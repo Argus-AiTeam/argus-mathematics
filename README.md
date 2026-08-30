@@ -64,7 +64,7 @@ literal presentation, and no worldwide priority claim is made.
 For the fixed ambient pair
 
 $$
-(X,F)=\left(E(2)\#(S^2\times S^2),\ \text{regular elliptic fiber}\right),
+(X,F)=\left(E(2)\mathbin{\unicode{x0023}}(S^2\times S^2),\ \text{regular elliptic fiber}\right),
 $$
 
 the prime knots $T(2,3)$ and $T(2,5)$ are neither equal nor mirrors, while
@@ -132,4 +132,3 @@ calculation or a precise source/theorem issue.
 Use [`CITATION.cff`](CITATION.cff) for repository-level citation. Individual
 technical reports should be cited directly when they are the object of
 discussion.
-
