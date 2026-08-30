@@ -11,9 +11,10 @@
 Take
 
 $$
-Y=E(2),\qquad Z=S^2\times S^2,\qquad X=Y\mathbin{\unicode{x0023}}Z,
+Y=E(2),\qquad Z=S^2\times S^2,\qquad X=Y\mathbin{\sharp}Z,
 $$
 
+where $\sharp$ denotes the connected sum,
 and let $F\subset Y\subset X$ be a regular elliptic fiber, with the
 connected-sum ball chosen away from $F$. The ambient pair satisfies the
 stated closedness, simple-connectivity, smoothness, square-zero, and complement
@@ -24,8 +25,8 @@ mirrors. Knot surgery is local with respect to the disjoint connected sum, and
 the published stabilization theorem supplies diffeomorphisms
 
 $$
-Y_K\mathbin{\unicode{x0023}}(S^2\times S^2)
-\cong Y\mathbin{\unicode{x0023}}(S^2\times S^2).
+Y_K\mathbin{\sharp}(S^2\times S^2)
+\cong Y\mathbin{\sharp}(S^2\times S^2).
 $$
 
 Composing these maps gives diffeomorphic knot-surgery manifolds for the two
@@ -34,7 +35,7 @@ non-mirror prime knots in the same fixed ambient pair.
 ## Boundary
 
 The construction uses the reducible ambient manifold
-$E(2)\mathbin{\unicode{x0023}}(S^2\times S^2)$. It does not produce a counterexample for the
+$E(2)\mathbin{\sharp}(S^2\times S^2)$. It does not produce a counterexample for the
 unstabilized K3 surface $E(2)$, and it does not claim to settle the historical
 fixed-$X$ conjecture.
 

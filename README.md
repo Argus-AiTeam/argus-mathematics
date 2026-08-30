@@ -64,9 +64,10 @@ literal presentation, and no worldwide priority claim is made.
 For the fixed ambient pair
 
 $$
-(X,F)=\left(E(2)\mathbin{\unicode{x0023}}(S^2\times S^2),\ \text{regular elliptic fiber}\right),
+(X,F)=\left(E(2)\mathbin{\sharp}(S^2\times S^2),\ \text{regular elliptic fiber}\right),
 $$
 
+where $\sharp$ denotes the connected sum,
 the prime knots $T(2,3)$ and $T(2,5)$ are neither equal nor mirrors, while
 the corresponding knot-surgery manifolds are diffeomorphic after applying the
 published stabilization theorem.
