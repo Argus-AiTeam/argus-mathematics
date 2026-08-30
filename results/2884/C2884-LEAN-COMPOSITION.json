@@ -1,0 +1,67 @@
+{
+  "evidence_id": "lean-C2884-LEAN-COMPOSITION-b908083014c2",
+  "lean_check": {
+    "audit_command": [
+      "/home/argustest/.elan/bin/lean",
+      "--run",
+      "/home/argustest/zimo/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "/home/argustest/zimo/counterexample-batch-1/campaigns/2884/research/stabilization-counterexample/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "/home/argustest/.elan/bin/lean",
+      "/home/argustest/zimo/counterexample-batch-1/campaigns/2884/research/stabilization-counterexample/Main.lean"
+    ],
+    "cwd": "/home/argustest/zimo/counterexample-batch-1/campaigns/2884/research/stabilization-counterexample",
+    "duration_ms": 3494,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "/home/argustest/zimo/counterexample-batch-1/campaigns/2884/research/stabilization-counterexample/Main.lean",
+    "source_sha256": "ff47d9be05915700ba7fea065c3dff15f0ca660e1bb008a06b649e7b73a64678",
+    "statement_fidelity": "/home/argustest/zimo/counterexample-batch-1/campaigns/2884/research/stabilization-counterexample/statement_fidelity.md",
+    "statement_fidelity_sha256": "a2fd61652a5432aa6fdeb46d6c574e4f2ac96cb3c0d9d7ee23dc3a084e63c4a7",
+    "status": "success",
+    "stderr": "",
+    "stdout": "Problem48.problem48_counterexample (Prime : Knot → Prop) (AmbientAdmissible : FourManifold → Prop)\n  (D : DiffeomorphismCalculus) (prime_T23 : Prime Knot.T23) (prime_T25 : Prime Knot.T25)\n  (ambient_X : AmbientAdmissible X)\n  (locality : ∀ (K : Knot), D.rel (X.knotSurgery K) ((FourManifold.E2.knotSurgery K).connectedSum FourManifold.S2xS2))\n  (stabilization : ∀ (K : Knot), D.rel ((FourManifold.E2.knotSurgery K).connectedSum FourManifold.S2xS2) X) :\n  ∃ witness, witness.K1 = Knot.T23 ∧ witness.K2 = Knot.T25\n'Problem48.problem48_counterexample' does not depend on any axioms\n",
+    "tool": "lean",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "/home/argustest/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "/home/argustest/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "/home/argustest/.elan/bin/lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/stabilization-counterexample/Main.lean",
+    "text": "/-!\n# A Lean 4 kernel check of the logical composition in the Problem 4.8 counterexample\n\nThis file formalizes the exact implication used in the proof:\n\n1. knot surgery on `E(2) # (S² × S²)` is diffeomorphic to\n   `E(2)_K # (S² × S²)` by locality of the disjoint connected sum;\n2. Baykur's one-stabilization theorem identifies the latter with\n   `E(2) # (S² × S²)` for every knot `K`;\n3. the two resulting identifications compose to a diffeomorphism between\n   the surgeries for `T(2,3)` and `T(2,5)`.\n\nThe differential-topology statements are explicit hypotheses of the final\ntheorem.  Thus Lean checks the logical assembly without adding axioms, while\nthe statement-fidelity document identifies the published inputs that those\nhypotheses encode.\n-/\n\nnamespace Problem48\n\n/-- The four knot labels needed to distinguish the two knots and their mirrors. -/\ninductive Knot where\n  | T23\n  | T25\n  | mirrorT23\n  | mirrorT25\n  deriving DecidableEq, Repr\n\n/-- Mirroring on the four named knot labels. -/\ndef mirror : Knot → Knot\n  | .T23 => .mirrorT23\n  | .T25 => .mirrorT25\n  | .mirrorT23 => .T23\n  | .mirrorT25 => .T25\n\ntheorem T23_ne_T25 : Knot.T23 ≠ Knot.T25 := by decide\ntheorem T23_ne_mirror_T25 : Knot.T23 ≠ mirror Knot.T25 := by decide\n\n/-- A syntax of the four-manifolds occurring in the argument. -/\ninductive FourManifold where\n  | E2\n  | S2xS2\n  | connectedSum (left right : FourManifold)\n  | knotSurgery (ambient : FourManifold) (knot : Knot)\n  deriving DecidableEq, Repr\n\n/-- The stabilized ambient manifold used in the counterexample. -/\ndef X : FourManifold := .connectedSum .E2 .S2xS2\n\n/-- The abstract equivalence-relation operations used for diffeomorphisms. -/\nstructure DiffeomorphismCalculus where\n  rel : FourManifold → FourManifold → Prop\n  symm {M N : FourManifold} : rel M N → rel N M\n  trans {M N P : FourManifold} : rel M N → rel N P → rel M P\n\n/-- The full logical witness for the negation of the general Problem 4.8 claim. -/\nstructure CounterexampleWitness\n    (Prime : Knot → Prop)\n    (AmbientAdmissible : FourManifold → Prop)\n    (Diffeomorphic : FourManifold → FourManifold → Prop) where\n  K1 : Knot\n  K2 : Knot\n  ambient : AmbientAdmissible X\n  K1_prime : Prime K1\n  K2_prime : Prime K2\n  knots_distinct : K1 ≠ K2\n  not_mirrors : K1 ≠ mirror K2\n  surgeries_diffeomorphic :\n    Diffeomorphic (.knotSurgery X K1) (.knotSurgery X K2)\n\n/--\nKernel-checked logical composition of the counterexample.\n\nThe hypotheses `ambient_X`, `locality`, and `stabilization` are the precise\nplaces where the source-backed 4-manifold mathematics enters.\n-/\ntheorem problem48_counterexample\n    (Prime : Knot → Prop)\n    (AmbientAdmissible : FourManifold → Prop)\n    (D : DiffeomorphismCalculus)\n    (prime_T23 : Prime .T23)\n    (prime_T25 : Prime .T25)\n    (ambient_X : AmbientAdmissible X)\n    (locality : ∀ K : Knot,\n      D.rel\n        (.knotSurgery X K)\n        (.connectedSum (.knotSurgery .E2 K) .S2xS2))\n    (stabilization : ∀ K : Knot,\n      D.rel\n        (.connectedSum (.knotSurgery .E2 K) .S2xS2)\n        X) :\n    ∃ witness : CounterexampleWitness Prime AmbientAdmissible D.rel,\n      witness.K1 = .T23 ∧ witness.K2 = .T25 := by\n  have surgeryToX (K : Knot) : D.rel (.knotSurgery X K) X :=\n    D.trans (locality K) (stabilization K)\n  have surgeriesDiffeomorphic :\n      D.rel (.knotSurgery X .T23) (.knotSurgery X .T25) :=\n    D.trans (surgeryToX .T23) (D.symm (surgeryToX .T25))\n  let witness : CounterexampleWitness Prime AmbientAdmissible D.rel := {\n    K1 := .T23\n    K2 := .T25\n    ambient := ambient_X\n    K1_prime := prime_T23\n    K2_prime := prime_T25\n    knots_distinct := T23_ne_T25\n    not_mirrors := T23_ne_mirror_T25\n    surgeries_diffeomorphic := surgeriesDiffeomorphic\n  }\n  exact ⟨witness, rfl, rfl⟩\n\n#check problem48_counterexample\n#print axioms problem48_counterexample\n\nend Problem48\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/stabilization-counterexample/statement_fidelity.md",
+    "text": "# Statement fidelity for `Problem48.lean`\n\n## Formal declaration\n\nThe declaration under review is `Problem48.problem48_counterexample`.\n\nIt states the following conditional proposition.  Let `X` be the formal term\n`connectedSum E2 S2xS2`.  Given:\n\n1. a predicate `Prime` and proofs that `T23` and `T25` satisfy it;\n2. a predicate `AmbientAdmissible` and a proof that `X` satisfies it;\n3. a relation `D.rel` equipped with symmetry and transitivity;\n4. for every knot label `K`, a locality proof\n   `knotSurgery X K ~ connectedSum (knotSurgery E2 K) S2xS2`; and\n5. for every knot label `K`, a stabilization proof\n   `connectedSum (knotSurgery E2 K) S2xS2 ~ X`;\n\nthe theorem constructs a witness with `K1 = T23`, `K2 = T25`, both marked\nprime, distinct, not mirrors, and with diffeomorphic knot-surgery manifolds.\n\n## Correspondence with the mathematical proof\n\n- `AmbientAdmissible X` corresponds to the checked hypotheses that\n  `X = E(2) # (S^2 x S^2)` is closed, simply connected and smooth, and that\n  the regular elliptic fiber is square-zero with simply connected complement.\n- `locality` corresponds to the cut-and-paste diffeomorphism\n  `X_K -> E(2)_K # (S^2 x S^2)` when the connected sum is performed away from\n  the elliptic fiber.\n- `stabilization` corresponds exactly to Baykur's published\n  one-`S^2 x S^2` stabilization theorem applied to `(E(2),F)`.\n- Symmetry and transitivity of `D.rel` correspond to inversion and composition\n  of diffeomorphisms.\n- The `Prime T23` and `Prime T25` hypotheses correspond to the source-checked\n  bridge-number argument.  Distinctness and non-mirroring of the finite labels\n  are kernel-checked definitionally.\n\n## Coverage boundary\n\nLean checks the complete logical composition from the three source-backed\ntopological inputs to the counterexample witness.  It does not formalize the\nsmooth 4-manifold definitions, Baykur's theorem, the elliptic-fiber complement\ncalculation, or the locality lemma from first principles.  Those remain\nhuman-reviewed mathematical inputs and are not represented as hidden Lean\naxioms: they appear explicitly as hypotheses of the theorem.\n"
+  },
+  "subject": {
+    "content_hash": "4f9c270e718d2f3f47000835fea125cf69960f1412062a70e459176753c58819",
+    "kind": "claim",
+    "subject_id": "C2884-LEAN-COMPOSITION"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}
