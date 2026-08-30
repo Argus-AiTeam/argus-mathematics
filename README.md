@@ -32,14 +32,14 @@ current view of active campaigns and catalog status.
 | ID | Result | Field | Public status |
 |---|---|---|---|
 | [20001068](results/20001068/) | A 26-vertex counterexample to the literal weak-inequality form of AIM Conjecture 6.23 | Weighted digraphs | Independently verified |
-| [11000263](results/11000263/) | \(X_3\neq0\) under two natural well-typed repairs of Bigelow Question 6 | Braid groups and algebra | Internal review passed; external specialist review invited |
-| [2884](results/2884/) | A scope-level counterexample to the arbitrary-\(X\) wording of K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Scope observation; the fixed \(X=E(2)\) conjecture remains open |
+| [11000263](results/11000263/) | $X_3\neq0$ under two natural well-typed repairs of Bigelow Question 6 | Braid groups and algebra | Internal review passed; external specialist review invited |
+| [2884](results/2884/) | A scope-level counterexample to the arbitrary-$X$ wording of K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Scope observation; the fixed $X=E(2)$ conjecture remains open |
 
 ### Result 20001068
 
 A finite loopless simple weighted digraph is constructed with 26 vertices and
 74 arcs. Every vertex has total inweight and outweight at least 1, but all 40
-simple directed cycles have weight \(19/20\). This refutes the literal
+simple directed cycles have weight $19/20$. This refutes the literal
 weak-inequality statement of AIM Conjecture 6.23.
 
 It does **not** refute strongly connected variants or formulations requiring
@@ -51,9 +51,9 @@ Bigelow's printed presentation invokes a generator that does not exist in the
 stated braid group. Under each of two natural well-typed repairs, an unreduced
 Burau representation gives
 
-\[
+$$
 \rho(X_3)=(q-u)(q^2-u)E_2\neq0.
-\]
+$$
 
 The result is a negative answer under those two explicit repaired
 presentations. It is not an unconditional statement about the ill-typed
@@ -63,16 +63,16 @@ literal presentation, and no worldwide priority claim is made.
 
 For the fixed ambient pair
 
-\[
+$$
 (X,F)=\left(E(2)\#(S^2\times S^2),\ \text{regular elliptic fiber}\right),
-\]
+$$
 
-the prime knots \(T(2,3)\) and \(T(2,5)\) are neither equal nor mirrors, while
+the prime knots $T(2,3)$ and $T(2,5)$ are neither equal nor mirrors, while
 the corresponding knot-surgery manifolds are diffeomorphic after applying the
 published stabilization theorem.
 
-This addresses the general arbitrary-\(X\) wording of Problem 4.8. It does
-**not** settle the Fintushel--Stern K3 conjecture with \(X\) fixed to \(E(2)\).
+This addresses the general arbitrary-$X$ wording of Problem 4.8. It does
+**not** settle the Fintushel--Stern K3 conjecture with $X$ fixed to $E(2)$.
 
 ## Evidence policy
 

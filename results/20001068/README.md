@@ -13,7 +13,7 @@ The construction is a finite loopless simple weighted digraph with:
 - minimum inweight and outweight equal to 1;
 - two strongly connected components of size 13;
 - 40 simple directed cycles;
-- maximum cycle weight \(19/20<1\).
+- maximum cycle weight $19/20<1$.
 
 This refutes the claim that local inweight and outweight at least 1 force a
 directed cycle of weight at least 1.
