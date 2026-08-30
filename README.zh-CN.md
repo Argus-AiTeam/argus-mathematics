@@ -51,8 +51,10 @@ $$
 取固定环境对
 
 $$
-(X,F)=\left(E(2)\mathbin{\unicode{x0023}}(S^2\times S^2),\ \text{正则椭圆纤维}\right).
+(X,F)=\left(E(2)\mathbin{\sharp}(S^2\times S^2),\ \text{正则椭圆纤维}\right).
 $$
+
+其中 $\sharp$ 表示连通和。
 
 两个素纽结 $T(2,3)$ 与 $T(2,5)$ 既不相同，也不互为镜像；结合已发表的稳定化定理，可以得到相应纽结手术流形之间的微分同胚。
 
