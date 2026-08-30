@@ -3,28 +3,29 @@
 ## K3 Problem 4.8 scope observation
 
 **Status:** scope-level result with source and logical-composition review  
-**Decided scope:** the general arbitrary-\(X\) wording of Problem 4.8  
-**Still open:** the Fintushel--Stern K3 conjecture with \(X=E(2)\) fixed  
+**Decided scope:** the general arbitrary-$X$ wording of Problem 4.8
+
+**Still open:** the Fintushel--Stern K3 conjecture with $X=E(2)$ fixed
 **Live result:** <https://open.argusbot.cn/results/2884>
 
 Take
 
-\[
+$$
 Y=E(2),\qquad Z=S^2\times S^2,\qquad X=Y\#Z,
-\]
+$$
 
-and let \(F\subset Y\subset X\) be a regular elliptic fiber, with the
-connected-sum ball chosen away from \(F\). The ambient pair satisfies the
+and let $F\subset Y\subset X$ be a regular elliptic fiber, with the
+connected-sum ball chosen away from $F$. The ambient pair satisfies the
 stated closedness, simple-connectivity, smoothness, square-zero, and complement
 fundamental-group hypotheses.
 
-The torus knots \(T(2,3)\) and \(T(2,5)\) are prime and are neither equal nor
+The torus knots $T(2,3)$ and $T(2,5)$ are prime and are neither equal nor
 mirrors. Knot surgery is local with respect to the disjoint connected sum, and
 the published stabilization theorem supplies diffeomorphisms
 
-\[
+$$
 Y_K\#(S^2\times S^2)\cong Y\#(S^2\times S^2).
-\]
+$$
 
 Composing these maps gives diffeomorphic knot-surgery manifolds for the two
 non-mirror prime knots in the same fixed ambient pair.
@@ -32,9 +33,9 @@ non-mirror prime knots in the same fixed ambient pair.
 ## Boundary
 
 The construction uses the reducible ambient manifold
-\(E(2)\#(S^2\times S^2)\). It does not produce a counterexample for the
-unstabilized K3 surface \(E(2)\), and it does not claim to settle the historical
-fixed-\(X\) conjecture.
+$E(2)\#(S^2\times S^2)$. It does not produce a counterexample for the
+unstabilized K3 surface $E(2)$, and it does not claim to settle the historical
+fixed-$X$ conjecture.
 
 ## Files
 
@@ -64,4 +65,3 @@ The archived Python verifier additionally expects source transcriptions and
 Jacobian payload files from the larger campaign bundle. Because those files
 are not all in the public result download, it is retained for provenance and
 is not run by this repository's automated checks.
-
