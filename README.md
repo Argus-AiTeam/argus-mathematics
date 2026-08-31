@@ -16,8 +16,8 @@ than around model transcripts.
 
 As of **2026-08-31**, the public program contains:
 
-- **9 published result packages** with technical reports or editor notes;
-- **5 independently replayable computational certificates**;
+- **10 published result packages** with technical reports or editor notes;
+- **6 independently replayable computational certificates**;
 - **1 Lean-checked logical composition** with an explicit formalization
   boundary;
 - **30 active research targets** on the live workbench;
@@ -31,6 +31,7 @@ current view of active campaigns and catalog status.
 
 | ID | Result | Field | Public status |
 |---|---|---|---|
+| [2813](results/2813/) | An explicit taut-foliation Euler-class obstruction on a hyperbolic mapping torus | Low-dimensional topology and foliations | Independently verified project-original explicit obstruction; worldwide priority unclaimed |
 | [20001836](results/20001836/) | Unbounded negative curvature operator in a collapsing circle quotient of $S^4$ | Riemannian geometry | Independently verified; literature novelty unaudited |
 | [20001862](results/20001862/) | Explicit half-turn obstruction to the standard pseudo-triangulation road map | Computational geometry | Independently verified reconstruction; negative status known since 2015 |
 | [20001382](results/20001382/) | A nonclosed-subgroup obstruction to the literal inverse arboreal Galois problem | Arithmetic dynamics | Independently verified scope correction |
@@ -40,6 +41,30 @@ current view of active campaigns and catalog status.
 | [20001068](results/20001068/) | A 26-vertex counterexample to the literal weak-inequality form of AIM Conjecture 6.23 | Weighted digraphs | Independently verified |
 | [11000263](results/11000263/) | $X_3\neq0$ under two natural well-typed repairs of Bigelow Question 6 | Braid groups and algebra | Internal review passed; external specialist review invited |
 | [2884](results/2884/) | A scope-level counterexample to the arbitrary-*X* wording of K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Scope observation; the fixed *X* = E(2) conjecture remains open |
+
+### Result 2813
+
+On the genus-three Eierlegende Wollmilchsau origami, take the affine
+pseudo-Anosov map with application-order word `SSTSST`, followed by left deck
+translation by `-i`. Its mapping torus is a closed hyperbolic three-manifold
+with
+
+$$
+H_1(M_f;\mathbb Z)\cong\mathbb Z^3\oplus\mathbb Z/2\oplus\mathbb Z/6.
+$$
+
+The even integral class with free Poincare-dual coordinates
+$(-2,-2,2)$ lies in the dual Thurston unit ball but is not the Euler class
+of any smooth cooriented taut foliation. The exact certificate enumerates all
+twelve one-periodic trajectories and verifies the obstruction hypotheses;
+three independent review stages passed, and the public proof graph contains
+95 valid nodes with no unproved proposition on the goal dependency chain.
+
+This is a project-original explicit application assembled from prior
+mathematical ingredients. No equivalent explicit pair was found in the
+audited corpus, but absolute novelty and worldwide priority are not claimed.
+The result decides one explicit class in Kirby Problem 3.15(a), not the complete
+taut-foliation branch or the other five realization branches.
 
 ### Result 20001836
 
@@ -203,6 +228,7 @@ python results/11000263/verify_burau.py
 python results/20001068/verify_counterexample.py > /tmp/result-20001068.json
 python results/20001836/verify.py > /tmp/result-20001836.json
 python results/20001862/replay.py verify results/20001862/certificate.json
+python results/2813/replay.py > /tmp/result-2813.json
 ```
 
 The verifier for Result 2884 checks a larger campaign bundle that includes
@@ -216,6 +242,7 @@ Lean file checks the logical composition described in
 
 ```text
 results/
+  2813/       explicit taut-foliation Euler-class obstruction
   20001836/   exact curvature-operator counterexample on S4
   20001862/   explicit pseudo-triangulation symmetry obstruction
   20001382/   inverse arboreal Galois scope correction
