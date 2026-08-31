@@ -16,12 +16,12 @@ for active targets.
 
 ## Current scale
 
-The public portal reported the following snapshot on 2026-08-30:
+The public portal reported the following snapshot on 2026-08-31:
 
 - 757 historical source records under audit;
 - 66 confirmed-open problem cards on the public landing page;
 - 30 active counterexample or proof campaigns;
-- 3 completed result packages linked from the landing page.
+- 9 completed result packages linked from the landing page.
 
 These numbers describe different layers and should not be added together.
 Catalog records are source-audit units, active targets are selected research
@@ -69,4 +69,3 @@ is a separate, dedicated project within the broader mathematics program. It
 tracks two isolated research processes investigating Hilbert's sixteenth
 problem, Part II. Its existence should not be read as limiting Argus
 mathematics to Hilbert16.
-
