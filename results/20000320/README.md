@@ -10,7 +10,7 @@ For the first positive-characteristic Artin thickening of a Lee--Nakayama
 surface family over
 
 $$
-B=\operatorname{Spec} k[t]/(t^2),
+B=\mathrm{Spec}\left(k[t]/(t^2)\right),
 $$
 
 the weak or naive Q-Gorenstein condition holds, while the second reflexive
@@ -26,4 +26,3 @@ reformulations restricted to canonically polarized or stable surfaces.
 
 This is a reconstruction of a result already present in the cited literature,
 not a claim of a newly discovered counterexample.
-

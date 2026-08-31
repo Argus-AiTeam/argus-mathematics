@@ -87,7 +87,7 @@ $S(B_2^d)=O(\sqrt d)$。该向量族来自 Grinberg 和 Sevastyanov 的已有工
 对 Lee--Nakayama 曲面族在正特征下的第一阶 Artin 加厚
 
 $$
-B=\operatorname{Spec} k[t]/(t^2),
+B=\mathrm{Spec}\left(k[t]/(t^2)\right),
 $$
 
 弱或 naive Q-Gorenstein 条件成立，但第二反身多重典范幂不满足相对 $S_2$，并在闭点
