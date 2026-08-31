@@ -39,7 +39,7 @@ current view of active campaigns and catalog status.
 | [3206](results/3206/) | A Cayley graph on $\mathbb Z_{15}$ whose core is $C_5$ | Algebraic graph theory | Independently verified reconstruction of a known 2008 counterexample |
 | [20001068](results/20001068/) | A 26-vertex counterexample to the literal weak-inequality form of AIM Conjecture 6.23 | Weighted digraphs | Independently verified |
 | [11000263](results/11000263/) | $X_3\neq0$ under two natural well-typed repairs of Bigelow Question 6 | Braid groups and algebra | Internal review passed; external specialist review invited |
-| [2884](results/2884/) | A scope-level counterexample to the arbitrary-$X$ wording of K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Scope observation; the fixed $X=E(2)$ conjecture remains open |
+| [2884](results/2884/) | A scope-level counterexample to the arbitrary-*X* wording of K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Scope observation; the fixed *X* = E(2) conjecture remains open |
 
 ### Result 20001836
 
@@ -174,8 +174,8 @@ the prime knots $T(2,3)$ and $T(2,5)$ are neither equal nor mirrors, while
 the corresponding knot-surgery manifolds are diffeomorphic after applying the
 published stabilization theorem.
 
-This addresses the general arbitrary-$X$ wording of Problem 4.8. It does
-**not** settle the Fintushel--Stern K3 conjecture with $X$ fixed to $E(2)$.
+This addresses the general arbitrary-*X* wording of Problem 4.8. It does
+**not** settle the Fintushel--Stern K3 conjecture with *X* fixed to E(2).
 
 ## Evidence policy
 

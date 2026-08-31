@@ -3,9 +3,9 @@
 ## K3 Problem 4.8 scope observation
 
 **Status:** scope-level result with source and logical-composition review  
-**Decided scope:** the general arbitrary-$X$ wording of Problem 4.8
+**Decided scope:** the general arbitrary-*X* wording of Problem 4.8
 
-**Still open:** the Fintushel--Stern K3 conjecture with $X=E(2)$ fixed
+**Still open:** the Fintushel--Stern K3 conjecture with *X* = E(2) fixed
 **Live result:** <https://open.argusbot.cn/results/2884>
 
 Take
@@ -37,7 +37,7 @@ non-mirror prime knots in the same fixed ambient pair.
 The construction uses the reducible ambient manifold
 $E(2)\mathbin{\sharp}(S^2\times S^2)$. It does not produce a counterexample for the
 unstabilized K3 surface $E(2)$, and it does not claim to settle the historical
-fixed-$X$ conjecture.
+fixed-*X* conjecture.
 
 ## Files
 
