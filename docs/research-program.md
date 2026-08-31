@@ -21,8 +21,7 @@ The public portal reported the following snapshot on 2026-08-31:
 - 757 historical source records under audit;
 - 66 confirmed-open problem cards on the public landing page;
 - 30 active counterexample or proof campaigns;
-- 10 completed public result packages, including Result 2813, which is not yet
-  highlighted in the landing-page result rail.
+- 12 completed public result packages linked from the landing page.
 
 These numbers describe different layers and should not be added together.
 Catalog records are source-audit units, active targets are selected research
