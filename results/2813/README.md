@@ -19,7 +19,7 @@ $$
 In a saturated basis for the free part, the even integral class
 
 $$
-\operatorname{PD}(w)=(-2,-2,2)
+\mathrm{PD}(w)=(-2,-2,2)
 $$
 
 lies in the dual Thurston unit ball but is not the Euler class of any smooth
