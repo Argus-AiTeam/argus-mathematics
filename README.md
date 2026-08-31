@@ -41,6 +41,102 @@ current view of active campaigns and catalog status.
 | [11000263](results/11000263/) | $X_3\neq0$ under two natural well-typed repairs of Bigelow Question 6 | Braid groups and algebra | Internal review passed; external specialist review invited |
 | [2884](results/2884/) | A scope-level counterexample to the arbitrary-$X$ wording of K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Scope observation; the fixed $X=E(2)$ conjecture remains open |
 
+### Result 20001836
+
+On the unit round $S^4$, take the effective isometric circle action with
+weights $(1,2)$. In the associated collapsing quotient with circle scale
+$\varepsilon$, Argus reconstructed the complete curvature operator at a fixed
+pole and found the exact eigenvalue
+
+$$
+\lambda_{\min}=1-\frac{2}{\varepsilon^2}.
+$$
+
+It tends to negative infinity as $\varepsilon\to0$, disproving an
+$\varepsilon$-independent lower bound for the curvature operator. An
+independent reviewer reconstructed all 36 matrix entries, the Bianchi identity,
+and the negative eigenvector. This is a project-original exact compact
+construction, but literature novelty and worldwide priority remain unaudited.
+
+### Result 20001862
+
+An eight-vertex simple nonconvex polygon with rational coordinates is
+invariant under a labelled half-turn. Every pointed-pseudo-triangulation
+completion contains four nonpolygon hull edges in two symmetry orbits.
+Deleting one edge in the standard Streinu road map leaves its half-turn
+partner as a rigid bar, so preserving the symmetry restores the deleted
+distance and prevents a nontrivial first motion.
+
+This result supplies explicit coordinates and a replayable exact certificate.
+It does not obstruct the distinct Connelly--Demaine--Rote construction or
+methods that delete an entire symmetry orbit. AIM had already recorded the
+negative answer in 2015, so this is an explicit reconstruction rather than a
+new priority claim.
+
+### Result 20001382
+
+The literal inverse arboreal Galois problem asks whether an arbitrary subgroup
+of the automorphism group of the infinite rooted binary tree can occur as a
+Galois image. Continuous Galois images are compact and therefore closed, while
+the finitary tree automorphism group is dense, proper, and nonclosed. That
+group gives an immediate obstruction to the unrestricted wording.
+
+The result identifies a missing closedness condition. It does not prove that
+any particular closed subgroup is unrealizable and does not solve the natural
+inverse problem for prescribed closed subgroups.
+
+### Result 20000916
+
+The literal wording of AIM Problem 1.4 permits an arbitrary norm while
+asserting a uniform $O(\sqrt d)$ Steinitz bound. In $\ell_1^d$, an explicit
+zero-sum family forces every ordering to contain a partial sum with
+
+$$
+S(B_1^d)\geq\frac{d+1}{2}.
+$$
+
+The linear lower bound rules out the arbitrary-norm assertion. It does not
+refute the Euclidean conjecture $S(B_2^d)=O(\sqrt d)$. The family comes from
+prior work by Grinberg and Sevastyanov; Argus contributed the source-checked
+reconstruction and scope audit, not the original construction.
+
+### Result 20000320
+
+For the first positive-characteristic Artin thickening of a Lee--Nakayama
+surface family over
+
+$$
+B=\operatorname{Spec} k[t]/(t^2),
+$$
+
+the weak or naive Q-Gorenstein condition holds, but the second reflexive
+pluricanonical power fails relative $S_2$ and closed-point base change. This
+refutes the unrestricted weak-condition/base-change equivalence in the
+literal wording of AIM Problem 1.1.
+
+The example uses positive characteristic and a nonreduced base. It does not
+contradict Hacking's characteristic-zero DVR theorem or decide versions
+restricted to canonically polarized or stable surfaces. This is a
+primary-source reconstruction of a literature result.
+
+### Result 3206
+
+The Cayley graph on $\mathbb Z_{15}$ with connection set
+
+$$
+\{1,4,6,9,11,14\}
+$$
+
+has graph core $C_5$. Since $5$ is not a nonnegative integral power of $15$,
+this refutes the literal arbitrary-abelian formulation of Open Problem Garden
+Problem 125. The replay checks the graph, its retraction onto $C_5$, all
+$5^5$ maps of $C_5$, and the cardinality obstruction.
+
+The problem author later clarified that the intended main case was
+$\mathbb Z_p$. Prime cyclic, elementary-abelian, and cubelike variants remain
+untouched. The counterexample was publicly identified in 2008, so this package
+is an independently verified reconstruction rather than a new discovery.
+
 ### Result 20001068
 
 A finite loopless simple weighted digraph is constructed with 26 vertices and
