@@ -16,12 +16,12 @@ for active targets.
 
 ## Current scale
 
-The public portal reported the following snapshot on 2026-08-31:
+The public portal reported the following snapshot on 2026-09-01:
 
 - 757 historical source records under audit;
 - 66 confirmed-open problem cards on the public landing page;
 - 30 active counterexample or proof campaigns;
-- 12 completed public result packages linked from the landing page.
+- 17 completed public result packages linked from the landing page.
 
 These numbers describe different layers and should not be added together.
 Catalog records are source-audit units, active targets are selected research

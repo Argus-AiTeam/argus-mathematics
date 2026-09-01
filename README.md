@@ -14,12 +14,14 @@ This repository preserves the completed and reviewable outputs of the Argus
 mathematics program. It is organized around claims and their evidence rather
 than around model transcripts.
 
-As of **2026-08-31**, the public program contains:
+As of **2026-09-01**, the public program contains:
 
-- **12 published result packages** with technical reports or editor notes;
+- **17 published result packages** with technical reports, source records, or
+  editor notes;
 - **7 independently replayable computational certificates**;
 - **1 Lean-checked logical composition** with an explicit formalization
   boundary;
+- **71 checksummed public artifacts**;
 - **30 active research targets** on the live workbench;
 - **757 historical problem records** under source and status audit.
 
@@ -31,6 +33,11 @@ current view of active campaigns and catalog status.
 
 | ID | Result | Field | Public status |
 |---|---|---|---|
+| [20001760](results/20001760/) | A rank-one lattice refutes the literal all-shell 12-design claim | Lattices and spherical designs | Independently reviewed literal-scope counterexample; higher-dimensional version remains open |
+| [1350](results/1350/) | GCH does not imply an $\aleph_2$-Suslin tree in relative consistency | Set theory | Independently reviewed published relative-consistency countermodel |
+| [1200029](results/1200029/) | Dead ends can have positive ball density in an infinite Cayley graph | Geometric group theory | Independently reviewed published counterexample under the closed-ball convention |
+| [1100501](results/1100501/) | Identical complete axis sets do not imply commensurability | Kleinian groups | Independently reviewed reconstruction of a known elementary counterexample |
+| [1100101](results/1100101/) | A finite $K(G,1)$ without Baumslag--Solitar subgroups can be non-hyperbolic | Geometric group theory | Independently reviewed published counterexample; dimension-at-most-three version remains open |
 | [4600048](results/4600048/) | An irrational fixed point for a Salem beta-transformation | Dynamical systems and algebraic number theory | Independently verified correction to the literal catalogue statement; Schmidt's problem remains open |
 | [2307015](results/2307015/) | A translated-cusp boundary set of positive harmonic measure | Complex analysis and potential theory | Independently verified interpretation-limited result; novelty unaudited |
 | [2813](results/2813/) | An explicit taut-foliation Euler-class obstruction on a hyperbolic mapping torus | Low-dimensional topology and foliations | Independently verified project-original explicit obstruction; worldwide priority unclaimed |
@@ -43,6 +50,64 @@ current view of active campaigns and catalog status.
 | [20001068](results/20001068/) | A 26-vertex counterexample to the literal weak-inequality form of AIM Conjecture 6.23 | Weighted digraphs | Independently verified |
 | [11000263](results/11000263/) | $X_3\neq0$ under two natural well-typed repairs of Bigelow Question 6 | Braid groups and algebra | Internal review passed; external specialist review invited |
 | [2884](results/2884/) | A scope-level counterexample to the arbitrary-*X* wording of K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Scope observation; the fixed *X* = E(2) conjecture remains open |
+
+### Result 20001760
+
+Because AIM Problem 1.44 states no dimension restriction, the rank-one lattice
+\(L=\mathbb Z\) is admissible. Every nonempty shell is the full zero-sphere
+\(\{-k,k\}\), whose discrete and spherical averages agree for every
+polynomial. Every shell is therefore a spherical \(t\)-design for every
+\(t\), including 12.
+
+This refutes only the literal dimension-unrestricted claim. It does not decide
+the problem after imposing \(n\geq2\), and it makes no statement about
+12-designs in the Leech lattice. Literature novelty and worldwide priority
+are unconfirmed.
+
+### Result 1350
+
+Assuming a weakly compact cardinal, Asperó and Golshani force a model of GCH
+with the special Aronszajn tree property at \(\aleph_2\). Such a model has no
+\(\aleph_2\)-Suslin tree, giving a countermodel to the proposed implication
+in the standard relative-consistency sense.
+
+The conclusion is conditional on the consistency of a weakly compact
+cardinal. It is not an unconditional construction in bare ZFC. The reviewed
+source is version 7 of the published research record, not a new Argus
+construction.
+
+### Result 1200029
+
+For the hyperbolic \((2,3,7)\) triangle group with generating set
+\(\{a,b,b^{-1}\}\), Calegari and Fujiwara prove that dead ends have positive
+asymptotic density in closed word balls, with lower bound at least \(1/64\).
+This disproves universal zero density under the closed-ball convention.
+
+The one-line question does not define density. The result does not decide
+word-sphere density and does not assert that \(1/64\) is the exact limiting
+value. It is a reviewed literature result.
+
+### Result 1100501
+
+The cyclic Kleinian groups generated by
+\(\mathrm{diag}(2,1/2)\) and \(\mathrm{diag}(3,1/3)\) have the same complete
+axis set, but their intersection is trivial because \(4^m=9^n\) forces
+\(m=n=0\). They are therefore not ambiently commensurable.
+
+Both groups are elementary, their joint group is not discrete, and they are
+abstractly commensurable as infinite cyclic groups. Nonelementary or jointly
+discrete strengthenings remain outside this reconstruction.
+
+### Result 1100101
+
+Italiano, Martelli, and Migliorini construct a non-hyperbolic group \(H\)
+that embeds in a hyperbolic group, has a finite \(K(H,1)\), and contains no
+Baumslag--Solitar subgroup. One group therefore refutes both unrestricted
+implications in Bestvina Question 1.1.
+
+The finite classifying space has dimension four. The strengthened question
+with dimension at most three remains open. The counterexample was already
+published in the 2021 source record.
 
 ### Result 4600048
 
@@ -276,6 +341,11 @@ Lean file checks the logical composition described in
 
 ```text
 results/
+  20001760/   rank-one lattice scope counterexample
+  1350/       relative-consistency countermodel at aleph-2
+  1200029/    positive dead-end ball density
+  1100501/    identical-axis Kleinian counterexample
+  1100101/    finite K(G,1) geometric-group counterexample
   4600048/    Salem beta-transformation catalogue scope correction
   2307015/    translated-cusp harmonic-measure result
   2813/       explicit taut-foliation Euler-class obstruction
