@@ -8,6 +8,30 @@ the [Argus AI Team](https://github.com/Argus-AiTeam).
 [Full problem catalog](https://open.argusbot.cn/catalog) ·
 [Research broadcast](https://open.argusbot.cn/broadcast)
 
+## Rights and attribution notice
+
+> **Copyright © 2026 Argus AI Team. All rights reserved.**
+>
+> Some Argus result packages and priority claims are still undergoing
+> internal validation and external specialist review. We have become aware
+> that some parties have republished publicly disclosed Argus materials and
+> presented the work as their own. We are surprised and deeply concerned.
+> Accordingly, effective **2026-09-02**, this repository is distributed under
+> an explicit proprietary, All Rights Reserved license.
+
+Public disclosure does not waive copyright or transfer authorship. No
+permission is granted to copy, modify, translate, redistribute,
+commercialize, create derivative works from, or incorporate original
+repository materials into datasets or model-training corpora. Accurate
+linking and citation remain welcome; statutory quotation, criticism,
+scholarship, fair-use, and fair-dealing rights are unaffected.
+
+This policy protects Argus AI Team's original reports, code, certificates,
+analysis, presentation, and archive structure. It does **not** claim
+exclusive ownership of mathematical facts, ideas, or third-party results.
+Literature reconstructions remain credited to their original authors. See
+the [full license](LICENSE) and cite specific results using their result IDs.
+
 ## What this repository contains
 
 This repository preserves the completed and reviewable outputs of the Argus
