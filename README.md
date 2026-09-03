@@ -46,14 +46,14 @@ This repository preserves the completed and reviewable outputs of the Argus
 mathematics program. It is organized around claims and their evidence rather
 than around model transcripts.
 
-As of **2026-09-01**, the public program contains:
+As of **2026-09-03**, the public program contains:
 
 - **17 published result packages** with technical reports, source records, or
   editor notes;
-- **7 independently replayable computational certificates**;
+- **9 independently replayable computational certificates**;
 - **1 Lean-checked logical composition** with an explicit formalization
   boundary;
-- **71 checksummed public artifacts**;
+- **81 checksummed public artifacts**;
 - **30 active research targets** on the live workbench;
 - **757 historical problem records** under source and status audit.
 
@@ -80,7 +80,7 @@ current view of active campaigns and catalog status.
 | [20000320](results/20000320/) | Weak Q-Gorensteinness does not force pluricanonical base change | Algebraic geometry | Independently reviewed primary-source reconstruction |
 | [3206](results/3206/) | A Cayley graph on $\mathbb Z_{15}$ whose core is $C_5$ | Algebraic graph theory | Independently verified reconstruction of a known 2008 counterexample |
 | [20001068](results/20001068/) | A 26-vertex counterexample to the literal weak-inequality form of AIM Conjecture 6.23 | Weighted digraphs | Independently verified |
-| [11000263](results/11000263/) | $X_3\neq0$ under two natural well-typed repairs of Bigelow Question 6 | Braid groups and algebra | Internal review passed; external specialist review invited |
+| [11000263](results/11000263/) | Twist-compatible Burau quotient with $X_4=0$ and $X_3\neq0$ | Braid groups and algebra | Mathematics reviewed; ready for Bigelow's convention check; novelty not certified |
 | [2884](results/2884/) | A scope-level counterexample to the arbitrary-*X* wording of K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Scope observation; the fixed *X* = E(2) conjecture remains open |
 
 ### Result 20001760
@@ -313,8 +313,25 @@ $$
 $$
 
 The result is a negative answer under those two explicit repaired
-presentations. It is not an unconditional statement about the ill-typed
-literal presentation, and no worldwide priority claim is made.
+presentations. A subsequent calculation answers Stephen Bigelow's twist
+question at the representation level:
+
+$$
+\rho(\sigma_1X_2)=-u\rho(X_2),\qquad
+\rho((\sigma_1\sigma_2)^3X_3)=u^3\rho(X_3).
+$$
+
+At $u=q^3$, the same representation has $X_4=0$ while $X_3$ remains nonzero
+of rank one. Its joint image with the specialized BMW quotient is
+finite-dimensional and surjects onto BMW with nonzero kernel detected by
+$X_3$. Exact symbolic checks for orders 4 through 8 and an independent
+finite-field replay both pass.
+
+This proves the requested finite-dimensional representation-level
+construction. It does not prove that the universal quotient by the three new
+relations is finite-dimensional. Bigelow's convention check, specialist
+review, and publication-level novelty search remain pending, so no worldwide
+priority claim is made.
 
 ### Result 2884
 
