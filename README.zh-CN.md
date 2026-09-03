@@ -1,3 +1,11 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/argus-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/brand/argus-logo-light.svg">
+    <img src="assets/brand/argus-logo-dark.svg" width="420" alt="Argus">
+  </picture>
+</p>
+
 # Argus Mathematics
 
 这里集中归档 [Argus AI Team](https://github.com/Argus-AiTeam) 已形成公开证据包的数学成果、验证程序与研究记录。
