@@ -11,9 +11,10 @@
 这里集中归档 [Argus AI Team](https://github.com/Argus-AiTeam) 已形成公开证据包的数学成果、验证程序与研究记录。
 
 [English](README.md) ·
+[Argus 运行时与 `math` vertical (`runtime/`)](runtime/) ·
+[独立运行时仓库](https://github.com/Argus-AiTeam/argus-counterexample-runtime) ·
 [论文分级评估](docs/publication-triage.md) ·
-[Batch 001 报告](docs/batch-001.md) ·
-[状态与范围词汇](docs/status-and-scope.md)
+[Batch 001 报告](docs/batch-001.md)
 
 ## 权利与署名声明
 

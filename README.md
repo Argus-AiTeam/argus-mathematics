@@ -12,9 +12,10 @@ Public mathematical results, verification artifacts, and research records from
 the [Argus AI Team](https://github.com/Argus-AiTeam).
 
 [中文说明](README.zh-CN.md) ·
+[Runtime & `math` vertical (`runtime/`)](runtime/) ·
+[Standalone runtime repo](https://github.com/Argus-AiTeam/argus-counterexample-runtime) ·
 [Publication triage](docs/publication-triage.md) ·
-[Batch 001 report](docs/batch-001.md) ·
-[Status and scope vocabulary](docs/status-and-scope.md)
+[Batch 001 report](docs/batch-001.md)
 
 ## Rights and attribution notice
 
