@@ -22,6 +22,8 @@ This result identifies a premise gap in the proof route of Theorem 2.8 / Claim 2
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_1465_TECHNICAL_REPORT.pdf` | Standalone AMS technical report PDF |
+| `ARGUS_RESULT_1465_TECHNICAL_REPORT.tex` | AMS LaTeX source |
 | `FU_THEOREM_2_8_REGULARITY_GAP.pdf` | Standalone technical report PDF |
 | `FU_THEOREM_2_8_REGULARITY_GAP.tex` | LaTeX source for the standalone report |
 | `REPORT.md` | Detailed source correspondence and mathematical argument |

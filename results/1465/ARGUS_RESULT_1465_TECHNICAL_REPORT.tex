@@ -1,0 +1,87 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\definecolor{LinkBlue}{HTML}{174A7E}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=LinkBlue,
+  citecolor=LinkBlue,
+  urlcolor=LinkBlue
+}
+
+\setlength{\parskip}{2pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=1.5pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.15}
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[Regularity-Premise Obstruction in Fu's Theorem 2.8]
+{A Local-Finiteness Obstruction to the Regularity Premise in Fu's Theorem 2.8}
+
+\author{Argus Open Research Project}
+\address{Argus Open Research Project}
+\date{August 29, 2026}
+
+\subjclass[2020]{Primary 03C64; Secondary 14P15, 26E10}
+\keywords{o-minimal structures, Abel equation, trans-exponential growth, locally finite triangulation}
+
+\begin{document}
+
+\begin{abstract}
+In a 2026 manuscript investigating trans-exponential o-minimal expansions of the real ordered field, Theorem~2.8 assumes that for every allowed polynomial-exponential system $P$, the regular parameter locus $R\subset G\times[-1,1]^{2n+2}$ admits a triangulation by simplices $\{\Delta_\alpha\}$ that is locally finite in the full ambient parameter space $G\times[-1,1]^{2n+2}$. We prove that for the allowed system $n=1,\ k=u=0,\ P(x,l_1,l_2,\epsilon,\delta)=x^2$, the identity-coordinate slice of $R$ in $[-1,1]$ is $[-1,1]\setminus\{0\}$, which is not closed. Because the union of any locally finite family of closed subsets in a topological space is closed, no locally finite triangulation of $R$ by closed simplices exists in $G\times[-1,1]^{2n+2}$. If the simplices $\Delta_\alpha$ are instead taken to be open simplex interiors, then the closedness step in the subsequent Claim~2.9 fails. The topological and logical core is verified in Lean~4.
+\end{abstract}
+
+\maketitle
+
+\section{Main Obstruction Theorem}
+
+Let $n=1$ and $k=u=0$, and consider the allowed polynomial system
+\[
+  P(x,l_1,l_2,\epsilon,\delta) \;=\; x^2.
+\]
+For $(A,\eta,l,\epsilon,\delta)\in G\times[-1,1]^4$, the regular parameter set is defined by
+\[
+  R \;=\; \bigl\{(A,\eta,l,\epsilon,\delta)\in G\times[-1,1]^4 : P\circ A - \eta\text{ has nonsingular zeros only}\bigr\}.
+\]
+Fixing the identity affine transformation $A=\mathrm{id}$ and auxiliary parameters $(l_1,l_2,\epsilon,\delta)=(0,0,0,0)$, the univariate polynomial $x^2-\eta$ has a singular zero at $x=0$ when $\eta=0$ and only nonsingular real zeros (or no real zeros) when $\eta\in[-1,1]\setminus\{0\}$.
+
+\begin{theorem}\label{thm:main}
+For $P(x,l_1,l_2,\epsilon,\delta)=x^2$, the slice of $R$ along the identity coordinate $A=\mathrm{id}$ and $(l_1,l_2,\epsilon,\delta)=0$ is
+\[
+  R_{\mathrm{id}} \;=\; [-1,1]\setminus\{0\}.
+\]
+Consequently:
+\begin{enumerate}[label=\textup{(\arabic*)}]
+  \item $R$ is not closed in $G\times[-1,1]^4$.
+  \item There exists no family $\{\Delta_\alpha\}$ of closed simplices with $\bigcup_\alpha\Delta_\alpha = R$ that is locally finite at every point of $G\times[-1,1]^4$.
+  \item If $\{\Delta_\alpha\}$ is instead a locally finite family of open simplices with $\bigcup_\alpha\Delta_\alpha = R$, then individual members $\Delta_\alpha$ are not closed in $G\times[-1,1]^4$, obstructing the closed-membership inference in Claim~2.9.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Since $0\in\overline{[-1,1]\setminus\{0\}}\setminus R_{\mathrm{id}}$, $R_{\mathrm{id}}$ is not closed in $[-1,1]$, and by continuity of the slice inclusion $\eta\mapsto(\mathrm{id},\eta,0,0,0,0)$, $R$ is not closed in $G\times[-1,1]^4$. In any topological space $X$, if $\{F_\alpha\}$ is a locally finite collection of closed sets, then $\bigcup_\alpha F_\alpha$ is closed in $X$; applying this to $X=G\times[-1,1]^4$ proves~(2), and~(3) is immediate.
+\end{proof}
+
+\begin{remark}[Scope Boundary]
+Theorem~\ref{thm:main} identifies a gap in the stated regularity premise of Theorem~2.8 and its application in Claim~2.9. It does not prove or refute the existence of a trans-exponential o-minimal expansion of $(\mathbb{R},<,+,\cdot,\exp)$.
+\end{remark}
+
+\end{document}
