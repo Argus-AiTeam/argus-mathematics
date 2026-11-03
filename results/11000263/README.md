@@ -45,6 +45,8 @@ The universal induction is closed by exact rank-four principal bases, direct ran
 
 | File | Purpose |
 |---|---|
+| `BIGELOW_UNIVERSAL_FINITE_DIMENSIONALITY.pdf` | All-rank $n\ge4$ universal finite-dimensionality manuscript (PDF) |
+| `BIGELOW_UNIVERSAL_FINITE_DIMENSIONALITY.tex` | All-rank $n\ge4$ universal finite-dimensionality manuscript (LaTeX source) |
 | `BIGELOW_QUESTION6_TECHNICAL_REPORT.pdf` | Initial $X_3\neq0$ technical report |
 | `review-package.md` | Exact theorem, derivation, scope, and review checklist |
 | `verify_burau.py` | Symbolic replay for $n=3,\ldots,8$ |

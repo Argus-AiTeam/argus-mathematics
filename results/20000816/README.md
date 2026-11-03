@@ -15,6 +15,8 @@ The result applies to the fixed-coordinate unlabelled geometric Gröbner fan con
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000816_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000816_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `fake_plane_generic_witness.md` | Main theorem: distinct entire components and dense opens with identical complete FJT fan |
 | `common_arithmetic_map.md` | Rational ambient-open separation of components via rigid surface images |
 | `conjugation_lemma.md` | Coefficient conjugation preserving complete unlabelled fans and faces |
@@ -24,3 +26,4 @@ The result applies to the fixed-coordinate unlabelled geometric Gröbner fan con
 | `exact_frame.py` | Exact arithmetic verifier over $\mathbb Q(\sqrt{-7})$ |
 | `check_algebra.sing` | Singular verification script for the frame algebra |
 | `results.json` | Independent Reviewer round-2 exact replay output |
+| `verification-summary.json` | Structured verification summary |

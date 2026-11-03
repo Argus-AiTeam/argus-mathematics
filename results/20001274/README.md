@@ -18,8 +18,11 @@ Following the two-cap perturbation mechanism of Zhang (`arXiv:1711.10445v1`), th
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20001274_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20001274_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `hyperplane_witness.md` | Complete analytical proof of convexity, universal plane congruence, and translation exclusion |
 | `verify_witness.py` | Standalone exact rational verifier for the curvature and exclusion margins |
 | `witness-replay.json` | Independent replay output |
 | `jacobian-sos-payload.json` | Jacobian SOS/Gram verification payload |
 | `jacobian-sos-output.json` | Jacobian SOS/Gram verification output |
+| `verification-summary.json` | Structured verification summary |

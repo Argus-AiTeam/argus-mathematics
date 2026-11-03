@@ -21,8 +21,11 @@ This refutes only the implication $\mathrm{CAT}(0) \implies \text{ordinary RFRS}
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20001516_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20001516_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `certificate.md` | Complete proof of the automorphism inverse, CAT(0) instantiation, and universal RFRS filtration obstruction |
 | `certificate.py` | Standalone exact verifier |
 | `certificate-output.json` | Recorded verification output |
 | `jacobian-payload.json` | Jacobian characteristic-polynomial payload |
 | `jacobian-result.json` | Jacobian typed output (`[1, -3, 1]`) |
+| `verification-summary.json` | Structured verification summary |

@@ -48,12 +48,12 @@ than around model transcripts.
 
 As of **2026-09-10**, the public program contains:
 
-- **43 published result packages** with technical reports, certificates, source
+- **44 published result packages** with technical reports, certificates, source
   records, or editor notes;
 - **23 independently replayable computational or symbolic certificates**;
 - **2 Lean-checked logical/topological compositions** (`2884` and `1465`) with
   explicit formalization boundaries;
-- **214 checksummed public artifacts**;
+- **306 checksummed public artifacts**;
 - **41 counterexample or proof campaigns** on the live workbench;
 - **757 historical problem records** under source and status audit (617
   reviewed, 593 independently verified, 102 confirmed open).
@@ -109,6 +109,7 @@ current view of active campaigns and catalog status.
 | [1285](results/1285/) | Asymptotic success upper bounds for restricted CRT-local factoring controllers and ECM dual-chain routes | Computational number theory | Independently verified scoped lower-bound theorems |
 | [1187](results/1187/) | Collapse of the Nielsen-torsion quotient $\mathcal D_{\mathrm{AC3}}=\mathcal R_U$ on $G_{4,3}$ and strict $\mathrm{AC}_3$ certificates in $F/K^{(3)}$ | Combinatorial and geometric group theory | Independently verified scoped group-theoretic theorems |
 | [20000582](results/20000582/) | Moving-window Engel Hilbert cocycles with $\Omega(\sqrt{k})$ homogeneous gauge distortion | Metric geometry and bi-Lipschitz embeddings | Independently reviewed scoped construction theorem |
+| [9400114](results/9400114/) | Prime-power ($p^e, e\ge2$) and 12,286 shared-order cofactor exclusions for Agrawal's conjecture | Computational number theory | Independently verified scoped exclusion certificates |
 
 ### Result 20001760
 
@@ -460,6 +461,7 @@ results/
   1285/       Tier-B: restricted CRT-local and ECM dual-chain factoring lower bounds
   1187/       Tier-B: G_{4,3} Nielsen-torsion collapse and F/K^(3) strict AC certificates
   20000582/   Tier-B: moving-window Engel Hilbert cocycles with Omega(sqrt(k)) distortion
+  9400114/    Agrawal conjecture prime-power and shared-order exclusion certificates
 docs/
   status-and-scope.md
   research-program.md

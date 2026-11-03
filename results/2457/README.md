@@ -23,5 +23,8 @@ This refutes only the flawed spectral-transfer implication in `viXra:2506.0023v1
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_2457_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_2457_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `FINAL_NEGATIVE_REPORT.md` | Exact diagonal countermodel $H_N$ and primary-source audit |
 | `ORIGINAL_FRONTIER_NEGATIVE_REPORT.md` | Summary of algebraic and sieve route boundaries for Problem #1055 |
+| `verification-summary.json` | Structured verification summary |

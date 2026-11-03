@@ -26,9 +26,12 @@ This is a domain correction to the literal inclusion of unrestricted $F$ in the 
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20001352_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20001352_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `F_counterexample.md` | Proof of the universal order and endpoint-character obstructions on $F$ |
 | `f_witness.json` | Exact dyadic piecewise-affine specification of $f$ |
 | `verify_f_witness.py` | Exact rational piecewise-affine verifier |
 | `test_verify_f_witness.py` | Unit tests for the exact verifier |
 | `commutators.result.json` | Commutator obstruction verification output |
 | `involutions.result.json` | Involution obstruction verification output |
+| `verification-summary.json` | Structured verification summary |

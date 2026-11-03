@@ -21,7 +21,10 @@ This establishes an explicit irrational jumping number for the full intrinsic bi
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000278_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000278_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `irrational_jump_certificate.md` | Complete endpoint containment and every-$\varepsilon$ strictness proof |
 | `candidate_geometry_certificate.md` | Fixed-ring eligibility, standard grading, and admissible boundaries |
 | `trace_lower_bound.md` | Twisted trace lower bound and Serre cutoff analysis |
 | `irrational_jump_candidate.md` | Candidate specification and parameter derivation |
+| `verification-summary.json` | Structured verification summary |

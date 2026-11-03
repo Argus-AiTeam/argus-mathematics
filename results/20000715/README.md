@@ -20,8 +20,11 @@ Classical $\eta$-products are modular/cusp forms rather than non-modular mock mo
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000715_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000715_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `eta_status_resolution.md` | Full derivation of the 3rd-order nonlinear ODE and the all-order $\mathbb C(q)$-linear obstruction |
 | `eta_exact.py` | Symbolic verifier for the Ramanujan differential elimination |
 | `eta_exact_result.json` | Verification output |
 | `reviewer-eta-exact-result.json` | Independent Reviewer verification receipt (21 exact checks) |
 | `reviewer-normal-form.output.json` | Independent normal-form remainder verification |
+| `verification-summary.json` | Structured verification summary |

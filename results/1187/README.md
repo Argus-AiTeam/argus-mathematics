@@ -18,9 +18,12 @@ These results close the tested nilpotent and third-derived quotient separation r
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_1187_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_1187_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `THEOREM.md` | All-tuple proof that $\mathcal D_{\mathrm{AC3}} = \mathcal R_U$ on $G_{4,3}$ |
 | `DERIVED_LIFTING.md` | Untruncated $F/K^{(3)}$ strict AC program analysis for $P_0$ and $P_2$ |
 | `strict-P0-k01.json` | Explicit strict AC certificate for $P_0$ in $F/K^{(3)}$ |
 | `strict-P2-k01.json` | Explicit strict AC certificate for $P_2$ in $F/K^{(3)}$ |
 | `replay.py` | Independent replay verifier for the $F/K^{(3)}$ certificates |
 | `NEGATIVE_REPORT.md` | Summary of tested Andrews--Curtis invariant boundaries |
+| `verification-summary.json` | Structured verification summary |

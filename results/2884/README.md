@@ -34,6 +34,8 @@ preserving the complete $1/28/5/2$ handle inventory and 36 signed cocore disks, 
 
 | File | Purpose |
 |---|---|
+| `FIXED_E2_SEVEN_ARROW_COUNTEREXAMPLE.pdf` | Unstabilized fixed-$E(2)$ seven-arrow PL/smooth manuscript (PDF) |
+| `FIXED_E2_SEVEN_ARROW_COUNTEREXAMPLE.tex` | Unstabilized fixed-$E(2)$ seven-arrow PL/smooth manuscript (LaTeX source) |
 | `EDITOR_NOTE_K3_PROBLEM_4_8.pdf` | Concise editor-facing scope note (Part A) |
 | `EDITOR_NOTE_K3_PROBLEM_4_8.tex` | LaTeX source for the editor note |
 | `PROBLEM_4_8_COUNTEREXAMPLE.pdf` | Detailed mathematical report (Part A) |

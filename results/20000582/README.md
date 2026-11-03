@@ -15,4 +15,7 @@ This provides the finite-ball cocycle construction and homogeneous-gauge distort
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000582_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000582_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `moving_window_doubling_theorem.md` | Complete proof of uniform doubling and $\Omega(\sqrt{k})$ gauge distortion |
+| `verification-summary.json` | Structured verification summary |

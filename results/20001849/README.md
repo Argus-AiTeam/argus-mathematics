@@ -20,7 +20,10 @@ AIMPL Problem 6.7 does not print an explicit definition of "collapsed"; this res
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20001849_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20001849_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `flying-wing.md` | Complete proof of completeness, all-scales spatial collapse, and positive-Ricci non-isometry |
 | `classification-probe.md` | Source alignment and collapse convention analysis |
 | `replay.py` | Exact symbolic/rational verifier for the curvature, volume-ratio, and Ricci-kernel steps |
 | `replay-result.json` | Recorded replay output |
+| `verification-summary.json` | Structured verification summary |

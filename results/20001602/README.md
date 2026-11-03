@@ -22,6 +22,9 @@ This refutes the literal statement without the just-infinite hypothesis. It does
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20001602_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20001602_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `counterexample.md` | Complete proof for $(G, G'')$, rigid-copy infinitude, and quotient infinite index |
 | `reviewer-exact-replay.json` | Independent Reviewer exact tree-permutation and relation-lattice replay |
 | `reviewer-smith-result.json` | Unimodular Smith normal form certificate (`D = U R V` with diagonal `(1,3,0,0,0)`) |
+| `verification-summary.json` | Structured verification summary |

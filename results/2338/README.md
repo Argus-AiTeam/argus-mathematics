@@ -26,6 +26,8 @@ These are unconditional global necessary conditions on any hypothetical integer 
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_2338_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_2338_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `k7_total_exclusion_synthesis.md` | Complete proof that $m(a)=5 \implies K(a)\ge8$ |
 | `k7_total_exclusion_synthesis_certificate.py` | Rerunnable verifier for the $K\le7$ exclusion |
 | `lower_index_six.md` | Complete exclusion at lower index $K=6$ |
@@ -34,3 +36,4 @@ These are unconditional global necessary conditions on any hypothetical integer 
 | `k8_lower_index_overlap_reduction.md` | Reduction of $K(a)=8$ to $\{3,5,7,8\}$ and $\{5,6,7,8\}$ |
 | `k8_5678_full_system_classification.md` | Proof that $\omega(a)\ge14$ on the $\{5,6,7,8\}$ branch |
 | `k8_5678_full_system_certificate.py` | Rerunnable verifier for the $\{5,6,7,8\}$ primary-cell classification |
+| `verification-summary.json` | Structured verification summary |

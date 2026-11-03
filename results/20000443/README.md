@@ -19,7 +19,10 @@ confirming smoothness of the projective hypersurface $X = V(\Phi) \subset \mathb
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000443_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000443_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `evidence-summary.md` | Proposition alignment, smoothness verification, and Fano/rational-connectedness bridge |
 | `jacobian-request.json` | Exact Jacobian resultant request payload |
 | `jacobian-output.json` | Exact Jacobian resultant output (`-108 * s^7 * (s - 1)^2`) |
 | `source-location.txt` | Primary source citation and passage index |
+| `verification-summary.json` | Structured verification summary |

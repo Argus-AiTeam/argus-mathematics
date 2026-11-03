@@ -20,6 +20,9 @@ These exclude the four studied construction families; the unrestricted existence
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_6800022_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_6800022_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `EXPLORATORY_NEGATIVE_REPORT.md` | Complete proof of the four embeddedness obstructions |
 | `COUNTEREXAMPLE_CONTRACT.md` | Problem specification and period/embeddedness constraints |
 | `source-audit.md` | Primary source alignment |
+| `verification-summary.json` | Structured verification summary |

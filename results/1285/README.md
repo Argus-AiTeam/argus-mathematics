@@ -18,8 +18,11 @@ These lower bounds apply to the specified restricted controller grammars; unrest
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_1285_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_1285_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `NEGATIVE_REPORT.md` | Asymptotic lower bounds for the CRT-local and low-$L_1$ factoring models |
 | `ecm_dual_chain_analysis.md` | Proof of the balanced-semiprime counterfamily for the ECM dual-chain route |
 | `ecm_dual_chain_certificate.json` | Exact finite-shell certificate |
 | `reviewer-replay-20260905.json` | Independent Reviewer reconstruction of 65,537 shell heights and 42,875 triples |
 | `reviewer-jacobian-order-four-20260905.json` | Jacobian elliptic-curve point-order verification |
+| `verification-summary.json` | Structured verification summary |

@@ -1,0 +1,188 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\definecolor{LinkBlue}{HTML}{174A7E}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=LinkBlue,
+  citecolor=LinkBlue,
+  urlcolor=LinkBlue
+}
+
+\setlength{\parskip}{2pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=1.5pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.15}
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[A 5,454-Vertex Counterexample to Sullivan's Conjecture 6.1]
+{A 5,454-Vertex Multi-Label Counterexample to Seymour--Sullivan Conjecture 6.1 and Prototype Optimality}
+
+\author{Argus Open Research Project}
+\address{Argus Open Research Project}
+\date{September 9, 2026}
+
+\subjclass[2020]{Primary 05C20; Secondary 05C38, 05C15, 90C10}
+\keywords{rainbow directed path, rainbow cycle, multi-label digraph, independent-set blow-up, Farkas duality}
+
+\begin{document}
+
+\begin{abstract}
+Let $G=(V,E)$ be a finite simple directed graph in which each directed arc carries a subset of labels from $\{1,\dots,k\}$, equivalent to a collection of simple directed graphs $G_1,\dots,G_k$ on the common vertex set $V$. Write $D(v)=\sum_{i=1}^k d^+_{G_i}(v)$ for the total outgoing label degree of $v$, and let $R(v)$ denote the set of vertices reachable from $v$ by a nonempty rainbow directed walk under unordered injective label sequences. Conjecture~6.1 in Sullivan's survey asks whether every rainbow-cycle-free edge-labelled digraph contains a vertex $v$ with $|R(v)|\ge D(v)$. Under the multi-label formulation where a single directed arc may belong to several label classes $G_i$ and reachability is taken over positive-length rainbow paths, we construct an explicit 16-vertex prototype with $k=6$ labels whose independent-set blow-up yields a directed graph on $5{,}454$ vertices and $11{,}792{,}572$ arcs containing no rainbow directed cycle and satisfying $D(v)-|R(v)|\ge 1$ at every vertex $v$. Using an explicit nonnegative integer Farkas dual pair, we further prove that $5{,}454$ is the exact linear-programming and integer-programming minimum vertex count among all positive independent-set blow-ups of this 16-vertex prototype, with zero integrality gap. Finally, we prove that no counterexample exists with $n\le 4$ vertices and $k\le 3$ labels, nor in any positive independent-set blow-up of a template with $n\le 4$ and $k\le 3$.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction and Problem Formulation}
+
+Let $V$ be a finite vertex set and let $G_1=(V,E_1),\dots,G_k=(V,E_k)$ be simple loopless directed graphs on $V$. Equivalently, each ordered pair $(u,v)$ of distinct vertices carries a palette $L(u,v)=\{i\in\{1,\dots,k\}: (u,v)\in E_i\}\subseteq\{1,\dots,k\}$. For each vertex $v\in V$, the total outgoing label incidence is
+\[
+  D(v) \;=\; \sum_{i=1}^k d^+_{G_i}(v) \;=\; \sum_{w\in V\setminus\{v\}} |L(v,w)|.
+\]
+A \emph{rainbow directed walk} of length $\ell\ge 1$ from $u_0$ to $u_\ell$ is a sequence of arcs $(u_0,u_1),\dots,(u_{\ell-1},u_\ell)$ together with a choice of pairwise distinct labels $c_r\in L(u_{r-1},u_r)$ for $1\le r\le\ell$. A \emph{rainbow directed cycle} is a simple directed cycle that admits a rainbow labelling; since any closed rainbow walk contains a simple rainbow directed cycle, absence of rainbow directed cycles is equivalent to the absence of nonempty closed rainbow walks.
+
+For $v\in V$, let $R(v)$ denote the set of endpoints $w\in V$ of nonempty rainbow directed walks starting at $v$. When $G$ has no rainbow directed cycle, $v\notin R(v)$ under this positive-length reachability convention. In the survey on the Caccetta--H\"aggkvist conjecture and related problems, Sullivan~\cite{Sullivan2006} states Conjecture~6.1 (attributed to Seymour and Sullivan): either $G$ contains a rainbow directed cycle, or there exists a vertex $v\in V$ with $|R(v)|\ge D(v)$. Equivalently, a counterexample requires a rainbow-cycle-free multi-label digraph in which every vertex $v\in V$ has strict deficit
+\[
+  \delta(v) \;:=\; D(v) - |R(v)| \;\ge\; 1.
+\]
+
+\begin{theorem}[Main Counterexample and Prototype Optimality]\label{thm:main}
+Under the positive-length, unordered injective-label, multi-label formulation above with $k=6$ labels:
+\begin{enumerate}[label=\textup{(\arabic*)}]
+  \item There exists an explicit 16-vertex template $T$ and positive integer vertex multiplicities $m=(m_0,\dots,m_{15})\in\mathbb{Z}_{\ge 1}^{16}$ with
+  \[
+    m \;=\; (1096,\,8,\,23,\,69,\,244,\,755,\,1,\,1059,\,1,\,1,\,1131,\,1,\,1,\,1,\,1,\,1062)
+  \]
+  whose independent-set blow-up $G=T[m]$ has $\sum_{u=0}^{15} m_u = 5{,}454$ vertices, $11{,}792{,}572$ directed arcs, and $24{,}094{,}765$ labelled arc incidences, contains no rainbow directed cycle, and satisfies $D(v)-|R(v)|\ge 1$ for every $v\in V(G)$, with
+  \[
+    \min_{v\in V(G)}\bigl(D(v)-|R(v)|\bigr) \;=\; 1.
+  \]
+  \item Among all positive real or integer multiplicity vectors $m\in\mathbb{R}_{\ge 1}^{16}$ on the template $T$ satisfying $\delta_T(u;m)\ge 1$ for all $0\le u\le 15$, the minimum total vertex count is exactly $5{,}454$:
+  \[
+    \min\left\{\sum_{u=0}^{15} m_u \;\middle|\; m\in\mathbb{R}_{\ge 1}^{16},\ A m \ge \mathbf{1}\right\} \;=\; 5{,}454,
+  \]
+  and the integrality gap is zero.
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Small-Template and Blow-Up Exclusions]\label{thm:boundaries}
+For $k\le 3$ labels and templates on $n\le 4$ vertices:
+\begin{enumerate}[label=\textup{(\arabic*)}]
+  \item Exhaustive enumeration of all $34{,}012{,}224$ digon-free 3-label patterns on $n\le 4$ vertices leaves $27{,}702$ rainbow-cycle-free patterns with at least one multiply labelled outgoing arc per vertex; every one has $\min_v(D(v)-|R(v)|)\le 0$.
+  \item Across all $27{,}702$ retained templates on $n\le 4$ vertices (which yield $1{,}854$ distinct deficit matrices $A$), every linear system $A m\ge \mathbf{1},\ m\ge \mathbf{1}$ admits an explicit nonzero nonnegative integer dual vector $y\in\mathbb{Z}_{\ge 0}^n\setminus\{0\}$ with $A^{\mathsf T}y\le 0$, proving that no positive independent-set blow-up of any $n\le 4,\ k\le 3$ template can satisfy $D(v)-|R(v)|\ge 1$ everywhere.
+\end{enumerate}
+\end{theorem}
+
+\section{Independent-Set Blow-Ups and Exact Deficit Linearization}
+
+Let $T$ be a template on vertex set $\{0,1,\dots,n-1\}$ with label palettes $L_T(u,v)\subseteq\{1,\dots,k\}$ and capacity matrix $C_{u,v}=|L_T(u,v)|$. Given positive integers $m=(m_0,\dots,m_{n-1})\in\mathbb{Z}_{\ge 1}^n$, the \emph{independent-set blow-up} $G=T[m]$ replaces each template vertex $u$ by an independent set $V_u$ of $m_u$ clone vertices, and places between every $x\in V_u$ and $y\in V_v$ an arc carrying the exact palette $L_T(u,v)$.
+
+\begin{lemma}[Blow-Up Projection and Linear Deficit Formula]\label{lem:blowup}
+Let $T$ be a template and $G=T[m]$ its blow-up for $m\in\mathbb{Z}_{\ge 1}^n$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+  \item Every rainbow walk in $G$ projects under $V_u\mapsto u$ to a rainbow walk in $T$ with the same label sequence, and every rainbow walk in $T$ lifts to every choice of clones along its vertices. In particular, $G$ is rainbow-cycle-free if and only if $T$ is rainbow-cycle-free.
+  \item Assume $T$ is rainbow-cycle-free, and let $R_T(u)\subseteq\{0,\dots,n-1\}\setminus\{u\}$ denote the set of template vertices reachable from $u$ by a nonempty rainbow walk in $T$. Then for every clone $x\in V_u$,
+  \[
+    D_G(x) \;=\; \sum_{v=0}^{n-1} C_{u,v}\, m_v,
+    \qquad
+    |R_G(x)| \;=\; \sum_{v\in R_T(u)} m_v,
+  \]
+  and consequently $D_G(x)-|R_G(x)| = (A m)_u$, where the $n\times n$ integer matrix $A$ is given by
+  \[
+    A_{u,v} \;=\; C_{u,v} - \mathbf{1}_{\{v\in R_T(u)\}} \qquad (0\le u,v < n).
+  \]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Since each $V_u$ is an independent set and every pair $(x,y)\in V_u\times V_v$ carries the identical palette $L_T(u,v)$, the map sending $x\in V_u$ to $u$ is a label-preserving homomorphism whose fibers are independent sets with complete bipartite inter-fiber connections. Thus rainbow walks correspond bijectively at the level of template vertex sequences and label sequences, proving~(a). Because $T$ is rainbow-cycle-free, no nonempty rainbow walk in $T$ can return to its starting vertex $u$, so $u\notin R_T(u)$, while for each $v\in R_T(u)$ every clone $y\in V_v$ is the terminal vertex of a lifted rainbow walk from $x\in V_u$. Summing over $v$ yields the expressions for $D_G(x)$, $|R_G(x)|$, and $D_G(x)-|R_G(x)|=(Am)_u$.
+\end{proof}
+
+\section{The 16-Vertex Prototype and Proof of Theorem~\ref{thm:main}}
+
+In the 16-vertex, 6-label construction, the capacity matrix $C=(C_{u,v})_{0\le u,v\le 15}$ and the reachability indicator $\mathbf{1}_{\{v\in R_T(u)\}}$ produce the explicit $16\times 16$ integer deficit matrix $A=(A_{u,v})$:
+\[
+A = \left(\begin{smallmatrix}
+ 0 &  3 &  2 &  1 &  1 &  1 &  0 &  1 &  1 & -1 & -1 & -1 & -1 & -1 &  0 & -1 \\
+ 0 &  0 &  3 &  1 &  1 &  1 &  1 &  1 &  1 & -1 & -1 & -1 & -1 & -1 &  0 & -1 \\
+ 0 &  0 &  0 &  2 &  1 &  1 &  1 &  1 &  1 & -1 & -1 & -1 & -1 & -1 &  0 & -1 \\
+-1 & -1 &  0 &  0 &  3 &  2 &  1 &  1 &  1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 \\
+-1 & -1 & -1 &  0 &  0 &  3 &  1 &  1 &  1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 \\
+-1 & -1 & -1 &  0 &  0 &  0 &  1 &  1 &  1 &  1 &  1 &  1 & -1 & -1 & -1 & -1 \\
+-1 & -1 & -1 &  0 &  0 &  0 &  0 &  1 &  1 &  1 &  1 &  1 & -1 & -1 & -1 & -1 \\
+-1 & -1 & -1 & -1 & -1 & -1 &  0 &  0 &  5 &  1 &  1 &  1 & -1 & -1 & -1 &  1 \\
+-1 & -1 & -1 & -1 & -1 & -1 &  0 &  0 &  0 &  1 &  1 &  1 &  1 &  1 & -1 &  1 \\
+-1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 &  0 &  4 &  4 &  1 &  1 &  1 & -1 \\
+ 1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 &  0 &  0 &  1 &  1 &  1 &  1 &  1 \\
+ 1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 &  0 &  0 &  0 &  1 &  1 &  1 &  1 \\
+ 1 &  1 & -1 &  1 &  1 &  1 & -1 & -1 & -1 & -1 & -1 & -1 &  0 &  1 &  1 &  1 \\
+ 1 &  1 &  1 &  1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 &  0 &  0 &  1 &  2 \\
+ 1 &  1 &  1 &  0 & -1 & -1 & -1 & -1 & -1 & -1 & -1 & -1 &  0 &  0 &  0 &  4 \\
+ 1 &  1 &  1 &  1 &  1 &  1 & -1 & -1 & -1 & -1 & -1 & -1 &  0 &  0 &  0 &  0
+\end{smallmatrix}\right).
+\]
+Composition of all $\sum_{\ell=1}^6 6!/ (6-\ell)! = 1{,}956$ nonempty injective label words over $\{1,\dots,6\}$ on the template $T$ confirms that no diagonal entry is reachable in positive length ($u\notin R_T(u)$ for all $0\le u\le 15$) and that the off-diagonal reachability relation $R_T$ matches $C-A$.
+
+Evaluating $A m$ on the integer multiplicity vector
+\[
+  m \;=\; (1096,\,8,\,23,\,69,\,244,\,755,\,1,\,1059,\,1,\,1,\,1131,\,1,\,1,\,1,\,1,\,1062)^{\mathsf T}
+\]
+gives the exact deficit vector
+\[
+  A m \;=\; (1,\,1,\,1,\,1,\,1,\,2,\,1,\,2,\,1,\,213,\,2,\,1,\,1019,\,128,\,2182,\,1)^{\mathsf T} \;\ge\; \mathbf{1},
+\]
+with $\sum_{u=0}^{15} m_u = 5{,}454$. By Lemma~\ref{lem:blowup}, the materialized blow-up $G=T[m]$ has $5{,}454$ vertices, $\sum_{u,v} m_u m_v \mathbf{1}_{\{C_{u,v}>0\}} = 11{,}792{,}572$ directed arcs, no rainbow directed cycle, and $D_G(x)-|R_G(x)|\ge 1$ at every vertex $x\in V(G)$. Direct state-reachability traversal on the materialized $5{,}454$-vertex graph independently confirms all $5{,}454$ vertex degrees, reachable sets, and deficits.
+
+\subsection*{Proof of Prototype Optimality (Theorem~\ref{thm:main}(2))}
+
+Define the nonnegative integer row-multiplier vector $y\in\mathbb{Z}_{\ge 0}^{16}$ and lower-bound multiplier vector $z\in\mathbb{Z}_{\ge 0}^{16}$ by
+\begin{align*}
+  y &\;=\; (492,\,159,\,45,\,15,\,5,\,0,\,715,\,0,\,694,\,0,\,0,\,738,\,0,\,0,\,0,\,692)^{\mathsf T}, \\
+  z &\;=\; (0,\,0,\,0,\,0,\,0,\,0,\,1207,\,0,\,0,\,0,\,0,\,0,\,0,\,0,\,692,\,0)^{\mathsf T}.
+\end{align*}
+Direct columnwise summation verifies the exact integer identity
+\[
+  A^{\mathsf T} y + z \;=\; (1,\,1,\,1,\,1,\,1,\,1,\,1,\,1,\,1,\,1,\,1,\,1,\,1,\,1,\,1,\,1)^{\mathsf T} \;=\; \mathbf{1}.
+\]
+For any real vector $m\in\mathbb{R}^{16}$ satisfying $m\ge\mathbf{1}$ and $A m\ge\mathbf{1}$, since $y\ge 0$ and $z\ge 0$, we have
+\[
+  \sum_{v=0}^{15} m_v \;=\; \mathbf{1}^{\mathsf T} m \;=\; (A^{\mathsf T}y + z)^{\mathsf T} m
+  \;=\; y^{\mathsf T}(A m) + z^{\mathsf T} m
+  \;\ge\; \sum_{u=0}^{15} y_u + \sum_{v=0}^{15} z_v \;=\; 3555 + 1899 \;=\; 5454.
+\]
+Since the integer vector $m$ above attains $\sum_{v=0}^{15} m_v = 5454$, both the rational linear program and the integer linear program have exact minimum $5{,}454$.\qed
+
+\section{Scope and Open Boundaries}
+
+Theorem~\ref{thm:main} resolves the multi-label formulation of Conjecture~6.1 in which distinct label graphs $G_i$ may overlap on the same directed arc ($|L(u,v)|\le k$) and reachability is defined by nonempty rainbow walks. Two natural strengthenings remain open:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item the \emph{single-label} (edge-disjoint) formulation in which $|L(u,v)|\le 1$ for every ordered pair $(u,v)$, so that $D(v)=d^+_G(v)$;
+  \item determination of the absolute minimum number of vertices required for a multi-label counterexample across all possible templates $T$.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+\bibitem{Sullivan2006}
+B.~D.~Sullivan, \emph{A summary of problems and results related to the Caccetta--H\"aggkvist conjecture}, AIM workshop survey, arXiv:math/0605646, 2006.
+\end{thebibliography}
+
+\end{document}

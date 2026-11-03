@@ -18,4 +18,7 @@ This rules out the analyzed depth-three scalar collision-Gram schedules; arbitra
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_2800203_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_2800203_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `EXPLORATORY_NEGATIVE_REPORT.md` | Proofs of the PSD pullback obstruction and the depth-3 rooted-$C_4$ threshold discrepancy bound |
+| `verification-summary.json` | Structured verification summary |

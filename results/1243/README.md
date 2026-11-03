@@ -21,7 +21,10 @@ This certifies the local/global pairing value on the displayed classes. A comple
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_1243_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_1243_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `PAIRING_RESULT.md` | Derivation of the explicit global norm preimage and local Hilbert symbols |
 | `compute_pairing.py` | Rerunnable local/global pairing verifier |
 | `local_cover_points_2759_936.json` | Certified local cover points |
 | `order012_pairing_from_cached.json` | Recorded pairing certificate |
+| `verification-summary.json` | Structured verification summary |
