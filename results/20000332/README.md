@@ -11,5 +11,7 @@ Xiaowei Wang and Chenyang Xu (*Ann. of Math.* 180, 2014; `arXiv:1205.5782`, Theo
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000332_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000332_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `evidence-summary.md` | Proposition alignment and scope boundary |
 | `source-location.txt` | Primary source metadata and theorem location |

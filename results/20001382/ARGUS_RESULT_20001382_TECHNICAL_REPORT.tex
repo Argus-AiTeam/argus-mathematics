@@ -1,0 +1,224 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\setlength{\parskip}{2pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[A topological obstruction to an inverse arboreal problem]
+{A Topological Obstruction to the Literal Inverse Arboreal Galois Problem}
+
+\author{Argus Open Research Project}
+\address{Argus Open Research Project}
+\date{August 30, 2026}
+
+\subjclass[2020]{Primary 12F10; Secondary 20E08, 37P15}
+\keywords{arboreal Galois representation, rooted tree, profinite group, nonclosed subgroup}
+
+\begin{document}
+
+\begin{abstract}
+An inverse problem asks whether an arbitrary subgroup of the automorphism
+group of a regular rooted tree can occur as the image of an arboreal Galois
+representation.  Taken literally, the answer is negative for a purely
+topological reason.  The image of a continuous homomorphism from an absolute
+Galois group into the profinite automorphism group of a rooted tree is closed.
+On the other hand, the finitary automorphism group of the infinite rooted
+binary tree is a dense proper subgroup and hence is not closed.  This gives a
+counterexample to the unrestricted arbitrary-subgroup formulation.  It does
+not address the inverse problem for prescribed closed subgroups.
+\end{abstract}
+
+\maketitle
+
+\section{The inverse problem and its topology}
+
+Let \(T_d\) be the infinite regular rooted \(d\)-ary tree.  An arboreal
+Galois representation associated with a polynomial and a basepoint is a
+continuous homomorphism
+\[
+ \rho:\operatorname{Gal}(K^{\mathrm s}/K)
+ \longrightarrow \operatorname{Aut}(T_d).
+\]
+The absolute Galois group carries its Krull topology.  The tree automorphism
+group carries the inverse-limit topology
+\[
+ \operatorname{Aut}(T_d)
+ \simeq \varprojlim_n \operatorname{Aut}(T_{d,n}),
+\]
+where \(T_{d,n}\) is the finite truncation through level \(n\).
+
+The literal form of the inverse problem asks whether every abstract subgroup
+of \(\operatorname{Aut}(T_d)\) can arise as such an image.  The following
+standard observation already imposes a necessary condition.
+
+\begin{proposition}\label{prop:closed}
+The image of every arboreal Galois representation is a closed subgroup of
+\(\operatorname{Aut}(T_d)\).
+\end{proposition}
+
+\begin{proof}
+The Krull-topological absolute Galois group is profinite and therefore
+compact.  The group \(\operatorname{Aut}(T_d)\), being an inverse limit of
+finite discrete groups, is Hausdorff.  The continuous image of a compact
+space is compact, and compact subsets of a Hausdorff space are closed.
+\end{proof}
+
+\section{The finitary subgroup}
+
+It remains to exhibit an abstract subgroup that violates the necessary
+closedness condition.  We work with the binary tree
+\[
+ T=\{0,1\}^{*},
+\]
+whose root is the empty word and whose children below a word \(w\) are
+\(w0\) and \(w1\).
+
+For each \(n\geq 0\), let \(T_n\) denote the truncation through level \(n\).
+Every automorphism \(h\in\operatorname{Aut}(T_n)\) has a trivial extension
+to \(T\): if a word of length greater than \(n\) is written uniquely as
+\(uv\), with \(\lvert u\rvert=n\), define
+\[
+ \iota_n(h)(uv)=h(u)v.
+\]
+Define
+\[
+ F=\bigcup_{n\geq0}\iota_n\bigl(\operatorname{Aut}(T_n)\bigr).
+\]
+Equivalently, \(F\) consists of those automorphisms whose local actions are
+trivial below some finite level.  It is called the finitary automorphism
+group.
+
+\begin{lemma}\label{lem:dense}
+The subgroup \(F\) is dense in \(\operatorname{Aut}(T)\).
+\end{lemma}
+
+\begin{proof}
+Let
+\[
+ \pi_m:\operatorname{Aut}(T)\longrightarrow\operatorname{Aut}(T_m)
+\]
+be restriction.  Given \(a\in\operatorname{Aut}(T_m)\), the trivial
+extension \(\iota_m(a)\) lies in \(F\) and restricts to \(a\).  Hence
+\[
+ \pi_m(F)=\operatorname{Aut}(T_m)
+ \qquad\text{for every }m.
+\]
+Every nonempty basic open subset of the inverse-limit topology is determined
+by a finite-level restriction.  Since \(F\) realizes every such restriction,
+every nonempty basic open set meets \(F\).
+\end{proof}
+
+\begin{lemma}\label{lem:proper}
+The subgroup \(F\) is a proper subgroup of \(\operatorname{Aut}(T)\).
+\end{lemma}
+
+\begin{proof}
+Each group \(\operatorname{Aut}(T_n)\) is finite, so \(F\) is countable.
+The full automorphism group is uncountable.  Indeed, the vertices
+\[
+ v_n=1^n0\qquad(n\geq0)
+\]
+are pairwise prefix-incomparable, and their descendant subtrees are
+disjoint.  For each binary sequence \(\epsilon=(\epsilon_n)_{n\geq0}\),
+simultaneously interchange the two child subtrees below \(v_n\) precisely
+when \(\epsilon_n=1\).  Disjointness of the supports makes this a tree
+automorphism, and distinct sequences give distinct automorphisms.  Thus
+\(\{0,1\}^{\mathbb N}\) injects into \(\operatorname{Aut}(T)\).
+\end{proof}
+
+\begin{corollary}\label{cor:nonclosed}
+The finitary subgroup \(F\) is not closed in \(\operatorname{Aut}(T)\).
+\end{corollary}
+
+\begin{proof}
+By \Cref{lem:dense}, the closure of \(F\) is the full automorphism group.
+By \Cref{lem:proper}, \(F\) is not the full automorphism group.
+\end{proof}
+
+\section{The counterexample}
+
+\begin{theorem}\label{thm:main}
+There is a subgroup of the automorphism group of a regular rooted tree that
+cannot be the image of an arboreal Galois representation.  In particular,
+the inverse problem with an unrestricted arbitrary-subgroup quantifier is
+false.
+\end{theorem}
+
+\begin{proof}
+Take the finitary subgroup
+\[
+ F\leq\operatorname{Aut}(T)
+\]
+of the infinite rooted binary tree.  It is a subgroup by construction and is
+not closed by \Cref{cor:nonclosed}.  If \(F\) were the image of an arboreal
+Galois representation, \Cref{prop:closed} would make it closed, a
+contradiction.
+\end{proof}
+
+\begin{remark}[Scope]\label{rem:scope}
+The obstruction uses only the omission of a closedness hypothesis.  It gives
+no nonrealizability result for any particular closed subgroup of
+\(\operatorname{Aut}(T_d)\).  Thus the natural inverse problem for prescribed
+closed subgroups remains separate from the literal statement treated here.
+\end{remark}
+
+\section{Discussion}
+
+The argument is independent of arithmetic properties of a polynomial.  Its
+content is that the topology is part of the data of an arboreal image: an
+abstract subgroup that is not closed cannot occur, regardless of the field,
+basepoint, or dynamical construction.  Consequently, a well-posed inverse
+problem must at least restrict the prescribed group to a closed subgroup of
+the profinite tree automorphism group.
+
+\appendix
+
+\section{Checklist for verification}
+
+\begin{enumerate}
+  \item Verify that the arboreal representation is continuous for the Krull
+  and inverse-limit topologies.
+  \item Check compactness of the absolute Galois group and the Hausdorff
+  property of \(\operatorname{Aut}(T_d)\).
+  \item Verify that every finite-level automorphism has the displayed trivial
+  extension and hence that every finite projection of \(F\) is surjective.
+  \item Check that \(F\) is countable while \(\operatorname{Aut}(T)\) is
+  uncountable.
+  \item Conclude that \(F\) is dense, proper, and nonclosed.
+  \item Keep the unrestricted abstract-subgroup statement separate from the
+  closed-subgroup inverse problem.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+
+\bibitem{AHPW}
+J.~Anderson, S.~Hamblen, B.~Poonen, and L.~Walton,
+\emph{Local arboreal representations},
+Int. Math. Res. Not. IMRN (2018), no.~19, 5974--5994;
+arXiv:1610.04969v2.
+
+\bibitem{AIM}
+American Institute of Mathematics,
+\emph{The Galois theory of orbits in arithmetic dynamics},
+problem list from the workshop held May 16--20, 2016, Problem~14.1.
+
+\end{thebibliography}
+
+\end{document}

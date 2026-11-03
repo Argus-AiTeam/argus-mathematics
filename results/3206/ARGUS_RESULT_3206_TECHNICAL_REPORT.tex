@@ -1,0 +1,241 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\setlength{\parskip}{2pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[A Cayley graph on \(\mathbb Z_{15}\) with core \(C_5\)]
+{A Cayley Graph on \(\mathbb Z_{15}\) Whose Core Is \(C_5\)}
+
+\author{Argus Open Research Project}
+\address{Argus Open Research Project}
+\date{August 30, 2026}
+
+\subjclass[2020]{Primary 05C60; Secondary 05C25, 20K01}
+\keywords{Cayley graph, graph core, graph homomorphism, retraction}
+
+\begin{document}
+
+\begin{abstract}
+We give an explicit connected Cayley graph on the cyclic group
+\(\mathbb Z_{15}\) whose core is the five-cycle.  Let
+\[
+ X=\operatorname{Cay}\bigl(\mathbb Z_{15},
+ \{1,4,6,9,11,14\}\bigr).
+\]
+Reduction modulo \(5\) maps \(X\) homomorphically onto \(C_5\), and the map
+\(i\mapsto6i\) gives a section whose image is an induced five-cycle.  The
+resulting composite is a retraction.  Every endomorphism of \(C_5\) is an
+automorphism, so \(C_5\) is the core of \(X\).  Since a Cayley graph on
+\((\mathbb Z_{15})^m\) has \(15^m\) vertices, this core is not a Cayley graph
+on any power of \(\mathbb Z_{15}\).  The example refutes the literal
+arbitrary-abelian formulation of a problem on cores of Cayley graphs, but
+does not address prime, elementary-abelian, or cubelike variants.
+\end{abstract}
+
+\maketitle
+
+\section{The graph}
+
+Let
+\[
+ G=\mathbb Z_{15},\qquad
+ \pi:G\longrightarrow\mathbb Z_5,\qquad \pi(x)=x\bmod5,
+\]
+and put
+\[
+ S=\pi^{-1}(\{1,-1\})
+ =\{1,4,6,9,11,14\}.
+\]
+Define the simple undirected Cayley graph
+\[
+ X=\operatorname{Cay}(G,S)
+\]
+by declaring \(x\) adjacent to \(y\) precisely when
+\(y-x\pmod {15}\) lies in \(S\).
+
+The set \(S\) does not contain zero and satisfies \(S=-S\), so \(X\) is a
+simple undirected graph.  It is \(6\)-regular and has
+\[
+ \frac{15\cdot6}{2}=45
+\]
+edges.  Since \(1\in S\), the edges \(x\sim x+1\) contain a spanning
+fifteen-cycle, and hence \(X\) is connected.
+
+\section{A retraction onto an induced five-cycle}
+
+Write
+\[
+ C_5=\operatorname{Cay}(\mathbb Z_5,\{1,-1\})
+\]
+and define
+\[
+ \sigma:\mathbb Z_5\longrightarrow\mathbb Z_{15},
+ \qquad \sigma(i)=6i\bmod15.
+\]
+Since \(6\equiv1\pmod5\), one has
+\[
+ \pi\circ\sigma=\operatorname{id}_{\mathbb Z_5}.
+\]
+
+\begin{lemma}\label{lem:maps}
+The maps \(\pi:X\to C_5\) and \(\sigma:C_5\to X\) are graph
+homomorphisms.
+\end{lemma}
+
+\begin{proof}
+If \(x\sim_X y\), then
+\[
+ \pi(y)-\pi(x)=\pi(y-x)\in\{1,-1\},
+\]
+so \(\pi(x)\sim_{C_5}\pi(y)\).
+
+Conversely, if \(i\sim_{C_5}j\), then \(j-i=\pm1\) in \(\mathbb Z_5\).
+Therefore
+\[
+ \sigma(j)-\sigma(i)=\pm6\in S,
+\]
+and hence \(\sigma(i)\sim_X\sigma(j)\).
+\end{proof}
+
+The image of \(\sigma\), in cyclic order, is
+\[
+ H=\{0,6,12,3,9\},\qquad 0-6-12-3-9-0.
+\]
+
+\begin{lemma}\label{lem:induced}
+The subgraph of \(X\) induced by \(H\) is a five-cycle, and
+\[
+ R=\sigma\circ\pi:X\longrightarrow H
+\]
+is a retraction.
+\end{lemma}
+
+\begin{proof}
+For distinct \(i,j\in\mathbb Z_5\),
+\[
+ \sigma(j)-\sigma(i)=6(j-i)\in S
+ \quad\Longleftrightarrow\quad
+ j-i\equiv\pm1\pmod5.
+\]
+Thus the only edges among the five image vertices are the five consecutive
+cycle edges, so \(H\) is induced.  By \Cref{lem:maps}, the composite \(R\)
+is a graph homomorphism.  For \(h=\sigma(i)\in H\),
+\[
+ R(h)=\sigma(\pi(\sigma(i)))=\sigma(i)=h,
+\]
+so \(R\) fixes \(H\) pointwise.
+\end{proof}
+
+\section{The five-cycle is a core}
+
+A finite graph is a \emph{core} if every endomorphism is an automorphism.
+
+\begin{lemma}\label{lem:c5core}
+Every endomorphism of \(C_5\) is an automorphism.
+\end{lemma}
+
+\begin{proof}
+Label the vertices by \(\mathbb Z_5\), and let
+\(f:C_5\to C_5\) be an endomorphism.  Since consecutive vertices must map
+to adjacent vertices,
+\[
+ f(i+1)-f(i)=\epsilon_i,\qquad
+ \epsilon_i\in\{1,-1\}.
+\]
+Summing over the five edges gives
+\[
+ \sum_{i=0}^{4}\epsilon_i\equiv0\pmod5.
+\]
+The sum of five signs is one of
+\[
+ -5,-3,-1,1,3,5.
+\]
+Only \(\pm5\) is divisible by \(5\), so all signs are equal.  Consequently
+\(f(i)=a+i\) for all \(i\), or \(f(i)=a-i\) for all \(i\).  These are the
+rotations and reflections of \(C_5\), and each is an automorphism.
+\end{proof}
+
+\begin{proposition}\label{prop:core}
+The core of \(X\) is isomorphic to \(C_5\).
+\end{proposition}
+
+\begin{proof}
+By \Cref{lem:induced}, \(X\) retracts onto \(H\cong C_5\).  Hence \(X\) and
+\(C_5\) are homomorphically equivalent.  By \Cref{lem:c5core}, \(C_5\) is
+already a core.  The core is unique up to isomorphism within a finite
+homomorphic-equivalence class.
+\end{proof}
+
+\section{The power-cardinality obstruction}
+
+\begin{theorem}\label{thm:main}
+There is a Cayley graph on \(\mathbb Z_{15}\) whose core is not a Cayley
+graph on any power of \(\mathbb Z_{15}\).
+\end{theorem}
+
+\begin{proof}
+Take the graph \(X\) above.  Its core has five vertices by
+\Cref{prop:core}.  A Cayley graph on \((\mathbb Z_{15})^m\) has exactly
+\(15^m\) vertices.  If \(m=0\) is allowed, this number is \(1\); if
+\(m\geq1\), it is divisible by \(3\).  In neither case is it \(5\).
+\end{proof}
+
+\begin{remark}[Scope]\label{rem:scope}
+The example uses the composite-order cyclic group \(\mathbb Z_{15}\).
+It refutes an unrestricted formulation quantifying over arbitrary abelian
+groups.  It does not refute variants restricted to
+\(\mathbb Z_p\), elementary abelian groups, or cubelike graphs.
+\end{remark}
+
+\appendix
+
+\section{Checklist for verification}
+
+\begin{enumerate}
+  \item Check that \(S=-S\), \(0\notin S\), and \(1\in S\).
+  \item Verify that reduction modulo \(5\) preserves every edge.
+  \item Verify that \(i\mapsto6i\) preserves every edge of \(C_5\).
+  \item Check that the image \(\{0,6,12,3,9\}\) is induced and that the
+  composite fixes it pointwise.
+  \item Verify the sign-sum proof that every endomorphism of \(C_5\) is an
+  automorphism.
+  \item Compare \(5\) with \(15^m\) for every \(m\geq0\).
+  \item Keep the arbitrary-abelian statement separate from the prime and
+  elementary-abelian variants.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+
+\bibitem{HellNesetril}
+P.~Hell and J.~Ne\v{s}et\v{r}il,
+\emph{Graphs and Homomorphisms},
+Oxford Lecture Series in Mathematics and its Applications, vol.~28,
+Oxford University Press, 2004.
+
+\bibitem{Samal}
+R.~\v{S}\'amal,
+\emph{Cores of Cayley graphs},
+Open Problem Garden, Problem~125 (2008), with a counterexample observation
+by G.~Royle and subsequent scope clarification by the author.
+
+\end{thebibliography}
+
+\end{document}

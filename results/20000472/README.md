@@ -11,5 +11,7 @@ Shi-Quan Looi (`arXiv:2204.06041`, Theorem 1.1) constructs a measurable symbol o
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000472_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000472_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `evidence-summary.md` | Proposition alignment and scope boundary |
 | `source-location.txt` | Primary source metadata and theorem location |

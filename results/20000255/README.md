@@ -11,5 +11,7 @@ Burt Totaro (*J. Algebraic Geom.* 28, 2019; `arXiv:1710.04364`, Theorem 3.1) con
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000255_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000255_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `evidence-summary.md` | Proposition alignment and scope boundary |
 | `source-location.txt` | Primary source metadata and theorem location |

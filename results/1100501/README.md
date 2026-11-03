@@ -34,3 +34,11 @@ both are infinite cyclic.
 
 - [Questions in Geometric Group Theory](https://www.math.utah.edu/~bestvina/eprints/questions-updated.pdf)
 - [Xie--Jiang, *On Kleinian Groups with the Same Set of Axes*](https://doi.org/10.1017/S0004972708000816)
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `ARGUS_RESULT_1100501_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_1100501_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
+| `verification-summary.json` | Structured verification summary |

@@ -48,12 +48,12 @@ than around model transcripts.
 
 As of **2026-09-10**, the public program contains:
 
-- **44 published result packages** with technical reports, certificates, source
+- **72 published result packages** (every package includes a standalone AMS LaTeX paper `.tex` and compiled `.pdf`) with technical reports, certificates, source
   records, or editor notes;
 - **23 independently replayable computational or symbolic certificates**;
 - **2 Lean-checked logical/topological compositions** (`2884` and `1465`) with
   explicit formalization boundaries;
-- **308 checksummed public artifacts**;
+- **492 checksummed public artifacts**;
 - **41 counterexample or proof campaigns** on the live workbench;
 - **757 historical problem records** under source and status audit (617
   reviewed, 593 independently verified, 102 confirmed open).
@@ -110,6 +110,34 @@ current view of active campaigns and catalog status.
 | [1187](results/1187/) | Collapse of the Nielsen-torsion quotient $\mathcal D_{\mathrm{AC3}}=\mathcal R_U$ on $G_{4,3}$ and strict $\mathrm{AC}_3$ certificates in $F/K^{(3)}$ | Combinatorial and geometric group theory | Independently verified scoped group-theoretic theorems |
 | [20000582](results/20000582/) | Moving-window Engel Hilbert cocycles with $\Omega(\sqrt{k})$ homogeneous gauge distortion | Metric geometry and bi-Lipschitz embeddings | Independently reviewed scoped construction theorem |
 | [9400114](results/9400114/) | Prime-power ($p^e, e\ge2$) and 12,286 shared-order cofactor exclusions for Agrawal's conjecture | Computational number theory | Independently verified scoped exclusion certificates |
+| [20000282](results/20000282/) | Failure of upper semicontinuity of Hilbert--Kunz multiplicity on $k[a,b,c,d]/(ab,acd)$ | Commutative algebra | Independently verified literal-scope counterexample (AIM Problem 1.5) |
+| [20001224](results/20001224/) | Explicit four-point rational design counterexample to AIM Question 47 | Algebraic statistics | Independently verified counterexample with exact determinant certificate |
+| [20001159](results/20001159/) | Connected balanced circulant counterexample $K_{3,3}$ to the $G_B(k,m)$ conjecture | Algebraic graph theory | Independently verified counterexample and order-$\le 32$ exhaustive check |
+| [3110](results/3110/) | Explicit $5$-regular two-stage counterexample $L_5$ to the graph-theoretic Bene\v{s} conjecture | Combinatorics and networks | Independently verified counterexample with min-cut certificate ($16<25$) |
+| [1442](results/1442/) | An $18$-vertex cubic bipartite counterexample to Teschner's bondage-number conjecture ($b(G)=5>9/2$) | Graph theory and domination | Independently verified exhaustive computational certificate |
+| [3117](results/3117/) | Counterexample $(C_3\mathbin{\square} K_2)^{3/5}$ with $\chi=6>5=\omega$ for graph fractional powers | Graph coloring | Independently verified computational certificate |
+| [7000029](results/7000029/) | Smooth $C^\infty$ counterexamples to the Loewner and Carath\'eodory umbilic-index conjectures | Differential geometry | Independently verified Lean 4 formal artifact (index $3/2>1$) |
+| [1900](results/1900/) | Refutation of both branches of Erd\H{o}s Problem #43 on disjoint-difference Sidon sets | Additive combinatorics | Independently replayed Lean 4.27 formal artifact and equal-size construction |
+| [2141](results/2141/) | Congruence sieve survivor set without logarithmic density (Erd\H{o}s Problem #486) | Analytic number theory | Independently verified Lean 4 formal artifact ($\liminf\le 177/200<49/50\le\limsup$) |
+| [2215](results/2215/) | Refutation of the linear-saving conjecture for triangle-free diameter-4 completion (Erd\H{o}s #619) | Extremal graph theory | Independently verified Lean 4 formal artifact ($h_4(G)\ge(1-\eta)n$) |
+| [1380](results/1380/) | Exact rational sign-cell exclusion on the balanced $(2,2,2,2)$ Heilbronn configuration space | Discrete geometry | Independently verified 175-leaf frontier exclusion |
+| [1413](results/1413/) | Girth-five 77-matching prefix certificate ($3{,}192$ vertices) for a degree-57 Moore graph | Algebraic graph theory | Independently verified prefix certificate |
+| [1417](results/1417/) | Exact exclusion of $43{,}046{,}721$ cross-block voltage graphs for Erd\H{o}s--Gy\'arf\'as | Graph theory | Independently verified family exclusion via 9 cycle witnesses |
+| [1518](results/1518/) | Exact 320-prime window and 11,005 interval exclusions for Hardy--Littlewood Conjecture B | Analytic number theory | Independently verified sieve exclusion |
+| [1900020](results/1900020/) | Diagonal quadratic energy contraction on section returns of the $D=229$ cubic Jacobi--Perron orbit | Number theory and dynamics | Independently verified method obstruction |
+| [1921](results/1921/) | Uniform degree bounds excluding bounded offset-signature colorings for Erd\H{o}s Problem #87 | Ramsey theory | Independently reviewed grammar exclusion |
+| [1994](results/1994/) | Quadratic reduction and scalar-span obstruction on rank-4 parabolic Erd\H{o}s--Ulam configurations | Discrete and arithmetic geometry | Independently verified algebraic reduction |
+| [20000786](results/20000786/) | Hasse--Witt matrix vanishing and cubic scalar cancellation on the $k=3$ quartic reduction branch | Arithmetic geometry | Independently verified arithmetic lemma |
+| [20001578](results/20001578/) | Quotient-multiplicity exclusion ($8<15$) of 18-element equality candidates in Thompson's group $F$ | Geometric group theory | Independently verified family exclusion |
+| [20001904](results/20001904/) | Six-point positive-weight Farkas obstruction to degree-four Hermite curvature repairs | Riemannian geometry | Independently verified family exclusion |
+| [2248](results/2248/) | Baier--Zhao dispersion scale barriers for quadratic-prime representations $n=ap^2+b$ (Erd\H{o}s #676) | Analytic number theory | Independently verified analytic barrier |
+| [2305027](results/2305027/) | Signed Cauchy--Green flux identity and $\ge N/400{,}000$ residual lower bound on planar corona corrections | Complex analysis | Independently verified analytic obstruction |
+| [2662](results/2662/) | Reidemeister-II collapse of two-change local plat families for unknotting and Conway mutation | Knot theory | Independently verified topological family exclusion |
+| [2669](results/2669/) | Handle-slide unlink orbit reduction on staged-framing two-component link presentations | Low-dimensional topology | Independently verified topological reduction |
+| [2775](results/2775/) | Complete classification $u\alpha(v)=vu$ of the $(A_{12},1,A_{12})$ fiber for braid and right-angled Artin groups | Braid groups and RAAGs | Independently verified fiber classification |
+| [2862](results/2862/) | Co-normalizer orthogonal join reduction and rational Chern--Simons volume on spherical bar cycles | Low-dimensional topology | Independently verified rationality reduction |
+| [8](results/8/) | Reduction of the minimal-101 root-4 odd perfect number branch to $\Phi_{31}(269)=\sigma(269^{30})$ | Number theory | Independently replayed $6{,}756{,}355$-prefix reduction |
+| [8200002](results/8200002/) | 39-dimensional Arb Krawczyk interval certificate on the third Fourier fibre in dimension six | Quantum information | Independently verified interval-Newton certificate |
 
 ### Result 20001760
 

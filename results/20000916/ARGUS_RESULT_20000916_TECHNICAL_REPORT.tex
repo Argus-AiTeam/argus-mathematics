@@ -1,0 +1,193 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\definecolor{LinkBlue}{HTML}{174A7E}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=LinkBlue,
+  citecolor=LinkBlue,
+  urlcolor=LinkBlue,
+  pdftitle={The l1 Obstruction to the Literal Arbitrary-Norm Steinitz O(sqrt d) Claim},
+  pdfauthor={Argus Open Research Project},
+  pdfsubject={Exact counterexample to the arbitrary-norm formulation of AIM Problem 1.4; Result 20000916},
+  pdfkeywords={Steinitz constant, vector rearrangement, l1 norm, lower bound, counterexample}
+}
+
+\setlength{\parskip}{2pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[The $\ell_1$ obstruction to an arbitrary-norm Steinitz claim]
+{The $\ell_1^d$ Obstruction to the Literal Arbitrary-Norm Steinitz $O(\sqrt d)$ Claim}
+
+\author{Argus Open Research Project}
+\address{Argus Open Research Project}
+\date{August 30, 2026}
+
+\subjclass[2020]{Primary 52A40; Secondary 46B20, 05A05}
+\keywords{Steinitz constant, vector rearrangement, $\ell_1$ norm, linear lower bound}
+
+\begin{document}
+
+\begin{abstract}
+AIM Problem~1.4 states an $O(\sqrt d)$ bound for the Steinitz rearrangement constant while explicitly quantifying over an arbitrary norm. We give a self-contained verification of the classical Grinberg--Sevast'yanov obstruction in $\ell_1^d$. For every $d\geq1$ and every sufficiently large odd integer $K$, an explicit finite indexed zero-sum family in the $\ell_1^d$ unit ball forces every ordering to have a partial sum of norm at least
+\[
+  \frac{d+1}{2}-\frac{d-1}{2K}.
+\]
+Consequently $S(B_1^d)\geq(d+1)/2$, which contradicts a dimension-uniform $O(\sqrt d)$ bound over all norms. The argument concerns the ordinary zero-sum vector-permutation constant and uses no matrix or sign-sequence transfer. It does not refute the genuinely Euclidean conjecture $S(B_2^d)=O(\sqrt d)$.
+\end{abstract}
+
+\maketitle
+
+\section{The statement and its scope}
+
+For a centrally symmetric convex body $B\subset\mathbb R^d$ with $0$ in its interior, write $\|\cdot\|_B$ for its Minkowski norm. The Steinitz constant $S(B)$ is the least $C$ such that every finite indexed family $V=(v_1,\ldots,v_n)\subset B$ with $\sum_i v_i=0$ admits a permutation $\pi$ satisfying
+\[
+  \left\|\sum_{i=1}^k v_{\pi(i)}\right\|_B\leq C
+  \qquad(1\leq k\leq n).
+\]
+Equivalently, $S(B)$ is the supremum, over finite zero-sum families in $B$, of the least possible maximum partial-sum norm.
+
+The displayed formula in AIM Problem~1.4 quantifies over ``a norm $X$'' and asserts $S(X,d)=O(\sqrt d)$ \cite{AIM}. The official discussion separately treats arbitrary norms and the Euclidean norm. Modern terminology makes the distinction explicit: Ambrus and Heck define the general constant $S(B)$, recall $S(B)\leq d$, record the lower bound $S(B_1^d)\geq(d+1)/2$, and state the Euclidean assertion $S(B_2^d)=O(\sqrt d)$ as a separate conjecture \cite{AmbrusHeck}.
+
+\begin{theorem}\label{thm:lower}
+For every integer $d\geq1$,
+\[
+  S(B_1^d)\geq\frac{d+1}{2}.
+\]
+Consequently no bound $S(B)=O(\sqrt d)$, with an absolute implied constant, can hold uniformly over all norms on $\mathbb R^d$.
+\end{theorem}
+
+\begin{remark}[Boundary of the conclusion]\label{rem:scope}
+The theorem refutes the literal arbitrary-norm assertion. It does not refute the Euclidean conjecture
+\[
+  S(B_2^d)=O(\sqrt d).
+\]
+The word ``Euclidean'' in a secondary catalogue title cannot narrow the explicit arbitrary-norm quantifier in the source formula.
+\end{remark}
+
+\section{The Grinberg--Sevast'yanov family}
+
+Fix $d\geq1$ and put $r=d-1$. Let $K$ be an odd integer satisfying $K\geq\max\{1,r/2\}$, and define
+\[
+  \tau_K=1-\frac{r}{2K}\geq0.
+\]
+Let $e_1,\ldots,e_r$ be the first $r$ coordinate vectors in $\mathbb R^d$. For $s=1,\ldots,K$, introduce separately indexed vectors
+\begin{align*}
+  a_s&=\left(-\frac1{2K},\ldots,-\frac1{2K},\tau_K\right),\\
+  b_s&=\left(-\frac1{2K},\ldots,-\frac1{2K},-\tau_K\right),
+\end{align*}
+where the first $r$ coordinates are all $-1/(2K)$. Set
+\[
+  V_K=(e_1,\ldots,e_r,a_1,\ldots,a_K,b_1,\ldots,b_K).
+\]
+This is the lower-bound family printed by Grinberg and Sevast'yanov \cite{GrinbergSevastyanov}. We verify every required condition directly.
+
+\begin{lemma}\label{lem:unit-zero}
+Every vector in $V_K$ has $\ell_1$ norm $1$, and the indexed family has total sum zero.
+\end{lemma}
+
+\begin{proof}
+Clearly $\|e_j\|_1=1$. Moreover,
+\[
+  \|a_s\|_1=\|b_s\|_1=\frac{r}{2K}+\tau_K=1.
+\]
+In each of the first $r$ coordinates, the $2K$ dense vectors contribute $2K(-1/(2K))=-1$, which is cancelled by the corresponding coordinate vector. In the final coordinate, the $a_s$ and $b_s$ contribute $K\tau_K-K\tau_K=0$.
+\end{proof}
+
+\section{Every ordering has a large partial sum}
+
+\begin{lemma}\label{lem:prefix}
+For every permutation of $V_K$, some partial sum has $\ell_1$ norm at least
+\[
+  \frac{d+1}{2}-\frac{d-1}{2K}.
+\]
+\end{lemma}
+
+\begin{proof}
+Fix an arbitrary permutation and stop immediately after exactly $K$ of the $2K$ dense vectors $a_s,b_s$ have appeared. Let $A$ and $B$ be the numbers of $a$- and $b$-vectors in this prefix. Then $A+B=K$.
+
+In each of the first $r$ coordinates, the dense vectors contribute $K(-1/(2K))=-1/2$. If the corresponding $e_j$ has appeared, that coordinate of the partial sum is $1/2$; otherwise it is $-1/2$. Thus the first $r$ coordinates contribute exactly $r/2$ to the $\ell_1$ norm, independently of the positions of the $e_j$.
+
+The last coordinate is $(A-B)\tau_K$. Since $K=A+B$ is odd, $A-B$ is odd and hence nonzero. Therefore $|A-B|\geq1$, and the selected partial sum has norm at least
+\[
+  \frac r2+\tau_K
+  =\frac{d+1}{2}-\frac{d-1}{2K}.
+\]
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:lower}]
+Let $C<(d+1)/2$. Choose a sufficiently large odd $K$. By \Cref{lem:unit-zero}, $V_K$ is a finite zero-sum family in the $\ell_1^d$ unit ball. By \Cref{lem:prefix}, every ordering has a partial sum of norm greater than $C$. Taking the supremum over finite families gives $S(B_1^d)\geq(d+1)/2$.
+
+Finally,
+\[
+  \frac{S(B_1^d)}{\sqrt d}
+  \geq \frac{d+1}{2\sqrt d}\longrightarrow\infty,
+\]
+so no arbitrary-norm $O(\sqrt d)$ estimate can hold.
+\end{proof}
+
+\begin{remark}
+The family is not the ineffective collection $\{e_i,-e_i\}$, which can be cancelled pairwise. For $d>1$ one has
+\[
+  a_s+b_t=(-1/K,\ldots,-1/K,0),
+\]
+so alternating dense vectors cancels only the final coordinate while accumulating drift in every other coordinate.
+\end{remark}
+
+\section{Source alignment}
+
+The opening paragraph of the 1980 paper defines the ordinary zero-sum permutation constant in an arbitrary $d$-dimensional normed space, and its displayed family is the one used above \cite{GrinbergSevastyanov}. The modern account \cite{AmbrusHeck} independently records the same $\ell_1^d$ lower bound and separates it from the Euclidean conjecture. Thus no transfer from a matrix Steinitz lemma, a sign-selection problem, or a nonstandard ordering constant is involved.
+
+The proof of \Cref{thm:lower} is fully symbolic and requires no numerical experiment.
+
+\appendix
+
+\section{Checklist for an independent referee}
+
+\begin{enumerate}
+  \item Confirm that AIM Problem~1.4 quantifies over an arbitrary norm and concerns ordinary zero-sum vector permutations.
+  \item Verify the $\ell_1$ unit-norm calculation for $e_j,a_s,b_s$.
+  \item Check the zero-sum identity coordinate by coordinate.
+  \item In an arbitrary ordering, stop after the $K$th dense vector and verify that every one of the first $d-1$ coordinates has absolute value $1/2$.
+  \item Use the oddness of $K$ to prove $|A-B|\geq1$ in the last coordinate.
+  \item Let $K\to\infty$ and distinguish the arbitrary-norm conclusion from the Euclidean conjecture.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+
+\bibitem{AIM}
+American Institute of Mathematics,
+\emph{Hereditary discrepancy and related topics}, Problem~1.4,
+AimPL problem-list export.
+
+\bibitem{AmbrusHeck}
+G.~Ambrus and R.~Heck,
+\emph{A note on the Steinitz lemma},
+arXiv:2505.09465v1 (2025).
+
+\bibitem{GrinbergSevastyanov}
+V.~S. Grinberg and S.~V. Sevast'yanov,
+\emph{Value of the Steinitz constant},
+Funct. Anal. Appl. \textbf{14} (1980), no.~2, 125--126.
+
+\end{thebibliography}
+
+\end{document}

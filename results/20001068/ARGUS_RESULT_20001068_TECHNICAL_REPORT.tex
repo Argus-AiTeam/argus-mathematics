@@ -1,0 +1,272 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\definecolor{LinkBlue}{HTML}{174A7E}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=LinkBlue,
+  citecolor=LinkBlue,
+  urlcolor=LinkBlue,
+  pdftitle={A 26-Vertex Counterexample to the Literal Weak-Inequality Form of AIM Conjecture 6.23},
+  pdfauthor={Argus Open Research Project},
+  pdfsubject={Exact weighted-digraph counterexample; Result 20001068},
+  pdfkeywords={weighted digraph, directed cycle, counterexample, AIM Conjecture 6.23}
+}
+
+\setlength{\parskip}{2pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=1.5pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.15}
+\emergencystretch=2em
+
+\newcommand{\inwt}{p^{-}}
+\newcommand{\outwt}{p^{+}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[A counterexample to AIM Conjecture 6.23]
+{A 26-Vertex Counterexample to the Literal Weak-Inequality Form of AIM Conjecture 6.23}
+
+\author{Argus Open Research Project}
+\address{Argus Open Research Project}
+\date{August 30, 2026}
+
+\subjclass[2020]{Primary 05C20; Secondary 05C38, 05C35}
+\keywords{weighted digraph, directed cycle, local weight condition, exact counterexample}
+
+\begin{document}
+
+\begin{abstract}
+We give an explicit finite loopless simple digraph with nonnegative rational arc weights such that every vertex has total inweight and total outweight at least one, while every simple directed cycle has weight strictly less than one. The construction has $26$ vertices and $74$ arcs. It has exactly $40$ simple directed cycles---twenty digons and twenty triangles---and every one has weight $19/20$. This disproves the literal weak-inequality formulation printed as AIM Conjecture~6.23. The example has two strongly connected components and does not satisfy equality of all local weights, so it does not address strongly connected or equality-constrained formulations.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+Let $G$ be a finite digraph and let $p:E(G)\to[0,1]$ assign a weight to every arc. For $u\in V(G)$ define
+\[
+  \outwt(u)=\sum_{uv\in E(G)}p(uv),
+  \qquad
+  \inwt(u)=\sum_{vu\in E(G)}p(vu).
+\]
+The statement printed as Conjecture~6.23 in the AIM survey on the Caccetta--H\"aggkvist conjecture is the following \cite[p.~9]{Sullivan2006}.
+
+\medskip
+\noindent
+\emph{If $p:E(G)\to[0,1]$ and $\inwt(u),\outwt(u)\geq1$ for every $u\in V(G)$, then $G$ contains a directed cycle of total weight at least $1$.}
+\medskip
+
+Here and below, a directed cycle is simple: its vertices are distinct except for the repeated initial and terminal vertex. We prove the following.
+
+\begin{theorem}\label{thm:main}
+There exists a finite loopless simple weighted digraph $(G,p)$ such that
+\[
+  \inwt(v)\geq1\quad\text{and}\quad\outwt(v)\geq1
+  \qquad (v\in V(G)),
+\]
+but
+\[
+  \max\left\{\sum_{e\in C}p(e): C\text{ is a simple directed cycle of }G\right\}
+  =\frac{19}{20}<1.
+\]
+One such graph has $26$ vertices, $74$ arcs, and exactly $40$ simple directed cycles.
+\end{theorem}
+
+The proof is elementary. The graph consists of two isomorphic $13$-vertex pieces with opposite orientations, joined by ten arcs all directed from one piece to the other. The one-way join raises the deficient local weights without creating any new directed cycle.
+
+\begin{remark}[Scope]\label{rem:scope}
+The graph in \Cref{thm:main} is not strongly connected. Moreover, some local inweights and outweights are strictly greater than $1$. Consequently the example does not refute a version requiring strong connectivity, nor a version requiring $\inwt(v)=\outwt(v)=1$ at every vertex. These distinctions are essential and are retained throughout the paper.
+\end{remark}
+
+\section{The construction}
+
+Let $I=\{0,1\}$ and $J=\{1,2,3,4,5\}$. For each sign $\sigma\in\{-,+\}$ define
+\[
+  V_\sigma
+  =\{r_\sigma,a_{0,\sigma},a_{1,\sigma}\}
+   \cup\{b_{ij,\sigma}:i\in I,\ j\in J\}.
+\]
+Set $V(G)=V_-\sqcup V_+$. Thus $|V(G)|=26$.
+
+Inside $V_+$, for every $i\in I$ and $j\in J$, add the arcs
+\begin{equation}\label{eq:plus}
+\begin{array}{rcl@{\qquad}c}
+r_+&\longrightarrow&a_{i,+},&p=\frac12,\\
+a_{i,+}&\longrightarrow&b_{ij,+},&p=\frac15,\\
+b_{ij,+}&\longrightarrow&r_+,&p=\frac14,\\
+b_{ij,+}&\longrightarrow&a_{i,+},&p=\frac34.
+\end{array}
+\end{equation}
+Inside $V_-$, reverse every arc in \eqref{eq:plus} and retain its weight. Explicitly, add
+\begin{equation}\label{eq:minus}
+\begin{array}{rcl@{\qquad}c}
+a_{i,-}&\longrightarrow&r_-,&p=\frac12,\\
+b_{ij,-}&\longrightarrow&a_{i,-},&p=\frac15,\\
+r_-&\longrightarrow&b_{ij,-},&p=\frac14,\\
+a_{i,-}&\longrightarrow&b_{ij,-},&p=\frac34.
+\end{array}
+\end{equation}
+Finally, add the ten cross arcs
+\begin{equation}\label{eq:cross}
+  b_{ij,-}\longrightarrow b_{ij,+}
+  \quad\text{with weight }\frac45
+  \qquad(i\in I,\ j\in J).
+\end{equation}
+
+There are $32$ arcs in each induced subgraph $G[V_\sigma]$ and ten cross arcs, hence
+\[
+  |E(G)|=32+32+10=74.
+\]
+Every weight belongs to $[0,1]$. The displayed list contains neither a loop nor two arcs with the same ordered pair of endpoints, so $G$ is loopless and simple.
+
+\section{Verification of the local weight conditions}
+
+All vertices of a fixed displayed type have the same inweight and outweight. Directly from \eqref{eq:plus}--\eqref{eq:cross} one obtains Table~\ref{tab:weights}.
+
+\begin{table}[ht]
+\caption{Local inweights and outweights.}
+\label{tab:weights}
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Vertex type & Number of vertices & $\inwt(v)$ & $\outwt(v)$\\
+\midrule
+$r_-$       & $1$  & $1$    & $5/2$\\
+$a_{i,-}$   & $2$  & $1$    & $17/4$\\
+$b_{ij,-}$  & $10$ & $1$    & $1$\\
+\addlinespace
+$r_+$       & $1$  & $5/2$  & $1$\\
+$a_{i,+}$   & $2$  & $17/4$ & $1$\\
+$b_{ij,+}$  & $10$ & $1$    & $1$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For completeness, the entries follow as follows. The vertex $r_-$ receives two arcs of weight $1/2$ and sends ten arcs of weight $1/4$. Each $a_{i,-}$ receives five arcs of weight $1/5$ and sends one arc of weight $1/2$ together with five arcs of weight $3/4$. Each $b_{ij,-}$ receives weights $1/4$ and $3/4$ and sends weights $1/5$ and $4/5$. The plus-side calculations are the reversed counterparts, with the cross arcs supplying the missing $4/5$ at the leaves.
+
+It follows immediately that
+\begin{equation}\label{eq:minlocal}
+  \min_{v\in V(G)}\inwt(v)=1,
+  \qquad
+  \min_{v\in V(G)}\outwt(v)=1.
+\end{equation}
+
+\section{Classification of the directed cycles}
+
+\begin{lemma}\label{lem:scc}
+The sets $V_-$ and $V_+$ induce the two strongly connected components of $G$. Every arc between the components is directed from $V_-$ to $V_+$.
+\end{lemma}
+
+\begin{proof}
+In $G[V_+]$, every $a_{i,+}$ is reachable from $r_+$, every $b_{ij,+}$ is reachable from $a_{i,+}$, and every $b_{ij,+}$ has an arc back to $r_+$. Thus $G[V_+]$ is strongly connected. Reversing all internal arcs proves the same assertion for $G[V_-]$. The final claim is exactly \eqref{eq:cross}, and there is no arc from $V_+$ to $V_-$. Hence the two sets are distinct strongly connected components.
+\end{proof}
+
+\begin{lemma}\label{lem:cycles}
+For each $\sigma\in\{-,+\}$, $i\in I$, and $j\in J$, the component $G[V_\sigma]$ has exactly the following two cycles involving $b_{ij,\sigma}$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item the digon $a_{i,\sigma}\leftrightarrow b_{ij,\sigma}$;
+  \item the triangle on $\{r_\sigma,a_{i,\sigma},b_{ij,\sigma}\}$, with the orientation prescribed by \eqref{eq:plus} or \eqref{eq:minus}.
+\end{enumerate}
+There are no other simple directed cycles in $G$.
+\end{lemma}
+
+\begin{proof}
+By \Cref{lem:scc}, no directed cycle can use a cross arc. It therefore suffices to inspect $G[V_+]$; the minus component is obtained by reversing every arc.
+
+Every outgoing arc of $a_{i,+}$ enters some $b_{ij,+}$. From that leaf there are exactly two internal choices. Returning to $a_{i,+}$ gives the digon in (i). Moving to $r_+$ forces the next vertex to be one of $a_{0,+}$ and $a_{1,+}$. Choosing $a_{i,+}$ closes the triangle in (ii). Choosing the other $a$-vertex forces a later repetition of either that $a$-vertex or $r_+$ before the initial vertex can be reached, which is incompatible with simplicity. This exhausts all possibilities.
+\end{proof}
+
+For each sign there are $|I||J|=10$ cycles of each type. Hence $G$ has twenty digons and twenty triangles. Their respective weights are
+\[
+  \frac34+\frac15=\frac{19}{20},
+  \qquad
+  \frac12+\frac15+\frac14=\frac{19}{20}.
+\]
+Together with \eqref{eq:minlocal}, this proves \Cref{thm:main}.
+
+\section{Independent computational check}
+
+The preceding proof is independent of computation. As a separate check, the graph was reconstructed from the four internal arc families and the cross-arc family using integer arithmetic at scale $20$. The calculation checked all local weights, computed mutual reachability, and enumerated simple directed cycles by subset dynamic programming, with cycles identified modulo cyclic rotation.
+
+The recorded output is
+\begin{center}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Quantity & Exact value\\
+\midrule
+Vertices & $26$\\
+Arcs & $74$\\
+Strongly connected component sizes & $13,13$\\
+Cross-component arcs & $10$\\
+Simple directed cycles & $40$\\
+Cycle-length histogram & $20$ of length $2$; $20$ of length $3$\\
+Maximum cycle weight & $19/20$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+An independent reviewer rebuilt the adjacency lists and used a separate depth-first enumeration. That computation returned the same vertex and arc counts, the same two strongly connected components, the same canonical cycle set, and the same maximum weight.
+
+\section{Discussion of the formulation}
+
+The construction exploits a precise difference between the literal weak inequalities and stronger formulations. Internally, both $13$-vertex components have controlled cycles of weight $19/20$. The leaves would have insufficient local weight on one side if the components were considered separately. The ten one-way cross arcs repair exactly those local deficits but, because the condensation digraph is acyclic, create no new cycle.
+
+This mechanism is unavailable if the whole graph is required to be strongly connected. It also does not produce a counterexample when every local inweight and outweight is required to equal $1$, since Table~\ref{tab:weights} contains the values $5/2$ and $17/4$. The present note therefore settles only the statement as printed in \cite{Sullivan2006}. Related weighted-path and heavy-cycle results may be found in \cite{BollobasScott1996,KLMN2020}.
+
+The example is small, exact, and independently reproducible. No minimality assertion is made: the paper does not claim that $26$ is the least possible number of vertices, nor that $74$ is the least possible number of arcs.
+
+\appendix
+
+\section{Checklist for an independent referee}
+
+The following checks suffice to verify the result without relying on the audit pipeline.
+
+\begin{enumerate}
+  \item Reconstruct the $26$ vertices and $74$ arcs from \eqref{eq:plus}--\eqref{eq:cross}.
+  \item Check that the graph is loopless and has no parallel arcs, and that all weights belong to $[0,1]$.
+  \item Recompute the six rows of Table~\ref{tab:weights}.
+  \item Verify that $V_-$ and $V_+$ are the two strongly connected components and that all ten cross arcs point from $V_-$ to $V_+$.
+  \item Enumerate simple directed cycles up to cyclic rotation and confirm that only the two families in \Cref{lem:cycles} occur.
+  \item Confirm the histogram $\{2:20,3:20\}$ and the common weight $19/20$.
+  \item Compare the construction only with the literal weak-inequality statement, keeping equality and strong-connectivity variants separate.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+
+\bibitem{BollobasScott1996}
+B.~Bollob\'as and A.~D. Scott,
+\emph{A proof of a conjecture of Bondy concerning paths in weighted digraphs},
+J. Combin. Theory Ser. B \textbf{66} (1996), no.~2, 283--292.
+
+\bibitem{KLMN2020}
+C.~Knierim, M.~Larcher, A.~Martinsson, and A.~Noever,
+\emph{Long cycles, heavy cycles and cycle decompositions in digraphs},
+arXiv:1911.07778v2 (2020).
+
+\bibitem{Sullivan2006}
+B.~D. Sullivan,
+\emph{A summary of results and problems related to the Caccetta--H\"aggkvist conjecture},
+American Institute of Mathematics workshop report, April 14, 2006.
+
+\end{thebibliography}
+
+\end{document}

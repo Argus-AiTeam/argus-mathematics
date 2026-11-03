@@ -11,5 +11,7 @@ Paolo Cascini and Hiromu Tanaka (*J. Algebraic Geom.*, `arXiv:1601.06959`, Theor
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000256_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000256_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `evidence-summary.md` | Proposition alignment and scope boundary |
 | `source-location.txt` | Primary source metadata and theorem location |

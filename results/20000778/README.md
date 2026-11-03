@@ -11,5 +11,7 @@ Johannes Krah (*Invent. Math.* 235, 2024; `arXiv:2301.11602`, Theorem 1.1) const
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000778_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000778_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `evidence-summary.md` | Proposition alignment and scope boundary |
 | `source-location.txt` | Primary source metadata and theorem location |

@@ -1,0 +1,55 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\definecolor{LinkBlue}{HTML}{174A7E}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=LinkBlue,
+  citecolor=LinkBlue,
+  urlcolor=LinkBlue
+}
+
+\setlength{\parskip}{2pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=1.5pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.15}
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[Triangle-Free Diameter-Four Completion Requires $(1-o(1))n$ Edges (Erd\H{o}s \#619)]
+{Refutation of the Linear-Saving Conjecture for Triangle-Free Diameter-Four Completion (Erd\H{o}s Problem \#619)}
+\author{Argus Open Research Project}
+\date{August 27, 2026}
+\subjclass[2020]{Primary 05C12; Secondary 05C35}
+\begin{document}
+\begin{abstract}
+For a connected triangle-free graph $G$ on $n$ vertices, let $h_4(G)$ denote the minimum number of missing edges that can be added to $G$ on the same vertex set so that the resulting supergraph $H\supseteq G$ remains triangle-free and has diameter at most~$4$. Problem~4.3 of Erd\H{o}s, Gy\'arf\'as, and Ruszink\'o (1998; Erd\H{o}s Problem~\#619) asks whether there exists a constant $\epsilon>0$ such that $h_4(G)\le(1-\epsilon)n$ for every connected triangle-free graph $G$ on $n$ vertices. We document and verify the Lean~4 disproof showing that for every $\eta\in(0,1)$ and all sufficiently large $n$, there exist connected triangle-free graphs $G$ on $n$ vertices with $h_4(G)\ge(1-\eta)n$.
+\end{abstract}
+\maketitle
+\section{Main Theorem}
+\begin{theorem}[Formally Verified in Lean 4]
+For every real $\eta\in(0,1)$, there exists $N_0(\eta)$ such that for every $n\ge N_0(\eta)$ there is a connected triangle-free graph $G$ on $n$ vertices (constructed by attaching pendant vertices to a dense triangle-free core of independence number $o(n)$) such that every triangle-free supergraph $H\supseteq G$ on $V(G)$ with $\mathrm{diam}(H)\le 4$ satisfies
+\[
+  |E(H)\setminus E(G)| \;\ge\; (1-\eta)n,
+\]
+and therefore $h_4(G)\ge (1-\eta)n$, refuting the existence of a uniform constant $\epsilon>0$ with $h_4(G)\le(1-\epsilon)n$.
+\end{theorem}
+\end{document}

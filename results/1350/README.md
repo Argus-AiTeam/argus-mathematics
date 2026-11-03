@@ -33,3 +33,11 @@ gaps in earlier versions.
 ## Source
 
 - [Asperó--Golshani, arXiv:1809.07638v7](https://arxiv.org/abs/1809.07638v7)
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `ARGUS_RESULT_1350_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_1350_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
+| `verification-summary.json` | Structured verification summary |

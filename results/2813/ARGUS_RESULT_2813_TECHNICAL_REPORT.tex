@@ -1,0 +1,437 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\setlength{\parskip}{2pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\allowdisplaybreaks
+\emergencystretch=3em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\R}{\mathbb R}
+\newcommand{\PD}{\operatorname{PD}}
+\newcommand{\tr}{\operatorname{tr}}
+
+\title[A worked instance of Liu's Euler-class obstruction]
+{A Fully Explicit Worked Instance of Liu's Euler-Class Obstruction}
+
+\author{Argus Open Research Project}
+\address{Argus Open Research Project}
+\date{August 31, 2026}
+
+\subjclass[2020]{Primary 57K32, 57K18; Secondary 57R30, 37E30}
+\keywords{taut foliation, Euler class, mapping torus, pseudo-Anosov map, origami surface, Thurston norm}
+
+\begin{document}
+
+\begin{abstract}
+Yi Liu's general nonrealizability theorem and its one-periodic-orbit
+criterion are already established in arXiv:2409.14504.  This note records a
+completely explicit worked instance \((M_f,w)\) of that criterion.  The
+manifold is the mapping torus of a specified
+affine pseudo-Anosov automorphism of the genus-three Eierlegende
+Wollmilchsau origami.  In saturated free coordinates,
+\[
+ H_1(M_f;\Z)\cong \Z^3\oplus\Z/2\oplus\Z/6,
+ \qquad \PD(w)=(-2,-2,2).
+\]
+The class \(w\) is even, integral, and lies in the dual Thurston unit ball,
+but it is not the Euler class of any smooth cooriented taut foliation on
+\(M_f\).  The nonrealizability follows from Liu's one-periodic-orbit
+obstruction after an exact enumeration of all fixed trajectories.  All
+finite algebra, homology, fixed-point, Alexander-polytope, and affine
+noncollision assertions were independently replayed using exact arithmetic.
+This document supplies no new obstruction theorem and no new disproof of the
+Euler class one conjecture.  It is an exact computational application of
+Liu's result, not a classification of the taut-foliation branch or of the
+other five branches of Kirby Problem~3.15.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction and statement}
+
+Let \(M\) be a closed oriented hyperbolic three-manifold with
+\(b_1(M)>0\).  Kirby Problem~3.15 asks which real cohomology classes occur as
+Euler classes of six kinds of structures, the first being taut foliations
+\cite{BKR}.  Parity and the dual Thurston norm give familiar necessary
+conditions.  They are not sufficient for the taut-foliation branch.
+
+The purpose of this note is to record one exact, externally checkable pair.
+It combines the quaternion origami of Herrlich--Schmithuesen
+\cite{HerrlichSchmithuesen}, explicit affine-lift formulas of
+Matheus--Yoccoz \cite{MatheusYoccoz}, the Alexander--Thurston comparison of
+McMullen \cite{McMullen}, and the obstruction of Liu \cite{Liu}.  The
+ingredients are established results; the construction below is a specified
+application with all finite choices made explicit.
+
+Let
+\[
+ Q_8=\{\pm1,\pm i,\pm j,\pm k\},
+ \qquad i^2=j^2=k^2=ijk=-1.
+\]
+The Eierlegende Wollmilchsau \(W\) is the square-tiled surface with one unit
+square for each \(g\in Q_8\), horizontal gluing \(g\mapsto gi\), and
+vertical gluing \(g\mapsto gj\).  Let \(\widetilde S,\widetilde T\) denote
+the standard affine lifts whose derivatives are
+\[
+ S=\begin{pmatrix}1&0\\1&1\end{pmatrix},
+ \qquad
+ T=\begin{pmatrix}1&1\\0&1\end{pmatrix}.
+\]
+Write \(L_g\) for left deck translation by \(g\).  Define
+\begin{equation}\label{eq:f-definition}
+ f=L_{-i}\circ\widetilde T\circ\widetilde S^2
+       \circ\widetilde T\circ\widetilde S^2,
+\end{equation}
+where the rightmost map is applied first.  Equivalently, the affine
+generators are applied in the order \(SSTSST\), followed by \(L_{-i}\).
+
+Let
+\[
+ M_f=W\times[0,1]/(x,1)\sim(f(x),0).
+\]
+The exact homology calculation below supplies a saturated basis
+\((\text{time},u,v)\) of the free quotient of \(H_1(M_f;\Z)\).  We record a
+class in \(H^2(M_f;\Z)\) by the coordinates of its Poincar\'e dual in this
+basis.
+
+\begin{theorem}\label{thm:main}
+The manifold \(M_f\) is closed, oriented, and hyperbolic, with
+\[
+ H_1(M_f;\Z)\cong\Z^3\oplus\Z/2\oplus\Z/6.
+\]
+There is an even integral class \(w\in H^2(M_f;\Z)\) with
+\[
+ \PD(w)=(-2,-2,2),
+ \qquad x^*(w)\leq1,
+\]
+where \(x^*\) is the dual Thurston norm, such that \(w\) is not the Euler
+class of any smooth cooriented taut foliation on \(M_f\).
+\end{theorem}
+
+\section{The origami monodromy}
+
+The square decomposition of \(W\) has eight faces and sixteen edge classes.
+The commutator of the horizontal and vertical gluing permutations is the
+central element \(-1\), producing four vertex classes.  Hence
+\[
+ \chi(W)=8-16+4=-4,
+\]
+so \(W\) is a closed oriented surface of genus three.
+
+\begin{lemma}\label{lem:derivative}
+The derivative of the map in \eqref{eq:f-definition} is
+\[
+ A=Df=TS^2TS^2=
+ \begin{pmatrix}11&4\\8&3\end{pmatrix}.
+\]
+It has characteristic polynomial \(X^2-14X+1\) and eigenvalues
+\(7\pm4\sqrt3\).
+\end{lemma}
+
+\begin{proof}
+This is direct matrix multiplication.  The left deck transformation has
+derivative the identity, \(\det A=1\), and \(\tr A=14\).
+\end{proof}
+
+The derivative is hyperbolic.  Since \(f\) is an affine automorphism of the
+translation surface \(W\), it is a pseudo-Anosov standard representative
+with orientable invariant foliations.  Thurston hyperbolization for closed
+pseudo-Anosov mapping tori therefore makes \(M_f\) hyperbolic.
+
+\section{Integral homology and the selected class}
+
+The cellular chain complex of the eight-square model has sixteen oriented
+edge generators.  Applying the explicit affine lifts to those generators,
+then imposing the square-boundary and vertex relations, gives the induced
+integral action on \(H_1(W;\Z)\).  Adjoining the suspension generator and the
+relations from \(f_*-I\) gives a mapping-torus presentation whose Smith
+factors are
+\begin{equation}\label{eq:smith}
+ 1,\ 1,\ 2,\ 6,\ 0,\ 0,\ 0.
+\end{equation}
+Consequently
+\[
+ H_1(M_f;\Z)\cong\Z^3\oplus\Z/2\oplus\Z/6.
+\]
+
+The exact row and column operations also give three primitive homomorphisms
+to \(\Z\).  Their determinant on the free quotient is \(\pm1\), so the
+resulting coordinates \((\text{time},u,v)\) are saturated.  Define
+\begin{equation}\label{eq:classes}
+ \PD(a)=(1,-1,1),
+ \qquad \PD(e_f)=(-4,0,0),
+ \qquad w=e_f+2a.
+\end{equation}
+Thus
+\[
+ \PD(w)=(-2,-2,2)=2(-1,-1,1).
+\]
+In particular, \(w\) is an even integral class, not merely a rational point
+of \(H^2(M_f;\R)\).  The time coordinate gives
+\begin{equation}\label{eq:fiber-evaluation}
+ \langle a,[W]\rangle=1.
+\end{equation}
+
+\section{The dual Thurston condition}
+
+Let \(P\subset\R^3\) be the Newton polytope of the multivariable Alexander
+polynomial in the saturated free coordinates.  Its support has unique bottom
+and top vertices in the fiber direction,
+\[
+ p_-=(0,2,2),
+ \qquad p_+=(4,2,2).
+\]
+McMullen's equality on the fibered cone identifies the canonical Euler
+functional with
+\[
+ \PD(e_f)=p_--p_+=(-4,0,0),
+\]
+in agreement with \eqref{eq:classes}.
+
+The dual Alexander unit ball is the difference body \(P-P\) in the
+normalization used here.  Two support points satisfy
+\begin{equation}\label{eq:w-difference}
+ (-2,-2,2)=(0,2,2)-(2,4,0),
+\end{equation}
+so \(\PD(w)\in P-P\).  An independent facet computation gives twelve
+primitive supporting inequalities; direct substitution places \(w\) on the
+facet \(-x-y=4\).  It also checks every one of the 137 distinct support
+differences against all twelve inequalities.
+
+Because \(b_1(M_f)=3\), McMullen's global comparison
+\[
+ \|\phi\|_A\leq\|\phi\|_{\mathrm{Th}}
+\]
+applies.  Duality reverses the inclusion, giving
+\[
+ B_A^*\subseteq B_{\mathrm{Th}}^*.
+\]
+Together with \eqref{eq:w-difference}, this proves
+\begin{equation}\label{eq:dual-thurston}
+ x^*(w)\leq1.
+\end{equation}
+No equality assertion for \(x^*(w)\) is needed.
+
+\section{Complete exclusion of one-periodic trajectories}
+
+The four singularities of the Abelian differential are permuted by \(f\) as
+two transpositions.  Thus no singularity is fixed.  On the base torus,
+\[
+ |\det(A-I)|=12,
+\]
+so there are exactly twelve base fixed points.  Exhausting all eight
+\(Q_8\)-lifts over each base point yields precisely twelve regular fixed
+points of \(f\).  Their suspension homology classes are as follows.
+
+\begin{table}[ht]
+\centering
+\caption{Complete one-periodic suspension multiset.}
+\label{tab:periodic}
+\begin{tabular}{cc}
+\toprule
+Free homology class & Multiplicity\\
+\midrule
+\((1,-1,0)\) & 1\\
+\((1,-1,2)\) & 1\\
+\((1,0,0)\) & 8\\
+\((1,1,-2)\) & 1\\
+\((1,1,0)\) & 1\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For completeness, the enumeration proceeds by choosing a rational based path
+to each fixed lift, applying the explicit free-group automorphism induced by
+\(f\), Schreier-rewriting the resulting closed word in the eight-square
+cover, and reducing it in the saturated mapping-torus basis.  The sole fixed
+point lying on a square edge is approached through a fixed rational interior
+waypoint, avoiding an unrecorded choice of edge sector.
+
+Every regular fixed point has local index \(-1\).  Their total index is
+therefore \(-12\), which agrees with the Lefschetz number
+\[
+ L(f)=2-\tr(f_*|H_1(W;\Z))=-12.
+\]
+As a separate check, the first fiber layer of the exact multivariable
+Alexander polynomial encodes exactly the five classes and coefficients in
+\Cref{tab:periodic}.  The enumeration is therefore complete, rather than a
+bounded orbit search.
+
+By \eqref{eq:classes},
+\[
+ \PD(a)=(1,-1,1),
+\]
+which does not occur in \Cref{tab:periodic}.  Hence no one-periodic
+trajectory represents \(\PD(a)\).
+
+\section{Liu's obstruction and proof of the theorem}
+
+We use the following consequence of Liu's one-periodic-orbit criterion
+\cite[Lemma~3.2]{Liu}.  Let \(F\) be a closed oriented surface and let
+\(g\colon F\to F\) be a pseudo-Anosov standard representative.  If an
+integral class \(c\) on the mapping torus satisfies
+\[
+ \langle c,[F]\rangle=1
+\]
+and \(\PD(c)\) is not represented by a one-periodic trajectory, then the
+class \(e_g+2c\) is not the real Euler class of any weakly symplectically
+fillable contact structure.
+
+\begin{proof}[Proof of \Cref{thm:main}]
+The closedness, orientation, hyperbolicity, and homology statement follow
+from \Cref{lem:derivative} and \eqref{eq:smith}.  The saturated coordinate
+calculation proves that \(w\) is even and integral, and
+\eqref{eq:dual-thurston} proves the required dual Thurston bound.
+
+Apply Liu's criterion with \(F=W\), \(g=f\), and the class \(a\) in
+\eqref{eq:classes}.  The fiber evaluation is one by
+\eqref{eq:fiber-evaluation}, while \Cref{tab:periodic} proves that
+\(\PD(a)\) has no one-periodic representative.  Therefore
+\[
+ w=e_f+2a
+\]
+is not the Euler class of any weakly symplectically fillable contact
+structure.
+
+The Eliashberg--Thurston approximation theorem, in the form recalled and used
+by Liu, perturbs any smooth cooriented taut foliation to a weakly fillable
+contact structure without changing the Euler class of the oriented plane
+field \cite{EliashbergThurston,Liu}.  A smooth cooriented taut foliation with
+Euler class \(w\) would therefore contradict the preceding obstruction.
+\end{proof}
+
+\section{Exact computational certification}
+
+The construction involves substantial but finite algebra.  The accompanying
+certificate was produced and replayed using integer and rational arithmetic;
+no floating-point inequality is used in the proof of \Cref{thm:main}.  The
+independent replay checks the following items.
+
+\begin{enumerate}
+\item The full multiplication table of \(Q_8\), the eight-square cellular
+  boundary maps, and the canonical affine actions of \(\widetilde S\) and
+  \(\widetilde T\).
+\item The derivative word \(SSTSST\), the deck postcomposition \(-i\), the
+  integral chain action, all Smith factors in \eqref{eq:smith}, and saturation
+  of the three free coordinates.
+\item All base fixed points, all \(Q_8\)-lifts, the four singularity images,
+  every based Schreier word, and every homology class in
+  \Cref{tab:periodic}.
+\item The Alexander support, its first fiber layer, all 137 support
+  differences, the complete rational facet system, and the membership of
+  \(w\) in the difference body.
+\item Every hypothesis used in the application of Liu's criterion.
+\end{enumerate}
+
+There is a close published affine formula in Matheus--Yoccoz
+\cite[Remark~2.9]{MatheusYoccoz}.  It does not give the same pair.  Conjugating
+the derivative of \(f\) by \(S^2\) gives
+\[
+ B=\begin{pmatrix}3&4\\8&11\end{pmatrix},
+\]
+whereas the printed element has derivative \(-B\).  Thus the traces are
+\(14\) and \(-14\), respectively.  An exact simultaneous intertwiner system
+for conjugacy and inverse conjugacy has rank eight and nullity zero.  Moreover,
+the same-derivative factor in the published formula acts trivially on the
+normal deck group \(Q_8\), while the present map induces the nontrivial
+automorphism \(\operatorname{Ad}_i\).  The corresponding mapping tori have
+first Betti numbers three and five.  These independent exact discriminators
+exclude the nearest identified collision.
+
+\section{Scope and literature status}
+
+\Cref{thm:main} gives one explicit nonrealizable Euler class in the smooth
+cooriented taut-foliation branch of Kirby Problem~3.15.  It does not classify
+all Euler classes in that branch.  It makes no assertion about tight contact
+structures, universally tight contact structures, pseudo-Anosov flows,
+quasigeodesic flows, or circle actions.
+
+Liu's theorem already establishes the general nonrealizability phenomenon,
+and Lemma~3.2 of that paper is the core exclusion used here.  The quaternion
+origami, its deck group, the canonical affine lifts, McMullen's norm
+comparison, and the taut-foliation approximation theorem are also prior work.
+The present document merely fixes one particular pair \((M_f,w)\) and records
+the finite calculations needed to check that Liu's criterion applies.
+
+Accordingly, this note is classified as a worked application and known-result
+reconstruction.  It is not presented as an original theorem, a new
+counterexample principle, a new disproof of the Euler class one conjecture, or
+a solution of Kirby Problem~3.15(a).
+
+\section{Independent-referee checklist}
+
+An external referee can audit the result in the following order.
+
+\begin{enumerate}
+\item Verify the eight-square \(Q_8\) gluing and the genus-three Euler
+  characteristic.
+\item Multiply the six derivative generators and check
+  \(Df=\left(\begin{smallmatrix}11&4\\8&3\end{smallmatrix}\right)\).
+\item Recompute the mapping-torus Smith factors and confirm that the displayed
+  free coordinates are saturated.
+\item Check the twelve base fixed points, all lifted fixed points, and the
+  complete homology multiset in \Cref{tab:periodic}.
+\item Recompute the Alexander support and verify both
+  \(\PD(e_f)=(-4,0,0)\) and \(\PD(w)\in P-P\).
+\item Check the hypotheses of Liu's Lemma~3.2 and the passage from taut
+  foliations to weakly fillable contact structures.
+\item Treat the document as an explicit application of Liu's published
+  obstruction, not as an original result or a solution of Problem~3.15(a).
+\end{enumerate}
+
+\begin{thebibliography}{99}
+
+\bibitem{BKR}
+R.~\.{I}. Baykur, R.~C. Kirby, and D. Ruberman,
+\emph{K3: A New Problem List in Low-Dimensional Topology},
+Mathematical Surveys and Monographs, vol.~295,
+American Mathematical Society, Providence, RI, 2026.
+
+\bibitem{EliashbergThurston}
+Y. Eliashberg and W. Thurston,
+\emph{Confoliations},
+University Lecture Series, vol.~13,
+American Mathematical Society, Providence, RI, 1998.
+
+\bibitem{HerrlichSchmithuesen}
+F. Herrlich and G. Schmith\"uesen,
+An extraordinary origami curve,
+\emph{Math. Nachr.} \textbf{281} (2008), no.~2, 219--237.
+
+\bibitem{Liu}
+Y. Liu,
+On the Euler class one conjecture for fillable contact structures,
+preprint, 2025, arXiv:2409.14504v2.
+
+\bibitem{MatheusYoccoz}
+C. Matheus and J.-C. Yoccoz,
+The action of the affine diffeomorphisms on the relative homology group of
+certain exceptionally symmetric origamis,
+\emph{J. Mod. Dyn.} \textbf{4} (2010), no.~3, 453--486.
+
+\bibitem{McMullen}
+C. T. McMullen,
+The Alexander polynomial of a 3-manifold and the Thurston norm on cohomology,
+\emph{Ann. Sci. \`Ecole Norm. Sup. (4)} \textbf{35} (2002), no.~2, 153--171.
+
+\end{thebibliography}
+
+\end{document}

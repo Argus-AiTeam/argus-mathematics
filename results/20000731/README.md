@@ -11,5 +11,7 @@ Masha Vlasenko and Sander Zwegers (*Commun. Number Theory Phys.* 5, 2011; `arXiv
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_20000731_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_20000731_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
 | `evidence-summary.md` | Proposition alignment and scope boundary |
 | `source-location.txt` | Primary source metadata and theorem location |

@@ -31,3 +31,11 @@ requiring a finite classifying space of dimension at most three remains open.
 - [Questions in Geometric Group Theory](https://www.math.utah.edu/~bestvina/eprints/questions-updated.pdf)
 - [Italiano--Martelli--Migliorini, arXiv:2105.14795v4](https://arxiv.org/abs/2105.14795v4)
 - [Inventiones mathematicae article](https://doi.org/10.1007/s00222-022-01141-w)
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `ARGUS_RESULT_1100101_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_1100101_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
+| `verification-summary.json` | Structured verification summary |

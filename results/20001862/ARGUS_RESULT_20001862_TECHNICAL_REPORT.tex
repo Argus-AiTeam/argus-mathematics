@@ -1,0 +1,243 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\setlength{\parskip}{2pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[A symmetric obstruction to the pseudo-triangulation road map]
+{A Half-Turn Symmetric Octagon Obstructing the Standard Pseudo-Triangulation Road Map}
+
+\author{Argus Open Research Project}
+\address{Argus Open Research Project}
+\date{August 31, 2026}
+
+\subjclass[2020]{Primary 52C25; Secondary 68U05, 05C10}
+\keywords{pseudo-triangulation, carpenter's rule, expansive motion, symmetry, rigidity}
+
+\begin{document}
+
+\begin{abstract}
+An official AIM workshop summary already records a negative answer to the
+symmetry question for the pseudo-triangulation algorithm, but gives no
+explicit witness.  We give a rational simple nonconvex octagon for which every legal first step
+of the standard pointed-pseudo-triangulation road map breaks the original
+labelled half-turn symmetry.  Every convex-hull edge belongs to a half-turn
+orbit of size two.  The road map deletes exactly one hull edge from a pointed
+pseudo-triangulation, leaving its symmetric partner as a rigid bar.  Any
+half-turn-preserving motion must keep the two paired distances equal, so the
+deleted distance is constant as well.  All edge lengths of the original
+infinitesimally rigid completion are then fixed, and no nontrivial first
+motion is possible.  This does not obstruct the distinct canonical
+symmetry-preserving expansive motion of Connelly, Demaine, and Rote, nor a
+modified pseudo-triangulation method that deletes an entire symmetry orbit.
+\end{abstract}
+
+\maketitle
+
+\section{Question and status}
+
+AIM Problem~13 asks whether the pseudo-triangulation algorithm for the
+carpenter's-rule problem gives an unfolding that preserves the symmetries of
+the initial linkage.  We use ``the pseudo-triangulation algorithm'' in its
+published standard sense: complete the polygon to a pointed
+pseudo-triangulation, delete one eligible convex-hull edge, and follow the
+resulting one-degree-of-freedom expansive mechanism.
+
+The AIM workshop summary, publicly archived by September~18, 2015, states
+that this question is false and separately notes that the construction of
+Connelly, Demaine, and Rote does preserve symmetry.  It supplies neither a
+witness nor a proof.  Accordingly, the negative status is not new: the
+contribution of this note is an explicit rational witness and a
+self-contained obstruction argument for the standard road map.  No priority
+claim is made for the negative answer itself.
+
+\section{The symmetric octagon}
+
+Let \(P=(p_0,\ldots,p_7)\) be the polygon with vertices, in cyclic order,
+\[
+\begin{aligned}
+p_0&=(2,1),             &p_1&=(0,\tfrac12),\\
+p_2&=(-2,1),            &p_3&=(-1,0),\\
+p_4&=(-2,-1),           &p_5&=(0,-\tfrac12),\\
+p_6&=(2,-1),            &p_7&=(1,0).
+\end{aligned}
+\]
+The half-turn
+\[
+ h(p_i)=p_{i+4}=-p_i
+\]
+is a labelled symmetry of the polygonal linkage.
+
+\begin{lemma}\label{lem:geometry}
+The polygon \(P\) is simple and nonconvex.  Its convex hull has vertices
+\[
+ p_0,p_2,p_4,p_6,
+\]
+and none of its four hull edges is a polygon edge.  The hull-edge orbits
+under \(h\) are
+\[
+ p_0p_2\longleftrightarrow p_4p_6,
+ \qquad
+ p_2p_4\longleftrightarrow p_6p_0.
+\]
+\end{lemma}
+
+\begin{proof}
+Direct determinant calculations show that the signed turns alternate
+between \(-2\) and \(3/2\).  Thus the polygon is nonconvex and has no
+collinear consecutive vertices.  Checking the twenty pairs of nonincident
+edges shows that no pair intersects.  The four extreme vertices are exactly
+\((\pm2,\pm1)\), while the remaining four vertices lie strictly inside their
+convex hull.  The displayed half-turn sends each hull edge to the opposite
+one, and no hull edge joins consecutive polygon vertices.
+\end{proof}
+
+\section{The standard road-map step}
+
+A pointed pseudo-triangulation on \(n\) vertices is a maximal planar pointed
+graph and has \(2n-3\) edges.  A simple polygon, regarded as a noncrossing
+pointed edge set, can be completed to such a graph.  The standard road-map
+convexification step chooses a pointed-pseudo-triangulation completion
+\(T\), deletes one convex-hull edge that is not a polygon edge, pins a
+remaining edge, and follows the resulting one-degree-of-freedom expansive
+mechanism until the next alignment event.
+
+For the octagon in \Cref{lem:geometry}, every completion \(T\) contains the
+eight polygon edges and all four convex-hull edges.  These twelve edges are
+distinct.  Since \(T\) has
+\[
+ 2\cdot8-3=13
+\]
+edges, the completion contains only one additional edge.  The argument below
+does not depend on that edge or on the choice of completion.
+
+\section{The missing-edge obstruction}
+
+\begin{theorem}\label{thm:main}
+No legal first step of the standard pointed-pseudo-triangulation road map
+for \(P\) preserves its labelled half-turn symmetry.
+\end{theorem}
+
+\begin{proof}
+Fix an arbitrary pointed-pseudo-triangulation completion \(T\), and let
+\(e=p_ap_b\) be the hull edge deleted in the first road-map step.  By
+\Cref{lem:geometry},
+\[
+ h(e)=p_{a+4}p_{b+4}\neq e.
+\]
+The partner \(h(e)\) is another mandatory hull edge of \(T\), and it remains
+a rigid bar in the mechanism \(T-e\).
+
+Suppose that a motion \(q_i(t)\) of \(T-e\) preserved the original labelled
+half-turn.  We allow both its center and the whole framework to move.  Thus
+there would be a point \(c(t)\) such that
+\[
+ q_{i+4}(t)=2c(t)-q_i(t)
+ \qquad(i\in\mathbb Z/8\mathbb Z).
+\]
+It follows that
+\[
+ q_{a+4}(t)-q_{b+4}(t)
+ =-\bigl(q_a(t)-q_b(t)\bigr),
+\]
+and hence
+\[
+ \lVert q_{a+4}(t)-q_{b+4}(t)\rVert
+ =\lVert q_a(t)-q_b(t)\rVert.
+\]
+The left-hand side is the length of the retained bar \(h(e)\), so it is
+constant.  The missing distance \(e\) is therefore constant as well.
+Consequently every edge length of the full pointed pseudo-triangulation
+\(T\) is constant during the motion.
+
+Pointed pseudo-triangulations are infinitesimally rigid and hence locally
+rigid.  The congruence orbit of the initial realization is therefore both
+closed and locally open inside any continuous path preserving all edge
+lengths of \(T\).  Since the parameter interval is connected, the whole path
+remains in that congruence orbit.  After the road map pins an edge, even this
+ambient rigid-body motion is removed.
+
+The first road-map segment is required to be the nontrivial expansive motion
+of the one-degree-of-freedom mechanism \(T-e\).  It therefore cannot preserve
+the half-turn.  Since \(T\) and \(e\) were arbitrary, every legal first step
+breaks the symmetry.
+\end{proof}
+
+\begin{remark}
+The infinitesimal form is even shorter.  Orient the unique mechanism flex so
+that the deleted hull distance has positive derivative.  Half-turn symmetry
+would make this derivative equal to that of the retained partner bar, which
+is zero.
+\end{remark}
+
+\section{Scope}
+
+\begin{remark}\label{rem:scope}
+The theorem concerns the standard road map in which exactly one hull edge is
+deleted at each step.  It does not rule out a modified method that deletes an
+entire symmetry orbit and analyzes a higher-dimensional mechanism.  It also
+does not assert that no symmetric pointed pseudo-triangulation exists.
+\end{remark}
+
+There is no contradiction with the symmetry-preserving carpenter's-rule
+motion of Connelly, Demaine, and Rote.  Their construction selects the unique
+solution of a global optimization problem; applying a symmetry to the
+solution gives the same solution by uniqueness.  That canonical motion is a
+different mechanism from the finite sequence of one-edge-deletion
+pseudo-triangulation motions considered here.
+
+\appendix
+
+\section{Checklist for verification}
+
+\begin{enumerate}
+  \item Check polygon simplicity and the alternating signed turns.
+  \item Recompute the four hull vertices and verify that no hull edge is a
+  polygon edge.
+  \item Verify the two size-two half-turn orbits of hull edges.
+  \item Check that every pointed-pseudo-triangulation completion contains all
+  polygon and hull edges and has thirteen edges.
+  \item For each possible deleted hull edge, verify that its half-turn partner
+  remains a rigid bar.
+  \item Use the moving-center half-turn equation to prove equality of the two
+  paired distances.
+  \item Apply local rigidity of the full completion and keep the standard
+  road map separate from other expansive motions.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+
+\bibitem{CDR}
+R.~Connelly, E.~D. Demaine, and G.~Rote,
+\emph{Straightening polygonal arcs and convexifying polygonal cycles},
+Discrete Comput. Geom. \textbf{30} (2003), 205--239.
+
+\bibitem{Streinu}
+I.~Streinu,
+\emph{Pseudo-triangulations, rigidity and motion planning},
+Discrete Comput. Geom. \textbf{34} (2005), 587--635.
+
+\bibitem{AIM}
+American Institute of Mathematics,
+\emph{Configuration spaces of linkages},
+workshop problem list and summary, October 13--17, 2014, Problem~13.
+
+\end{thebibliography}
+
+\end{document}

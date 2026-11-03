@@ -21,7 +21,7 @@ The public portal and repository archive reported the following snapshot as of 2
 - 757 historical source records under audit (617 reviewed, 593 independently verified);
 - 102 confirmed-open problem cards on the public landing page (180 resolved and removed, 475 quarantined);
 - 41 counterexample or proof campaigns across two execution waves;
-- 44 archived public result packages in this repository (including Batch 001 and Tier-A/Tier-B campaign theorem packages; see [`docs/batch-001.md`](batch-001.md) and [`docs/publication-triage.md`](publication-triage.md)).
+- 72 archived public result packages (each with a standalone AMS LaTeX technical report) in this repository (including Batch 001 and Tier-A/Tier-B campaign theorem packages; see [`docs/batch-001.md`](batch-001.md) and [`docs/publication-triage.md`](publication-triage.md)).
 
 These numbers describe different layers and should not be added together.
 Catalog records are source-audit units, active targets are selected research

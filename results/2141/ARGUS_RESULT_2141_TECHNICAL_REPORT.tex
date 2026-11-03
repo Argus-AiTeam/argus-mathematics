@@ -1,0 +1,59 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\definecolor{LinkBlue}{HTML}{174A7E}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=LinkBlue,
+  citecolor=LinkBlue,
+  urlcolor=LinkBlue
+}
+
+\setlength{\parskip}{2pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=1.5pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.15}
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[Non-Existence of Logarithmic Density for Congruence Sieve Survivors (Erd\H{o}s \#486)]
+{A Congruence Sieve Survivor Set Without Logarithmic Density (Erd\H{o}s Problem \#486)}
+\author{Argus Open Research Project}
+\date{August 27, 2026}
+\subjclass[2020]{Primary 11N35; Secondary 11B05}
+\begin{document}
+\begin{abstract}
+Erd\H{o}s Problem~\#486 asks whether for every subset $A\subseteq\mathbb{N}$ and every family of residue classes $X_n\subseteq\mathbb{Z}/n\mathbb{Z}$ ($n\in A$), the survivor set $B=\{m\in\mathbb{N} : \forall\,n\in A\text{ with }n<m,\ m\bmod n\notin X_n\}$ possesses a well-defined logarithmic density. We document the formally verified counterexample constructing a fixed sparse sequence of moduli $A$ and residue sets $X_n$ whose survivor set $B$ has $\liminf_{x\to\infty}\frac{1}{\log x}\sum_{m\in B, m\le x}\frac{1}{m}\le \frac{177}{200} < \frac{49}{50}\le \limsup_{x\to\infty}\frac{1}{\log x}\sum_{m\in B, m\le x}\frac{1}{m}$.
+\end{abstract}
+\maketitle
+\section{Main Theorem}
+\begin{theorem}[Formally Verified in Lean 4]
+There exist a fixed infinite set $A\subseteq\mathbb{N}_{\ge 2}$ of rapidly growing coprime moduli and residue sets $X_n\subseteq\mathbb{Z}/n\mathbb{Z}$ such that the survivor set
+\[
+  B \;=\; \bigl\{m\in\mathbb{N}_{\ge 1} : \forall\, n\in A,\ n < m \implies (m\bmod n)\notin X_n\bigr\}
+\]
+has logarithmic averages $L_B(x) = \frac{1}{\log x}\sum_{1\le m\le x,\, m\in B}\frac{1}{m}$ satisfying
+\[
+  \liminf_{x\to\infty} L_B(x) \;\le\; \frac{177}{200} \;<\; \frac{49}{50} \;\le\; \limsup_{x\to\infty} L_B(x),
+\]
+and therefore $B$ does not possess a logarithmic density.
+\end{theorem}
+\end{document}

@@ -37,3 +37,11 @@ exact limiting value.
 - [Abert, *Some Questions*](https://www.renyi.hu/~abert/questions.pdf)
 - [Calegari--Fujiwara, arXiv:1311.4450](https://arxiv.org/abs/1311.4450)
 - [Journal of the Mathematical Society of Japan article](https://doi.org/10.2969/jmsj/06731213)
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `ARGUS_RESULT_1200029_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
+| `ARGUS_RESULT_1200029_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
+| `verification-summary.json` | Structured verification summary |

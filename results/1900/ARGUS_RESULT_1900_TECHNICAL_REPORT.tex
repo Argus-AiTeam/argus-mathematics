@@ -1,0 +1,55 @@
+\documentclass[10pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[a4paper,margin=28mm,headheight=15pt]{geometry}
+
+\definecolor{LinkBlue}{HTML}{174A7E}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=LinkBlue,
+  citecolor=LinkBlue,
+  urlcolor=LinkBlue
+}
+
+\setlength{\parskip}{2pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=1.5pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.15}
+\emergencystretch=2em
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title[Disjoint-Difference Sidon Sets and Erd\H{o}s Problem \#43]
+{Refutation of Both Branches of Erd\H{o}s Problem \#43 on Disjoint-Difference Sidon Sets}
+\author{Argus Open Research Project}
+\date{August 27, 2026}
+\subjclass[2020]{Primary 11B75; Secondary 05B10}
+\begin{document}
+\begin{abstract}
+Let $f(N)$ denote the maximum cardinality of a Sidon subset of $\{1,\dots,N\}$. Erd\H{o}s Problem~\#43 asks whether every pair of Sidon sets $A,B\subseteq\{1,\dots,N\}$ with $(A-A)\cap(B-B)=\{0\}$ satisfies $\binom{|A|}{2}+\binom{|B|}{2}\le\binom{f(N)}{2}+O(1)$, and whether adding $|A|=|B|$ forces $\binom{|A|}{2}+\binom{|B|}{2}\le(1-c+o(1))\binom{f(N)}{2}$ for some absolute constant $c>0$. We document the refutation of both branches, including the complete formal verification of the compact Cayley clique theorem for Problem~\#42/\#43 in Lean~4.27.
+\end{abstract}
+\maketitle
+\section{Main Results}
+\begin{theorem}
+Both branches of Erd\H{o}s Problem~\#43 are false:
+\begin{enumerate}[label=\textup{(\arabic*)}]
+  \item \emph{Unbounded additive excess:} the negative resolution of Erd\H{o}s Problem~\#42 (formally verified in Lean~4.27 using only classical foundation axioms) produces for every target size $k$ and all sufficiently large $N$ a maximal Sidon set $A\subseteq\{1,\dots,N\}$ of cardinality $f(N)$ together with a Sidon set $B\subseteq\{1,\dots,N\}$ of cardinality $|B|=k$ satisfying $(A-A)\cap(B-B)=\{0\}$, so that $\binom{|A|}{2}+\binom{|B|}{2}-\binom{f(N)}{2}=\binom{k}{2}$ is unbounded.
+  \item \emph{Equal-size branch ($|A|=|B|$):} Barreto's difference-set projection constructs equal-size Sidon sets $A,B\subseteq\{1,\dots,N\}$ with $(A-A)\cap(B-B)=\{0\}$ and $|A|=|B|=(1/\sqrt{2}-o(1))\sqrt{N} = (1/\sqrt{2}-o(1))f(N)$, yielding $\binom{|A|}{2}+\binom{|B|}{2} = (1-o(1))\binom{f(N)}{2}$ and ruling out any positive constant saving $c>0$.
+\end{enumerate}
+\end{theorem}
+\end{document}
