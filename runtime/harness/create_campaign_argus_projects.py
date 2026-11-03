@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CAMPAIGN_IDS = (
+    "7200051", "3059", "3102", "20001675", "3167", "3256",
     "1417", "1518", "1243", "1187", "8200002", "1900020", "2457", "20001578",
     "11000263", "20000786", "1994", "1285", "20000582", "2305027", "8", "1380", "2800203",
     "2338", "2662", "2669", "2862",
@@ -20,11 +21,10 @@ CAMPAIGN_IDS = (
 )
 PRIORITY_POOL = ROOT / "inputs" / "priority_pool.csv"
 
-AGENTS = """# Independent counterexample Argus rules
+AGENTS = """# Independent publishable math Argus rules
 
 - This directory owns exactly one conjecture and one Argus daemon.
-- Search only for a counterexample or explicit negative witness. Do not spend
-  the campaign proving the conjecture true.
+- Pursue a genuinely publishable mathematical result (`research_target_level=publishable`, `math_objective_mode=exploratory`): either an explicit counterexample witness OR an unconditional publishable theorem, global obstruction/non-existence proof, complete family classification, or asymptotic bound (`new_theorem`, `improved_bound`, `new_reduction`, `complete_solution`, or `exact_counterexample` with `novelty_status=verified_new`).
 - The authoritative original dataset and source audit are read-only at
   `/home/argustest/zimo/counterexample-batch-1`.
 - Write all campaign artifacts inside this directory.
@@ -37,9 +37,10 @@ AGENTS = """# Independent counterexample Argus rules
   English (mathematical notation may remain unchanged) so international viewers
   can follow the live workbench.
 - A timeout, failed search, numerical near-solution, or finite boundary is not
-  a counterexample. Require an independently rerunnable exact certificate.
+  a publishable theorem or counterexample. Require an independently rerunnable exact certificate.
 - Use Jacobian only through the Argus sidecar bridge or the pinned executable
   `/home/argustest/zimo/references/jacobian/.venv/bin/jacobian`.
+- For every `argus_skill` module command (`math_state`, `proof_graph_check`, `citation_check`, `lean_evidence`), invoke `/home/argustest/zimo/argus-live-update/.venv/bin/python` or `/home/argustest/zimo/argus-latest/.venv/bin/python` explicitly; never use bare `python -m argus_skill` (which resolves to an unrelated miniconda checkout).
 """
 
 

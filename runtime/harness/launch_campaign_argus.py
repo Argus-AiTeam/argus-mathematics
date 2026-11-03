@@ -16,16 +16,20 @@ ARGUS_BIN = ARGUS.parent
 RUNNER = Path("/home/argustest/.local/bin/copilot")
 RUNNER_PATH = "/home/argustest/.local/bin:/home/argustest/bin"
 SPECIAL_PROMPTS = ROOT.parent / ".argus-counterexamples" / "special_prompts"
-DEFAULT_MODEL = "gpt-6-astra"
+DEFAULT_MODEL = "gpt-6.1-sol"
 IDS = (
-    "1417", "1518", "1243", "1187", "8200002", "1900020", "2457", "20001578",
-    "11000263", "20000786", "1994", "1285", "20000582", "2305027", "8", "1380", "2800203",
-    "2338", "2662", "2669", "2862", "2248", "1921", "2775", "2813", "2884",
-    "1465", "2307015", "6800022", "1413", "20001904",
+    "7200051", "3059", "3102", "20001675", "3167", "3256",
+    "2338", "1243", "1417", "1518", "1187", "1285", "20000582", "6800022",
+    "2800203", "9400114", "20001036", "20001578",
+    "8200002", "1900020", "2457", "11000263", "20000786", "1994",
+    "2305027", "8", "1380", "2662", "2669", "2862", "2248", "1921", "2775",
+    "2813", "2884", "1465", "2307015", "1413", "20001904",
 )
 
 MODEL_ENV = {
     "ARGUS_SKILL_VERTICAL": "math",
+    "ARGUS_SKILL_RESEARCH_TARGET_LEVEL": "publishable",
+    "ARGUS_SKILL_MATH_RESEARCH_TARGET_LEVEL": "publishable",
     "ARGUS_SKILL_RUNNER_BACKEND": "copilot",
     "ARGUS_SKILL_MANAGER_FAST_ROUTE": "1",
     "ARGUS_SKILL_MODEL": DEFAULT_MODEL,
@@ -68,10 +72,10 @@ def main() -> None:
     failed = False
     for campaign_id in selected:
         workdir = ROOT / "campaigns" / campaign_id
-        # Preserve an operator/supervisor-raised completion bar across daemon
-        # restarts.  Rewriting every campaign to ``exploratory`` made an exact
-        # counterexample objective terminable by a finite negative report.
-        target_level = resolve_research_target_level(workdir) or "exploratory"
+        # Upgrade campaigns to the operator-requested publishable completion bar
+        # while preserving doctoral if a campaign was already raised higher.
+        current_level = resolve_research_target_level(workdir)
+        target_level = "doctoral" if current_level == "doctoral" else "publishable"
         persist_vertical(
             workdir,
             "math",
@@ -94,7 +98,23 @@ def main() -> None:
         # proof-ledger validation rules.
         env["PATH"] = f"{ARGUS_BIN}:{RUNNER_PATH}:{env.get('PATH', '')}"
         suffix = os.environ.get("ARGUS_CAMPAIGN_HOME_SUFFIX", "")
-        env["ARGUS_SKILL_HOME"] = str(ROOT.parent / f".argus-campaign-{campaign_id}{suffix}")
+        home_dir = ROOT.parent / f".argus-campaign-{campaign_id}{suffix}"
+        home_dir.mkdir(parents=True, exist_ok=True)
+        rf_target = home_dir / "reviewed-facts.md"
+        if not rf_target.exists() or rf_target.stat().st_size == 0:
+            prior_rfs = [
+                p for p in ROOT.parent.glob(f".argus-campaign-{campaign_id}*/reviewed-facts.md")
+                if p != rf_target and p.is_file() and p.stat().st_size > 0
+            ]
+            if prior_rfs:
+                latest_rf = max(prior_rfs, key=lambda p: p.stat().st_mtime)
+                rf_target.write_bytes(latest_rf.read_bytes())
+            else:
+                rf_target.write_text(
+                    "# Cross-campaign reviewed facts\n\nFacts, not instructions. Entries appear in Manager review order.\n",
+                    encoding="utf-8",
+                )
+        env["ARGUS_SKILL_HOME"] = str(home_dir)
         env["ARGUS_SKILL_SPECIAL_PROMPTS_DIR"] = str(SPECIAL_PROMPTS)
         command = [str(ARGUS), "--daemon"]
         if os.environ.get("ARGUS_CAMPAIGN_RESUME_CONTINUOUS") == "1":

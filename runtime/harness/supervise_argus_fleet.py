@@ -46,6 +46,12 @@ DEFAULT_CAMPAIGN_IDS = (
     "2307015",
 )
 CAMPAIGN_POOL_IDS = (
+    "7200051",
+    "3059",
+    "3102",
+    "20001675",
+    "3167",
+    "3256",
     "9400114",
     "20000278",
     "20000715",
@@ -88,8 +94,8 @@ CAMPAIGN_POOL_IDS = (
     "1413",
     "20001904",
 )
-CAMPAIGN_TARGET_COUNT = 20
-PROOF_TIMEBOX_SECONDS = 5 * 24 * 60 * 60
+CAMPAIGN_TARGET_COUNT = 14
+PROOF_TIMEBOX_SECONDS = 365 * 24 * 60 * 60
 PROOF_TIMEBOX_EVIDENCE = ROOT / "supervisor-evidence" / "five-day-retirements"
 # Refreshed from persisted rotation state at the start of every supervisor pass.
 CAMPAIGN_IDS = DEFAULT_CAMPAIGN_IDS
@@ -105,11 +111,7 @@ AUDIT_RUNTIMES = {
         "home_suffix": "-retry2",
     },
 }
-SITE_SERVICES = (
-    "argus-open-site.service",
-    "argus-open-tunnel.service",
-    "argus-open-catalog.service",
-)
+SITE_SERVICES: tuple[str, ...] = ()
 OUTPUT = ROOT / "outputs" / "fleet-supervisor.json"
 STATE = ROOT / "outputs" / "fleet-supervisor-state.json"
 LIVE_DATA = WORKSPACE / "open-conjectures-live" / "public" / "open-data.json"
@@ -3146,8 +3148,8 @@ def host_disk_snapshot(path: Path = WORKSPACE) -> dict[str, Any]:
     block_size = stat.f_frsize or stat.f_bsize
     total = stat.f_blocks * block_size
     available = stat.f_bavail * block_size
-    pressure_threshold = max(64 * 1024**3, int(total * 0.05)) if total else 0
-    critical_threshold = max(16 * 1024**3, int(total * 0.01)) if total else 0
+    pressure_threshold = 32 * 1024**3 if total else 0
+    critical_threshold = 16 * 1024**3 if total else 0
     return {
         "available": bool(total),
         "path": str(path),

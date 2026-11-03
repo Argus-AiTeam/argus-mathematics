@@ -11,9 +11,11 @@ checks against the current campaign directory:
 
 ```bash
 PROJECT_ROOT="$(pwd -P)"
-python -m argus_skill.verticals.math.math_state check --project-root "$PROJECT_ROOT"
-python -m argus_skill.verticals.math.proof_graph_check check --project-root "$PROJECT_ROOT"
+/home/argustest/zimo/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.math_state check --project-root "$PROJECT_ROOT"
+/home/argustest/zimo/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.proof_graph_check check --project-root "$PROJECT_ROOT"
 ```
+
+Always invoke `/home/argustest/zimo/argus-live-update/.venv/bin/python` (or `/home/argustest/zimo/argus-latest/.venv/bin/python`) explicitly; never use bare `python -m argus_skill` because `/home/argustest/miniconda3/bin/python` on this host resolves to an unrelated checkout with a different schema.
 
 The role must record the exact project root and both zero exit statuses. A
 passing check against the shared batch root does not certify the campaign.
