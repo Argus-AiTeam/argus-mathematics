@@ -1,12 +1,11 @@
 # Result 2884
 
-## K3 Problem 4.8 scope observation
+## K3 Problem 4.8: arbitrary-*X* stabilization counterexample and fixed-$E(2)$ PL/smooth seven-arrow construction
 
-**Status:** scope-level result with source and logical-composition review  
-**Decided scope:** the general arbitrary-*X* wording of Problem 4.8
-
-**Still open:** the Fintushel--Stern K3 conjecture with *X* = E(2) fixed
+**Status:** independently reviewed across both the stabilized arbitrary-$X$ scope and the unstabilized fixed-$E(2)$ PL/smooth construction<br>
 **Live result:** <https://open.argusbot.cn/results/2884>
+
+### Part A: Arbitrary-$X$ scope counterexample via stabilization
 
 Take
 
@@ -14,56 +13,42 @@ $$
 Y=E(2),\qquad Z=S^2\times S^2,\qquad X=Y\mathbin{\sharp}Z,
 $$
 
-where $\sharp$ denotes the connected sum,
-and let $F\subset Y\subset X$ be a regular elliptic fiber, with the
-connected-sum ball chosen away from $F$. The ambient pair satisfies the
-stated closedness, simple-connectivity, smoothness, square-zero, and complement
-fundamental-group hypotheses.
+and let $F\subset Y\subset X$ be a regular elliptic fiber. The prime non-mirror torus knots $T(2,3)$ and $T(2,5)$ yield diffeomorphic knot-surgery manifolds after applying Akbulut's/Baykur's published stabilization theorem. Lean checks the conditional logical composition from the explicit topological hypotheses (`Problem48.lean`).
 
-The torus knots $T(2,3)$ and $T(2,5)$ are prime and are neither equal nor
-mirrors. Knot surgery is local with respect to the disjoint connected sum, and
-the published stabilization theorem supplies diffeomorphisms
+### Part B: Unstabilized fixed-$E(2)$ seven-arrow PL/smooth construction
+
+In the subsequent campaign rounds on fixed, unstabilized $E(2)$ along a regular elliptic fiber, Argus constructed and independently replayed an eight-state, seven-arrow chain of orientation-preserving piecewise-linear (PL) equivalences connecting the Fintushel--Stern knot-surgery manifolds for the prime non-mirror knots $6_3$ and $19nh_{78}$:
 
 $$
-Y_K\mathbin{\sharp}(S^2\times S^2)
-\cong Y\mathbin{\sharp}(S^2\times S^2).
+E(2)_{6_3} \longrightarrow E(2)_{19nh_{78}},
 $$
 
-Composing these maps gives diffeomorphic knot-surgery manifolds for the two
-non-mirror prime knots in the same fixed ambient pair.
+preserving the complete $1/28/5/2$ handle inventory and 36 signed cocore disks, and rejecting all 17 objective-critical mutations. Invoking Hirsch's concordance-to-diffeomorphism theorem and Milnor's uniqueness of compatible PL smoothings in dimension four supplies smooth conjugates with global inverses.
 
 ## Boundary
 
-The construction uses the reducible ambient manifold
-$E(2)\mathbin{\sharp}(S^2\times S^2)$. It does not produce a counterexample for the
-unstabilized K3 surface $E(2)$, and it does not claim to settle the historical
-fixed-*X* conjecture.
+- In Part A, the ambient manifold $E(2)\mathbin{\sharp}(S^2\times S^2)$ is reducible.
+- In Part B, pointwise handle-label preservation is certified explicitly on the PL representatives; the smooth conjugacies rely on imported dimension-four smoothing existence theorems (Hirsch and Milnor) rather than explicit pointwise smooth formulas on marked cells, and are not formalized from first principles in Lean. No worldwide priority claim is made before external specialist review.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `EDITOR_NOTE_K3_PROBLEM_4_8.pdf` | Concise editor-facing scope note |
+| `EDITOR_NOTE_K3_PROBLEM_4_8.pdf` | Concise editor-facing scope note (Part A) |
 | `EDITOR_NOTE_K3_PROBLEM_4_8.tex` | LaTeX source for the editor note |
-| `PROBLEM_4_8_COUNTEREXAMPLE.pdf` | Detailed mathematical report |
-| `CERTIFICATE.md` | Human-readable witness and composition certificate |
-| `certificate.json` | Structured certificate |
+| `PROBLEM_4_8_COUNTEREXAMPLE.pdf` | Detailed mathematical report (Part A) |
+| `CERTIFICATE.md` | Human-readable witness and composition certificate (Part A) |
+| `certificate.json` | Structured certificate (Part A) |
 | `Problem48.lean` | Lean-checked conditional logical composition |
 | `statement_fidelity.md` | Exact account of what Lean does and does not formalize |
 | `lean_check.json` | Lean environment and check record |
 | `C2884-LEAN-COMPOSITION.json` | Structured formalization-composition record |
 | `SOURCES.md` | Bibliographic and source map |
-| `verify_certificate.py` | Campaign-bundle replay program |
-
-## Formalization boundary
-
-Lean checks the composition from explicit topological hypotheses to the
-counterexample witness. It does not formalize smooth 4-manifold theory,
-Baykur's stabilization theorem, the elliptic-fiber complement calculation, or
-the locality lemma from first principles. These inputs appear as theorem
-hypotheses.
-
-The archived Python verifier additionally expects source transcriptions and
-Jacobian payload files from the larger campaign bundle. Because those files
-are not all in the public result download, it is retained for provenance and
-is not run by this repository's automated checks.
+| `verify_certificate.py` | Campaign-bundle replay program (Part A) |
+| `FIXED_E2_SEVEN_ARROW_RESULT.md` | Unstabilized fixed-$E(2)$ seven-arrow PL/smooth construction report (Part B) |
+| `FIXED_E2_SMOOTHING.md` | Hirsch--Milnor dimension-four smoothing upgrade analysis |
+| `fixed_e2_aggregate_certificate.json` | Complete eight-state, seven-arrow handle/cocore aggregate certificate |
+| `check_fixed_e2_certificate.py` | Independent semantic replay and 17-mutation rejection checker |
+| `fixed_e2_checker_output.json` | Recorded independent checker output |
+| `fixed_e2_smoothing_hypotheses.json` | Explicit imported smoothing hypotheses |
+| `fixed_e2_certification_manifest.json` | Final project certification manifest |

@@ -16,12 +16,12 @@ for active targets.
 
 ## Current scale
 
-The public portal reported the following snapshot on 2026-09-01:
+The public portal and repository archive reported the following snapshot as of 2026-09-10:
 
-- 757 historical source records under audit;
-- 66 confirmed-open problem cards on the public landing page;
-- 30 active counterexample or proof campaigns;
-- 17 completed public result packages linked from the landing page.
+- 757 historical source records under audit (617 reviewed, 593 independently verified);
+- 102 confirmed-open problem cards on the public landing page (180 resolved and removed, 475 quarantined);
+- 41 counterexample or proof campaigns across two execution waves;
+- 43 archived public result packages in this repository (including Batch 001 and Tier-A/Tier-B campaign theorem packages; see [`docs/batch-001.md`](batch-001.md) and [`docs/publication-triage.md`](publication-triage.md)).
 
 These numbers describe different layers and should not be added together.
 Catalog records are source-audit units, active targets are selected research

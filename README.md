@@ -46,16 +46,17 @@ This repository preserves the completed and reviewable outputs of the Argus
 mathematics program. It is organized around claims and their evidence rather
 than around model transcripts.
 
-As of **2026-09-03**, the public program contains:
+As of **2026-09-10**, the public program contains:
 
-- **17 published result packages** with technical reports, source records, or
-  editor notes;
-- **9 independently replayable computational certificates**;
-- **1 Lean-checked logical composition** with an explicit formalization
-  boundary;
-- **81 checksummed public artifacts**;
-- **30 active research targets** on the live workbench;
-- **757 historical problem records** under source and status audit.
+- **43 published result packages** with technical reports, certificates, source
+  records, or editor notes;
+- **23 independently replayable computational or symbolic certificates**;
+- **2 Lean-checked logical/topological compositions** (`2884` and `1465`) with
+  explicit formalization boundaries;
+- **214 checksummed public artifacts**;
+- **41 counterexample or proof campaigns** on the live workbench;
+- **757 historical problem records** under source and status audit (617
+  reviewed, 593 independently verified, 102 confirmed open).
 
 The live portal changes more frequently than this repository. The repository
 is the durable archive for completed result packages; the portal remains the
@@ -80,8 +81,34 @@ current view of active campaigns and catalog status.
 | [20000320](results/20000320/) | Weak Q-Gorensteinness does not force pluricanonical base change | Algebraic geometry | Independently reviewed primary-source reconstruction |
 | [3206](results/3206/) | A Cayley graph on $\mathbb Z_{15}$ whose core is $C_5$ | Algebraic graph theory | Independently verified reconstruction of a known 2008 counterexample |
 | [20001068](results/20001068/) | A 26-vertex counterexample to the literal weak-inequality form of AIM Conjecture 6.23 | Weighted digraphs | Independently verified |
-| [11000263](results/11000263/) | Twist-compatible Burau quotient with $X_4=0$ and $X_3\neq0$ | Braid groups and algebra | Mathematics reviewed; ready for Bigelow's convention check; novelty not certified |
-| [2884](results/2884/) | A scope-level counterexample to the arbitrary-*X* wording of K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Scope observation; the fixed *X* = E(2) conjecture remains open |
+| [11000263](results/11000263/) | Twist-compatible Burau quotient ($X_3\neq0, X_4=0$) and universal finite-dimensionality for all $n\ge4$ | Braid groups and algebra | Independently verified; $(2n-1)!!+1\le\dim Q_n\le(2n-1)!!+(n!/3)^2$; priority unclaimed |
+| [2884](results/2884/) | Arbitrary-*X* stabilization counterexample and fixed-$E(2)$ PL/smooth seven-arrow construction for K3 Problem 4.8 | Smooth 4-manifolds and knot surgery | Independently verified across stabilized scope and unstabilized $E(2)_{6_3}\to E(2)_{19nh_{78}}$ PL/Hirsch--Milnor construction |
+| [20001036](results/20001036/) | A 5,454-vertex multi-label counterexample to Seymour--Sullivan Conjecture 6.1 (Rainbow reachability) | Directed graphs and combinatorial optimization | Independently verified computational counterexample under positive-length unordered multi-label convention |
+| [1465](results/1465/) | Fu 2026 Theorem 2.8: regularity-premise local-finiteness gap | Model theory and o-minimal structures | Independently verified proof-premise correction with Lean 4 logical core |
+| [2338](results/2338/) | Necessary conditions for multiplicity five in Pascal's triangle ($K(a)\ge8$, $\omega(a)\ge7$, and $\omega(a)\ge14$ on $\{5,6,7,8\}$) | Number theory and Diophantine equations | Independently verified global necessary-condition theorems (Erdős Problem #849) |
+| [20000278](results/20000278/) | An irrational non-$\mathbb Q$-Gorenstein $F$-jumping number $\lambda=(53609-\sqrt{17})/48$ in characteristic 13 | Commutative algebra and singularity theory | Independently verified certificate (AIM Problem 1.3) |
+| [20000816](results/20000816/) | Distinct Hilbert-scheme components of $\mathrm{Hilb}^{4803}(\mathbb A^{20}_{\mathbb C})$ sharing a complete unlabelled Gröbner fan | Algebraic geometry and commutative algebra | Independently verified counterexample under unlabelled FJT fan convention |
+| [20001274](results/20001274/) | Congruent plane projections do not determine a convex body up to translation or reflection | Convex and discrete geometry | Independently verified explicit two-cap reconstruction ($\varepsilon=1/1000$) |
+| [20001352](results/20001352/) | Literal-scope counterexample for commutator width and involution factorization in Thompson's group $F$ | Geometric group theory | Independently verified domain correction (AIMPL Problem 3.1) |
+| [20001516](results/20001516/) | A $\mathrm{CAT}(0)$ free-by-cyclic group $F_2\rtimes_\phi\mathbb Z$ that is not ordinary RFRS | Geometric group theory | Independently verified literature reconstruction (AIM Problem 5.3) |
+| [20001602](results/20001602/) | Missing just-infinite hypothesis and Hanoi branch-group counterexample $(G,G'')$ for commensurated subgroups | Group theory and branch groups | Independently verified literal-scope counterexample |
+| [20001849](results/20001849/) | Flying wings ($n=3,\alpha=1/2$) refute uniqueness of the collapsed product steady Ricci soliton | Differential geometry and Ricci flow | Independently verified theorem-backed counterexample under Lai's all-scales spatial collapse |
+| [20000715](results/20000715/) | Explicit 3rd-order nonlinear ODE and all-order $\mathbb C(q)$-linear ODE obstruction for $\eta^{24}$ | Modular forms and differential algebra | Independently verified status resolution and linear obstruction (AIM Problem 1.2) |
+| [2457](results/2457/) | Countermodel $H_N=\mathrm{diag}(0_K,(3/10)I_{N-K})$ to the Arvidsson heat-trace bounded-kernel implication | Spectral theory and analytic number theory | Independently verified proof-premise countermodel (Erdős Problem #1055) |
+| [20000443](results/20000443/) | Smooth rationally connected degree-5 hypersurface in $\mathbb P^9_K$ over a $\mathrm{cd}(K)\le1$ field with no $K$-point | Arithmetic and algebraic geometry | Independently verified counterexample with Jacobian resultant certificate (Batch 001) |
+| [20000255](results/20000255/) | Terminal three-fold singularities in positive characteristic need not be Cohen--Macaulay | Birational and algebraic geometry | Independently reviewed primary-source refutation (Batch 001; Totaro 2019) |
+| [20000256](results/20000256/) | A characteristic-two $\mathbb Q$-factorial 3-fold plt pair with a non-normal plt centre | Birational geometry | Independently reviewed primary-source refutation (Batch 001; Cascini--Tanaka) |
+| [20000332](results/20000332/) | Non-stabilization of Chow semistable pluricanonical limits | Algebraic geometry and moduli | Independently reviewed primary-source refutation (Batch 001; Wang--Xu 2014) |
+| [20000472](results/20000472/) | A bounded Fock-space Toeplitz operator with unbounded heat transform at $t=1/4$ | Operator theory and harmonic analysis | Independently reviewed primary-source refutation (Batch 001; Looi 2022) |
+| [20000496](results/20000496/) | Smooth centrally symmetric convex domains in high dimensions with interior hot spots | Spectral geometry and PDE | Independently reviewed primary-source refutation (Batch 001; de Dios Pont 2024) |
+| [20000731](results/20000731/) | Counterexamples to Nahm Conjecture 4.1 on $q$-hypergeometric modular functions | Modular forms and algebraic $K$-theory | Independently reviewed primary-source refutation (Batch 001; Vlasenko--Zwegers 2011) |
+| [20000778](results/20000778/) | A universal phantom subcategory on the blow-up of $\mathbb P^2_{\mathbb C}$ at 10 general points | Algebraic geometry and derived categories | Independently reviewed primary-source refutation (Batch 001; Krah 2024) |
+| [1243](results/1243/) | Explicit nondegenerate Cassels--Tate pairing $\langle 936,1304\rangle_{\mathrm{CT}}=1/2$ on a genus-two cover | Arithmetic geometry and explicit descent | Independently replayed scoped intermediate theorem |
+| [6800022](results/6800022/) | Four embeddedness obstructions in genus-one four-ended minimal-surface families | Differential geometry and minimal surfaces | Independently reviewed scoped obstruction theorems |
+| [2800203](results/2800203/) | Threshold discrepancy barriers for depth-three scalar planted-clique AMP schedules | High-dimensional probability | Independently verified scoped impossibility theorem |
+| [1285](results/1285/) | Asymptotic success upper bounds for restricted CRT-local factoring controllers and ECM dual-chain routes | Computational number theory | Independently verified scoped lower-bound theorems |
+| [1187](results/1187/) | Collapse of the Nielsen-torsion quotient $\mathcal D_{\mathrm{AC3}}=\mathcal R_U$ on $G_{4,3}$ and strict $\mathrm{AC}_3$ certificates in $F/K^{(3)}$ | Combinatorial and geometric group theory | Independently verified scoped group-theoretic theorems |
+| [20000582](results/20000582/) | Moving-window Engel Hilbert cocycles with $\Omega(\sqrt{k})$ homogeneous gauge distortion | Metric geometry and bi-Lipschitz embeddings | Independently reviewed scoped construction theorem |
 
 ### Result 20001760
 
@@ -405,11 +432,39 @@ results/
   20000320/   Q-Gorenstein base-change literature reconstruction
   3206/       known Cayley-core counterexample reconstruction
   20001068/   independently verified weighted-digraph counterexample
-  11000263/   Burau witness for two repaired Bigelow presentations
-  2884/       K3 Problem 4.8 scope observation
+  11000263/   Burau witness and all-n>=4 universal finite-dimensionality for Bigelow presentations
+  2884/       K3 Problem 4.8 stabilization scope and fixed-E(2) 7-arrow PL/smooth construction
+  20001036/   5,454-vertex multi-label counterexample to Seymour-Sullivan Conjecture 6.1
+  1465/       Fu Theorem 2.8 regularity-premise gap (with Lean 4 logical core)
+  2338/       Multiplicity-five necessary conditions in Pascal's triangle (Erdos #849)
+  20000278/   Characteristic-13 irrational non-Q-Gorenstein F-jumping number
+  20000816/   Hilb^4803(A^20_C) components sharing a complete unlabelled Grobner fan
+  20001274/   Explicit two-cap convex bodies with congruent plane projections
+  20001352/   Thompson's group F involution and commutator-width domain correction
+  20001516/   CAT(0) free-by-cyclic group not ordinary RFRS
+  20001602/   Hanoi branch-group commensurated subgroup counterexample (G, G'')
+  20001849/   Flying-wing steady Ricci soliton counterexample to collapsed uniqueness
+  20000715/   eta^24 3rd-order nonlinear ODE and all-order C(q)-linear ODE obstruction
+  2457/       Arvidsson heat-trace bounded-kernel countermodel
+  20000443/   Ax degree-5 form over cd<=1 field with Jacobian resultant certificate
+  20000255/   Batch 001: Totaro terminal 3-fold non-Cohen-Macaulay refutation
+  20000256/   Batch 001: Cascini-Tanaka characteristic-2 plt non-normal centre
+  20000332/   Batch 001: Wang-Xu non-stabilizing Chow semistable limits
+  20000472/   Batch 001: Looi Fock-space Toeplitz unbounded heat transform
+  20000496/   Batch 001: de Dios Pont centrally symmetric interior hot spots
+  20000731/   Batch 001: Vlasenko-Zwegers Nahm Conjecture 4.1 counterexamples
+  20000778/   Batch 001: Krah universal phantom subcategory on blow-up of P^2
+  1243/       Tier-B: explicit Cassels-Tate pairing <936,1304>_CT = 1/2
+  6800022/    Tier-B: four embeddedness obstructions for genus-1 4-end minimal surfaces
+  2800203/    Tier-B: depth-3 scalar planted-clique AMP threshold discrepancy barrier
+  1285/       Tier-B: restricted CRT-local and ECM dual-chain factoring lower bounds
+  1187/       Tier-B: G_{4,3} Nielsen-torsion collapse and F/K^(3) strict AC certificates
+  20000582/   Tier-B: moving-window Engel Hilbert cocycles with Omega(sqrt(k)) distortion
 docs/
   status-and-scope.md
   research-program.md
+  batch-001.md
+  publication-triage.md
 data/
   results.json
 scripts/

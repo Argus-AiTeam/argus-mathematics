@@ -1,0 +1,376 @@
+# A concrete field-conjugate component construction at (n,d)=(20,4803)
+
+**Exact construction with retained independent mathematical acceptance.**
+The current C8 statement is supported by
+`judgement-C8-68365532b35f` in `research/MATH_STATE.json`.
+The complete frozen statement was independently certified in
+`roles/reviewer/progress.json:current_mission_certification_review`.
+These are retained judgements, not a new Reviewer verdict.
+
+This is a generic-component construction, not merely equality at two
+special ideals. It uses explicit length-4803 ideals over Q(sqrt(-7)),
+a common arithmetic ambient-open map proving that they share no
+component, and the already reviewed field-conjugation lemma C9.
+It supplies a uniform finite family of component witnesses: **every**
+geometric minimal prime through the specified plus frame works.
+No uniqueness or smoothness of that frame is assumed.
+
+The field, coordinates, fan convention, and open sets below are fixed.
+No novelty claim is made.
+
+## 1. Polynomial data and exact length
+
+Put K=Q(r), r^2=-7, with complex embedding r=i*sqrt(7).
+Let sigma be complex conjugation; it fixes Q and every variable.
+Use the coordinates
+
+    z=(U0,...,U9,Y0,...,Y9)
+
+on A^20. The ideal I_+ in K[U0,...,U9] is the 84-cubic ideal
+from the exact Borisov-Keum ancillary file, retained as
+
+    research/sources/c6_followup/explicit_input/Magma84FinalFPPexact.
+
+The normalized sparse exact polynomials are
+
+    research/certificates/generic_collision/fake_plane/normalized_input.json.
+
+Only the 84-polynomial list is parsed; ancillary commands are not
+executed. Put I_-=sigma(I_+) and
+
+    J_+ = I_+ + (U0,...,U9)^5 + (Y0,...,Y9)^2
+          + (U0*Y0+...+U9*Y9),
+    J_- = sigma(J_+).
+
+The exact characteristic-zero computation over K gives
+
+    in_drl(I_+) = (U0,...,U6)^3,
+    H_(S/I_+)(t) = (1+7t+28t^2)/(1-t)^3.
+
+Let
+
+    B = {U^alpha : |alpha|<=4, alpha_0+...+alpha_6<=2}.
+
+This is a basis of S/(I_++m_U^5), with graded dimensions
+(1,10,55,136,253) and size455. Multiplication by U9 is injective
+in degrees below4, with explicit identity minors in the output.
+The degree4 part, of dimension253, is the whole socle.
+
+The same divisor-closed monomial set is a basis for BOTH frame
+quotients:
+
+    O = B
+        union {Y_i*b : b in B, 0<=i<=8}
+        union {Y9*b : b in B, exponent_U9(b)=0}.
+
+Its size is
+
+    455 + 9*455 + 253 = 4803.
+
+The last basis restriction eliminates U9*Y9 using the displayed
+bilinear relation. Exact multiplication matrices and all border
+normal forms have been computed over K. The total Hilbert
+function is
+
+    (1,20,154,676,1558,2394).
+
+The output verifies every commutator of the 20 multiplication
+matrices. Thus the finite arithmetic is an exact quotient
+certificate, not a modular estimate or an asserted Hilbert series.
+
+## 2. Why conjugation exchanges different entire components
+
+The proof is `common_arithmetic_map.md` in this directory.
+Its essential new input is one Q-defined open W of
+
+    H = Hilb^4803(A^20_Q)
+
+containing both frames, with one Q-morphism
+
+    rho : W -> Hilb^(18*j^2-9*j+1)(P^9_Q)
+
+sending the two frames to the two Borisov-Keum surfaces.
+
+It composes the universal BB open immersions and limit maps of
+Jelisiejew's frame construction, then recovers the U-degree
+zero part. Finally, a single explicit degree-three determinant
+chart recovers the 84-cubic saturated ideal. Degree-four
+syzygies of (U0,...,U6)^3 prove that recovery works on the
+whole chart, not just at the two frames.
+
+The two surfaces are nonisomorphic rigid fake projective planes,
+with q=0 and their complete bicanonical embeddings. Hence their
+projective-coordinate orbit closures are distinct components,
+and the two displayed surface points share no component.
+The irreducible-image argument for rho shows that J_+ and J_-
+share no irreducible component of H_C.
+
+Consequently **every** irreducible component X containing J_+
+is different from sigma(X), since the latter contains J_-.
+This is the mechanism missing from the earlier special-point
+collision: the entire components, not just their isolated
+points, are exchanged by an automorphism fixing the coordinates.
+
+The geometric claims in this section depend on the cited primary
+theorems and the common-map proof; the length computation is not
+misrepresented as their mechanical verification.
+
+## 3. Explicit component and dominant-family data
+
+Here is a finite algebraic presentation that makes the component
+construction precise without guessing a component dimension or
+assuming a BB fiber is irreducible.
+
+Order O as in `fake_plane/frame_basis.json`, with 1 first.
+Let
+
+    D = (union_i z_i*O) minus O.
+
+The exact data give |D|=38259. For each b in D and m in O
+introduce c_(b,m), and let R0=Q[c_(b,m)]. Define 4803-by-4803
+matrices Z_i with column indexed by m as follows:
+
+    if z_i*m in O: the unit column e_(z_i*m);
+    otherwise:    (c_(z_i*m,m'))_(m' in O).
+
+Let E be the ideal generated by all entries of
+
+    Z_i*Z_j - Z_j*Z_i,   0<=i<j<20.
+
+This is an explicit finite polynomial presentation over Q.
+Its 183757977 coefficient variables and at most 4383073710
+commutator entries are specified by the matrix formula, not
+materialized as a multi-billion-line file.
+
+The scheme Spec(R0/E) is the open quotient-basis chart H_O in H.
+This can be checked directly: commuting Z_i define a cyclic
+module with basis O and generator e_1, because divisor-closedness
+gives m(Z)e_1=e_m. Thus the border relations
+
+    b - sum_(m in O) c_(b,m)*m
+
+give a quotient free of rank4803. Conversely, any ideal whose
+quotient has basis O gives exactly these multiplication matrices.
+
+Let k=Qbar inside C and define the explicit maximal ideal
+
+    m_+ = (c_(b,m)-c^+_(b,m)) in k[c],
+
+where the numbers c^+ are the exact coefficients in
+`fake_plane/frame_border.jsonl`. Its conjugate is m_-.
+Consider the finite, nonempty set
+
+    P_+ = {p in Min(E*k[c]) : p is contained in m_+}.
+
+For **any** p in this set, put
+
+    X_p = closure in H_C of Spec(C[c]/p*C[c]),
+    Y_p = sigma(X_p).
+
+These are entire irreducible components: geometric minimal primes
+of an open chart, rather than arbitrary primes defining strata.
+Section2 proves p != sigma(p). This proves the required property
+uniformly for every member of the concrete finite selection set;
+no assertion that a particular uncomputed prime is minimal is
+being made.
+
+The corresponding dominant families are the above border relations
+over
+
+    A_p = k[c]/p,        A_sigma(p) = k[c]/sigma(p).
+
+Their classifying morphisms are inclusions of the reduced
+components of H_O, so they are dominant onto X_p and Y_p.
+They are finite free of rank4803, including when the ambient
+Hilbert component has a nonreduced scheme structure.
+
+This is a theorem-level component specification by an explicit
+chart and a uniformly certified finite minimal-prime selection.
+The individual minimal-prime Groebner bases are not expanded or
+computed. The proof does not depend on such an expansion, on
+finding smooth frame points, or on the dimensions of the selected
+components.
+
+## 4. An explicit simultaneous specialization condition
+
+Fix p in P_+. Work over the component function field
+
+    F_p = Frac(A_p).
+
+All Z_i now have entries in A_p. Restrict to the nonempty open
+X_p intersect W_C, which contains the plus frame.
+The total BB limit has the fixed Hilbert function from Section1.
+Thus every ideal there is supported at one point s and has
+
+    m_s^6 = 0.
+
+Indeed, the total-dilation limit is the associated graded local
+algebra; its degrees6 and higher vanish. Nakayama's lemma gives
+the same sixth-power vanishing before taking that limit.
+
+For every strictly positive weight, (z-s)^alpha with |alpha|=6
+has leading monomial z^alpha. Therefore every standard monomial
+has degree at most5, and every minimal initial generator has
+degree at most6, on this entire open.
+
+This improves C9's general degree bound4803 to the concrete
+degree bound6 for this construction.
+
+Define the finite matrix
+
+    A_6(c) = [ Z_0^alpha_0 * ... * Z_19^alpha_19 * e_1
+               : alpha in N^20, |alpha|<=6 ].
+
+Its dimensions are exactly 4803 by 230230. Let M_p be the set
+of all square subdeterminants of A_6, of orders1 through4803,
+which are nonzero in A_p, and put
+
+    Delta_p = product_(f in M_p) f  in A_p.
+
+This is an explicit finite determinant formula tied to the
+displayed matrices and to the selected geometric prime; it is
+not the phrase "choose a sufficiently general point." Its value
+is nonzero because A_p is an integral domain. Include each
+indexed minor once; repeated polynomial values cause no problem.
+
+To avoid every other component, for each geometric minimal prime
+q != p of E*k[c], choose the first element of its reduced
+Groebner basis (in a fixed monomial order on c) that is not in p,
+and let H_p be their product. Such an element exists because
+distinct minimal primes are incomparable. Thus H_p is nonzero
+in A_p, and H_p!=0 excludes all the other components meeting
+H_O. Components not meeting H_O cannot meet this open at all.
+
+The simultaneous opens are
+
+    U_p = X_p intersect W_C intersect H_O intersect D(Delta_p*H_p),
+    V_p = sigma(U_p) inside Y_p.
+
+They are nonempty dense opens of the ENTIRE components: each
+factor is nonzero on an integral component, and W_C intersect
+X_p is already a nonempty open. They avoid all other components.
+Since W is defined over Q and H_O is defined by the same
+monomials, conjugation sends the first displayed condition to
+exactly the corresponding condition for sigma(p).
+
+The product is specified algebraically, not expanded in a file;
+there is no numerical near-solution, sampled-order assumption,
+or uncomputed claim that the product is nonzero at the special
+frame itself. It need not be nonzero at that exceptional point.
+
+## 5. Complete generic fan certificate
+
+For every I in U_p all minors of A_6 have the same vanishing
+pattern as over F_p. Hence every degree-at-most5 monomial
+quotient basis and every coefficient support of its
+degree-at-most6 border relations is constant on U_p.
+
+For each monomial order, the reduced Groebner basis is recovered
+from this finite data by solving for the minimal excluded
+monomials. The coefficient zero tests are precisely minor zero
+tests. Section4 supplies the degree bound uniformly for every
+positive-weight refinement of a monomial order.
+
+An explicit description of the common geometric fan F_p is:
+for each such realized reduced basis G with marked heads
+x^alpha, take the cone
+
+    {w in R^20 : w.(alpha-beta)>=0
+      for every nonzero tail x^beta of each member of G},
+
+retain the cones of initial-equivalence classes meeting the
+strictly positive orthant, and include all their faces.
+All coefficients and supports in this description are those of
+the displayed universal border family over F_p. Repetitions are
+discarded as equal cones. This describes the complete fan, not
+just its intersection with a positive orthant.
+
+FJT Propositions2.6 and2.16, already independently attributed for
+C9, show that these supports determine the complete initial-
+equivalence cones and their face interiors, including extensions
+to negative weights. Thus every point of U_p has exactly F_p.
+
+Coefficientwise conjugation gives, for ALL real weights w,
+
+    sigma(in_w(I)) = in_w(sigma(I)).
+
+It preserves equality and inequality of initial ideals, all
+supports, and every real weight coordinate. Hence the complete
+geometric fan of sigma(I) is F_p as well. Every point in V_p
+is of that form. Therefore
+
+    F_geom(I)=F_p for every [I] in U_p union V_p.
+
+No initial-ideal labels are included in fan equality; no
+homogenized fan, coordinate quotient, or different restriction
+is substituted.
+
+## 6. What the construction establishes, and what it does not claim
+
+Assuming the cited geometric inputs and the common-map proof,
+the construction supplies the stronger target with explicit
+n=20,d=4803, entire conjugate components, dominant quotient
+families, and one simultaneous nonempty determinantal open on
+which the complete fixed-coordinate FJT fan agrees.
+
+It also supplies pointwise separation failure by choosing any
+points of U_p and V_p, since these opens avoid every other
+component. Thus the unresolved pointwise-versus-generic
+quantifier distinction is covered under the chosen geometric
+fan convention.
+
+The original sources still do not explicitly specify geometric
+versus initial-ideal-labeled fan data. No conclusion about
+labeled fan equality or the authors' unstated convention is
+claimed. C6, the historical interpretation claim, is not proved
+by renaming this stronger alternative.
+
+The dependency chain is C14 (exact quotient data) and C15
+(surface separation), then C16 (one common ambient-open map),
+C17 (entire component selection), and C18 (simultaneous
+component-exclusive dense opens), together with C9 (the complete
+fan argument). The retained independent judgements support
+C14 v1, C15 v4, C16 v4, C17 v1, C18 v2, and C9 v2; the
+current C8 v1 uses exactly these statements. Their applicable
+source attributions and judgement identifiers are linked in
+`research/PROOF_GRAPH.json`. No retired assumption, historical
+C6 conclusion, or unresolved C2 source attribution is used here.
+
+This chain improves on the accepted length-eight special-point
+collision by separating entire conjugate components and giving
+one fan throughout simultaneous dense component-exclusive opens.
+The present source-reference reconciliation adds no mathematical
+proposition beyond the retained length-4803 acceptance.
+The finite replay certifies exact polynomial and quotient data,
+not the independently reviewed geometric arguments by itself.
+
+## Replay
+
+From the campaign directory:
+
+    /home/argustest/zimo/argus-latest/.venv/bin/python -B \
+      research/certificates/generic_collision/fake_plane/exact_frame.py run
+
+This uses the installed Singular for exact arithmetic over
+Q(r)/(r^2+7), no modular approximation and no new dependency.
+The retained result is `fake_plane/results.json`, with the
+full Groebner basis, quotient bases, sparse multiplication
+matrices, and border normal forms alongside it.
+
+The additional finite check
+
+    /home/argustest/zimo/argus-latest/.venv/bin/python -B \
+      research/certificates/generic_collision/check_generic_witness_data.py
+
+checks the explicit common-basis formula, the border and matrix
+dimensions, and every degree-three head-pair's reduction to
+degree-four syzygies. Its output is
+`generic_witness_data_exact.json`. It does not rerun the
+unchanged number-field arithmetic or claim to expand primes.
+
+Replay progress is printed to stderr only. The certificate
+does not edit role-progress files or append Engineer actions
+when a Reviewer reruns it.
+
+The primary-source assumptions and proof obligations are in
+the claim ledger; none is presented as Lean or kernel evidence.

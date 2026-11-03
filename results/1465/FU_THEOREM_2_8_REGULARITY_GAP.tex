@@ -1,0 +1,169 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\setlist{nosep}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\id}{\mathrm{id}}
+\title{An Exact Obstruction to the Local-Finiteness Premise\\in Fu's Theorem 2.8}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give an explicit allowed polynomial system for which the regular-parameter
+set appearing in Theorem 2.8 of Y.~Fu, \emph{Towards Trans-Exponential
+O-minimal Expansion of the Real Ordered Field}, cannot possess the locally
+finite closed-simplex triangulation required by the argument.  The example is
+the one-variable system $P(x,l_1,l_2,\epsilon,\delta)=x^2$.  On a fixed
+identity-coordinate slice, the regular-parameter set is exactly
+$[-1,1]\setminus\{0\}$, hence is not closed.  A locally finite union of closed
+simplices in the full ambient parameter space is closed, giving an immediate
+contradiction.  If the word ``simplex'' is instead interpreted as an open
+simplex interior, the membership conclusion used in Claim 2.9 does not follow
+from density and local finiteness.  Thus the displayed construction route has
+a precise gap.  This note does not claim a counterexample to o-minimality or a
+solution of the general trans-exponential problem.
+\end{abstract}
+
+\section{The source premise}
+
+For a system $P$ of the form used in Fu's equation (3), equations (4) and (6)
+define a parameter set $G$ and the regular locus
+\[
+ R=\bigl\{(A,\eta,l,\epsilon,\delta)\in
+ G\times[-1,1]^{2n+2}: P\circ A-\eta
+ \text{ has nonsingular zeros only}\bigr\}.
+\]
+Theorem 2.8 assumes a triangulation $\{\Delta_\alpha\}$ of $R$ with the
+following ambient local-finiteness property: every point of
+$G\times[-1,1]^{2n+2}$ has a neighborhood intersecting only finitely many
+$\Delta_\alpha$.  The proof then uses density of $R$ to assert in Claim 2.9
+that each point of the compact identity slice belongs to one of finitely many
+such simplices.
+
+\section{The explicit system}
+
+Take
+\[
+ n=1,\qquad k=u=0,\qquad
+ P(x,l_1,l_2,\epsilon,\delta)=x^2.
+\]
+Then $m=3n+k+u+2=5$.  Fix arbitrary
+$(l,\epsilon,\delta)\in[-1,1]^4$ and define
+\[
+ p_\eta=(I_5,\eta,l,\epsilon,\delta),\qquad -1\leq\eta\leq1.
+\]
+
+\begin{lemma}
+For every $\eta\in[-1,1]$, the pair $(I_5,\eta)$ lies in Fu's set $G$.
+\end{lemma}
+
+\begin{proof}
+The zero set of $x^2-\eta$ is empty for $\eta<0$, consists of the single
+$x$-coordinate $0$ for $\eta=0$, and consists of the two $x$-coordinates
+$\pm\sqrt\eta$ for $\eta>0$.  Including the four auxiliary coordinates gives
+respectively the empty set, $\{0\}\times\R^4$, or
+$\{-\sqrt\eta,\sqrt\eta\}\times\R^4$.  For any auxiliary point, restrict to a
+bounded neighborhood in those four coordinates.  The inverse image under the
+auxiliary-coordinate projection is then empty, one bounded copy, or two
+bounded copies.  This is exactly the local boundedness condition defining
+$G$.
+\end{proof}
+
+\begin{proposition}
+On the displayed identity-coordinate slice,
+\[
+ \{\eta\in[-1,1]:p_\eta\in R\}=[-1,1]\setminus\{0\}.
+\]
+\end{proposition}
+
+\begin{proof}
+For $\eta<0$, the equation $x^2-\eta=0$ has no real zeros, so the assertion
+that all zeros are nonsingular is vacuously true.  For $\eta>0$, the only
+zeros are $\pm\sqrt\eta$ and the derivative $2x$ is nonzero at both.  At
+$\eta=0$, the zero $x=0$ has derivative zero and is singular.  These three
+cases prove the equality.
+\end{proof}
+
+\section{Failure of ambient local finiteness}
+
+\begin{theorem}
+The regular locus $R$ for the system above admits no triangulation by closed
+simplices that is locally finite in the full ambient space
+$G\times[-1,1]^4$.
+\end{theorem}
+
+\begin{proof}
+Assume that $R=\bigcup_\alpha\Delta_\alpha$, where each $\Delta_\alpha$ is a
+closed simplex and the family is locally finite in the full ambient space.
+For $j\geq1$, put $\eta_j=-1/j$.  Then $p_{\eta_j}\in R$ and
+$p_{\eta_j}\to p_0$, while $p_0\notin R$.
+
+Choose an ambient neighborhood $U$ of $p_0$ that meets only finitely many
+simplices, say $\Delta_1,\ldots,\Delta_N$.  All sufficiently large
+$p_{\eta_j}$ lie in $U$, so infinitely many of them belong to one fixed
+$\Delta_i$.  Because $\Delta_i$ is closed, their limit $p_0$ also lies in
+$\Delta_i\subset R$, a contradiction.
+\end{proof}
+
+Equivalently, a locally finite union of closed subsets is closed.  The
+sequence above exhibits directly that $R$ is not closed in the ambient space,
+so the first bullet of Theorem 2.8 cannot hold under the closed-simplex
+meaning used by its proof.
+
+\section{Why open simplex interiors do not repair the argument}
+
+One might instead call the relative interiors of simplices the members of a
+triangulation.  Such pieces need not be closed, so the preceding topological
+contradiction would not apply verbatim.  However, Fu's Claim 2.9 uses density
+and local finiteness to conclude that a limit point on the identity slice
+\emph{belongs} to one of the finitely many simplices.  For a decomposition by
+open simplex interiors, a sequence may converge to a proper face without the
+limit belonging to any of the interiors containing the sequence.  The
+displayed points $p_{-1/j}\to p_0$ give exactly this failure mode.  Thus either
+the simplices are closed, in which case the assumed ambient local finiteness
+is impossible, or they are open interiors, in which case Claim 2.9 requires a
+new argument.
+
+\section{Formal and independent verification}
+
+The accompanying Lean 4 development proves:
+\begin{enumerate}
+  \item the unrestricted regular-parameter set for $x^2-\eta$ is
+  $\R\setminus\{0\}$;
+  \item the constrained slice is $[-1,1]\setminus\{0\}$;
+  \item this slice is not closed; and
+  \item it cannot be a locally finite union of closed pieces.
+\end{enumerate}
+The development compiles with Lean 4.31.0, contains no proof holes, and passes
+the recorded axiom audit.  A separate Reviewer checked the source definitions,
+the admissibility of the $P=x^2$ system, the mapping from the paper's parameter
+space to the formal slice, and the use of the closed-simplex interpretation in
+Claim 2.9.
+
+\section{Scope of the conclusion}
+
+The conclusion is a correction to the proof route, not a counterexample to
+the conditional conclusion of Theorem 2.8 and not a counterexample to
+o-minimality.  The example proves that the stated triangulation premise is not
+available for all allowed systems and that the proof cannot obtain it merely
+from density of the regular locus.  Consequently, the o-minimality construction
+depending on this step requires a replacement argument or a strengthened
+hypothesis.
+
+\section*{Primary source}
+
+Yayi Fu, \emph{Towards Trans-Exponential O-minimal Expansion of the Real
+Ordered Field}, arXiv:2604.03477v2.  Relevant locations: equations (3), (4),
+and (6); Lemmas 2.5--2.7; Theorem 2.8; and Claim 2.9.
+
+\end{document}

@@ -1,0 +1,105 @@
+< "input.sing";
+short=0;
+option(redSB);
+proc require(int condition, string message)
+{
+  if (!condition)
+  {
+    print("CERTIFICATE_FAILURE: "+message);
+    quit;
+  }
+}
+link data="ASCII:w algebra.tsv";
+open(data);
+ideal G=std(I);
+int i,j,k;
+for (i=1;i<=size(G);i++)
+{
+  G[i]=G[i]/leadcoef(G[i]);
+}
+require(size(G)==84,"84 Groebner generators");
+for (i=1;i<=size(G);i++)
+{
+  require(deg(G[i])==3,"cubic Groebner generator");
+  write(data,"G|"+string(i)+"|"+string(G[i]));
+}
+attrib(G,"isSB",1);
+ideal inputNF=reduce(I,G);
+for (i=1;i<=ncols(inputNF);i++)
+{
+  require(inputNF[i]==0,"input membership");
+}
+matrix W=lift(I,G);
+matrix residual=matrix(I)*W-matrix(G);
+for (i=1;i<=ncols(residual);i++)
+{
+  require(residual[1,i]==0,"Groebner generator membership lift");
+}
+for (i=1;i<=nrows(W);i++)
+{
+  for (j=1;j<=ncols(W);j++)
+  {
+    if (W[i,j]!=0)
+    {
+      require(deg(W[i,j])==0,"constant change of cubic generators");
+      write(data,"W|"+string(i)+"|"+string(j)+"|"+string(W[i,j]));
+    }
+  }
+}
+int pairs=0;
+int productPairs=0;
+intvec e,f;
+poly common;
+poly difference;
+int disjoint;
+for (i=1;i<=size(G);i++)
+{
+  e=leadexp(G[i]);
+  for (j=i+1;j<=size(G);j++)
+  {
+    f=leadexp(G[j]);
+    common=1;
+    disjoint=1;
+    for (k=1;k<=10;k++)
+    {
+      if ((e[k]>0) && (f[k]>0)) { disjoint=0; }
+      if (e[k]>f[k]) { common=common*var(k)^e[k]; }
+      else { common=common*var(k)^f[k]; }
+    }
+    if (disjoint) { productPairs++; }
+    else
+    {
+      difference=(common/lead(G[i]))*G[i]-(common/lead(G[j]))*G[j];
+      require(reduce(difference,G)==0,"Buchberger S-pair");
+      pairs++;
+    }
+  }
+}
+write(data,"CHECK|input_membership|1");
+write(data,"CHECK|lift_membership|1");
+write(data,"CHECK|spairs_reduced|"+string(pairs));
+write(data,"CHECK|spairs_product_criterion|"+string(productPairs));
+write(data,"CHECK|dimension|"+string(dim(G)));
+write(data,"HILBERT_FIRST|"+string(hilb(G,1)));
+write(data,"HILBERT_SECOND|"+string(hilb(G,2)));
+ideal F=std(G+maxideal(5));
+ideal O=kbase(F);
+write(data,"CHECK|finite_length|"+string(vdim(F)));
+write(data,"CHECK|finite_groebner_size|"+string(size(F)));
+for (i=1;i<=size(O);i++)
+{
+  write(data,"B|"+string(i)+"|"+string(leadexp(O[i])));
+}
+poly nf;
+for (i=1;i<=size(O);i++)
+{
+  for (j=1;j<=10;j++)
+  {
+    nf=reduce(var(j)*O[i],F);
+    write(data,"N|"+string(i)+"|"+string(j)+"|"+string(nf));
+  }
+}
+write(data,"COMPLETE|1");
+close(data);
+print("EXACT_ALGEBRA_CHECKS_COMPLETE");
+quit;
