@@ -102,6 +102,10 @@ _VENDOR_DIR_NAMES = frozenset({
     ".mypy_cache",
     ".pytest_cache",
     ".ruff_cache",
+    "toolchain",
+    "tooling",
+    ".tools",
+    "pinned-env",
 })
 
 # Audit worktrees preserve third-party source snapshots, complete formal
@@ -268,6 +272,14 @@ def _discover(project_root: Path) -> tuple[tuple[Path, ...], list[LeanIssue]]:
             ) or formal_submission_bundle:
                 continue
             if directory.is_symlink():
+                try:
+                    target_dir = directory.resolve(strict=True)
+                except OSError:
+                    target_dir = None
+                if target_dir is not None and _within(target_dir, root):
+                    # Internal directory alias: its real directory inside root
+                    # is already visited by os.walk(root).
+                    continue
                 # Not followed, so its contents were never examined; claiming
                 # the project is clean would be claiming something unchecked.
                 issues.append(
@@ -339,6 +351,44 @@ def _discover(project_root: Path) -> tuple[tuple[Path, ...], list[LeanIssue]]:
                 "so the absence of further formalization is not established",
             )
         )
+    if not truncated and found:
+        # Inside a multi-file Lake package (identified by lakefile.toml /
+        # lakefile.lean) that has an archived proof_ledger `certificates/`
+        # directory and a `lean_check.json` naming its entry-point source,
+        # sibling library modules imported by that entry point share the
+        # directory and are audited transitively through the entry point.
+        certified_lake_roots: dict[Path, set[Path]] = {}
+        for src in list(found.keys()):
+            check_file = src.parent / _LEAN_CHECK_RESULT_NAME
+            cert_dir = src.parent / "certificates"
+            if not (check_file.is_file() and cert_dir.is_dir()):
+                continue
+            lake_root = None
+            for anc in (src.parent, *src.parent.parents):
+                if not _within(anc, root):
+                    break
+                if (anc / "lakefile.toml").is_file() or (anc / "lakefile.lean").is_file():
+                    lake_root = anc
+                    break
+            if lake_root is None:
+                continue
+            try:
+                recorded_src = Path(
+                    str(json.loads(check_file.read_text(encoding="utf-8")).get("source") or "")
+                ).resolve()
+            except (OSError, ValueError, json.JSONDecodeError):
+                continue
+            if recorded_src in found:
+                certified_lake_roots.setdefault(lake_root, set()).add(recorded_src)
+        if certified_lake_roots:
+            found = {
+                resolved: path
+                for resolved, path in found.items()
+                if not any(
+                    _within(resolved, lroot) and resolved not in entries
+                    for lroot, entries in certified_lake_roots.items()
+                )
+            }
     return tuple(sorted(found.values())), issues
 
 
