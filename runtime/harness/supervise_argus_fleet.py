@@ -3423,11 +3423,19 @@ def queue_campaign_artifact_repair(
     alerts: list[str],
     state: dict[str, Any],
 ) -> dict[str, Any] | None:
-    """Queue one repair notice whenever a campaign's alert set changes."""
+    """Queue one repair notice whenever an idle campaign's alert set changes.
+
+    Never queue a structural-gate inbox notice while a role/backend is actively
+    running: mid-turn edits to MATH_STATE.json or PROOF_GRAPH.json can trigger
+    transient check errors, and an inbox directive hijacks the next round into
+    a structural-only repair turn instead of advancing the mathematical proof.
+    """
     key = f"campaign:{campaign_id}"
     fingerprints = state.setdefault("artifact_alert_fingerprints", {})
     if not alerts:
         fingerprints.pop(key, None)
+        return None
+    if record.get("backend_active") or record.get("active_role"):
         return None
     if not record.get("life_dir"):
         return None
