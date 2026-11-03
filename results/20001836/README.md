@@ -5,8 +5,6 @@
 **Status:** independently verified exact compact construction  
 **Novelty:** literature novelty has not yet been certified  
 **Field:** Riemannian geometry  
-**Live result:** <https://open.argusbot.cn/results/20001836>
-
 Take the effective isometric circle action of weights $(1,2)$ on the unit
 round $S^4$. For the quotient construction with circle length scale
 $\varepsilon$, the complete curvature operator at either fixed pole has the

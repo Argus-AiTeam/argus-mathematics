@@ -5,8 +5,6 @@
 **Status:** independently verified reconstruction of a known counterexample  
 **Field:** algebraic graph theory  
 **Historical counterexample:** publicly identified in 2008  
-**Live result:** <https://open.argusbot.cn/results/3206>
-
 The Cayley graph on $\mathbb Z_{15}$ with connection set
 
 $$

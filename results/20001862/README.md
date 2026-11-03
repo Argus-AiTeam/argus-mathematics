@@ -5,8 +5,6 @@
 **Status:** independently verified explicit reconstruction  
 **Field:** computational geometry and linkage rigidity  
 **Historical status:** the negative answer was recorded by AIM in 2015  
-**Live result:** <https://open.argusbot.cn/results/20001862>
-
 An explicit simple nonconvex octagon with rational coordinates is invariant
 under a labelled half-turn. Every pointed-pseudo-triangulation completion
 contains four nonpolygon hull edges in two symmetry orbits. Deleting one hull

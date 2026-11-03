@@ -5,8 +5,6 @@
 **Status:** independently verified scope correction  
 **Originality:** erratum and scope correction, not a new resolution of Schmidt's problem  
 **Field:** dynamical systems and algebraic number theory  
-**Live result:** <https://open.argusbot.cn/results/4600048>
-
 Let \(\beta>2\) be the larger real root of
 
 $$

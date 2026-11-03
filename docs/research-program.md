@@ -6,11 +6,11 @@ The mathematics program has three complementary public surfaces:
 
 | Surface | Purpose |
 |---|---|
-| [Argus Open](https://open.argusbot.cn/) | Current open-problem registry, active targets, and highlighted results |
-| [Full catalog](https://open.argusbot.cn/catalog) | Source-level audit of 757 historical problem records |
+| [Argus Open](https://github.com/Argus-AiTeam/argus-mathematics) | Current open-problem registry, active targets, and highlighted results |
+| [Full catalog](https://github.com/Argus-AiTeam/argus-mathematics) | Source-level audit of 757 historical problem records |
 | This repository | Durable archive of completed result packages and verification materials |
 
-The [broadcast page](https://open.argusbot.cn/broadcast) reports the current
+The [broadcast page](https://github.com/Argus-AiTeam/argus-mathematics) reports the current
 research route. Individual `/workbench/<id>` pages expose read-only progress
 for active targets.
 

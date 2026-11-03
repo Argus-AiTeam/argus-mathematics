@@ -5,8 +5,6 @@
 **Status:** independently reviewed published counterexample  
 **Originality:** published by Italiano, Martelli, and Migliorini in 2021  
 **Field:** geometric group theory  
-**Live result:** <https://open.argusbot.cn/results/1100101>
-
 Italiano, Martelli, and Migliorini construct a hyperbolic group \(G\) with a
 homomorphism to \(\mathbb Z\) whose kernel \(H\) has all of the following
 properties:

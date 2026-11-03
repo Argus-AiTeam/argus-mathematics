@@ -4,8 +4,6 @@
 
 **Status:** independently reviewed literature-counterexample reconstruction  
 **Field:** convex geometry and vector balancing  
-**Live result:** <https://open.argusbot.cn/results/20000916>
-
 AIM Problem 1.4, read literally, permits an arbitrary norm while asserting a
 uniform $O(\sqrt d)$ Steinitz bound. In $\ell_1^d$, an explicit zero-sum family
 forces every ordering to contain a partial sum satisfying

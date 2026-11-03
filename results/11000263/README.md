@@ -5,8 +5,6 @@
 **Status:** independently verified across both representation-level and universal quotient stages<br>
 **Result:** $X_3\neq0$ in both repaired presentations; twist relations hold at the representation level; universal presented quotient $Q_n$ is finite-dimensional for every finite $n\ge4$ with $(2n-1)!!+1 \le \dim Q_n \le (2n-1)!!+(n!/3)^2$<br>
 **Novelty:** scoped public-corpus novelty checked; absolute originality and unpublished Bigelow--Moos priority remain unclaimed<br>
-**Live result:** <https://open.argusbot.cn/results/11000263>
-
 Bigelow's terminal displayed relation uses $\sigma_n$ inside $RB_n$, while $B_n$ has generators only through $\sigma_{n-1}$. The literal printed presentation is therefore not well-typed.
 
 This result package treats two explicit well-typed repairs:
@@ -45,6 +43,8 @@ The universal induction is closed by exact rank-four principal bases, direct ran
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_11000263_TECHNICAL_REPORT.pdf` | Standalone AMS technical report PDF |
+| `ARGUS_RESULT_11000263_TECHNICAL_REPORT.tex` | AMS LaTeX source |
 | `BIGELOW_UNIVERSAL_FINITE_DIMENSIONALITY.pdf` | All-rank $n\ge4$ universal finite-dimensionality manuscript (PDF) |
 | `BIGELOW_UNIVERSAL_FINITE_DIMENSIONALITY.tex` | All-rank $n\ge4$ universal finite-dimensionality manuscript (LaTeX source) |
 | `BIGELOW_QUESTION6_TECHNICAL_REPORT.pdf` | Initial $X_3\neq0$ technical report |

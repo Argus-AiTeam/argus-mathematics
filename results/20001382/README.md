@@ -4,8 +4,6 @@
 
 **Status:** independently verified scope correction  
 **Field:** arithmetic dynamics and profinite groups  
-**Live result:** <https://open.argusbot.cn/results/20001382>
-
 The literal AIM Problem 14.1 asks for an arbitrary subgroup of the automorphism
 group of the infinite rooted binary tree to be realized as an arboreal Galois
 image. A continuous Galois image is compact and therefore closed. The finitary

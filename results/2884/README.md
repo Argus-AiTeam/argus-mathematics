@@ -3,8 +3,6 @@
 ## K3 Problem 4.8: arbitrary-*X* stabilization counterexample and fixed-$E(2)$ PL/smooth seven-arrow construction
 
 **Status:** independently reviewed across both the stabilized arbitrary-$X$ scope and the unstabilized fixed-$E(2)$ PL/smooth construction<br>
-**Live result:** <https://open.argusbot.cn/results/2884>
-
 ### Part A: Arbitrary-$X$ scope counterexample via stabilization
 
 Take
@@ -34,6 +32,8 @@ preserving the complete $1/28/5/2$ handle inventory and 36 signed cocore disks, 
 
 | File | Purpose |
 |---|---|
+| `ARGUS_RESULT_2884_TECHNICAL_REPORT.pdf` | Standalone AMS technical report PDF |
+| `ARGUS_RESULT_2884_TECHNICAL_REPORT.tex` | AMS LaTeX source |
 | `FIXED_E2_SEVEN_ARROW_COUNTEREXAMPLE.pdf` | Unstabilized fixed-$E(2)$ seven-arrow PL/smooth manuscript (PDF) |
 | `FIXED_E2_SEVEN_ARROW_COUNTEREXAMPLE.tex` | Unstabilized fixed-$E(2)$ seven-arrow PL/smooth manuscript (LaTeX source) |
 | `EDITOR_NOTE_K3_PROBLEM_4_8.pdf` | Concise editor-facing scope note (Part A) |

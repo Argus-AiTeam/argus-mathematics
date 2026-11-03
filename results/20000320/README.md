@@ -4,8 +4,6 @@
 
 **Status:** independently reviewed primary-source reconstruction  
 **Field:** algebraic geometry  
-**Live result:** <https://open.argusbot.cn/results/20000320>
-
 For the first positive-characteristic Artin thickening of a Lee--Nakayama
 surface family over
 

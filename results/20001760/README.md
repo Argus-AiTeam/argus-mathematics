@@ -5,8 +5,6 @@
 **Status:** independently reviewed literal-scope counterexample  
 **Originality:** literature novelty and worldwide priority unconfirmed  
 **Field:** lattices and spherical designs  
-**Live result:** <https://open.argusbot.cn/results/20001760>
-
 The official HTML, TeX, and PDF statement of AIM Problem 1.44 imposes no
 dimension restriction. For a full rank-one lattice \(L=a\mathbb Z\), every
 nonempty positive-norm shell is

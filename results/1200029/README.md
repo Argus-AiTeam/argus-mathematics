@@ -5,8 +5,6 @@
 **Status:** independently reviewed published counterexample  
 **Originality:** published by Calegari and Fujiwara  
 **Field:** geometric group theory and Cayley graph geometry  
-**Live result:** <https://open.argusbot.cn/results/1200029>
-
 Consider the hyperbolic triangle group
 
 $$

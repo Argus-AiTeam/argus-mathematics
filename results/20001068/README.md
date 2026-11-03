@@ -4,8 +4,6 @@
 
 **Status:** independently verified  
 **Resolved scope:** the literal weak-inequality formulation  
-**Live result:** <https://open.argusbot.cn/results/20001068>
-
 The construction is a finite loopless simple weighted digraph with:
 
 - 26 vertices;

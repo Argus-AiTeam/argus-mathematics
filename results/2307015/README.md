@@ -5,8 +5,6 @@
 **Status:** independently verified, interpretation-limited exact result  
 **Originality:** novelty unaudited; not counted as original  
 **Field:** complex analysis, potential theory, and harmonic measure  
-**Live result:** <https://open.argusbot.cn/results/2307015>
-
 For \(\alpha=2/3\), let
 
 $$

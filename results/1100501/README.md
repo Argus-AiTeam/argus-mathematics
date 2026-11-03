@@ -5,8 +5,6 @@
 **Status:** independently reviewed reconstruction of a known counterexample  
 **Originality:** elementary case covered by the 2008 literature record  
 **Field:** Kleinian groups and hyperbolic geometry  
-**Live result:** <https://open.argusbot.cn/results/1100501>
-
 In \(\mathrm{PSL}(2,\mathbb C)\), take
 
 $$

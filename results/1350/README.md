@@ -5,8 +5,6 @@
 **Status:** independently reviewed relative-consistency countermodel  
 **Originality:** reconstruction of Asperó and Golshani's published result  
 **Field:** set theory  
-**Live result:** <https://open.argusbot.cn/results/1350>
-
 Asperó and Golshani prove that, assuming a weakly compact cardinal, one can
 force a model satisfying the generalized continuum hypothesis together with
 the special Aronszajn tree property at \(\aleph_2\). In that extension every

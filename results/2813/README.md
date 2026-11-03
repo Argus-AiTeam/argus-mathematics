@@ -5,8 +5,6 @@
 **Status:** independently verified project-original explicit obstruction  
 **Novelty:** no equivalent explicit pair found in the audited corpus; worldwide priority is unclaimed  
 **Field:** low-dimensional topology, foliations, and dynamical systems  
-**Live result:** <https://open.argusbot.cn/results/2813>
-
 Let \(W\) be the genus-three Eierlegende Wollmilchsau origami. Take the affine
 pseudo-Anosov map obtained from the application-order word `SSTSST`, followed
 by left deck translation by `-i`. Its mapping torus \(M_f\) is a closed
