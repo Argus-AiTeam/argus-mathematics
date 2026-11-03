@@ -46,6 +46,12 @@ DEFAULT_CAMPAIGN_IDS = (
     "2307015",
 )
 CAMPAIGN_POOL_IDS = (
+    "3395",
+    "1138",
+    "20002392",
+    "40",
+    "1275",
+    "9400078",
     "7200051",
     "3059",
     "3102",
@@ -94,7 +100,7 @@ CAMPAIGN_POOL_IDS = (
     "1413",
     "20001904",
 )
-CAMPAIGN_TARGET_COUNT = 14
+CAMPAIGN_TARGET_COUNT = 17
 PROOF_TIMEBOX_SECONDS = 365 * 24 * 60 * 60
 PROOF_TIMEBOX_EVIDENCE = ROOT / "supervisor-evidence" / "five-day-retirements"
 # Refreshed from persisted rotation state at the start of every supervisor pass.
@@ -757,6 +763,60 @@ def runtime_record(
             and str(payload.get("campaign_id")) == expected_campaign_id
         ):
             completion = payload
+        else:
+            life_candidate = latest_life(homes)
+            if life_candidate is not None:
+                w_ps = ROOT / "campaigns" / expected_campaign_id / ".argus" / "PIPELINE_STATE.json"
+                l_ps = life_candidate / ".argus" / "PIPELINE_STATE.json"
+                if w_ps.is_file() and l_ps.is_file():
+                    w_data = load_json(w_ps, {})
+                    l_data = load_json(l_ps, {})
+                    stage_rank = {"scope": 0, "solve": 1, "review": 2}
+                    if isinstance(w_data, dict) and isinstance(l_data, dict):
+                        l_st = str(l_data.get("current_stage") or "scope")
+                        w_st = str(w_data.get("current_stage") or "scope")
+                        if stage_rank.get(l_st, 0) > stage_rank.get(w_st, 0) or l_data.get("stages") != w_data.get("stages"):
+                            w_data["current_stage"] = l_st
+                            if l_data.get("stages"):
+                                w_data["stages"] = l_data["stages"]
+                            if l_data.get("stage_history"):
+                                w_data["stage_history"] = l_data["stage_history"]
+                            try:
+                                write_json_atomic(w_ps, w_data)
+                            except OSError:
+                                pass
+            for ps_root in (
+                [life_candidate, ROOT / "campaigns" / expected_campaign_id]
+                if life_candidate is not None
+                else [ROOT / "campaigns" / expected_campaign_id]
+            ):
+                ps_data = load_json(ps_root / ".argus" / "PIPELINE_STATE.json", {})
+                rev_stage = (
+                    (ps_data.get("stages") or {}).get("review")
+                    if isinstance(ps_data, dict)
+                    and isinstance(ps_data.get("stages"), dict)
+                    else None
+                )
+                if (
+                    isinstance(ps_data, dict)
+                    and str(ps_data.get("current_stage") or "") == "review"
+                    and isinstance(rev_stage, dict)
+                    and str(rev_stage.get("status") or "") == "done"
+                    and str(rev_stage.get("completion_contract_sha256") or "")
+                ):
+                    completion = {
+                        "campaign_id": expected_campaign_id,
+                        "status": "completed",
+                        "completed_at": now_iso(),
+                        "completion_contract_sha256": rev_stage.get(
+                            "completion_contract_sha256"
+                        ),
+                    }
+                    try:
+                        write_json_atomic(marker, completion)
+                    except OSError:
+                        pass
+                    break
     elif expected_audit_workdir:
         marker = (
             ROOT

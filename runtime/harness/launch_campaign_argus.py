@@ -17,7 +17,9 @@ RUNNER = Path("/home/argustest/.local/bin/copilot")
 RUNNER_PATH = "/home/argustest/.local/bin:/home/argustest/bin"
 SPECIAL_PROMPTS = ROOT.parent / ".argus-counterexamples" / "special_prompts"
 DEFAULT_MODEL = "gpt-6.1-sol"
+ASTRA_CAMPAIGN_IDS = frozenset({"3395", "1138", "20002392", "40", "1275", "9400078"})
 IDS = (
+    "3395", "1138", "20002392", "40", "1275", "9400078",
     "7200051", "3059", "3102", "20001675", "3167", "3256",
     "2338", "1243", "1417", "1518", "1187", "1285", "20000582", "6800022",
     "2800203", "9400114", "20001036", "20001578",
@@ -84,6 +86,23 @@ def main() -> None:
         )
         env = os.environ.copy()
         env.update(MODEL_ENV)
+        campaign_model = (
+            os.environ.get("ARGUS_CAMPAIGN_MODEL")
+            or ("gpt-6-astra" if campaign_id in ASTRA_CAMPAIGN_IDS else DEFAULT_MODEL)
+        )
+        for model_key in (
+            "ARGUS_SKILL_MODEL",
+            "ARGUS_SKILL_FRONTDOOR_MODEL",
+            "ARGUS_SKILL_MANAGER_MODEL",
+            "ARGUS_SKILL_MANAGER_REPLY_MODEL",
+            "ARGUS_SKILL_PLAN_MODEL",
+            "ARGUS_SKILL_ENGINEER_MODEL",
+            "ARGUS_SKILL_REVIEWER_MODEL",
+            "ARGUS_SKILL_CURATOR_MODEL",
+            "ARGUS_SKILL_SUPERVISOR_MODEL",
+            "ARGUS_SKILL_BOUNDED_DAG_MODEL",
+        ):
+            env[model_key] = campaign_model
         for name in (
             "CONDA_PREFIX",
             "CONDA_DEFAULT_ENV",
