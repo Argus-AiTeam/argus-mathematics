@@ -53,7 +53,7 @@ As of **2026-09-10**, the public program contains:
 - **23 independently replayable computational or symbolic certificates**;
 - **2 Lean-checked logical/topological compositions** (`2884` and `1465`) with
   explicit formalization boundaries;
-- **306 checksummed public artifacts**;
+- **308 checksummed public artifacts**;
 - **41 counterexample or proof campaigns** on the live workbench;
 - **757 historical problem records** under source and status audit (617
   reviewed, 593 independently verified, 102 confirmed open).
