@@ -1,0 +1,380 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pp}{\mathcal P}
+\title{Actual-corner minors, nuclear tails, and the limit of matrix-only gluing}
+\author{Campaign 3395: Engineer continuation}
+\date{November 4, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Status and comparison.}
+The averaged circuit-specific nuclear-tail charge and the unrestricted
+fixed-factor lower bound remain unproved. This note proves the actual-corner
+minor budget, the requested truncated-SVD transfer (also in the reverse
+direction), and a precise obstruction to a \emph{matrix-only} conversion.
+The obstruction does not refute the charge under the full original sampler
+with its polynomial-in-original-size exponential remainder.
+Reviewed V14 remains the strongest achieved approximation theorem, at factor
+$1+2^{-(2q+\lceil k_0\rceil+14)}$, not a fixed factor.
+No verified novelty or publishable significance is claimed here.
+
+Reuse reviewed K1--K2, J5/J8--J12, T1--T4, V8/V10/V14,
+CD1--CD20, Z6--Z20, A4/A7, the compulsory cut and the original sampler.
+Existing independent source attribution is unchanged. All new matrix
+calculations below are proved directly; in particular, the incidence
+matrix is a classical elementary construction, not a claimed new
+finite-field or spectral theorem. No external gluing theorem is assumed.
+
+\section{A minor bound for the actual four corners}
+Retain CD5's probability law $\mu$, including the original pre-bit law,
+the original uniform bits, and independent flips of probability $1/(2q)$.
+For actual cut $Q_j=A_jV_j$, its honored row and column flips give
+four actual one-hot corners with union $U_j\le U^*$.
+Let $Z_j$ be the two-square matrix of $Q_j$ at those corners. Define
+\[
+ \phi(Z)=
+ \begin{cases}
+  \det(Z)^2/(\sum Z)^3,&\sum Z>0,\\
+  0,&Z=0.
+ \end{cases}                                                   \tag{RG1}
+\]
+This is not a minor of a globally completed error matrix.
+
+\begin{proposition}
+For any nonnegative two-square matrix $Z$ and any rank-at-most-one
+matrix $R\ge Z$ entrywise,
+\[
+                    \phi(Z)\le\sum(R-Z).                       \tag{RG2}
+\]
+Consequently, for the actual local K1 completions,
+\[
+ \phi(Z_j)\le D_{Q_j}(U_j),\qquad
+ \sum_j\E_\mu\phi(Z_j)\le e^3 b_Q.                              \tag{RG3}
+\]
+All coefficients and actual cut terms are retained.
+\end{proposition}
+\begin{proof}
+Put $t=\sum Z$, $d=\sum(R-Z)$. The case $t=0$ is immediate.
+Let $\sigma_1\ge\sigma_2\ge0$ be the singular values of $Z$.
+The Frobenius norm is at most $t$, so $\sigma_1,\sigma_2\le t$.
+Choose a unit vector in the kernel of $R$. Evaluating $Z$ on
+that vector gives
+$\sigma_2\le\|Z-R\|_{\mathrm F}\le d$.
+Therefore
+\[
+ \phi(Z)=\frac{\sigma_1^2\sigma_2^2}{t^3}
+       \le\frac{\sigma_2^2}{t}\le\sigma_2\le d.
+\]
+This argument includes $R=0$ and singular $Z$ and makes no division
+by an entry, determinant, or completion error.
+
+Use the K1 completion at $U_j$, restricted to the four corners.
+It is a rank-one upper completion across the same compulsory partition.
+If the two row strings or the two column strings coincide, $Z_j$ has
+repeated rows or columns and its determinant is zero. No fourfold count
+of a repeated corner is then used. Otherwise the injective original
+bit-to-assignment map makes all four corners distinct. K2 bounds the
+sum of their nonnegative errors by $D_{Q_j}(U_j)$, proving the first
+inequality in (RG3). Finally sum over actual cuts under precisely
+CD5's law and use CD7:
+\[
+ \sum_j\E_\mu\phi(Z_j)
+ \le\sum_j\E_\mu D_{Q_j}(U_j)
+ \le\E_\mu D_Q(U^*)\le e^3b_Q.
+\]
+There is one joint whole-output defect budget, not a sum of gate maxima.
+\end{proof}
+
+\section{The singular-value tail is an equivalent remaining obligation}
+For every original conditional matrix, write
+\[
+ M_j=M_j(Q_j),\quad L_j=M_j(H_j),\quad W_j=M_j(W_j),\quad
+ M_j=L_j+W_j,\quad a_j=m_j^{-2}\sum W_j,\quad m_j=2^{k_j}.
+\]
+In particular $a_j$ is still the actual \emph{heavy} conditional mean.
+Set
+\[
+ I_j=1_{\{k_j\ge5k_0/4,\ a_j\ge2^{-k_0}\}},\qquad
+ r_j=\lfloor2^{k_j/8}\rfloor,\quad
+ \tau_j=\sum_{i>r_j}\sigma_i(M_j),\qquad
+ {\cal T}(Q)=\sum_j\E\frac{I_j\tau_j^2}{m_j^3a_j}.              \tag{RG4}
+\]
+Every quotient is defined to be zero outside its displayed indicator;
+there is no division by a zero heavy mean. The expectation is the
+unchanged original outer law and each cut's original unhonored-bit fixing.
+The truncations below are analytic matrices, not extracted circuits.
+
+\begin{proposition}
+For every allowed unrestricted circuit and admissible $N\ge2^{142}$,
+\[
+ {\cal T}(Q)\le{\cal E}_{\rm thick}(Q)
+ \le3{\cal T}(Q)+54s\,2^{-3k_0/32}
+                         +6s\,e^{-5k_0/32}.                    \tag{RG5}
+\]
+\end{proposition}
+\begin{proof}
+J5 gives $\operatorname{rank}L_j\le D_h$. If $h>0$, J8 gives
+$\log D_h\le153k_0/2^{16}$; if $h=0$, $D_h=1$.
+On $I_j=1$,
+\[
+ \frac{k_j\log2}{8}\ge\frac{5k_0}{64}
+                         >\frac{153k_0}{2^{16}},
+\]
+using $\log2\ge1/2$. Since $D_h$ is an integer,
+$D_h\le\lfloor2^{k_j/8}\rfloor=r_j$.
+
+For completeness, the nuclear-norm best-rank-$r$ error of any matrix
+$M$ is $\sum_{i>r}\sigma_i(M)$. Indeed, if $\operatorname{rank}B\le r$,
+restrict the domain to $\ker B$, of codimension at most $r$.
+The $i$th singular value of that restriction of $M$ is at least
+$\sigma_{i+r}(M)$: intersect the span of its first $i+r$ right singular
+vectors with $\ker B$ to get an $i$-dimensional test subspace.
+Right multiplication by an orthogonal projection contracts nuclear
+norm. Hence $\|M-B\|_*\ge\sum_{i>r}\sigma_i(M)$.
+The truncated SVD attains equality. Applying this with $B=L_j$
+gives $\tau_j\le\|W_j\|_*$, proving the first part of (RG5).
+
+Let $M_j^{(r)}$ be its truncated SVD. The exact identity
+$W_j=(M_j-M_j^{(r)})+M_j^{(r)}-L_j$ gives
+\[
+ \|W_j\|_*^2
+ \le3\tau_j^2+3\|M_j^{(r)}\|_*^2+3\|L_j\|_*^2
+ \le3\tau_j^2+27(r_j+D_h)m_j^2.                         \tag{RG6}
+\]
+Here $0\le L_j\le M_j\le3$ entrywise, so both relevant Frobenius
+norms are at most $3m_j$; SVD truncation does not increase that norm.
+On $I_j=1$, the normalized remainder is at most
+\[
+ \frac{27(r_j+D_h)}{m_ja_j}
+ \le54\,2^{k_0-7k_j/8}\le54\,2^{-3k_0/32}.              \tag{RG7}
+\]
+Average, sum at most $s$ actual cuts, and add exactly V8's strip
+$k_0\le k_j<5k_0/4$, whose contribution is at most
+$6s e^{-5k_0/32}$. This proves (RG5).
+\end{proof}
+
+Thus a bound
+\[
+ {\cal T}(Q)\le Cb_Q+K M_n^\alpha(s+1)^\beta e^{-cN}             \tag{RG8}
+\]
+would give T5 with constants
+$3C$, $3K+60$, $\alpha$, $\max(\beta,1)$, and
+$\min(c,3/2^{140})$. The last rate uses $\log2\ge1/2$ in
+(RG5). The reviewed fixed factor would be
+$1+1/(768(3C+1))$. Conversely T5 implies (RG8) with its same
+constants. These implications do not establish (RG8).
+
+The known CD18--CD20 and Z6--Z20 witnesses do not obstruct (RG8):
+their \emph{full actual cut-value matrices} have rank at most one
+on every history, so $\tau_j=0$. This uses their displayed
+separation across the compulsory partition, not a new replay.
+The positive exponential terms in (RG5) are retained; they are not
+silently set to zero.
+
+\section{A density obstruction to matrix-only gluing}
+The following all-size family rules out a conversion using only
+the entry bound, low-band rank, heavy mean, and the averaged local
+minor energy. It does not impose the full original outer sampler
+or a small original-DAG realization.
+
+Let $t=4^\ell$, $\ell\ge1$, and take a field $\mathbb F_t$.
+Its existence needs no additional conjecture: in a splitting field
+over $\mathbb F_2$, the $t$ distinct roots of $X^t-X$ form a field.
+They are closed under addition, multiplication and nonzero inverses
+by the characteristic-two power identity, and the derivative is $-1$.
+A splitting field is obtained by successively adjoining roots using
+quotients by irreducible factors.
+Index both rows $(x,y)$ and columns $(a,b)$ by $\mathbb F_t^2$ and set
+\[
+ B_{(x,y),(a,b)}=1_{\{y=ax+b\}},\quad
+ M=\tfrac12J+B,\quad L=\tfrac12J,\quad W=B,\quad
+ m=t^2=2^k,\quad k=4\ell,\quad a_{\rm heavy}=1/t.        \tag{RG9}
+\]
+Each row and column of $B$ has exactly $t$ ones.
+We have $0\le L\le M\le3/2$ and $\operatorname{rank}L=1$.
+With $k_0=3\ell$, both $k\ge5k_0/4$ and
+$a_{\rm heavy}\ge2^{-k_0}$ hold. Arbitrarily large such parameters
+meet $k_0\ge256$.
+
+\begin{proposition}
+For $r=\lfloor m^{1/8}\rfloor=\lfloor t^{1/4}\rfloor$,
+\[
+ \frac{\tau_r(M)^2}{m^3a_{\rm heavy}}
+       =\left(1-\frac1t-\frac{r-1}{t^2}\right)^2
+       \longrightarrow1.                                    \tag{RG10}
+\]
+For \emph{any} four-corner coupling whose individual corners are
+uniform on the row-column index set, including every sparse bit-flip
+coupling used here,
+\[
+                       \E\phi(Z)\le\frac1{8t}.                \tag{RG11}
+\]
+Consequently no fixed multiple of this minor energy plus a
+polynomial-in-$k$ exponentially decaying remainder controls (RG10).
+\end{proposition}
+\begin{proof}
+Two distinct points with the same $x$ coordinate have no common
+incident line; points with different $x$ coordinates have exactly one.
+Thus, grouping rows by $x$,
+\[
+ BB^{\mathsf T}=tI+(J_t-I_t)\otimes J_t.
+\]
+Its eigenspaces are: constants, eigenvalue $t^2$; functions constant
+inside each $x$ block and summing to zero across blocks, eigenvalue
+zero and dimension $t-1$; and functions summing to zero inside
+each block, eigenvalue $t$ and dimension $t(t-1)$.
+The constant term in $M$ changes only the first singular value.
+Its complete singular spectrum is therefore
+\[
+             (m/2+t)^1,\quad(\sqrt t)^{\,t(t-1)},\quad0^{\,t-1}.
+                                                               \tag{RG12}
+\]
+Removing the first $r$ values gives (RG10).
+
+For the four entries of $B$ let $w$ be their number of ones,
+counted with their positions even if corners repeat.
+All possibilities for $\phi(\tfrac12J+B_{\rm local})$ are
+\[
+\begin{array}{c|ccccc}
+w&0&1&2\ {\rm adjacent}&2\ {\rm opposite}&3\quad 4\\ \hline
+\phi&0&1/108&0&1/16&9/500\quad 0 .
+\end{array}
+\]
+In each case $\phi\le w/32$. Each corner has incidence probability
+$1/t$, so $\E w=4/t$, without an independence assumption between
+corners. This proves (RG11). For any fixed $C,K,c>0$ and $d\ge0$,
+$C/(8t)+Kk^d e^{-ck_0}\to0$, whereas (RG10) tends to one.
+The same conclusion holds when $q$ is any fixed constant multiple
+of $k$; in particular the prescribed $q/k_0$ scale does not rescue
+this matrix-only estimate.
+\end{proof}
+
+This is not the previous rank-one completion-error obstruction.
+Here $W$ has rank $t^2-t+1$, and truncating $m^{1/8}$ singular values
+leaves order-one normalized nuclear energy. The full matrix even has
+every entry at least $1/2$. Sparsity of the \emph{heavy part}, together
+with its actual conditional denominator, is the obstruction.
+The table also permits local rank-one upper completions with small
+average error: when all four heavy entries vanish, the matrix already
+has rank one; otherwise the constant matrix $3J/2$ is an upper
+completion, with total error at most four. The expectation of that
+error is at most $16/t$. Such independently chosen local completions
+need not be the coherent completions of an actual circuit.
+
+\section{Binding the new finite check to an actual cut}
+The replay uses $t=4$, not an admissible-large-graph simulation.
+There are $k=4$ row bits and $k=4$ column bits, with two two-variable
+source groups for each bit. Thus there are sixteen groups and
+thirty-two variables. Both options are designated nonroot variables.
+For a row string $u$, let $r_u$ choose that string in both row groups
+per bit. For a column string $v$, let $c_v$ choose it only in the
+first column group per bit and $d_v$ choose it in both column groups.
+Let $S$ contain all eight row groups, and define
+\[
+ V=\sum_v d_v=\prod_{i=1}^k(z_i z_i'+w_i w_i'),\quad
+ P=\sum_{u,v:B_{uv}=1}r_u c_v,\quad
+ A=\tfrac12F_S+P,\quad Q=AV.                            \tag{RG13}
+\]
+Build $V$ and $P$ before $A$, then the final output product.
+$G(A)=S$, $G(V)=\overline S$, and $A$ is the last balanced gate.
+The compulsory cut therefore has divided context exactly $V$;
+cutting $A$ kills the output. The replay verifies this using the
+existing exact shared-DAG extractor, not an asserted product split.
+
+The full Boolean cube satisfies $Q\le3F/2$. Indeed,
+$P\le(\sum_u r_u)(\sum_v c_v)$, $\sum_u r_u\le F_S$,
+and
+\[
+ \left(\sum_v c_v\right)V\le F_{\overline S},
+ \qquad V\le F_{\overline S}.
+\]
+For the first inequality, at each column bit use
+$z_i z_i'+w_i w_i'\le z_i'+w_i'$ on Boolean inputs, and multiply
+by $z_i+w_i$. Zero faces cause no exception.
+For every cutoff $0\le h<k$, precisely $PV$ is heavy: it has
+$k$ optional nonroot groups in the first factor, while
+$F_SV/2$ has none. On the correlated bit corners its matrices
+are exactly (RG9), with $a_{\rm heavy}=1/4$, not the full mean $3/4$.
+The finite parameters $k_0=3$, $h=1$ meet the strong-good/thick
+inequalities; they are not the asymptotic $N$ parameter recipe.
+
+For each fixed row string, a column Boolean box is described by
+its available choices $C_i,D_i$ in the two groups.
+Put
+\[
+ v_{\rm box}=\prod_i|C_i\cap D_i|,\quad
+ f_{\rm box}=\prod_i|C_i||D_i|,\quad
+ n_u(C)=\#\{v:B_{uv}=1,\ v_i\in C_i\}.
+\]
+Its defect is exactly
+$n_u(C)v_{\rm box}-n_u(C\cap D)$.
+An arbitrary row box is a positive sum of these row patterns,
+of total weight at most $F_S$. Thus enumerating the $3^8$
+nonempty column boxes and sixteen consistent rows, together with
+formal coverage of zero faces, determines the full-cube maximum
+$b_Q$ exactly. This is a proved reduction, not individual enumeration
+of all $2^{32}$ Boolean inputs.
+
+For a sparse flip outcome, let ${\cal U},{\cal V}$ be the row and
+column bit subcubes spanned coordinatewise by the two strings.
+The actual local K1 completion at a row $u$ is
+$1/2+n_u({\cal V})$, independent of its column. Moreover
+\[
+ D_Q(U_j)=(|{\cal V}|-1)
+           \sum_{u\in{\cal U},v\in{\cal V}}B_{uv}.       \tag{RG14}
+\]
+The checker verifies every one of the $16^4=65536$ base/flip outcomes,
+including repeated corners, against these actual completions.
+It retains the original conditional bit-flip weights $p=1/8$.
+The exact mean raw defect is
+\[
+ \E D_Q(U_j)=\frac1t(1+p)^k
+                    \bigl((1+3p)^k-(1+p)^k\bigr),      \tag{RG15}
+\]
+and the union normalization is $(1+3p)^{2k}$.
+Equation (RG15) follows by first fixing the masks: each of the
+$2^{|e_r|+|e_c|}$ subcube corners has incidence probability $1/t$.
+In the abstract family with $q\ge k$ and $p=1/(2q)$ this is at most
+$e^2/t$. Even the actual \emph{conditional} local defect budget can
+therefore vanish while (RG10) stays bounded away from zero.
+
+This observation is not a full-sampler counterexample. These circuits
+have an explicit $O(kt^3)$ representation, not a proved polynomial
+size in $k$, and the matrix concerns a designated conditional history.
+Also $b_Q\ge1/2$: select an edge of the column hypercube across the
+boundary of a nonempty proper incidence row, fix the second groups to
+the nonincident endpoint, and allow both choices in just that first
+group. The defect is one and $F=2$. Thus neither a small whole-output
+defect nor the original outer average required to refute (RG8)
+has been obtained. A polynomial-size exponential remainder cannot
+be dropped on the basis of this diagnostic.
+
+For the finite case the full Gram spectrum is
+$144^1,4^{12},0^3$; hence $r=1$, $\tau=24$ and
+$\tau^2/(m^3a_{\rm heavy})=9/16$.
+The exact full-cube maximum is $b_Q=3/4$.
+The original circuit has 320 arithmetic gates, 5120 formal monomials,
+and 4096 projected monomials; only one cut term is nonzero.
+The inspected Jacobian operation checks that exact complete spectrum.
+The local replay independently checks all shifted nullities and binds
+the payload and returned matrix to the actual circuit values.
+Run \texttt{python3 research/boolean-local-signed-stability/%
+local\_rank\_gluing\_check.py} from the campaign root to replay the new
+checks. It reads the dedicated typed payload and output but also
+recomputes the matrix ranks independently over rational numbers.
+No earlier certificate is rerun, and no Lean compilation is claimed.
+
+\paragraph{Remaining mathematical task.}
+Retire only the generic matrix-only implication. The actual-circuit,
+full-original-sampler conversion
+$\mathcal T(Q)\le C_0\sum_j\E_\mu\phi(Z_j)
++K M_n^\alpha(s+1)^\beta e^{-cN}$ remains a possible sufficient route;
+so does a direct proof of (RG8) using more of the defect than minors.
+Neither is proved here. Any successful continuation must exploit
+circuit structure and the original outer averaging, or introduce a
+different genuine spectral modulus. No entrywise mass substitute,
+unchanged failed pointwise shortcut, or finite diagnostic completes
+the requested fixed-factor theorem.
+\end{document}
