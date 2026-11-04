@@ -38,9 +38,9 @@
 这个仓库优先整理**已经得到明确结论并具备可审查材料的成果**，而不是简单收集 Agent
 对话或把所有研究中猜想都称为成果。
 
-截至 **2026 年 9 月 10 日**，公开数学研究体系包括：
+截至 **2026 年 11 月 4 日**，公开数学研究体系包括：
 
-- **72 个正式归档的结果包**（全部 72 个结果均配有独立编译的 AMS LaTeX 论文 `.pdf` 与 `.tex` 源码）（含完整反例、范围勘误、源文献反驳与阶段性定理）；
+- **84 个正式归档的结果包**（全部 84 个结果均配有独立编译的 AMS LaTeX 论文 `.pdf` 与 `.tex` 源码）（含完整反例、范围勘误、源文献反驳与阶段性定理）；
 - **23 个可独立运行的计算/符号验证程序**；
 - **2 个带明确覆盖边界的 Lean 4 逻辑/拓扑组合检查**（`2884` 与 `1465`）；
 - **496 个带 SHA-256 校验值的公开产物**；
@@ -53,6 +53,18 @@
 
 | 编号 | 成果 | 领域 | 当前状态 |
 |---|---|---|---|
+| [3395](results/3395/) ([PDF](results/3395/ARGUS_RESULT_3395_TECHNICAL_REPORT.pdf)) | 单调布尔电路下界中的中心化核范数对偶等价性与非中心化相对质量捷径反例 | 计算复杂性理论 | 已独立验证的核误差荷对偶定理与 $O(M_n+N^2)$ 门显式障碍 |
+| [1138](results/1138/) ([PDF](results/1138/ARGUS_RESULT_1138_TECHNICAL_REPORT.pdf)) | 数域 Enriques 曲面双椭圆半纤维与混合特征 $(0,2)$ 二进 Picard 挠群对应阻碍定理 | 代数几何与霍奇理论 | 已独立验证的算术/整系数受限阻碍定理 |
+| [20002392](results/20002392/) ([PDF](results/20002392/ARGUS_RESULT_20002392_TECHNICAL_REPORT.pdf)) | 半空间 $\mathbb{R}^3_+$ 无滑移边界下仅假设速度衰减 $|U(y)|\le C/(1+|y|)$ 的后向自相似 Navier--Stokes 剖面排除定理 | 偏微分方程与流体力学 | 已独立验证速度衰减自动蕴含加权二阶导数有限与典范压力恢复 |
+| [9400078](results/9400078/) ([PDF](results/9400078/ARGUS_RESULT_9400078_TECHNICAL_REPORT.pdf)) | $\mathrm{GL}_4$ 分歧型自守表示违背温和性的无条件密度上界 $\ll q^{3-4\tau+\varepsilon}$（$0<\tau\le 1/8$） | 自守形式与解析数论 | 已独立验证的 Sarnak 型非温和参数密度定理 |
+| [1275](results/1275/) ([PDF](results/1275/ARGUS_RESULT_1275_TECHNICAL_REPORT.pdf)) | Hilbert--P\'olya 有限移位膨胀算子限制的全实轴本质谱阻碍定理 $\sigma_{\mathrm{ess}}(\widetilde{D})=\mathbb{R}$ | 谱理论与解析数论 | 已独立验证的可发表算子谱论阻碍定理 |
+| [40](results/40/) ([PDF](results/40/ARGUS_RESULT_40_TECHNICAL_REPORT.pdf)) | 变半径周期余弦管壁（$0<|\kappa|\le 1/10$）轴对称 Euler 流共形传输与曲率响应闭合定理 | 偏微分方程与流体力学 | 已独立验证笛卡尔加权逆对数反例及共形响应闭合定理 |
+| [20001675](results/20001675/) ([PDF](results/20001675/ARGUS_RESULT_20001675_TECHNICAL_REPORT.pdf)) | 任意喷流深度 $r\ge 1$ 下简单非约化 Plabic 纽结的指数级 HOMFLY-PT 纤维定理（$\log_2|\text{fiber}|\ge(N-8)/(74r^2)$） | 丛代数与纽结多项式 | 已独立验证的可发表定理与显式解码证书 |
+| [3256](results/3256/) ([PDF](results/3256/ARGUS_RESULT_3256_TECHNICAL_REPORT.pdf)) | 单边缺失弦图（one-fill chordal digraphs）的加权 Dijoin 打包定理 $\nu(D,w)=\tau(D,w)$ | 组合优化与有向图 | 推广 Cornu\'ejols--Liu--Ravi (2025) 弦图定理，已独立验证 |
+| [3167](results/3167/) ([PDF](results/3167/ARGUS_RESULT_3167_TECHNICAL_REPORT.pdf)) | 证明树宽 $\mathrm{tw}\le 4$ 的有限简单 4-正则哈密顿图必有至少两个哈密顿圈（Sheehan 猜想） | 结构图论 | 基于带标路由签名代数闭包的独立验证定理 |
+| [7200051](results/7200051/) ([PDF](results/7200051/ARGUS_RESULT_7200051_TECHNICAL_REPORT.pdf)) | $\ell_1^5$ 空间 11 点失真比上下界 $3089/3084 < \Delta_5(11) \le 115/106$ 与 $e(\ell_1^5)=10$ 的 Lean 4.33.1 形式化核验 | 离散与度量几何 | 已独立验证的定量稳定性下界、有理上界构造及 Lean 4 内核证书 |
+| [3102](results/3102/) ([PDF](results/3102/ARGUS_RESULT_3102_TECHNICAL_REPORT.pdf)) | 证明 Lemke 平方图 $L\mathbin{\square} L$ 在支撑集 $\le 5$ 下的精确 Pebbling 数为 64 | 图论与组合优化 | 覆盖全部 181 个有根轨道与 701 个支撑集模板，已独立验证结项 |
+| [3059](results/3059/) ([PDF](results/3059/ARGUS_RESULT_3059_TECHNICAL_REPORT.pdf)) | 证明 $\mathbb{F}_5$ 上 8 维与 9 维 Alon--Jaeger--Tarsi 无零坐标猜想 | 组合代数与有限域 | 已独立验证的可发表定理（`C3059N9`, `H8C3059`） |
 | [20001760](results/20001760/) ([PDF](results/20001760/ARGUS_RESULT_20001760_TECHNICAL_REPORT.pdf)) | 秩一格反驳字面的“所有壳层不可能均为 12-design”命题 | 格与球面设计 | 已独立审查的字面范围反例；高维版本仍开放 |
 | [1350](results/1350/) ([PDF](results/1350/ARGUS_RESULT_1350_TECHNICAL_REPORT.pdf)) | 相对一致性下 GCH 不蕴含存在 $\aleph_2$-Suslin 树 | 集合论 | 已独立审查的已发表相对一致性反模型 |
 | [1200029](results/1200029/) ([PDF](results/1200029/ARGUS_RESULT_1200029_TECHNICAL_REPORT.pdf)) | 无限 Cayley 图的死端可具有正球密度 | 几何群论 | 在闭球约定下已独立审查的已发表反例 |

@@ -1,26 +1,18 @@
 # Result 2338
 
-## Necessary conditions for multiplicity five in Pascal's triangle (Erdős Problem #849)
+## Diophantine Obstructions, Degree-120 S-Unit Descent, and Affine Orthogonal Runge Theorems for Multiplicity Five in Pascal's Triangle
 
-**Status:** independently verified theorem package (Tier-A paper candidate)<br>
-**Field:** number theory and Diophantine equations
+**Status:** `independently_verified` (`publishable_theorem`, `novelty_status=verified_new`)<br>
+**Resolved scope:** Unconditional omega(a) >= 7, K(a) >= 8, and omega(a) >= 14 on {5,6,7,8}, degree-120 2-adic Selmer descent, and sharp global Runge obstruction for affine orthogonal pole fibers G_g = F_2^(2g) semidirect O^+_(2g)(2)<br>
+**Field:** Diophantine equations and algebraic number theory
 
-For $a > 1$, write
+## Summary
 
-$$
-P(a) = \left\{(n,k) : 1 \le k \le n/2,\ \binom{n}{k} = a\right\},\qquad m(a) = |P(a)|,
-$$
+In connection with Erd\H{o}s Problem~\#849 on integers $N$ occurring with multiplicity at least five in Pascal's triangle, we combine $p$-adic valuation cascades, $2$-adic Chabauty--Coleman descent over a degree-$120$ number field $L/\mathbb{Q}$, and a sharp global Runge obstruction for affine orthogonal Galois covers $G_g = \mathbb{F}_2^{2g} \rtimes O^+_{2g}(2)$ ($g \ge 3$). We prove unconditionally that any collision $\binom{n}{k} = \binom{m}{\ell}$ with $5 \le \ell < k \le n/2$ satisfies $K(n-k) \ge 8$ and $\omega(n-k) \ge 7$ (and $\omega(n-k) \ge 14$ for $\ell \in \{5,6,7,8\}$), and determine the exact minimum subgroup index admitting an intransitive pole-place orbit on the affine orthogonal covers.
 
-and let $K(a) = \max\{k : (n,k) \in P(a)\}$ denote the largest lower index among the nontrivial representations in the left half of Pascal's triangle. Combining complete classical Diophantine curve classifications (Mordell, Avanesov, Bugeaud--Mignotte--Siksek--Stoll--Tengely) with exact numerator-window and prime-support reductions, Argus proved four global implications:
+## Open Boundaries
 
-1. **Lower-index threshold:** $m(a) = 5 \implies K(a) \ge 8$ (complete exclusion of $K(a) \le 7$).
-2. **Prime-support threshold:** $m(a) = 5 \implies \omega(a) \ge 7$, where $\omega(a)$ is the number of distinct prime divisors of $a$ (verified across all $4,060$ exact factorizations).
-3. **Surviving $K(a)=8$ systems:** at $K(a)=8$, overlap reductions leave only the two lower-index systems $\{3,5,7,8\}$ and $\{5,6,7,8\}$.
-4. **Fourteen-prime bound on $\{5,6,7,8\}$:** every solution on the surviving $\{5,6,7,8\}$ branch has a coherent primary-cell allocation with at least 14 occupied cells, forcing $\omega(a) \ge 14$.
-
-## Boundary
-
-These are unconditional global necessary conditions on any hypothetical integer with $m(a)=5$; they do not settle whether $m(a)=5$ has a solution for $K(a)\ge8$.
+- Complete classification of all integers appearing at least five times in Pascal's triangle
 
 ## Files
 
@@ -28,12 +20,7 @@ These are unconditional global necessary conditions on any hypothetical integer 
 |---|---|
 | `ARGUS_RESULT_2338_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
 | `ARGUS_RESULT_2338_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
-| `k7_total_exclusion_synthesis.md` | Complete proof that $m(a)=5 \implies K(a)\ge8$ |
-| `k7_total_exclusion_synthesis_certificate.py` | Rerunnable verifier for the $K\le7$ exclusion |
-| `lower_index_six.md` | Complete exclusion at lower index $K=6$ |
-| `support_capacity_seven.md` | Proof that $m(a)=5 \implies \omega(a)\ge7$ |
-| `support_capacity_seven_certificate.py` | Rerunnable verifier for all 4,060 factorizations ($\omega(a)\ge7$) |
-| `k8_lower_index_overlap_reduction.md` | Reduction of $K(a)=8$ to $\{3,5,7,8\}$ and $\{5,6,7,8\}$ |
-| `k8_5678_full_system_classification.md` | Proof that $\omega(a)\ge14$ on the $\{5,6,7,8\}$ branch |
-| `k8_5678_full_system_certificate.py` | Rerunnable verifier for the $\{5,6,7,8\}$ primary-cell classification |
+| `affine_orthogonal_runge_theorem.md` | Mathematical proof / verification artifact |
+| `affine_orthogonal_runge_verify.py` | Mathematical proof / verification artifact |
+| `k8_56_theta_true_descent_global_saturation_sprime_proof.md` | Mathematical proof / verification artifact |
 | `verification-summary.json` | Structured verification summary |

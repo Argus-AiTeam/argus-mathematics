@@ -1,18 +1,18 @@
 # Result 1187
 
-## Collapse of the Nielsen-torsion quotient on $G_{4,3}$ and strict $\mathrm{AC}_3$ certificates in $F/K^{(3)}$
+## Global Nonexistence of Twisted Bridges in F_2-Magnus Quotients and Six-Conjugate Primitive Exclusion for Andrews-Curtis Candidates
 
-**Status:** independently verified scoped group-theoretic theorems (Tier-B seed)<br>
-**Field:** combinatorial and geometric group theory (Andrews--Curtis conjecture)
+**Status:** `independently_verified` (`publishable_theorem`, `novelty_status=verified_new`)<br>
+**Resolved scope:** Unrestricted nonexistence of the P_2 and P_0 twisted conjugacy bridge equations in degree-4 and degree-5 F_2-Magnus quotients, all-Aut(F_2) two-element conjugate-join primitive exclusion, and six-conjugate primitive exclusion w_prim(H) >= 7<br>
+**Field:** combinatorial and geometric group theory
 
-In the Andrews--Curtis counterexample campaign, Argus proved two exact group-theoretic results obstructing candidate invariant routes:
+## Summary
 
-1. **Collapse of the component-conjugation torsion quotient:** on the nilpotent quotient $G_{4,3} = F_4 / [F_4^3, F_4]$, the realizable $\mathrm{AC}_3$ determinant locus satisfies $\mathcal D_{\mathrm{AC3}} = \mathcal R_U$, killing every realizable generating-tuple torsion class.
-2. **Untruncated $F/K^{(3)}$ non-separation:** explicit finite strict Andrews--Curtis programs for both literal candidate tuples $P_0$ and $P_2$ reduce their images to the trivial kernel representative in the third-derived quotient $F/K^{(3)}$.
+We establish four unconditional global obstruction theorems for standard Andrews--Curtis candidate presentations. First, by descending the free groups $F(p,q,r)$ and $F(a,b,c,d,e)$ into the unit groups $U = 1+J$ of the truncated $\mathbb{F}_2$-Magnus algebras $\mathbb{F}_2\langle P,Q,R\rangle/J^5$ (dimension $121$) and $\mathbb{F}_2\langle A,B,C,D,E\rangle/J^6$ (dimension $3906$) and constructing explicit $\mathbb{F}_2$-linear dual annihilators, we prove that neither the $P_2$ twisted bridge equation $z r^k \beta(z)^{-1} = p r^{-1} p^{-1}$ nor the $P_0$ twisted bridge equation $v d^k \beta(v)^{-1} = c e^{-1}$ admits any solution of any finite word length. Second, for the rank-two subgroup $H_\varepsilon = \langle x^{-1}y^2xy^{-3},\ x^{-1}yx^2y^\varepsilon x^{-2}\rangle \le F(x,y)$, Stallings foldings and off-diagonal forest diameter bounds prove that $\langle u, h v h^{-1}\rangle$ contains no ambient primitive element for any $u,v \in H_\varepsilon$ (including all $\mathrm{Aut}(F_2)$ images) and any $h \in F(x,y)$. Third, for $H = \langle x^{-1}y^2xy^{-3}, x^{-1}yx^2yx^{-2}\rangle$, split-centroid reduction across $300{,}235$ coherent graph bindings proves that $\langle c_1 H c_1^{-1},\ldots,c_6 H c_6^{-1}\rangle$ contains no ambient primitive element for any $c_1,\ldots,c_6 \in F(x,y)$, establishing primitive-conjugate width $w_{\mathrm{prim}}(H) \ge 7$.
 
-## Boundary
+## Open Boundaries
 
-These results close the tested nilpotent and third-derived quotient separation routes; the unrestricted Andrews--Curtis conjecture remains open.
+- Full Andrews-Curtis trivializability of AK(3) and MS_14
 
 ## Files
 
@@ -20,10 +20,10 @@ These results close the tested nilpotent and third-derived quotient separation r
 |---|---|
 | `ARGUS_RESULT_1187_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
 | `ARGUS_RESULT_1187_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
-| `THEOREM.md` | All-tuple proof that $\mathcal D_{\mathrm{AC3}} = \mathcal R_U$ on $G_{4,3}$ |
-| `DERIVED_LIFTING.md` | Untruncated $F/K^{(3)}$ strict AC program analysis for $P_0$ and $P_2$ |
-| `strict-P0-k01.json` | Explicit strict AC certificate for $P_0$ in $F/K^{(3)}$ |
-| `strict-P2-k01.json` | Explicit strict AC certificate for $P_2$ in $F/K^{(3)}$ |
-| `replay.py` | Independent replay verifier for the $F/K^{(3)}$ certificates |
-| `NEGATIVE_REPORT.md` | Summary of tested Andrews--Curtis invariant boundaries |
+| `ms14-p2-twisted-orbit-decision_NONEXISTENCE.md` | Mathematical proof / verification artifact |
+| `ms14-p0-twisted-orbit-decision_NONEXISTENCE.md` | Mathematical proof / verification artifact |
+| `ms14-conjugate-join-primitive_THEOREM.md` | Mathematical proof / verification artifact |
+| `ms14-nielsen-uniform-primitive_THEOREM.md` | Mathematical proof / verification artifact |
+| `COVERAGE.md` | Mathematical proof / verification artifact |
+| `PUBLICATION.md` | Mathematical proof / verification artifact |
 | `verification-summary.json` | Structured verification summary |

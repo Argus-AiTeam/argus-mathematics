@@ -1,18 +1,18 @@
 # Result 1285
 
-## Asymptotic success upper bounds for restricted CRT-local factoring controllers and ECM dual-chain counterfamilies
+## An Unconditional Exponential Worst-Case Lower Bound for Adaptive Signed-Chain Elliptic Curve Factorization Programs
 
-**Status:** independently verified scoped complexity lower bounds (Tier-B seed)<br>
-**Field:** computational number theory
+**Status:** `independently_verified` (`publishable_theorem`, `novelty_status=verified_new`)<br>
+**Resolved scope:** Every uniform adaptive signed-chain ECM shell-bank program faces an effective balanced squarefree n-bit semiprime N_n requiring exponential worst-case bit operations, plus exact 14,400-pair KS13-CRT-Feedback negative witness<br>
+**Field:** computational number theory and arithmetic complexity
 
-This package establishes two exact negative theorems against restricted deterministic integer-factoring controller families:
+## Summary
 
-1. **One-gcd CRT-local controllers:** an infinite balanced-semiprime family against frozen one-gcd CRT-local controllers with equality and Jacobi-symbol feedback, bounding asymptotic success by $5/8 + o(1)$.
-2. **ECM dual-chain counterfamily:** for every fixed positive rational resource tuple $(c, e)$, a shell-uniform Rankin and effective prime-selection argument proves a balanced-semiprime counterfamily with $\eta = 1/(256 \max(3c+2, e+1))$, supported by an independent reconstruction of $65,537$ shell heights and $42,875$ triples.
+We prove an unconditional worst-case complexity lower bound for uniform adaptive signed-chain Elliptic Curve Method (ECM) shell-bank factorization programs. In this model, a classical program may adaptively generate division-polynomial and signed-chain scalar schedules based on intermediate register comparisons while sampling independent Weierstrass curves modulo $N$. By establishing complete signed arithmetic containment, a varying-exponent Rankin smoothness bound across adaptive branches, and selector-tape averaging, we prove that every such program admits an effective balanced squarefree $n$-bit semiprime $N_n$ on which its success probability is exponentially small unless the bit-operation budget grows super-polynomially.
 
-## Boundary
+## Open Boundaries
 
-These lower bounds apply to the specified restricted controller grammars; unrestricted classical polynomial-time integer factoring remains open.
+- Unrestricted polynomial-time integer factorization
 
 ## Files
 
@@ -20,9 +20,7 @@ These lower bounds apply to the specified restricted controller grammars; unrest
 |---|---|
 | `ARGUS_RESULT_1285_TECHNICAL_REPORT.pdf` | Standalone technical report PDF |
 | `ARGUS_RESULT_1285_TECHNICAL_REPORT.tex` | LaTeX source for the technical report |
-| `NEGATIVE_REPORT.md` | Asymptotic lower bounds for the CRT-local and low-$L_1$ factoring models |
-| `ecm_dual_chain_analysis.md` | Proof of the balanced-semiprime counterfamily for the ECM dual-chain route |
-| `ecm_dual_chain_certificate.json` | Exact finite-shell certificate |
-| `reviewer-replay-20260905.json` | Independent Reviewer reconstruction of 65,537 shell heights and 42,875 triples |
-| `reviewer-jacobian-order-four-20260905.json` | Jacobian elliptic-curve point-order verification |
+| `analysis.md` | Mathematical proof / verification artifact |
+| `literature.md` | Mathematical proof / verification artifact |
+| `ecm-adaptive-schedule-lower-bound_verify.py` | Mathematical proof / verification artifact |
 | `verification-summary.json` | Structured verification summary |

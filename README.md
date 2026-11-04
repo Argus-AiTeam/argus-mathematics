@@ -47,9 +47,9 @@ This repository preserves the completed and reviewable outputs of the Argus
 mathematics program. It is organized around claims and their evidence rather
 than around model transcripts.
 
-As of **2026-09-10**, the public program contains:
+As of **2026-11-04**, the public program contains:
 
-- **72 published result packages** (every package includes a standalone AMS LaTeX paper `.tex` and compiled `.pdf`) with technical reports, certificates, source
+- **84 published result packages** (every package includes a standalone AMS LaTeX paper `.tex` and compiled `.pdf`) with technical reports, certificates, source
   records, or editor notes;
 - **23 independently replayable computational or symbolic certificates**;
 - **2 Lean-checked logical/topological compositions** (`2884` and `1465`) with
@@ -65,6 +65,18 @@ Every result package in `results/<ID>/` contains a standalone compiled AMS LaTeX
 
 | ID | Result | Field | Public status |
 |---|---|---|---|
+| [3395](results/3395/) ([PDF](results/3395/ARGUS_RESULT_3395_TECHNICAL_REPORT.pdf)) | Centered nuclear duality and $O(M_n+N^2)$-gate refutation of uncentered relative-mass shortcuts | Computational complexity | Independently verified monotone circuit complexity equivalence and barrier |
+| [1138](results/1138/) ([PDF](results/1138/ARGUS_RESULT_1138_TECHNICAL_REPORT.pdf)) | Bielliptic half-fiber and mixed-characteristic $(0,2)$ dyadic Picard-torsion obstructions on Enriques models | Algebraic geometry and Hodge theory | Independently verified scoped arithmetic/integral obstruction theorem |
+| [20002392](results/20002392/) ([PDF](results/20002392/ARGUS_RESULT_20002392_TECHNICAL_REPORT.pdf)) | Velocity-only exclusion of backward self-similar Navier--Stokes profiles in $\mathbb{R}^3_+$ | PDE and fluid mechanics | Independently verified half-space profile exclusion under $|U(y)|\le C/(1+|y|)$ |
+| [9400078](results/9400078/) ([PDF](results/9400078/ARGUS_RESULT_9400078_TECHNICAL_REPORT.pdf)) | Unconditional exceptional-parameter density bound $\ll q^{3-4\tau+\varepsilon}$ for ramified $\mathrm{GL}_4$ representations | Automorphic forms and analytic number theory | Independently verified Sarnak-type density theorem ($0<\tau\le 1/8$) |
+| [1275](results/1275/) ([PDF](results/1275/ARGUS_RESULT_1275_TECHNICAL_REPORT.pdf)) | Full-line essential spectrum $\sigma_{\mathrm{ess}}(\widetilde{D})=\mathbb{R}$ for finite-shift dilation restrictions | Spectral theory and analytic number theory | Independently verified Hilbert--P\'olya operator realization obstruction |
+| [40](results/40/) ([PDF](results/40/ARGUS_RESULT_40_TECHNICAL_REPORT.pdf)) | Conformal transfer and curvature-response closure for axisymmetric Euler flows in curved pipes | PDE and fluid dynamics | Independently verified logarithmic Cartesian obstruction and conformal closure ($0<|\kappa|\le 1/10$) |
+| [20001675](results/20001675/) ([PDF](results/20001675/ARGUS_RESULT_20001675_TECHNICAL_REPORT.pdf)) | Arbitrary-depth exponential HOMFLY-PT fibers ($\log_2|\text{fiber}|\ge(N-8)/(74r^2)$) for plabic knots | Cluster algebras and knot polynomials | Independently verified publishable theorem on simple non-reduced plabic realizations |
+| [3256](results/3256/) ([PDF](results/3256/ARGUS_RESULT_3256_TECHNICAL_REPORT.pdf)) | Weighted dijoin packing $\nu(D,w)=\tau(D,w)$ in one-edge deletions of chordal digraphs | Combinatorial optimization and digraphs | Independently verified publishable theorem extending Cornu\'ejols--Liu--Ravi (2025) |
+| [3167](results/3167/) ([PDF](results/3167/ARGUS_RESULT_3167_TECHNICAL_REPORT.pdf)) | Sheehan's conjecture for 4-regular simple graphs of treewidth $\le 4$ | Structural graph theory | Independently verified publishable theorem via pointed routing-signature closure |
+| [7200051](results/7200051/) ([PDF](results/7200051/ARGUS_RESULT_7200051_TECHNICAL_REPORT.pdf)) | Eleven-point distortion bounds $3089/3084 < \Delta_5(11) \le 115/106$ in $\ell_1^5$ and Lean 4.33.1 $e(\ell_1^5)=10$ verification | Discrete and metric geometry | Independently verified quantitative stability bound, rational construction, and Lean 4 kernel audit |
+| [3102](results/3102/) ([PDF](results/3102/ARGUS_RESULT_3102_TECHNICAL_REPORT.pdf)) | Support-at-most-five pebbling number of the Lemke square $L\mathbin{\square} L$ is 64 | Graph theory and combinatorial optimization | Independently verified publishable theorem across all 181 rooted orbits and 701 templates |
+| [3059](results/3059/) ([PDF](results/3059/ARGUS_RESULT_3059_TECHNICAL_REPORT.pdf)) | The Alon--Jaeger--Tarsi Conjecture in dimensions 8 and 9 over $\mathbb{F}_5$ | Combinatorial algebra and finite fields | Independently verified publishable theorem (`C3059N9`, `H8C3059`) |
 | [20001760](results/20001760/) ([PDF](results/20001760/ARGUS_RESULT_20001760_TECHNICAL_REPORT.pdf)) | A rank-one lattice refutes the literal all-shell 12-design claim | Lattices and spherical designs | Independently reviewed literal-scope counterexample; higher-dimensional version remains open |
 | [1350](results/1350/) ([PDF](results/1350/ARGUS_RESULT_1350_TECHNICAL_REPORT.pdf)) | GCH does not imply an $\aleph_2$-Suslin tree in relative consistency | Set theory | Independently reviewed published relative-consistency countermodel |
 | [1200029](results/1200029/) ([PDF](results/1200029/ARGUS_RESULT_1200029_TECHNICAL_REPORT.pdf)) | Dead ends can have positive ball density in an infinite Cayley graph | Geometric group theory | Independently reviewed published counterexample under the closed-ball convention |

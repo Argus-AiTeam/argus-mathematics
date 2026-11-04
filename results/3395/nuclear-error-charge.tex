@@ -1,0 +1,395 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pp}{\mathcal P}
+\title{The nuclear error charge and a full-sampler obstruction to its mass relaxation}
+\author{Campaign 3395: Engineer continuation}
+\date{November 4, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Status.}
+T5 and the unrestricted fixed-factor lower bound remain unproved.
+The new results below are an equivalent nuclear-error formulation of
+T5 and an exact all-size counterexample to charging the
+\emph{capped relative entrywise error} directly to $b_Q$.
+The counterexample uses the full original sampler, one actual cut
+that is entirely heavy, and thick conditional means with probability
+tending to one. Its actual nuclear energy is exponentially small,
+so it is not a counterexample to T5 or E4.
+
+This is not another enlargement of the shrinking-accuracy window.
+The strongest achieved approximation theorem remains reviewed V14.
+Reviewer support for V1--V16, T1--T14, E1--E20, J8--J12, K1--K16,
+the original cut, sampler and Boolean lift is reused without replay.
+The nuclear/operator duality and PSD characterization in
+arXiv:0706.4138v1, Proposition 2.1 and equation (2.6), retain their
+independently confirmed attribution. No new external result is used.
+The elementary symmetric recurrence used below is prior art already
+present in the campaign's N14 and optional-support calculations;
+the new ingredient is its use with fixed nonroot arcs retained by
+the original random matching.
+
+\section{An equivalent charge that keeps the nuclear norm}
+Keep precisely the J2--J3 heavy matrices and V4's completions:
+\[
+ M_j=M_j(Q_j),\quad W_j^{\rm mat}=M_j(W_j),\quad
+ L_j=M_j(H_j),\quad S_j^{\rm mat}=\min(R_j,3),\quad
+ E'_j=S_j^{\rm mat}-M_j .
+\]
+Here $Q_j=A_jV_j$ is an actual cut product; the notation
+$S_j^{\rm mat}$ is unrelated to its compulsory group set.
+All these matrices have dimension $m_j=2^{k_j}$ and
+$a_j=m_j^{-2}\sum W_j^{\rm mat}$.
+Put
+\[
+ {\cal H}_j=\{k_j\ge5k_0/4\},\quad
+ {\cal T}_j=\{a_j\ge2^{-k_0}\},\qquad k_0=N/2^{134},
+\]
+and define
+\[
+ \begin{split}
+ {\mathfrak N}(Q)
+ &=\sum_j\E\left[
+     1_{{\cal H}_j\cap{\cal T}_j}
+          \frac{\|E'_j\|_*^2}{m_j^3a_j}\right],\\
+ {\mathfrak L}(Q)
+ &=\sum_j\E\left[
+     1_{{\cal H}_j\cap{\cal T}_j}
+          \frac{\sum E'_j}{m_j^2a_j}\right].
+ \end{split}                                                   \tag{Z1}
+\]
+The expectations use the unchanged original law and the original
+unhonored-bit fixing for each actual cut. The indicators are
+measurable in that conditioning. The positive threshold excludes
+division by zero; use zero outside it.
+
+\begin{proposition}
+For admissible $N\ge2^{142}$ and every allowed circuit,
+\[
+ \begin{split}
+ {\cal E}_{\rm thick}
+ &\le3{\mathfrak N}(Q)+2^{16}s e^{-5k_0/32},\\
+ {\mathfrak N}(Q)
+ &\le3{\cal E}_{\rm thick}+2^{16}s e^{-5k_0/32}.
+ \end{split}                                                   \tag{Z2}
+\]
+Thus T5 is equivalent, up to fixed constants, to
+\[
+ {\mathfrak N}(Q)\le Cb_Q+K M_n^\alpha(s+1)^\beta e^{-cN},
+ \qquad C\ge0,\quad K,c,\beta>0,\quad\alpha\ge0.            \tag{Z3}
+\]
+Neither T5 nor (Z3) is proved here.
+\end{proposition}
+\begin{proof}
+Use the two exact identities
+$W_j^{\rm mat}=S_j^{\rm mat}-E'_j-L_j$ and
+$E'_j=S_j^{\rm mat}-W_j^{\rm mat}-L_j$.
+Squaring the nuclear triangle inequality bounds either energy by
+three times the other plus
+$27((k_j+1)^2+D_h)/(m_ja_j)$.
+On ${\cal H}_j\cap{\cal T}_j$, reviewed V10 bounds the sum of these
+remainders by $55323s e^{-5k_0/32}$.
+For the first inequality only, add V8's strip
+$k_0\le k_j<5k_0/4$, whose heavy energy is at most
+$6s e^{-5k_0/32}$. Both coefficients are below $2^{16}$.
+This proves (Z2).
+
+In either direction an estimate of the displayed form transfers
+with coefficient $3C$ and remainder constants
+$3K+2^{16}$, $\alpha$, $\max(\beta,1)$, and
+$\min(c,5/2^{139})$.
+No new Cauchy--Schwarz budget or substituted law is used.
+The reviewed common-law square-root transfer can then be applied
+if (Z3) is eventually proved; stronger linear J10 is unnecessary.
+\end{proof}
+
+Because $0\le E'_j\le3$,
+\[
+ \|E'_j\|_*^2\le m_j\|E'_j\|_{\rm F}^2
+                  \le3m_j\sum E'_j,\qquad
+                         {\mathfrak N}\le3{\mathfrak L}. \tag{Z4}
+\]
+Therefore the following direct replacement for the V11--V12 loss
+would be sufficient:
+\[
+ {\mathfrak L}(Q)\le Cb_Q+
+                  K M_n^\alpha(s+1)^\beta e^{-cN}.       \tag{Z5}
+\]
+Unlike (Z3), assertion (Z5) is false. This remains so after capping
+the errors, retaining only thick heavy matrices, and keeping all
+original outer averaging.
+
+\section{Fixed nonroot arcs seen by the original sampler}
+Take any sufficiently large admissible $N\ge2^{154}$.
+The base graph has maximum degree eight and at least $N-1$ edges.
+For an edge $e$ let $Q_e$ be the set of edges incident to an
+endpoint of $e$. At most $2\cdot8^2=128$ edges $f$ have
+$Q_f\cap Q_e\ne\varnothing$, by the same neighborhood count used
+in the original matching proof.
+A greedy packing therefore permits a fixed set of
+\[
+                          v=\lfloor N/512\rfloor         \tag{Z6}
+\]
+edges with pairwise disjoint $Q_e$.
+Orient each of these edges once and let $Y$ contain its
+source-to-target variable $y_u$. Every $y_u$ has a nonroot target,
+and their source groups are distinct.
+Choose a fixed balanced partition $S,B$ of the $g=N+2$ groups
+with all endpoints of these edges in $B$. This is possible since
+$2v<g/2$. All choices precede the sampler.
+
+Let $\ell=\ell(\eta)$ be the number of variables of $Y$ available
+in the original common box $U_\eta$, and let $K=K(\omega)$ be the
+number selected in the complete one-hot assignment. Thus
+$0\le K\le\ell\le v$.
+
+\begin{proposition}
+Under the full original sampler, including the matching and its
+prescribed order, with
+\[
+ \tau=N/2^{66},\qquad
+ \delta_N=e^{-N/2^{19}}+2e^{-N/2^{68}},
+\]
+one has
+\[
+                 \Pr(K\ge\tau,\ \ell-K\ge\tau)
+                              \ge1-\delta_N.             \tag{Z7}
+\]
+\end{proposition}
+\begin{proof}
+Retention events for the packed edges are independent because
+their edge-mark neighborhoods are disjoint.
+Each succeeds with probability at least $1/64$.
+Since $v\ge N/1024$, their mean is at least $N/2^{16}$.
+The reviewed elementary Bernoulli half-mean estimate shows that
+at least $N/2^{17}$ of these edges are retained except with
+probability $e^{-N/2^{19}}$.
+
+The matching-preserving order lists endpoints of every retained
+edge consecutively. At most $N/L$ such edges cross full-block
+boundaries and at most $L$ are lost in the remainder.
+Since $L=2^{23}\le N/2^{24}$, at least $N/2^{18}$ packed retained
+edges lie inside full blocks.
+
+Condition on any such matching and order. Let $t_i$ count these
+oriented edges in block $i$. The event that the ordered slots
+$(a_{i,1},b_{i,1})$ equal one of them has exact probability
+$t_i/[L(L-1)]$. The other two slots can be any distinct remaining
+vertices. If additionally $x_i=1$, the corresponding $y_u$ is
+selected. If $x_i=0$, it is absent from the sample but present
+in $U_\eta$: that source points to the next block rather than
+its selected $b$ vertex.
+
+For either choice of $x_i$, the indicators are independent across
+blocks and have total mean at least
+\[
+ \sum_i\frac{t_i}{2L(L-1)}
+                  \ge\frac{N}{2^{19}L^2}=N/2^{65}.
+\]
+Each success uses a distinct source. Applying the same half-mean
+bound separately to the two signs gives counts at least
+$N/2^{66}$, with total failure at most $2e^{-N/2^{68}}$.
+Other appearances of $Y$ can only increase $K$ or $\ell-K$.
+Averaging the actual matching and order proves (Z7).
+No independently chosen active-source law has replaced the sampler.
+\end{proof}
+
+\section{A polynomial-size, entirely heavy actual cut}
+Set
+\[
+ h=\lfloor2^{-150}N\rfloor,\quad d=h+1,\quad
+ r=\lfloor N/2^{67}\rfloor,\quad
+ \zeta=2^{-\lceil k_0/4\rceil},\quad
+ \lambda=\frac{\binom rd}{\binom vd},\quad a_*=\zeta\lambda .
+                                                               \tag{Z8}
+\]
+The stated range ensures $2d\le r<v$.
+For each marked source group write its group sum as $y_u+z_u$,
+where $z_u$ is the sum of all its other variables.
+Let $U_k$ be the formal full-$B$ polynomial selecting exactly
+$k$ variables from $Y$:
+\[
+ U_k=F_{B\setminus\operatorname{src}(Y)}
+                         [t^k]\prod_{u\in\operatorname{src}(Y)}
+                                      (z_u+t y_u).
+\]
+The coefficient notation is implemented by the ordinary positive
+counting recurrence. Define
+\[
+ V=\sum_{k=r}^{v}\frac{U_k}{\binom kd},\qquad
+ A=a_*F_S e_d(Y),\qquad Q=AV,                            \tag{Z9}
+\]
+where $e_d$ is the elementary symmetric polynomial of degree $d$.
+
+\begin{proposition}
+There is an original shared DAG of size $O(M_n+N^2)$ for (Z9),
+with exactly one nonzero actual cut product, the displayed $AV$.
+It is entirely its J2 heavy part, and
+\[
+              0\le Q\le\zeta F,\qquad b_Q\le\zeta\longrightarrow0
+                        \quad\hbox{on the full Boolean cube}.  \tag{Z10}
+\]
+Its exact projection and sampled values are
+\[
+ \Pp Q=a_*F_S\sum_{k=r}^v U_k,\qquad
+                         Q(X_\nu)=a_*1_{\{K\ge r\}}.     \tag{Z11}
+\]
+\end{proposition}
+\begin{proof}
+Compute all $U_k$ and $e_d(Y)$ by their positive dynamic programs,
+using $O(M_n+N^2)$ gates. Constants such as $\binom kd^{-1}$
+are allowed nonnegative real constants, here rational.
+Build $V$ before $A$ and then their final product.
+Since $d<v$, the intersection of supports of $e_d(Y)$ is empty,
+so $G(A)=S$, while $G(V)=B$.
+The last balanced gate is $A$; cutting it annihilates the output
+and its exact divided context is $V$.
+All further cut products vanish. Shared inputs do not change this.
+
+Every monomial of $A$ has exactly $d>h$ optional nonroot source
+groups outside $S$, and $V$ has none inside $S$. The entire one
+actual cut, not an enumerated list of components, is therefore heavy.
+
+On the Boolean cube, $e_d(Y)\le\binom vd$ and
+$V\le F_B/\binom rd$, proving (Z10).
+Full-group coverage handles all group-zero faces.
+For a monomial of $U_k$, exactly $\binom kd$ multipliers in
+$e_d(Y)$ are compatible, retaining every coefficient.
+The reciprocal coefficient in $V$ cancels this count, proving
+(Z11). The one-hot formula follows immediately.
+\end{proof}
+
+The amplitude is well above the thick threshold:
+\[
+ 2^{-60d}\le\lambda\le2^{-57d},\qquad
+             \lambda\ge2^{-k_0/512},\qquad
+                              a_*\ge2^{-k_0/2}.          \tag{Z12}
+\]
+Indeed
+$\lambda\ge((r-d+1)/v)^d\ge(r/(2v))^d\ge2^{-60d}$ and
+$\lambda\le(r/v)^d\le2^{-57d}$.
+Use $d\le N/2^{149}$ and $60/2^{15}<1/512$ for the next bound.
+Finally $\lceil k_0/4\rceil\le k_0/4+1$ and $k_0\ge2^{20}$
+give the last assertion.
+
+\section{The mass relaxation diverges on thick histories}
+For each original $(\eta,z)$ conditioning, let
+$p=\Pr(K\ge r\mid\eta,z)$.
+Every honored row source lies in $S$, whereas $Y$ and $V$ use
+only $B$. Thus the full heavy matrix has identical rows, and
+\[
+                    a=a_*p,\qquad
+ M(x,y)=a_*1_{\{K(y)\ge r\}}.                            \tag{Z13}
+\]
+The actual common-box completion has, on each column,
+\[
+ R(x,y)=a_*\frac{\binom\ell d}{\binom{K(y)}d}
+                           1_{\{K(y)\ge r\}}\le\zeta .
+                                                               \tag{Z14}
+\]
+Because $R\le\zeta\le1$, clipping at three does nothing:
+$E'=R-M=E$. This is a bounded error of the very completion
+used in V11--V12, not an alternative completion.
+
+The conditional relative mass in (Z1) is consequently
+\[
+ \frac{\sum E'}{m^2a}
+ =\frac{\E_{\rm honored}
+    [1_{\{K\ge r\}}(\binom\ell d/\binom Kd-1)]}{p}.
+                                                               \tag{Z15}
+\]
+On the event $\mathcal Z=\{K\ge\tau,\ell-K\ge\tau\}$ from (Z7),
+one has $K\ge r$ and
+\[
+ \frac{\binom\ell d}{\binom Kd}
+  =\prod_{i=0}^{d-1}\frac{\ell-i}{K-i}
+  \ge(\ell/K)^d
+  \ge(1+2^{-57})^d ,
+                                                               \tag{Z16}
+\]
+since $K\le v\le N/512$.
+The denominator $p\le1$ in (Z15) only strengthens this lower bound
+after multiplying by the conditional probability of $\mathcal Z$.
+
+Moreover $\Pr(p<1/2)\le2\Pr(K<r)\le2\delta_N$, by total
+expectation in the original law. When $p\ge1/2$, (Z12) implies
+$a\ge2^{-k_0}$.
+The probability of $\neg{\cal H}$ is bounded by reviewed V8.
+Thus, for $N\ge2^{154}$,
+\[
+ \Pr(\mathcal Z\cap{\cal H}\cap{\cal T})
+ \ge1-3\delta_N-e^{-N/2^{22}}-e^{-5k_0/32}>1/2 .
+                                                               \tag{Z17}
+\]
+For example each exponential has exponent at least eight, so
+the total loss is below $11e^{-8}<1/2$.
+All indicators here refer to the same full history;
+none is averaged under a separately optimized distribution.
+
+Equations (Z15)--(Z17) prove
+\[
+ {\mathfrak L}(Q)
+ \ge\tfrac12((1+2^{-57})^d-1)
+ \ge\tfrac12(e^{N/2^{208}}-1)\longrightarrow\infty .
+                                                               \tag{Z18}
+\]
+For the second inequality use
+$\log(1+t)\ge t/2$ on $0\le t\le1$ and $d>N/2^{150}$.
+Since $M_n=\Theta(N)$, $s=O(M_n+N^2)$ and $b_Q\le\zeta\to0$,
+the right side of any proposed (Z5) tends to zero.
+This refutes (Z5) for every fixed allowed set of constants.
+
+\section{Why the actual nuclear route survives}
+The heavy matrix in (Z13) has rank at most one. For $a>0$ its
+energy is exactly $a_*/m$, so
+\[
+             {\cal E}_{\rm thick}(Q)\le a_*2^{-k_0}.      \tag{Z19}
+\]
+The error in (Z14) also has identical rows.
+On ${\cal H}\cap{\cal T}$ its nuclear norm equals its
+Frobenius norm, whence
+\[
+ \frac{\|E'\|_*^2}{m^3a}
+ \le\frac{\zeta^2}{ma}
+ \le\zeta^2\,2^{-k_0/4}
+ \le2^{-3k_0/4}.
+ \quad\text{Thus}\quad
+                       {\mathfrak N}(Q)\le2^{-3k_0/4}.   \tag{Z20}
+\]
+These are exponentially small under the full original sampler.
+No nuclear norm has been replaced by entrywise mass in these
+conclusions.
+
+The old K11 obstruction had unbounded raw completion error and
+zero heavy residual. Here the error is bounded by a number tending
+to zero, the entire actual cut is heavy, and the thick event has
+probability tending to one. This is a different obstruction to the
+specific \emph{relative} mass relaxation after clipping.
+The example is not an approximator of $R_n$; it tests the universal
+$Q\le3F$ premise in T5 and the proposed sufficient shortcut.
+
+Only the route through (Z5) is excluded. It would be incorrect to
+retire T5, E4, (Z3), an adaptive amplitude-sensitive bound, or a
+nuclear high-frequency argument from this construction.
+In particular (Z2)--(Z3) retain the unrestricted nuclear structure
+and the original-size remainder. Their missing defect charge is
+still a proof obligation, not a theorem.
+
+\paragraph{New exact replay.}
+\path{relative_error_check.py} verifies a new rational circuit and
+its sole entirely heavy cut, the coefficientwise projection,
+all Boolean inputs on the four marked groups, and the actual
+conditional matrices and completions.
+An exact eight-square error Gram calculation verifies the rank-one
+nuclear identities without interpreting entrywise mass as nuclear
+cost. A separate bounded enumeration of the original ordered
+four-tuple kernel at block size eight verifies the new matching-arc
+trigger and its two bit probabilities.
+The finite host is abstract, not an admissible physical graph or
+an asymptotic original-sampler experiment.
+All-size claims (Z7)--(Z20) rest on the proofs above, not on finite
+extrapolation. New claims await independent review; no verified
+novelty or publication qualification is asserted.
+\end{document}

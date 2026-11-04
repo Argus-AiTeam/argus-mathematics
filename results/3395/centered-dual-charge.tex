@@ -1,0 +1,521 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pp}{\mathcal P}
+\newcommand{\op}{\mathrm{op}}
+\title{Centered nuclear duality and a sparse two-copy defect budget}
+\author{Campaign 3395: Engineer continuation}
+\date{November 4, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Status and the missing result.}
+The fixed-factor theorem, T5, and the signed dual charge below remain
+unproved. The new results are the requested centering bridge, an exact
+sparse-noise coupling with unchanged original one-hot marginals and one
+bounded whole-output defect budget, and a high-frequency reduction with
+a dimension-independent noise inverse. The budget has not been shown
+to control the signed pairing. These are partial lemmas, not an
+achieved fixed approximation factor or a publication qualification.
+Reviewed V14 remains the strongest achieved approximation theorem.
+
+Reuse independently reviewed Z1--Z20, V1--V16, T1--T4, J8--J12,
+K1--K5, the original sampler and cut, and A4/A7 without unchanged
+replay. Nuclear/operator duality is already independently attributed
+to arXiv:0706.4138v1, Proposition 2.1 and equations (2.5)--(2.6).
+It is used only as a finite-dimensional matrix identity; a short
+SVD argument is also given below. No matrix-recovery or circuit
+stability theorem, new external assumption, or novelty claim is used.
+The capped relative-mass route remains retired for its reviewed reason.
+
+\section{The elementary bridge and its exact dual}
+Retain every definition and conditioning in Z1. In particular
+$E'_j=\min(R_j,3)-M_j(Q_j)$, $0\le E'_j\le3$,
+$m_j=2^{k_j}$, and $a_j$ is the conditional mean of the actual
+heavy part, not the mean of the error. Write
+\[
+ I_j=1_{\{k_j\ge5k_0/4,\ a_j\ge2^{-k_0}\}},\quad
+ P_j=\frac{\boldsymbol1\boldsymbol1^{\mathsf T}}{m_j},\quad
+ X_j=(I-P_j)E'_j(I-P_j),\qquad k_0=N/2^{134}.
+\]
+All energies are zero outside $I_j=1$. Put
+$\mathfrak N_{\rm cen}=\sum_j\E[I_j\|X_j\|_*^2/(m_j^3a_j)]$.
+The expectation is exactly Z1's original law.
+
+\begin{proposition}
+For the unrestricted circuits in Z1,
+\[
+ \mathfrak N_{\rm cen}\le\mathfrak N
+ \le2\mathfrak N_{\rm cen}+36s\,2^{-k_0/4}.             \tag{CD1}
+\]
+Moreover
+\[
+ \mathfrak N_{\rm cen}
+ =\sup_{P_jY_j=Y_jP_j=0}
+ \sum_j\E\left[I_j\left(
+ \frac{2\langle Y_j,X_j\rangle}{m_j^{3/2}}
+                     -a_j\|Y_j\|_{\op}^2\right)\right]. \tag{CD2}
+\]
+The supremum permits every conditionally measurable real matrix
+family, with no restriction on efficient computation.
+\end{proposition}
+\begin{proof}
+Suppress $j$. Orthogonal compression is contractive for nuclear norm.
+Also
+\[
+ E'-X=PE'+(I-P)E'P
+\]
+has rank at most two and Frobenius norm at most $\|E'\|_{\rm F}$:
+the three blocks $X$, $PE'$, and $(I-P)E'P$ are Frobenius-orthogonal.
+Thus $\|E'-X\|_*^2\le2\|E'\|_{\rm F}^2\le18m^2$.
+The nuclear triangle inequality and $(u+v)^2\le2u^2+2v^2$
+give
+$\|E'\|_*^2\le2\|X\|_*^2+36m^2$.
+On the indicated event, $1/(ma)\le2^{k_0-k}\le2^{-k_0/4}$.
+There are at most $s$ actual cuts. This proves (CD1).
+
+Write an SVD of $X$ using only its nonzero singular values:
+$X=U\Sigma V^{\mathsf T}$. Its left and right singular vectors
+are orthogonal to $\boldsymbol1$. Therefore $Z=UV^{\mathsf T}$
+is centered, has operator norm one when $X\ne0$, and satisfies
+$\langle Z,X\rangle=\|X\|_*$.
+Conversely $|\langle Y,X\rangle|\le\|Y\|_{\op}\|X\|_*$.
+Maximizing
+$2t\|X\|_*/m^{3/2}-at^2$ over $t\ge0$ gives
+$\|X\|_*^2/(am^3)$, attained at
+$t=\|X\|_*/(am^{3/2})$. Use $Y=0$ when $X=0$.
+For fixed $N$ the history space is finite, so the optimizing choices
+can be made simultaneously. This justifies the supremum of the sum
+and expectation, rather than only a pointwise upper bound.
+\end{proof}
+
+The missing assertion is
+\[
+ \mathfrak N_{\rm cen}\le Cb_Q+
+                K M_n^\alpha(s+1)^\beta e^{-cN}.        \tag{CD3}
+\]
+If proved with fixed explicit constants, (CD1) and Z2 would give
+T5 with $C_T=6C$, $K_T=6K+65644$,
+$\beta_T=\max(\beta,1)$, $\alpha_T=\alpha$ and
+$c_T=\min(c,2^{-137})$. Here $\log2\ge1/2$ bounds the new
+remainder. The reviewed choice
+$1+1/(768(C_T+1))$ would then apply. No such $C$ is established.
+
+\section{Two copies: the normalization matters}
+For a matrix $A$ and two row and column strings define
+\[
+ \delta A=A(u,v)-A(u',v)-A(u,v')+A(u',v').
+\]
+If $u,u',v,v'$ are independent uniform strings and $Y$ is centered,
+\[
+ \E[\delta Y\,\delta E']
+           =\frac4{m^2}\langle Y,E'\rangle
+           =\frac4{m^2}\langle Y,X\rangle.              \tag{CD4}
+\]
+This follows by expanding the sixteen terms and using zero row and
+column sums. It retains signs. It does not bound the pairing by defect.
+
+Independent complete bit strings have an unsuitable raw union
+normalization: each differing bit changes two distinct source groups,
+so the expected value of $F$ at their union is $(5/2)^{2q}$.
+The following coupling removes this particular exponential factor.
+It is not a replacement of the original marginal distribution.
+
+Let $\eta$ have the unchanged original pre-bit law, and let
+$b\in\{0,1\}^{2q}$ be its original uniform bit string. Independently
+flip each bit with probability
+\[
+ p=\frac1{2q},\qquad b'=b\mathbin{\oplus}e,\qquad
+ U^*=X_{\eta,b}\vee X_{\eta,b'} .
+\]
+Write $\mu$ for this joint law. For cut $j$, let $e_{j,r}$ and
+$e_{j,c}$ retain respectively only its honored row and column flips.
+Its four mixed corners have strings
+$b$, $b\oplus e_{j,r}$, $b\oplus e_{j,c}$,
+$b\oplus e_{j,r}\oplus e_{j,c}$.
+Their union $U_j$ is below $U^*$.
+
+\begin{proposition}
+All four corners have the original marginal law, also conditionally
+on $\eta$ and that cut's unhonored bits. Furthermore
+\[
+ F(U^*)=4^{|e|},\qquad
+ Z_q:=\E_\mu F(U^*)=(1+3/(2q))^{2q}\le e^3.             \tag{CD5}
+\]
+The probability law $d\widehat\mu=F(U^*)\,d\mu/Z_q$
+has the same pre-bit law and the same uniform $b$, independently
+of a flip mask with flip probability
+\[
+                       \widehat p=\frac{4p}{1+3p}.       \tag{CD6}
+\]
+Thus it too preserves all four original corner marginals.
+The actual cuts and the actual A4 mixed contexts obey the one
+joint budget
+\[
+ \begin{split}
+ \sum_j\E_\mu D_{Q_j}(U_j)
+ &\le \E_\mu D_Q(U^*)\\
+ &=\sum_{v\ {\rm product}}\E_\mu H_v(U^*)J_v(U^*)\\
+ &=Z_q\,\E_{\widehat\mu}\frac{D_Q(U^*)}{F(U^*)}
+ \le Z_q b_Q\le e^3b_Q .                               \tag{CD7}
+ \end{split}
+\]
+\end{proposition}
+\begin{proof}
+Conditional on $\eta$, the honored sets are fixed. XOR with a mask
+independent of uniform bits preserves their joint uniform law.
+The mixed corners never change the unhonored bits, so the same
+argument holds with those bits fixed.
+
+In the original sampler every bit changes the outgoing choice at
+exactly two source groups. Different bits use disjoint groups.
+A flipped bit therefore contributes four to $F(U^*)$ and an unflipped
+bit contributes one. This proves the first equality of (CD5).
+Independence gives its second equality, and $1+x\le e^x$ gives
+the bound. The weight $4^{|e|}$ depends on neither $b$ nor $\eta$.
+Factoring its normalization bit by bit gives (CD6).
+It also proves that the displayed density defines a probability law.
+
+Each $D_{Q_j}$ has nonnegative coefficients after Booleanization.
+Hence $D_{Q_j}(U_j)\le D_{Q_j}(U^*)$.
+Sum actual cuts at this one common input and use A7.
+Use A4 at the same input for the next equality.
+Finally $D_Q/F\le b_Q$ everywhere used here.
+All unions have every group nonempty, so every division is legitimate.
+No separately optimized gate maximum, degree factor, or factor $s$
+has been placed on $b_Q$.
+\end{proof}
+
+\section{A sparse-noise inverse without a dimension loss}
+Centering alone would leave the smallest nonzero noise eigenvalue
+$1/q$. Low Walsh degrees can instead be removed at exponentially
+small nuclear-energy cost.
+Fix a conditional matrix, set $k=k_j$, and assume $I_j=1$.
+For admissible $N\ge2^{142}$, $k\ge320$. Set
+\[
+ r=\lfloor k/256\rfloor,\quad
+ d_k=\sum_{\ell=0}^{r-1}\binom{k}{\ell},\quad
+ L=\hbox{orthogonal projection onto Walsh degrees less than }r,
+ \quad H=I-L.                                          \tag{CD8}
+\]
+Here $H$ is a matrix on row strings, and the same definition is
+used on column strings. These are analysis operators, not circuit gates.
+The normalized Walsh vector of a subset $A$ is
+$2^{-k/2}(-1)^{\sum_{i\in A}u_i}$.
+
+Let $T$ be the bit-flip transition matrix on these $k$ bits,
+with the same $p=1/(2q)$ as above. Its Walsh eigenvalue in degree
+$\ell$ is $\rho^\ell$, where $\rho=1-1/q$.
+Define $B$ to be zero on degrees below $r$ and to have eigenvalue
+$(1-\rho^\ell)^{-1}$ in degree $\ell\ge r$.
+
+\begin{proposition}
+Uniformly in the allowed parameters,
+\[
+ d_k\le2^{k/16},\qquad
+ B(I-T)=(I-T)B=H,\qquad \|B\|_{\op}\le2^{121}.           \tag{CD9}
+\]
+For $X^{\rm hi}_j=H_jE'_jH_j$ and
+$\mathfrak N_{\rm hi}=\sum_j\E[I_j\|X^{\rm hi}_j\|_*^2/(m_j^3a_j)]$,
+\[
+ \mathfrak N_{\rm hi}\le\mathfrak N_{\rm cen}\le\mathfrak N
+ \le2\mathfrak N_{\rm hi}+36s\,2^{-11k_0/64}.            \tag{CD10}
+\]
+\end{proposition}
+\begin{proof}
+If $r=1$, then $d_k=1$. Otherwise put $h=r-1\le k/256$.
+At $z=h/k\le1$,
+$z^h\sum_{\ell=0}^h\binom{k}{\ell}\le(1+z)^k\le e^h$.
+The increasing function $x\log(ek/x)$ on $(0,k]$ gives
+\[
+ d_k\le(ek/h)^h\le(256e)^{k/256}
+       \le2^{10k/256}\le2^{k/16}.
+\]
+The Walsh eigenvalue formula follows by independence of the flips.
+Since $r\ge k/512$, $r\le q$, and
+$(1-1/q)^r\le e^{-r/q}\le(1+r/q)^{-1}$, the eigenvalues
+of $I-T$ on $H$ are at least
+\[
+ \frac{r}{q+r}\ge\frac{k}{1024q}
+ \ge\frac{k_0}{1024q}\ge2^{-121}.
+\]
+The last step uses $q\le N/2^{23}=2^{111}k_0$.
+This proves (CD9).
+
+The matrix $E'-HE'H=LE'+HE'L$ has rank at most $2d_k$
+and Frobenius norm at most $\|E'\|_{\rm F}$, by orthogonal blocks.
+Exactly as in (CD1),
+$\|E'\|_*^2\le2\|HE'H\|_*^2+36d_km^2$.
+On the indicated event,
+\[
+ \frac{d_k}{ma}\le2^{k_0-15k/16}
+                         \le2^{-11k_0/64}.
+\]
+Compression gives the other inequalities, since $H(I-P)=H$.
+Sum only over the at most $s$ original cuts.
+\end{proof}
+
+For arbitrary real $Y$, let $\widetilde Y=BYB$. Under the
+conditional sparse-noise law, expansion in Walsh vectors, or
+twice the identity
+$\E[(f(u)-f(u'))(g(u)-g(u'))]
+ =2\langle f,(I-T)g\rangle/m$, gives
+\[
+ \begin{split}
+ \E_e\E_{u,v}[\delta\widetilde Y\,\delta E']
+  &=\frac4{m^2}\langle\widetilde Y,(I-T)E'(I-T)\rangle\\
+  &=\frac4{m^2}\langle Y,HE'H\rangle,\qquad
+ \|\widetilde Y\|_{\op}\le2^{242}\|Y\|_{\op}.             \tag{CD11}
+ \end{split}
+\]
+All expectations in this identity use $\mu$, not the tilted law.
+The tilt was used only to justify (CD7).
+The high-frequency energy is therefore exactly the supremum of
+\[
+ \sum_j\E_{\eta,z_j}\left[I_j\left(
+  \frac{\sqrt{m_j}}2
+       \E_{u,v,e}[\delta(B_jY_jB_j)\,\delta E'_j]
+              -a_j\|Y_j\|_{\op}^2\right)\right],         \tag{CD12}
+\]
+where one may restrict to $Y_j=H_jY_jH_j$.
+The SVD argument for (CD2) applies verbatim.
+A fixed defect bound for (CD12) would also yield T5 with coefficient
+$6C$; its new remainder rate is at least $11/2^{141}$.
+Neither (CD7) nor (CD11) supplies that bound.
+
+\section{Why the common budget is not yet a signed charge}
+The entries in $\delta E'_j$ use the fixed \emph{global} completion
+at $U_\eta$. In (CD7), the local union $U_j$ usually contains
+only a few additional choices. Replacing the former completion by
+the latter changes the matrix. The following exact diagnostic
+shows that even a pointwise zero-defect implication fails.
+It does not refute an averaged estimate with an exponential remainder.
+
+Use three abstract gadgets, with twelve two-variable groups
+$(z_i,w_i)$, $0\le i<12$. Row bit $u_t$ selects the same
+option in groups $2t,2t+1$; column bit $v_t$ does so in
+groups $6+2t,7+2t$. Let $S=\{0,\ldots,5\}$, and put
+\[
+ \begin{split}
+ f_S&=(z_0+2w_0^3)\prod_{i=1}^{5}(z_i+w_i),\\
+ V&=(z_8+2w_8^2)
+                  \prod_{i\in\{6,7,9,10,11\}}(z_i+w_i),\\
+ A&=\tfrac12 f_S(1+\tfrac12w_6),\qquad Q=AV.            \tag{CD13}
+ \end{split}
+\]
+Build $V$ before $A$ and their final product. The last balanced
+gate is $A$, $G(A)=S$, and the divided context is exactly $V$.
+Cutting $A$ annihilates the output. Thus this is one actual cut,
+not a freely chosen product representation. Repeated powers and
+shared variable inputs are retained.
+
+On the full Boolean cube, $Q\le3F$. After Booleanization,
+\[
+ D_Q=\tfrac14\,\overline f_S\,w_6z_6\,\overline V_{\ne6},
+ \qquad b_Q=\tfrac12.                                  \tag{CD14}
+\]
+Bars mean idempotent powers; $V_{\ne6}$ omits group six.
+Indeed $\overline f_S/F_S\le2$ and
+$\overline V_{\ne6}/F_{B\setminus\{6\}}\le2$.
+If $w_6z_6=1$ its normalized factor is $1/2$.
+All three maxima occur together, proving the exact defect value.
+Full-group coverage handles the zero faces.
+
+In the complete original-bit box of this abstract restriction,
+with $f(u)=1+u_0$ and $h(v)=(1+v_1)(1-v_0)$,
+\[
+ \begin{split}
+ M(u,v)&=\tfrac12(1+u_0)(1+\tfrac12v_0)(1+v_1),\\
+ R(u,v)&=\tfrac34(1+u_0)(1+v_1)\le3,\\
+ E'(u,v)&=\tfrac14 f(u)h(v),\\
+ X(u,v)&=\tfrac14(f(u)-\tfrac32)(h(v)-\tfrac34).
+                                                               \tag{CD15}
+ \end{split}
+\]
+At the finite heavy cutoff zero, the heavy mean is $a=9/32$.
+For the finite parameter $k_0=2$, $k=3\ge5k_0/4$ and
+$a\ge2^{-k_0}$. These finite parameters are not the admissible
+asymptotic recipe for $N$.
+
+The eight-square Gram matrix $XX^{\mathsf T}$ has exact spectrum
+\[
+           (11/16)^1,\quad 0^7,\qquad
+ \frac{\|X\|_*^2}{m^3a}=\frac{11}{2304}.                \tag{CD16}
+\]
+For example $\sum_u(f(u)-3/2)^2=2$ and
+$\sum_v(h(v)-3/4)^2=11/2$, so the squared rank-one norm is
+$11/16$. This is a genuine centered error, not a row-only proxy.
+
+Take $u=0$, $u'=1$, $v=0$, $v'=2$, with bit indices starting
+at zero. Thus only row bit zero and column bit one flip.
+The optional variable $w_6$ is absent at all four corners and
+at their union $U^*$. Nevertheless, for the centered choice $Y=X$,
+\[
+ D_Q(U^*)=0,\quad F(U^*)=16,\quad
+ \delta E'=\delta X=\tfrac14,\quad
+                          \delta X\,\delta E'=\tfrac1{16}. \tag{CD17}
+\]
+For $p=1/6$ and the finite cutoff $r=1$, the same example gives
+$\delta(BXB)=9/5$ and
+$\delta(BXB)\delta E'=9/20>0$.
+Consequently zero local defect does not force the signed integrand
+in (CD12) to vanish. Applying A4 to that integrand without another
+identity or inequality is not justified.
+The example has rank one and can be absorbed by an exponential
+low-rank remainder as dimensions grow. It supplies no all-size
+counterexample to (CD3), Z3, T5, or the target lower bound.
+
+\section{The pointwise shortcut also fails with the actual heavy threshold}
+The preceding finite example alone does not address the asymptotic
+cutoff $h=\lfloor N/2^{150}\rfloor$. The following construction does.
+It rules out only a remainder-free pointwise use of (CD7), not the
+averaged charge (CD12).
+
+Fix any pre-bit history in the support of the original sampler.
+Choose a balanced $S$ containing all its $2q$ row sources and none
+of its $2q$ column sources. There are enough other groups to fill
+out $S$, since $q\le N/2^{23}$. The circuit below is then fixed;
+the original sampler is not conditioned or changed in the target
+claim. At this particular history, all $k=q$ gadgets are honored.
+Set
+\[
+ d=h+1,\quad D=\{0,\ldots,d-1\},\quad
+ W=\{d,\ldots,k-1\}.
+\]
+One has $d+1\le k_0$, $d<r=\lfloor k/256\rfloor$, and
+$k-d\ge r$. Indeed $k_0\ge256$,
+$d\le k_0/2^{16}+1$, and
+$r\ge k/512\ge N/2^{33}>k_0$.
+
+On one representative source of each row bit, let
+$P_{\rm even,S}$ select the even-parity choices of its two
+designated arcs, and multiply by the full group sums on all
+other groups of $S$. Define $P_{\rm even,B}$ similarly on one
+representative source for each column bit in $W$, with full group
+sums on the remaining groups of $B=\overline S$.
+Both polynomials are coefficientwise at most the respective full
+group product. They have positive linear-size circuits: starting
+from $E=1,O=0$, a designated pair $(z,w)$ updates the two states to
+$(Ez+Ow,Oz+Ew)$. The final even state is multiplied by the
+remaining group sums.
+
+For $i\in D$, let $y_i$ be the bit-one nonroot arc at its
+representative column source, and put $C_D=\prod_{i\in D}y_i$.
+Define
+\[
+ f_S=F_S+P_{\rm even,S},\quad
+ V=F_B+P_{\rm even,B},\quad
+ A=\tfrac12 f_S(1+\tfrac12 C_D),\qquad Q=AV.             \tag{CD18}
+\]
+Again build $V$ before $A$. This is an $O(M_n+q+d)$-gate
+original DAG with exactly one nonzero actual cut, whose context
+is $V$. It has full-group coverage and $Q\le3F$ on the entire
+Boolean cube. Precisely the branch $\tfrac14f_SC_DV$ is heavy:
+its $d=h+1$ optional nonroot source groups lie outside $S$;
+the other branch and $V$ have no optional group in the opposite side.
+
+Write $\chi_U$ for parity on all row bits, $\chi_W$ for parity
+on the indicated column bits, and
+$c(v)=1_{\{v_i=1\ (i\in D)\}}$. At the chosen history,
+\[
+ f(u)=\tfrac32+\tfrac12\chi_U(u),\quad
+ g(v)=\tfrac32+\tfrac12\chi_W(v),\quad
+ a=\tfrac9{16}2^{-d}>2^{-(d+1)}\ge2^{-k_0}.
+\]
+The original completion is $R=\tfrac34fg\le3$, so
+$E'=\tfrac14fg(1-c)$ without clipping.
+The low column degrees of $1-c$ are at most $d<r$; multiplying
+by $\chi_W$ gives only degrees $k-d,\ldots,k$.
+Consequently
+\[
+ X^{\rm hi}(u,v)=\frac{\chi_U(u)\chi_W(v)(1-c(v))}{16},
+ \qquad
+ \|X^{\rm hi}\|_{\op}^2
+          =\frac{m^2(1-2^{-d})}{256}.                    \tag{CD19}
+\]
+This follows directly from the two rank-one factor norms.
+
+Take the all-zero row and column strings, flip one row bit and
+one column bit in $W$, and flip no others. All $y_i$ are absent
+from their common union, so $D_Q(U^*)=0$. Nevertheless
+$\delta E'=1/4$. Set $\lambda_\ell=1-\rho^\ell$. At these strings
+the column inverse of $\chi_W(1-c)$ has values $J$ and $-J$, where
+\[
+ \begin{split}
+ J&=\frac1{\lambda_{k-d}}
+   -2^{-d}\sum_{t=0}^d
+        \frac{(-1)^t\binom dt}{\lambda_{k-d+t}}\\
+  &=\sum_{n=0}^{\infty}\rho^{n(k-d)}
+                    \bigl[1-2^{-d}(1-\rho^n)^d\bigr]\ge1 .
+ \end{split}
+\]
+The geometric series converge since $k-d>0$ and $0\le\rho<1$.
+Every summand is nonnegative, and the term $n=0$ is one.
+Thus
+$\delta(BX^{\rm hi}B)\delta E'=J/(16\lambda_k)>0$.
+Use the admissible, conditionally fixed high-frequency test matrix
+$Y=m^{-2}X^{\rm hi}$. Since $a\le9/32$,
+\[
+ \begin{split}
+ \frac{\sqrt m}{2}\delta(BYB)\delta E'-a\|Y\|_{\op}^2
+ &=\frac{J}{32\lambda_km^{3/2}}
+             -\frac{a(1-2^{-d})}{256m^2}\\
+ &\ge\frac{247}{8192m^2}>0,\qquad D_Q(U^*)=0.            \tag{CD20}
+ \end{split}
+\]
+This event has positive probability in the full original law
+and in the sparse flip law; no lower bound on that probability
+is asserted.
+For every finite $C$, it refutes the proposed pointwise estimate
+that the sum of these regularized signed integrands is at most
+$C D_Q(U^*)$ with no remainder.
+
+It does not refute the actual mission. At \emph{every} history,
+$f_S$ depends only on the row side, while $V$ and $C_D$ depend
+only on the column side after the unhonored bits are fixed.
+The unclipped completion is always at most three, and
+$0\le E'\le1$ has rank at most one. Hence this entire original-sampler
+family satisfies
+$\mathfrak N\le2^{-k_0/4}$ on the strong-good/thick event.
+An allowed exponential remainder absorbs it.
+The remainder-free pointwise route is retired for (CD20);
+the averaged signed route remains open.
+
+\paragraph{Exact replay and its scope.}
+\path{centered_dual_check.py} binds (CD15)--(CD17) to the original
+rational DAG, its actual cut, exact coefficient-preserving projection,
+and heavy split. It checks full-cube domination through all 64 inputs
+on the three distinguished groups and exact cancellation of the
+other group factors, rather than claiming individual enumeration of
+the entire physical cube.
+It checks all 4096 three-gadget base-string/flip-mask outcomes,
+the original and tilted corner marginals for every honored subset,
+the common union normalization and defect budget, and sparse-noise
+polarization with two finite Walsh cutoffs. Two further finite
+Walsh transforms check the high-frequency formulas and inverse
+in (CD19)--(CD20); they do not simulate an admissible large graph.
+The general proofs above, not these finite cases, supply the
+all-size statements.
+
+The new bounded Jacobian operation
+\texttt{matrix.symmetric.rational\_spectrum\_claim.check} checks
+the complete spectrum of the circuit-bound centered Gram matrix.
+Its inspected contract, exact payload and full typed result are in
+the dedicated \path{centered-spectrum-*.json} files. The replay
+independently checks every shifted nullity and binds the returned
+matrix and claims to the circuit. No numerical eigenvalue or timeout
+is used as evidence.
+
+\paragraph{Remaining obligation.}
+The construction now has original marginals, a bounded normalization,
+one whole-output A4/A7 budget, and a bounded high-frequency inverse.
+What remains is an inequality controlling the supremum (CD12) by
+that budget with its actual heavy denominator and one exponentially
+small original-size remainder. The global-to-local completion
+comparison and the signed factor $\sqrt m\,\delta(BYB)$ are
+uncontrolled. No summation of absolute component budgets, efficient
+semantic extraction, nonnegative-coordinate Gram restriction, or
+entrywise monotonicity of nuclear norm is substituted for this step.
+It remains a mathematical gap, not an external-tool blocker.
+\end{document}
