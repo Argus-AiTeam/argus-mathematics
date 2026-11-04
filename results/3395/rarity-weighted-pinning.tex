@@ -1,0 +1,374 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\Pp}{\mathcal P}
+\newcommand{\B}{\mathcal B}
+\title{Rarity-weighted pinning: exact profiles versus coefficient-sensitive splitting}
+\author{Campaign 3395: Engineer continuation}
+\date{November 4, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Status.}
+BP2 and the unrestricted fixed-factor lower bound remain unproved.
+This note constructs a general, coefficient-preserving pin expansion,
+but does not prove its required weighted bound. It identifies an
+all-size failure of grouping by \emph{exact} compatibility neighborhoods:
+arbitrarily small positive coefficients can make that particular
+expansion's rarity-weighted budget exponential.
+Splitting the offending addition first repairs the same family, with
+one whole-output defect charge and the original sampler.
+Thus neither existence of a good weighted expansion nor BP2 is refuted.
+The general coefficient-sensitive charge is still missing.
+Reviewed V14 is unchanged; no novelty or publication qualification is claimed.
+
+\paragraph{Reused facts and scope.}
+We use the reviewed actual compulsory cut, Boolean lift, A4/A7,
+J2 and J8--J11, and BP1--BP16, with their original meanings.
+The independent Reviewer judgments and the Jukna v1 attribution already
+in the ledger are preserved; no external result is newly assumed.
+Here $N=n-3$, $L=2^{23}$, $\rho=4/L=2^{-21}$,
+$h=\lfloor N/2^{150}\rfloor$, $k=\lfloor h/2\rfloor+1$,
+and $\ell=\max(k-2,0)$.
+The maximum of a polynomial below is over the \emph{whole} one-hot
+assignment domain, as in the global coefficient maxima used in BP9/BP15,
+not an assertion that every maximizing assignment belongs to $\Delta$.
+
+\section{An exact expansion, without a quantitative claim}
+For fixed-before-sampling nonnegative full-group polynomials $P_i$,
+each pinned at a base-source set $I_i$, write
+\[
+ A_i=\max_\nu P_i(X_\nu),\qquad
+ {\cal R}_\rho(P)=\sum_i A_i\rho^{|I_i|},\qquad
+ Z=\Pp Q_{\rm heavy}-\sum_iP_i.                         \tag{WP1}
+\]
+BP8 gives $|\Lambda_\Delta(P_i)|\le A_i\rho^{|I_i|}$.
+The desired quantitative assertion is therefore
+${\cal R}_\rho(P)-\Lambda_\Delta(Z)\le
+C b_Q^\alpha+K M_n^d(s+1)^e e^{-cN}$.
+There is no polynomial bound on the number of pieces in this assertion.
+
+\begin{proposition}
+Every actual J2 cut admits a finite, sampler-independent nonnegative
+full-group expansion
+\[
+                    \Pp Q_{\rm heavy}=\sum_iP_i,       \tag{WP2}
+\]
+with fixed base-source pins $|I_i|\ge\ell$.
+All formal coefficients, including multiplicities from sharing and
+repeated powers, are retained. The construction below groups rows by
+their exact compatibility neighborhoods and unions their optional pins.
+It asserts neither a small circuit for a component nor a bound on (WP1).
+\end{proposition}
+\begin{proof}
+Fix one actual product $A_jV_j$, retaining its original partition
+$S_j=G(A_j)$. Use its exact formal monomials, not parse-tree occurrences.
+Let $A^+$ consist of rows with at least $k$ optional nonroot sources
+outside $S_j$, and let $A^-=A_j-A^+$. Define $V^+$ on $S_j$.
+A heavy pair belongs to exactly one of the two branches
+$A^+V_j$ and $A^-V^+$; use the original J2 pair filter in both.
+
+First consider rows in $A^+$ with partners in $V_j$.
+Discard internally incompatible monomials for purposes of projection
+only. For a row $a$, let ${\cal N}(a)$ be the set of internally
+compatible partner monomials whose products with $a$ are compatible.
+Partition the rows with nonempty neighborhoods by equality of
+${\cal N}(a)$. For a class $E$, let $A_E$ be its row subpolynomial
+and $V_E$ its common partner subpolynomial, both with original
+coefficients. Project the J2-heavy pairs of $A_EV_E$ to obtain $P_E$.
+Every compatible heavy pair occurs once, with its product coefficient.
+
+Let $I_E$ be the union of the optional nonroot base-source sets
+of all rows of $E$. Each partner meets every group outside $S_j$.
+Because it is compatible with every row of $E$, it uses the same
+prescribed nonroot variable at each source in this union.
+Conflicting prescriptions would make the neighborhood empty.
+Thus every nonzero $P_E$ is pinned at $I_E$.
+There are at least $k$ optional source groups in each row, and deleting
+the two hubs removes at most two of them, so $|I_E|\ge\ell$.
+Filtering out some pairs cannot remove these pins.
+
+Repeat with rows in $V^+$ and partners in $A^-$.
+Here the compulsory coverage by $A^-$ is at least the original $S_j$,
+which is exactly what the reversed argument needs.
+The two disjoint branches and then the original cut indices give (WP2).
+Repeated occurrences of a source enter a set union once.
+All choices are made from the fixed formal factors, before sampling.
+
+An internally incompatible pair or an incompatible cross pair
+contributes nothing to projection. Its Booleanized coefficient remains
+in $\B(A_jV_j)-\Pp(A_jV_j)$; it is not silently discarded from the
+defect. Summing these coefficients uses A7, or the actual mixed
+contexts of A4, with no ordinary-derivative substitution.
+\end{proof}
+
+Even allowing a signed residual does not make the charge automatic:
+\[
+ {\cal R}_\rho(P)-\Lambda_\Delta(Z)
+ =-\Lambda_\Delta(\Pp Q_{\rm heavy})
+   +\sum_i\bigl(A_i\rho^{|I_i|}+\Lambda_\Delta(P_i)\bigr)
+ \ \ge\ -\Lambda_\Delta(\Pp Q_{\rm heavy}).              \tag{WP3}
+\]
+The last summands are nonnegative by BP8. A useful proof must
+bound the residual independently, not assume a benefit from rewriting.
+
+\section{Small coefficients can destroy exact-profile compression}
+Choose $v$ disjoint pairs of base sources, with controls on a balanced
+side $S$ and probes on its complement. At control $i$ use a root variable
+$r_i$ and an allowed nonroot variable $x_i$; at probe $i$ use a root
+variable $s_i$ and an allowed nonroot variable $z_i$.
+All other outgoing variables remain present in the original problem.
+Put
+\[
+ \begin{split}
+ A_c&=\prod_{i=1}^v(r_i+x_i z_i),&
+ B&=\prod_{i=1}^v(s_i+z_i),&
+ Z_0&=\prod_{i=1}^v z_i,\\
+ F_c&=\prod_{i=1}^v(r_i+x_i),&
+ C_c&=\prod_{i=1}^v\bigl(r_i(s_i+z_i)+x_i z_i\bigr).
+ \end{split}                                                   \tag{WP4}
+\]
+Let $F_*$ be the full product of the other groups, including the hubs.
+Then $P=F_*F_cZ_0$ and $C=F_*C_c$ are coefficient subpolynomials of
+the original $F$. For $H=F$ or the actual $H=R_n$, and
+$0\le\varepsilon\le1/64$, define the formal positive circuit
+\[
+ Q_H=\bigl(H-(1-\varepsilon)P-\varepsilon C\bigr)
+        +F_*A_c\bigl((1-\varepsilon)Z_0+\varepsilon B\bigr).
+                                                               \tag{WP5}
+\]
+The displayed subtraction specifies a nonnegative baseline polynomial;
+it is not a subtraction gate.
+
+\begin{proposition}
+For (WP5), on the entire original Boolean cube,
+\[
+ \Pp Q_H=H,\qquad
+ H\le Q_H\le(1+\varepsilon)H,\qquad
+ b_{Q_H}=\varepsilon(1-2^{-v}).                         \tag{WP6}
+\]
+The easy-target circuit has $O(M_n+v)$ arithmetic gates.
+No polynomial-size baseline is asserted for $H=R_n$.
+There is an original gate order with exactly the heavy polynomial
+\[
+ W=F_*A_{>h}\bigl((1-\varepsilon)Z_0+\varepsilon B\bigr),
+ \quad
+ A_{>h}=\sum_{|I|>h}
+       \prod_{i\notin I}r_i\prod_{i\in I}x_i z_i.        \tag{WP7}
+\]
+\end{proposition}
+\begin{proof}
+The baseline is nonnegative because $H\ge F$ coefficientwise and
+$(1-\varepsilon)P+\varepsilon C\le F$ coefficientwise.
+Booleanization gives $A_cZ_0=F_cZ_0$, while
+$\Pp(F_*A_cB)=C$. Therefore
+\[
+ Q_H(X)=H(X)+\varepsilon F_*(X)(A_c(X)B(X)-C_c(X)).
+                                                               \tag{WP8}
+\]
+This also identifies the entire output defect.
+
+If one of the selected two-label groups is empty, the parenthesized
+difference is zero. Otherwise set
+\[
+ p_i=\frac{r_i+x_i z_i}{r_i+x_i},\qquad
+ q_i=\frac{r_i(s_i+z_i)+x_i z_i}
+           {(r_i+x_i)(s_i+z_i)} .
+ \]
+On Boolean inputs $0\le p_i\le1$ and $q_i\ge p_i/2$.
+Consequently
+\[
+ 0\le\frac{A_cB-C_c}{F_cB}
+       =\prod_i p_i-\prod_i q_i\le1-2^{-v}.
+ \]
+Adding other available outgoing variables only increases the full $F$;
+the numerator still uses just the selected variables.
+Equality holds when every $r_i=0$, $x_i=s_i=z_i=1$,
+all other labels at the selected sources are off, and each other
+group has one available label. This proves the exact value of $b_Q$.
+Since $H\ge F$, (WP6) follows, including every group-zero face.
+
+For $H=F$, write the baseline as
+$(1-\varepsilon)(F-P)+\varepsilon(F-C)$.
+Both complements have positive first-failing-block recurrences.
+For $F-P$, a local block excludes the control/probe patterns
+$(r_i,z_i)$ and $(x_i,z_i)$; for $F-C$ it excludes those two and
+$(r_i,s_i)$. A local complement is a sum of the remaining positive
+terms. With extra labels, partition them into the selected labels
+and their positive sum, so this still costs $O(M_n+v)$, not a
+quadratic enumeration of the outgoing domains.
+Shared prefix/suffix products implement the first-failure sum.
+For $H=R_n$, a formal monomial-sum baseline suffices for existence
+but can be exponential.
+
+Compute the baseline, the complementary rest factors and
+$V=F_{*,\overline S}((1-\varepsilon)Z_0+\varepsilon B)$ first,
+then $A=F_{*,S}A_c$. Its compulsory set is exactly $S$ and it is
+the last balanced gate; its divided context is exactly $V$.
+The subsequent nonzero cuts come from the set-multilinear baseline
+and have no optional groups. In this first cut there are no optional
+groups on the $V$ side, while an $A$ row indexed by $I$ has exactly
+$|I|$ optional nonroot probes. This proves (WP7).
+Arbitrary positive integer powers of the selected variables in
+$A_c,Z_0$ leave these Boolean and projection identities unchanged.
+Shared computations of those powers remain actual shared gates.
+\end{proof}
+
+\begin{proposition}
+Suppose $0<\varepsilon\le1/64$ and $0\le h\le v-2$.
+The exact-neighborhood expansion in (WP2), using even its
+\emph{maximal} common base-nonroot pin sets, has cost
+\[
+ {\cal R}_{\rm profile}
+       = B_{v,h}(\rho):=\sum_{j=h+1}^v\binom vj\rho^{2j}.          \tag{WP9}
+\]
+At $\varepsilon=0$ it instead coalesces to one component of cost
+$\rho^v$. Thus the positive-$\varepsilon$ cost is independent of
+how small the nonzero perturbation coefficient is.
+\end{proposition}
+\begin{proof}
+A row is indexed by the control word $I$. Its partner neighborhood
+contains the $Z_0$ branch and precisely the $B$ words whose nonroot
+probe set contains $I$. These neighborhoods are distinct for distinct
+$I$ as soon as $\varepsilon>0$.
+The resulting projected polynomial is
+\[
+ \left(\prod_{i\notin I}r_i\prod_{i\in I}x_i\right)F_*
+ \left((1-\varepsilon)Z_0+
+        \varepsilon\prod_{i\in I}z_i
+                    \prod_{i\notin I}(s_i+z_i)\right).            \tag{WP10}
+\]
+Its one-hot maximum is one, attained when all probes use $z_i$.
+Its common nonroot base pins are exactly the controls and probes
+indexed by $I$, hence $2|I|$ pins, not just the optional $|I|$.
+The other controls are roots; every remaining probe can be a root
+in its positive perturbation branch. Other base groups have their
+full root-containing factors. The hubs are excluded.
+Summing (WP10) for $|I|>h$ proves (WP9).
+If $\varepsilon=0$, all nonempty row neighborhoods coincide;
+their union pins all probes and the rows merge. Since $h\le v-2$,
+no control is a common nonroot pin of the merged component.
+\end{proof}
+
+Take $v=\lfloor N/(8L)\rfloor$ and admissible $N\ge2^{153}$.
+These sources fit on the two balanced sides, and $v\ge N/(16L)$.
+Write $u=\rho^2=2^{-42}$ and $p=u/(1+u)\ge2^{-43}$.
+The binomial expansion and the elementary Bernoulli lower-tail
+bound used in the reviewed sampler proof give
+\[
+ B_{v,h}(\rho)
+   =(1+u)^v\Pr\{\operatorname{Bin}(v,p)>h\}
+   \ge\tfrac12 e^{N/2^{70}}.                           \tag{WP11}
+\]
+Indeed $vp\ge N/2^{70}$, $h\le vp/2$, and the discarded tail is
+at most $e^{-vp/8}<1/2$.
+Also $\log(1+u)\ge u/2$ and $v u/2\ge N/2^{70}$.
+Choosing $\varepsilon_N=1/(64N^2)$ gives polynomial-size $Q_F$
+and $b_Q\to0$, while (WP11) grows exponentially.
+This refutes the \emph{generic exact-profile budget shortcut}.
+It does not refute an actual-target polynomial-in-original-size
+bound: the $R_n$ baseline has no small-size guarantee.
+
+\section{The addition-aware expansion repairs this same family}
+\begin{proposition}
+Split the actual addition in $V$ before taking compatibility profiles.
+For either choice of $H$ in (WP5), set
+\[
+ P_0=(1-\varepsilon)\Pp(F_*A_{>h}Z_0),\qquad
+ Z=\varepsilon\Pp(F_*A_{>h}B).                         \tag{WP12}
+\]
+Then $\Pp W=P_0+Z$, $P_0$ is pinned at the $v$ probe sources,
+and, for the unchanged original sampler,
+\[
+ {\cal R}_\rho(P_0)-\Lambda_\Delta(Z)
+ \le(1-\varepsilon)\rho^v+\varepsilon
+ \le 2b_Q+\rho^v
+ \le 2b_Q+e^{-N/2^{24}}.                               \tag{WP13}
+\]
+The last inequality uses the all-size parameters of (WP11).
+\end{proposition}
+\begin{proof}
+The identity follows by distributivity at the specified original
+addition, with its original coefficients.
+The first maximum is at most $1-\varepsilon$, and on every one-hot
+assignment $0\le Z\le\varepsilon$: at most one control word survives,
+and $A_{>h}\le A_c\le F_c$ on Boolean inputs.
+Apply BP8 to the fixed probe set and use
+$-\Lambda_\Delta(Z)\le\mathbb E_\Delta Z\le\varepsilon$.
+Equation (WP6) gives $\varepsilon\le2b_Q$ for $v\ge1$.
+Finally $21\log2\,v\ge(21/2)N/2^{27}\ge N/2^{24}$.
+There is no gate-count multiplier on $b_Q$, no relabeling of a
+conditional law as $\Delta$, and no independent multiplication of
+rarities at overlapping pins.
+\end{proof}
+
+The weighted obstruction therefore has an explicit good expansion.
+It kills only exact-profile compression as a generic quantitative
+argument, not the live rarity-weighted strategy.
+Unlike BP15, it concerns a \emph{weighted} cost, and its failure is
+caused by coefficients arbitrarily close to zero rather than merely
+an exponential component count.
+
+\section{Exact diagnostic and the still-missing general estimate}
+The new source \path{rarity_weighted_pinning_check.py} constructs
+(WP5) for $v=4,h=1,\varepsilon=1/128$, with shared squared probe
+variables and higher powers at controls.
+It checks the actual original cut, exact A4/A7 coefficient accounting,
+the profile expansion, and the addition-aware identity.
+It also checks the $65536$ selected-label Boolean boxes, all $256$
+one-hot assignments, the zero-coefficient coalescence, and a second
+strictly positive coefficient. A separate new rational shared product
+has both heavy directions and internally incompatible monomials in
+both factors; its exact projection partition and A4 contexts are checked.
+These are new finite diagnostics,
+not an admissible-large-graph sampler enumeration.
+
+There is a small exact LP for the displayed two-branch allocation.
+Let $a=\rho^v$ and $B=B_{v,h}(\rho)$.
+Retain amount $w$ of the common probe-pinned component and amount
+$u$ of each perturbation-row component; pay a uniform residual cap $t$.
+The constraints are
+\[
+ 0\le\varepsilon-u\le t,\qquad
+ 0\le1-w-u\le t,\qquad w,u,t\ge0,
+ \quad\min(aw+Bu+t).                                   \tag{WP14}
+\]
+They follow from the actual one-hot values $\varepsilon$ and $1$.
+The optimum \emph{within this stated allocation family} is
+\[
+                (1-\varepsilon)a+\varepsilon\min(B,1). \tag{WP15}
+\]
+For fixed $u\in[0,\varepsilon]$, minimizing over $w,t$ sets
+$w=1-\varepsilon$, $t=\varepsilon-u$, since $0<a<1$.
+The remaining objective is
+$(1-\varepsilon)a+\varepsilon+u(B-1)$, proving (WP15).
+This is not a global optimization over all possible rewrites.
+The first seven-variable, four-equation request was rejected before
+optimization by the adapter's simplex-basis admission bound.
+Its exact payload and structured rejection are retained; they have
+no mathematical significance.
+The proved elimination above reduces the LP to
+$u+z=\varepsilon$, $u,z\ge0$, with objective $(B-1)u$ and the
+separate constant offset $(1-\varepsilon)a+\varepsilon$.
+The inspected Jacobian rational-LP contract supplies one bounded
+typed computation for this reduction at the actual $\rho=2^{-21}$.
+Dedicated JSON files preserve both requests and responses, version,
+protocol and error status. The new checker independently verifies
+primal/dual witnesses for both the original and reduced problems,
+retains the objective offset, and binds them to the circuit's pin table.
+
+\paragraph{Mathematical blocker and changed approach.}
+In a general actual circuit, no proof identifies addition branches
+whose retained parts have small rarity cost and whose remaining
+one-hot signed contribution is controlled by one normalized output
+defect budget. A4 and A7 count incompatible coefficients exactly;
+they do not bound the compatible portion of a discarded branch.
+For (WP5), (WP6) supplies that comparison explicitly. It has not
+been extended to arbitrary real coefficients, shared contexts,
+both optional directions, and unrestricted degree.
+Retire only the generic exact-profile-budget route with (WP9)--(WP11).
+Continue with coefficient-sensitive splitting at actual additions
+and mixed product contexts, not support-only neighborhood equality.
+Neither (WP2), the family-specific (WP13), nor the finite LP proves
+BP2, supplies a fixed $\kappa_0>1$, or improves V14.
+\end{document}

@@ -1,0 +1,453 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pp}{\mathcal P}
+\newcommand{\B}{\mathcal B}
+\title{A square-root local budget and code obstructions to conditional signed testing}
+\author{Campaign 3395: Engineer continuation}
+\date{November 4, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Status and scope.}
+The unrestricted fixed-factor lower bound is not proved.
+The proposed matrix-general signed test is false, even with its
+full-mean tolerance and exponential remainder retained.
+After finding that obstruction, we also test a stronger statistic:
+the coherent sparse-union defect of an actual balanced cut.
+An explicit polynomial-size paired-group circuit defeats a
+\emph{conditional-history} version of that stronger test.
+Its fixed-source embedding is exponentially rare under the original
+outer sampler, so it does not refute the actual-target signed estimate,
+BP2, or the unrestricted lower bound.
+
+The positive results are the square-root local budget and an explicit
+conditional transfer to the target. Neither supplies the missing
+global signed inequality. Reviewed V14 remains the strongest achieved
+approximation theorem, at a factor tending to one.
+No originality or publishable significance is certified.
+
+We reuse reviewed K1--K2, CD5--CD7, J11, BP1--BP3 and BP8,
+and the WP results without unchanged replay.
+The code facts and all new inequalities below are proved directly.
+In particular, no communication-protocol or external stability theorem
+is imported. The elementary binary code construction is not claimed new.
+
+\section{The local budget is valid}
+For a nonnegative two-square matrix $Z$ put
+\[
+ \psi(Z)=
+ \frac{(\sqrt{Z_{00}Z_{11}}-\sqrt{Z_{01}Z_{10}})^2}
+      {\sum_{a,b}Z_{ab}},\qquad \psi(0)=0.                 \tag{ST1}
+\]
+Let $d_p(M)$ average this statistic at
+$(u,v),(u,v\oplus b),(u\oplus a,v),(u\oplus a,v\oplus b)$,
+where $u,v$ are independent uniform $k$-bit strings and $a,b$
+are independent masks with Bernoulli-$p$ coordinates.
+
+\begin{proposition}
+If $R\ge Z$ entrywise is nonnegative and has rank at most one, then
+\[
+ \psi(Z)\le\sum_{a,b}(R_{ab}-Z_{ab}).
+\]
+For the actual cuts and CD5's unchanged law $\mu$, this implies
+\[
+ \sum_j\E_\mu\psi(Z_j)\le e^3b_Q,\qquad
+ \sum_j\E_{\eta,z}\operatorname{mean}(M_j)
+       =\E_\Delta Q\le3.                                 \tag{ST2}
+\]
+The means here are the \emph{full-cut} means, not the heavy means.
+\end{proposition}
+\begin{proof}
+Set $A_{ab}=\sqrt{Z_{ab}}$, $B_{ab}=\sqrt{R_{ab}}$.
+A nonnegative rank-one matrix has nonnegative outer factors;
+taking their square roots shows that $B$ has rank at most one.
+If $s_1\ge s_2$ are the singular values of $A$, then
+\[
+ \psi(Z)=\frac{s_1^2s_2^2}{s_1^2+s_2^2}\le s_2^2.
+\]
+Choose a unit vector $x$ in the kernel of $B$. Then
+$\|A-B\|_{\rm F}^2\ge\|(A-B)x\|^2=\|Ax\|^2\ge s_2^2$.
+Finally
+$(\sqrt r-\sqrt z)^2\le r-z$ for $0\le z\le r$.
+This proves the assertion, including the zero case.
+The determinant identity used here is
+$\det(AA^{\mathsf T})=(ad-bc)^2$ for
+$A=\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)$.
+The preserved bounded Jacobian calculation verifies this exact polynomial.
+
+Use the actual K1 upper completion on each local union $U_j$.
+If both row and column corners are distinct, K2 bounds the four
+completion errors by $D_{Q_j}(U_j)$.
+If either pair repeats, $\psi(Z_j)=0$; no repeated corner error
+is charged twice. Sum over the actual cut and apply CD7.
+For the second assertion, each conditional full-cut mean averages
+back to $\E_\Delta Q_j$ under the same original law.
+Sum $Q_j=Q$ before using $Q(X_\nu)\le3$.
+There is no degree factor or gate-count multiplier on $b_Q$.
+\end{proof}
+
+\section{What a valid signed estimate would imply}
+The proposed, subsequently refuted matrix assertion is
+\[
+ |\E_{u,v}(-1)^{u\cdot v}M(u,v)|
+ \le\frac{\operatorname{mean}(M)}{64}
+          +C d_p(M)+K\|M\|_\infty e^{-ck},               \tag{ST3a}
+\]
+with fixed positive constants, $k\ge256$,
+$k\le q\le2^{111}k$, and $p=1/(2q)$.
+Here and below the dot product in an exponent is over $\mathbb F_2$.
+
+Had (ST3a) held, (ST2), $\|M_j\|_\infty\le3$,
+$k_j\ge k_0=N/2^{134}$ on the original good event, and J11 would give
+\[
+ |\Lambda_\Delta(\Pp Q)|
+ \le\frac3{64}+Ce^3b_Q+3Ks e^{-ck_0}
+                  +3\sqrt{2s}e^{-N/2^{137}}.             \tag{ST3}
+\]
+The same conclusion follows from the actual-sampler alternative
+(ST11) below; that alternative is not refuted here.
+All conditional sign factors from unhonored bits have modulus one.
+Also $q\le N/2^{23}\le2^{111}k_j$, so no sampler parameter is changed.
+
+For an explicit rational upper bound $\overline C\ge C$, set
+\[
+ t=\frac1{6912(\overline C+1)},\qquad \kappa_0=1+t.
+\]
+Then $t<1/64$, $b_Q\le4t$, and $e^3<27$ imply
+$Ce^3b_Q<1/64$. The non-remainder part of (ST3) is less than $1/16$.
+For example, set
+$a=\min(c/2^{135},2^{-137})>0$.
+If $s<e^{aN}$, the remaining terms are at most
+$3(K+2)e^{-aN/2}$, which is at most $3/16$ when
+$N\ge(2/a)\log(16(K+2))$.
+This contradicts BP3's lower bound greater than $7/16$.
+Thus a proved (ST11) with explicit constants would give
+$s\ge e^{aN}$ for all sufficiently large admissible $N$,
+equivalently an exponential bound in $M_n=\Theta(N)$.
+This is a conditional implication, not an achieved factor.
+
+\paragraph{The earlier witnesses do not by themselves refute (ST3a).}
+For rank-one $M$, $\psi$ vanishes and the Hadamard operator bound gives
+$|\E(-1)^{u\cdot v}M|\le2^{-k/2}\sqrt{\E M^2}
+\le2^{-k/2}\|M\|_\infty$.
+For RG9's incidence matrix $M=J/2+B$ with density $1/t$,
+regardless of its bit labeling,
+$|\E(-1)^{u\cdot v}M|\le2^{-k-1}+1/t$.
+For $t\ge256$, $2^k=t^2$, this is smaller than
+$\operatorname{mean}(M)/64$, whose value is at least $1/128$.
+Thus its former heavy-denominator obstruction is not transferred
+to the deliberately different full mean.
+In WP5, the unperturbed Boolean product is rank one across its cut,
+and the perturbation has one-hot magnitude at most $\varepsilon$.
+Its diverging exact-profile cost is not a diverging signed correlation.
+Reviewed WP13 gives the family bound
+$2b_Q+\exp(-N/2^{24})$ under the original sampler.
+This observation is not a proof of (ST3a); it preserves both terms
+that a support-only comparison would lose.
+
+\section{A polynomial-density code defeats the matrix test}
+Let $r\ge3$, $k=2^r-1$, and index the coordinates by the nonzero
+vectors $h_i\in\mathbb F_2^r$. Define
+\[
+ C=\{u:\ \textstyle\sum_i u_i h_i=0\},\qquad
+ \delta=|C|/2^k=1/(k+1).
+\]
+The parity-check map has rank $r$ because its columns include a basis.
+No word of $C$ has weight one or two.
+If $A_w$ counts its weight-$w$ words, deleting one marked coordinate
+from a codeword determines that coordinate uniquely, as the sum of
+the other columns. Hence
+\[
+ w A_w\le {k\choose w-1},\qquad
+ A_w\le k^{w-1}/w!\quad(w\ge3).                          \tag{ST4}
+\]
+
+Put $M(u,v)=1_C(u)1_{\{u\cdot v=0\}}$ and $\mu=\operatorname{mean}(M)$.
+Then
+\[
+ \|M\|_\infty=1,\quad
+ \E(-1)^{u\cdot v}M=\mu
+       =\frac1{2(k+1)}+2^{-k-1}.                         \tag{ST5}
+\]
+Indeed a nonzero row has exactly half its columns positive, and
+the zero row has all columns positive.
+
+For a Bernoulli-$p$ mask, write
+$\rho_p=\Pr(a\in C\setminus\{0\})$.
+Using (ST4), $kp\le1/2$, and the ratio at most $1/8$ between
+successive terms of the exponential series after its cubic term,
+\[
+ \rho_p\le\frac1k\sum_{w\ge3}\frac{(kp)^w}{w!}
+             \le\frac1{48k}\frac1{1-1/8}
+             =\frac1{42k}.                              \tag{ST6}
+\]
+If one local row is outside $C$, it is zero.
+If the two rows coincide, their minor is zero.
+Thus a nonzero local statistic requires $u\in C$ and
+$a\in C\setminus\{0\}$. Every zero-one two-square matrix has
+$\psi\le1/2$: the only nonzero cases are two opposite ones
+with value $1/2$, or three ones with value $1/3$.
+Consequently
+\[
+ d_p(M)\le\tfrac12\delta\rho_p,\qquad
+                    \frac{d_p(M)}{\mu}\le\frac1{42k}.    \tag{ST7}
+\]
+This bound holds for every $q\ge k$, not just the largest allowed $q$.
+
+Fix arbitrary $C_*,K_*,c_*>0$ and take $q=k$.
+Along $k=2^r-1$ with $r\ge9$, choose $k$ so large that
+$C_* /(42k)\le1/64$ and
+$2K_*(k+1)e^{-c_*k}\le1/64$.
+The right side of (ST3a) is then at most $3\mu/64$,
+whereas its left side is $\mu>0$.
+This disproves the asserted existence of any fixed constants.
+The density is polynomial, so the exponential remainder cannot
+absorb this witness. This is an all-size proof, not a finite search miss.
+
+\paragraph{Exact identities used in the replay.}
+Every nonzero dual word has weight $(k+1)/2$. Character orthogonality,
+obtained by summing $(-1)^{\ell\cdot\sum u_i h_i}$ over $\ell$,
+therefore gives
+\[
+ \Pr(a\in C)=
+  \frac{1+k(1-2p)^{(k+1)/2}}{k+1},\quad
+ W_C(t):=\sum_w A_wt^w
+ =\frac{(1+t)^k+k(1+t)^{(k-1)/2}(1-t)^{(k+1)/2}}{k+1}.
+\]
+Subtract $(1-p)^k$ for $\rho_p$.
+For distinct nonzero rows $u,u'=u\oplus a$ in $C$,
+averaging over $v$ and its mask gives the exact local value
+\[
+ \frac{7-3(1-2p)^{|u|}-3(1-2p)^{|u'|}
+                    -(1-2p)^{|a|}}{48}.
+\]
+If one row is zero it is instead
+$(1-(1-2p)^{|a|})/6$.
+For the first formula the two row parities are independent uniform
+bits. The mask parity patterns $10,01,11$ have conditional
+mean statistics $1/6,1/6,1/4$, respectively; $00$ has zero.
+The second formula uses the constantly positive zero row.
+
+\section{Changing the test to coherent actual completions is not enough locally}
+The next construction is stronger in its factor realization, but its
+scope is still a conditional paired-group problem.
+Use two two-choice row groups and two two-choice column groups
+per coordinate. Write their variables as
+$x_{i,0},x_{i,1}$, $x'_{i,0},x'_{i,1}$ and
+$y_{i,0},y_{i,1}$, $y'_{i,0},y'_{i,1}$.
+Set
+\[
+ r_u=\prod_i x_{i,u_i}x'_{i,u_i},\quad
+ c_v=\prod_i y_{i,v_i},\quad d_v=\prod_i y_{i,v_i}y'_{i,v_i},
+\]
+\[
+ P=\sum_{\substack{u,v\in C\\u\cdot v=0}}r_uc_v,\quad
+ V=\sum_{v\in C}d_v,\quad
+ A=\lambda F_S+P,\quad Q=AV,\quad \lambda=(k+1)^{-3}.    \tag{ST8}
+\]
+Here $S$ comprises all $2k$ row groups, exactly half the groups.
+All selected labels can be designated nonroot labels.
+
+\begin{proposition}
+The polynomial $Q$ has a positive arithmetic DAG with at most
+$64k(k+1)^2$ arithmetic gates. It can be ordered so that its sole
+nonzero actual compulsory cut is $A$ with divided context exactly $V$.
+It satisfies $Q\le(1+\lambda)F$ on the entire Boolean cube.
+On the correlated bit corners its full cut matrix is
+\[
+ M(u,v)=\lambda1_C(v)+B(u,v),\qquad
+ B(u,v)=1_C(u)1_C(v)1_{\{u\cdot v=0\}}.
+\]
+For $r\ge3$, with $\mu_B=\E B$,
+\[
+ \mu_B=\frac1{2(k+1)^2}+2^{-k-1},\qquad
+ \E(-1)^{u\cdot v}M=\mu_B+\lambda2^{-k}
+                      \ge\frac{32}{33}\E M.             \tag{ST9}
+\]
+For the actual sparse-union defect, not independently chosen local
+completions,
+\[
+ \E_{\rm bits,masks}D_Q(U)
+   =\mu_B(1+p)^{2k}
+       \left[W_C\!\left(\frac{2p}{1+p}\right)-1\right]
+   \le \frac{2\mu_B}{3k}\quad(q\ge k).                   \tag{ST10}
+\]
+\end{proposition}
+\begin{proof}
+Compute $P$ by a layered positive dynamic program whose state is
+the two $r$-bit syndromes and the accumulated parity.
+At coordinate $i$, the four choices $(u_i,v_i)$ multiply the
+current value by $x_{i,u_i}x'_{i,u_i}y_{i,v_i}$ and update the
+state by $(u_i h_i,v_i h_i,u_iv_i)$.
+Accept the zero state. There are at most $2(k+1)^2$ states per layer.
+Compute $V$ similarly with one syndrome and the paired column atoms.
+Including their atoms, $F_S$, and the final three gates gives the
+stated conservative gate bound. Sharing is counted in this original DAG.
+
+Compute $V$ and $P$ before $A$. The small positive $\lambda F_S$
+branch ensures $G(A)=S$; without it the optional column groups
+would be compulsory and the asserted cut would be wrong.
+$G(V)=\overline S$, and $A$ is the last balanced original gate.
+The final product is full-group, and setting $A$ to zero kills
+the whole output. The actual cut therefore has context $V$.
+
+For Boolean inputs,
+$\sum_u r_u\le F_S$ and
+\[
+ \left(\sum_v c_v\right)V
+ \le\prod_i(y_{i,0}+y_{i,1})
+               (y_{i,0}y'_{i,0}+y_{i,1}y'_{i,1})
+ \le F_{\overline S}.
+\]
+Also $V\le F_{\overline S}$. Thus $PV\le F$ and
+$\lambda F_SV\le\lambda F$, including every zero face.
+The projection is exactly
+$\lambda F_SV+\sum_{u,v\in C,\ u\cdot v=0}r_ud_v$.
+
+For $r\ge3$ the dual code lies in $C$:
+two distinct nonzero linear functionals on $\mathbb F_2^r$
+are simultaneously one on $2^{r-2}$ columns, and a single one
+is one on $2^{r-1}$ columns. These numbers are even.
+Character orthogonality on $C$ gives
+$\sum_{u,v\in C}(-1)^{u\cdot v}=|C||C^\perp|=2^k$,
+proving the formula for $\mu_B$.
+The other signed contribution is $\lambda2^{-k}$.
+Since $\E M=\mu_B+\lambda/(k+1)$ and
+$\lambda/(k+1)\le2\mu_B/(k+1)^2\le\mu_B/32$,
+(ST9) follows.
+
+Fix base strings and masks. Let ${\cal R},{\cal T}$ be the bit
+subcubes spanned coordinatewise by the two rows and columns.
+Let $n$ count the pairs of $B$ in ${\cal R}\times{\cal T}$ and
+$m=|C\cap{\cal T}|$. Directly from the displayed projection,
+\[
+                         D_Q(U)=n(m-1).
+\]
+The low branch has no defect. If $C\cap{\cal T}$ is nonempty,
+$m=L(b):=|C\cap\mathbb F_2^{\operatorname{supp}b}|$;
+otherwise $n=0$. Hence $D_Q(U)=n(L(b)-1)$ always.
+For fixed masks, averaging their base strings gives
+$\E n=2^{|a|+|b|}\mu_B$.
+Furthermore
+\[
+ L(b)-1=\sum_{w\in C\setminus\{0\}}
+                 1_{\{\operatorname{supp}w\subseteq\operatorname{supp}b\}},
+\]
+and
+$\E 2^{|b|}1_{\{\operatorname{supp}w\subseteq\operatorname{supp}b\}}
+=(2p)^{|w|}(1+p)^{k-|w|}$.
+This proves the equality in (ST10).
+Here $k\,2p/(1+p)\le1$ and (ST4) give
+$W_C(2p/(1+p))-1\le(1/k)\sum_{w\ge3}1/w!\le2/(9k)$.
+The last bound uses the successive ratio at most $1/4$.
+Finally $(1+p)^{2k}\le e<3$, proving the inequality.
+\end{proof}
+
+Thus even replacing $d_p$ by the actual conditional raw defect
+does not yield a dimension-free version of (ST3a) for all these
+full-group $Q\le3F$. The mean is polynomially small,
+the relative defect tends to zero, and the original size is polynomial
+in $k$. A polynomial-in-size exponential remainder still tends to zero
+relative to the mean. This statement does not retain the actual
+$R_n$ lower approximation promise or average over the original
+pre-bit law, and is not asserted to refute a theorem that does.
+
+\section{The original outer law removes this particular obstruction}
+Embed the selected variables into any fixed original history with
+these gadgets, and multiply by the other full-group factors.
+Choose a balanced $S$ containing the selected row sources and
+excluding the selected column sources. Remaining source groups can
+fill the balanced sides. The $V$ factor requires all $2k$ specified
+base column sources to be nonroot, independently of its codeword.
+The one-hot bound is still $Q\le1+\lambda$.
+Reviewed BP8 therefore gives directly
+\[
+       \E_\Delta Q\le(1+\lambda)(4/L)^{2k}.
+\]
+The bound needs neither a pin-cover expansion nor a count of codewords.
+For $k$ proportional to $N$ it is exponentially small.
+The high correlation in (ST9) was at a designated conditional
+history, not under this full law.
+
+One can preserve the complete actual-target promise formally:
+put $P_0=\Pp Q$ (including the other full-group factors), and
+$Q_H=H-\varepsilon P_0+\varepsilon Q$ for $H=F$ or $H=R_n$.
+For $0<\varepsilon\le1/(64(1+\lambda))$ the baseline has nonnegative
+coefficients, because $P_0\le(1+\lambda)F$ coefficientwise.
+Then $\Pp Q_H=H$, $H\le Q_H\le(1+\varepsilon b_Q)H$,
+and $b_{Q_H}=\varepsilon b_Q$.
+This is a positive formal baseline, not a subtraction gate.
+No polynomial-size representation of the $R_n$ baseline is supplied.
+The added cut is still suppressed by the fixed nonroot-source event.
+Consequently this lift also supplies no counterexample to BP2.
+
+\paragraph{The changed, still unresolved approach.}
+Retain the actual factors and use the full original outer law,
+not a per-matrix or per-history theorem. Write
+\[
+ \begin{split}
+ {\cal S}(Q)&=\sum_j\E_{\eta,z}1_{{\cal G}_j}
+             |\E_{u,v}(-1)^{u\cdot v}M_j(u,v)|,\\
+ {\cal D}_{\rm loc}(Q)&=\sum_j\E_\mu D_{Q_j}(U_j)\le e^3b_Q.
+ \end{split}
+\]
+A sufficient remaining assertion, specifically for the actual
+BP1 approximators, is
+\[
+ {\cal S}(Q)\le
+ \frac1{64}\sum_j\E_{\eta,z}1_{{\cal G}_j}\operatorname{mean}(M_j)
+       +C{\cal D}_{\rm loc}(Q)+3Ks e^{-ck_0}.            \tag{ST11}
+\]
+The conditional obstruction explains why the outer averaging cannot
+be dropped even after coherent completion information is restored.
+The source-rarity argument just proved handles this fixed-source
+family only. It does not bound arbitrary overlapping optional
+supports or their coefficient-weighted actual contexts.
+No argument here establishes (ST11), and none excludes it.
+This is the remaining proof-layer gap, not an unavailable tool.
+
+\paragraph{Exact replay and its limits.}
+\path{signed_test_check.py} checks the preserved typed Gram output,
+binary minor values, code weight counts, exact mask-return formulas,
+and the local statistic by independent complete enumeration at $k=7$.
+It also checks an actual positive shared DAG at $k=3$, its compulsory
+cut, formal projection, full-cube maximum by a proved row-pattern
+reduction, and every conditional base/mask outcome with the original
+corner marginals. The $k=3$ diagnostic uses the same construction but
+does not invoke the $r\ge3$ dual-containment formula.
+It has 172 original arithmetic gates, formal degree 15, one nonzero
+actual cut, mean $13/256$, signed correlation $25/512$, and
+average raw defect $343/124416$ at $p=1/6$.
+Its full-cube defect maximum is exactly $1/8$, not a vanishing
+whole-output defect inferred from its small local expectation.
+
+For completeness, the full-cube reduction also permits different
+choice sets $Y_i,Y'_i$ in the two column copies.
+Let $n_u(Y)$ count the codewords allowed by $Y$ and orthogonal to $u$,
+and let $m(Y\cap Y')$ count all codewords allowed by both copies.
+The defect on an arbitrary row box is
+\[
+ \sum_{u\in C} r_u(X)
+ \left[n_u(Y)m(Y\cap Y')-n_u(Y\cap Y')\right].
+\]
+Every bracket is nonnegative, and $\sum_u r_u(X)\le F_S(X)$.
+The normalized maximum is therefore achieved by a fixed code row
+and some column box. The replay covers all $2\cdot4^6=8192$
+such cases at $k=3$, including zero faces.
+The value $1/8$ is attained at row zero with every first column
+copy allowing both labels and every second copy fixed at zero.
+This proves that the reduced enumeration certifies the entire cube,
+not only its paired bit corners.
+
+Closed-form rational calculations also cover $k=511$, within the
+matrix conjecture's dimension range; no enormous matrix is enumerated.
+The small circuits are not simulations of the admissible large-$N$
+graph family. The all-size conclusions follow from the proofs above,
+not from promoting those finite diagnostics to general theorems.
+
+Only the matrix-general testing route is retired.
+The replacement (ST11), BP2, and the fixed-factor campaign remain open,
+and all new mathematical judgments require Host-invoked independent review.
+\end{document}

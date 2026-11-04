@@ -136,8 +136,14 @@ composition lemma inductively replaces every restriction by a carrier
 representative, without changing the boundary degrees or discarding any
 positive routing entry. All lower-terminal feedback is unrestricted.
 At the root it supplies the forbidden empty-boundary closed unit marker.
-This contradiction proves the conditional statement. Establishing a
-finite carrier satisfying these hypotheses is still an open obligation.
+This contradiction proves the conditional statement. A finite carrier
+satisfying these hypotheses now has complete exact evidence in
+`profile_certificate/runs/batch-feedback2-full/exact-result.json`.
+All 809003 construction rows, 1879078 unary operations and 25209843635
+required relative orders pass, with no uncovered output or accepting
+marker. `theorem.md` states the resulting all-orders deduction and
+reproduction command. Independent Host correctness and publication
+review remain pending; this does not change the conditional lemma's scope.
 
 ## Exact finite certificate semantics
 

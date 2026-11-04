@@ -224,6 +224,30 @@ or compatible multicolor descent is still missing, and all reconstruction
 above remains conditional. The stronger new lemmas await independent review;
 the independently certified full-packing scope is unchanged.
 
+## Rank-four continuation
+
+The Host accepted the native h<=3 theorem in round twelve.
+`native_rank_four.md` now submits its computer-assisted extension to
+h<=4. Complete exact four-variable classification leaves two
+three-marked and four four-marked models. Original unit-shore
+signatures, the threshold-two internal-footprint bound and actual
+direct anchors exclude them, including the possible degree-three
+non-tight terminal. Original tight-shore reconstruction is supplied
+for this rank-bounded theorem.
+
+If accepted, every bad/multiple-B reservation at a positive global
+minimum must have h>=5, strengthening the reviewed h>=4 obstruction.
+The independent anchor-incidence argument in `six_terminal_packing.md`
+gives h<=|S|+|K|-2. Together these yield a submitted integral-capacity,
+all-q packing theorem when the condensation has at most six sources
+and sinks in total; that note separately justifies q=2 and closure
+of the bounded-terminal class. Williams's earlier four-s-path theorem
+is recorded as essential prior art, not ignored in the novelty claim.
+Neither arbitrary larger-rank exclusion nor compatible multicolor
+descent is established. The full-color assertion and unrestricted
+reconstruction above remain unproved; independent correctness,
+originality and publication-significance review is still required.
+
 ## Finite marked-pattern test
 
 `full_color.py` encodes all original unit assignments on the saved
@@ -331,11 +355,24 @@ original cut lower bounds or appeal to one-color integrality.
 
 ## Exact remaining gap
 
-The new conditional reconstruction and all-color bookkeeping do not
-increase the strongest reviewed unconditional packing scope, the
-tight-exceptional-cut subcase. A theorem supplying the **coupled**
-endpoint/permutation selection for arbitrary-size q>=3 normal forms is
-still missing. There is no proof that positive b_min is impossible,
-no original all-unit counterexample, and no verified publication-level
-novelty or significance. The full-color route remains open rather than
-being retired because a bounded finite test succeeded.
+Round eleven accepted prescribed actual-B singleton selection and
+the necessary three-component Q6 quotient, but not its native
+exclusion. The new working `native_rank_three.md` proves paired
+repair when the original ordinary reserved-two-cut graph has h<=3.
+Its actual tight-shore component identity h=h_L+h_R-1 reduces a
+smallest auxiliary failure to terminal paths. An analytic original
+shore-mask argument excludes their Q6 configuration, independently
+corroborated by all 978 relaxed path signatures. Reverse tight
+gluing reconstructs that original pair without losing passive
+topology, contacts or unit labels. This proof awaits independent
+Host review; the known abstract Q6 model is not claimed new.
+
+The resulting positive-global-minimum obstruction is **h>=4 for
+every bad/multiple-B reservation**, not nonexistence of a positive
+minimum. No argument excludes the larger native non-polar systems
+or supplies a compatible actual multicolor bypass. There is no
+proved reduction of those systems to Q6, and identifying arbitrary
+two-cut components is not a graph-minor operation. The unrestricted
+zero-bad-color theorem and full-q reverse reconstruction remain
+unproved, with no original all-unit counterexample or verified
+publication-level novelty and significance. The route remains open.

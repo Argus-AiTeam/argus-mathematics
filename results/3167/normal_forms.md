@@ -1,7 +1,11 @@
 # Proper-adhesion join normal form
 
-This is an auxiliary reduction, not a treewidth-five exclusion. Its finite
-closure obligation is still open. In particular it does not freeze the
+This is an auxiliary reduction, not by itself a treewidth-five exclusion.
+The stronger raw-support closure criterion below remains an alternative;
+the completion-profile instance in `hamilton_liveness.md` now has complete
+finite closure evidence, combined with this reduction in `theorem.md`.
+Independent Host correctness and publication review remain pending.
+In particular this reduction does not freeze the
 five-terminal carrier, discard closed entries, or replace treewidth by
 pathwidth. No external theorem is needed for the argument below.
 

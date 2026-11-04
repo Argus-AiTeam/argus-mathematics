@@ -132,13 +132,15 @@ Argus 所有数学战役均以**单守护进程分级工作流**（`Planner -> E
 ### 5. [`#1243`](results/1243/) — 3×3 平方数幻方：Bremner 八次 K3 曲面亏格 161 覆盖的有理点无条件完全分类与映射刚性定理（[论文 PDF](results/1243/ARGUS_RESULT_1243_TECHNICAL_REPORT.pdf)）
 * **成果**：在不依赖 GRH 与 $\amalg$ 有限性的前提下，证明 18 次二等分域 $K/\mathbb{Q}$ 类数为奇数、12 个 Simon 生成元张成完整的范数平方类核，并结合 Cassels–Tate 配对证明 6 次椭圆覆盖满足 $\dim_{\mathbb{F}_2}\mathrm{Sel}_2(E/k)=3$、$\operatorname{rank} E(k)=1$ 及 $\amalg(E/k)[2^\infty]\cong(\mathbb{Z}/2\mathbb{Z})^2$。结合 $p=23$ Chabauty–Coleman 闭合，证明亏格 161 三平方覆盖曲线 $X(\mathbb{Q})$ 仅有 $x=-1$ 上方的 8 个碰撞有理点，几何 gonality 为 8，$\mathrm{Aut}_{\mathbb{Q}}(X)\cong(\mathbb{Z}/2\mathbb{Z})^3$，且不存在到 Bremner 亏格 57 曲线的非常数有理态射。
 
-### 6. [`#1138`](results/1138/) — 整系数霍奇猜想：数域 Enriques 曲面乘积上的二进有限平坦 Picard 挠群阻碍定理（[论文 PDF](results/1138/ARGUS_RESULT_1138_TECHNICAL_REPORT.pdf)）
-* **成果**：利用 Knudsen–Mumford 完美复形上同调行列式，在混合特征 $(0,2)$ 二进离散赋值环上建立了不假设群概形光滑的有限平坦对应延拓定理（同时修正了 Liedtke 2010 Lemma 3.6 在混合特征下的不变量符号错误），在 $\mathbb{Q}(\sqrt{2})$ 上显式构造出具有二进好约化与 $G_{\pi,\pi}$ Picard 挠群的 Enriques 曲面 $S_{\text{new}}$，证明三维光滑射影簇 $E \times S_{\text{new}}$（$E\colon Y^2+Y=X^3$）的 4 次整系数霍奇缺陷群为 $(\mathbb{Z}/2\mathbb{Z})^2 \neq 0$。
+### 6. [`#1138`](results/1138/) — 整系数霍奇猜想：二进 Enriques 乘积上对一切复曲线成立的普适全迷向与亏格线性增长缺陷定理（[论文 PDF](results/1138/ARGUS_RESULT_1138_TECHNICAL_REPORT.pdf)）
+* **成果**：Benoist–Ottem (2020, *Comment. Math. Helv.*) 的主定理仅能对“非常一般（very general）”曲线证明整系数霍奇猜想在 $C\times S$ 上失效。我们在 $\mathbb{Q}(\sqrt{2})$ 上显式构造出具有二进光滑射影模型与有限平坦 Picard 挠群 $G_{\pi,\pi}$（$\pi^2=2$）的 Enriques 曲面 $S_{\text{new}}$，结合 Knudsen–Mumford 完美复形上同调行列式、Raynaud 半稳定曲线 Picard 专门化与 SGA~7~I Poincaré 双扩张，无条件证明：对**任意亏格 $g\ge 1$ 的光滑射影连通复曲线 $C$（无需任何“非常一般”或数域定义假设）**，代数对应拉回子空间 $A_C = \{Z^*\alpha : Z \in \mathrm{CH}_1(C\times S_{\text{new}})\} \subset H^1(C,\mathbb{F}_2)$ 关于杯积**恒为全迷向子空间（totally isotropic）**，从而
+  $$\dim_{\mathbb{F}_2} A_C \le g \implies \dim_{\mathbb{F}_2} D_C = 2g - \dim_{\mathbb{F}_2} A_C \ge g,$$
+  即整系数霍奇猜想在 $C \times S_{\text{new}}$ 上对**每一条**正亏格光滑复曲线 $C$ 均不成立，且缺陷维数至少随亏格 $g$ 线性增长！
 
 ### 7. 其它新近完成的可发表级定理精选（[`#1518`](results/1518/)、[`#1417`](results/1417/)、[`#3167`](results/3167/)、[`#3256`](results/3256/)、[`#7200051`](results/7200051/)、[`#9400114`](results/9400114/)）
 * **[`#1518`](results/1518/) ([PDF](results/1518/ARGUS_RESULT_1518_TECHNICAL_REPORT.pdf))**：用短磨光零点检测器证明黎曼 $\zeta(s)$ 零点在 $|\sigma-7/8|\le 10^{-3}$ 邻域的**六阶加性能量无条件幂次节省 $\delta=1/200$**，并导出第二 Hardy–Littlewood 猜想在 $\log_N H \approx 5/12$ 处的异常对上界 $V(N,H)\ll_\varepsilon N^{19/15 - 1/10000 + \varepsilon}$。
 * **[`#1417`](results/1417/) ([PDF](results/1417/ARGUS_RESULT_1417_TECHNICAL_REPORT.pdf))**：强最小度 3 临界无 $C_4,C_8$ 图的参数统一平方根边亏损定理 $n \le \max\{8d, 4d^2-8d\} \le 4d^2$（将 Erdős–Gyárfás 极小反例边数上界压至 $m \le 2n - \max\{7, \lceil 1+\sqrt{n+4}/2\rceil\}$）。
-* **[`#3167`](results/3167/) ([PDF](results/3167/ARGUS_RESULT_3167_TECHNICAL_REPORT.pdf))**：证明所有树宽 $\operatorname{tw}(G)\le 4$ 的有限简单 4-正则哈密顿图必有至少两个不同的无向哈密顿圈（树宽 4 下 Sheehan 猜想成立）。
+* **[`#3167`](results/3167/) ([PDF](results/3167/ARGUS_RESULT_3167_TECHNICAL_REPORT.pdf))**：无条件证明所有**树宽 $\operatorname{tw}(G)\le 5$** 的有限简单 4-正则哈密顿图必有至少两个不同的无向哈密顿圈（遍历 6 顶点边界袋的全部 $152{,}441$ 个带标状态、$88{,}107{,}797$ 个正路由条目与 $25{,}209{,}843{,}635$ 个相对边界序，未覆盖目标数为 $0$）。
 * **[`#3256`](results/3256/) ([PDF](results/3256/ARGUS_RESULT_3256_TECHNICAL_REPORT.pdf))**：将 Cornuéjols–Liu–Ravi (2025) 加权弦图定理推广至全体**单边缺失弦图（one-fill chordal digraphs）**，证明对任意非负整数容量 $w$ 恒有 $\nu(D,w)=\tau(D,w)$。
 * **[`#7200051`](results/7200051/) ([PDF](results/7200051/ARGUS_RESULT_7200051_TECHNICAL_REPORT.pdf))**：证明 $\ell_1^5$ 空间 11 点最小失真比满足 $\frac{3089}{3084} < \Delta_5(11) \le \frac{115}{106}$，并完成 $e(\ell_1^5)=10$ 的 Lean 4.33.1 内核形式化核验。
 * **[`#9400114`](results/9400114/) ([PDF](results/9400114/ARGUS_RESULT_9400114_TECHNICAL_REPORT.pdf))**：Agrawal 素性猜想的无目标素数幂根基约化、短弧有理交比显式三次方下界 $p \ge \max\{r^2+2, 1+N(\lfloor(r-1)/4\rfloor)\} \sim r^3/768$ 及逆 Frobenius 分圆范数完整分类。
@@ -155,7 +157,7 @@ Argus 所有数学战役均以**单守护进程分级工作流**（`Planner -> E
 | [`11000263`](results/11000263/) | [PDF](results/11000263/ARGUS_RESULT_11000263_TECHNICAL_REPORT.pdf) | Bigelow 拉链代数的 twist Burau 商（$X_3\neq 0, X_4=0$）与全 $n\ge 4$ 普适商有限维定理 | 辫群与代数表示论 | 已独立验证反例与全 $n$ 定理 |
 | [`3059`](results/3059/) | [PDF](results/3059/ARGUS_RESULT_3059_TECHNICAL_REPORT.pdf) | 证明 $\mathbb{F}_5$ 上 8 维与 9 维 Alon–Jaeger–Tarsi 无零坐标猜想（`C3059N9`, `H8C3059`） | 组合代数与有限域 | 已独立验证可发表定理 |
 | [`3102`](results/3102/) | [PDF](results/3102/ARGUS_RESULT_3102_TECHNICAL_REPORT.pdf) | 证明 Lemke 平方图 $L\mathbin{\square} L$ 在支撑集 $\le 5$ 下的精确 Pebbling 数为 64 | 图论与组合优化 | 已独立验证可发表定理 |
-| [`3167`](results/3167/) | [PDF](results/3167/ARGUS_RESULT_3167_TECHNICAL_REPORT.pdf) | 证明树宽 $\mathrm{tw}\le 4$ 的有限简单 4-正则哈密顿图必有至少两个哈密顿圈（Sheehan 猜想） | 结构图论 | 已独立验证可发表定理 |
+| [`3167`](results/3167/) | [PDF](results/3167/ARGUS_RESULT_3167_TECHNICAL_REPORT.pdf) | 证明树宽 $\mathrm{tw}\le 5$ 的有限简单 4-正则哈密顿图必有至少两个哈密顿圈（Sheehan 猜想） | 结构图论 | 已独立验证可发表定理 |
 | [`3256`](results/3256/) | [PDF](results/3256/ARGUS_RESULT_3256_TECHNICAL_REPORT.pdf) | 单边缺失弦图（one-fill chordal digraphs）的加权 Dijoin 打包定理 $\nu(D,w)=\tau(D,w)$ | 组合优化与有向图 | 已独立验证可发表定理 |
 | [`7200051`](results/7200051/) | [PDF](results/7200051/ARGUS_RESULT_7200051_TECHNICAL_REPORT.pdf) | $\ell_1^5$ 空间 11 点失真比上下界 $3089/3084 < \Delta_5(11) \le 115/106$ 与 $e(\ell_1^5)=10$ 的 Lean 4.33.1 核验 | 离散与度量几何 | 已独立验证上下界与 Lean 4 核验 |
 | [`1417`](results/1417/) | [PDF](results/1417/ARGUS_RESULT_1417_TECHNICAL_REPORT.pdf) | 强最小度 3 临界无 $C_4,C_8$ 图的平方根边亏损定理 $n\le\max\{8d,4d^2-8d\}\le 4d^2$（Erdős–Gyárfás） | 极值与结构图论 | 已独立验证改进上界定理 |
@@ -163,7 +165,7 @@ Argus 所有数学战役均以**单守护进程分级工作流**（`Planner -> E
 | [`1243`](results/1243/) | [PDF](results/1243/ARGUS_RESULT_1243_TECHNICAL_REPORT.pdf) | 3×3 平方数幻方 Bremner K3 曲面 18 次域平方类完备性、$\operatorname{rank} E(k)=1$、亏格 161 有理点完全分类与刚性 | 算术几何与丢番图方程 | 已独立验证可发表定理 |
 | [`1187`](results/1187/) | [PDF](results/1187/ARGUS_RESULT_1187_TECHNICAL_REPORT.pdf) | Andrews–Curtis 候选表示在 4/5 阶 $\mathbb{F}_2$-Magnus 商群中的扭曲桥不存在定理、全 $\mathrm{Aut}(F_2)$ 排除与 $w_{\mathrm{prim}}(H)\ge 7$ | 组合与几何群论 | 已独立验证可发表定理 |
 | [`9400114`](results/9400114/) | [PDF](results/9400114/ARGUS_RESULT_9400114_TECHNICAL_REPORT.pdf) | Agrawal 猜想的无目标素数幂根基约化、短弧交比显式三次方下界 $p\gg r^3$ 与逆 Frobenius 分类 | 计算与代数数论 | 已独立验证可发表定理 |
-| [`2338`](results/2338/) | [PDF](results/2338/ARGUS_RESULT_2338_TECHNICAL_REPORT.pdf) | 杨辉三角重数 5 的素因子下界（$K(a)\ge 8, \omega(a)\ge 7, 14$）、120 次域下降与仿射正交群全局 Runge 阻碍（Erdős #849） | 丢番图方程与代数数论 | 已独立验证可发表定理 |
+| [`2338`](results/2338/) | [PDF](results/2338/ARGUS_RESULT_2338_TECHNICAL_REPORT.pdf) | 杨辉三角重数 5 素因子下界（$K(a)\ge 8, \omega(a)\ge 7, 14$）、仿射正交群 Runge 定理与 512 次（亏格 1537）超特殊 2-群 $2_+^{1+8}$ 覆盖阻碍（Erdős #849） | 丢番图方程与代数数论 | 已独立验证可发表定理 |
 | [`6800022`](results/6800022/) | [PDF](results/6800022/ARGUS_RESULT_6800022_TECHNICAL_REPORT.pdf) | 互反反射对称 Kato–Muroya 亏格 1 四悬链端极小曲面轨迹全部 9 种穿孔分布的全局嵌入不存在定理 | 微分几何与极小曲面 | 已独立验证可发表定理 |
 | [`1285`](results/1285/) | [PDF](results/1285/ARGUS_RESULT_1285_TECHNICAL_REPORT.pdf) | 一致自适应符号链 ECM 壳库整数分解程序在 $n$ 比特无平方因子半素数上的最坏情况无条件指数下界 | 计算数论与算术复杂性 | 已独立验证可发表定理 |
 | [`20001675`](results/20001675/) | [PDF](results/20001675/ARGUS_RESULT_20001675_TECHNICAL_REPORT.pdf) | 任意喷流深度 $r\ge 1$ 下简单非约化 Plabic 纽结的指数级 HOMFLY-PT 纤维定理（$\log_2|\text{fiber}|\ge(N-8)/(74r^2)$） | 丛代数与纽结多项式 | 已独立验证可发表定理 |
@@ -180,7 +182,7 @@ Argus 所有数学战役均以**单守护进程分级工作流**（`Planner -> E
 
 | 编号 | 论文 | 成果名称与核心结论 | 领域 | 状态 |
 |---|---|---|---|---|
-| [`1138`](results/1138/) | [PDF](results/1138/ARGUS_RESULT_1138_TECHNICAL_REPORT.pdf) | 数域 $\mathbb{Q}(\sqrt{2})$ 上 Enriques 曲面乘积 $E\times S_{\text{new}}$ 的混合特征 $(0,2)$ 二进 Picard 挠群对应延拓与 $(\mathbb{Z}/2\mathbb{Z})^2$ 整系数霍奇缺陷 | 代数几何与霍奇理论 | 已独立验证整系数霍奇反例 |
+| [`1138`](results/1138/) | [PDF](results/1138/ARGUS_RESULT_1138_TECHNICAL_REPORT.pdf) | 二进 Enriques 乘积 $C\times S_{\text{new}}$ 对一切正亏格复曲线 $C$ 的普适全迷向定理（$\dim_{\mathbb{F}_2} A_C\le g$）与亏格成正比整系数霍奇缺陷（$\dim_{\mathbb{F}_2} D_C\ge g$） | 代数几何与霍奇理论 | 已独立验证可发表定理 |
 | [`20002392`](results/20002392/) | [PDF](results/20002392/ARGUS_RESULT_20002392_TECHNICAL_REPORT.pdf) | 半空间 $\mathbb{R}^3_+$ 无滑移边界下仅假设速度衰减 $|U(y)|\le C/(1+|y|)$ 的后向自相似 Navier–Stokes 对齐剖面完整排除定理 | 偏微分方程与流体力学 | 已独立验证可发表定理 |
 | [`40`](results/40/) | [PDF](results/40/ARGUS_RESULT_40_TECHNICAL_REPORT.pdf) | 变半径周期余弦管壁（$0<|\kappa|\le 1/10$）轴对称 Euler 流笛卡尔逆对数发散反例与共形曲率响应闭合定理 | 偏微分方程与流体力学 | 已独立验证可发表定理 |
 | [`1275`](results/1275/) | [PDF](results/1275/ARGUS_RESULT_1275_TECHNICAL_REPORT.pdf) | Hilbert–Pólya 有限移位膨胀算子限制 $D|_{P(S)C_c^\infty(0,\infty)}$ 的全实轴本质谱阻碍定理 $\sigma_{\mathrm{ess}}(\widetilde{D})=\mathbb{R}$ | 谱理论与解析数论 | 已独立验证可发表定理 |

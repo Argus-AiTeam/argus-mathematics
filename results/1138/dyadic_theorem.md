@@ -2,11 +2,13 @@
 
 An explicit surface over \(\mathbf Q(\sqrt2)\), its smooth dyadic quotient,
 the correspondence-extension argument, and the resulting integral Hodge
-obstruction are given below. The polynomial certificates have been replayed;
-the geometric proof and publication qualification are submitted for independent
-review, not certified by the author. This is a new surface, not the previously
-fixed Kummer-Enriques surface. No conclusion concerns a counterexample to the
-smooth rational Hodge conjecture.
+obstruction are given below. Sections 2--5 and their exact certificates passed
+the independent correctness review recorded in
+`roles/reviewer/progress.json#dyadic_review` on 2026-11-04. That review did
+not certify publication originality or significance. Section 7 isolates the
+remaining contribution and proves two comparisons that prevent overstating it.
+This is a new surface, not the previously fixed Kummer-Enriques surface.
+No conclusion concerns a counterexample to the smooth rational Hodge conjecture.
 
 ## 1. Scope and known inputs
 
@@ -83,7 +85,7 @@ publication result.
 
 ## 2. Correspondence extension
 
-**Proposition (proof submitted for independent review).** Let \(R\) be a
+**Proposition (correspondence extension).** Let \(R\) be a
 mixed-characteristic DVR, \(\mathcal S/R\) a smooth projective surface and
 \(\mathcal C/R\) a smooth projective geometrically connected curve. Let
 \(G\subset\operatorname{Pic}_{\mathcal S/R}\) be a finite flat subgroup,
@@ -526,8 +528,9 @@ torsion, is invariant under algebraic equivalence. This is descent of
 the cycle **class**, not the false assertion that every complex cycle
 itself descends to a number field. Applying the preceding paragraph
 proves \(A=0\) for all complex cycles. This is the same general
-class-descent argument already established in `../enriques-arithmetic-defect/
-arithmetic_defect.md`, Section 4; no odd-place specialization result is
+class-descent argument already established in
+`../enriques-arithmetic-defect/arithmetic_defect.md`, Section 4;
+no odd-place specialization result is
 being reused at the coefficient prime.
 
 For completeness the cohomological identification in (21) is exact.
@@ -623,20 +626,254 @@ arithmetic realization missing from the previously hypothetical route.
 No statement about the old fixed surface, its unresolved cup, \(A_B\),
 \(D_0\), or descent of \(z_p\) has changed.
 
-This comparison establishes a different mathematical mechanism and an
-explicit example, not publication priority by itself. The primary-source
-reader found the known very-general and odd-place examples and the known
-Enriques lifting construction; the bounded search did not verify an
-identical dyadic theorem. **Novelty and substantive publication significance
-remain unverified pending independent review.** The Host Reviewer must
-read the extension argument, global geometry and Picard identification
-as well as replay the exact algebra. A successful algebra program does
-not independently verify those geometric proofs.
+There is a further direct primary comparison with Huryn-Newman,
+*On the torsion in the Chow motive of an Enriques surface*,
+arXiv:2609.04360v1. Definition 1.7, used in Theorem 1.8, explicitly
+requires residue characteristic different from two. Proposition 3.2
+requires that the residue characteristic not divide the coefficient
+\(n\). Corollary 3.3 additionally requires multiplicative reduction of
+the elliptic curve. The actual statements and their hypotheses were
+read and retained in `sources/huryn-newman-v1-passages.txt`. Those
+statements do not directly supply the coefficient-prime extension
+theorem or the present good-reduction example. This is a comparison
+of their stated range, not a claim that every possible consequence of
+that paper has been excluded, nor a new challenge to its main theorems.
 
-The official source-citation archiver writes to `research/literature/`,
-outside this mission's writable paths. It has not been run with a
-different root or a fabricated independent identity. Primary passages
-and their exact locators are available here for the normal Reviewer.
-The initially mistyped Benoist-Ottem DOI ending in 480 was disproved by
-publisher lookup and retired in the ledger; only the verified DOI ending
-in 479 is used. No old citation verdict was transferred.
+The independent review subsequently accepted the geometric arguments and
+the exact replay. Those settled checks are not repeated for the present
+comparison. Correctness does not settle publication qualification, and
+failure of the stated odd-place hypotheses does not exclude other known
+coefficient-prime methods. Section 7 makes that distinction precise.
+
+The current mission permits citation archival under `research/literature/`.
+The earlier independent source judgements and excerpts remain intact;
+they are not silently relabelled as native citation attributions. The
+new source-reader report in `sources/finite-flat-prior-art.txt` is explicitly
+a set of paraphrases, not a quotation file. Independent attribution must
+use actual primary passages and the actual reader's identity. This source
+recording issue is separate from the missing publication contribution.
+The incorrect Benoist-Ottem DOI ending in 480 remains retired; only the
+verified DOI ending in 479 is used for the published defect calculation.
+
+## 7. The precise contribution and its limitations
+
+### 7.1 What the correspondence theorem adds to a torsor dictionary
+
+Fix the embeddings needed to identify the geometric two-torsion of the
+number-field objects with their complex and local counterparts. For a
+smooth Enriques model with finite flat \(G=\operatorname{Pic}^{\tau}\),
+write \(\omega\) for the nonzero generic point corresponding to the
+canonical line bundle. Define the allowed local image
+\[
+\mathcal H_R(G,\mathcal E)=
+\bigcup_{R'}\{f_\eta(\omega):
+ f\in\operatorname{Hom}_{R'}(G_{R'},\mathcal E[2]_{R'})\}
+ \ \subset E[2](\overline K),
+\tag{24}
+\]
+where \(R'\) runs through the valuation rings after finite extensions
+of the chosen valued field. The groups are compared in a fixed algebraic
+closure. The assertion furnished by Sections 2 and 5 is
+\[
+ A(E_{\mathbf C},S_{\mathbf C})\ \subseteq\
+ \mathcal H_R(G,\mathcal E),
+\tag{25}
+\]
+using the Kummer identification on the left. Indeed, descend the
+integral cycle class to a number field, extend its Picard action by
+Section 2, and evaluate that homomorphism at \(\omega\).
+This is an inclusion, not an assertion that all allowed homomorphisms
+are realized by cycles.
+
+The finite-flat torsor--Picard dictionary is already available in
+Mehidi--Poiret, arXiv:2407.10924v4, Theorem 2.2. Applied to the pointed
+smooth curve \(\mathcal E/R\), it identifies relative torsor classes
+with appropriate homomorphisms from the Cartier dual to its Picard
+scheme. It does **not** extend every generic torsor with every prescribed
+finite flat group model. Their Corollary 3.14 is an extension theorem
+with additional logarithmic hypotheses, including a Kummer log etale
+Cartier dual. With strict pulled-back log structures, the present
+group, whose special fiber is \(\alpha_2\), is not log etale.
+No assertion about every possible non-strict log structure is needed.
+
+Thus the application-specific assertion in (25) is that
+**correspondence-induced** generic maps extend with the prescribed
+Picard model, although arbitrary generic maps need not. The determinant
+functor, perfection of pushforward under the ambient smooth projection,
+norm interpretation, and generic-density argument are classical
+ingredients, not newly proved theories of torsors or determinants.
+The following exact comparison exhibits the chosen-model distinction.
+
+### 7.2 Both geometric fibers admit maps, but the integral model does not
+
+**Proposition (fixed-model comparison).** Extend the dyadic DVR to
+contain \(\pi,\kappa,\zeta\), where
+\(\pi^2=2\), \(\kappa^3=2\), and \(\zeta\) is a primitive cube root of
+unity; call the resulting DVR \(B\). Set
+\[
+G=G_{\pi,\pi},\qquad H=G_{\kappa,\kappa^2}.
+\]
+Both group schemes have geometric generic fiber \(\mathbf Z/2\) and
+geometric special fiber \(\alpha_2\). Nevertheless,
+\[
+\operatorname{Hom}_B(G,\mathcal E[2])=0,\qquad
+\operatorname{Hom}_B(H,\mathcal E[2])
+ =\{0,\ t\mapsto-\zeta^j s\ (j=0,1,2)\}.
+\tag{26}
+\]
+For \(k=\overline{\mathbf F}_2\), one also has
+\[
+\operatorname{Hom}_k(\alpha_2,E_k[2])\simeq(k,+),
+\qquad c\longmapsto(t\mapsto cs).
+\tag{27}
+\]
+In particular, vanishing of the Hom group on either geometric fiber
+cannot detect the first obstruction in (26).
+
+**Proof.** In both source models the two generic points are distinct.
+The nonidentity point has order two by the displayed comultiplication.
+Both parameters in each model have positive valuation, so reduction
+gives \(s^2=0\) and primitive comultiplication.
+
+The first equality in (26) is (5). For the second, put \(c=-\zeta^j\).
+In \(B[s]/(s^2-\kappa s)\), the target equation pulls back to
+\[
+(cs)^4+2cs
+ =2c(c^3+1)s=0.
+\tag{28}
+\]
+Hence \(t\mapsto cs\) is an integral pointed morphism. Its generic
+fiber sends the nonzero point to \(t=-\kappa\zeta^j\), one of the
+three nonzero two-torsion points, and is a homomorphism. Flat generic
+density extends the group law. These exhaust all possible generic
+maps; uniqueness of extension proves (26). These nonzero maps are
+even closed immersions, since \(c\) is a unit.
+
+For (27), the special two-torsion algebra is \(k[t]/(t^4)\).
+Every pointed scheme map from \(\alpha_2=\operatorname{Spec}k[s]/(s^2)\)
+has the form \(t\mapsto cs\). To check the group law, restrict the
+formal group law of \(E_k\) to \(k[u,v]/(u^2,v^2)\).
+The identity property makes it
+\[
+F(u,v)=u+v+\lambda uv.
+\]
+The automorphism \((x,y)\mapsto(\zeta x,y)\) fixes the identity and
+sends the local parameter \(t=-x/y\) to \(\zeta t\). Its compatibility
+with addition forces
+\(\lambda\zeta^2=\lambda\zeta\). As
+\(\zeta\ne0,1\), one has \(\lambda=0\).
+Thus every \(c\) gives a homomorphism, and addition of these maps is
+addition of their coefficients. This proves (27). The geometric
+generic Hom group, for either source, is \(E[2](\overline K)\) and
+has four elements. \(\square\)
+
+This proposition concerns integral group models, not the algebraicity
+of a proposed cycle. In particular, replacing \(G\) by \(H\) in
+(26) does not construct an Enriques surface or a nonzero
+correspondence. Its role is to pinpoint the information used in
+(25): the mixed-characteristic model, rather than only its generic
+or special geometric isomorphism class. The calculation is an
+elementary consequence of the rank-two models and (8), not a new
+classification of finite flat group schemes.
+
+### 7.3 For this CM curve maximal defect is automatic once failure is known
+
+**Proposition (CM dichotomy).** For \(E:Y^2+Y=X^3\) and any complex
+Enriques surface \(S\),
+\[
+ A(E,S)=0\quad\hbox{or}\quad A(E,S)=H^1(E,\mathbf F_2).
+\tag{29}
+\]
+Consequently any failure of integral Hodge for this product already
+forces the entire defect \((\mathbf Z/2)^2\).
+
+**Proof.** The image \(A\) is an \(\mathbf F_2\)-subspace and is
+stable under every automorphism of \(E\): pull a correspondence back
+under that automorphism on the first factor. The automorphism
+\(\rho(x,y)=(\zeta x,y)\) cyclically permutes the three nonzero
+two-torsion points \(P_j\). The induced action on their Kummer
+classes is a three-cycle (possibly in the inverse direction).
+It therefore preserves no one-dimensional subspace.
+Equivalently, in a suitable basis its matrix over \(\mathbf F_2\) is
+\[
+ \begin{pmatrix}0&1\\1&1\end{pmatrix},
+\]
+whose polynomial \(T^2+T+1\) has value \(1\) at both elements of
+\(\mathbf F_2\) and is irreducible. This proves (29); the already
+reviewed defect formula gives the last assertion. \(\square\)
+
+Benoist--Ottem, arXiv:1802.01845v3, Section 3, already use this
+automorphism transitivity to obtain positive integral-Hodge examples,
+including the \(j=0\) elliptic curve. Thus neither the rank two in
+(21) nor simultaneous nonalgebraicity of its three nonzero mixed
+classes is an independent structural improvement over establishing
+one failure for this curve. The unresolved arithmetic question that
+(21) answers is failure for the **specified surface**, not this
+representation-theoretic amplification.
+
+For a bounded exact check of the displayed polynomial, the inspected
+Argus-sidecar operation `polynomial.galois.factor_mod_p.compute`
+used `jacobian-cm-payload.json` and returned
+`jacobian-cm-output.json`: server 0.14.0, protocol 2025-11-25,
+field order 2, unit 1, the single factor \(T^2+T+1\) with multiplicity
+one, and `is_irreducible: true`. Runtime was 15 ms; the adapter exited
+zero, with no error or timeout under a 45-second outer bound.
+It can be replayed by
+
+```bash
+/home/argustest/zimo/argus-live-update/.venv/bin/python \
+  -m argus_skill.tools.jacobian run \
+  --operation polynomial.galois.factor_mod_p.compute \
+  --payload-file research/enriques-dyadic-defect/jacobian-cm-payload.json
+```
+
+This check concerns only the elementary CM representation. It is not
+a new verification of (21), a compiler certificate, or evidence of
+publication significance.
+
+### 7.4 Comparison of the full assertions
+
+The additional primary-source reader inspected the following
+propositions, not just abstracts or the numerical equations.
+The source report, including its paraphrase limitation, is
+`sources/finite-flat-prior-art.txt`.
+
+| Result | Actual range and conclusion | What remains for the specified pair |
+|---|---|---|
+| Knudsen--Mumford, determinant of cohomology; Stacks 0B91 | Determinants of perfect complexes and proper-flat perfect pushforward with base change. These apply to the smooth ambient projection. | Section 2 identifies the Picard morphism and generic norm, and uses flat density for the group law. These are applications of classical machinery, not a new determinant theorem. |
+| Mehidi--Poiret, arXiv:2407.10924v4, Theorems 2.2, 3.13 and Corollary 3.14 | The relative torsor--Picard dictionary; a log extension theorem with log-regular base and Kummer log etale dual. | It does not assert unrestricted extension with the non-etale model \(G_{\pi,\pi}\). Equations (25)--(28) isolate the correspondence-specific restriction and the failure of arbitrary chosen-model extension. |
+| Benoist--Ottem, arXiv:1802.01845v3, Theorem 0.1, Remark 2.2 and Section 3 | Very-general-curve failure for every Enriques surface; arithmetic odd-place examples; positive examples using half-fibers and CM symmetry. | These statements do not decide \(A\) for the displayed number-field surface. Arithmeticity, Kodaira dimension zero, and the \(j=0\) maximal-defect amplification are not new on their own. |
+| Diaz, arXiv:1906.06598v3, Theorem 1.2, Section 2.2, Corollaries 2.12--2.13 and 3.3 | The Bloch--Esnault input uses ordinary good reduction at the coefficient prime, torsion-free crystalline cohomology and differential forms. Applied to covering abelian varieties, it produces unramified-cohomology obstructions and nontorsion integral-Hodge counterexamples on Kummer threefolds. | Coefficient-prime good reduction is already an obstruction method. The quoted input is ordinary, whereas the elliptic special fiber here is supersingular; its conclusion is not the present mixed torsion calculation on an Enriques product. |
+| Huryn--Newman, arXiv:2609.04360v1, the locators in Section 6 | Prime-to-characteristic specialization with the stated nonvanishing/residue hypotheses; in Corollary 3.3 the elliptic curve has multiplicative reduction. | Those stated hypotheses do not supply this good-reduction dyadic proof. That non-application is not a priority theorem and does not exclude every consequence of the paper. |
+| Schreieder, arXiv:2011.15047v4, Theorems 1.3 and 6.1 | For an Enriques surface very general relative to \(Y\), an injective exterior-product map \(A^i(Y)/2\to A^{i+1}(S\times Y)[2]\), with \(A\) denoting cycles modulo algebraic equivalence; the general degeneration theorem has additional semistable and unramified-cohomology hypotheses. | The displayed product concerns algebraic torsion cycles. For \(Y=E\), \(K_S\times[\mathrm{pt}]\) is in an algebraic outer Kunneth summand, not \(H^3(S)\otimes H^1(E)\). This product calculation alone neither supplies very-generality for the given arithmetic surface nor determines its missing mixed classes. |
+| Liedtke, arXiv:1007.0787v2, Theorems 4.7 and 4.9; Bombieri--Mumford, Section 3 | Lifting with prescribed Picard model under the stated polarization hypotheses; generic invariant-quadric constructions. | Section 4 supplies numerical equations, quotient geometry and geometric smoothness certificates. It is an explicit realization of known construction methods, not a new general lifting theorem. |
+
+### 7.5 Publication-qualification decision
+
+The strongest residual candidate is now precise: (25) restricts
+**all complex integral correspondences** using the chosen finite flat
+Picard model, and the explicit supersingular Enriques realization
+makes its right side zero for a prescribed good-reduction CM curve.
+The two-fiber comparison explains why merely testing geometric
+Hom groups would miss the obstruction.
+
+Neither that explanation nor the source report establishes the
+required substantive publication qualification. In particular:
+the coefficient-prime strategy already has precedents; maximal
+defect is formal for this CM curve; the chosen-model mismatch is
+elementary finite-flat algebra; and the determinant and Enriques
+construction tools are classical. No cited theorem has been shown
+to subsume (21), but the absence of such a finding is not a positive
+originality argument. Conversely, these observations do not prove
+that (21) is known or unpublishable.
+
+The accepted mathematical result is therefore retained, while
+`Q1138-DY-publication` remains unclosed. The present differentiation
+route does not meet the requested bar and is submitted for normal
+independent review as a **replanning request**, not as a verified-new,
+publishable result. Repeating the odd-place exclusion, enlarging the
+example parameters, archiving more citations, or restating (25)
+does not supply the missing structural contribution. A replacement
+target must ask for additional mathematics rather than another
+qualification-only dispatch. Nothing here settles the old fixed
+CM cup, \(A_B\), \(D_0\), or descent of \(z_p\).
