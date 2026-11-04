@@ -20,9 +20,9 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Published_Result_Packages-84-174A7E?style=flat-square" alt="84 Result Packages">
   <img src="https://img.shields.io/badge/Standalone_AMS_LaTeX_Papers-84_PDFs-2E7D32?style=flat-square" alt="84 AMS Papers">
-  <img src="https://img.shields.io/badge/Checksummed_Artifacts-728-6A1B9A?style=flat-square" alt="728 Artifacts">
+  <img src="https://img.shields.io/badge/Checksummed_Artifacts-730-6A1B9A?style=flat-square" alt="728 Artifacts">
   <img src="https://img.shields.io/badge/Verification-Jacobian_%7C_Lean_4_%7C_PARI%2FGP-C62828?style=flat-square" alt="Verification">
-  <img src="https://img.shields.io/badge/Total_Billed_Cost-%24319.96_(%243.57%2FTheorem)-E65100?style=flat-square" alt="Billed Cost">
+  <img src="https://img.shields.io/badge/Total_Billed_Cost-%24352.84_(%244.20%2FResult)-E65100?style=flat-square" alt="Billed Cost">
 </p>
 
 ---
@@ -31,7 +31,7 @@
 
 This repository archives the completed, independently verified mathematical outputs of the **Argus** autonomous research program. Rather than publishing unverified model transcripts, every package in [`results/<ID>/`](results/) is organized around **explicit mathematical statements, exact rerunnable certificates, and explicit scope boundaries**, accompanied by a standalone compiled AMS LaTeX paper (`ARGUS_RESULT_<ID>_TECHNICAL_REPORT.pdf` and `.tex`).
 
-As of **November 4, 2026**, the archive contains **84 result packages** (**728 SHA-256 checksummed artifacts**):
+As of **November 4, 2026**, the archive contains **84 result packages** (**730 SHA-256 checksummed artifacts**):
 
 | Category | Count | Description |
 |---|---:|---|
@@ -43,36 +43,75 @@ As of **November 4, 2026**, the archive contains **84 result packages** (**728 S
 
 ---
 
-## Compute Efficiency & Per-Problem Billed Cost (`usage.jsonl` Audit)
+## Compute Efficiency & Complete Per-Problem Billed Cost (`usage.jsonl` Audit)
 
-All Argus campaigns execute as single-daemon staged workflows (`Planner -> Engineer -> Independent Reviewer`, `mission_width=1`) backed by deterministic symbolic/polyhedral sidecars (`Jacobian`, `PARI/GP`, `Lean 4`) and an append-only `Proof Ledger` (`MATH_STATE.json`) that prevents repetitive dead-end loops. Under actual GitHub Copilot CLI billing (`$0.04` per Premium Request), the entire 53-campaign research program consumed **7,999 Premium Requests (`6.37B` total tokens)** for a **total cumulative billed cost of `$319.96`** — and the **20 publishable-theorem campaigns** run in November 2026 cost **`$71.44` total (`$3.57` average per problem)**:
+All Argus campaigns execute as single-daemon staged workflows (`Planner -> Engineer -> Independent Reviewer`, `mission_width=1`) backed by deterministic symbolic/polyhedral sidecars (`Jacobian`, `PARI/GP`, `Lean 4`) and an append-only `Proof Ledger` (`MATH_STATE.json`). Across all **150 `usage.jsonl` ledgers** (see [`docs/usage-and-cost-audit.md`](docs/usage-and-cost-audit.md) and [`data/usage-audit.json`](data/usage-audit.json)), the entire **84-package** program consumed **8,877 model calls (`8,821.0` Premium Requests, `7.61B` total tokens)** for a **grand total billed cost of `$352.84` (`$4.20` average per published result package)**:
 
-| ID | Result Summary | Model | Calls | Premium Requests | Total Tokens | Nov 2026 Theorem Run Cost | Cumulative Billed Cost (`$0.04`/req) |
+- **53 Dedicated Problem Campaigns (August–November 2026):** `8,096` calls (`8,005.0` Premium Requests, `6.37B` tokens) $	o$ **`$320.20` total (`$6.04` avg/campaign)**; the **20 November publishable-theorem campaigns** cost **`$71.68` total (`$3.58` avg/theorem)**.
+- **31 Shared Batch-Audit & Screening Result Packages (Batch 001 & 757-Problem Audit Shards):** `781` calls (`816.0` Premium Requests, `1.24B` tokens) $	o$ **`$32.64` total (`$1.05` amortized per published result package)**.
+
+<details open>
+<summary><strong>Complete Per-Problem Billed Cost Ledger (All 53 Dedicated Campaigns + 31 Shared-Pool Packages = 84 Results)</strong></summary>
+
+| ID | Result Package | Models | Calls | Prem. Req. | Total Tokens | Nov 2026 Run | Cumulative Billed Cost (`$0.04`/req) |
 |---|---|---|---:|---:|---:|---:|---:|
-| [`11000263`](results/11000263/) | Bigelow zipper algebra ($X_3\neq 0$) & all-$n\ge 4$ finite-dimensionality | `gpt-5.6-sol` | 6 | 6.0 | 6.48M | — | **`$0.24`** |
-| [`1275`](results/1275/) | Hilbert–Pólya finite-shift dilation full-line essential spectrum $\sigma_{\mathrm{ess}}=\mathbb{R}$ | `gpt-6-astra` | 16 | 16.0 | 7.93M | `$0.64` | **`$0.64`** |
-| [`40`](results/40/) | 3D Euler curved-pipe Cartesian logarithmic obstruction & conformal closure | `gpt-6-astra` | 34 | 34.0 | 40.98M | `$1.36` | **`$1.36`** |
-| [`3102`](results/3102/) | Support-five pebbling number of the Lemke square $L\mathbin{\square} L$ is $64$ | `gpt-6.1-sol` | 36 | 36.0 | 22.80M | `$1.44` | **`$1.44`** |
-| [`7200051`](results/7200051/) | Kusner $\ell_1^5$ $11$-point distortion bounds ($3089/3084 < \Delta \le 115/106$) & Lean 4 | `gpt-6.1-sol` | 44 | 44.0 | 24.19M | `$1.76` | **`$1.76`** |
-| [`3167`](results/3167/) | Sheehan's conjecture for $4$-regular simple graphs of treewidth $\le 4$ | `gpt-6.1-sol` | 53 | 53.0 | 42.76M | `$2.12` | **`$2.12`** |
-| [`3256`](results/3256/) | Weighted dijoin packing $\nu(D,w)=\tau(D,w)$ in one-fill chordal & $6$-terminal digraphs | `gpt-6.1-sol` | 72 | 72.0 | 52.53M | `$2.88` | **`$2.88`** |
-| [`1417`](results/1417/) | Erdős–Gyárfás uniform square-root edge-deficit theorem $n \le \max\{8d,4d^2-8d\}$ | `gpt-6.1-sol` | 76 | 73.0 | 30.62M | `$1.36` | **`$2.92`** |
-| [`6800022`](results/6800022/) | Complete reciprocal-reflection Kato–Muroya genus-$1$ four-end obstruction | `gpt-6.1-sol` | 88 | 88.0 | 102.65M | `$1.16` | **`$3.52`** |
-| [`20001675`](results/20001675/) | Arbitrary-depth exponential HOMFLY-PT fibers for plabic links and knots | `gpt-6.1-sol` | 93 | 93.0 | 69.23M | `$3.72` | **`$3.72`** |
-| [`1138`](results/1138/) | Enriques product mixed-characteristic $(0,2)$ dyadic Picard-torsion Hodge defect | `gpt-6-astra` | 97 | 97.0 | 97.44M | `$3.88` | **`$3.88`** |
-| [`3059`](results/3059/) | The Alon–Jaeger–Tarsi Conjecture in dimensions $8$ and $9$ over $\mathbb{F}_5$ | `gpt-6.1-sol` | 111 | 111.0 | 106.72M | `$4.44` | **`$4.44`** |
-| [`3395`](results/3395/) | Centered nuclear-error duality & $O(M_n+N^2)$-gate relative-mass barrier | `gpt-6-astra` | 118 | 115.0 | 126.15M | `$4.60` | **`$4.60`** |
-| [`9400078`](results/9400078/) | Unconditional ramified $\mathrm{GL}_4$ non-tempered density bound $\ll q^{3-4\tau+\varepsilon}$ | `gpt-6-astra` | 144 | 143.0 | 56.57M | `$5.72` | **`$5.72`** |
-| [`20002392`](results/20002392/) | Velocity-only exclusion of half-space backward self-similar Navier–Stokes profiles | `gpt-6-astra` | 150 | 145.0 | 39.00M | `$5.80` | **`$5.80`** |
-| [`1285`](results/1285/) | Unconditional exponential lower bound for adaptive signed-chain ECM programs | `gpt-6.1-sol` | 157 | 155.0 | 93.52M | `$1.24` | **`$6.20`** |
-| [`2338`](results/2338/) | Multiplicity $5$ in Pascal's triangle ($K(a)\ge 8, \omega(a)\ge 7,14$) & affine orthogonal Runge | `gpt-6.1-sol` | 187 | 187.0 | 194.53M | `$5.72` | **`$7.48`** |
-| [`1243`](results/1243/) | Bremner K3 genus-$161$ rational points, $\operatorname{rank} E(k)=1, \amalg[2^\infty]=(\mathbb{Z}/2)^2$ & rigidity | `gpt-6.1-sol` | 204 | 192.0 | 71.54M | `$6.92` | **`$7.68`** |
-| [`1187`](results/1187/) | Andrews–Curtis $\mathbb{F}_2$-Magnus twisted-bridge nonexistence & $w_{\mathrm{prim}}(H)\ge 7$ | `gpt-6.1-sol` | 249 | 246.0 | 113.91M | `$7.72` | **`$9.84`** |
-| [`1518`](results/1518/) | Unconditional sixth-energy saving ($\delta=1/200$) for Riemann zeta zeros near $\sigma=7/8$ | `gpt-6.1-sol` | 269 | 266.0 | 104.23M | `$5.04` | **`$10.64`** |
-| [`9400114`](results/9400114/) | Agrawal prime-power reduction, short-arc cubic bound $p\gg r^3$ & inverse-Frobenius | `gpt-6.1-sol` | 303 | 298.0 | 202.21M | `$3.92` | **`$11.92`** |
-| [`20001036`](results/20001036/) | $5{,}454$-vertex digon-free counterexample to Seymour–Sullivan Conjecture 6.1 & optimality | `gpt-6-astra` | 891 | 883.0 | 606.40M | — | **`$35.32`** |
-| **All 53 Campaigns** | **Full program (84 published result packages across 53 campaign workdirs)** | **Combined** | **8,054** | **7,999.0** | **6,367.29M** | **`$71.44` (`$3.57`/problem)** | **`$319.96`** |
+| [`11000263`](results/11000263/) | Twist-compatible Burau quotient and universal finite-dimensionality for Bigelow's zipper algebra | `gpt-5.6-sol` | 6 | 6.0 | 6.48M | — | **`$0.24`** |
+| [`2813`](results/2813/) | An explicit taut-foliation Euler-class obstruction on a hyperbolic mapping torus | `gpt-5.6-sol` | 10 | 10.0 | 1.77M | — | **`$0.40`** |
+| [`1275`](results/1275/) | Essential-Spectrum Obstruction for Finite-Shift Dilation Restrictions in Hilbert-Polya Realizations | `gpt-6-astra` | 16 | 16.0 | 7.93M | $0.64 | **`$0.64`** |
+| [`2457`](results/2457/) | Countermodel to the Arvidsson heat-trace bounded-kernel implication (Erdos Problem #1055) | `gpt-5.6-sol` | 20 | 23.0 | 0.00M | — | **`$0.92`** |
+| [`2662`](results/2662/) | Reidemeister-II collapse of two-change local plat families for unknotting and Conway mutation (Kirby 1.3) | `gpt-5.6-sol, gpt-6-astra` | 23 | 23.0 | 9.62M | — | **`$0.92`** |
+| [`2775`](results/2775/) | Complete solution classification of the (A_12, 1, A_12) projection fiber for braid and right-angled Artin groups | `gpt-5.6-sol, gpt-6-astra` | 25 | 25.0 | 44.79M | — | **`$1.00`** |
+| [`2307015`](results/2307015/) | A translated-cusp boundary set of positive harmonic measure | `gpt-5.6-sol` | 26 | 26.0 | 22.34M | — | **`$1.04`** |
+| [`1921`](results/1921/) | Uniform degree bounds excluding bounded offset-signature colorings for Erdos Problem #87 | `gpt-5.6-sol` | 27 | 27.0 | 0.67M | — | **`$1.08`** |
+| [`40`](results/40/) | Conformal Transfer and Curvature-Response Closure for Axisymmetric Euler Flows in Periodic Variable-Radius Pipes | `gpt-6-astra` | 34 | 34.0 | 40.98M | $1.36 | **`$1.36`** |
+| [`3102`](results/3102/) | The Support-At-Most-Five Pebbling Number of the Lemke Square Is 64 | `gpt-6.1-sol` | 36 | 36.0 | 22.80M | $1.44 | **`$1.44`** |
+| [`7200051`](results/7200051/) | Quantitative Distortion Bounds and Formal Equilateral Exclusion for Eleven Points in Five-Dimensional l_1 | `gpt-6.1-sol` | 44 | 44.0 | 24.19M | $1.76 | **`$1.76`** |
+| [`2800203`](results/2800203/) | Threshold discrepancy barriers for depth-three scalar planted-clique AMP schedules | `gpt-5.6-sol, gpt-6-astra` | 49 | 49.0 | 79.04M | — | **`$1.96`** |
+| [`1994`](results/1994/) | Bottom-row quadratic reduction and scalar-span obstruction on rank-four parabolic Erdos-Ulam configurations | `gpt-5.6-sol, gpt-6-astra` | 49 | 50.0 | 12.14M | — | **`$2.00`** |
+| [`3167`](results/3167/) | Sheehan's Conjecture for Four-Regular Simple Graphs of Bounded Treewidth | `gpt-6.1-sol` | 54 | 54.0 | 42.76M | $2.16 | **`$2.16`** |
+| [`20001352`](results/20001352/) | Literal-scope counterexample for commutator width and involution factorization in Thompson's group F (AIMPL Problem 3.1) | `gpt-5.6-sol, gpt-6-astra` | 60 | 57.0 | 4.31M | — | **`$2.28`** |
+| [`2884`](results/2884/) | K3 Problem 4.8: arbitrary-X stabilization counterexample and fixed-E(2) PL/smooth seven-arrow construction | `gpt-5.6-sol` | 60 | 60.0 | 100.90M | — | **`$2.40`** |
+| [`20000278`](results/20000278/) | An irrational non-Q-Gorenstein F-jumping number in characteristic 13 (AIM Problem 1.3) | `gpt-6-astra` | 62 | 61.0 | 22.53M | — | **`$2.44`** |
+| [`20001602`](results/20001602/) | Commensurated subgroups of branch groups: missing just-infinite hypothesis and Hanoi group counterexample | `gpt-6-astra` | 62 | 62.0 | 14.58M | — | **`$2.48`** |
+| [`20001849`](results/20001849/) | Flying wings refute uniqueness of the collapsed product steady Ricci soliton (AIMPL Problem 6.7) | `gpt-5.6-sol, gpt-6-astra` | 65 | 63.0 | 11.20M | — | **`$2.52`** |
+| [`20001516`](results/20001516/) | A CAT(0) free-by-cyclic group that is not ordinary RFRS (AIM Problem 5.3) | `gpt-6-astra` | 67 | 66.0 | 14.84M | — | **`$2.64`** |
+| [`2669`](results/2669/) | Handle-slide unlink orbit reduction on staged-framing two-component link presentations (Property R) | `gpt-5.6-sol, gpt-6-astra` | 69 | 66.0 | 24.52M | — | **`$2.64`** |
+| [`1900020`](results/1900020/) | Diagonal quadratic energy contraction on section returns of the cubic Jacobi-Perron algorithm | `gpt-5.6-sol, gpt-6-astra` | 71 | 71.0 | 85.89M | — | **`$2.84`** |
+| [`3256`](results/3256/) | Weighted Dijoin Packing in One-Edge Deletions of Chordal Digraphs | `gpt-6.1-sol` | 72 | 72.0 | 52.53M | $2.88 | **`$2.88`** |
+| [`1417`](results/1417/) | A Uniform Square-Root Edge-Deficit Bound for Strongly Critical Graphs Avoiding Four- and Eight-Cycles | `gpt-6-astra, gpt-6.1-sol` | 76 | 73.0 | 30.62M | $1.36 | **`$2.92`** |
+| [`2862`](results/2862/) | Co-normalizer orthogonal join reduction and rational Chern-Simons volume on one-angle spherical bar cycles | `gpt-5.6-sol, gpt-6-astra` | 73 | 73.0 | 12.43M | — | **`$2.92`** |
+| [`1413`](results/1413/) | Girth-five 77-matching prefix certificate in the search for a degree-57 Moore graph | `gpt-5.6-sol` | 82 | 81.0 | 100.77M | — | **`$3.24`** |
+| [`20001904`](results/20001904/) | A six-point positive-weight obstruction to degree-four Hermite curvature repairs on manifolds without conjugate points | `gpt-5.6-sol, gpt-6-astra` | 82 | 82.0 | 75.04M | — | **`$3.28`** |
+| [`6800022`](results/6800022/) | Complete Global Embeddedness Obstruction for the Reciprocal-Reflection Kato-Muroya Genus-One Four-Catenoidal-End Locus | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 88 | 88.0 | 102.65M | $1.16 | **`$3.52`** |
+| [`20000786`](results/20000786/) | Hasse-Witt matrix vanishing and cubic scalar cancellation on the k=3 quartic reduction branch | `gpt-5.6-sol, gpt-6-astra` | 89 | 89.0 | 111.66M | — | **`$3.56`** |
+| [`20001675`](results/20001675/) | Arbitrary-Depth Exponential HOMFLY-PT Fibers over Quiver Point-Counting Polynomials of Plabic Links and Knots | `gpt-6.1-sol` | 93 | 93.0 | 69.23M | $3.72 | **`$3.72`** |
+| [`8`](results/8/) | Reduction of the minimal-101 root-4 odd perfect number branch to the single factor Phi_31(269) | `gpt-5.6-sol, gpt-6-astra` | 96 | 96.0 | 15.01M | — | **`$3.84`** |
+| [`1138`](results/1138/) | Bielliptic Half-Fiber and Dyadic Picard-Torsion Obstructions on Enriques Surfaces | `gpt-6-astra` | 97 | 97.0 | 97.44M | $3.88 | **`$3.88`** |
+| [`20001274`](results/20001274/) | Congruent plane projections do not determine a convex body up to translation or reflection | `gpt-6-astra` | 103 | 102.0 | 14.76M | — | **`$4.08`** |
+| [`3059`](results/3059/) | The Alon-Jaeger-Tarsi Conjecture in Dimensions Eight and Nine over F_5 | `gpt-6.1-sol` | 111 | 111.0 | 106.72M | $4.44 | **`$4.44`** |
+| [`3395`](results/3395/) | Centered Nuclear Duality and Relative-Mass Obstructions in Monotone Boolean Circuit Lower Bounds | `gpt-6-astra` | 122 | 119.0 | 129.04M | $4.76 | **`$4.76`** |
+| [`9400078`](results/9400078/) | Unconditional Exceptional-Parameter Density Bounds for Ramified GL_4 Automorphic Representations | `gpt-6-astra` | 144 | 143.0 | 56.57M | $5.72 | **`$5.72`** |
+| [`1380`](results/1380/) | Exact rational sign-cell exclusion on the balanced (2,2,2,2) Heilbronn configuration space | `gpt-5.6-sol, gpt-6-astra` | 145 | 144.0 | 121.94M | — | **`$5.76`** |
+| [`20002392`](results/20002392/) | Velocity-Only Exclusion of Backward Self-Similar Navier-Stokes Profiles in a Half-Space | `gpt-6-astra` | 150 | 145.0 | 39.00M | $5.80 | **`$5.80`** |
+| [`20000582`](results/20000582/) | Moving-window Engel Hilbert cocycles with Omega(sqrt(k)) homogeneous gauge distortion | `gpt-5.6-sol, gpt-6-astra` | 152 | 152.0 | 437.17M | — | **`$6.08`** |
+| [`1285`](results/1285/) | An Unconditional Exponential Worst-Case Lower Bound for Adaptive Signed-Chain Elliptic Curve Factorization Programs | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 157 | 155.0 | 93.52M | $1.24 | **`$6.20`** |
+| [`2305027`](results/2305027/) | A signed Cauchy-Green flux identity and linear residual lower bound on planar corona corrections | `gpt-5.6-sol, gpt-6-astra` | 161 | 165.0 | 84.57M | — | **`$6.60`** |
+| [`20001578`](results/20001578/) | Exact quotient-multiplicity exclusion of 18-element equality candidates in Thompson's group F | `gpt-5.6-sol, gpt-6-astra` | 182 | 182.0 | 272.80M | — | **`$7.28`** |
+| [`2338`](results/2338/) | Diophantine Obstructions, Degree-120 S-Unit Descent, and Affine Orthogonal Runge Theorems for Multiplicity Five in Pascal's Triangle | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 188 | 188.0 | 194.53M | $5.76 | **`$7.52`** |
+| [`1243`](results/1243/) | Unconditional Global Squareclasses, Genus-161 Rational-Point Classification, and Map Rigidity on Bremner's Octic K3 Surface | `gpt-5.6-sol, gpt-6.1-sol` | 204 | 192.0 | 71.54M | $6.92 | **`$7.68`** |
+| [`8200002`](results/8200002/) | A 39-dimensional Arb Krawczyk interval certificate for the third Fourier fibre in dimension six | `gpt-5.6-sol, gpt-6-astra` | 239 | 239.0 | 417.23M | — | **`$9.56`** |
+| [`1187`](results/1187/) | Global Nonexistence of Twisted Bridges in F_2-Magnus Quotients and Six-Conjugate Primitive Exclusion for Andrews-Curtis Candidates | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 249 | 246.0 | 113.91M | $7.72 | **`$9.84`** |
+| [`1518`](results/1518/) | An Unconditional Sixth-Energy Saving for Riemann Zeta Zeros and a Local Prime-Window Exceptional-Pair Bound | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 269 | 266.0 | 104.23M | $5.04 | **`$10.64`** |
+| [`9400114`](results/9400114/) | Target-Free Prime-Power Reduction, Short-Arc Cubic Obstructions, and Inverse-Frobenius Classifications for Agrawal's Conjecture | `gpt-6-astra, gpt-6.1-sol, mai-code-1.1-flash` | 303 | 298.0 | 202.21M | $3.92 | **`$11.92`** |
+| [`2248`](results/2248/) | Baier-Zhao dispersion scale barriers for quadratic-prime representations n = a p^2 + b (Erdos #676) | `gpt-5.6-sol, gpt-6-astra` | 309 | 311.0 | 500.20M | — | **`$12.44`** |
+| [`20000715`](results/20000715/) | Differential equations and linear-ODE obstructions for eta-products (AIM Problem 1.2) | `gpt-5.6-luna, gpt-5.6-sol, gpt-6-astra` | 426 | 426.0 | 33.14M | — | **`$17.04`** |
+| [`1465`](results/1465/) | Fu 2026 Theorem 2.8: regularity-premise local-finiteness gap | `gpt-5.6-sol, gpt-6-astra` | 777 | 778.0 | 1431.73M | — | **`$31.12`** |
+| [`20001036`](results/20001036/) | A 5,454-vertex multi-label counterexample to Seymour-Sullivan Conjecture 6.1 and prototype optimality | `gpt-5.6-sol, gpt-6-astra` | 891 | 883.0 | 606.40M | — | **`$35.32`** |
+| [`20000816`](results/20000816/) | Distinct Hilbert-scheme components sharing a complete unlabelled Grobner fan (AIM Problem 15 / 1.35) | `gpt-5.6-sol, gpt-6-astra` | 995 | 987.0 | 77.31M | — | **`$39.48`** |
+| **31 Batch/Audit Packages** | Shared audit shards (`audit-shard-01`, `audit-shard-02`, `batch-001`, `open-audit`) producing 31 packages (`$1.05`/pkg) | `gpt-5.6-sol, gpt-6-astra` | 781 | 816.0 | 1,243.08M | — | **`$32.64`** |
+| **Grand Total (All 84 Results)** | **53 Dedicated Campaigns + 31 Shared-Pool Packages (150 `usage.jsonl` ledgers)** | **Combined** | **8,877** | **8,821.0** | **7,613.25M (`7.61B`)** | **`$71.68` (`$3.58`/thm)** | **`$352.84` (`$4.20`/pkg)** |
 
+</details>
 ---
 
 ## Featured Flagship Breakthroughs
