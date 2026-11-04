@@ -22,6 +22,7 @@
   <img src="https://img.shields.io/badge/Standalone_AMS_LaTeX_Papers-84_PDFs-2E7D32?style=flat-square" alt="84 AMS Papers">
   <img src="https://img.shields.io/badge/Checksummed_Artifacts-728-6A1B9A?style=flat-square" alt="728 Artifacts">
   <img src="https://img.shields.io/badge/Verification-Jacobian_%7C_Lean_4_%7C_PARI%2FGP-C62828?style=flat-square" alt="Verification">
+  <img src="https://img.shields.io/badge/Total_Billed_Cost-%24319.96_(%243.57%2FTheorem)-E65100?style=flat-square" alt="Billed Cost">
 </p>
 
 ---
@@ -39,6 +40,38 @@ As of **November 4, 2026**, the archive contains **84 result packages** (**728 S
 | **III. Independently Verified Counterexamples & Literature Resolutions (Batch 001 & Audit)** | **31** | Exact counterexamples, Lean 4 formal refutations, and source-audited resolutions across 757 historical problem records |
 | **IV. Symbolic, Algebraic & Polyhedral Boundary Certificates** | **19** | Computer-assisted exclusion certificates, Farkas dual proofs, and arithmetic reductions |
 | **Total Archived Result Packages** | **84** | Every package includes `ARGUS_RESULT_<ID>_TECHNICAL_REPORT.pdf`, `.tex`, `README.md`, and `verification-summary.json` |
+
+---
+
+## Compute Efficiency & Per-Problem Billed Cost (`usage.jsonl` Audit)
+
+All Argus campaigns execute as single-daemon staged workflows (`Planner -> Engineer -> Independent Reviewer`, `mission_width=1`) backed by deterministic symbolic/polyhedral sidecars (`Jacobian`, `PARI/GP`, `Lean 4`) and an append-only `Proof Ledger` (`MATH_STATE.json`) that prevents repetitive dead-end loops. Under actual GitHub Copilot CLI billing (`$0.04` per Premium Request), the entire 53-campaign research program consumed **7,999 Premium Requests (`6.37B` total tokens)** for a **total cumulative billed cost of `$319.96`** — and the **20 publishable-theorem campaigns** run in November 2026 cost **`$71.44` total (`$3.57` average per problem)**:
+
+| ID | Result Summary | Model | Calls | Premium Requests | Total Tokens | Nov 2026 Theorem Run Cost | Cumulative Billed Cost (`$0.04`/req) |
+|---|---|---|---:|---:|---:|---:|---:|
+| [`11000263`](results/11000263/) | Bigelow zipper algebra ($X_3\neq 0$) & all-$n\ge 4$ finite-dimensionality | `gpt-5.6-sol` | 6 | 6.0 | 6.48M | — | **`$0.24`** |
+| [`1275`](results/1275/) | Hilbert–Pólya finite-shift dilation full-line essential spectrum $\sigma_{\mathrm{ess}}=\mathbb{R}$ | `gpt-6-astra` | 16 | 16.0 | 7.93M | `$0.64` | **`$0.64`** |
+| [`40`](results/40/) | 3D Euler curved-pipe Cartesian logarithmic obstruction & conformal closure | `gpt-6-astra` | 34 | 34.0 | 40.98M | `$1.36` | **`$1.36`** |
+| [`3102`](results/3102/) | Support-five pebbling number of the Lemke square $L\mathbin{\square} L$ is $64$ | `gpt-6.1-sol` | 36 | 36.0 | 22.80M | `$1.44` | **`$1.44`** |
+| [`7200051`](results/7200051/) | Kusner $\ell_1^5$ $11$-point distortion bounds ($3089/3084 < \Delta \le 115/106$) & Lean 4 | `gpt-6.1-sol` | 44 | 44.0 | 24.19M | `$1.76` | **`$1.76`** |
+| [`3167`](results/3167/) | Sheehan's conjecture for $4$-regular simple graphs of treewidth $\le 4$ | `gpt-6.1-sol` | 53 | 53.0 | 42.76M | `$2.12` | **`$2.12`** |
+| [`3256`](results/3256/) | Weighted dijoin packing $\nu(D,w)=\tau(D,w)$ in one-fill chordal & $6$-terminal digraphs | `gpt-6.1-sol` | 72 | 72.0 | 52.53M | `$2.88` | **`$2.88`** |
+| [`1417`](results/1417/) | Erdős–Gyárfás uniform square-root edge-deficit theorem $n \le \max\{8d,4d^2-8d\}$ | `gpt-6.1-sol` | 76 | 73.0 | 30.62M | `$1.36` | **`$2.92`** |
+| [`6800022`](results/6800022/) | Complete reciprocal-reflection Kato–Muroya genus-$1$ four-end obstruction | `gpt-6.1-sol` | 88 | 88.0 | 102.65M | `$1.16` | **`$3.52`** |
+| [`20001675`](results/20001675/) | Arbitrary-depth exponential HOMFLY-PT fibers for plabic links and knots | `gpt-6.1-sol` | 93 | 93.0 | 69.23M | `$3.72` | **`$3.72`** |
+| [`1138`](results/1138/) | Enriques product mixed-characteristic $(0,2)$ dyadic Picard-torsion Hodge defect | `gpt-6-astra` | 97 | 97.0 | 97.44M | `$3.88` | **`$3.88`** |
+| [`3059`](results/3059/) | The Alon–Jaeger–Tarsi Conjecture in dimensions $8$ and $9$ over $\mathbb{F}_5$ | `gpt-6.1-sol` | 111 | 111.0 | 106.72M | `$4.44` | **`$4.44`** |
+| [`3395`](results/3395/) | Centered nuclear-error duality & $O(M_n+N^2)$-gate relative-mass barrier | `gpt-6-astra` | 118 | 115.0 | 126.15M | `$4.60` | **`$4.60`** |
+| [`9400078`](results/9400078/) | Unconditional ramified $\mathrm{GL}_4$ non-tempered density bound $\ll q^{3-4\tau+\varepsilon}$ | `gpt-6-astra` | 144 | 143.0 | 56.57M | `$5.72` | **`$5.72`** |
+| [`20002392`](results/20002392/) | Velocity-only exclusion of half-space backward self-similar Navier–Stokes profiles | `gpt-6-astra` | 150 | 145.0 | 39.00M | `$5.80` | **`$5.80`** |
+| [`1285`](results/1285/) | Unconditional exponential lower bound for adaptive signed-chain ECM programs | `gpt-6.1-sol` | 157 | 155.0 | 93.52M | `$1.24` | **`$6.20`** |
+| [`2338`](results/2338/) | Multiplicity $5$ in Pascal's triangle ($K(a)\ge 8, \omega(a)\ge 7,14$) & affine orthogonal Runge | `gpt-6.1-sol` | 187 | 187.0 | 194.53M | `$5.72` | **`$7.48`** |
+| [`1243`](results/1243/) | Bremner K3 genus-$161$ rational points, $\operatorname{rank} E(k)=1, \amalg[2^\infty]=(\mathbb{Z}/2)^2$ & rigidity | `gpt-6.1-sol` | 204 | 192.0 | 71.54M | `$6.92` | **`$7.68`** |
+| [`1187`](results/1187/) | Andrews–Curtis $\mathbb{F}_2$-Magnus twisted-bridge nonexistence & $w_{\mathrm{prim}}(H)\ge 7$ | `gpt-6.1-sol` | 249 | 246.0 | 113.91M | `$7.72` | **`$9.84`** |
+| [`1518`](results/1518/) | Unconditional sixth-energy saving ($\delta=1/200$) for Riemann zeta zeros near $\sigma=7/8$ | `gpt-6.1-sol` | 269 | 266.0 | 104.23M | `$5.04` | **`$10.64`** |
+| [`9400114`](results/9400114/) | Agrawal prime-power reduction, short-arc cubic bound $p\gg r^3$ & inverse-Frobenius | `gpt-6.1-sol` | 303 | 298.0 | 202.21M | `$3.92` | **`$11.92`** |
+| [`20001036`](results/20001036/) | $5{,}454$-vertex digon-free counterexample to Seymour–Sullivan Conjecture 6.1 & optimality | `gpt-6-astra` | 891 | 883.0 | 606.40M | — | **`$35.32`** |
+| **All 53 Campaigns** | **Full program (84 published result packages across 53 campaign workdirs)** | **Combined** | **8,054** | **7,999.0** | **6,367.29M** | **`$71.44` (`$3.57`/problem)** | **`$319.96`** |
 
 ---
 
