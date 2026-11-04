@@ -1,0 +1,62 @@
+{
+  "evidence_id": "lean-C_GALLINGER-c2a87c05dcd1",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "/home/argustest/zimo/counterexample-batch-1/campaigns/7200051/research/gallinger/pinned-env/toolchain/lean-4.33.1-linux/bin/lean",
+      "/home/argustest/zimo/counterexample-batch-1/campaigns/7200051/research/gallinger/source/KusnerL1/Main.lean"
+    ],
+    "cwd": "/home/argustest/zimo/counterexample-batch-1/campaigns/7200051/research/gallinger/source/KusnerL1",
+    "duration_ms": 6455,
+    "environment_failure": "missing_dependency",
+    "exit_code": 1,
+    "lake_workspace": "",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "/home/argustest/zimo/counterexample-batch-1/campaigns/7200051/research/gallinger/source/KusnerL1/Main.lean",
+    "source_sha256": "dd053601ee8891c3ce07021b07faac85dc8756d31b0f201e78811a92cf62a8b8",
+    "statement_fidelity": "/home/argustest/zimo/counterexample-batch-1/campaigns/7200051/research/gallinger/source/KusnerL1/statement_fidelity.md",
+    "statement_fidelity_sha256": "9f5e3b8f36607960045018ab89e85da4b671bd21c62841b1b447365a8de62d7c",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "/home/argustest/zimo/counterexample-batch-1/campaigns/7200051/research/gallinger/source/KusnerL1/Main.lean:1:0: error: unknown module prefix 'KusnerL1'\n\nNo directory 'KusnerL1' or file 'KusnerL1.olean' in the search path entries:\n\n/home/argustest/zimo/counterexample-batch-1/campaigns/7200051/research/gallinger/pinned-env/toolchain/lean-4.33.1-linux/lib/lean\n",
+    "tool": "lean",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "/home/argustest/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "/home/argustest/.elan/bin/lake",
+        "version": ""
+      },
+      "lean": {
+        "available": true,
+        "path": "/home/argustest/zimo/counterexample-batch-1/campaigns/7200051/research/gallinger/pinned-env/toolchain/lean-4.33.1-linux/bin/lean",
+        "version": "Lean (version 4.33.1, x86_64-unknown-linux-gnu, commit 819816b2e0a3bf405af45ae5c7af2491d8f5bee6, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/gallinger/source/KusnerL1/Main.lean",
+    "text": "import KusnerL1.ScalarReduction\nimport KusnerL1.Cardinality\n\n/-! The main theorem for arbitrary equilateral sets in the genuine ℓ₁ metric. -/\nnamespace KusnerL1\n\ntheorem no_unit_equilateral {n : ℕ} (hn : 2 ≤ n) (hn6 : n ≤ 6)\n    (x : Fin (2 * n + 1) → L1 n) : ¬ UnitEquilateral x := by\n  intro hx\n  exact no_scalar_solution hn hn6 _ _ (scalar_obstruction hn hx)\n\n/-- Every equilateral set, without an a priori finiteness assumption. -/\ntheorem equilateral_upper {n : ℕ} (hn : 2 ≤ n) (hn6 : n ≤ 6)\n    {S : Set (L1 n)} (hS : Equilateral S) : S.encard ≤ 2 * n :=\n  equilateral_encard_le_of_exclusion (no_unit_equilateral hn hn6) hS\n\ntheorem equilateral_finite {n : ℕ} (hn : 2 ≤ n) (hn6 : n ≤ 6)\n    {S : Set (L1 n)} (hS : Equilateral S) : S.Finite ∧ S.ncard ≤ 2 * n :=\n  equilateral_finite_of_exclusion (no_unit_equilateral hn hn6) hS\n\ntheorem equilateralDimension_eq {n : ℕ} (hn : 2 ≤ n) (hn6 : n ≤ 6) :\n    equilateralDimension n = (2 * n : ℕ) :=\n  equilateralDimension_eq_of_exclusion n (no_unit_equilateral hn hn6)\n\n/-- The conclusion `e(ℓ₁⁵) = 10`. -/\ntheorem equilateralDimension_five : equilateralDimension 5 = 10 :=\n  equilateralDimension_eq (by norm_num) (by norm_num)\n\n/-- The conclusion `e(ℓ₁⁶) = 12`. -/\ntheorem equilateralDimension_six : equilateralDimension 6 = 12 :=\n  equilateralDimension_eq (by norm_num) (by norm_num)\n\nend KusnerL1\n"
+  },
+  "produced_by": "lean_evidence/lean 4.33.1",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/gallinger/source/KusnerL1/statement_fidelity.md",
+    "text": "# Statement fidelity: Gallinger's pinned main theorem\n\nThe source is the unmodified `KusnerL1/Main.lean` at commit\n`7f3a7fe3bd7341ed6fa331737138dc0ab295b5c2` of\n`https://github.com/kusner-l1/kusnerl1-lean`.\n\n`KusnerL1.L1 n` abbreviates `PiLp 1 (fun _ : Fin n => Real)`.\n`KusnerL1.l1_dist` identifies its distance with the sum of absolute coordinate\ndifferences. It is not the supremum metric on the function space.\n`KusnerL1.Equilateral S` requires a positive common distance for all distinct\nmembers of the arbitrary set `S`. `equilateralDimension` is the supremum of\nthe extended cardinalities of such sets, so infinite sets are not silently\nassigned cardinality zero.\n\nThe declarations `KusnerL1.equilateralDimension_five` and\n`KusnerL1.equilateralDimension_six` assert, without additional hypotheses,\nthat these suprema equal 10 and 12, respectively. Their upper-bound dependency\nis `no_unit_equilateral`: for every natural number `n` with `2 <= n <= 6`\nand every indexed family `Fin (2*n+1) -> L1 n`, not all distinct-index\ndistances can equal one. This includes arbitrary real coordinates and ties.\nThe lower bounds are supplied by the signed coordinate vectors.\n\nThese are the statements of Theorem 1.1 and Corollary 6.2 in\nDOI `10.5281/zenodo.22984024`, not an aspect-ratio theorem. Their proof passes\nthrough terminal clipping, positive reciprocal radii, cut energies, the span\nand endpoint inequalities, scalar reduction, and the dimension-six scalar\nexclusion. The source's definitions of `a`, `b`, `Phi`, `G`, `alpha`, and\n`Admissible` match equations (5.5), (5.7), (5.8), and (5.11) in that paper.\n\nThe README warns that the formalization predates later manuscript revisions.\nThe direct dimension-five argument in Remark 6.3 and the surviving\ndimension-seven scalar pair in Proposition 7.1 do not appear as declarations\nin the pinned main theorem dependency chain. They are not certified by a\nsuccessful build of the two main theorems.\n\nThe upstream toolchain is Lean 4.33.1 with Mathlib commit\n`0df444a360eaa60ab8c11dca51a86af692955474`.\nAn alternate-environment replay, if successful, checks the unchanged source\nwith the installed Lean 4.31.0 and its installed Mathlib. It must not be\ndescribed as reproduction of the pinned upstream build.\n\nThe compiler checks the encoded statements and their imported proof terms.\nIt does not check this reading of the paper, its novelty, or any assertion\nabout the exact eleven-point minimum aspect ratio.\n"
+  },
+  "subject": {
+    "content_hash": "15860ba47b05e109628f085c79a46f168a53138e4520adb626f186e3952a32f9",
+    "kind": "claim",
+    "subject_id": "C_GALLINGER"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}
