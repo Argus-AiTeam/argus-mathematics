@@ -1,0 +1,261 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Om}{\Omega}
+\title{An entropy upper bound for actual positive-hinge repairs}
+\author{Campaign 3395: Engineer continuation}
+\date{November 5, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Result and unresolved obligation.}
+This is an upper construction, not another discrepancy lower bound.
+The reviewed HC construction supplies a full-domain positive cover.
+Its entropy can be bounded by retained-mass-weighted box surprisal,
+plus the logarithm of the original cut count and a bounded term.
+It is not necessary to bound the unweighted sum of box coefficients
+in order to apply this estimate.
+
+No uniformly affordable packing is established here. In particular
+CDR18, MP9, explicit native constants, a positive fixed defect
+threshold, and GL10--GL13's fixed-factor consequence remain unproved.
+DS16--DS18 remain the strongest achieved unrestricted circuit result.
+Neither verified novelty nor publishable completion is asserted.
+
+\paragraph{Reused premises.}
+Use the actual compulsory cut C1--C6, common-box completion K1--K2,
+and A7's joint original-DAG defect identity. HC1--HC13a already
+prove the hinge expansion, full-domain domination, and the exact
+single-loss formula, including partial retention of hinges.
+BP1 bounds only the whole output, not either factor.
+CDR1--CDR3 identify the attained finite soft-retention dual.
+The ledger records these internal sources before the new argument.
+No new external theorem is a premise. HC15--HC17's failed scalar
+volume replacement is reused as a boundary, not repeated as a test.
+
+\section{The construction and its single loss}
+Let $Q=\sum_{j=1}^r A_jV_j$, $1\le r\le s$, be the nonzero
+terms of the actual cut of the original size-$s$ DAG. Its source
+partitions $S_j,\overline S_j$ are balanced. Put
+$h_j(\nu)=(A_jV_j)(X_\nu)$, $h=\sum_jh_j$, and
+$H=\max_{\Om}h\le2\kappa$.
+
+For a finite family of source boxes $U$, use the actual HC4
+completion $R_{j,U}$ and error $E_{j,U}=R_{j,U}-h_j$ on $\Om(U)$.
+Choose
+\[
+ \max_{\Om(U)}E_{j,U}\le\delta_{j,U}\le D_j(U),\qquad
+ T_{j,U}=1_{\Om(U)}(R_{j,U}-\delta_{j,U})_+ .       \tag{HE1}
+\]
+Every $T_{j,U}$ is an exact nonnegative rectangle sum across
+$S_j,\overline S_j$, with total coefficient weight
+$m_{j,U}=\max T_{j,U}\le H$. Its rectangles are subsets of $U$.
+On the entire original domain $0\le T_{j,U}\le h_j$.
+
+Fix nonnegative $\lambda_U$ and $0\le\rho_{j,U}\le1$ before
+drawing the original sampler, subject to
+\[
+ c(\nu)=\sum_U\lambda_U1_{\Om(U)}(\nu)\le1
+                         \quad(\nu\in\Om).
+ \quad
+ H_U=\sum_j\rho_{j,U}T_{j,U},\qquad
+ P=\sum_U\lambda_UH_U.                              \tag{HE2}
+\]
+Thus $P\le ch\le h$ even at zero-probability assignments.
+With $p=\Delta$ the unchanged complete law, set
+\[
+ \begin{split}
+ p_U&=p(\Om(U)),& Z_U&=\E_pH_U,&
+ W_U&=\sum_j\rho_{j,U}m_{j,U}\le rH,\\
+ \alpha&=\sum_U\lambda_Up_U\le1,&
+ Z&=\sum_U\lambda_UZ_U=\E_pP .
+ \end{split}                                                    \tag{HE3}
+\]
+The exact loss, with no separate per-cut allowance, is
+\[
+ \begin{split}
+ \Theta={}&\E_p[(1-c)h]\\
+ &+\sum_U\lambda_U\E_p\left[1_{\Om(U)}
+   \sum_j\left((1-\rho_{j,U})h_j+
+     \rho_{j,U}\min\{h_j,\delta_{j,U}-E_{j,U}\}\right)\right]\\
+ ={}&\E_p(h-P).                                      \tag{HE4}
+ \end{split}
+\]
+This is HC13a, without replacing an actual lost mass by its error
+allowance. At each box $\sum_jD_j(U)=D_Q(U)$ remains the joint
+original charge. No separately maximized defects are added.
+
+\section{Cost the rectangles before discarding their probabilities}
+For any probability law $p$ on the finite original domain, write
+$c_p(B)=p(B)\log(1/p(B))$, with zero value at $p(B)=0$.
+If $f=\sum_i a_i1_{B_i}$, $a_i\ge0$, let $W=\sum_i a_i$
+and $z=\E_pf$. Concavity of $x\log(1/x)$ gives
+\[
+ \sum_i a_i c_p(B_i)\le z\log(W/z)\quad(z>0).          \tag{HE5}
+\]
+Indeed, apply concavity with weights $a_i/W$ to the probabilities
+$p(B_i)$, whose weighted mean is $z/W$. The function is continuous
+at zero, so zero-law rectangles are included. When $z=0$, both
+entropy cost and its continuously interpreted upper bound are zero.
+
+\begin{proposition}
+Suppose the construction (HE1)--(HE3) has $Z>0$. There is an
+explicit full-domain representation of $P$ by balanced original
+rectangles, of entropy cost $C_p(w)$, satisfying
+\[
+ \begin{split}
+ C_p(w)&\le
+    \sum_{U:Z_U>0}\lambda_UZ_U\log(W_U/Z_U),           \tag{HE6}\\
+ \frac{C_p(w)}Z&\le
+     J+\log(rH\alpha/Z),\\
+ J&=\sum_{U:Z_U>0}\frac{\lambda_UZ_U}{Z}
+                              \log(1/p_U).           \tag{HE7}
+ \end{split}
+\]
+All boxes, factors, and probabilities are evaluated under the
+same original law. The weights in $J$ are retained means, not
+uniform box weights, raw $\lambda_U$, or conditioned-history weights.
+\end{proposition}
+\begin{proof}
+Expand each hinge by HC3, multiply its weights by
+$\lambda_U\rho_{j,U}$, and add. Each rectangle keeps its original
+partition; intersecting its two sides with $U$ preserves that
+partition. No signed correction is made. Apply (HE5) to the
+combined hinge representation of $H_U$, whose total coefficient
+weight is exactly $W_U$. This proves (HE6).
+
+For $p_U>0$ put $a_U=Z_U/p_U$, allowing $a_U=0$.
+Since $W_U\le rH$, division by $Z$ gives
+\[
+ \frac{C_p(w)}Z\le J+\log(rH)
+               -\frac1Z\sum_{U:p_U>0}
+                                  \lambda_Up_Ua_U\log a_U.
+                                                               \tag{HE8}
+\]
+The weights $\lambda_Up_U/\alpha$ form a probability vector,
+and their mean $a_U$ is $Z/\alpha$. Convexity of $x\log x$,
+with $0\log0=0$, therefore gives
+\[
+ \sum_U\lambda_Up_Ua_U\log a_U\ge Z\log(Z/\alpha).
+                                                               \tag{HE9}
+\]
+Since $Z>0$ implies $\alpha>0$, substitution proves (HE7).
+If $p_U=0$, then $Z_U=0$; its entropy contribution is zero but
+its full-domain rectangles and packing constraints were not removed.
+\end{proof}
+
+In particular, under BP1 and the single condition $\Theta\le1/16$,
+\[
+ Z\ge1/\kappa-1/16,\qquad
+ \frac{rH\alpha}{Z}\le
+     r\,\frac{2\kappa^2}{1-\kappa/16}
+ \le r\,\frac{4225}{1918}<\frac83\,r .
+                                                               \tag{HE10}
+\]
+The exponential series gives $e>1+1+1/2+1/6=8/3$. Consequently
+\[
+                  C_p(w)/Z<J+\log(s+1)+1.             \tag{HE11}
+\]
+No LR3 normalization is used here: $r$ counts the nonzero original
+cut terms, not gates of a materialized normalized circuit.
+If such a circuit were recut instead, the existing LR3 overhead
+would have to be charged. Real coefficients, sharing, repeated
+powers, and unrestricted degree remain covered by K2 and HC3.
+
+\section{Precisely what would imply the all-multiplier estimate}
+Retain the full size-dependent proposed budget
+\[
+ T=K_0+a\log(M_n+2)+\beta\log(s+1)+N/2^{139}.          \tag{HE12}
+\]
+If for every native input circuit an original-law packing could
+be constructed with
+\[
+              \Theta\le1/16,\qquad
+              J\le T-\log(s+1)-1,                    \tag{HE13}
+\]
+then the same $P$ would satisfy the MP9 domination and entropy
+requirements. For every $\eta\ge0$, its soft-retention objective
+would obey, without choosing a multiplier first,
+\[
+ \begin{split}
+ {\cal E}_{p,T+\eta}(h)
+ &\le C_p(w)+(T+\eta)\Theta\\
+ &\le TZ+(T+\eta)\Theta
+   =T\E_ph+\eta\Theta
+   \le T\E_ph+\eta/16.                               \tag{HE14}
+ \end{split}
+\]
+This proves CDR18 \emph{conditional on (HE13)}, not unconditionally.
+It is a sufficient construction criterion, not a new equivalence
+and not a necessary restriction on globally pooled MP9 covers.
+
+The missing step is the simultaneous construction in (HE13) using
+the original circuit size and a fixed positive defect threshold.
+The packing inequality alone does not bound $J$ at the required
+rate. Conversely the old scalar lower bound on
+$\sum_U\lambda_U$ is not a lower bound on (HE6), on $J$, or on an
+optimally pooled cover. No repeated scalar-volume test is used
+here. No values of $K_0,a,\beta,b_*,N_0$ satisfying the native
+quantifiers have been established, so primal attainment and
+GL10--GL13 cannot yet be invoked to announce a fixed-factor theorem.
+
+\section{Exact finite upper-construction replay}
+This is a finite diagnostic under a declared test law, not the
+complete production sampler. Four binary sources are denoted
+$x,y,z,w$; all factors below use cubes of their literal variables.
+On Boolean inputs those cubes have the literal values. With
+$t=1/256$, share the interaction $I=t x_1^3z_1^3$ and set
+\[
+ A=(x_0^3+x_1^3+I)(y_0^3+y_1^3),\quad
+ V=(z_0^3+z_1^3+I)(w_0^3+w_1^3),\quad Q=AV.          \tag{HE15}
+\]
+Build $V$ before $A$. The nonzero actual cut is $A$ with context
+$V$ and original partition $\{x,y\}\mid\{z,w\}$.
+The replay checks this using the existing divided-difference cut,
+not an invented factor label. All $256$ Boolean inputs satisfy
+$F\le Q\le(1+t)^2F$, and exactly $b_Q=t/2$.
+No small production-$R_n$ circuit is asserted.
+
+The test law fixes $y=w=0$ and makes $x,z$ independent fair bits.
+Use boxes $\Om,\{x=0\},\{x=1\},\{y=0\},\{y=1\}$ with weights
+$1/4,1/4,1/4,1/2,1/2$, respectively. They pack with $c=1$ on
+all $16$ assignments, including the $12$ zero-law assignments.
+Take the actual maximum completion error as each allowance and
+retain every hinge. Direct exact calculation gives
+\[
+ \begin{split}
+ \Theta&=7t/16<1/16,&
+ Z&=1+t/16+t^2/4,\\
+ C_p(w)/\log2&=1/4+7t/8+t^2/2,&
+ ZJ/\log2&=1/4+(t+t^2)/16,\\
+ \sum_U\lambda_UW_U&=7/4+3t/2+3t^2/2.                \tag{HE16}
+ \end{split}
+\]
+Here $H=(1+t)^2$, $r=\alpha=1$. The upper bound
+$J+\log(H/Z)$ is strictly smaller than the older global-weight
+bound $\log((\sum_U\lambda_UW_U)/Z)$. The replay proves this
+without floating point: $J/\log2<1/3$ and
+$1-H/(\sum_U\lambda_UW_U)>1/3$, using
+$\log2<1$ and $\log u\ge1-1/u$ for $u\ge1$.
+It also verifies the entropy upper inequality using the same
+rational logarithm bounds. A second case simultaneously reduces
+packing coverage and one hinge's retained fraction, checking
+the uncovered and partial-retention terms of (HE4).
+
+One bounded Jacobian mutual-information operation checks only
+the constant-hinge specialization of this packing. Its exact
+joint law is $p(\nu)\lambda_U1_U(\nu)$, its information is
+$1/4$ bits, and the zero-law box is retained as a zero column.
+The first request with all sixteen rows exceeded the operation's
+bounded cell count and was rejected before computation. Its exact
+payload and validation error are retained. The corrected request
+omits only zero-probability rows of this auxiliary joint table,
+leaving twenty cells; the local cover replay still checks all
+sixteen domain points.
+It does not certify the circuit theorem or supply native constants.
+The source \texttt{hinge\_entropy\_upper\_check.py} independently
+replays (HE15)--(HE16), all full-domain constraints, and the
+retained typed adapter certificate. The general upper proof
+is (HE5)--(HE9), not the finite replay.
+\end{document}

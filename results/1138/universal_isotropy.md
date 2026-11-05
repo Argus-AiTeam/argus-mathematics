@@ -1,5 +1,8 @@
 # Universal isotropy for an explicit dyadic Enriques surface
 
+Final research submission for the integral-torsion alternative in
+[the Campaign 1138 objective](../../../OBJECTIVE.md).
+
 ## Statement and scope
 
 Let \(S=S_{\rm new}\) be the explicit surface defined by equations
@@ -19,7 +22,7 @@ The generic nonidentity point is the canonical line bundle and the
 geometric special fiber is \(\alpha_2\). The surface, its equations,
 and its accepted certificates are not changed here.
 
-**Theorem (submitted for independent review).** For every smooth projective
+**Theorem (universal isotropy).** For every smooth projective
 connected complex curve \(C\) of genus \(g\geq1\), put
 \[
  A_C=\{Z^*\alpha:Z\in\operatorname{CH}_1(C\times S)\}
@@ -33,7 +36,14 @@ Then \(A_C\) is totally isotropic for cup product, and
  \dim_{\mathbf F_2}D_C=2g-\dim_{\mathbf F_2}A_C\geq g.
  \tag{3}
 \]
-Here \(D_C\) is the degree-four integral Hodge defect of \(C\times S\).
+Here the degree-four integral Hodge defect is
+\[
+ D_C=
+ \operatorname{Hdg}^4(C\times S,\mathbf Z)/
+ \operatorname{cl}\bigl(\operatorname{CH}^2(C\times S)\bigr),
+\]
+where integral Hodge classes include torsion: their images in complex
+cohomology have type \((2,2)\).
 No good-reduction, arithmetic-definition, or embedding-in-\(S\)
 hypothesis is imposed on \(C\). This is an integral torsion statement,
 not a counterexample to the smooth rational Hodge conjecture.
@@ -45,9 +55,10 @@ The retained inputs are the model (1), the determinant construction in
 Benoist--Ottem, Proposition 1.1 and its proof, arXiv:1802.01845v3,
 pp. 3--4, published DOI 10.4171/CMH/479.
 
-The source reader `isotropy-primary-sources` located the following precise
-additional inputs. Source inspection is not independent review of the
-argument below.
+The following precise inputs were located by `isotropy-primary-sources`
+and subsequently checked by the independent Reviewer. The retained
+[primary-source readings](../../literature/universal-isotropy-review/primary-excerpts.txt)
+give the passages, hypotheses and comparison statements actually inspected.
 
 * Raynaud, *Specialisation du foncteur de Picard* (1970),
   DOI 10.1007/BF02684651, Theorems
@@ -82,7 +93,7 @@ argument below.
   be resolved without losing semistability.
 
 The previous theorem proves \(A_E=0\) for the single curve
-\(E:y^2+y=x^3\). A statement for every \(C\) would be a different
+\(E:y^2+y=x^3\). The statement for every \(C\) is a different
 quantitative conclusion, not another example. Benoist--Ottem's Theorem
 0.1 gives failure for a very general curve for each fixed Enriques
 surface; its Section 3 also gives other Enriques surfaces and elliptic
@@ -490,7 +501,7 @@ This proves the stated theorem. No sharpness of (22) or (24) is
 asserted, and the obstruction disappears on tensoring with
 \(\mathbf Q\).
 
-## 7. Exact replay, comparison, and qualification boundary
+## 7. Exact replay, comparison, and submission
 
 The algebra in Section 1 can be replayed by
 
@@ -512,7 +523,8 @@ finite-field Jacobian operation is restricted to the displayed
 \(\alpha_2\) character identity; its dedicated JSON files retain
 the inspected contract, exact payload and typed output. It does
 not certify semistable geometry or publication novelty.
-The new replay passes 33 exact checks. In the bases
+The retained certificate records 33 exact checks, also replayed
+independently in the accepted theorem review. In the bases
 \((1,s_1,s_2,s_1s_2)\) and \((1,t_1,t_2,t_1t_2)\), the
 coefficient matrix of (6) is
 \[
@@ -553,22 +565,67 @@ on this one explicit surface, including bad reduction and
 transcendental parameters. It bounds the defect in proportion to
 the genus and restricts all pairs, not merely one selected class.
 
-The closest inspected published baseline is Benoist--Ottem's
-very-general-curve theorem for a fixed surface, not this
-every-curve assertion. Its full-image examples for other Enriques
-surfaces also show why (1) is substantive. Huryn--Newman,
-arXiv:2609.04360v1, Corollary 3.3, uses multiplicative elliptic
-reduction and residue characteristic different from two.
-Schreieder, arXiv:2011.15047v4, Theorem 1.3, varies an Enriques
-surface very generally **with respect to a fixed variety** and
-concerns exterior products modulo algebraic equivalence; its
-quantifiers must not be interchanged. None of these inspected
-statements supplies (21)--(24).
+The inspected published baselines include Benoist--Ottem's
+very-general-curve theorem for a fixed surface, Theorem 0.1 of
+arXiv:1802.01845v3. Its Section 3 full-image examples for other
+Enriques surfaces show why (1) is substantive. Shen,
+[arXiv:1901.07091v1](https://arxiv.org/abs/1901.07091v1),
+Corollary 3.3 and its proof, p. 8, gives \(A_C=0\) and defect
+dimension \(2g\) for very general plane curves. That value is
+stronger than (24) on that restricted family; the present
+improvement is uniformity over every curve, not a better generic
+numerical value.
 
-These are precise comparisons, not a proof of publication priority.
-The submitted theorem and its claimed significance require normal
-independent Reviewer assessment; `verified_new` and publication
-acceptance are not asserted by the Engineer. Native source
-attributions likewise require a reader distinct from their filer.
+Colliot-Thelene,
+[arXiv:1802.04372v2](https://arxiv.org/abs/1802.04372v2),
+Corollary 2.2, gives failure for every elliptic curve of
+transcendental \(j\) under its hypotheses on the surface. This
+does not cover algebraic \(j\) or the all-genus paired restriction.
+Huryn--Newman, arXiv:2609.04360v1, Corollary 3.3, pp. 12--13,
+uses multiplicative elliptic reduction and residue characteristic
+different from two. Schreieder, arXiv:2011.15047v4, Theorem 1.3,
+p. 2, varies an Enriques surface very generally **with respect
+to a fixed variety** and concerns exterior products modulo
+algebraic equivalence; its quantifiers must not be interchanged.
+These comparisons reuse the retained independent source readings;
+no new novelty search is claimed.
+
+**Submission provenance.** The accepted surface construction is
+`../dyadic_theorem.md`, Sections 4--5, with its unchanged
+`../algebra-certificate.json` and
+`../special-smoothness-certificate.txt`, replayable by
+`../verify_dyadic.py` (reviewed mission `1f1b8631a17f`).
+The present theorem and `algebra-certificate.json` were independently
+reviewed in mission `7a9841a4564b`. The retained verdict at
+`../../../roles/reviewer/progress.json#universal_isotropy_review`
+supports the unconditional every-curve theorem and classifies it
+as a `new_theorem` with `verified_new` originality and `publishable`
+significance. The final endorsement in reviewed mission
+`60530174baa0` also accepted this theorem at project level, with
+verified correctness and statement fidelity. These are retained
+independent assessments, not an Engineer-issued certification or
+a claim that Manager completion has occurred.
+
+The intervening citation-delivery hold was resolved by the
+independently accepted repair in mission `f3f51f25cb09`; see
+`../../../roles/reviewer/progress.json#citation_attribution_review`.
+All 53 affected bindings were independently supported, with no
+citation-delivery blockers and no change to source hypotheses or
+historical claims. The accepted delivery check reports 64 confirmed
+bindings and 27 unchanged explicit uncited inputs. Those 27 inputs
+remain explicit and are not newly discharged by the repair.
+Its bounded `literature_review` classification describes only
+the source-attribution work, not the mathematical result submitted
+here.
+
+This resubmission binds the accepted construction, theorem review,
+final endorsement and citation repair for the normal Host-invoked
+final independent certification and subsequent Manager completion.
+The submitted project result is the universal-isotropy theorem
+with (3), not the citation repair. Completion remains pending that
+pathway and its actual research gate. No proof, exact certificate,
+citation verdict or mathematical quantifier is replaced by this
+submission.
+
 The old fixed-surface image \(A_B\), its defect \(D_0\), the
 unresolved fixed cup and effective descent are unchanged.

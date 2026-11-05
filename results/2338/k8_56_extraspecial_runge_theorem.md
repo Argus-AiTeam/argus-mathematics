@@ -2,10 +2,13 @@
 
 ## Result and status
 
-This is an Engineer prose proof, with a rerunnable certificate for its new
-finite algebra. Independent mathematical, citation, originality and
-publishable-significance review is still required. No finite computation
-below is a substitute for the quantified proof.
+The construction, actual arithmetic images and all-number-field pole
+inequality passed independent mathematical review in handoff
+`b8d9e2ab8eee`. Its reviewed source attributions and rerunnable finite
+certificate are reused, not rechecked here. No finite computation below
+is a substitute for the quantified proof. Publication-level originality,
+significance and objective fit remain separate, unresolved obligations;
+Sections 9--10 make the publication case and its limitations explicit.
 
 Let C be the smooth projective model of
 
@@ -480,3 +483,170 @@ for the normal independent Reviewer. The earlier failed tactic
 of declaring the old general cohomology/counting ingredients
 new is not reopened, and the accepted arithmetic results and
 completed claims are unchanged.
+
+## 10. Publication case and the remaining scientific gap
+
+### The precise candidate contribution
+
+The candidate is the conjunction already proved in Sections 2--7:
+the specified theta square-character kernel in the actual geometric
+fundamental group descends over Q; its pointed quotient is exactly Y_1;
+the based and infinity-path images are respectively Aut(E) and Hol(E);
+and its pole inequality holds over every number field. In particular,
+the nonzero **abelian** Kummer difference forces the full actual
+**nonabelian** translation image without a separate central-sign
+hypothesis. This describes the accepted arithmetic result, not a
+stronger theorem established in the publication round.
+
+The strongest accepted campaign baseline is the entire multiplication
+tower, not just its first 256-point fiber. Its geometric deck groups
+are abelian, so none of those covers can dominate Z over C. Moreover,
+the degree-two central quotient alone gives only
+
+    r_Y1(K) <= r_Z(K) <= 2 r_Y1(K).
+
+Indeed each orbit downstairs has at least one orbit above it and at
+most two, by inspecting its two-element geometric fiber. Thus applying
+the old bound to Y_1 yields only r_Z(K)<=2s_inf(K), not the required
+r_Z(K)<=s_inf(K). Sections 4--7 supply the actual nonabelian image and
+the tighter conclusion. This is a genuine difference in the covers
+treated and the arithmetic conclusion obtained. It is not a proof of
+logical independence from all consequences of the accepted tower or
+from classical theta-group theory.
+
+### Positive classical antecedents, not a search-miss argument
+
+The bounded primary-source reader `theta-primary-comparison` supplied
+the following additional comparisons. They concern the publication
+claim, not new assumptions in the accepted proof of Sections 2--7.
+
+**Mumford's theta group already supplies the abstract E.**
+Mumford, *On the equations defining abelian varieties. I*,
+Inventiones Mathematicae 1 (1966), 287--354,
+DOI `10.1007/BF01389737`, works over an algebraically closed field.
+The primary scan is
+https://pazuki.perso.math.cnrs.fr/index_fichiers/Mumford66.pdf.
+Section 1, Theorem 1 and its corollary, pp. 293--295, give the
+nondegenerate theta-group commutator. Section 2, pp. 310--311,
+constructs the homomorphism
+
+    eta_2 : G(L^2) -> G(L)
+
+for symmetric L. Proposition 6, pp. 312--314, and Corollary 1,
+p. 315, identify the square/quadratic-refinement data.
+
+Here is the relevant specialization, rather than a claim that Mumford
+states the campaign theorem. If L is a symmetric principal theta line
+bundle on an abelian fourfold over an algebraically closed field of
+characteristic different from two, then G(L) is the scalar group.
+The map eta_2 squares scalars, and its finite kernel E_L fits into
+
+    1 -> mu_2 -> E_L -> A[2] -> 1.
+
+Its commutator is the Weil pairing and its square form is e_*^L.
+For clarity, an order-two lift h of v in G(L^2) satisfies
+eta_2(h)=e_*^L(v) by Proposition 6. Rescaling h by a scalar a
+with a^2=e_*^L(v) puts it in E_L and makes its square e_*^L(v).
+Nondegeneracy then makes E_L extraspecial of order 512; a plus
+refinement gives precisely the abstract plus type used here.
+Consequently neither this abstract group nor its theta square form
+is an original contribution of the campaign.
+
+This specialization does not identify E_L, with its arithmetic
+structure, with the prescribed quotient of Pi. In particular it
+does not identify the geometric kernel, the rationally pointed
+twist, or the actual two arithmetic images in this note. Those
+identifications cannot be replaced by an abstract group isomorphism.
+
+**The exponent-two filtration and quadratic obstruction are also
+established antecedents.** Wickelgren,
+*3-nilpotent obstructions to pi_1 sections ...*,
+`arxiv:1011.0655v2` (22 August 2012),
+https://arxiv.org/pdf/1011.0655v2,
+Section 12.2.3, PDF pp. 12--13, treats the characteristic series
+
+    P_1=pi,       P_(n+1)=[pi,P_n] P_n^2
+
+and its arithmetic obstruction maps. The quotient pi/P_3 already
+has nilpotency class at most two and exponent dividing four.
+It is therefore not enough to distinguish this work from earlier
+nilpotent descent merely by saying that its quotient has exponent
+four. Section 12.3.1, PDF p. 14, explicitly attributes the
+cup-product polarization identity for the class-two obstruction
+to Ellenberg's 2000 preprint, Proposition 1, and also credits
+Zarhin. This is a different Wickelgren source from the
+`arxiv:1006.0265v3` comparison in Section 9.
+
+The full Ellenberg preprint was not obtained: the current author
+archive supplied no copy and the Penn workshop endpoint returned
+HTTP 403. The proposition recovered through Wickelgren concerns
+the obstruction's polarization. It does not settle what other
+assertions Ellenberg's unavailable text contains.
+
+**Arithmetic theta compatibility is not new either.**
+Poonen--Rains, *Self cup products and the theta characteristic
+torsor*, `arxiv:1104.2105v1`,
+https://arxiv.org/pdf/1104.2105v1,
+Proposition 3.2, PDF p. 7, constructs quadratic refinements
+functorially from symmetric line bundles on abelian schemes.
+Theorem 3.9, PDF p. 11, relates the theta-characteristic torsor
+of a smooth proper family of geometrically integral curves to
+the polarization obstruction and self cup products. These are
+genuine arithmetic antecedents, not merely complex-topological
+spin structures. The cited propositions do not assert this
+curve's prescribed etale cover or its full Hol(E) path image.
+
+Together with Section 9, these comparisons assign the foundations
+precisely: Griess supplies nonsplitting; SGA1 supplies descent and
+comparison; Johnson supplies the spin/quadratic dictionary; Stoll
+supplies general finite-descent torsors; Mumford supplies the
+abstract theta group; and Wickelgren and Poonen--Rains supply
+nilpotent-obstruction and arithmetic theta compatibility. None
+of those ingredients is claimed as new here. This is a positive
+antecedent reduction, not evidence that the whole arithmetic
+theorem was previously published.
+
+### Significance, objective fit, and the decision boundary
+
+The substantive candidate application is an extension-stable
+limitation on direct Runge at an actual nonabelian layer: selecting
+this theta refinement and then passing to any number field cannot
+repair the strict pole condition. Its quantifier over all fields
+is essential and cannot be replaced by a finite list of extensions.
+It closes a covering direction not treated by the abelian
+multiplication covers. These facts explain the proposed arithmetic
+interest; they do not themselves certify field-level significance.
+
+Under OBJECTIVE.md this is a candidate structural/global-Runge
+result. It must not be rejected solely for lacking a literal
+counterexample. Equally, it is not a Diophantine obstruction to
+solutions: it excludes neither surviving lower-index system,
+does not improve K(a)>=8, gives no new bound on m(a), and does
+not rule out other nonabelian covers or other uses of Runge.
+No new arithmetic proposition stronger than the already reviewed
+extraspecial theorem is proved in this publication round.
+
+The precise unsupported assertion is that the prescribed
+geometric-kernel-to-full-arithmetic-path-image result, and its
+pole consequence, constitute an original, substantial advance
+over the established theta-group and nonabelian-descent framework.
+The positive comparisons above remove the abstract group and
+exponent-four filtration as possible novelty cores. They do not
+establish that remaining assertion, nor do they refute it. The
+unavailable full Ellenberg text leaves a specific priority
+comparison unresolved; obtaining it alone would still not
+establish significance.
+
+Accordingly the Engineer publication judgement is **inconclusive**:
+neither verified-new status nor publishable significance is
+claimed. The three new comparison assumptions also await independent
+proposition attribution in the citation ledger; the source reader's
+report is not substituted for that verdict. This does not reopen the
+accepted Griess and SGA1 attributions. The normal independent Reviewer
+must judge the precise arithmetic contribution and its objective fit.
+If unsupported,
+the next task is mathematical replanning for a substantive
+contribution, not another runtime task, a renamed group, a repeat
+of this source comparison, or stronger publication language.
+The accepted theorem, its original route and all existing
+certificates remain intact.

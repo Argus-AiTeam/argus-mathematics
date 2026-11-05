@@ -31,15 +31,29 @@
 
 本仓库集中归档 **Argus** 自治数学研究项目已形成完整证据链的数学定理、显式反例与形式化/符号复算证书。本仓库不堆砌未验证的模型对话，[`results/<ID>/`](results/) 下的每一个成果包均围绕**严格的数学命题、可独立重跑的精确证书（Farkas 对偶、SMT/ILP、$\mathbb{F}_2$-Magnus 代数、PARI/GP 数域下降、Lean 4 内核）以及明确的适用边界**构建，并配有独立编译的 AMS LaTeX 学术论文（`ARGUS_RESULT_<ID>_TECHNICAL_REPORT.pdf` 与 `.tex` 源码）。
 
-截至 **2026 年 11 月 4 日**，仓库共收录 **84 个正式成果包**（**730 个带 SHA-256 校验值的公开产物**）：
+截至 **2026 年 11 月 5 日**，仓库共收录 **84 个独立开放问题正式成果包**（**748 个带 SHA-256 校验值的公开产物**），以及对 **OpenAI `openai/math` 文库的大规模自主红队审计、`refutes` 证伪账本、Lean 4.31.0 形式化认证与定理强化专章**（详见 [`docs/openai-math-audit-findings.md`](docs/openai-math-audit-findings.md)）：
 
 | 类别 | 数量 | 说明 |
 |---|---:|---|
 | **一、公开猜想的旗舰反例与可发表新定理** | **22** | 组合图论、有限域代数、代数几何、群论与数论中公开猜想的直接反例及无条件正面定理 |
-| **二、千禧年难题前沿子模型与结构阻碍定理** | **12** | 整系数霍奇猜想二进阻碍、Navier–Stokes 自相似排除、Euler 弯管共形闭合、Hilbert–Pólya 本质谱阻碍、$\mathrm{GL}_4$ 非温和密度界与电路复杂性对偶 |
+| **二、千禧年难题前沿子模型与结构阻碍定理** | **12** | 整系数霍奇猜想普适迷向性定理、Navier–Stokes 自相似排除、Euler 弯管共形闭合、Hilbert–Pólya 本质谱阻碍、$\mathrm{GL}_4$ 非温和密度界与电路复杂性对偶 |
 | **三、独立核验反例与文献勘误（Batch 001 与全量审计）** | **31** | 对 757 道历史公开问题逐项审计产出的显式反例、Lean 4 形式化反驳与定义域修正 |
 | **四、符号计算、代数归约与多面体边界证书** | **19** | 计算机辅助家族排除证书、Farkas 不可行性对偶证明与高精度区间牛顿认证 |
 | **合计正式归档成果包** | **84** | 每个成果包均含 `ARGUS_RESULT_<ID>_TECHNICAL_REPORT.pdf`、`.tex`、`README.md` 与 `verification-summary.json` |
+
+---
+
+## 对 OpenAI `openai/math` 文库的自主红队审计、16 项 `refutes` 证伪、20 项 Lean 4.31.0 机器认证与 14 项定理强化
+
+依托 Argus 的**三层自进化母库（`Skills + Wiki + Tools`）**与 24 路并发 `gpt-6.1-sol` 守护进程，我们对 OpenAI 2026 年 10 月发布的 `github.com/openai/math` 开展了系统性红队猎杀与形式化认证（完整报告见 **[`docs/openai-math-audit-findings.md`](docs/openai-math-audit-findings.md)**）：
+
+- **正式载入 `MATH_STATE.json` 的 16 项被推翻命题（`17` 条 `refutes` 判决）**：精准抓出并证伪了 OpenAI 手稿中的 16 处伪中间引理、AI 同名符号撞车、Sobolev 阶数越界与外部定理误套，包括：
+  1. **`#341`（Donaldson 超辛形变，10月7日热补丁）中的 AI 同名符号撞车与阶数越界（`F341_OH_ZHU_SYMBOL_COLLISION` & `F341_OH_ZHU_SOBOLEV_DELTA_ORDER`）**：把 Oh–Zhu (2008) 式 (2.18) 中代表“殆复结构 $J$ 任意无穷小变分”的参数 $B$ 混同为本文“固定闭 2-形式 $B$”，并将 $W^{1,p}$ 零阶 $\delta$ 对偶越界套用于高阶一阶射流空间；
+  2. **`#318`（弱色分裂猜想反例）中的含挠群有限上同调维数错误（`C318EXTCD`，Engineer + Reviewer 双重 `refutes`）**：对含 5 阶伽罗瓦挠元 $C_5$ 的完整扩张 Morava 稳定子群 $G_5 = \mathrm{St}_5 \rtimes C_5$ 错误断言离散 5-准素模上有限 5-上同调维数（实为 $\infty$）；
+  3. **`#001`（Milne 有理性猜想，第 1 号门面论文）中的假提升引文（`F001_MILNE_521_LIFTING_CITATION`）**：将 Milne `SVp.pdf v2.2` 第 5.21 节提出的设想误作已证提升定理引用（与 Milne 本人 2026 年 10 月 9 日更新的 `v2.4` 第 12 节批评完全印证）；
+  4. **在 `#004`（希尔伯特第十问题 $h^2$ 清除因子反例）、`#046`（Shafarevich 交叉点局部群反模型）、`#201`（Kurosh 等谱集 Jacobian 秩反例）、`#053`（Pixton）、`#067`（Campana–Peternell）、`#316`（Curtis）、`#209`（Gersten）、`#321`（Wall $D(2)$）、`#340`（邻近拉格朗日）中抓出的显式反例与跳步漏洞。**
+- **为 20 个 OpenAI“无 Lean 证明”家族补齐零 `sorry` 的 Lean 4.31.0 机器形式化证明（`Main.lean`）**：全部通过 `lean_evidence/lean 4.31.0` 内核编译（`exit_code: 0, proof_holes: []`）。
+- **14 项漏洞修复与严格更强的新定理超越**：Argus 不仅当场修好了上述全部断裂证明，还顺手证出了 **14 项比 OpenAI 原文更强的新定理**——包括**全新的二进 $(0,2)$ 有限剩余域 $\mathbb{F}_2$ 的 3 次整系数 Gersten 反例定理 `D2_MAIN`（`#209`）**、**消去 Fano 假设的任意非常丰沛线丛 Gromov–Witten 后代下界 `Theorem A`（`#063`）**、**压缩 3 倍的 $16D_0+30$ 极小图重叠半径（`#285`）**、**多项式空间尺度 $Z\ge \kappa S^{2Ds^{n-1}+2}$ 的 Hindman 粗糙步消除定理（`#164`）**、**推翻 ETH 的精确闭式 2-进 Hermite 赋值损失公式（`#378`）** 以及 **Kakeya 纯 $m$ 阶导数匹配紧指数界 $d\ge (m+1)/2$（`#074`）**！平均每个问题族审计+形式化实付仅 **`$0.34`（`8.4` 个请求，缓存命中率 `91.5%`）**。
 
 ---
 
@@ -141,7 +155,7 @@ Argus 所有数学战役均以**单守护进程分级工作流**（`Planner -> E
 * **[`#1518`](results/1518/) ([PDF](results/1518/ARGUS_RESULT_1518_TECHNICAL_REPORT.pdf))**：用短磨光零点检测器证明黎曼 $\zeta(s)$ 零点在 $|\sigma-7/8|\le 10^{-3}$ 邻域的**六阶加性能量无条件幂次节省 $\delta=1/200$**，并导出第二 Hardy–Littlewood 猜想在 $\log_N H \approx 5/12$ 处的异常对上界 $V(N,H)\ll_\varepsilon N^{19/15 - 1/10000 + \varepsilon}$。
 * **[`#1417`](results/1417/) ([PDF](results/1417/ARGUS_RESULT_1417_TECHNICAL_REPORT.pdf))**：强最小度 3 临界无 $C_4,C_8$ 图的参数统一平方根边亏损定理 $n \le \max\{8d, 4d^2-8d\} \le 4d^2$（将 Erdős–Gyárfás 极小反例边数上界压至 $m \le 2n - \max\{7, \lceil 1+\sqrt{n+4}/2\rceil\}$）。
 * **[`#3167`](results/3167/) ([PDF](results/3167/ARGUS_RESULT_3167_TECHNICAL_REPORT.pdf))**：无条件证明所有**树宽 $\operatorname{tw}(G)\le 5$** 的有限简单 4-正则哈密顿图必有至少两个不同的无向哈密顿圈（遍历 6 顶点边界袋的全部 $152{,}441$ 个带标状态、$88{,}107{,}797$ 个正路由条目与 $25{,}209{,}843{,}635$ 个相对边界序，未覆盖目标数为 $0$）。
-* **[`#3256`](results/3256/) ([PDF](results/3256/ARGUS_RESULT_3256_TECHNICAL_REPORT.pdf))**：将 Cornuéjols–Liu–Ravi (2025) 加权弦图定理推广至全体**单边缺失弦图（one-fill chordal digraphs）**，证明对任意非负整数容量 $w$ 恒有 $\nu(D,w)=\tau(D,w)$。
+* **[`#3256`](results/3256/) ([PDF](results/3256/ARGUS_RESULT_3256_TECHNICAL_REPORT.pdf))**：完整解决 Schrijver (1980) 以来悬置 46 年的加权 Dijoin 打包可达性缺陷阈值问题——无条件证明对任意非负整数容量 $w$ 与任意 $q\ge 1$，当强连通缩合图的不可达源汇对数满足 **$\operatorname{def}(D)\le 2$** 时恒有 $\nu(D,w)=\tau(D,w)$（而 $\operatorname{def}(D)\ge 3$ 被 Schrijver 反例证伪，故阈值 $d=2$ 绝对紧），并推广至全体单边缺失弦图。
 * **[`#7200051`](results/7200051/) ([PDF](results/7200051/ARGUS_RESULT_7200051_TECHNICAL_REPORT.pdf))**：证明 $\ell_1^5$ 空间 11 点最小失真比满足 $\frac{3089}{3084} < \Delta_5(11) \le \frac{115}{106}$，并完成 $e(\ell_1^5)=10$ 的 Lean 4.33.1 内核形式化核验。
 * **[`#9400114`](results/9400114/) ([PDF](results/9400114/ARGUS_RESULT_9400114_TECHNICAL_REPORT.pdf))**：Agrawal 素性猜想的无目标素数幂根基约化、短弧有理交比显式三次方下界 $p \ge \max\{r^2+2, 1+N(\lfloor(r-1)/4\rfloor)\} \sim r^3/768$ 及逆 Frobenius 分圆范数完整分类。
 
@@ -158,14 +172,14 @@ Argus 所有数学战役均以**单守护进程分级工作流**（`Planner -> E
 | [`3059`](results/3059/) | [PDF](results/3059/ARGUS_RESULT_3059_TECHNICAL_REPORT.pdf) | 证明 $\mathbb{F}_5$ 上 8 维与 9 维 Alon–Jaeger–Tarsi 无零坐标猜想（`C3059N9`, `H8C3059`） | 组合代数与有限域 | 已独立验证可发表定理 |
 | [`3102`](results/3102/) | [PDF](results/3102/ARGUS_RESULT_3102_TECHNICAL_REPORT.pdf) | 证明 Lemke 平方图 $L\mathbin{\square} L$ 在支撑集 $\le 5$ 下的精确 Pebbling 数为 64 | 图论与组合优化 | 已独立验证可发表定理 |
 | [`3167`](results/3167/) | [PDF](results/3167/ARGUS_RESULT_3167_TECHNICAL_REPORT.pdf) | 证明树宽 $\mathrm{tw}\le 5$ 的有限简单 4-正则哈密顿图必有至少两个哈密顿圈（Sheehan 猜想） | 结构图论 | 已独立验证可发表定理 |
-| [`3256`](results/3256/) | [PDF](results/3256/ARGUS_RESULT_3256_TECHNICAL_REPORT.pdf) | 单边缺失弦图（one-fill chordal digraphs）的加权 Dijoin 打包定理 $\nu(D,w)=\tau(D,w)$ | 组合优化与有向图 | 已独立验证可发表定理 |
+| [`3256`](results/3256/) | [PDF](results/3256/ARGUS_RESULT_3256_TECHNICAL_REPORT.pdf) | 加权 Woodall Dijoin 打包的源汇不可达缺陷紧阈值定理（$\operatorname{def}(D)\le 2$ 对任意整容量 $q\ge 1$ 成立，$d\ge 3$ 失效）与单边缺失弦图定理 | 组合优化与有向图 | 已独立验证可发表定理 |
 | [`7200051`](results/7200051/) | [PDF](results/7200051/ARGUS_RESULT_7200051_TECHNICAL_REPORT.pdf) | $\ell_1^5$ 空间 11 点失真比上下界 $3089/3084 < \Delta_5(11) \le 115/106$ 与 $e(\ell_1^5)=10$ 的 Lean 4.33.1 核验 | 离散与度量几何 | 已独立验证上下界与 Lean 4 核验 |
 | [`1417`](results/1417/) | [PDF](results/1417/ARGUS_RESULT_1417_TECHNICAL_REPORT.pdf) | 强最小度 3 临界无 $C_4,C_8$ 图的平方根边亏损定理 $n\le\max\{8d,4d^2-8d\}\le 4d^2$（Erdős–Gyárfás） | 极值与结构图论 | 已独立验证改进上界定理 |
 | [`1518`](results/1518/) | [PDF](results/1518/ARGUS_RESULT_1518_TECHNICAL_REPORT.pdf) | 黎曼 $\zeta$ 零点在 $\sigma\approx 7/8$ 处的六阶加性能量无条件节省（$\delta=1/200$）与素数窗口异常对上界 | 解析数论 | 已独立验证可发表定理 |
 | [`1243`](results/1243/) | [PDF](results/1243/ARGUS_RESULT_1243_TECHNICAL_REPORT.pdf) | 3×3 平方数幻方 Bremner K3 曲面 18 次域平方类完备性、$\operatorname{rank} E(k)=1$、亏格 161 有理点完全分类与刚性 | 算术几何与丢番图方程 | 已独立验证可发表定理 |
 | [`1187`](results/1187/) | [PDF](results/1187/ARGUS_RESULT_1187_TECHNICAL_REPORT.pdf) | Andrews–Curtis 候选表示在 4/5 阶 $\mathbb{F}_2$-Magnus 商群中的扭曲桥不存在定理、全 $\mathrm{Aut}(F_2)$ 排除与 $w_{\mathrm{prim}}(H)\ge 7$ | 组合与几何群论 | 已独立验证可发表定理 |
 | [`9400114`](results/9400114/) | [PDF](results/9400114/ARGUS_RESULT_9400114_TECHNICAL_REPORT.pdf) | Agrawal 猜想的无目标素数幂根基约化、短弧交比显式三次方下界 $p\gg r^3$ 与逆 Frobenius 分类 | 计算与代数数论 | 已独立验证可发表定理 |
-| [`2338`](results/2338/) | [PDF](results/2338/ARGUS_RESULT_2338_TECHNICAL_REPORT.pdf) | 杨辉三角重数 5 素因子下界（$K(a)\ge 8, \omega(a)\ge 7, 14$）、仿射正交群 Runge 定理与 512 次（亏格 1537）超特殊 2-群 $2_+^{1+8}$ 覆盖阻碍（Erdős #849） | 丢番图方程与代数数论 | 已独立验证可发表定理 |
+| [`2338`](results/2338/) | [PDF](results/2338/ARGUS_RESULT_2338_TECHNICAL_REPORT.pdf) | 杨辉三角重数 5 素因子下界（$K(a)\ge 8, \omega(a)\ge 7, 14$）、一致渐近上界 $m(a)\le\omega(a)$、仿射正交群 Runge 定理与 512 次（亏格 1537）超特殊 2-群 $2_+^{1+8}$ 覆盖阻碍（Erdős #849） | 丢番图方程与代数数论 | 已独立验证可发表定理 |
 | [`6800022`](results/6800022/) | [PDF](results/6800022/ARGUS_RESULT_6800022_TECHNICAL_REPORT.pdf) | 互反反射对称 Kato–Muroya 亏格 1 四悬链端极小曲面轨迹全部 9 种穿孔分布的全局嵌入不存在定理 | 微分几何与极小曲面 | 已独立验证可发表定理 |
 | [`1285`](results/1285/) | [PDF](results/1285/ARGUS_RESULT_1285_TECHNICAL_REPORT.pdf) | 一致自适应符号链 ECM 壳库整数分解程序在 $n$ 比特无平方因子半素数上的最坏情况无条件指数下界 | 计算数论与算术复杂性 | 已独立验证可发表定理 |
 | [`20001675`](results/20001675/) | [PDF](results/20001675/ARGUS_RESULT_20001675_TECHNICAL_REPORT.pdf) | 任意喷流深度 $r\ge 1$ 下简单非约化 Plabic 纽结的指数级 HOMFLY-PT 纤维定理（$\log_2|\text{fiber}|\ge(N-8)/(74r^2)$） | 丛代数与纽结多项式 | 已独立验证可发表定理 |

@@ -1,0 +1,244 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prb}{\mathbb P}
+\title{Coefficient-preserving first hits and their original-law stopping cost}
+\author{Campaign 3395: Engineer continuation}
+\date{November 5, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{The live estimate is not proved.}
+The question is the small-size assertion
+\[
+ S_3(\rho)\le\tfrac14
+ \quad\text{for every BP1 circuit of factor }1+t
+ \text{ and size }s<e^{aN},                         \tag{SF1}
+\]
+with explicit fixed rational $0<t\le1/64$, explicit
+$0<a\le2^{-136}$ and admissible $N\ge N_0\ge2^{146}$.
+No such triple is obtained here. A global FH16 modulus is not
+required, and the small-size hypothesis is not a restriction on the
+allowed circuit model.
+
+The attempted first-hit proof below preserves coefficients and makes
+its probability accounting explicit. Its remaining step is a signed
+residual domination, not a missing implementation or an unavailable
+tool. Neither the algebraic identities nor the bounded computations
+prove SF1. FH12 and FH13 remain unchanged. No novelty or publishable
+significance is claimed.
+
+\paragraph{Reused results.}
+Use the reviewed BP1--BP3, C2--C6, A4/A7, DS8--DS9,
+SC10--SC11, FH1/FH6/FH9/FH15, GH4--GH14, and GW4--GW12.
+Their certificates are not rerun. The finite two-block factors below
+are the already reviewed AT12 factors, not a new small approximator.
+All new assertions are proved directly; no external theorem is added.
+
+\section{A first hit counts a coefficient once, even with sharing}
+Expand the original finite arithmetic DAG into decorated parse
+occurrences $\tau$. Addition chooses one child; multiplication chooses
+an ordered pair of child occurrences. Keep distinct occurrences even
+when their monomials agree. Write their coefficients and monomials as
+$c_\tau>0,m_\tau$. This expansion is a mathematical indexing set,
+not a claimed efficient construction.
+
+Fix distinct original arithmetic gates $v_1,\ldots,v_r$ before the
+sampler. Let $i(\tau)$ be the least index of a gate occurring anywhere
+in $\tau$, or $\infty$ when none occurs. Repeated uses of the same
+gate do not create further first hits.
+
+\begin{proposition}
+For the successive zero substitutions of GW7,
+\[
+ Z_i=Q^{[i-1]}-Q^{[i]}
+       =\sum_{\tau:i(\tau)=i}c_\tau m_\tau.          \tag{SF2}
+\]
+The actual compulsory-cut expansion can be refined into these same
+original occurrences without altering a coefficient. Consequently
+the cut index and the first-hit index give a joint partition, not
+two independent copies of the output coefficients.
+\end{proposition}
+\begin{proof}
+A parse survives a zero substitution exactly when it contains none
+of the substituted gates. Its first deletion is therefore $i(\tau)$,
+which proves SF2 coefficientwise, including arbitrary powers and
+nonnegative real constants.
+
+For the cut at an original gate, distinguish its first occurrence
+in the left-to-right traversal of a parse. At a multiplication gate,
+the two terms of C5 partition parses into those whose left child
+contains the cut gate and those whose left child does not but whose
+right child does. These classes are disjoint. The unchanged and
+zero-substituted child polynomials in C5 implement exactly these
+classes. Addition preserves the partition. Earlier cuts remove
+their entire classes first. This proves the claimed refinement
+and explains why ordinary derivatives, which count every occurrence,
+are not used.
+\end{proof}
+
+\section{The surviving density factor}
+Let $\omega=(H,I_\rho)$ have exactly its original law, write
+$U=U_I(H)$, and refine each actual cut pair into the occurrences
+above. Every output occurrence is full-group. Call it bad if its
+monomial contains distinct variables from the same source group.
+For a bad occurrence belonging to actual cut $j$, let
+$\chi_\tau(\omega)$ be its DS9 completion-survival indicator.
+It retains both optional-source directions.
+Let $\ell_j(\omega)$ be the original dependent height-three secant.
+In particular, it is not recomputed after splitting a cut.
+
+For the occurrences of cut $j$ and first hit $v$, define measures by
+\[
+ d\nu_{jv}(\omega,\tau)=
+  \frac{c_\tau m_\tau(U)}{F(U)}\,d\Prb(\omega),\qquad
+ d\mu_{jv}=F(U)\ell_j(\omega)\chi_\tau(\omega)\,d\nu_{jv}.
+                                                               \tag{SF3}
+\]
+Zero-support terms are zero; all boxes contain the original one-hot
+assignment, so their denominator is positive.
+
+\begin{proposition}
+For a list covering the output parses, these are exact identities:
+\[
+ \sum_{j,v}\int d\nu_{jv}
+       =\E\frac{D_Q(U)}{F(U)}\le b_Q,\qquad
+ S_3(\rho)=\sum_{j,v}\int
+                \sigma(H)F(U)\ell_j\chi_\tau\,d\nu_{jv}.          \tag{SF4}
+\]
+For a noncovering list include the $\infty$ class. At each fixed box,
+the bad first-hit charge is at most $Z_v(U)/F(U)$, and these
+normalized deletion charges have total at most $3$ under BP1.
+\end{proposition}
+\begin{proof}
+SF2 partitions all original coefficients. Compatibility filtering
+is linear on this partition, so its bad part sums to $D_Q$, by A7.
+Any completed bad occurrence has all its variables in $U$, hence
+$\chi_\tau\le m_\tau(U)$. Its original one-hot value is zero.
+A compatible full-group occurrence survives the completion exactly
+when it survives the original assignment: its compulsory choices
+already fix every optional choice. Thus the raw error consists
+exactly of the completed bad occurrences. Multiplying their sum
+by the common original $\ell_j$ gives the clipped error.
+This proves SF3--SF4. Positivity and GW8 give the last assertion.
+\end{proof}
+
+This construction does not remove $F(U)=16^{|I|}$ from SF3.
+The compulsory-anchor fraction in the active-bit average gives
+exactly the existing $4^{|I|}$ unsigned bound, hence FH6, not a
+constant coefficient. Nor can the sign cancel inside one fixed
+occurrence: SC10--SC11 fixes its compulsory anchor and sign.
+Cancellation must still relate different occurrences.
+
+In particular retain the exact signed quantity
+\[
+ S_3(\rho)=R_{\rm opt}-L_{\rm disc}-L_{\rm unsat},                 \tag{SF5}
+\]
+where the two losses are precisely the two expectations in GH7.
+The first-hit labels do not restrict legal exchanges to equal labels.
+Both row-preserving and column-preserving exchanges stay available.
+There is no assertion that compatible blockers are bad coefficients.
+
+\section{An adaptive stopping event must be predictable}
+Condition only on the original marks, matching and order, before
+the tuple draws. In each full block, the selected source set is a
+uniform four-subset of its $L$ vertices, independently between blocks.
+The ordered roles and original bits retain their original laws.
+
+Consider a fixed policy which queries membership of previously
+unqueried base vertices, using only previous membership answers,
+the conditioned data, and independent auxiliary randomness.
+Designate a probe \emph{before} seeing its answer.
+Immediately before such a probe in block $i$, let $e_i$ be the
+number of exposed vertices and $r_i$ the number of selected answers.
+Then, on every positive-probability transcript,
+\[
+ \Prb(\text{probe is selected}\mid\text{transcript})
+                        =\frac{4-r_i}{L-e_i}.                    \tag{SF6}
+\]
+Indeed the still-hidden selected subset is uniform of size $4-r_i$
+among $L-e_i$ vertices. Adaptive choices disclose no other information
+under the stated filtration. Revealing a tuple, its outgoing targets,
+or a label selected using the full history is not this filtration.
+
+\begin{proposition}
+Suppose $e_i\le L/2$ before every designated probe. The event that
+a fixed policy emits $k$ designated probes and all are selected has
+complete-original-law probability at most
+\[
+                         (8/L)^k.                              \tag{SF7}
+\]
+The bound allows intervening membership queries, failure-dependent
+choices of blocks, and early stopping. It does not allow discarding
+a failed designated probe and calling a later success the same probe.
+\end{proposition}
+\begin{proof}
+SF6 bounds the conditional success probability by $8/L$ at each
+designated probe. The event that a next probe is attempted is known
+before its answer. Conditional expectation bounds the probability
+of extending an all-success prefix by another factor $8/L$.
+Induction proves SF7. There are finitely many distinct source queries,
+so no infinite stopping argument is required. Average the original
+marks, matching, order and independent auxiliary variables afterwards.
+Remainder vertices cannot succeed and hubs are not counted as probes.
+\end{proof}
+
+Thus, for $r\le s$ policies fixed before sampling and normalized
+first-removal charges $z_v=Z_v(U)/F(U)$,
+\[
+ \E\sum_v z_v1_{E_v}\le3\min(1,r(8/L)^k).                       \tag{SF8}
+\]
+This follows from GW9 and SF7, without independence between $z_v$
+and $E_v$. It is a valid adaptive event budget, not a construction
+of events dominating SF5.
+
+\section{Where the attempted proof stops}
+The missing assertion is a circuit-dependent domination of SF5 by
+a joint dimension-independent defect charge and charges of the form
+SF8, with enough probes and a proved aggregate coefficient budget.
+SF2 supplies the coefficients; it does not supply that domination.
+
+There are two distinct issues. First, replacing $\mu$ by $\nu$
+in SF3 drops the displayed density factor. Second, the direct
+selection of a completed pair, a maximizing Hall subset, or a
+clipping threshold uses the full $(H,I)$, including the tuples.
+The pins obtained that way are not designated before their membership
+is known. SF6 therefore cannot be applied to that selection.
+No alternative predictable exploration has been proved to retain
+the required signed residual while keeping the exposure budget.
+The small-size hypothesis alone has not supplied either missing
+implication. These are proof gaps, not refutations of SF1, FH16,
+GH15, or the residual-specific first-removal route.
+
+If SF1 were established, FH9 and $a\le2^{-136}$ would give
+\[
+ |F_3(\rho)|<15e^{-N/2^{136}}\le15e^{-1024}<1/64.
+\]
+FH15 would then give $-\E_\Delta\sigma h_Q<17/64$, contradicting
+BP3's lower bound above $7/16$. Hence $s\ge e^{aN}$.
+With $D$ the fixed base-graph degree and
+$D_*=\sum_{i=1}^{14L}D^i$, the existing variable convention gives
+$M_n\le(D_*+6)N$ and therefore
+$s\ge2^{aM_n/(D_*+6)}$. This is a conditional implication only.
+FH12 still has factor
+$1+1/[16(1+3/(5\cdot2^{65}))^q]$ and exponent $2^{-137}$;
+FH13 still has exponent $2^{-136}$ at the old DS16 factor.
+Neither benchmark has been improved here.
+
+\paragraph{Exact replay and its scope.}
+\path{first_hit_signed_check.py} checks the new first-hit partition
+on a shared-square DAG and the measures SF3 on the reviewed two-block
+factor fixture, retaining both optional directions and the original
+dependent clipping. It does not rerun the previous Hall optimization.
+A separate ten-vertex uniform-four-subset experiment has sixteen
+membership atoms. After querying vertex zero, its two designated
+probes are $(1,2)$ if zero was selected and $(2,3)$ otherwise.
+Their conditional all-success probabilities are $1/12$ and $1/6$;
+the unconditional probability is $2/15$. The inverse conditional
+likelihood on successful paths has expectation one.
+The inspected Jacobian conditional-expectation operation checks
+this new finite law, not SF1 or a production-size enumeration.
+Dedicated JSON files preserve its payload, typed output and execution
+status. The all-size statements above are proved in prose.
+\end{document}
