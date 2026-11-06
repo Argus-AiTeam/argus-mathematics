@@ -72,6 +72,26 @@ We performed an independent verification across all **373 active families (720 m
 
 ## II. Complete Catalog of 42 Refuted Claims (`67` `refutes` Verdicts Across 26 Families)
 
+### II.0 Severity Classification: 10 "Structural Death Sentence" Families (25 Manuscripts) vs. 12 Locally Patchable Families (19 Manuscripts)
+
+Among the refuted families, we distinguish between **un-salvageable structural collapses** (where the headline theorem is false or the core construction/route collapses identically, on par with OpenAI's 3 withdrawn papers) and **locally patchable lemma failures**:
+
+1. **Tier A — Structural Death Sentences (`10 families / 25 manuscripts`, `19` core refutations):**
+   * **Headline Theorem or Core Mechanism Directly False (4 Families):**
+     1. **`#318` (Chromatic Splitting Series, 5 papers):** The headline claim $\mathrm{level}_G(X)=3$ is false because the degree-$-5$ comparison map vanishes identically, splitting $Y \simeq B_2 \vee V$ and forcing **$\mathrm{level}_G(X)=2$** (while the $\pi_{-3}$ rational map is nonzero and the extended stabilizer has $\mathrm{cd}_5 = \infty$).
+     2. **`#376` (Forced Navier–Stokes Universal Computation, 9 papers):** The rapid-slowdown clock class ($\alpha(t)$ rapidly decreasing on $[0,\infty)$ with $\int_0^\infty \alpha(t)\,dt = +\infty$) is **mathematically empty** since rapidly decreasing functions belong to $L^1([0,\infty))$.
+     3. **`#180` (Barnette's Conjecture, 1 paper):** The paired-state polynomial order-preservation mechanism fails on `bipyramid_4` due to exact leading-term cancellation (`+1` vs `-1`).
+     4. **`#274` ($\mathrm{Parity} \notin \mathrm{QAC}^0$, 2 papers):** Higher-rank local projections induce nonzero phase covariance on the zero-count subspace, refuting coordinatewise independence.
+   * **Original Proof Route or Algebraic Model Collapses Identically, Requiring a Brand-New Construction (6 Families):**
+     5. **`#209` (Integral Gersten Counterexamples, 2 papers):** The odd-prime $y=0$ slice vanishes identically in the dyadic $(0,2)$ model (replaced by our brand-new dyadic $\mathbb{F}_2$ regular local domain $B$ in `D2_MAIN`).
+     6. **`#001` (Milne's Rationality Conjecture, 1 flagship paper):** `lem:admissible-realization` relies on Milne `SVp.pdf` §5.21 (an unproved open problem) and an unframed Kisin shortcut (replaced from scratch by our Gabber affine-étale smoothness proof).
+     7. **`#341` (Donaldson Hypersymplectic Deformation, 1 Oct 7 hotfix paper):** The Oh–Zhu (2.18) route collapses due to conflating infinite-dimensional Sobolev spaces $E_0,E_1$ with finite-dimensional bundles $E_i$ (replaced by our direct Cauchy–Riemann operator proof).
+     8. **`#053` (Pixton Completeness in Chow, 1 paper):** Numerical equivalence on toric varieties cannot imply Chow vanishing of marked torsion sheaves (replaced by explicit Atiyah–Bott equivariant localization residue calculations).
+     9. **`#321` (Wall's Finite $D(2)$ Problem, 1 paper):** Howie's constant-coefficient lemma cannot upgrade directly to nonflat bimodules due to $\mathrm{Tor}_1^{\mathbb{Z}G}$ torsion (replaced by our 2,029-line Lean 4 integral group-ring resolution).
+     10. **`#342` (Donaldson Tamed-to-Compatible Conjecture, 2 papers):** The $T^4$ self-dual 2-form construction refutes 4 printed theorems in the cited external paper Li–Zhang (*arXiv:0708.2520v4*).
+2. **Tier B — Literal Intermediate Lemma Refuted, Mechanism Locally Patchable by Strengthening Hypotheses (`12 families / 19 manuscripts`):**
+   * Includes `#004` ($h \to h^2$), `#046` (elementwise meridian $\to$ profinite Fox matrix), `#067`, `#201` (pointwise $\to$ collective rank), `#247` (adding left-endpoint anchor), `#316` (joint Milnor primitive kernel), `#320` (`Lemma 3.9` $\to$ `Lemma 6.7`), `#340` (boundary collar cutoff), etc.
+
 ### II.A Direct Flaws, False Lemmas, Counterexamples, and Non-Existent Citations in Active OpenAI Manuscripts (28 Manuscript-Level Refutations)
 
 | Family & Domain | Flawed OpenAI Manuscript Assertion / Locator | Nature of Flaw | Argus Counterexample & Refutation Proof |
