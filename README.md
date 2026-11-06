@@ -51,6 +51,15 @@ Using Argus's **Lakatosian Proofs-and-Refutations** architecture and 24-way para
 - **📄 完整中文审计与超越报告：** **[`docs/openai-math-audit-findings.zh-CN.md`](docs/openai-math-audit-findings.zh-CN.md)**
 - **📊 Machine-Readable 376-Family Audit Ledger:** **[`data/openai-math-373-audit.json`](data/openai-math-373-audit.json)**
 
+### 0. Head-to-Head Comparison: OpenAI `openai/math` vs. `Argus + gpt-6.1-sol`
+
+| Dimension | OpenAI `openai/math` Release (October 2026) | `Argus + gpt-6.1-sol` Autonomous Discovery & Audit Program |
+| :--- | :--- | :--- |
+| **Review Status & Verification Rigor** | Officially marked **`review: {status: unchecked}`** in `formalization.yaml`; 75.6% of papers unmapped in `formalization.yaml`; 128 families have zero Lean code; 144 of 245 Lean-tagged families carry partial/simplified-model disclaimers in `lean/docs/` | **Lakatosian Proofs-and-Refutations Double-Blind Audit (`Planner -> Engineer -> Reviewer`)**: Decomposed into **9,597 formal claims & 8,368 evidence records**; produced **381 zero-`sorry`, zero-custom-axiom Lean 4.31.0 certificates (520,095 lines, 41,751 theorems)**, newly formalizing 90 previously unformalized families from scratch |
+| **Hidden Flaws & Red-Team Refutations** | Withdrew 3 Hodge/K3/Weil papers on Oct 7 after a cascading sign error ($I(f_1)-m=-2m\neq 0$) and patched 27 others; remaining active papers left unaudited | Caught **28 manuscript-level `refutes` across 21 active, un-withdrawn OpenAI families (42 papers)**—including a fake theorem citation in flagship paper `#001`, a false generation level ($\mathrm{level}_G(X)=2\neq 3$) in `#318`, cross-paper symbol collisions in Oct 7 hotfix `#341`, and an $L^1$ integrability contradiction in `#376`—plus 5 refuted theorems in cited external paper Li–Zhang (`#342`) |
+| **Repairs & Theorem Strengthening** | Static preprint snapshots requiring manual withdrawals/errata when flaws surface | **Achieved constructive proof repairs (`101` families) or strictly stronger theorems (`243` families) across `276` of `373` active families (`74.0%`, covering `552` papers)**, including 4 `verified_new` original theorems (e.g., `#209` `D2_MAIN` first dyadic $\mathbb{F}_2$ degree-3 integral Gersten kernel) |
+| **Open-Problem Breakthroughs & Cost Efficiency** | Undisclosed compute cost (estimated multi-million-dollar frontier run) | **Audited and Lean-certified all 373 families (720 papers) on `gpt-6.1-sol` for `$85.88` total (`$0.23`/family, `93.8%` cache hit rate)**, and independently produced **84 open-problem result packages for `$352.84` (`$4.20`/package)** (refuting the 20-year-old Seymour–Sullivan Conjecture 6.1, closing the 46-year Schrijver $\operatorname{def}(D)\le 2$ weighted Woodall threshold, and removing Benoist–Ottem's *very general* hypothesis in the Integral Hodge Conjecture) |
+
 ### 1. Panorama 5-Tier Credibility Matrix (All 376 Families / 723 Manuscripts)
 
 | Credibility Tier | Families (%) | Manuscripts (%) | Verification & Epistemic Profile |
