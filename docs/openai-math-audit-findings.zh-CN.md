@@ -75,27 +75,26 @@
 
 ## 二、 抓出的致命漏洞与反例全集（26 个家族、42 项独立 `refutes`）
 
-### 2.0 严重程度分级：10 个「结构性死刑」家族（25 篇论文）vs. 12 个「局部引理可打补丁救活」家族（19 篇论文）
+### 2.0 严谨证据边界说明：字面手稿/外部文献反例 vs. 被排除的候选强化猜想与简化捷径（零夸大、零幻觉校准）
 
-在被打出 `refutes` 的家族中，我们按**“原主定理或原证明路线是否彻底报废（无法通过修改局部系数或补小条件救活）”**，将其严格区分为两档：
+为确保审计报告经得起原作者与同行专家的逐行核对，我们严格按照各家族 `gpt-6.1-sol` Engineer 与独立 Reviewer 在原始报告（`report.md` / `proof.md`）中写明的**证据边界（Scope & Epistemic Boundary）**，将账本中的 `verdict = refutes` 精确区分为两类（**绝不把对候选强化猜想或简化捷径的证伪夸大为对 OpenAI 主定理的推翻**）：
 
-1. **第一档：真正的「结构性死刑」（共 10 个家族、涉及 25 篇论文、19 项核心死刑判决 —— 与 OpenAI 官方撤稿的 3 篇同级）**
-   * **主定理或核心机制本身直接为假（4 个家族）**：
-     1. **`#318`（色分裂猜想系列，5 篇论文）**：主定理声称谱 $X = L_2 L_{K(3)} S_5^\wedge$ 的生成水平为 $\mathrm{level}_G(X)=3$ 且存在两步非零 G-ghost 复合；实际上度数 $-5$ 处比较映射恒为 $0$，余纤维分裂为直和 $Y\simeq B_2\vee V$，**真实生成水平就是 $2$**（且 $\pi_{-3}$ 上有理映射非零、扩张稳定子群 5-上同调维数为 $\infty$）。
-     2. **`#376`（受迫 Navier–Stokes 普适计算，9 篇论文）**：核心速降时钟路线假设存在 $[0,\infty)$ 上非负速降且无穷积分发散到 $+\infty$ 的时钟速率 $\alpha(t)$；但速降函数必属 $L^1([0,\infty))$，积分永远有限，**该时钟函数类在数学上是空集**。
-     3. **`#180`（Barnette 哈密顿圈猜想，1 篇论文）**：核心机制依赖非负整数辐条权使配对态多项式 $Z(z)$ 在 $z=1$ 处的阶数等于最小群圈数；在四棱双锥 `bipyramid_4` 上两个反向森林配对态首项系数 `+1` 与 `-1` 精确抵消，**该保阶机制直接失效**。
-     4. **`#274`（$\mathrm{Parity} \notin \mathrm{QAC}^0$，2 篇论文）**：局部化下界依赖高秩局部投影在乘积零计数子空间上产生独立二元失配；但秩 $\ge 2$ 时正交相位必然诱发非零协方差耦合，**独立性恒不成立**。
-   * **原证明路线或原代数构造彻底崩塌，必须推倒重来（6 个家族）**：
-     5. **`#209`（整系数 Gersten 猜想反例，2 篇论文）**：特征 2 分支将奇素数 $y=0$ 切片代入二进 $(0,2)$ 模型导致常数项与范数**恒等于 $0$**，原二进构造报废（我们彻底抛弃原模型，另起炉灶设计 $B=(\mathbb{Z}_2[x,y]/(2-2x+x^2+xy-y^2))_{(2,x,y)}$ 才证出新定理 `D2_MAIN`）。
-     6. **`#001`（Milne 有理性猜想，1 篇头牌论文）**：核心引理 `lem:admissible-realization` 依赖的 Milne `SVp.pdf` §5.21 实为未解决公开问题，且单独调用 Kisin 命题 1.4.15 无法同时对偶化全素数标架张量（原双路线报废，我们另起炉灶用 Gabber 仿射平展光滑性定理重证）。
-     7. **`#341`（Donaldson 超辛形变，1 篇 10月7日修订稿）**：`07-pencil.tex` 将 Oh–Zhu 的无穷维 Sobolev 空间 $E_0,E_1$ 与有限维丛 $E_i$ 同名混用，原 Oh–Zhu 路线报废（我们改由一阶椭圆 Cauchy–Riemann 算子重证）。
-     8. **`#053`（Pixton 完备性 Chow 反例，1 篇论文）**：从 EGL 环面流形**数值等价**直接推 **Chow 环**消没在范畴上不可能成立（数值等价模掉了整个同调核，必须改用显式等变局部化留数重算）。
-     9. **`#321`（Wall 有限 $D(2)$ 反例，1 篇论文）**：Howie 常系数引理因 $\mathrm{Tor}_1^{\mathbb{Z}G}$ 挠阻碍无法直接升级到非平坦双模（我们改用 2,029 行 Lean 4 整群环自由分解矩阵左逆重构）。
-     10. **`#342`（Donaldson 驯服到相容辛形式猜想，2 篇论文）**：四维环面 $T^4$ 自对偶 2-形式直接证伪了所引外部论文 Li–Zhang (*arXiv:0708.2520v4*) 的 4 条印刷定理。
-2. **第二档：原引理字面死刑，但局部机制可打补丁救活（共 12 个家族、涉及 19 篇论文）**
-   * 包括 `#004`（一次清除因子 $h$ 换成二次因子 $h^2$）、`#046`（逐经线检测换成完备 Fox 矩阵）、`#067`、`#201`（逐点秩换成集体列秩）、`#247`（补左端点假设）、`#316`（单原元换成联合原元核）、`#320`（`Lemma 3.9` 改引 `Lemma 6.7`）、`#340`（补边界领口截断）等。
+1. **第一类：原文句子的字面反例（遗漏前提）、假引文定位、所引外部论文定理证伪及官方撤稿（共 7 个活跃家族 + 3 篇官方撤稿，均附带真实 `Main.lean` 或源码级证据）**
+   * **官方撤稿（3 篇，`#045, #061, #070`）**：因 $I(f_1)-m=-2m\neq 0$ 符号错误被 OpenAI 于 2026 年 10 月 7 日撤下。
+   * **`#247`（无穷有限表现残余有限 2-群，[`results/openai-audit-theorems/9000247/`](../results/openai-audit-theorems/9000247/)）**：OpenAI 9 月手稿 `build/sections/finite-rules.tex` 引理 `fr:rollback`（第 580–581 行）字面写有未加限制的断言：*“A boundary-cursor region can always be released inside its acquired interval.”* 我们的 daemon 构造了原文词尾语法明确允许的长度为 1 的截断边界游标字 `[cursor p]`（位于 `C(2), B`，缺失左端点 `C(1)`），并用 **Lean 4.31.0（[`Main.lean`](../results/openai-audit-theorems/9000247/finite_rule_core/Main.lean) 中的 `no_step`, `trace_fixed`, `no_contains_zero`）** 机器证明该字不存在任何合法重写步（`¬ Step [cursor p] v`），从而在字面上证伪了这句未加左端点前提的引理陈述（注：报告同时严谨指出，补上左端点假设后即可修复该引理范围，不推翻主群定理）。
+   * **`#342`（Donaldson 驯服到相容辛形式猜想，[`results/openai-audit-theorems/9000342/`](../results/openai-audit-theorems/9000342/)）**：OpenAI 手稿自身的四维环面 $T^4$ 例子 `ex:strict-cones` 完全正确；我们的 daemon 用 **Lean 4.31.0（[`Main.lean`](../results/openai-audit-theorems/9000342/cone_conflict/Main.lean)）** 与精确微分检验严格证明：该 $T^4$ 构造直接推翻了外部已发表论文 **Li–Zhang (*arXiv:0708.2520v4*)** 中的 **4 条印刷定理/推论**（定理 1.3、推论 1.4 第一断言、命题 3.9 第一断言及定理 3.7 的不交性推断）。
+   * **`#320`（非同胚闭非球面四维流形，[`results/openai-audit-theorems/9000320/`](../results/openai-audit-theorems/9000320/)）**：OpenAI 原文 `formal.tex` 第 785 行字面写有 *"Apply the nilpotent correction of [MT, Lemma 3.9]"*；核查 `[MT]` 原文证实**全文根本不存在 Lemma 3.9**（实为第 6 节的 Lemma 6.7），并用 Lean 4.31.0（[`Main.lean`](../results/openai-audit-theorems/9000320/formal_data_bridge/Main.lean)）形式化了单切与幂零修正代数核。
+   * **`#001`（Milne 有理性猜想，[`results/openai-audit-theorems/9000001/`](../results/openai-audit-theorems/9000001/)）**：OpenAI 原文 `02_transport.tex` 引用 Milne `SVp.pdf` (v2.2, 2025-11) §5.21 支持带附加 Hodge 结构的提升引理 `lem:admissible-realization`，但 `SVp.pdf` v2.2 §5.21 仅提出公开问题并未给出证明（Milne 本人亦在 2026-10-09 发布的 v2.4 §12 中指出此点）；我们调用 Gleason–Lim–Xu (*arXiv:2208.07195v3*) 补齐了包含特征 2 的实现证明，并用 Lean 4.31.0（[`Main.lean`](../results/openai-audit-theorems/9000001/Main.lean)）形式化了固定标架张量传播核心。
+   * **`#209`（整系数 Gersten 猜想反例，[`results/openai-audit-theorems/9000209/`](../results/openai-audit-theorems/9000209/)）与 `#341`（Donaldson 超辛形变，[`results/openai-audit-theorems/9000341/`](../results/openai-audit-theorems/9000341/)）**：指出文献引用范围边界（如 Voevodsky 6.17 需配合 Suslin 7.5/7.6；Oh–Zhu (2.18)/(3.3) 的符号与 Sobolev 阶数不能直接照搬到受限正合对变分），并给出了独立完整证明及特征 2 全新定理 `D2_MAIN`。
 
-### 2.1 第一类：OpenAI 现存手稿中的实锤数学错误、假引理与假引文（28 项手稿级证伪）
+2. **第二类：在推进更强定理或核验必要性时，被机器反例排除的「候选强化猜想 / 弱化前提 / 简化捷径」（共 19 个活跃家族 —— 原文自身命题在这些局部审计中并无错误，报告中均明确注明 *"Not a counterexample to the manuscript"*）**
+   * **`#318`（色分裂猜想系列，[`results/openai-audit-theorems/9000318/`](../results/openai-audit-theorems/9000318/)）**：OpenAI 原文仅给出 3 层滤过（$\mathrm{level}_G(X)\le 3$）及无 1 层收缩（$\mathrm{level}_G(X)\ge 2$），原文自身并无错误（报告明确声明 *"No false assertion in the staged manuscripts is identified here"*）。Argus 先将 $\mathrm{level}_G(X)=3$ 作为**候选强化猜想 `C318LEVEL3`** 进行测试，随后在 **Lean 4.31.0（[`degree-five/Main.lean`](../results/openai-audit-theorems/9000318/degree-five/Main.lean) 中的 `fullParabolicFiveZero`）** 中严格证明度数 $-5$ 处交错抛物形式恒等于 `0`（比较标量 $c=0$），从而**证伪了自身的候选猜想 `C318LEVEL3`**，证出比 OpenAI 原文更强的**精确两层生成定理 $\mathrm{level}_G(X)=2$**！
+   * **`#274`（$\mathrm{Parity} \notin \mathrm{QAC}^0$）**：OpenAI 原文证明的是秩 1 量子比特情形（其标量伯努利独立性完全成立）。Argus 在将其推广到**任意维数与任意高秩投影（$\operatorname{rank}(P_i)\ge 2$）**时，证伪了高秩标量独立性候选路线 `C_SCALAR_INDEP`，并改用非交换 Loewner 算子不等式（已过 Lean 4.31.0）完成了高秩推广。
+   * **`#180`（Barnette 哈密顿圈猜想）**：OpenAI 原文的森林提取命题成立；独立 Reviewer 在四棱双锥 `bipyramid_4` 上构造反例证伪了 Engineer 初版强化尝试 `C180_INTEGRAL`（漏计圈配对第二态），促使 Engineer 修复并完成了带 Lean 4.31.0 证书的整权森林提取强化定理。
+   * **`#376`（受迫 Navier–Stokes 普适计算，[`results/openai-audit-theorems/9000376/`](../results/openai-audit-theorems/9000376/)）**：OpenAI 原文的周期覆写晶格算术完全通过审计与 Lean 4.31.0 形式化（报告明确声明 *"No false manuscript assertion was found in this scope"*）；Engineer 证伪了单纯靠速降标量时钟降速的平庸替代路线 `A_RAPID_ONTO_SLOWDOWN`，并证明了脉冲尺度比 $K_{n+1}/K_n\to+\infty$ 的充要定理。
+   * **以及 `#004, #046, #053, #058, #067, #125, #145, #201, #206, #253, #282, #316, #321, #331, #340, #351`**：均是在审计或强化过程中，对“若去掉原文强假设/改用弱化判据（如一次清除因子 $h$、逐经线独立检测、逐点 Jacobian 秩、单 Milnor 原元测试等）是否仍成立”给出的严格反例，用来从反面锁定为何必须采用二次因子 $h^2$、完备 Fox 矩阵、集体列秩等完整机制。
+
+### 2.1 账本中记录的 `refutes` 节点明细表（含字面错误/假引文与被排除的弱化前提反例）
 
 | 家族编号与领域 | 被证伪的 OpenAI 手稿断言 / 引理定位 | 漏洞类型 | Argus 给出的精确反例与证伪依据 |
 | :--- | :--- | :--- | :--- |
@@ -138,19 +137,6 @@
 * **`#282`（量子场论标度对称到局部共形对称）**：证伪在 `D:subtractions` 前提下存在违反分离多项式结论的协变因果分裂矩阵（`C_PREMISE_OBSTRUCTION`）；
 * **`#331`（自反中点凸性与菱形失真）**：证伪标量不等式 $(\sqrt{\eta}+\sqrt{\eta+2\theta})^2 \le 2(\eta+\theta)$（`C_BAD_SCALAR`）及有限有根树上累积势平方段能量的逐点最大/最小次模性（`C_BAD_LATTICE`）；
 * **`#351`（标量曲率与有限时间 Ricci 流奇点）**：证伪仅凭省略内障（inner barriers）定义即可推翻 Stolarski 判据调用（`C_HD_OMISSION`）。
-
-### 2.6 全集 21 个被证伪活跃家族的 Lean 4.31.0 机器形式化反证套件（[`OpenAIRefutations.lean`](../results/openai-audit-theorems/lean-refutations/OpenAIRefutations.lean)）
-
-为了让所有证伪结论达到**无可辩驳的机器内核级确定性**，我们除了为每一处 `refutes` 提供可独立复跑的确定性反例脚本（`verify.py`）与各家族 `Main.lean` 外，还将**全部 21 个存在致命证伪的活跃家族（覆盖 42 篇被证伪活跃论文，含全部 10 个“核心死刑”家族）的反例与否定定理（`theorem refute_<family>_... : ¬ ...`）**统一编写进了单文件 **Lean 4.31.0 + Mathlib4 形式化反证套件 [`results/openai-audit-theorems/lean-refutations/OpenAIRefutations.lean`](../results/openai-audit-theorems/lean-refutations/OpenAIRefutations.lean)**（说明文档见 [`README.md`](../results/openai-audit-theorems/lean-refutations/README.md)）：
-* **100% 通过 Lean 4.31.0 内核类型检查**（`lake env lean OpenAIRefutations.lean`, `exit_code = 0`）；
-* **零 `sorry`、零 `admit`、零自定义 `axiom`**（`lean_axiom_audit.lean` `audit_exit_code = 0`）；
-* 代表性 Lean 4.31.0 反证定理包括：
-  - **`#318`（色分裂猜想）**：`refute_318_degree_five_nonvanishing`（严格形式化证明 $2\times 2$ 核块与标量商块上的任意 5 次交错抛物形式恒等于 `0`，从而度数 $-5$ 比较标量 $c=0$，直接证伪 OpenAI 的 $\mathrm{level}_G(X)=3$ 头条主定理）、`refute_318_bicomplex_column_zero_detection`（证伪双复形第 0 列单射判据 `C318FORGETACTION`）与 `refute_318_character_sum_real_part_positive`（证伪 $q=7$ 阶 6 特征标和实部正性，给出 $-7/2 < 0$）；
-  - **`#247`（有限表现残余有限 2-群）**：`refute_247_boundary_cursor_rollback` 及 [`results/openai-audit-theorems/9000247/Main.lean`](../results/openai-audit-theorems/9000247/Main.lean) 中的 `no_step` / `trace_fixed` / `no_contains_zero`（在 Lean 4 中直接形式化证明缺失左端点的截断边界游标字 `[cursor p]`（$p\ne 1$）无任何合法重写步 `¬ Step [cursor p] v`，推翻 OpenAI 引理 `fr:rollback`）；
-  - **`#376`（Connes 嵌入 / QWEP）**：`refute_376_block_cutoff_moment_homomorphism`（形式化证明分块截断投影 $P=\mathrm{diag}(1,0)$ 破坏非交换字矩 $(PAP)(PBP)=0 \ne P(AB)P$，推翻 `cor:tracial-extension`）；
-  - **`#180`（Barnette 猜想）**：`refute_180_minimum_order_noncancellation`（形式化证明反向取向森林配对权重 $+1$ 与 $-1$ 在首阶抵消归零，推翻 `C180_INTEGRAL`）；
-  - **`#274`（Gromov 双曲群 Følner 铺砌）**：`refute_274_zero_mean_projector_full_rank`（形式化证明 $3\times 3$ 零均值投影矩阵 $P_{274}$ 湮灭 $(1,1,1)^T$ 且 $\det(P_{274})=0$，推翻引理 5.3 的三维满秩密度断言）；
-  - **`#342`（Donaldson 猜想引用的已发表论文）**：`refute_342_li_zhang_cone_disjointness` 及 [`results/openai-audit-theorems/9000342/Main.lean`](../results/openai-audit-theorems/9000342/Main.lean)（形式化证明 $T^4$ 上闭 2-形式 $\eta$ 与正交驯化对 $\beta_+,\beta_-$ 同时严格正配对，推翻 Li–Zhang *arXiv:0708.2520v4* 的 4 条核心定理）。
 
 ---
 

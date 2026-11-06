@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C320_FORMAL_CORE-2fc9340b9d2c",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "/home/argustest/.elan/bin/lake",
+      "env",
+      "lean",
+      "/home/argustest/zimo/counterexample-batch-1/campaigns/9000320/research/formal_data_bridge/Main.lean"
+    ],
+    "cwd": "/home/argustest/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6169,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "/home/argustest/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "/home/argustest/zimo/counterexample-batch-1/campaigns/9000320/research/formal_data_bridge/Main.lean",
+    "source_sha256": "97c4b682349db4bef9376e37faca1e28748d55338cdb7a82708bf46f6dc8ef36",
+    "statement_fidelity": "/home/argustest/zimo/counterexample-batch-1/campaigns/9000320/research/formal_data_bridge/statement_fidelity.md",
+    "statement_fidelity_sha256": "141a964e6acc3017aa466bb22d2e3a1b2244818a481e7ce485d8f501ab4dfe0e",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "/home/argustest/zimo/counterexample-batch-1/campaigns/9000320/research/formal_data_bridge/Main.lean:90:0: error: maximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "/home/argustest/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "/home/argustest/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "/home/argustest/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/formal_data_bridge/Main.lean",
+    "text": "import Mathlib\n\nnamespace FormalDataBridge\n\nvariable {R : Type*} [CommRing R]\n\ntheorem square_zero_product {ι : Type*} (s : Finset ι)\n    (t : R) (ht : t * t = 0) (r u : ι → R) :\n    t * (∏ i ∈ s, (r i + t * u i)) = t * ∏ i ∈ s, r i := by\n  classical\n  induction s using Finset.induction_on with\n  | empty => simp\n  | @insert a s ha ih =>\n      simp only [Finset.prod_insert ha]\n      calc\n        t * ((r a + t * u a) * ∏ i ∈ s, (r i + t * u i)) =\n            r a * (t * ∏ i ∈ s, (r i + t * u i)) := by\n              calc\n                _ = r a * (t * ∏ i ∈ s, (r i + t * u i)) +\n                    (t * t) * (u a * ∏ i ∈ s, (r i + t * u i)) := by ring\n                _ = _ := by rw [ht]; ring\n        _ = r a * (t * ∏ i ∈ s, r i) := by rw [ih]\n        _ = t * (r a * ∏ i ∈ s, r i) := by ring\n\ntheorem taylor_remainder_ideal {ι : Type*} (I J : Ideal R)\n    (q : ℕ) (delta : ι → R) (remainder : R)\n    (hdelta : ∀ i, delta i ∈ J ^ q * I)\n    (hremainder : remainder ∈ (Ideal.span (Set.range delta)) ^ 2) :\n    remainder ∈ J ^ (2 * q) * I ^ 2 := by\n  have hspan : Ideal.span (Set.range delta) ≤ J ^ q * I := by\n    apply Ideal.span_le.mpr\n    rintro x ⟨i, rfl⟩\n    exact hdelta i\n  have hpow := Ideal.pow_right_mono hspan 2\n  have heq : (J ^ q * I) ^ 2 = J ^ (2 * q) * I ^ 2 := by\n    rw [mul_pow, ← pow_mul]\n    congr 2\n    omega\n  rw [← heq]\n  exact hpow hremainder\n\ntheorem newton_step {ι : Type*} (I J : Ideal R)\n    (q : ℕ) (delta : ι → R)\n    (oldValue linearTerm remainder newValue : R)\n    (hdelta : ∀ i, delta i ∈ J ^ q * I)\n    (hremainder : remainder ∈ (Ideal.span (Set.range delta)) ^ 2)\n    (hcancel : oldValue + linearTerm = 0)\n    (htaylor : newValue = oldValue + linearTerm + remainder) :\n    newValue ∈ J ^ (2 * q) * I ^ 2 := by\n  rw [htaylor, hcancel, zero_add]\n  exact taylor_remainder_ideal I J q delta remainder hdelta hremainder\n\ntheorem error_zero_of_nilpotent (I J : Ideal R) (N q : ℕ)\n    (hJ : J ^ N = ⊥) (hN : N ≤ q) (e : R)\n    (he : e ∈ J ^ q * I ^ 2) : e = 0 := by\n  have hq : J ^ q = ⊥ := by\n    apply le_antisymm\n    · calc\n        J ^ q ≤ J ^ N := Ideal.pow_le_pow_right hN\n        _ = ⊥ := hJ\n    · exact bot_le\n  simpa [hq] using he\n\ntheorem finite_newton_termination {ι : Type*}\n    (I J : Ideal R) (N steps : ℕ)\n    (hJ : J ^ N = ⊥) (hsteps : N ≤ 2 ^ steps)\n    (value linearTerm remainder : ℕ → R) (delta : ℕ → ι → R)\n    (hzero : value 0 ∈ J * I ^ 2)\n    (hdelta : ∀ k < steps, ∀ i, delta k i ∈ J ^ (2 ^ k) * I)\n    (hremainder : ∀ k < steps,\n      remainder k ∈ (Ideal.span (Set.range (delta k))) ^ 2)\n    (hcancel : ∀ k < steps, value k + linearTerm k = 0)\n    (htaylor : ∀ k < steps,\n      value (k + 1) = value k + linearTerm k + remainder k) :\n    value steps = 0 := by\n  have hvalue : ∀ k ≤ steps, value k ∈ J ^ (2 ^ k) * I ^ 2 := by\n    intro k hk\n    cases k with\n    | zero => simpa using hzero\n    | succ k =>\n        have hks : k < steps := by omega\n        have h := newton_step I J (2 ^ k) (delta k)\n          (value k) (linearTerm k) (remainder k) (value (k + 1))\n          (hdelta k hks) (hremainder k hks)\n          (hcancel k hks) (htaylor k hks)\n        simpa [pow_succ, Nat.mul_comm] using h\n  exact error_zero_of_nilpotent I J N (2 ^ steps) hJ hsteps\n    (value steps) (hvalue steps le_rfl)\n\ntheorem twenty_parameters_five_steps (I J : Ideal R)\n    (hJ : J ^ 21 = ⊥) (e : R)\n    (he : e ∈ J ^ (2 ^ 5) * I ^ 2) : e = 0 :=\n  error_zero_of_nilpotent I J 21 (2 ^ 5) hJ (by decide) e he\n\ntheorem unit_of_nilpotent_congruence (J : Ideal R) (N : ℕ)\n    (hJ : J ^ N = ⊥) (u v : R) (hu : IsUnit u)\n    (hvu : v - u ∈ J) : IsUnit v := by\n  have hnil : IsNilpotent J := ⟨N, by simpa using hJ⟩\n  apply (IsNilpotent.isUnit_quotient_mk_iff hnil).mp\n  have heq : Ideal.Quotient.mk J v = Ideal.Quotient.mk J u :=\n    (Ideal.Quotient.eq (I := J)).mpr hvu\n  rw [heq]\n  exact hu.map (Ideal.Quotient.mk J)\n\ntheorem polynomial_congruence {ι : Type*} (I : Ideal R)\n    (x y : ι → R) (hxy : ∀ i, x i - y i ∈ I)\n    (p : MvPolynomial ι R) :\n    MvPolynomial.eval x p - MvPolynomial.eval y p ∈ I := by\n  apply (Ideal.Quotient.eq (I := I)).mp\n  have hcoordinates : (fun i => Ideal.Quotient.mk I (x i)) =\n      (fun i => Ideal.Quotient.mk I (y i)) := by\n    funext i\n    exact (Ideal.Quotient.eq (I := I)).mpr (hxy i)\n  change Ideal.Quotient.mk I\n      (MvPolynomial.eval₂Hom (RingHom.id R) x p) =\n    Ideal.Quotient.mk I\n      (MvPolynomial.eval₂Hom (RingHom.id R) y p)\n  rw [MvPolynomial.map_eval₂Hom, MvPolynomial.map_eval₂Hom, hcoordinates]\n\ntheorem polynomial_membership_transport {ι : Type*} (I : Ideal R)\n    (x y : ι → R) (hxy : ∀ i, x i - y i ∈ I)\n    (p : MvPolynomial ι R) (hy : MvPolynomial.eval y p ∈ I) :\n    MvPolynomial.eval x p ∈ I := by\n  have h := I.add_mem (polynomial_congruence I x y hxy p) hy\n  simpa using h\n\nend FormalDataBridge\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/formal_data_bridge/statement_fidelity.md",
+    "text": "# Statement fidelity: actual ideals in the full-parameter correction\n\n## Claim and scope\n\nThis document describes claim `C320_FORMAL_CORE` and the declarations in\n`Main.lean`, namespace `FormalDataBridge`. The objects are an arbitrary\ncommutative ring `R`, actual ideals `I` and `J` of `R`, arbitrary coordinate\nindex types, and natural-number exponents. The formal source does not\nassume that `R` is reduced, that `I` is radical, or that its generators\nform a regular sequence. It never imposes `J^2 = 0`.\n\nThe source formalizes algebra used in sections E and F of `report.md`.\nIt does **not** formalize a marked cut decomposition, de Rham theory,\nthe construction of the vertex curvature list, a Chern--Simons action,\nthe endpoint-assignment theorem, MT's marked algebraicity, or the main\nfour-manifold conclusions. In particular a successful compile is not\na proof of claim `C320_FORMAL` or campaign completion.\n\n## Objects, quantifiers, hypotheses, and conclusions\n\n`square_zero_product` quantifies over every finite set of indices, one\nelement `t` with the individual relation `t*t=0`, and two indexed scalar\nfamilies `r,u`. Its conclusion is the exact identity\n\n    t product_i(r_i + t u_i) = t product_i r_i.\n\nAll other source parameters may be elements of `R`; no mixed source\nproduct is killed by a hypothesis. This verifies the monomial absorption\nused to replace factors in `(I,t)` after multiplication by their own\nsource parameter. It is a scalar-coefficient statement; it does not\nassert that matrices commute.\n\n`taylor_remainder_ideal` quantifies over arbitrary `I,J`, exponent `q`,\nan indexed displacement `delta`, and a remainder. Its hypotheses are\n`delta_i in J^q I` for every coordinate and remainder membership in\nthe **square** of the ideal spanned by the displacement coordinates.\nIts conclusion is membership in `J^(2q) I^2`. Neither existence nor\nanalytic differentiability of a potential is assumed or proved by this\ndeclaration.\n\n`newton_step` adds a Taylor identity and cancellation of the linear\nterm to the preceding hypotheses. It concludes the doubled-power ideal\nmembership for the new value. The linear cancellation is an explicit\nhypothesis; choosing that displacement using an inverse gradient minor\nis proved in prose in `report.md`, not hidden in the Lean theorem.\n\n`error_zero_of_nilpotent` assumes `J^N = bottom`, `N <= q`, and\n`e in J^q I^2`, and concludes `e=0`. `finite_newton_termination`\nquantifies over finitely many steps of value, linear-term, remainder,\nand displacement families. It assumes the initial error lies in\n`J I^2`; at step `k`, displacement is in `J^(2^k) I`, the remainder\nis quadratic in that displacement, the linear term cancels, and the\ndisplayed Taylor identity holds. If `J^N=bottom` and `N <= 2^steps`,\nthe final value is zero. This is a finite-iteration verification, not\nan assumption that a Newton iteration exists for arbitrary input.\n\n`twenty_parameters_five_steps` is the numerical specialization:\n`J^21=bottom` and an error in `J^(2^5) I^2` imply zero. The statement\ndoes not itself construct the twenty-parameter quotient or prove its\npigeonhole nilpotency; that elementary generator argument is in the\nreport. The bound is uniform in the degree of the cyclic cover.\n\n`unit_of_nilpotent_congruence` assumes `J^N=bottom`, `u` is a unit,\nand `v-u in J`. It concludes `v` is a unit. Applied to the selected\ndeterminants, this is the minor-stability fact. It does not construct\nthe original unit minor from topological duality.\n\n`polynomial_congruence` quantifies over every multivariate polynomial\nand coordinate families congruent modulo the actual ideal `I`.\nIt concludes that their evaluations are congruent modulo `I`.\n`polynomial_membership_transport` adds membership of one evaluation\nin `I` and concludes membership of the other. The coefficient ring\nmay contain all the nilpotent parameters. These declarations are about\npolynomials, not unrestricted formal power series; extending the\napplication to a convergent formal substitution in a complete\nNoetherian ring uses ideal-closedness as explained in the report.\n\n## Fidelity limitation\n\nThe imported MT single-cut and marked-algebraicity theorems remain\nexplicit external assumptions in the ledger. The compiler does not\ncheck their truth, the geometric realizability of cuts, the report's\nprose deductions, citation fidelity, or novelty. Independent review of\nthose questions is still required.\n"
+  },
+  "subject": {
+    "content_hash": "c73f9d9945418e775022a4d71d60824ec7e618a33e1a8570c8e2492e305fb708",
+    "kind": "claim",
+    "subject_id": "C320_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}
