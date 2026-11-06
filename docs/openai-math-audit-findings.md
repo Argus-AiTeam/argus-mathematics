@@ -101,7 +101,13 @@ Argus also recorded formal `refutes` verdicts (explicitly labeled as non-manuscr
 
 ---
 
-### III.B 32 Flagship Strictly Stronger Theorems Proved by Argus (Out of 243 Strengthened Families; Full 166-Family Headline Catalog Below)
+### III.B 36 Flagship Strictly Stronger Theorems Proved by Argus (Out of 243 Strengthened Families; Standalone Packages in [`results/openai-audit-theorems/`](../results/openai-audit-theorems/))
+
+0. **Four Original Breakthrough Theorems Certified as `verified_new` ([`#209`](../results/openai-audit-theorems/9000209/), [`#063`](../results/openai-audit-theorems/9000063/), [`#074`](../results/openai-audit-theorems/9000074/), [`#378`](../results/openai-audit-theorems/9000378/)):**
+   * **`#209` (Integral Gersten Counterexamples — Brand-New Dyadic $\mathbb{F}_2$ Theorem `D2_MAIN`, [`dyadic_audit/theorem.md`](../results/openai-audit-theorems/9000209/dyadic_audit/theorem.md)):** Whereas OpenAI's manuscript required odd primes (and its $y=0$ dyadic slice collapsed to zero), Argus constructed the **first dyadic ($p=2$, finite residue field $\mathbb{F}_2$) 2D Noetherian regular local domain $B = (\mathbb{Z}_2[x,y]/(2-2x+x^2+xy-y^2))_{(2,x,y)}$ with a nonzero integral degree-3 Gersten kernel class $c \in \ker(K_3(B)\to K_3(\mathrm{Frac}(B)))$, $c\notin 2K_3(B)$**.
+   * **`#063` (Generalized Mukai & Gromov–Witten Descendants — Non-Fano Arbitrary Very Ample Bound `Theorem A`, [`descendant_bound/proof.md`](../results/openai-audit-theorems/9000063/descendant_bound/proof.md)):** Eliminated the Fano hypothesis entirely, proving $\langle\tau_{d-2}(\mathrm{pt})\rangle_\beta \ge (H\cdot\beta)^{-(d-1)}$ for **any** smooth projective variety $X$ with $-K_X\cdot C\ge 2$ on rational curves and **any very ample line bundle $H$**.
+   * **`#074` (3D & 4D Kakeya — Sharp $m$-th Order Pure-Type Matching Theorem `Theorem 2`, [`two_color_matching/report.md`](../results/openai-audit-theorems/9000074/two_color_matching/report.md)):** Proved the sharp exponent bound **$d \ge (m+1)/2$** for $m$-th order derivative matching with explicit extremal families attaining equality for every $m\ge 1$.
+   * **`#378` (Refuting ETH — Exact Closed-Form 2-Adic Hermite Valuation Loss, [`hermite_precision/proof.md`](../results/openai-audit-theorems/9000378/hermite_precision/proof.md)):** Derived the exact non-asymptotic 2-adic valuation identity $v_2(E_t(0)) = -h(6\cdot 2^n - (2k+6)2^{n-k} - k(n+2))$, reducing the required 2-adic precision $P_t$ (verified in Lean 4.31.0).
 
 1. **`#164` (Hindman's Finite Sums and Products Conjecture — Polynomial Scale Replacing Superpolynomial Scale):**
    * *OpenAI Manuscript:* `prop:rough-step` requires the spatial box scale $Z$ to grow **superpolynomially** relative to the step scale $S$ ($Z/S^a \to \infty$ for all $a>0$).

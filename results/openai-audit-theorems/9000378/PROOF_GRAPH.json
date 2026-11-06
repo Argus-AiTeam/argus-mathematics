@@ -1,0 +1,117 @@
+{
+  "goal": "C9000378",
+  "routes": [
+    {
+      "name": "R9000378-HERMITE-SOURCEBOUND",
+      "status": "current",
+      "evidence": "research/hermite_precision/proof.md"
+    },
+    {
+      "name": "R9000378-TENSOR-STEP",
+      "status": "current",
+      "evidence": "research/tensor_modes/proof.md"
+    }
+  ],
+  "nodes": {
+    "C9000378": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 378 (Disproof of the Exponential Time Hypothesis.; papers: The Exponential Time Hypothesis is False; Lean status: Partially/Comparator formalized (lean/docs/378.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C9000378-HERMITE-FULL",
+        "C9000378-HERMITE-CONSEQUENCE",
+        "C9000378-TENSOR-STEP"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C9000378-HERMITE-FULL": {
+      "statement": "Universal recovery under the exact manuscript hypotheses, with sufficient precision p+hB(a-i,u-i)+(m_t-1)(a+1-i), bounded by the manuscript precision.",
+      "status": "open",
+      "depends_on": [
+        "C9000378-HERMITE",
+        "C9000378-HERMITE-INSTANTIATION"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/hermite_precision/proof.md",
+        "research/hermite_precision/exact_certificate.json",
+        "research/hermite_precision/verify.py"
+      ]
+    },
+    "C9000378-HERMITE": {
+      "statement": "Universal finite dyadic loss identity and coordinatewise stability of the rational Hermite quotient/evaluation functional at the exact stated precision constants.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/hermite_precision/Main.lean",
+        "research/hermite_precision/statement_fidelity.md",
+        "research/hermite_precision/certificates/C9000378-HERMITE-756788a698ae9fe9.json"
+      ]
+    },
+    "C9000378-HERMITE-INSTANTIATION": {
+      "statement": "Concrete translated-grid counts, exact valuation of E_t(0), Hermite identity, polynomial bit complexity, and monic-normal-form extension to the original truncated ring.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/hermite_precision/proof.md",
+        "research/hermite_precision/verify.py"
+      ]
+    },
+    "C9000378-HERMITE-CONSEQUENCE": {
+      "statement": "Conditional on the separate recursion and mode assertions, this validates precision O(MD_t/u) and mode exponent O(M/sqrt(u)); the other algorithmic assertions remain unaudited.",
+      "status": "open",
+      "depends_on": ["C9000378-HERMITE-FULL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/hermite_precision/proof.md"
+      ]
+    },
+    "C9000378-TENSOR-STEP": {
+      "statement": "For every admissible nonzero retained node, integral interpolation value, fixed lifted input tensors, and actual packet embedding, the manuscript Cauchy one-step recursion identity holds modulo 2^p with its strict weighted cutoff, and its children obey the stated edge and degree bounds.",
+      "status": "open",
+      "depends_on": [
+        "C9000378-TENSOR-KERNEL",
+        "C9000378-TENSOR-FACTOR",
+        "C9000378-TENSOR-SIZE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tensor_modes/proof.md"
+      ]
+    },
+    "C9000378-TENSOR-KERNEL": {
+      "statement": "The actual normalized grid Cauchy kernel admits the stated crossing mode expansion, with integral coefficient of weight b+1 divisible by 2^(b+1), including p=1, zero/nonconstant interpolation values, and negative nodes.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tensor_modes/proof.md"
+      ]
+    },
+    "C9000378-TENSOR-FACTOR": {
+      "statement": "Weighted truncation, disjoint target-variable coefficient extraction, source substitution, and independent group bit sums give exactly the specified product of child contractions over the original coefficient ring modulo 2^p.",
+      "status": "open",
+      "depends_on": [
+        "C9000378-TENSOR-KERNEL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tensor_modes/proof.md"
+      ]
+    },
+    "C9000378-TENSOR-SIZE": {
+      "statement": "Given the actual packet load guarantees, there are at most 6M/D modes per weight; each child has R_g+C_g<=6M/r edges and maximum degree max(Delta,2L), hence fewer than M/8 edges and maximum degree Delta at r=64 and 2L<=Delta.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tensor_modes/proof.md"
+      ]
+    }
+  }
+}

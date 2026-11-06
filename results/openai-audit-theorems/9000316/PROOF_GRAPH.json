@@ -1,0 +1,227 @@
+{
+  "goal": "C9000316",
+  "routes": [
+    {
+      "name": "Uniform even-degree injection via Laurent freeness and exponent truncation",
+      "status": "current",
+      "evidence": "research/tor_injection/report.md"
+    },
+    {
+      "name": "Monomial-only or separate-primitive tests",
+      "status": "ruled_out",
+      "evidence": "research/tor_injection/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000316": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 316 (Curtis’s conjecture.; papers: The Stable Hurewicz Image of the Sphere at Two; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C316_TOR"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C316_CURTIS": {
+      "statement": "Manuscript thm:curtis asserts the positive stable mod-two Hurewicz image is spanned by the Hopf and existing Kervaire invariant-one images. This assertion is not verified by the local Tor audit.",
+      "status": "open",
+      "depends_on": [
+        "C316_WEIGHTS",
+        "C316_CONES",
+        "C316_OBSTRUCTION",
+        "C316_TERMINAL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/introduction.tex"
+      ]
+    },
+    "C316_WEIGHTS": {
+      "statement": "Manuscript lem:weight-modules and lem:zero-weights identify suspended Dickson ideals and the preceding-level functional restriction; not audited here.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/weights.tex"
+      ]
+    },
+    "C316_CONES": {
+      "statement": "Manuscript lem:cone-square, prop:cone-extension and cor:tensor-detection supply nonzero tensors from actual sphere maps; not audited here.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/cones.tex"
+      ]
+    },
+    "C316_MILNOR": {
+      "statement": "The Dickson-coordinate primitive actions and square-coefficient expression for later primitives follow from the polynomial binomial/Cartan model and root polynomial.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tor_injection/report.md",
+        "research/tor_injection/verify.py",
+        "research/tor_injection/exact_certificate.json"
+      ]
+    },
+    "C316_COINVAR": {
+      "statement": "Above the exponent floor, the E-coinvariant monomials have d0 exponent congruent to k and all other Dickson exponents odd.",
+      "status": "open",
+      "depends_on": [
+        "C316_MILNOR"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tor_injection/report.md"
+      ]
+    },
+    "C316_CARTIER": {
+      "statement": "Manuscript lem:cartier identifies the above-floor coinvariant submodule with the stated halved Dickson ideal; not audited here.",
+      "status": "open",
+      "depends_on": [
+        "C316_COINVAR"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/algebra.tex"
+      ]
+    },
+    "C316_FUNCTIONAL": {
+      "statement": "Manuscript lem:algebra-functional-halving derives n congruent to k modulo 2^v2(m) and c at least n+2^v2(m)-2 from the lifted functional; not audited here.",
+      "status": "open",
+      "depends_on": [
+        "C316_CARTIER"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/algebra.tex"
+      ]
+    },
+    "C316_LOCAL_FREE": {
+      "statement": "The Laurent Dickson algebra is free over the first-k exterior algebra, with the explicit orbit basis q_T(d0^-k product(dj,j>0)) over the Laurent square subring.",
+      "status": "open",
+      "depends_on": [
+        "C316_MILNOR"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tor_injection/report.md",
+        "research/tor_injection/exact_certificate.json"
+      ]
+    },
+    "C316_TRUNCATION": {
+      "statement": "For finite Laurent coefficient vectors and a differential shifting each exponent by exactly one, ambient exactness fills every cycle above floor n inside coefficients at or above n, by truncating a filling.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tor_injection/Main.lean",
+        "research/tor_injection/statement_fidelity.md",
+        "research/tor_injection/lean_evidence/certificates/C316_TRUNCATION-2db17c0a3e80028e.json"
+      ]
+    },
+    "C316_FLOOR_TOR": {
+      "statement": "For every positive homological degree s and every n>=0, Tor_s over the first-k primitives of Sigma^n d0^n Dk is canonically represented at the exponent floor and has internal degree congruent to s modulo two.",
+      "status": "open",
+      "depends_on": [
+        "C316_LOCAL_FREE",
+        "C316_TRUNCATION"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tor_injection/report.md",
+        "research/tor_injection/exact_certificate.json",
+        "research/tor_injection/Main.lean"
+      ]
+    },
+    "C316_TOR": {
+      "statement": "For k>=1, n>=0, n congruent to k mod 2, the manuscript projection I tensor_A Sigma^n d0^n Dk to the quotient by all Milnor primitives is injective on even-total-degree cycles.",
+      "status": "open",
+      "depends_on": [
+        "C316_COINVAR",
+        "C316_FLOOR_TOR"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tor_injection/report.md",
+        "research/tor_injection/verify.py",
+        "research/tor_injection/exact_certificate.json"
+      ]
+    },
+    "C316_EVEN_VANISH": {
+      "statement": "Manuscript lem:algebra-even-vanishing uses Tor injection and the exponent bounds to kill non-power-of-two even Sq^m tensors; its other steps are not audited here.",
+      "status": "open",
+      "depends_on": [
+        "C316_TOR",
+        "C316_CARTIER",
+        "C316_SQUARES"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/algebra.tex"
+      ]
+    },
+    "C316_OBSTRUCTION": {
+      "statement": "Manuscript lem:algebra-obstruction excludes nonbottom weights except n=k=1 and power-of-two degrees when both the nonzero tensor and lifted functional hypotheses hold; not certified here.",
+      "status": "open",
+      "depends_on": [
+        "C316_FUNCTIONAL",
+        "C316_EVEN_VANISH",
+        "C316_SQUARES"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/algebra.tex"
+      ]
+    },
+    "C316_SQUARES": {
+      "statement": "Manuscript lem:algebra-odd-tensor and lem:algebra-near-top-square supply the odd-case tensor vanishing and the near-top square identities used in the even-case endpoint; not audited here.",
+      "status": "open",
+      "depends_on": [
+        "C316_MILNOR"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/algebra.tex"
+      ]
+    },
+    "C316_TERMINAL": {
+      "statement": "Manuscript last-root, fourth-power exclusion and terminal Hopf/Kervaire identification complete the geometric argument using additional literature; not audited here.",
+      "status": "open",
+      "depends_on": [
+        "C316_WEIGHTS",
+        "C316_CONES",
+        "C316_OBSTRUCTION"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/conclusion.tex",
+        "research/openai_manuscript/The-Stable-Hurewicz-Image-of-the-Sphere-at-Two-September-25-2026/build/powers.tex"
+      ]
+    },
+    "F316_MONOMIAL_SINGLE_PRIMITIVE_QUOTIENT_TEST": {
+      "statement": "In OpenAI Family 316 (Curtis conjecture, algebra.tex lem:tor-injection), testing monomials or one Milnor primitive q_i at a time determines the quotient by all degree-two Steenrod relations and detects multi-component cycle cancellations.",
+      "status": "refuted",
+      "is_goal": false,
+      "depends_on": [],
+      "reviewer_confirmed": true,
+      "evidence": [
+        "research/tor_injection/report.md"
+      ]
+    },
+    "F316_INFINITE_PRIMITIVE_STRICT_SHIFT": {
+      "statement": "In OpenAI Family 316 (Curtis conjecture), Milnor primitives q_i beyond the first k primitives preserve the strict exponent shift by one required to apply floor truncation directly to the full infinite primitive complex.",
+      "status": "refuted",
+      "is_goal": false,
+      "depends_on": [],
+      "reviewer_confirmed": true,
+      "evidence": [
+        "research/tor_injection/report.md"
+      ]
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "goal": "C9000176",
+  "routes": [
+    {
+      "name": "Indexed posterior and outside-label measurability",
+      "status": "current",
+      "evidence": "research/tree-reduction/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000176": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 176 (The second Kahn–Kalai conjecture with an edge-count bound.; papers: The second Kahn–Kalai conjecture; Lean status: Partially/Comparator formalized (lean/docs/176.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_TREE_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN": {
+      "statement": "For n >= 2 and a finite simple H with 1 <= h=e(H) and v(H)<=n, p_c(n,H) <= min(1,2048 exp(50) p_E(n,H)(1+log_2 h)).",
+      "status": "open",
+      "depends_on": ["C_TREE_COVER", "C_GRAPH_HIERARCHY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-second-Kahn-Kalai-conjecture-September-24-2026/build/source/sections/introduction.tex"]
+    },
+    "C_TREE_COVER": {
+      "statement": "A finite disjoint sigma-spread probability tree with positive capacities growing by a factor at least 16 has a covered full path with probability at least 2/3 at density min(1,16 exp(50) sigma (1+log_2 ell_k)).",
+      "status": "open",
+      "depends_on": ["C_ITERATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-second-Kahn-Kalai-conjecture-September-24-2026/build/source/sections/trees.tex", "research/tree-reduction/Main.lean"]
+    },
+    "C_ITERATION": {
+      "statement": "Repeated reductions with fresh samples, keeping failed attempts unchanged and deleting empty prefixes after successes, finish in 4(floor(log_2 ell_k)+1) attempts with probability at least 2/3 and spread inflation less than 4.",
+      "status": "open",
+      "depends_on": ["C_TREE_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-second-Kahn-Kalai-conjecture-September-24-2026/build/source/sections/trees.tex"]
+    },
+    "C_GRAPH_HIERARCHY": {
+      "statement": "Ratio-maximizing cores yield a disjoint 128 p_E(n,H)-spread probability tree whose path unions are copies of H without isolated vertices and whose positive label sizes grow by at least 16 and are at most e(H).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-second-Kahn-Kalai-conjecture-September-24-2026/build/source/sections/graphs.tex"]
+    },
+    "C_TREE_REDUCTION": {
+      "statement": "Original lem:reduction: one common Bernoulli sample at rho=exp(50)a<1 deterministically yields, with probability at least 3/4, a same-depth disjoint probability tree with capacities floor(m_j/2), spread alpha_j/(1-exp(-m_j)), and pathwise recovery.",
+      "status": "open",
+      "depends_on": ["C_THREE_SEPARATED_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree-reduction/Main.lean", "research/tree-reduction/statement-fidelity.md", "research/tree-reduction/certificates/C_TREE_REDUCTION-c419892233c8de30.json", "research/tree-reduction/report.md"]
+    },
+    "C_POSTERIOR": {
+      "statement": "The actual indexed child laws give the displayed Bayes posterior; the planted union has density Z against the Bernoulli law, with repeated labels retained as separate indices.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-second-Kahn-Kalai-conjecture-September-24-2026/build/source/sections/resampling.tex", "research/tree-reduction/Main.lean"]
+    },
+    "C_LOCAL": {
+      "statement": "For every indexed a-spread law with labels of size at most positive m and a/rho<=exp(-50), failure Z<exp(-10m) or fragment size>m/2 has probability at most exp(-9m).",
+      "status": "open",
+      "depends_on": ["C_POSTERIOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-second-Kahn-Kalai-conjecture-September-24-2026/build/source/sections/resampling.tex", "research/tree-reduction/Main.lean"]
+    },
+    "C_DISTORTION": {
+      "statement": "For each target b and every nonnegative f depending only on W outside A_b, E[1(target=b,Z>=exp(-10m)) f(W)] <= exp(11m) nu_b E f(W).",
+      "status": "open",
+      "depends_on": ["C_POSTERIOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-second-Kahn-Kalai-conjecture-September-24-2026/build/source/sections/resampling.tex", "research/tree-reduction/Main.lean"]
+    },
+    "C_DESCENDANT_MEASURABILITY": {
+      "statement": "For every fixed-input child b, its entire descendant pruning potential depends only on coordinates outside its incoming label, without conditioning on goodness or retention.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-second-Kahn-Kalai-conjecture-September-24-2026/build/source/sections/trees.tex"]
+    },
+    "C_PRUNING": {
+      "statement": "The actual local transition masses and recursively good nodes give deterministic pruning, same-depth recovery, capacity halving, and the stated conditional spread bound whenever the root is good.",
+      "status": "open",
+      "depends_on": ["C_POSTERIOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree-reduction/Main.lean", "research/tree-reduction/report.md"]
+    },
+    "C_EXPECTED_RECURRENCE": {
+      "statement": "For the actual indexed local masses and fixed-input descendant potentials using one common W, E[D_v] <= exp(-8 m_s) + exp(12 m_s) sum_b nu_v(b) E[D_b].",
+      "status": "open",
+      "depends_on": ["C_LOCAL", "C_DISTORTION", "C_DESCENDANT_MEASURABILITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree-reduction/Main.lean"]
+    },
+    "C_POTENTIAL_BOUND": {
+      "statement": "For arbitrary finite disjoint probability trees satisfying the original local hypotheses and positive capacities with m_(s+1)>=3m_s, the actual fixed-input pruning potential satisfies E[D_v]<=exp(-7m_s) at every non-leaf node.",
+      "status": "open",
+      "depends_on": ["C_EXPECTED_RECURRENCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree-reduction/Main.lean", "research/tree-reduction/report.md"]
+    },
+    "C_THREE_SEPARATED_REDUCTION": {
+      "statement": "The original common-sample reduction conclusion holds with the weaker capacity separation m_(s+1)>=3m_s instead of 16, with unchanged density exp(50)a, success probability 3/4, halved capacities, conditional spread, and full-path recovery.",
+      "status": "open",
+      "depends_on": ["C_POTENTIAL_BOUND", "C_PRUNING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree-reduction/Main.lean", "research/tree-reduction/statement-fidelity.md", "research/tree-reduction/exact_certificate.json"]
+    }
+  }
+}

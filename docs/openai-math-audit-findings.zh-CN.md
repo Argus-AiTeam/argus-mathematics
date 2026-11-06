@@ -116,9 +116,15 @@
 
 ---
 
-### 3.2 严格超越 OpenAI 原文的 35 项旗舰新定理精选（全集共 243 族强化，166 族完整清单附后）
+### 3.2 严格超越 OpenAI 原文的 35 项旗舰新定理精选（全集共 243 族强化，归档包见 [`results/openai-audit-theorems/`](../results/openai-audit-theorems/)，166 族完整清单附后）
 
-在原文核心思路成立的家族中，Argus 进一步消除了冗余假设、改进了渐近指数或扩大了适用范畴：
+在原文核心思路成立的家族中，Argus 进一步创造了全新的数学对象、消除了冗余假设、改进了渐近指数或扩大了适用范畴（24 个旗舰家族的完整证明手稿、`verify.py`、精确证书与 `Main.lean` 已独立归档于 [`results/openai-audit-theorems/`](../results/openai-audit-theorems/)）：
+
+0. **四项独立 Reviewer 认证为 `verified_new` 的原创突破定理（[`#209`](../results/openai-audit-theorems/9000209/)、[`#063`](../results/openai-audit-theorems/9000063/)、[`#074`](../results/openai-audit-theorems/9000074/)、[`#378`](../results/openai-audit-theorems/9000378/)）**：
+   * **`#209`（整系数 Gersten 猜想反例，[`dyadic_audit/theorem.md`](../results/openai-audit-theorems/9000209/dyadic_audit/theorem.md)）**：OpenAI 原文仅能处理奇素数（且 $y=0$ 切片在特征 2 下坍缩为 0）。Argus 首创特征 2 有限剩余域 $\mathbb{F}_2$ 上的二进二维局部正则整环 $B = (\mathbb{Z}_2[x,y]/(2-2x+x^2+xy-y^2))_{(2,x,y)}$，利用 Friedlander–Suslin 混合谱序列配对证明存在**非零整系数 3 次 Gersten 核元素 $c \in \ker(K_3(B)\to K_3(\mathrm{Frac}(B)))$ 且 $c\notin 2K_3(B)$（定理 `D2_MAIN`）**！
+   * **`#063`（广义 Mukai 猜想与 Gromov–Witten 不变量，[`descendant_bound/proof.md`](../results/openai-audit-theorems/9000063/descendant_bound/proof.md)）**：彻底去掉 OpenAI 原文的 Fano 假设，证明对**任意**满足有理曲线上 $-K_X\cdot C\ge 2$ 的光滑射影簇 $X$ 与**任意非常丰沛线丛 $H$**，均有零亏格点后代下界 $\langle\tau_{d-2}(\mathrm{pt})\rangle_\beta \ge (H\cdot\beta)^{-(d-1)}$（`Theorem A`）。
+   * **`#074`（三维与四维 Kakeya 猜想，[`two_color_matching/report.md`](../results/openai-audit-theorems/9000074/two_color_matching/report.md)）**：建立任意 $m\ge 1$ 阶导数纯型双色匹配的**紧指数定理 $d \ge (m+1)/2$（`Theorem 2`）**，并构造出对一切 $m$ 达到该下界的显式极值函数族。
+   * **`#378`（否定指数时间假设 ETH，[`hermite_precision/proof.md`](../results/openai-audit-theorems/9000378/hermite_precision/proof.md)）**：导出无任何渐近近似的**锥形 Hermite 插值精确闭式 2-进赋值损失恒等式** $v_2(E_t(0)) = -h(6\cdot 2^n - (2k+6)2^{n-k} - k(n+2))$，直接降低 ETH 计数算法所需的 2-进模精度 $P_t$（已过 Lean 4.31.0）。
 
 1. **`#164`（Hindman 有限和积猜想）：将「超多项式空间尺度」削弱为「显式有限幂次尺度」**
    * **OpenAI 原文**：`prop:rough-step` 要求空间盒子尺度 $Z$ 相对步长 $S$ 满足**超多项式增长**（即对任意固定 $a>0$ 有 $Z/S^a \to \infty$）。

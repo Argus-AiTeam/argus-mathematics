@@ -1,0 +1,144 @@
+{
+  "goal": "C9000342",
+  "routes": [
+    {
+      "name": "Resolve the explicit torus cone conflict, independently of the unverified existence theorem",
+      "status": "current",
+      "evidence": "research/cone_conflict/proof.md"
+    }
+  ],
+  "nodes": {
+    "C9000342": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 342 (Donaldson's tamed-to-compatible conjecture.; papers: Taming implies compatibility on four-manifolds; Lean status: Partially/Comparator formalized (lean/docs/342.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_CONE_RESOLUTION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN": {
+      "statement": "Staged thm:main: every symplectically tamed smooth almost complex structure on a closed connected four-manifold admits a compatible symplectic form.",
+      "status": "open",
+      "depends_on": ["C_SEPARATION", "C_GROWTH", "C_ENERGY", "C_SPLITTING", "C_FINAL_PAIRING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Taming-implies-compatibility-on-four-manifolds-October-6-2026/build/sections/01-introduction.tex"]
+    },
+    "C_LIFT": {
+      "statement": "Staged lem:lift: Rdd* has a generalized inverse giving a closed order-zero lift B with RB=Id.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_SEPARATION": {
+      "statement": "Staged prop:separation: nonexistence of compatibility yields normalized positive P and anti-invariant Q with T=P+Q annihilating closed forms.",
+      "status": "open",
+      "depends_on": ["C_LIFT"],
+      "reviewer_confirmed": false
+    },
+    "C_GROWTH": {
+      "statement": "Staged prop:growth: corrected radial tests imply uniform quadratic trace growth.",
+      "status": "open",
+      "depends_on": ["C_LIFT", "C_SEPARATION"],
+      "reviewer_confirmed": false
+    },
+    "C_KERNEL_MIXING": {
+      "statement": "Staged lem:kernel and lem:mixing: resolvent kernel has a positive scalar leading part with O(r^-2) error, and relative projection mixing is O(r).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_ENERGY": {
+      "statement": "Staged prop:energy: growth, kernel and mixing estimates imply Q in L2, angular moment O(r^4), and vanishing mixed terms.",
+      "status": "open",
+      "depends_on": ["C_SEPARATION", "C_GROWTH", "C_KERNEL_MIXING"],
+      "reviewer_confirmed": false
+    },
+    "C_DENSITY": {
+      "statement": "Staged lem:density: under the abstract splitting hypotheses the two-density exists at every point.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_TRANSVERSE": {
+      "statement": "Staged lem:transverse: constant-polarization tangent measures are planar, giving the transverse moment o(r^2).",
+      "status": "open",
+      "depends_on": ["C_DENSITY"],
+      "reviewer_confirmed": false
+    },
+    "C_CUTOFF": {
+      "statement": "Staged splitting proof: L2 correction cutoff error vanishes; angular O(r^4) times transverse o(r^2) controls tangential derivatives after r^-3 normalization.",
+      "status": "open",
+      "depends_on": ["C_DENSITY", "C_TRANSVERSE"],
+      "reviewer_confirmed": false
+    },
+    "C_SPLITTING": {
+      "statement": "Staged thm:splitting: if P+Q is closed, Q is anti-invariant L2, and the mass and angular estimates hold, the positive-density restriction P_E is closed.",
+      "status": "open",
+      "depends_on": ["C_DENSITY", "C_TRANSVERSE", "C_CUTOFF"],
+      "reviewer_confirmed": false
+    },
+    "C_FINAL_PAIRING": {
+      "statement": "Staged Section 7: pairing the residual with T forces Q=0 and contradicts positivity on a closed tamer.",
+      "status": "open",
+      "depends_on": ["C_SEPARATION", "C_ENERGY", "C_SPLITTING"],
+      "reviewer_confirmed": false
+    },
+    "C_CLASS_ESTIMATES": {
+      "statement": "Staged lem:invariant-cohomology, lem:class-separation and prop:class-estimates: prescribed-class separation and the same analytic bounds hold when P annihilates exact invariant forms.",
+      "status": "open",
+      "depends_on": ["C_LIFT", "C_GROWTH", "C_KERNEL_MIXING", "C_SPLITTING"],
+      "reviewer_confirmed": false
+    },
+    "C_RESIDUAL_PAIRINGS": {
+      "statement": "Staged lem:general-residual: zero two-density in one quadratic-growth factor makes mixed positive-current pairing have nonnegative lower limit.",
+      "status": "open",
+      "depends_on": ["C_KERNEL_MIXING"],
+      "reviewer_confirmed": false
+    },
+    "C_CONE_THEOREM": {
+      "statement": "Staged thm:taming-cones and cor:taming-cones: the invariant taming cone has the asserted strict-intersection-positive compatible subcone; cone-sum equality follows when h_J^-=b_2^+-1.",
+      "status": "open",
+      "depends_on": ["C_MAIN", "C_CLASS_ESTIMATES", "C_RESIDUAL_PAIRINGS"],
+      "reviewer_confirmed": false
+    },
+    "C_CONE_ALGEBRA": {
+      "statement": "For every real f,k and vector v, K(Kv)=-(1+f^2+k^2)v and |Kv|^2=(1+f^2+k^2)|v|^2; if r is nonzero with r^2=1+f^2+k^2 then (K/r)^2=-Id. The stated numerator, eta and tamer wedge identities and scalar positivity implications hold under their explicit hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_conflict/Main.lean", "research/cone_conflict/statement_fidelity.md", "research/cone_conflict/lean_certificates/certificates/C_CONE_ALGEBRA-da0d452a1a757d85.json"],
+      "note": "The current claim has closed_kernel mechanical status. The graph remains open pending independent statement-fidelity review."
+    },
+    "C_TORUS_GEOMETRY": {
+      "statement": "The example defines a smooth correctly oriented J with compatible eta, both stated tamers, H_J^-=0 and H_J^+=H^2; explicit invariant representatives certify fullness.",
+      "status": "open",
+      "depends_on": ["C_CONE_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_conflict/proof.md", "research/cone_conflict/exact_certificate.json"]
+    },
+    "C_STRICT_CONES": {
+      "statement": "Staged ex:strict-cones is valid: both zero-intersection taming classes have no compatible representative, despite H_J^-=0 and a nonempty compatible cone.",
+      "status": "open",
+      "depends_on": ["C_TORUS_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_conflict/proof.md", "research/cone_conflict/exact_certificate.json"]
+    },
+    "C_PROJECTED_CURRENT": {
+      "statement": "The invariant projection of the closed current represented by U-V0 is positive, nonclosed and annihilates a closed invariant representative of [U+V0], refuting the disjointness inference in Li-Zhang v4 Theorem 3.7.",
+      "status": "open",
+      "depends_on": ["C_TORUS_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_conflict/proof.md", "research/cone_conflict/exact_certificate.json"]
+    },
+    "C_CONE_RESOLUTION": {
+      "statement": "The verified staged torus example contradicts the actual hypotheses and conclusions of Li-Zhang arXiv:0708.2520v4 Theorem 1.3, Corollary 1.4 and Proposition 3.9; the projected-current inference is invalid. This does not refute or verify the manuscript's general existence or cone-duality theorem.",
+      "status": "open",
+      "depends_on": ["C_STRICT_CONES", "C_PROJECTED_CURRENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_conflict/proof.md", "research/cone_conflict/literature/0708.2520v4.tex"],
+      "refutation_targets": ["F_EXTERNAL_THM13", "F_EXTERNAL_COR14", "F_EXTERNAL_PROP39", "F_EXTERNAL_THM37", "F_EXTERNAL_THM37_DISJOINTNESS"]
+    }
+  }
+}

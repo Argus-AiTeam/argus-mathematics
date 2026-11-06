@@ -1,0 +1,192 @@
+{
+  "goal": "C9000164",
+  "routes": [
+    {
+      "name": "RS-uniform-verification",
+      "status": "current",
+      "evidence": "research/rough_step/report.md"
+    },
+    {
+      "name": "RS-citation-only",
+      "status": "ruled_out",
+      "evidence": "research/rough_step/report.md, External inputs and source findings: the corrected equidistribution citation alone does not establish uniform interpolation or adaptive kernel descent."
+    }
+  ],
+  "nodes": {
+    "C9000164": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 164 (Hindman’s finite sums and products conjecture.; papers: Monochromatic finite sums and products in the positive integers; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["RS_VERIFY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "MS_MAIN": {
+      "statement": "For every finite coloring and m,R,D there are separated a_1<...<a_m whose nonempty subset sums and products all have one color; separation is a_1>R and a_d>R(sum_{k<d}a_k+prod_{k<d}a_k)^D.",
+      "status": "open",
+      "depends_on": ["MS_PREDICTION", "MS_ALIGNMENT", "MS_CHAIN", "MS_SCALES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/01_introduction.tex:13-30"],
+      "scope": "Manuscript assertion, not certified by the rough-step mission."
+    },
+    "MS_PREDICTION": {
+      "statement": "Prediction principle pr:prediction: calibrated bounded-step piecewise nilsequence models approximate the weighted simultaneous sum/product count.",
+      "status": "open",
+      "depends_on": ["MS_CORRELATION", "MS_MODELS", "MS_CUBE", "MS_SCALES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/02_framework.tex:155-205"]
+    },
+    "MS_ALIGNMENT": {
+      "statement": "Alignment principle pr:alignment: a positive uniform alignment mass for admissible models, obtained using finite word recurrence, cube symmetries, and removal of tail-product sampling factors.",
+      "status": "open",
+      "depends_on": ["MS_WORDPLAN", "MS_CUBE", "MS_ROUGH_RESIDUAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/02_framework.tex:211-247"]
+    },
+    "MS_CHAIN": {
+      "statement": "lem:chain-selection: a sufficiently long product list has an m-block chain whose nonempty block-products have one color.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/02_framework.tex:258-285"]
+    },
+    "MS_SCALES": {
+      "statement": "lem:master-scales and prop:linear-forms provide admissible arithmetic scales, prime-pool/divisibility control, and weighted linear-forms estimates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/03_arithmetic.tex:197-244,463-498"]
+    },
+    "MS_CORRELATION": {
+      "statement": "prop:correlation-test: uniform weighted correlation control after prime insertion, mask removal, polynomial-direction reduction, and additive elimination.",
+      "status": "open",
+      "depends_on": ["MS_SCALES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/04_correlation.tex:576-653"]
+    },
+    "MS_MODELS": {
+      "statement": "lem:dual-pseudorandomness and prop:dense-model give bounded dense models tested by lem:nilsequence-testing.",
+      "status": "open",
+      "depends_on": ["MS_CORRELATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/05_prediction.tex:68-85,199-219,275-292"]
+    },
+    "MS_CUBE": {
+      "statement": "prop:local-cube-law and prop:face-lift give local cube laws and lift marginal face symmetries to joint configurations.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/07_cube_limits.tex:209-223,381-418,569-598"]
+    },
+    "MS_WORDPLAN": {
+      "statement": "lem:finite-word-plan converts nilpotent polynomial recurrence into finitely many scale updates and jumps.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/08_alignment.tex:94-150"]
+    },
+    "MS_ROUGH_RESIDUAL": {
+      "statement": "cor:rough-residual-step removes one factor t from a fixed retained class modulo q, without requiring gcd(q,t)=1.",
+      "status": "open",
+      "depends_on": ["RS_VERIFY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Monochromatic-finite-sums-and-products-in-the-positive-integers-September-23-2026/build/sections/06_rough_progressions.tex:597-630"]
+    },
+    "RS_VERIFY": {
+      "statement": "Proposition prop:rough-step with its full sequential uniformity over jointly log-polynomial coefficients and per-step adaptive boxes, residues, and bounded Lipschitz tests.",
+      "status": "in_progress",
+      "depends_on": ["RS_POWER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/report.md", "research/rough_step/exact_certificate.json"],
+      "review_status": "Engineer proof supplied; independent Reviewer and independent citation attribution pending."
+    },
+    "RS_POWER": {
+      "statement": "For n=dim G>=1, step cap s>=1 and degree D>=1, the full adaptive coefficient-uniform rough-step postcondition holds already under Z>=kappa*S^(2*D*s^(n-1)+2) for any fixed kappa>0, with every other hypothesis unchanged.",
+      "status": "in_progress",
+      "depends_on": ["RS_DENSITY", "RS_DESCENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/report.md"],
+      "review_status": "Candidate strengthening; neither novelty nor independent acceptance is asserted."
+    },
+    "RS_DENSITY": {
+      "statement": "A positive-density exceptional set contains every fixed length of progression with smooth difference; finite color refinements preserve arbitrarily long bad progression families.",
+      "status": "in_progress",
+      "depends_on": ["RS_SZEMEREDI"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/report.md"]
+    },
+    "RS_DESCENT": {
+      "statement": "A bad progression family descends to one of finitely many fixed rational kernel nilmanifolds of smaller dimension, with all new analytic constants independent of progression length.",
+      "status": "in_progress",
+      "depends_on": ["RS_HAAR_BOX", "RS_INTERPOLATION", "RS_KERNEL", "RS_COUNTS", "RS_SZEMEREDI"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/report.md"]
+    },
+    "RS_HAAR_BOX": {
+      "statement": "Haar discrepancy on a comparable box yields a common bounded horizontal character and monomial coefficient obstructions, uniformly in polynomial coefficients.",
+      "status": "in_progress",
+      "depends_on": ["RS_GT_EQUAL", "RS_FILTERED"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/report.md"]
+    },
+    "RS_FILTERED": {
+      "statement": "A logarithmic polynomial of ordinary total degree D is polynomial for the fixed stretched lower-central filtration of degree sD.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/report.md"]
+    },
+    "RS_INTERPOLATION": {
+      "statement": "Exact division interpolation has an H-independent error constant; only its smooth denominators and asymptotic exactness threshold depend on the fixed progression length H.",
+      "status": "in_progress",
+      "depends_on": ["RS_EXACT_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/report.md", "research/rough_step/exact_certificate.json"]
+    },
+    "RS_EXACT_ALGEBRA": {
+      "statement": "Rational gap forcing, polynomial linear-factor exact division, coprime-denominator cancellation, and orientation-correct group kernel factorization.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/Main.lean", "research/rough_step/statement_fidelity.md", "research/rough_step/certificates/RS_EXACT_ALGEBRA-3ea594aff987b5d5.json"],
+      "mechanical_scope": "Universal exact algebra only; the compiler does not prove the analytic theorem or verify statement fidelity."
+    },
+    "RS_KERNEL": {
+      "statement": "Horizontal splitting gives a kernel log-polynomial of degree at most sD; the quotient lattices depend only on a fixed finite character list and finitely many residues, not on interpolation denominators.",
+      "status": "in_progress",
+      "depends_on": ["RS_EXACT_ALGEBRA", "RS_RATIONAL_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/report.md", "research/rough_step/exact_certificate.json"]
+    },
+    "RS_COUNTS": {
+      "statement": "Freezing on boundedly many subboxes and splitting modulo fixed K preserves a fixed discrepancy; the CRT reparametrization retains the original step t.",
+      "status": "in_progress",
+      "depends_on": ["RS_EXACT_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/report.md", "research/rough_step/exact_certificate.json"]
+    },
+    "RS_GT_EQUAL": {
+      "statement": "External input: corrected quantitative Leibman theorem on equal-side boxes, with a fixed rational adapted basis and coefficient-independent constants.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["https://arxiv.org/html/1311.6170v3#S1"]
+    },
+    "RS_SZEMEREDI": {
+      "statement": "External input: finite Szemeredi theorem; finite van der Waerden follows by taking density 1/number_of_colors.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/gowers_theorems.txt"]
+    },
+    "RS_RATIONAL_GEOMETRY": {
+      "statement": "External rational nilpotent Lie-group structure: rational connected subgroups meet lattices in lattices, rational conjugation preserves the rational structure, and BCH is a finite rational Lie polynomial.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/rough_step/green_tao_0709.3562v4.html"]
+    }
+  }
+}

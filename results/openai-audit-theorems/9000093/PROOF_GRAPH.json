@@ -1,0 +1,140 @@
+{
+  "goal": "C9000093",
+  "routes": [
+    {
+      "name": "Universal adaptive-projection verification and moment removal",
+      "status": "current",
+      "evidence": "research/entropy-loss-audit/report.md"
+    },
+    {
+      "name": "Gaussian-reference counterexample search",
+      "status": "ruled_out",
+      "retired_because": "The relative heat score is v/(v+r) times the conditional initial relative score for q=N(0,v Id), so entropy dissipation proves the comparison in this subclass.",
+      "evidence": "research/entropy-loss-audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000093": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 093 (Dimension-free logarithmic Sobolev inequality for subgaussian log-concave measures.; papers: A dimension-free logarithmic Sobolev inequality for subgaussian log-concave measures; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_ENTROPY_NO_MOMENT", "C_RANK_ROBUSTNESS", "C_HEAVY_TAIL_STRICTNESS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_ENTROPY_NO_MOMENT": {
+      "statement": "The entropy-loss comparison holds without any moment assumption on p, assuming smooth positive p,q, log-concave q, and finite relative entropy and Fisher information.",
+      "status": "open",
+      "depends_on": ["C_ENTROPY_LOSS", "L_DAMPING_CONTINUITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/entropy-loss-audit/report.md"]
+    },
+    "C_ENTROPY_LOSS": {
+      "statement": "The universal comparison in manuscript lem:entropy-loss, with its literal hypotheses, holds for every dimension and heat time.",
+      "status": "open",
+      "depends_on": ["L_ADAPTIVE_COST", "L_UNIFORM_RANK", "L_PREDICTION_LIMIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/entropy-loss-audit/report.md"]
+    },
+    "L_ADAPTIVE_COST": {
+      "statement": "Adaptive retained likelihoods have base curvature B and total entropy cost O(N,b,p)(u delta) at fixed N,u, uniformly over mesh subdivisions.",
+      "status": "open",
+      "depends_on": ["L_CURVATURE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/entropy-loss-audit/report.md"]
+    },
+    "L_UNIFORM_RANK": {
+      "statement": "Full-observation residuals remain conditionally independent across copies; conditional-score uniform integrability controls adaptive rank-one exclusions uniformly in the mesh.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/entropy-loss-audit/report.md"]
+    },
+    "L_PREDICTION_LIMIT": {
+      "statement": "The variational minimum is the stated Gaussian-prediction sum, with the successive mesh, independent-copy, and precision limits.",
+      "status": "open",
+      "depends_on": ["L_UNIFORM_RANK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/entropy-loss-audit/report.md"]
+    },
+    "L_DAMPING_CONTINUITY": {
+      "statement": "Gaussian damping of p preserves the entropy and predicted-score integrals in the limit using no moment of p.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/entropy-loss-audit/report.md"]
+    },
+    "L_CURVATURE": {
+      "statement": "The anisotropic positive-curvature entropy bound, its approximation extension, and the centered Gaussian linear-moment bound are proved in report Section 2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/entropy-loss-audit/report.md", "research/entropy-loss-audit/bakry-emery-excerpt.txt"]
+    },
+    "C_RANK_ROBUSTNESS": {
+      "statement": "The finite-moment adaptive proof permits arbitrary discarded ranks ell_N=o(N); its uniform residual bound uses only finite I.",
+      "status": "open",
+      "depends_on": ["L_ADAPTIVE_COST", "L_UNIFORM_RANK", "L_PREDICTION_LIMIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/entropy-loss-audit/report.md", "research/entropy-loss-audit/exact_certificate.json"]
+    },
+    "C_HEAVY_TAIL_STRICTNESS": {
+      "statement": "The explicit non-Gaussian p=2/[pi(1+x^2)^2], q proportional to exp(-sqrt(1+x^2)) has finite relative entropy and Fisher information but no exponential-square moment under p.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/entropy-loss-audit/report.md", "research/entropy-loss-audit/verify.py", "research/entropy-loss-audit/exact_certificate.json"]
+    },
+    "M_MAIN": {
+      "statement": "Manuscript thm:main: dimension-free logarithmic Sobolev inequality from linear subgaussianity and log-concavity. Not established by this dependency audit.",
+      "status": "open",
+      "depends_on": ["M_INFORMATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-dimension-free-logarithmic-Sobolev-inequality-for-subgaussian-log-concave-measures-September-23-2026/build/sections/01-introduction.tex"]
+    },
+    "M_CRITICAL": {
+      "statement": "Manuscript prop:critical-sequence supplies the common critical law and approximate first-eigenfunction vector field.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-dimension-free-logarithmic-Sobolev-inequality-for-subgaussian-log-concave-measures-September-23-2026/build/sections/03-critical.tex"]
+    },
+    "M_PROBES": {
+      "statement": "Manuscript lem:efficient-probes supplies asymptotically efficient Gaussian probes in the strict branch.",
+      "status": "open",
+      "depends_on": ["M_CRITICAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-dimension-free-logarithmic-Sobolev-inequality-for-subgaussian-log-concave-measures-September-23-2026/build/sections/04-prediction.tex"]
+    },
+    "M_PREDICTION": {
+      "statement": "Manuscript prop:prediction determines the limiting prediction curve in the strict and gap branches.",
+      "status": "open",
+      "depends_on": ["M_CRITICAL", "M_PROBES", "C_ENTROPY_LOSS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-dimension-free-logarithmic-Sobolev-inequality-for-subgaussian-log-concave-measures-September-23-2026/build/sections/04-prediction.tex"]
+    },
+    "M_HIERARCHY": {
+      "statement": "Manuscript prop:hierarchy constructs symmetric tensor near-equalities.",
+      "status": "open",
+      "depends_on": ["M_CRITICAL", "M_PREDICTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-dimension-free-logarithmic-Sobolev-inequality-for-subgaussian-log-concave-measures-September-23-2026/build/sections/05-hierarchy.tex"]
+    },
+    "M_FROZEN": {
+      "statement": "Manuscript prop:frozen-law gives frozen matrix fluctuations.",
+      "status": "open",
+      "depends_on": ["M_HIERARCHY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-dimension-free-logarithmic-Sobolev-inequality-for-subgaussian-log-concave-measures-September-23-2026/build/sections/06-matrices.tex"]
+    },
+    "M_INFORMATION": {
+      "statement": "Manuscript information upper/lower bounds and scalar divergence give the final contradiction.",
+      "status": "open",
+      "depends_on": ["M_CRITICAL", "M_FROZEN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-dimension-free-logarithmic-Sobolev-inequality-for-subgaussian-log-concave-measures-September-23-2026/build/sections/07-observations.tex"]
+    }
+  }
+}
