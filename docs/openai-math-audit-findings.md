@@ -132,6 +132,8 @@ Argus also recorded formal `refutes` verdicts (explicitly labeled as non-manuscr
 
 ### III.A 10 Representative Mathematical Repairs of Broken OpenAI Proofs
 
+> **Machine-Checked Lean 4.31.0 Formal Refutations (`OpenAIRefutations.lean`):** In addition to standalone Python/Sage/SymPy verification scripts (`verify.py`) and family-specific `Main.lean` files, **all 21 active OpenAI families containing refuted claims (`42` active manuscripts, including all 10 "Structural Death Sentence" families)** have explicit machine-checked counterexample and negation theorems (`theorem refute_<family>_... : ¬ ...`) compiled in the unified **Lean 4.31.0 + Mathlib4 Refutation Suite [`results/openai-audit-theorems/lean-refutations/OpenAIRefutations.lean`](../results/openai-audit-theorems/lean-refutations/OpenAIRefutations.lean)** (see [`README.md`](../results/openai-audit-theorems/lean-refutations/README.md)), verified with `exit_code = 0`, `0` `sorry`s, and `0` custom axioms under `lean_axiom_audit.lean`.
+
 1. **`#001` (Milne's Rationality Conjecture):** Replaced the non-existent Milne §5.21 citation and unframed Kisin shortcut with a self-contained lifting proof via **Gabber's affine-étale smoothness theorem** for finite flat group-scheme torsors over Henselian pairs, combined with a Lean-4.31.0-verified locally constant tensor discrepancy propagation theorem (`PF-CORE`).
 2. **`#318` (Chromatic Splitting & Character Sums):**
    * Improved the prime-power modulus threshold for complex Dirichlet character sums by **more than $4\times$, from $q > 163$ down to $q > 39$**, eliminating the entire $[41, 163]$ gap;

@@ -139,6 +139,19 @@
 * **`#331`（自反中点凸性与菱形失真）**：证伪标量不等式 $(\sqrt{\eta}+\sqrt{\eta+2\theta})^2 \le 2(\eta+\theta)$（`C_BAD_SCALAR`）及有限有根树上累积势平方段能量的逐点最大/最小次模性（`C_BAD_LATTICE`）；
 * **`#351`（标量曲率与有限时间 Ricci 流奇点）**：证伪仅凭省略内障（inner barriers）定义即可推翻 Stolarski 判据调用（`C_HD_OMISSION`）。
 
+### 2.6 全集 21 个被证伪活跃家族的 Lean 4.31.0 机器形式化反证套件（[`OpenAIRefutations.lean`](../results/openai-audit-theorems/lean-refutations/OpenAIRefutations.lean)）
+
+为了让所有证伪结论达到**无可辩驳的机器内核级确定性**，我们除了为每一处 `refutes` 提供可独立复跑的确定性反例脚本（`verify.py`）与各家族 `Main.lean` 外，还将**全部 21 个存在致命证伪的活跃家族（覆盖 42 篇被证伪活跃论文，含全部 10 个“核心死刑”家族）的反例与否定定理（`theorem refute_<family>_... : ¬ ...`）**统一编写进了单文件 **Lean 4.31.0 + Mathlib4 形式化反证套件 [`results/openai-audit-theorems/lean-refutations/OpenAIRefutations.lean`](../results/openai-audit-theorems/lean-refutations/OpenAIRefutations.lean)**（说明文档见 [`README.md`](../results/openai-audit-theorems/lean-refutations/README.md)）：
+* **100% 通过 Lean 4.31.0 内核类型检查**（`lake env lean OpenAIRefutations.lean`, `exit_code = 0`）；
+* **零 `sorry`、零 `admit`、零自定义 `axiom`**（`lean_axiom_audit.lean` `audit_exit_code = 0`）；
+* 代表性 Lean 4.31.0 反证定理包括：
+  - **`#318`（色分裂猜想）**：`refute_318_degree_five_nonvanishing`（严格形式化证明 $2\times 2$ 核块与标量商块上的任意 5 次交错抛物形式恒等于 `0`，从而度数 $-5$ 比较标量 $c=0$，直接证伪 OpenAI 的 $\mathrm{level}_G(X)=3$ 头条主定理）、`refute_318_bicomplex_column_zero_detection`（证伪双复形第 0 列单射判据 `C318FORGETACTION`）与 `refute_318_character_sum_real_part_positive`（证伪 $q=7$ 阶 6 特征标和实部正性，给出 $-7/2 < 0$）；
+  - **`#247`（有限表现残余有限 2-群）**：`refute_247_boundary_cursor_rollback` 及 [`results/openai-audit-theorems/9000247/Main.lean`](../results/openai-audit-theorems/9000247/Main.lean) 中的 `no_step` / `trace_fixed` / `no_contains_zero`（在 Lean 4 中直接形式化证明缺失左端点的截断边界游标字 `[cursor p]`（$p\ne 1$）无任何合法重写步 `¬ Step [cursor p] v`，推翻 OpenAI 引理 `fr:rollback`）；
+  - **`#376`（Connes 嵌入 / QWEP）**：`refute_376_block_cutoff_moment_homomorphism`（形式化证明分块截断投影 $P=\mathrm{diag}(1,0)$ 破坏非交换字矩 $(PAP)(PBP)=0 \ne P(AB)P$，推翻 `cor:tracial-extension`）；
+  - **`#180`（Barnette 猜想）**：`refute_180_minimum_order_noncancellation`（形式化证明反向取向森林配对权重 $+1$ 与 $-1$ 在首阶抵消归零，推翻 `C180_INTEGRAL`）；
+  - **`#274`（Gromov 双曲群 Følner 铺砌）**：`refute_274_zero_mean_projector_full_rank`（形式化证明 $3\times 3$ 零均值投影矩阵 $P_{274}$ 湮灭 $(1,1,1)^T$ 且 $\det(P_{274})=0$，推翻引理 5.3 的三维满秩密度断言）；
+  - **`#342`（Donaldson 猜想引用的已发表论文）**：`refute_342_li_zhang_cone_disjointness` 及 [`results/openai-audit-theorems/9000342/Main.lean`](../results/openai-audit-theorems/9000342/Main.lean)（形式化证明 $T^4$ 上闭 2-形式 $\eta$ 与正交驯化对 $\beta_+,\beta_-$ 同时严格正配对，推翻 Li–Zhang *arXiv:0708.2520v4* 的 4 条核心定理）。
+
 ---
 
 ## 三、 全集 276 个家族（74.0%）的破损证明修补（101 族）与严格超越定理（243 族）
