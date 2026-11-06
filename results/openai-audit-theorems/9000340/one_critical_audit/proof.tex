@@ -1,0 +1,736 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Int}{\operatorname{int}}
+\newcommand{\Gr}{\operatorname{Gr}}
+\newcommand{\T}{\mathcal T}
+\title{The full one-critical-point obstruction over \(S^9\)}
+\author{Campaign 9000340: Engineer argument for independent review}
+\date{November 5, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Result and evidence boundary.}
+We verify Proposition \texttt{one-critical} of the staged September 23,
+2026 manuscript, under its actual varying-infinity hypotheses.
+The new work supplies the negative-eigenbundle comparison, quantitative
+normalization and smoothing, and a collar-relative, parameter-uniform
+straightening of \emph{unframed} tube cores.
+The previously independently accepted result supplies only the normalized
+zero-band deduction; it is stated precisely below and is not reproved.
+This is a prose proof using identified external theorems, supported by an
+exact calculation certificate. It is not a kernel-checked topological
+proof, a counterexample, or a novelty certification.
+The nonzero tube-kernel calculation and the manuscript's Lagrangian
+realization and transport remain unverified by this note.
+
+\section{Statement, conventions, and inputs}
+
+Write \(q_{k,l}(x,y)=-|x|^2+|y|^2\).
+Let \(T_{k,l}\) be the \(C^1\) path component of
+\(q_{k,l}|_{S^{k+l-1}}\) among functions having zero as a regular value.
+Its elements extend homogeneously by \(g(ru)=r^2h(u)\), including their
+\(C^1\) extension at zero. Smooth homogeneous data mean that \(h\) is
+smooth. The stable tube space \(\T\) uses the diagonal stabilization
+by \(q_{1,1}\). The spherical class of a family is that of its
+negative domains \(D(h)=\{h\leq0\}\), stabilized as sphere homotopy types.
+This definition does not require the tube-fibration theorem.
+
+\begin{theorem}\label{thm:main}
+Let \(p\geq20\), \(B=S^9\), and let
+\(f:B\times\R^{2p}\longrightarrow\R\) be smooth.
+Suppose that outside one common ball it agrees with smooth
+degree-two homogeneous data \(g_b\) of type \(T_{p,p}\);
+that each \(f_b\) has exactly one nondegenerate critical point,
+forming a smooth section; and that its stable spherical infinity class
+is zero in \([B,BG]\).
+Then its stable tube infinity class is zero in \([B,\T]\).
+\end{theorem}
+
+Here are the imported results and their exact scope.
+\begin{enumerate}
+\item \textbf{Accepted zero-band result.}
+For a smooth family over \(S^9\), with just the critical point zero,
+equal to the \emph{fixed} \(q_{k,l}\) on a common neighborhood of zero,
+and smooth homogeneous \(T_{k,l}\) data at infinity, \(k,l\geq20\),
+the negative flow embeds the fixed inner truncated tube \(T^0\) into
+the outer truncated tube \(T_b^1\). Its complement is an
+incoming-identified h-cobordism family \(C_b\), and this family is a
+product relative to its incoming collar.
+This is the result of \path{research/zero_band_audit/proof.tex},
+especially its h-cobordism lemma and vanishing theorem.
+The Host-invoked Reviewer accepted precisely this deduction in
+\path{handoffs/5e635ae1a6ab/round-0001.json} of the assigned project.
+The seal does not approve any of the new steps in this note.
+\item \textbf{Stable \(J_8\) is injective.}
+Adams \cite[Theorem 9.5, p.~51]{Adams} states that, for \(r>1\) and
+\(r\equiv0,1\pmod8\),
+\[
+ e_RJ:\pi_r(SO)\longrightarrow\Z/2
+ \quad\text{is an isomorphism}.
+ \]
+Here \(J\) is the stable map defined on p.~21 and \(e_R\) is the
+mod-two invariant of Section 9, not the differently graded
+\(\mathbb Q/\mathbb Z\)-valued invariant. In degree eight its domain
+is all of \(\pi_8^S\), since the real \(K\)-theory invariant \(d_R\)
+vanishes there (Section 7).
+Specializing the displayed composition to \(r=8\) proves injectivity
+of \(J_8:\pi_8(O)\to\pi_8^S\); positive-degree homotopy is unchanged
+on passing from \(SO\) to \(O\).
+The map on \(\pi_9\) induced by \(BO\to BG\) is this \(J_8\).
+Neither \(J_9\), Rognes's computation, nor the existence of a nonzero
+kernel class in \(\pi_9\T\) is an input.
+\item \textbf{Homological Whitehead.}
+An integral homology isomorphism between simply connected CW
+complexes is a homotopy equivalence
+\cite[Corollary 4.33]{Hatcher}. The retained author text and the
+independent source reading from the zero-band review are reused.
+\item \textbf{Multijet transversality.}
+For a smooth submanifold \(S\) of \(J_s^r(X,Y)\), smooth maps whose
+multijet extension is transverse to \(S\) form a residual subset
+\cite[Theorem 2.3.4]{BPT}, in the smooth topology.
+The cited version's Corollary 2.3.5(iii) also gives the
+\emph{non-relative} fiberwise parameter count
+\(\operatorname{codim}S>s\dim X+d\) for disk parameters of
+dimension \(d\).
+It does not prescribe endpoint values or collars.
+Lemma~\ref{lem:relative} below derives the relative assertion we
+actually need, from the ordinary multijet theorem on closed manifolds.
+\end{enumerate}
+
+The Adams and BPT original PDFs and searchable texts are retained in
+\texttt{sources/}, with the exact source identifiers in the claim ledger.
+The BPT file is explicitly arXiv version 1.
+Bott's original paper was also obtained: its Corollary to Theorem II,
+equation (1.5), and the following orthogonal period give
+\(\pi_8(O)=\Z/2\). That independent group confirmation is not needed
+in addition to Adams's stated isomorphism, and is not a hidden
+kernel-class assumption.
+The formal citation-archive operation writes outside this mission's
+owned paths. It has not been used or represented as complete.
+
+We use elementary smooth ODE theory, the inverse function theorem,
+smooth partitions of unity, basic CW obstruction theory and homology.
+In particular, none of the arguments below select a family of
+trivializations from merely pointwise trivializations.
+
+\section{Compact normalization and the negative sphere bundle}
+
+For smooth angular data, direct differentiation gives
+\[
+ \nabla g_b(ru)=r\bigl(2h_b(u)u+\nabla_Sh_b(u)\bigr),\qquad
+ |\nabla g_b(ru)|^2
+ =r^2\bigl(4h_b(u)^2+|\nabla_Sh_b(u)|^2\bigr).
+ \tag{1}
+\]
+The two summands in the gradient are orthogonal. Regularity and
+compactness therefore give a uniform \(c>0\) with
+\(|\nabla g_b(w)|\geq c|w|\). Upper bounds of the same kind also hold.
+
+Let \(a_b\) be the critical section. A cutoff constant vector field
+\(\chi(w)a_b\), equal to \(a_b\) on a common neighborhood of all segments
+\([0,a_b]\), has a smooth compactly supported time-one flow \(\phi_b\)
+with \(\phi_b(0)=a_b\). Pulling back \(f_b\) by this flow moves its
+unique critical point to zero without changing infinity.
+The whole flow is a family of diffeomorphisms, so it preserves
+nondegeneracy and the number of critical points.
+
+Let \(v_b=f_b(0)\). Subtract
+\(t v_b\chi(|w|/A)\), \(0\leq t\leq1\), where \(\chi=1\) on
+\([0,1]\), \(\chi=0\) on \([2,\infty)\), and \(|\chi'|\leq C_\chi\).
+Take \(A\) beyond all previous compact modifications.
+On the only transition annulus the gradient error is at most
+\(\sup|v_b|C_\chi/A\), whereas the old gradient is at least \(cA\).
+Choosing \(A^2>2\sup|v_b|C_\chi/c\) excludes a new critical point
+throughout the homotopy. Elsewhere the correction is constant or zero.
+The result has critical value zero.
+
+Write its Taylor expansion as \(f_b=Q_b+R_b\), where
+\[
+ Q_b(w)=\tfrac12\operatorname{Hess}_0(f_b)(w,w),\quad
+ |R_b(w)|\leq K_0|w|^3,\quad |dR_b(w)|\leq K_1|w|^2,
+ \quad |\nabla Q_b(w)|\geq c_0|w|.
+ \tag{2}
+\]
+All constants and the Taylor neighborhood are uniform.
+Replace \(f_b\) by \(Q_b+(1-t\chi(|w|/a))R_b\).
+For \(r=|w|\leq2a\), the error from \(dQ_b\) is bounded by
+\[
+ (K_1+2C_\chi K_0)r^2.
+ \tag{3}
+\]
+Indeed the differentiated cutoff contributes at most
+\(C_\chi K_0r^3/a\), on \(a\leq r\leq2a\).
+Take \(4a(K_1+2C_\chi K_0)<c_0\).
+Every intermediate gradient is nonzero for \(r>0\) in the modified
+ball; outside it the function is unchanged.
+Its Hessian at zero is unchanged. We have reached \(f_b=Q_b\)
+on one common ball, with no change at infinity.
+
+\begin{lemma}\label{lem:sphere}
+Suppose that the preceding local quadratic family has smooth
+\(T_{k,l}\) infinity data, \(k,l\geq3\), over a compact smooth base.
+Its Morse index is \(k\). If \(E^-\) is its negative eigenspace
+bundle in the ambient Euclidean metric, there is a fiber homotopy
+equivalence \(S(E^-)\longrightarrow D(h)\) over the base.
+The local quadratic forms need not be constant or globally framed.
+\end{lemma}
+\begin{proof}
+For small uniform \(\delta>0\), put \(M_\pm^b=\{f_b\leq\pm\delta\}\).
+Choose a large sphere of radius \(R\) in a common homogeneous collar.
+On \(M_-^b\cap\{r\leq R\}\) choose a strictly descending field,
+radial outward near \(r=R\). This prescription is possible because
+\(df_b(\partial_r)=2f_b/r<0\) there. Convex patching with negative
+gradient gives a field smooth over all parameters. The compact inner
+region contains no critical point. Its bounded function range and a
+uniform positive lower bound for \(-df_b(V)\) force exit through
+\(r=R\) in uniformly bounded time; exit through \(f_b=-\delta\) is
+impossible. The exit is transverse.
+Stopped flow, fixing the exterior, is a continuous family deformation
+retraction onto the outer part of \(M_-^b\).
+
+Angular projection of that outer part has, over \(h_b(u)<0\), the
+radial interval
+\[
+ \left[\max\left\{R,\sqrt{\delta/(-h_b(u))}\right\},\infty\right).
+ \tag{4}
+\]
+Its continuous lower endpoint gives a contraction of the interval
+fibers. The open negative domain is homotopy equivalent to its
+closure, uniformly in the parameters, by a small regular boundary
+collar. Each negative domain has type \(S^{k-1}\): a path in
+\(T_{k,l}\) can be smoothed while preserving regularity, and solving
+\(\partial_t h+dh(X)=0\) near its zero sets gives an ambient domain
+isotopy. Only this individual fiber type, not a simultaneous choice
+of paths, is used. Thus \(M_-^b\simeq S^{k-1}\).
+
+On \(f_b\geq\delta\), normalized descent
+\(-\nabla f_b/|\nabla f_b|^2\) has derivative \(-1\) on \(f_b\)
+and bounded speed, by (1) and compactness away from the critical
+point. Extend it using a cutoff below \(\delta\), away from zero.
+It is a complete bounded field. Stopping at level \(\delta\) after
+time \(f_b(w)-\delta\), and fixing the lower sublevel, retracts
+\(\R^{k+l}\) onto \(M_+^b\). In particular \(M_+^b\) is contractible.
+
+Here is the relative handle comparison, without choosing frames of
+the eigenspaces. Split the trivial ambient bundle as \(E^-\oplus E^+\)
+by the smooth spectral projections of \(Q\).
+In its adapted metrics write \(Q=-|x|_Q^2+|y|_Q^2\).
+These metrics and their comparison constants are smooth and uniform.
+Choose a smooth \(\nu\) supported in \((0,2\delta)\), with
+\(0\leq\nu\leq3/4\), equal to \(3/4\) on
+\([\delta/4,7\delta/4]\), and set
+\(\mu(s)=\int_s^{2\delta}\nu(u)\,du\).
+Then
+\[
+ -3/4\leq\mu'\leq0,\qquad
+ \mu(0)\geq9\delta/8>\delta,\qquad
+ \mu=0\ \text{for }s\geq2\delta.
+ \tag{5}
+\]
+In a sufficiently small quadratic neighborhood use
+\(\widetilde f=Q-\mu(|x|_Q^2+2|y|_Q^2)\).
+Its support is inside \(Q<\delta\), and in orthonormal coordinates
+for these metrics its derivatives are
+\[
+ -2(1+\mu')x,\qquad 2(1-2\mu')y.                 \tag{6}
+\]
+Thus it has just the original nondegenerate critical point, now
+below \(-\delta\), and \(\{\widetilde f\leq\delta\}=M_+\).
+Normalized descent across its regular slab retracts \(M_+\) onto
+\(\{\widetilde f\leq-\delta\}\), fixing the latter and hence \(M_-\).
+
+The latter set retracts relative to \(M_-\) onto \(M_-\cup D\), where
+\(D=\{y=0,\ |x|_Q^2\leq\delta\}\).
+At a point outside \(M_-\), shrink \(y\) radially to zero when
+\(|x|_Q^2\leq\delta\), and otherwise to norm
+\(\sqrt{|x|_Q^2-\delta}\). During the motion \(\widetilde f\)
+decreases since its derivative with respect to \(|y|_Q^2\) is
+\(1-2\mu'>0\). The formula agrees continuously with fixing \(M_-\).
+Membership of \(D\) follows from
+\(s+\mu(s)\geq\mu(0)>\delta\) for \(0\leq s\leq\delta\).
+All formulas are invariant under the orthogonal transitions of
+the adapted bundles.
+
+If the index is \(j\), the pair has the relative homology of
+\((D^j,S^{j-1})\). Since \(M_+\) is contractible and
+\(M_-\simeq S^{k-1}\), its relative homology is instead \(\Z\) in
+degree \(k\), and zero otherwise. Hence \(j=k\), and the boundary
+of the local negative disk is a generator of
+\(H_{k-1}(M_-^b;\Z)\).
+Expand that boundary, within the local negative cone and still in
+\(M_-\), to a fixed small Euclidean sphere \(aS(E_b^-)\).
+Flow it to \(r=R\) using the preceding descending field and project
+angularly. This gives a smooth bundle map into the open negative
+domain. On every fiber it takes the generator to a generator.
+Both spaces have the type of the simply connected sphere
+\(S^{k-1}\), so homological Whitehead makes each fiber map a
+homotopy equivalence.
+
+For clarity, the last fiberwise assertion is a family assertion.
+For a bundle map with fiber homotopy equivalences over a CW base,
+the fiberwise mapping-path replacement has contractible homotopy
+fibers. Local bundle trivializations and the relative extension
+property over successive cells construct a section and the
+fiberwise homotopies to the identities. Equivalently, every
+obstruction is a homotopy group of one of these contractible fibers
+and vanishes. This is the fiberwise Whitehead argument, not a
+selection of independently chosen inverses. It proves the claimed
+fiber homotopy equivalence over the whole base.
+\end{proof}
+
+\section{Fixing the quadratic model and stabilizing smoothly}
+
+Apply Lemma~\ref{lem:sphere} with \(k=l=p\).
+The spherical hypothesis gives \(BJ[E^-]=0\).
+Adams's injectivity therefore implies \([E^-]=0\) in \([S^9,BO]\).
+The passage between free and based sphere classes is harmless:
+the fundamental group action fixes the zero element, so its orbit
+contains only zero.
+
+The homotopy fiber of \(\Gr_p(\R^{2p})\to BO(p)\) is
+\(V_p(\R^{2p})\), which is \((p-1)\)-connected.
+This follows successively from the sphere fibers in the
+forgetful maps of Stiefel manifolds.
+Also \(BO(p)\to BO(p+1)\) has fiber \(S^p\), so
+\(BO(p)\to BO\) is \(p\)-connected.
+Both maps induce isomorphisms on \(\pi_9\), since \(p\geq20\).
+Thus the actual negative-plane map is null in the finite
+Grassmannian, not only after adding an unspecified bundle.
+
+For a symmetric invertible matrix \(A\) of \(Q\), the path
+\((1-t)A+tA|A|^{-1}\) remains invertible with the same negative plane.
+Sign forms are \(I-2P_E\).
+A smooth, endpoint-collared approximation to the Grassmannian
+nullhomotopy consequently gives nondegenerate quadratic forms
+\(Q_{b,s}\), from \(Q_b\) to the fixed \(q_{p,p}\), with
+\[
+ |\nabla Q_{b,s}(w)|\geq c_1|w|,\qquad
+ |\partial_s Q_{b,s}(w)|\leq K|w|^2.              \tag{7}
+\]
+Compactness gives uniform constants. No orthogonal lift or
+chosen frame of \(E^-\) has been asserted.
+
+Insert \(Q_{b,\lambda s(r)}(w)\), \(0\leq\lambda\leq1\), in the
+quadratic ball, with \(s=1\) near zero and \(s=0\) near its outer
+boundary. Its differential is the fixed-parameter differential plus
+\[
+ \lambda\,\partial_sQ_{b,\lambda s(r)}(w)s'(r)\,dr .
+ \tag{8}
+\]
+Choose \(r|s'(r)|\leq\varepsilon<c_1/(2K)\) if \(K>0\);
+there is no restriction from this error when \(K=0\).
+Such a cutoff is obtained on a logarithmic interval of length \(L\):
+its derivative satisfies \(r|s'|\leq\|\sigma'\|_\infty/L\).
+The outer radius stays inside the quadratic ball and the inner
+radius decreases as \(e^{-L}\). The error in (8) is at most
+\(K\varepsilon r<c_1r/2\).
+Every intermediate function has exactly its nondegenerate critical
+point at zero and the same infinity data. At the endpoint its
+local form is the fixed \(q_{p,p}\).
+
+\begin{lemma}[Quantitative stabilization smoothing]\label{lem:smoothing}
+Let \(G_0(b,w,z)=g_b(w)+q'(z)\), where \(g_b\) is smooth away
+from zero, homogeneous of degree two, and
+\(|\nabla g_b(w)|\geq c|w|\), and \(q'\) is fixed nondegenerate
+quadratic. Suppose a smooth \(F\) satisfies
+\[
+ |F-G_0|\leq M_0,\qquad |dF-dG_0|\leq M_1 .
+ \]
+Over any parameter set for which the bounds below are uniform,
+one can modify \(F\) outside an arbitrarily large common ball,
+through smooth functions with no new critical points, to a smooth
+homogeneous function at infinity. All original critical
+neighborhoods are unchanged. The new homogeneous data are
+regularly \(C^1\)-homotopic to \(G_0\).
+\end{lemma}
+\begin{proof}
+Put \(R=|(w,z)|\), \(a=|w|\), \(s=a/R\).
+Block orthogonality gives
+\(|\nabla G_0|\geq c_*R\) for some \(c_*>0\).
+Choose uniform bounds
+\(|g_b(w)|\leq H_0a^2\), \(|dg_b(w)|\leq H_1a\).
+Let \(\rho_\eta(s)=\rho(s/\eta)\), with \(\rho=0\) on
+\([0,1]\), \(\rho=1\) on \([2,\infty)\), \(0\leq\rho\leq1\),
+and \(|\rho'|\leq K_\rho\). Set
+\[
+ G_\eta=\rho_\eta(a/R)g_b(w)+q'(z).
+ \]
+The possibly nonsmooth summand vanishes on an open cone about \(w=0\),
+so \(G_\eta\) is smooth away from the total origin.
+Where the cutoff changes,
+\[
+ |ds|^2=\frac{|z|^2}{R^4}\leq R^{-2}.
+ \tag{9}
+\]
+On the support of \(G_\eta-G_0\), \(a\leq2\eta R\), giving
+\[
+ |G_\eta-G_0|\leq D_0\eta^2R^2,\quad
+ |dG_\eta-dG_0|\leq D_1\eta R,\quad
+ D_0=4H_0,\quad D_1=2H_1+4K_\rho H_0 .
+ \tag{10}
+\]
+These bounds extend across \(w=0\) by \(C^1\) continuity.
+For \(D_1\eta<c_*/2\), straight interpolation between \(G_0\)
+and \(G_\eta\) has no nonzero critical point, hence regular angular
+zero level by (1).
+
+Choose \(\alpha_A(R)=\alpha(R/A)\), zero for \(R\leq A\), one
+for \(R\geq2A\), with \(0\leq\alpha\leq1\),
+\(|\alpha'|\leq K_\alpha\). For all \(0\leq\tau\leq1\) use
+\[
+ F_\tau=(1-\tau\alpha_A)F+\tau\alpha_AG_\eta .
+ \tag{11}
+\]
+On \(A\leq R\leq2A\), differentiating the cutoff as well as the
+two functions bounds the gradient error from \(G_0\), divided by \(R\),
+by
+\[
+ \frac{M_1}{A}+D_1\eta+
+ \frac{K_\alpha M_0}{A^2}+2K_\alpha D_0\eta^2 .
+ \tag{12}
+\]
+For example, the last term comes from
+\((K_\alpha/A)D_0\eta^2R^2/R\), using \(R/A\leq2\);
+it must not be discarded. The value-error term is of order \(A^{-2}\),
+not merely an unspecified small perturbation.
+Choose \(\eta>0\), at most \(1/4\), so that
+\[
+ \frac{D_1\eta}{c_*}\leq\frac18,\qquad
+ \frac{2K_\alpha D_0\eta^2}{c_*}\leq\frac18,
+ \]
+and then choose \(A\), as large as desired, so that
+\[
+ \frac{M_1}{c_*A}\leq\frac18,\qquad
+ \frac{K_\alpha M_0}{c_*A^2}\leq\frac18 .
+ \tag{13}
+\]
+If a numerator vanishes its inequality imposes no condition.
+Then (12) is at most \(c_*/2\).
+Outside \(2A\) the cutoff-derivative terms vanish and the same
+lower bound applies throughout (11). Every original critical point
+lies in \(R\leq M_1/c_*\); enlarge \(A\) past a neighborhood of this
+ball. Thus the homotopy creates none and preserves all of them,
+including their Hessians. At \(\tau=1\) it equals \(G_\eta\)
+outside \(2A\), and it remains smooth at the origin because it is
+unchanged there.
+
+An intermediate \(F_\tau\) need not be exactly homogeneous outside
+any ball. Its homogeneous reference is
+\(G_\tau=(1-\tau)G_0+\tau G_\eta\), and outside \(2A\)
+\(F_\tau-G_\tau=(1-\tau)(F-G_0)\), with bounded value and derivative.
+Thus the associated explicit regular homogeneous homotopy tracks
+the stabilized tube class. Exact smooth homogeneity, needed for the
+zero-band theorem, is restored at \(\tau=1\); that theorem is not
+applied at intermediate times.
+\end{proof}
+
+Add exactly ten positive squares to the normalized \(f_b\).
+The direct sum has just its nondegenerate critical point at zero.
+Its difference from \(g_b(w)+|z|^2\), including its vertical derivative,
+is uniformly bounded: the difference is supported in a fixed
+\(w\)-ball, although not in a fixed \((w,z)\)-ball.
+Lemma~\ref{lem:smoothing} applies and leaves the fixed local form intact.
+We have obtained
+\[
+ k=p,\qquad l=p+10,\qquad l>k+9.                    \tag{14}
+\]
+The smoothed angular data have type \(T_{k,l}\). Indeed direct
+sums of a \(C^1\) regular path from the original datum to
+\(q_{p,p}\) remain regular, by block gradients, and the smoothing
+has just been joined to that direct sum by a regular homotopy.
+This argument preserves the actual varying stable infinity class;
+it has not replaced it by fixed quadratic infinity data.
+
+\section{From the accepted product complement to unframed cores}
+
+Apply the accepted zero-band result to this normalized family.
+It gives smooth embeddings \(j_b:T^0\to\Int T_b^1\) and an
+incoming-relative product identification of
+\(T_b^1\setminus\Int j_b(T^0)\) over the whole \(S^9\).
+The numerical hypothesis is particularly safe here:
+\[
+ \dim\Sigma=k+l-2\geq48>35,\qquad
+ \min(k,l)-2\geq18>9 .
+ \tag{15}
+\]
+These are only the arithmetic applications of the already
+reviewed connectivity argument.
+
+Move the actual negative boundary through its small regular angular
+collar to the truncated one. Then, in the \emph{family} product
+coordinate on the attached cobordism, shorten \([0,1]\) to
+\([0,t]\), \(1\geq t\geq0\). At \(t=0\) its boundary is
+\(\partial j_b(T^0)\), an embedded hypersurface.
+The fixed incoming collars make this an isotopy of domains smooth
+also at \(t=0\): extend the product coordinate slightly into
+\(j_b(T^0)\). This uses the accepted family trivialization, not
+the fact that each cobordism separately is a product.
+
+Fix \(T^0=S^{k-1}\times D^l\) and set \(e_b(u)=j_b(u,0)\).
+Choose the metric normal bundle \(\nu\) of this family of cores.
+Compactness gives a common tubular chart. Shrink the disk factors
+of \(j_b\) to radius \(r_0>0\), small enough that their images
+lie in this chart, and express them there as
+\[
+ j_b(u,z)=(\psi_b(u,z),\xi_b(u,z)),\quad
+ \psi_b(u,0)=u,\quad \xi_b(u,0)=0,\quad |z|\leq r_0 .
+ \]
+Here \(\xi_b(u,z)\) belongs to the normal fiber over
+\(\psi_b(u,z)\); no identification of different normal fibers has
+been omitted. For \(0<t\leq1\) use
+\[
+ L_t(b,u,z)=\bigl(\psi_b(u,tz),\,t^{-1}\xi_b(u,tz)\bigr).
+ \tag{16}
+\]
+It is a composition of source disk dilation, the original embedding,
+and fiberwise normal-bundle dilation, so it is an embedding.
+Uniformly \(|\xi_b(u,tz)|\leq Ct|z|\); take \(Cr_0\) smaller
+than the common normal-chart radius.
+
+In any local trivialization of \(\nu\), the normal coordinates satisfy
+the exact division formula
+\[
+ t^{-1}\xi_b(u,tz)
+   =\int_0^1D_z\xi_b(u,vtz)\,z\,dv .                \tag{17}
+\]
+Thus (16) extends smoothly at \(t=0\) to
+\((u,A_b(u)z)\), \(A_b(u)=D_z\xi_b(u,0)\).
+On chart overlaps the smooth limits agree with (16) for \(t>0\)
+and hence agree at zero. The normal derivative \(A_b(u)\) is an
+isomorphism: the derivative of the full codimension-zero embedding
+at the core induces an isomorphism on the quotient by its tangent
+space. Its limit is therefore also an embedding.
+
+The resulting normal ellipsoid is
+\(\{v:\langle(AA^*)^{-1}v,v\rangle\leq r_0^2\}\).
+Interpolate the positive definite operator \((AA^*)^{-1}\) with
+the identity. Compactness gives a positive common lower eigenvalue
+throughout this interpolation, so a further small choice of \(r_0\)
+keeps every ellipsoid in the same chart. Its boundary is a smooth
+embedded sphere bundle at every time. We have deformed the domains
+to round normal neighborhoods of \(e_b\).
+This deformation forgets the parametrization of the disk fibers.
+It neither chooses nor asks the ensuing core homotopy to preserve
+the frame \(A_b\).
+
+\begin{lemma}[Relative parameter-uniform general position]
+\label{lem:relative}
+Let \(P=B\times[0,1]\), with \(B\) a closed compact smooth
+manifold, \(\dim P=q\), and let \(M\) be a closed compact
+\(m\)-manifold. Suppose a smooth
+\(H:P\times M\to Y^N\) is constant in time and has fiber embeddings
+on collars of the two time endpoints, and \(N>q+2m\).
+Then it has an arbitrarily small smooth perturbation, fixed on
+smaller endpoint collars, which is an embedding in every fiber.
+\end{lemma}
+\begin{proof}
+Double the time interval by concatenating \(H\) with
+its reverse. This gives a smooth map
+\(\overline H:\overline P\times M\to Y\) on
+\(\overline P=B\times S^1\), since the collars are constant.
+We can work throughout on closed compact source manifolds.
+
+Write \(X=\overline P\times M\). In \(J^1(X,Y)\), the stratum
+where the derivative restricted to the vertical tangent \(TM\)
+has rank \(r<m\) has codimension
+\((N-r)(m-r)\), at least \(N-m+1\).
+The other derivative columns are unrestricted. Since
+\[
+ N-m+1>q+m=\dim X ,
+ \tag{18}
+\]
+transversality to these finitely many strata makes their inverse
+images empty.
+
+For double points use the ordinary two-point zero-jet space
+\(J_2^0(X,Y)\), with its distinct-source-point condition.
+The \emph{bad} submanifold consists of pairs
+\[
+ ((p,u),(p,v);y,y),\qquad u\ne v .
+ \]
+Equality of the two parameter coordinates has codimension \(q\);
+equality of their target values has codimension \(N\).
+These are independent conditions, so its codimension is \(q+N\).
+Its inverse image under the two-point jet of a transverse map is
+empty because
+\[
+ 2(q+m)-(q+N)=q+2m-N<0 .                          \tag{19}
+\]
+This forbids only \emph{same-parameter} double points.
+Imposing ordinary double-point avoidance without the equal-parameter
+condition would use the wrong, stronger dimension inequality.
+
+The multijet theorem in the stated input, applied to all these
+strata, gives a dense residual set of maps \(G\) satisfying both
+avoidances. Choose \(G\) arbitrarily close to \(\overline H\) in
+the smooth topology. On a central closed subinterval of the
+original time interval we keep \(G\).
+Take a smooth parameter cutoff \(\beta\), equal to one there and
+zero on smaller endpoint collars, whose transition regions lie
+inside the original embedding collars.
+For \(G\) sufficiently close to \(\overline H\), set on the original
+cylinder
+\[
+ H'(p,u)=\exp_{H(p,u)}
+       \bigl(\beta(p)\log_{H(p,u)}G(p,u)\bigr).
+ \tag{20}
+\]
+The logarithm is defined on a uniform neighborhood of the compact
+image. Where \(\beta=1\), (18)--(19) give injective immersions.
+Where \(\beta\) changes, the original fiber maps are embeddings,
+and (20) is uniformly \(C^1\)-close to them. Embeddings of a compact
+source are \(C^1\)-open, uniformly over a compact family:
+the derivative has a common lower singular-value bound; finitely
+many source charts give uniform local injectivity; away from a
+small diagonal neighborhood compactness gives positive separation.
+These same bounds hold for sufficiently close maps.
+Thus (20) is a fiber embedding also on the transition collars.
+It is exactly \(H\) on the prescribed smaller collars.
+An injective immersion of compact \(M\) is an embedding.
+This proves the relative assertion; no relative conclusion was
+silently imported from the non-relative corollary.
+\end{proof}
+
+For our cores \(M=S^{k-1}\) and \(Y=S^{k+l-1}\).
+As maps on \(S^9\times S^{k-1}\), both \(e_b(u)\) and the standard
+core family are nullhomotopic: that finite CW source has dimension
+\(k+8<k+l-1\), while the target sphere is
+\((k+l-2)\)-connected. Cell-by-cell extension, or cellular
+approximation, gives the nullhomotopies.
+Concatenate them and smooth relative to endpoint collars to obtain
+an initial homotopy \(H\).
+Here \(q=10\), \(m=k-1\), \(N=k+l-1\), and
+\[
+ N-(q+2m)=l-k-9\geq1,\qquad
+ (N-m+1)-(q+m)=l-k-8\geq2 .                       \tag{21}
+\]
+Lemma~\ref{lem:relative} supplies the needed homotopy through
+embeddings, fixed at both ends.
+
+The metric normal bundle over the compact
+\(S^9\times[0,1]\times S^{k-1}\) has a uniform tubular radius.
+For completeness, near its zero section the normal exponential
+has invertible derivative; compactness gives uniform local charts.
+If arbitrarily small radii still allowed two normal points in one
+fiber with the same image, take a convergent sequence of their base
+points. The limiting core images agree, so the base points agree
+by injectivity of that fiber core. They then lie in one of the
+uniform local charts, contradicting its injectivity.
+Thus one positive radius works for the entire family.
+Shrink our initial round tube to this radius if necessary, and
+follow these normal disk \emph{bundles} along the homotopy.
+At the end the core is the fixed standard core, so its round
+neighborhood is fixed. Increasing its angular radius to \(\pi/4\)
+identifies it by a domain isotopy with \(D(q_{k,l})\).
+No normal framing has been extended through the homotopy.
+
+\section{Functions, infinity classes, and conclusion}
+
+A smooth compact family of cooriented embedded domain boundaries
+has a uniform signed normal collar. A smooth profile, equal to
+the signed coordinate near zero and to fixed negative and positive
+constants on the two outer portions, gives a smooth family of
+defining functions on \(Y\).
+For a fixed domain their space is convex: signs in the two interiors
+and the positive outward derivative on the boundary persist under
+convex combination. This also permits a prescribed initial or final
+defining function, by an extra endpoint-collared convex interpolation.
+Consequently all the preceding domain homotopies lift to regular
+smooth angular function homotopies, with the original infinity
+datum at the start and \(q_{k,l}|_Y\) at the end.
+They prove nullity in \(T_{k,l}\), not merely fiberwise diffeomorphism
+of the negative domains.
+
+These last homotopies need only be homotopies of infinity data.
+Nevertheless they can, if desired, also be realized by smooth
+one-critical families without changing the critical neighborhood.
+For a smooth regular homogeneous homotopy \(G_{b,t}\), compactness
+gives \(|d_wG_{b,t}|\geq c'|w|\) and
+\(|\partial_tG_{b,t}|\leq K'|w|^2\).
+Starting in a homogeneous outer region, set
+\[
+ F_{b,\lambda}(w)=G_{b,\lambda s(|w|)}(w),
+ \tag{22}
+\]
+with \(s=0\) near its inner radius, \(s=1\) outside a much larger
+radius, and \(r|s'(r)|<c'/(2K')\) when \(K'>0\).
+Keep the original function inside. The same calculation (8)
+gives nonzero gradient on the new annulus, uniformly in \(b,\lambda\).
+The critical point, its nondegeneracy, and its neighborhood are
+unchanged. Outside the new common ball the data are \(G_{b,\lambda}\).
+Thus even this stronger realization does not introduce an
+uncontrolled critical point or replace the stable infinity class.
+
+Finally add ten negative squares. With the fixed ordering of
+negative coordinates before positive coordinates this reaches
+the diagonal stage \(T_{p+10,p+10}\).
+The composite addition is the original datum stabilized by ten
+copies of \(q_{1,1}\), up to a fixed coordinate permutation.
+That permutation is a homeomorphism of function spaces carrying
+constant data to constant data; no claim that it is isotopic to
+the identity is needed for nullity.
+Adding a fixed quadratic summand preserves regularity of the
+homogeneous homotopy by block gradients. Angular smoothing, or
+Lemma~\ref{lem:smoothing} if smooth total functions are wanted,
+preserves its class.
+The nullhomotopy at \(T_{k,l}\) therefore proves stable nullity
+of the original family. This proves Theorem~\ref{thm:main}.
+
+\paragraph{What improved over the prior result.}
+The accepted zero-band theorem began with a fixed local quadratic
+model and ended with triviality of a cobordism family.
+Here the original varying negative eigenspace bundle is compared
+over the whole base with infinity, \(J_8\) makes that \emph{finite}
+local model null, all changes of functions have quantitative
+gradient margins, and the product cobordism is removed followed by
+a genuinely relative homotopy of unframed cores.
+These close the remaining logical dependencies of
+\texttt{MS-one-critical}; they do not prove the nonzero-kernel
+proposition or the manuscript's main theorem.
+
+\paragraph{Exact-certificate boundary.}
+\texttt{verify.py} checks the local cutoff and radial chain rules,
+the handle derivatives and their margins, the angular ratio
+differential (9), all terms in (10)--(13), the block-gradient bound,
+a polynomial Taylor-jet replay of (16), and the universal dimension
+polynomials for \(k=20+u\), \(l=k+10+v\), \(u,v\geq0\).
+One bounded Jacobian operation encloses
+\(1-e_1-e_2-e_3-e_4\) on \([0,1/8]^4\), independently replayed
+over the rationals. The four variables are exactly the four
+normalized error budgets in (13), not arbitrary proxies for the
+gradient. Its range is \([1/2,1]\), with both endpoints attained.
+This is a certificate for the arithmetic after the analytic
+estimates, not a theorem about an arbitrary function supplied to
+a computer.
+Neither it nor the polynomial normal-coordinate example verifies
+the smooth bundle arguments, ODE constructions, relative
+transversality, the external \(J\)-theorem, or the accepted
+h-cobordism theorem. Those are the prose proof and explicit inputs.
+No independent approval of this new proof is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{Adams}
+J.~F. Adams, \emph{On the groups \(J(X)\). IV},
+Topology 5 (1966), 21--71.
+\href{https://doi.org/10.1016/0040-9383(66)90004-8}
+{doi:10.1016/0040-9383(66)90004-8}.
+Original retained from
+\url{https://math.univ-cotedazur.fr/u/cazanave/Gdt/ImJ/J-IV.pdf}.
+\bibitem{BPT}
+M. Borodzik, M. Powell and P. Teichner,
+\emph{Link concordance implies link homotopy},
+\href{https://arxiv.org/abs/2503.04348v1}{arXiv:2503.04348v1},
+Theorem 2.3.4 and Corollary 2.3.5(iii).
+\bibitem{Hatcher}
+A. Hatcher, \emph{Algebraic Topology}, Cambridge University Press,
+2002, ISBN 9780521795401; corrected author electronic text,
+Corollary 4.33. Retained in the preceding zero-band audit.
+\end{thebibliography}
+\end{document}
