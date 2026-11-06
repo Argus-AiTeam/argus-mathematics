@@ -45,7 +45,18 @@ We performed an independent verification across all **373 active families (720 m
 
 ---
 
-## I. Panorama Credibility Matrix (All 376 Families / 723 Manuscripts)
+## I. Cumulative Flawed-Manuscript Count & Panorama Credibility Matrix (All 376 Families / 723 Manuscripts)
+
+### I.1 How Many OpenAI Manuscripts Have Issues? (Cumulative Count by Strictness)
+
+| Audit Threshold (From Fatal Refutations to Full Self-Containment) | Families (%) | **Manuscripts with Issues (%)** | Specific Flaws Included |
+| :--- | :---: | :---: | :--- |
+| **Threshold 1: [Fatal Refutations & Withdrawals]**<br>(False main theorem / false lemma refuted by counterexample / fake citation / withdrawn) | **24** (`6.4%`) | **`45 papers` (`6.2%`)** | **3 papers** withdrawn by OpenAI on Oct 7 (`#045, #061, #070`) + **42 active papers (21 families)** where Argus refuted a false main theorem (`#318`), fake/colliding citation (`#001, #341, #320`), or false intermediate lemma (`#004, #180, #209, #376`, etc.) |
+| **Threshold 2: [Fatal Errors + Formula/Step Repairs + Citation Failures]**<br>(Manuscripts requiring concrete mathematical or citation repairs) | **131** (`34.8%`) | **`236 papers` (`32.6%`)** | Threshold 1 + manuscripts containing **reversed signs, inverted vectors, off-by-one step counts, omitted compactness/modulus hypotheses** (`101` repaired families), or **failed/inconclusive primary-source citation checks** (`31` families) — **nearly one-third of the corpus** |
+| **Threshold 3: [Including Unclosed Prose Bridges (`inconclusive`)]**<br>(Errors + local lemmas proved while the bridge to the headline theorem remains unclosed) | **254** (`67.6%`) | **`516 papers` (`71.4%`)** | Threshold 2 + manuscripts with **`554` explicit `inconclusive` Reviewer verdicts** on unproved prose bridges, unjustified limit interchanges, or singular-boundary extrapolations (**over 71% of the corpus fails to close its headline claim end-to-end**) |
+| **Threshold 4: [Not Fully Self-Contained]**<br>(All manuscripts outside the 73 unconditionally self-contained Tier-1 papers) | **340** (`90.4%`) | **`650 papers` (`89.9%`)** | Includes manuscripts delegating core geometric/analytic steps to unverified external literature black-box assumptions (`305` families) — **only `73 manuscripts (10.1%)` are 100% self-contained and unconditionally verified end-to-end** |
+
+### I.2 Mutually Exclusive 5-Tier Credibility Matrix (All 376 Families / 723 Manuscripts)
 
 | Credibility Tier | Families | Family % | Manuscripts | Manuscript % | Verification & Epistemic Profile |
 | :--- | :---: | :---: | :---: | :---: | :--- |
