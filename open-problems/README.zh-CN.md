@@ -22,7 +22,6 @@
   <img src="https://img.shields.io/badge/独立_AMS_LaTeX_论文-84_篇_PDF-2E7D32?style=flat-square" alt="84 篇论文">
   <img src="https://img.shields.io/badge/SHA--256_校验产物-730-6A1B9A?style=flat-square" alt="728 个产物">
   <img src="https://img.shields.io/badge/验证体系-Jacobian_%7C_Lean_4_%7C_PARI%2FGP-C62828?style=flat-square" alt="验证体系">
-  <img src="https://img.shields.io/badge/总实际算力扣费-%24352.84_(均_%244.20%2F包)-E65100?style=flat-square" alt="实际扣费">
 </p>
 
 ---
@@ -43,75 +42,85 @@
 
 ---
 
-## 算力效率与全部 84 个成果包实际扣费全表（`usage.jsonl` 精确账单）
+## 算力花销（按 token 计量）
 
-Argus 所有数学战役均以**单守护进程分级工作流**（`Planner -> Engineer -> Independent Reviewer`，`mission_width=1`）运行，结合 `Proof Ledger`（`MATH_STATE.json` 内容哈希账本）与确定性侧车（`Jacobian`、`PARI/GP`、`Lean 4`）。经对全部 **150 份 `usage.jsonl` 原始账单**逐条汇总（完整报告见 [`docs/usage-and-cost-audit.md`](docs/usage-and-cost-audit.md) 与 [`usage-audit.json`](usage-audit.json)），产出**全部 84 个正式成果包**累计仅调用 **8,877 次**（**8,821.0** 个计费请求，**76.13 亿 tokens**），**全项目历史总实际扣费仅 `$352.84`（平均每个成果包仅 `$4.20`！）**：
+| | 成果包数 | Tokens | 花销 |
+|---|---:|---:|---:|
+| 专项 campaign | 53 | 10.37B | **$13,211.56**（每个包的中位数为 $105.00） |
+| 共享审计与筛选池 | 31 | 1.77B | **$1,202.86** |
+| **合计** | **84** | **12.14B** | **$14,414.42** |
 
-- **53 个独立专项攻关战役（8月–11月全部单题战役）**：共调用 `8,096` 次（`8,005.0` 个请求，`63.70 亿` tokens），合计实际扣费 **`$320.20`（平均每题 `$6.04`）**；其中 **11月 20 个新定理攻关战役合计仅花费 `$71.68`（平均每证出一道新定理仅 `$3.58`）**。
-- **31 个批量审计与反例筛查成果包（Batch 001 与 757 题全量审计分片）**：共调用 `781` 次（`816.0` 个请求，`12.43 亿` tokens），合计实际扣费 **`$32.64`（分摊到 31 个成果包平均每个仅 `$1.05`）**。
+花销按供应商的 token 计量折算成美元（`total_nano_aiu / 1e11`），数据取自各 campaign 用量文件和会话数据库里的每一条调用记录，已去重。另有 963 次调用没有 token 明细，未计入，所以上面的总额是下限。各成果包的明细见 [`usage-audit.json`](usage-audit.json) 和 [`docs/usage-and-cost-audit.md`](docs/usage-and-cost-audit.md)。
 
-<details open>
-<summary><strong>展开查看全部 53 个专项战役 + 31 个批量审计包（共 84 个成果包）实际扣费明细全表</strong></summary>
+<details>
+<summary><strong>各专项 campaign 花销（53 个成果包）</strong></summary>
 
-| 题号 | 成果包名称 | 使用模型 | 调用次数 | 计费请求数 | 累计 Tokens | 11月冲刺扣费 | 累计总实际扣费 (`$0.04`/次) |
-|---|---|---|---:|---:|---:|---:|---:|
-| [`11000263`](11000263/) | Twist-compatible Burau quotient and universal finite-dimensionality for Bigelow's zipper algebra | `gpt-5.6-sol` | 6 | 6.0 | 6.48M | — | **`$0.24`** |
-| [`2813`](2813/) | An explicit taut-foliation Euler-class obstruction on a hyperbolic mapping torus | `gpt-5.6-sol` | 10 | 10.0 | 1.77M | — | **`$0.40`** |
-| [`1275`](1275/) | Essential-Spectrum Obstruction for Finite-Shift Dilation Restrictions in Hilbert-Polya Realizations | `gpt-6-astra` | 16 | 16.0 | 7.93M | $0.64 | **`$0.64`** |
-| [`2457`](2457/) | Countermodel to the Arvidsson heat-trace bounded-kernel implication (Erdos Problem #1055) | `gpt-5.6-sol` | 20 | 23.0 | 0.00M | — | **`$0.92`** |
-| [`2662`](2662/) | Reidemeister-II collapse of two-change local plat families for unknotting and Conway mutation (Kirby 1.3) | `gpt-5.6-sol, gpt-6-astra` | 23 | 23.0 | 9.62M | — | **`$0.92`** |
-| [`2775`](2775/) | Complete solution classification of the (A_12, 1, A_12) projection fiber for braid and right-angled Artin groups | `gpt-5.6-sol, gpt-6-astra` | 25 | 25.0 | 44.79M | — | **`$1.00`** |
-| [`2307015`](2307015/) | A translated-cusp boundary set of positive harmonic measure | `gpt-5.6-sol` | 26 | 26.0 | 22.34M | — | **`$1.04`** |
-| [`1921`](1921/) | Uniform degree bounds excluding bounded offset-signature colorings for Erdos Problem #87 | `gpt-5.6-sol` | 27 | 27.0 | 0.67M | — | **`$1.08`** |
-| [`40`](40/) | Conformal Transfer and Curvature-Response Closure for Axisymmetric Euler Flows in Periodic Variable-Radius Pipes | `gpt-6-astra` | 34 | 34.0 | 40.98M | $1.36 | **`$1.36`** |
-| [`3102`](3102/) | The Support-At-Most-Five Pebbling Number of the Lemke Square Is 64 | `gpt-6.1-sol` | 36 | 36.0 | 22.80M | $1.44 | **`$1.44`** |
-| [`7200051`](7200051/) | Quantitative Distortion Bounds and Formal Equilateral Exclusion for Eleven Points in Five-Dimensional l_1 | `gpt-6.1-sol` | 44 | 44.0 | 24.19M | $1.76 | **`$1.76`** |
-| [`2800203`](2800203/) | Threshold discrepancy barriers for depth-three scalar planted-clique AMP schedules | `gpt-5.6-sol, gpt-6-astra` | 49 | 49.0 | 79.04M | — | **`$1.96`** |
-| [`1994`](1994/) | Bottom-row quadratic reduction and scalar-span obstruction on rank-four parabolic Erdos-Ulam configurations | `gpt-5.6-sol, gpt-6-astra` | 49 | 50.0 | 12.14M | — | **`$2.00`** |
-| [`3167`](3167/) | Sheehan's Conjecture for Four-Regular Simple Graphs of Bounded Treewidth | `gpt-6.1-sol` | 54 | 54.0 | 42.76M | $2.16 | **`$2.16`** |
-| [`20001352`](20001352/) | Literal-scope counterexample for commutator width and involution factorization in Thompson's group F (AIMPL Problem 3.1) | `gpt-5.6-sol, gpt-6-astra` | 60 | 57.0 | 4.31M | — | **`$2.28`** |
-| [`2884`](2884/) | K3 Problem 4.8: arbitrary-X stabilization counterexample and fixed-E(2) PL/smooth seven-arrow construction | `gpt-5.6-sol` | 60 | 60.0 | 100.90M | — | **`$2.40`** |
-| [`20000278`](20000278/) | An irrational non-Q-Gorenstein F-jumping number in characteristic 13 (AIM Problem 1.3) | `gpt-6-astra` | 62 | 61.0 | 22.53M | — | **`$2.44`** |
-| [`20001602`](20001602/) | Commensurated subgroups of branch groups: missing just-infinite hypothesis and Hanoi group counterexample | `gpt-6-astra` | 62 | 62.0 | 14.58M | — | **`$2.48`** |
-| [`20001849`](20001849/) | Flying wings refute uniqueness of the collapsed product steady Ricci soliton (AIMPL Problem 6.7) | `gpt-5.6-sol, gpt-6-astra` | 65 | 63.0 | 11.20M | — | **`$2.52`** |
-| [`20001516`](20001516/) | A CAT(0) free-by-cyclic group that is not ordinary RFRS (AIM Problem 5.3) | `gpt-6-astra` | 67 | 66.0 | 14.84M | — | **`$2.64`** |
-| [`2669`](2669/) | Handle-slide unlink orbit reduction on staged-framing two-component link presentations (Property R) | `gpt-5.6-sol, gpt-6-astra` | 69 | 66.0 | 24.52M | — | **`$2.64`** |
-| [`1900020`](1900020/) | Diagonal quadratic energy contraction on section returns of the cubic Jacobi-Perron algorithm | `gpt-5.6-sol, gpt-6-astra` | 71 | 71.0 | 85.89M | — | **`$2.84`** |
-| [`3256`](3256/) | Weighted Dijoin Packing in One-Edge Deletions of Chordal Digraphs | `gpt-6.1-sol` | 72 | 72.0 | 52.53M | $2.88 | **`$2.88`** |
-| [`1417`](1417/) | A Uniform Square-Root Edge-Deficit Bound for Strongly Critical Graphs Avoiding Four- and Eight-Cycles | `gpt-6-astra, gpt-6.1-sol` | 76 | 73.0 | 30.62M | $1.36 | **`$2.92`** |
-| [`2862`](2862/) | Co-normalizer orthogonal join reduction and rational Chern-Simons volume on one-angle spherical bar cycles | `gpt-5.6-sol, gpt-6-astra` | 73 | 73.0 | 12.43M | — | **`$2.92`** |
-| [`1413`](1413/) | Girth-five 77-matching prefix certificate in the search for a degree-57 Moore graph | `gpt-5.6-sol` | 82 | 81.0 | 100.77M | — | **`$3.24`** |
-| [`20001904`](20001904/) | A six-point positive-weight obstruction to degree-four Hermite curvature repairs on manifolds without conjugate points | `gpt-5.6-sol, gpt-6-astra` | 82 | 82.0 | 75.04M | — | **`$3.28`** |
-| [`6800022`](6800022/) | Complete Global Embeddedness Obstruction for the Reciprocal-Reflection Kato-Muroya Genus-One Four-Catenoidal-End Locus | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 88 | 88.0 | 102.65M | $1.16 | **`$3.52`** |
-| [`20000786`](20000786/) | Hasse-Witt matrix vanishing and cubic scalar cancellation on the k=3 quartic reduction branch | `gpt-5.6-sol, gpt-6-astra` | 89 | 89.0 | 111.66M | — | **`$3.56`** |
-| [`20001675`](20001675/) | Arbitrary-Depth Exponential HOMFLY-PT Fibers over Quiver Point-Counting Polynomials of Plabic Links and Knots | `gpt-6.1-sol` | 93 | 93.0 | 69.23M | $3.72 | **`$3.72`** |
-| [`8`](8/) | Reduction of the minimal-101 root-4 odd perfect number branch to the single factor Phi_31(269) | `gpt-5.6-sol, gpt-6-astra` | 96 | 96.0 | 15.01M | — | **`$3.84`** |
-| [`1138`](1138/) | Bielliptic Half-Fiber and Dyadic Picard-Torsion Obstructions on Enriques Surfaces | `gpt-6-astra` | 97 | 97.0 | 97.44M | $3.88 | **`$3.88`** |
-| [`20001274`](20001274/) | Congruent plane projections do not determine a convex body up to translation or reflection | `gpt-6-astra` | 103 | 102.0 | 14.76M | — | **`$4.08`** |
-| [`3059`](3059/) | The Alon-Jaeger-Tarsi Conjecture in Dimensions Eight and Nine over F_5 | `gpt-6.1-sol` | 111 | 111.0 | 106.72M | $4.44 | **`$4.44`** |
-| [`3395`](3395/) | Centered Nuclear Duality and Relative-Mass Obstructions in Monotone Boolean Circuit Lower Bounds | `gpt-6-astra` | 122 | 119.0 | 129.04M | $4.76 | **`$4.76`** |
-| [`9400078`](9400078/) | Unconditional Exceptional-Parameter Density Bounds for Ramified GL_4 Automorphic Representations | `gpt-6-astra` | 144 | 143.0 | 56.57M | $5.72 | **`$5.72`** |
-| [`1380`](1380/) | Exact rational sign-cell exclusion on the balanced (2,2,2,2) Heilbronn configuration space | `gpt-5.6-sol, gpt-6-astra` | 145 | 144.0 | 121.94M | — | **`$5.76`** |
-| [`20002392`](20002392/) | Velocity-Only Exclusion of Backward Self-Similar Navier-Stokes Profiles in a Half-Space | `gpt-6-astra` | 150 | 145.0 | 39.00M | $5.80 | **`$5.80`** |
-| [`20000582`](20000582/) | Moving-window Engel Hilbert cocycles with Omega(sqrt(k)) homogeneous gauge distortion | `gpt-5.6-sol, gpt-6-astra` | 152 | 152.0 | 437.17M | — | **`$6.08`** |
-| [`1285`](1285/) | An Unconditional Exponential Worst-Case Lower Bound for Adaptive Signed-Chain Elliptic Curve Factorization Programs | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 157 | 155.0 | 93.52M | $1.24 | **`$6.20`** |
-| [`2305027`](2305027/) | A signed Cauchy-Green flux identity and linear residual lower bound on planar corona corrections | `gpt-5.6-sol, gpt-6-astra` | 161 | 165.0 | 84.57M | — | **`$6.60`** |
-| [`20001578`](20001578/) | Exact quotient-multiplicity exclusion of 18-element equality candidates in Thompson's group F | `gpt-5.6-sol, gpt-6-astra` | 182 | 182.0 | 272.80M | — | **`$7.28`** |
-| [`2338`](2338/) | Diophantine Obstructions, Degree-120 S-Unit Descent, and Affine Orthogonal Runge Theorems for Multiplicity Five in Pascal's Triangle | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 188 | 188.0 | 194.53M | $5.76 | **`$7.52`** |
-| [`1243`](1243/) | Unconditional Global Squareclasses, Genus-161 Rational-Point Classification, and Map Rigidity on Bremner's Octic K3 Surface | `gpt-5.6-sol, gpt-6.1-sol` | 204 | 192.0 | 71.54M | $6.92 | **`$7.68`** |
-| [`8200002`](8200002/) | A 39-dimensional Arb Krawczyk interval certificate for the third Fourier fibre in dimension six | `gpt-5.6-sol, gpt-6-astra` | 239 | 239.0 | 417.23M | — | **`$9.56`** |
-| [`1187`](1187/) | Global Nonexistence of Twisted Bridges in F_2-Magnus Quotients and Six-Conjugate Primitive Exclusion for Andrews-Curtis Candidates | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 249 | 246.0 | 113.91M | $7.72 | **`$9.84`** |
-| [`1518`](1518/) | An Unconditional Sixth-Energy Saving for Riemann Zeta Zeros and a Local Prime-Window Exceptional-Pair Bound | `gpt-5.6-sol, gpt-6-astra, gpt-6.1-sol` | 269 | 266.0 | 104.23M | $5.04 | **`$10.64`** |
-| [`9400114`](9400114/) | Target-Free Prime-Power Reduction, Short-Arc Cubic Obstructions, and Inverse-Frobenius Classifications for Agrawal's Conjecture | `gpt-6-astra, gpt-6.1-sol, mai-code-1.1-flash` | 303 | 298.0 | 202.21M | $3.92 | **`$11.92`** |
-| [`2248`](2248/) | Baier-Zhao dispersion scale barriers for quadratic-prime representations n = a p^2 + b (Erdos #676) | `gpt-5.6-sol, gpt-6-astra` | 309 | 311.0 | 500.20M | — | **`$12.44`** |
-| [`20000715`](20000715/) | Differential equations and linear-ODE obstructions for eta-products (AIM Problem 1.2) | `gpt-5.6-luna, gpt-5.6-sol, gpt-6-astra` | 426 | 426.0 | 33.14M | — | **`$17.04`** |
-| [`1465`](1465/) | Fu 2026 Theorem 2.8: regularity-premise local-finiteness gap | `gpt-5.6-sol, gpt-6-astra` | 777 | 778.0 | 1431.73M | — | **`$31.12`** |
-| [`20001036`](20001036/) | A 5,454-vertex multi-label counterexample to Seymour-Sullivan Conjecture 6.1 and prototype optimality | `gpt-5.6-sol, gpt-6-astra` | 891 | 883.0 | 606.40M | — | **`$35.32`** |
-| [`20000816`](20000816/) | Distinct Hilbert-scheme components sharing a complete unlabelled Grobner fan (AIM Problem 15 / 1.35) | `gpt-5.6-sol, gpt-6-astra` | 995 | 987.0 | 77.31M | — | **`$39.48`** |
-| **31 个批量/分片成果包** | 共享审计分片（`shard-01`、`shard-02`、`batch-001`、`open-audit`）产出其余 31 个成果包（均摊 `$1.05`/包） | `gpt-5.6-sol, gpt-6-astra` | 781 | 816.0 | 1,243.08M | — | **`$32.64`** |
-| **全部 84 个成果包总计** | **53 个专项战役 + 31 个批量分片成果包（150 份 `usage.jsonl` 账单）** | **综合** | **8,877** | **8,821.0** | **7,613.25M (`76.13亿`)** | **`$71.68`（均 `$3.58`/题）** | **`$352.84`（均 `$4.20`/包）** |
+| ID | 成果包 | 运行次数 | Tokens | 花销（按 token 计量） |
+|---|---|---:|---:|---:|
+| [`20001036`](20001036/) | A 5,454-vertex multi-label counterexample to Seymour-Sullivan Conjecture 6.1 and prototype optimality | 9 | 693.6M | $1,783.00 |
+| [`3395`](3395/) | Centered Nuclear Duality, Addition-Aware Pinning, and Relative-Mass Obstructions in Monotone Boolean Circuit Lower Bounds | 2 | 515.9M | $1,469.29 |
+| [`1465`](1465/) | Fu 2026 Theorem 2.8: regularity-premise local-finiteness gap | 1 | 1,730.8M | $1,295.35 |
+| [`20000816`](20000816/) | Distinct Hilbert-scheme components sharing a complete unlabelled Grobner fan (AIM Problem 15 / 1.35) | 17 | 292.4M | $1,064.44 |
+| [`2248`](2248/) | Baier-Zhao dispersion scale barriers for quadratic-prime representations n = a p^2 + b (Erdos #676) | 1 | 601.6M | $674.48 |
+| [`20000582`](20000582/) | Moving-window Engel Hilbert cocycles with Omega(sqrt(k)) homogeneous gauge distortion | 1 | 557.8M | $606.57 |
+| [`8200002`](8200002/) | A 39-dimensional Arb Krawczyk interval certificate for the third Fourier fibre in dimension six | 1 | 711.9M | $603.19 |
+| [`20001578`](20001578/) | Exact quotient-multiplicity exclusion of 18-element equality candidates in Thompson's group F | 1 | 443.5M | $489.84 |
+| [`1138`](1138/) | Universal Isotropy and Genus-Proportional Integral Hodge Defects on Dyadic Enriques Products | 1 | 142.0M | $431.99 |
+| [`1380`](1380/) | Exact rational sign-cell exclusion on the balanced (2,2,2,2) Heilbronn configuration space | 1 | 270.7M | $325.93 |
+| [`9400114`](9400114/) | Target-Free Prime-Power Reduction, Short-Arc Cubic Obstructions, and Inverse-Frobenius Classifications for Agrawal's Conjecture | 9 | 182.1M | $295.98 |
+| [`20000715`](20000715/) | Differential equations and linear-ODE obstructions for eta-products (AIM Problem 1.2) | 14 | 92.9M | $288.56 |
+| [`2305027`](2305027/) | A signed Cauchy-Green flux identity and linear residual lower bound on planar corona corrections | 4 | 141.9M | $266.22 |
+| [`1518`](1518/) | An Unconditional Sixth-Energy Saving for Riemann Zeta Zeros and a Local Prime-Window Exceptional-Pair Bound | 5 | 354.6M | $242.43 |
+| [`2338`](2338/) | Diophantine Obstructions, Affine Orthogonal Runge Theorems, and Degree-512 Extraspecial Covers for Multiplicity Five in Pascal's Triangle | 6 | 287.3M | $238.35 |
+| [`9400078`](9400078/) | Unconditional Exceptional-Parameter Density Bounds for Ramified GL_4 Automorphic Representations | 6 | 77.5M | $232.25 |
+| [`20000786`](20000786/) | Hasse-Witt matrix vanishing and cubic scalar cancellation on the k=3 quartic reduction branch | 1 | 254.1M | $213.57 |
+| [`1187`](1187/) | Global Nonexistence of Twisted Bridges in F_2-Magnus Quotients and Six-Conjugate Primitive Exclusion for Andrews-Curtis Candidates | 5 | 197.3M | $200.89 |
+| [`1900020`](1900020/) | Diagonal quadratic energy contraction on section returns of the cubic Jacobi-Perron algorithm | 1 | 96.9M | $180.14 |
+| [`3256`](3256/) | Weighted Dijoin Packing in One-Edge Deletions of Chordal Digraphs and Six-Terminal Single-Defect Digraphs | 4 | 323.0M | $165.54 |
+| [`1285`](1285/) | An Unconditional Exponential Worst-Case Lower Bound for Adaptive Signed-Chain Elliptic Curve Factorization Programs | 3 | 123.0M | $155.40 |
+| [`2669`](2669/) | Handle-slide unlink orbit reduction on staged-framing two-component link presentations (Property R) | 1 | 94.7M | $152.13 |
+| [`20002392`](20002392/) | Velocity-Only Exclusion of Backward Self-Similar Navier-Stokes Profiles in a Half-Space | 5 | 51.0M | $150.15 |
+| [`40`](40/) | Conformal Transfer and Curvature-Response Closure for Axisymmetric Euler Flows in Periodic Variable-Radius Pipes | 1 | 44.7M | $131.45 |
+| [`3167`](3167/) | Sheehan's Conjecture for Four-Regular Simple Graphs of Treewidth at Most Five | 7 | 275.5M | $124.34 |
+| [`1994`](1994/) | Bottom-row quadratic reduction and scalar-span obstruction on rank-four parabolic Erdos-Ulam configurations | 1 | 137.0M | $121.95 |
+| [`8`](8/) | Reduction of the minimal-101 root-4 odd perfect number branch to the single factor Phi_31(269) | 1 | 163.4M | $105.00 |
+| [`20000278`](20000278/) | An irrational non-Q-Gorenstein F-jumping number in characteristic 13 (AIM Problem 1.3) | 2 | 29.5M | $96.33 |
+| [`20001274`](20001274/) | Congruent plane projections do not determine a convex body up to translation or reflection | 3 | 25.6M | $84.24 |
+| [`20001516`](20001516/) | A CAT(0) free-by-cyclic group that is not ordinary RFRS (AIM Problem 5.3) | 1 | 27.2M | $80.40 |
+| [`6800022`](6800022/) | Complete Global Embeddedness Obstruction for the Reciprocal-Reflection Kato-Muroya Genus-One Four-Catenoidal-End Locus | 2 | 151.5M | $78.20 |
+| [`2884`](2884/) | K3 Problem 4.8: arbitrary-X stabilization counterexample and fixed-E(2) PL/smooth seven-arrow construction | 1 | 219.3M | $76.02 |
+| [`20001602`](20001602/) | Commensurated subgroups of branch groups: missing just-infinite hypothesis and Hanoi group counterexample | 3 | 22.4M | $70.08 |
+| [`20001849`](20001849/) | Flying wings refute uniqueness of the collapsed product steady Ricci soliton (AIMPL Problem 6.7) | 3 | 19.0M | $63.41 |
+| [`1413`](1413/) | Girth-five 77-matching prefix certificate in the search for a degree-57 Moore graph | 1 | 140.4M | $61.23 |
+| [`2800203`](2800203/) | Threshold discrepancy barriers for depth-three scalar planted-clique AMP schedules | 1 | 99.3M | $59.06 |
+| [`3059`](3059/) | The Alon-Jaeger-Tarsi Conjecture in Dimensions Eight and Nine over F_5 | 3 | 111.6M | $54.38 |
+| [`20001904`](20001904/) | A six-point positive-weight obstruction to degree-four Hermite curvature repairs on manifolds without conjugate points | 1 | 84.1M | $53.52 |
+| [`1417`](1417/) | A Uniform Square-Root Edge-Deficit Bound for Strongly Critical Graphs Avoiding Four- and Eight-Cycles | 3 | 44.5M | $52.37 |
+| [`2862`](2862/) | Co-normalizer orthogonal join reduction and rational Chern-Simons volume on one-angle spherical bar cycles | 1 | 20.2M | $51.83 |
+| [`1243`](1243/) | Unconditional Global Squareclasses, Genus-161 Rational-Point Classification, and Map Rigidity on Bremner's Octic K3 Surface | 6 | 100.0M | $50.04 |
+| [`2775`](2775/) | Complete solution classification of the (A_12, 1, A_12) projection fiber for braid and right-angled Artin groups | 1 | 108.4M | $43.55 |
+| [`2307015`](2307015/) | A translated-cusp boundary set of positive harmonic measure | 1 | 94.6M | $38.23 |
+| [`20001352`](20001352/) | Literal-scope counterexample for commutator width and involution factorization in Thompson's group F (AIMPL Problem 3.1) | 3 | 10.3M | $37.67 |
+| [`1275`](1275/) | Essential-Spectrum Obstruction for Finite-Shift Dilation Restrictions in Hilbert-Polya Realizations | 1 | 9.5M | $33.09 |
+| [`20001675`](20001675/) | Arbitrary-Depth Exponential HOMFLY-PT Fibers over Quiver Point-Counting Polynomials of Plabic Links and Knots | 4 | 60.0M | $30.81 |
+| [`2457`](2457/) | Countermodel to the Arvidsson heat-trace bounded-kernel implication (Erdos Problem #1055) | 1 | 23.6M | $23.85 |
+| [`2662`](2662/) | Reidemeister-II collapse of two-change local plat families for unknotting and Conway mutation (Kirby 1.3) | 1 | 41.4M | $20.78 |
+| [`7200051`](7200051/) | Quantitative Distortion Bounds and Formal Equilateral Exclusion for Eleven Points in Five-Dimensional l_1 | 2 | 28.3M | $13.52 |
+| [`3102`](3102/) | The Support-At-Most-Five Pebbling Number of the Lemke Square Is 64 | 3 | 26.1M | $11.66 |
+| [`1921`](1921/) | Uniform degree bounds excluding bounded offset-signature colorings for Erdos Problem #87 | 1 | 7.8M | $8.90 |
+| [`11000263`](11000263/) | Twist-compatible Burau quotient and universal finite-dimensionality for Bigelow's zipper algebra | 1 | 6.8M | $7.24 |
+| [`2813`](2813/) | An explicit taut-foliation Euler-class obstruction on a hyperbolic mapping torus | 1 | 2.6M | $2.72 |
+
+| 共享审计池 | Tokens | 花销 |
+|---|---:|---:|
+| `argus-audit-shard-02-retry2` | 1,608.3M | $1,119.47 |
+| `argus-audit-shard-01-run3` | 147.8M | $76.30 |
+| `argus-open-audit` | 10.9M | $7.09 |
+| `argus-counterexamples` | — | 未计量（35 次调用无 token 明细） |
+| `argus-audit-shard-01-run2` | — | 无用量记录 |
 
 </details>
+
 ---
 
 ## 核心代表作（Featured Flagship Breakthroughs）
