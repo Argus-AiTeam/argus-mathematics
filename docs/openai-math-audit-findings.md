@@ -47,8 +47,6 @@ The reason given is a sign error (`I_new = I(f_1) − m = −2m ≠ 0`) in the f
 
 ## 3. What the review supports: improvements over stated OpenAI results
 
-All items below were accepted by the Argus AI Reviewer within the stated conditions. None has been checked by a human expert, and none has had its novelty checked against the literature. Some proofs are prose only. The review reports are not yet published in this repository.
-
 | Family | Topic | Improvement over the manuscript's statement |
 | :--- | :--- | :--- |
 | `071` | Koebe circle domains | Barrier coefficient 8 (budget `4m`) improved to every `κ>1` (budget `κm`); an explicit annular construction shows no coefficient below 1 works, so the constant is optimal. |
