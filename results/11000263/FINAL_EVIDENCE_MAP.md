@@ -37,7 +37,7 @@ was otherwise changed.
 | Termination and honest upper/lower bounds | Section 6 gives the strict defect-rank/multiset measure and inverse closure; Section 7 gives the ideal exact sequence | `uniform-defect-propagation-certificate.json`, field `termination`; `MATH_STATE.json`, claim `C-PRINCIPAL-BOUND-REDUCTION` |
 | Explicit uniform dimension bound | Equations (2)-(3) and Section 7 prove \(\dim Q_n\leq(2n-1)!!+(n!/3)^2\); the BMW quotient and nonzero \(J_n\) give the honest lower bound \((2n-1)!!+1\) | `uniform-defect-propagation-certificate.json`, field `theorem`; the two current baseline replays below |
 | Exact ranks 4-6 and all indexed critical templates | Section 8 separates exact characteristic-zero anchors from the finite-fiber replay and states that the all-rank conclusion is symbolic | `uniform-defect-propagation-certificate.json`, fields `exact_q4_base`, `q5_replay`, `q6_replay`, and `critical_pair_replay`; `q6-propagation-certificate.json` |
-| Surviving BMW projection and nonzero \(X_3\) kernel | Section 7 proves \(Q_n/J_n\cong\operatorname{BMW}_n(q,-q^3)\), while the Burau model has nonzero rank-one \(X_3\) and \(X_4=0\) for both repairs | `research/final_certification/baseline_replay/twist-extension-verification.json`; `twist-extension-modular-verification.json`; immutable `../../supervisor-evidence/11000263/TEACHER_REQUEST_COMPLETION.md` |
+| Surviving BMW projection and nonzero \(X_3\) kernel | Section 7 proves \(Q_n/J_n\cong\operatorname{BMW}_n(q,-q^3)\), while the Burau model has nonzero rank-one \(X_3\) and \(X_4=0\) for both repairs | `research/final_certification/baseline_replay/twist-extension-verification.json`; `twist-extension-modular-verification.json` |
 
 The exact certificate hashes are:
 

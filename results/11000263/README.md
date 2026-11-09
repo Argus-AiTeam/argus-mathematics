@@ -66,8 +66,3 @@ The universal induction is closed by exact rank-four principal bases, direct ran
 | `uniform-defect-propagation-certificate.json` | Certificate for uniform defect propagation |
 | `verify_q6_propagation.py` | Rank-6 defect propagation verifier |
 | `q6-propagation-certificate.json` | Rank-6 propagation certificate |
-| `TEACHER_REQUEST_COMPLETION.md` | Proved/open boundary for Bigelow's emailed request |
-| `COVER_EMAIL_TO_BIGELOW.md` | Draft message requesting convention confirmation |
-| `BIGELOW_ZIPPER_TWIST_SUBMISSION_2026-09-03.zip` | Paper, source, checks, and receipts |
-| `bigelow-11000263-complete-logs.zip` | Redacted public research and review event logs |
-| `bigelow-11000263-log-manifest.json` | Session labels, event counts, and hashes |
