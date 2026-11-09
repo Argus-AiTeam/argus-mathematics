@@ -1,6 +1,6 @@
 # 215. Canonical $`O(3)`$ continuum limit and exact $`O(4)`$ mass asymptotics.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 # 237. The three-quarter exponent for honeycomb self-avoiding walk.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

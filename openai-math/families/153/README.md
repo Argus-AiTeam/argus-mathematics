@@ -1,6 +1,6 @@
 # 153. Arithmetic classification and non-Pisot singularity for Bernoulli convolutions.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

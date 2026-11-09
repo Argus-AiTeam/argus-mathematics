@@ -1,6 +1,6 @@
 # 017. The irrationality exponent of <i>π</i> is 2.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

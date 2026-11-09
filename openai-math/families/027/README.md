@@ -1,6 +1,6 @@
 # 027. Potential integral density on curve character varieties.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

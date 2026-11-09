@@ -1,6 +1,6 @@
 # 141. Existential–universal real sentences in the counting hierarchy.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

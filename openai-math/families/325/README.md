@@ -1,6 +1,6 @@
 # 325. The complete Crouzeix conjecture.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

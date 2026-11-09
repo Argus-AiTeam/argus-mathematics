@@ -1,6 +1,6 @@
 # 345. Infinitely many closed geodesics on Riemannian spheres and closed three-manifolds.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

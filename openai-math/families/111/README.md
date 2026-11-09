@@ -1,6 +1,6 @@
 # 111. One-sample matroid prophet inequalities against an almighty adversary.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

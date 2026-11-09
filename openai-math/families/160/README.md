@@ -1,6 +1,6 @@
 # 160. Superexponential van der Waerden numbers.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

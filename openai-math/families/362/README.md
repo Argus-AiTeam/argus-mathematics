@@ -1,6 +1,6 @@
 # 362. Global smoothness for relativistic Vlasov–Maxwell.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

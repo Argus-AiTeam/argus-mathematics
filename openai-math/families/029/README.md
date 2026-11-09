@@ -1,6 +1,6 @@
 # 029. Primitive roots for every admissible integer base.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

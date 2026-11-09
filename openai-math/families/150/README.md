@@ -1,6 +1,6 @@
 # 150. Weak mixing of triangular billiards with an irrational angle.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

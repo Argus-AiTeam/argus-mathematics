@@ -1,6 +1,6 @@
 # 133. The computational complexity of Weisfeiler–Leman refinement.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

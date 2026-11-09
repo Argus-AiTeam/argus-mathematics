@@ -1,6 +1,6 @@
 # 232. Gaussian fields and interfaces for triangular-lattice Lipschitz heights.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 # 168. Combinatorial invariance of Kazhdan–Lusztig polynomials.
 
-**Result:** nothing substantive.
+**Category:** no substantive output.
 
 Main files:
 

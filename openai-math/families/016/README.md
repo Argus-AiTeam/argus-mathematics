@@ -1,6 +1,6 @@
 # 016. Zilber–Pink in abelian varieties and the Siegel threefold.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 132. A superquadratic separation of sensitivity and block sensitivity.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

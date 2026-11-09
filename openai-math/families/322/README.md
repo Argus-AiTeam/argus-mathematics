@@ -1,6 +1,6 @@
 # 322. Tingley’s sphere-isometry problem.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

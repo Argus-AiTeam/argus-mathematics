@@ -1,6 +1,6 @@
 # 143. Hilbert's sixteenth problem: uniform bounds for limit cycles.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

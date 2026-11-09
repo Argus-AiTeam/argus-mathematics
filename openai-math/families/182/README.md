@@ -1,6 +1,6 @@
 # 182. Power savings for intersective polynomial differences and prime arguments.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

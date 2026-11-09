@@ -1,6 +1,6 @@
 # 003. The quasi-Riemann hypothesis.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

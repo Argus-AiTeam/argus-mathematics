@@ -1,6 +1,6 @@
 # 335. Gromov’s integral scalar-curvature bound for simplicial volume.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

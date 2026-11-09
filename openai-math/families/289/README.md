@@ -1,6 +1,6 @@
 # 289. Strong Kadison–Kastler stability and its spatial boundaries.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

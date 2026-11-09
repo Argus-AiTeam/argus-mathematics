@@ -1,6 +1,6 @@
 # 375. De Giorgi's conjecture in dimension eight.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 191. A power improvement in the Heilbronn triangle lower bound.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

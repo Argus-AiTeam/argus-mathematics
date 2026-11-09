@@ -1,6 +1,6 @@
 # 297. A ZFC counterexample to Naimark's problem.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

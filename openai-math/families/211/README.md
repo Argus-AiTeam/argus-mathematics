@@ -1,6 +1,6 @@
 # 211. The geometric phase diagram, diffusion, and spectra of random planar maps.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

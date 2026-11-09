@@ -1,6 +1,6 @@
 # 347. Counterexamples to stable-Morse and strong Arnold fixed-point bounds.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

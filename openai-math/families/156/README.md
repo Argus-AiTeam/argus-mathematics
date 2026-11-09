@@ -1,6 +1,6 @@
 # 156. Borsuk's conjecture fails in dimension nine.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

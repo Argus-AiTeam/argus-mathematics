@@ -1,6 +1,6 @@
 # 185. Counterexamples to infinite matroid intersection and packing/covering.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 004. Hilbert’s tenth problem over ℚ.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

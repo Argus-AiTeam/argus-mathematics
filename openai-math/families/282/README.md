@@ -1,6 +1,6 @@
 # 282. From scale symmetry to local conformal symmetry in four-dimensional QFT.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

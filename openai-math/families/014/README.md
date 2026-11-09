@@ -1,6 +1,6 @@
 # 014. Restricted geometric Langlands, global Arthur enhancements, and generic Ramanujan.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 # 285. Counterexamples to Baum–Connes and Kadison–Kaplansky.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

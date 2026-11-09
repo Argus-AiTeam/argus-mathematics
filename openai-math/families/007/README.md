@@ -1,6 +1,6 @@
 # 007. Ordinary two-point correlations and the corrected Elliott conjecture.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

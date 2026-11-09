@@ -1,6 +1,6 @@
 # 030. Modularity of elliptic curves over imaginary quadratic fields.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

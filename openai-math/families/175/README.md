@@ -1,6 +1,6 @@
 # 175. Talagrand’s expectation thresholds, discrete convexity, and graph decompositions.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

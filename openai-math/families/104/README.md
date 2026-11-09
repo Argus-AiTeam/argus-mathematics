@@ -1,6 +1,6 @@
 # 104. Quasipolynomial algorithms for mean-payoff, stochastic and parity games.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

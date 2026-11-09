@@ -1,6 +1,6 @@
 # 265. Area laws and tensor networks for two-dimensional gapped systems.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

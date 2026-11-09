@@ -1,6 +1,6 @@
 # 184. Correspondence coloring with a fixed forbidden subgraph.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

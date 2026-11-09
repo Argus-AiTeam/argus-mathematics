@@ -1,6 +1,6 @@
 # 094. Subpolynomial dimension reduction in <i>L</i><sub><i>p</i></sub>.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

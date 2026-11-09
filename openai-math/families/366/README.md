@@ -1,6 +1,6 @@
 # 366. The planar Mumford–Shah regularity conjecture and local weak-<i>L</i><sup>4</sup> gradient bounds.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

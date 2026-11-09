@@ -1,6 +1,6 @@
 # 075. The $`L\log L`$ Fourier-convergence conjecture.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

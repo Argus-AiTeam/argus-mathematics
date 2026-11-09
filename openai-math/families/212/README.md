@@ -1,6 +1,6 @@
 # 212. Planar first-passage geometry and the absence of bigeodesics.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

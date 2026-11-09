@@ -1,6 +1,6 @@
 # 296. The generator problem for finite factors.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 354. The isoperimetric profile of the cubic three-torus.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -20,7 +20,7 @@
 
 | 部分 | 内容 | 入口 |
 | :--- | :--- | :--- |
-| **[`openai-math/`](openai-math/)** | 用 Argus 处理 OpenAI [`openai/math`](https://github.com/openai/math) 论文集的全部 373 个结果家族（721 篇论文），每条结论都对照原文核查过。其中 **134 个家族**对 OpenAI 原文结论有改进，有 55 个家族的关键一步经过独立验证。没有发现 OpenAI 论文中的数学错误。 | [报告](openai-math/README.zh-CN.md) · [Report](openai-math/README.md) · [家族索引](openai-math/INDEX.md) |
+| **[`openai-math/`](openai-math/)** | 用 Argus 处理 OpenAI [`openai/math`](https://github.com/openai/math) 论文集的全部 373 个结果家族（721 篇论文），每条结论都对照原文核查过。结果分三类：**改进**，134 个家族对 OpenAI 原文结论有改进，其中 55 个家族的关键一步经过独立验证；**挑错**，找到 3 处小问题，没有数学错误；**复核**，229 个家族独立复核了 OpenAI 的结果。 | [报告](openai-math/README.zh-CN.md) · [Report](openai-math/README.md) · [家族索引](openai-math/INDEX.md) |
 | **[`open-problems/`](open-problems/)** | 84 个关于开放问题和猜想的成果包，每个包都有技术报告（PDF + TeX），以及证书或验证脚本。 | [目录](open-problems/README.zh-CN.md) · [Catalog](open-problems/README.md) · [`results.json`](open-problems/results.json) |
 
 ## OpenAI 论文集上的重点成果

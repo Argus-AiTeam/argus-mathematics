@@ -1,6 +1,6 @@
 # 183. Power savings for planar halving lines and <i>k</i>-sets.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

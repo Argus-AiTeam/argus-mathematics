@@ -1,6 +1,6 @@
 # 022. The weak inhomogeneous Duffin–Schaeffer conjecture.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

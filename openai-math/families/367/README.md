@@ -1,6 +1,6 @@
 # 367. The critical dimension for the one-phase Bernoulli problem.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

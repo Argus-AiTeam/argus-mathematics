@@ -1,6 +1,6 @@
 # 166. The higher-dimensional Erdős distinct-distances conjecture.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

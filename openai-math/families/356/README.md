@@ -1,6 +1,6 @@
 # 356. Gigli’s characterization of Alexandrov curvature.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

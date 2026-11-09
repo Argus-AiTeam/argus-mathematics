@@ -1,6 +1,6 @@
 # 291. Cuntz comparison, nuclear dimension, and equivariant Jiang–Su stability.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

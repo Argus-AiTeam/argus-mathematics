@@ -1,6 +1,6 @@
 # 242. Single-fold Diophantine representations and undecidability under an at-most-one-solution promise.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

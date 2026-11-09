@@ -1,6 +1,6 @@
 # 180. Barnette’s Hamiltonian-cycle conjecture.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

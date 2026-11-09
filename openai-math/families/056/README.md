@@ -1,6 +1,6 @@
 # 056. Termination of projective and Kähler fourfold minimal model programs.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

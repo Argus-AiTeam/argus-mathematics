@@ -1,6 +1,6 @@
 # 129. Exponential state costs for two-way automata.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

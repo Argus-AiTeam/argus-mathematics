@@ -1,6 +1,6 @@
 # 302. Radius of comparison equals half the mean dimension.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

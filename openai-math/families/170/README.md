@@ -1,6 +1,6 @@
 # 170. Sharp logarithmic exponents for off-diagonal Ramsey numbers.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

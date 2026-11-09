@@ -1,6 +1,6 @@
 # 286. Rigidity and arithmetic of lattice von Neumann algebras.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

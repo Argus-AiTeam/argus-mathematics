@@ -1,6 +1,6 @@
 # 115. Sampling and counting contingency tables with arbitrary margins.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

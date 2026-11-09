@@ -1,6 +1,6 @@
 # 236. The exact factor-of-IID threshold for free Ising spins on trees.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 # 053. A counterexample to Pixton completeness in Chow.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

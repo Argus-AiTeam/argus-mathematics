@@ -1,6 +1,6 @@
 # 069. Global quantum geometric Langlands at irrational level.
 
-**Result:** nothing substantive.
+**Category:** no substantive output.
 
 - `first-pass/`: Argus first-pass drafts (proof graph `MATH_STATE.json`, reports, Lean, verifiers).
 

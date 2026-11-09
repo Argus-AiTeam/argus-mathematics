@@ -1,6 +1,6 @@
 # 225. Gaussian free field limits throughout the balanced six-vertex regime.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

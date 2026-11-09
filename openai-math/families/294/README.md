@@ -1,6 +1,6 @@
 # 294. Kaplansky's quasitrace conjecture and failure of tensor-product stable finiteness.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

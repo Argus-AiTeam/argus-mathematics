@@ -1,6 +1,6 @@
 # 040. Bloch’s conjecture for complex surfaces.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 243. Separating choiceless counting from polynomial time and witnessed choice.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 278. Failure of Kohn–Sham ensemble representation.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

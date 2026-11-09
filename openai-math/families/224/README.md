@@ -1,6 +1,6 @@
 # 224. Critical and quenched near-critical universality for Poisson–Voronoi percolation.
 
-**Result:** nothing substantive.
+**Category:** no substantive output.
 
 Main files:
 

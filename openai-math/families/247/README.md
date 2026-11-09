@@ -1,6 +1,6 @@
 # 247. An infinite finitely presented residually finite 2-group and a finitely presented nil algebra.
 
-**Result:** issue in the OpenAI manuscript.
+**Category:** error found in the OpenAI manuscript.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

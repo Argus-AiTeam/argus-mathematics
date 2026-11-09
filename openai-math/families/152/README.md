@@ -1,6 +1,6 @@
 # 152. Zero entropy does not guarantee a smooth positive-volume model.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

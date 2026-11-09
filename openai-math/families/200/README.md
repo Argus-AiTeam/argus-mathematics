@@ -1,6 +1,6 @@
 # 200. Eisenbud–Green–Harris and lex-plus-powers.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

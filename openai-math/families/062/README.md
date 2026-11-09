@@ -1,6 +1,6 @@
 # 062. Projective contact classification and the LeBrun–Salamon conjecture.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

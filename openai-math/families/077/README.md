@@ -1,6 +1,6 @@
 # 077. Fourier restriction for positively curved surfaces.
 
-**Result:** nothing substantive.
+**Category:** no substantive output.
 
 Main files:
 

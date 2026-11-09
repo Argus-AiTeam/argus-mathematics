@@ -1,6 +1,6 @@
 # 227. Critical SK autocorrelation processes and dynamics across the temperature transition.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 # 342. Donaldson's tamed-to-compatible conjecture.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

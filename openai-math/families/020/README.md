@@ -1,6 +1,6 @@
 # 020. Squarefree quartics and power-free polynomial values.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

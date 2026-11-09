@@ -1,6 +1,6 @@
 # 276. Classical capacity of generalized amplitude damping.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 054. Irrational cubic fourfolds with Hodge-theoretic and categorical K3 associations.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

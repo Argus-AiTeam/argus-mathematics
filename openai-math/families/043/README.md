@@ -1,6 +1,6 @@
 # 043. <i>P</i> = <i>W</i> for fixed-determinant SL<sub><i>n</i></sub> moduli spaces.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 270. Threshold and positive-energy bound states of the BFSS matrix model.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

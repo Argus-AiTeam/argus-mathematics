@@ -1,6 +1,6 @@
 # 120. Almost-linear-time exact matching and prescribed-degree factors in general graphs.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

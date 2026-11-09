@@ -1,6 +1,6 @@
 # 229. Exact three- and four-state reconstruction thresholds and four-state tree capacity.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

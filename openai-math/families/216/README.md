@@ -1,6 +1,6 @@
 # 216. Critical and near-critical XY scaling and BKT universality.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

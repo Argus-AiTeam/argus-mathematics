@@ -1,6 +1,6 @@
 # 252. A torsion-free hyperbolic group that is neither residually finite nor linear over any field.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

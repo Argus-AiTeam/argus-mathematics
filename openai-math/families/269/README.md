@@ -1,6 +1,6 @@
 # 269. Uniform Laughlin gap and stability under bounded scalar disorder.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

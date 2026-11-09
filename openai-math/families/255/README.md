@@ -1,6 +1,6 @@
 # 255. Quasi-isometric recognition of virtually polycyclic groups.
 
-**Result:** nothing substantive.
+**Category:** no substantive output.
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 041. Hyperkähler SYZ and projective-space bases.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

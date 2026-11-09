@@ -1,6 +1,6 @@
 # 087. The Mahler conjectures, functional inequalities and polar-product symplectic width.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 # 332. Metric Markov cotype of <i>ℓ</i><sub>1</sub> and Hilbert-space Lipschitz extension.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

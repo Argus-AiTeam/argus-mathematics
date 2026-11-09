@@ -1,6 +1,6 @@
 # 179. The circulant Hadamard and Barker-sequence conjectures.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 # 136. A quasilinear PCP theorem for PPAD.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

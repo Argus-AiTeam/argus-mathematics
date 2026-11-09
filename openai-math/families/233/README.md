@@ -1,6 +1,6 @@
 # 233. The joint critical Ashkin–Teller current limit.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

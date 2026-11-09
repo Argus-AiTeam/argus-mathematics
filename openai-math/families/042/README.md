@@ -1,6 +1,6 @@
 # 042. Oka classification for minimal compact complex surfaces: Kodaira dimension zero and class VII.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

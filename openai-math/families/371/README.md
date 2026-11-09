@@ -1,6 +1,6 @@
 # 371. Stable blowup for the defocusing Schrödinger equation.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

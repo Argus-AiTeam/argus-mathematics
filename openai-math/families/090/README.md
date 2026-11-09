@@ -1,6 +1,6 @@
 # 090. Triangular-lattice optimality, long-range Riesz and Coulomb energies, and spherical logarithmic energy.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

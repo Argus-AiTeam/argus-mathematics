@@ -1,6 +1,6 @@
 # 262. Sharp finite-matrix Lieb–Thirring inequalities and all equality cases.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

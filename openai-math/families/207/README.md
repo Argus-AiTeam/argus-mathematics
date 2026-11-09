@@ -1,6 +1,6 @@
 # 207. The ℓ¹-Bass conjecture for all discrete groups.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 337. Sharp Cartan–Hadamard isoperimetry and rigidity.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

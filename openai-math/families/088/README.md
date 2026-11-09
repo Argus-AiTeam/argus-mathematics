@@ -1,6 +1,6 @@
 # 088. Sharp projection-body inequalities and a counterexample to simplex maximization.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

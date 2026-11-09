@@ -1,6 +1,6 @@
 # 110. Optimal-order randomized <i>k</i>-server on arbitrary metrics.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

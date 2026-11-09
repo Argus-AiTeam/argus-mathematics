@@ -1,6 +1,6 @@
 # 157. Graph coloring, clique minors, and Colin de Verdière invariants.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

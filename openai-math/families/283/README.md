@@ -1,6 +1,6 @@
 # 283. Polynomial-time unitary synthesis from a Boolean oracle.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

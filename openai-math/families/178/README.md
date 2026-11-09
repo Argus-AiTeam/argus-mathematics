@@ -1,6 +1,6 @@
 # 178. Deterministic nonbipartite Ramanujan graphs in every fixed degree.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

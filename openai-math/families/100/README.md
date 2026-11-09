@@ -1,6 +1,6 @@
 # 100. Cylinder coverings below the half-area bound.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

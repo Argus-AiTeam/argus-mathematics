@@ -1,6 +1,6 @@
 # 114. Approximate counting of common integer polymatroid bases.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

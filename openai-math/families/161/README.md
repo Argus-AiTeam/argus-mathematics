@@ -1,6 +1,6 @@
 # 161. Counterexamples to Sidorenko’s conjecture and the forcing conjecture.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

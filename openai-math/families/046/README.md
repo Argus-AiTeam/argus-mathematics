@@ -1,6 +1,6 @@
 # 046. Shafarevich counterexamples in dimension two and with large fundamental group.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

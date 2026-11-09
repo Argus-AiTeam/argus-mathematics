@@ -1,6 +1,6 @@
 # 360. Weak MTW curvature gives convexity and regular optimal transport.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

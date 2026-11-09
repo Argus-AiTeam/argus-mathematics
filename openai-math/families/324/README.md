@@ -1,6 +1,6 @@
 # 324. Lipschitz equivalent Banach spaces need not be linearly isomorphic.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

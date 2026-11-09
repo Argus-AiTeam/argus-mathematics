@@ -1,6 +1,6 @@
 # 213. Critical percolation on every quasi-transitive graph.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

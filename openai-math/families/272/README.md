@@ -1,6 +1,6 @@
 # 272. Entanglement without distillable secret key.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

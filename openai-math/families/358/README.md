@@ -1,6 +1,6 @@
 # 358. A three-manifold without conjugate points or nonpositive curvature.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

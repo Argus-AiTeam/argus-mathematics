@@ -1,6 +1,6 @@
 # 002. The full BSD formula from low Selmer corank.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

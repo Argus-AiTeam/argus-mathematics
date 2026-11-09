@@ -1,6 +1,6 @@
 # 293. Invariant projections, hyperinvariant subspaces, and transitive algebras.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

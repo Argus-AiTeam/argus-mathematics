@@ -1,6 +1,6 @@
 # 118. Bin packing and unbounded configuration-LP gaps.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

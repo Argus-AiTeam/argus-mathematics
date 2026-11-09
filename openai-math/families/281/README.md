@@ -1,6 +1,6 @@
 # 281. QAOA attains the SK optimum in the thermodynamic-first limit.
 
-**Result:** nothing substantive.
+**Category:** no substantive output.
 
 Main files:
 

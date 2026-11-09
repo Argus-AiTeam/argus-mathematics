@@ -1,6 +1,6 @@
 # 165. The Harary–Hill and Zarankiewicz crossing-number formulas.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

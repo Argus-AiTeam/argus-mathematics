@@ -1,6 +1,6 @@
 # 327. Markov type characterizes superreflexivity.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

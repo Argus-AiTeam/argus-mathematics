@@ -1,6 +1,6 @@
 # 011. Prime-factor statistics of $`p-1`$.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

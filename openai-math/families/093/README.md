@@ -1,6 +1,6 @@
 # 093. Dimension-free logarithmic Sobolev inequality for subgaussian log-concave measures.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

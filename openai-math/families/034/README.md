@@ -1,6 +1,6 @@
 # 034. Log abundance for compact Kähler spaces under logarithmic Iitaka subadditivity.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

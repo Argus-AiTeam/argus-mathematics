@@ -1,6 +1,6 @@
 # 311. The Hovey–Strickland and Chai conjectures.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

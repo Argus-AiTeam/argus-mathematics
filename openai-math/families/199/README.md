@@ -1,6 +1,6 @@
 # 199. Counterexamples to Auslander–Reiten, Tachikawa and related homological conjectures.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

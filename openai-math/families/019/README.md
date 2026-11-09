@@ -1,6 +1,6 @@
 # 019. The local <i>p</i>-adic section conjecture and global consequences.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

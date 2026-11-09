@@ -1,6 +1,6 @@
 # 309. The Kervaire invariant problem at the prime three.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

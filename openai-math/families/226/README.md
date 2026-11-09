@@ -1,6 +1,6 @@
 # 226. The double-dimer loop ensemble converges to CLE<sub>4</sub>.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

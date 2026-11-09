@@ -1,6 +1,6 @@
 # 015. Torus-packet equidistribution in prime, quartic, and sextic degrees.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 # 353. Affine Bernstein rigidity through dimension nine and a smooth dimension-ten counterexample.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

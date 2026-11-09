@@ -1,6 +1,6 @@
 # 006. Goldfeld’s conjecture: densities and mean analytic rank.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

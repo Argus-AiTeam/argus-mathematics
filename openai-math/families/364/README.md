@@ -1,6 +1,6 @@
 # 364. Kinetic limits and fluctuations over the Boltzmann lifespan.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

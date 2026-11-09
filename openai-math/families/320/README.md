@@ -1,6 +1,6 @@
 # 320. Nonhomeomorphic closed aspherical four-manifolds.
 
-**Result:** issue in the OpenAI manuscript.
+**Category:** error found in the OpenAI manuscript.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

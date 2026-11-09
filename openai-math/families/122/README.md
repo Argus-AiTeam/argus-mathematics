@@ -1,6 +1,6 @@
 # 122. Quantitative trace-reconstruction bounds with a uniform decoder.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

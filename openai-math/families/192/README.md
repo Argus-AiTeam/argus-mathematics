@@ -1,6 +1,6 @@
 # 192. Boolean functions violate the square-root degree bound by arbitrary factors.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

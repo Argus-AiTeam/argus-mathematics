@@ -1,6 +1,6 @@
 # 206. Finite lattice representation and undecidability.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

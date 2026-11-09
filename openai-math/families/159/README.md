@@ -1,6 +1,6 @@
 # 159. Erdős’s reciprocal-sum conjecture and quasipolynomial Szemerédi bounds.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

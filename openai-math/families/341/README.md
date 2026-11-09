@@ -1,6 +1,6 @@
 # 341. Donaldson's hypersymplectic deformation conjecture.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

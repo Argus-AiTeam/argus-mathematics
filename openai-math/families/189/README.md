@@ -1,6 +1,6 @@
 # 189. Cycle–clique Ramsey numbers.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

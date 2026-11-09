@@ -1,6 +1,6 @@
 # 373. Nonattainment of the three-marginal Coulomb Monge problem.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

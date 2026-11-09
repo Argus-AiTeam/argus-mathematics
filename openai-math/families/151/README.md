@@ -1,6 +1,6 @@
 # 151. A <i>C</i><sup>1</sup> counterexample to the entropy conjecture.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

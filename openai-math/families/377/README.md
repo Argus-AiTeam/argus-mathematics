@@ -1,6 +1,6 @@
 # 377. Interior $`C^{1,\alpha}`$ regularity for infinity-harmonic functions.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

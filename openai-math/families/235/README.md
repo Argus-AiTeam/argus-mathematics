@@ -1,6 +1,6 @@
 # 235. Limiting random SAT thresholds, sharp variance and computability.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

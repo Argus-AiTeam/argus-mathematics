@@ -1,6 +1,6 @@
 # 124. Polynomial-time scheduling on three identical machines.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

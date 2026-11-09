@@ -1,6 +1,6 @@
 # 221. The Mézard–Parisi formula for diluted spin glasses.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

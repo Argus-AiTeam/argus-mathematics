@@ -1,6 +1,6 @@
 # 240. Shelah's eventual categoricity and the prescribed-threshold obstruction.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

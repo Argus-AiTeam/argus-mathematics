@@ -1,6 +1,6 @@
 # 144. Banach’s simple Lebesgue-spectrum problem.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

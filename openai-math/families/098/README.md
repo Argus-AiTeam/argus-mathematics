@@ -1,6 +1,6 @@
 # 098. Compact counterexamples to bi-Lipschitz dimension reduction.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

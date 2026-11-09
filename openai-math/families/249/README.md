@@ -1,6 +1,6 @@
 # 249. A finitely generated Eilenberg–Ganea counterexample.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

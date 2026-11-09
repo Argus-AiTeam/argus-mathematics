@@ -1,6 +1,6 @@
 # 284. The optimal quartic separation between randomized and quantum queries.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

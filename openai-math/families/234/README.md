@@ -1,6 +1,6 @@
 # 234. All-temperature pressure of orthogonally invariant Ising spin glasses.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

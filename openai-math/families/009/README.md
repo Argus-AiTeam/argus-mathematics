@@ -1,6 +1,6 @@
 # 009. Function-field reconstruction from Milnor K-theory and Galois data.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

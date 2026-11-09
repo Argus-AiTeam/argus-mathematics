@@ -1,6 +1,6 @@
 # 047. Zariski cancellation and affine fibrations over the complex numbers.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

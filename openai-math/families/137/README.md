@@ -1,6 +1,6 @@
 # 137. One-tape time simulation in two-fifths-power space.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

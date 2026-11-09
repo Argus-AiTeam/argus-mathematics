@@ -1,6 +1,6 @@
 # 301. Trace cones and Razak–Jacelon stabilization.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

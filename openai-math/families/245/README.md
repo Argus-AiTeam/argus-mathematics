@@ -1,6 +1,6 @@
 # 245. Weak normalization implies strong normalization in pure type systems.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

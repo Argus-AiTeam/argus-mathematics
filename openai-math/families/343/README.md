@@ -1,6 +1,6 @@
 # 343. Symplectic ball packing in higher dimensions.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

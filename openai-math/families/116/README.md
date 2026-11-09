@@ -1,6 +1,6 @@
 # 116. Uniform black-box noncommutative identity testing across characteristics.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

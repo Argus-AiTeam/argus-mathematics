@@ -1,6 +1,6 @@
 # 196. A counterexample to Kaplansky’s zero-divisor conjecture.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

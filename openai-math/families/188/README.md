@@ -1,6 +1,6 @@
 # 188. The sharp terminal leave in random triangle removal.
 
-**Result:** nothing substantive.
+**Category:** no substantive output.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

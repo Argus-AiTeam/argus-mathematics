@@ -1,6 +1,6 @@
 # 372. Global uniqueness in smooth isotropic elasticity.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

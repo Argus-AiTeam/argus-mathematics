@@ -1,6 +1,6 @@
 # 039. Nagata’s conjecture and maximal Seshadri constants.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

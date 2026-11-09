@@ -1,6 +1,6 @@
 # 363. Nonuniqueness with local conservation for the hard-sphere Boltzmann equation.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

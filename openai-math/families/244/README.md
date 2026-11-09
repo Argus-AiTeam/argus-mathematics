@@ -1,6 +1,6 @@
 # 244. The Partition Principle does not imply Choice.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

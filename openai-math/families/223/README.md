@@ -1,6 +1,6 @@
 # 223. Random-cluster interfaces: critical, disordered, thermal, and natural-time scaling.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

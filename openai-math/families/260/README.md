@@ -1,6 +1,6 @@
 # 260. Spacetime Penrose inequalities: enclosing area, charge, rotation, and anti-de Sitter extensions.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

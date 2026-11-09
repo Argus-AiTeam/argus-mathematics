@@ -1,6 +1,6 @@
 # 158. The Euclidean plane cannot be colored with five colors.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 365. Joint metric and connection recovery from one boundary patch.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

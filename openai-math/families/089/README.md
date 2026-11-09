@@ -1,6 +1,6 @@
 # 089. Bounded-distortion <i>L</i><sub>1</sub> embeddings of planar and bounded-treewidth graphs.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

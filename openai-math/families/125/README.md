@@ -1,6 +1,6 @@
 # 125. The metric <i>k</i>-median approximation threshold and recovery.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 # 263. The ionization and generalized ionization conjectures.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 186. Uniform influence and sharp thresholds for graph and hypergraph properties.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

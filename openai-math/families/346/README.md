@@ -1,6 +1,6 @@
 # 346. Sharp singular-set bounds for stationary integral varifolds.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

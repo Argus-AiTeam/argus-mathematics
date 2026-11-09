@@ -1,6 +1,6 @@
 # 370. The Lane–Emden and Hénon–Lane–Emden conjectures.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

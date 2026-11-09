@@ -1,6 +1,6 @@
 # 308. Finite Smith–Toda complexes at every height.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

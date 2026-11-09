@@ -1,6 +1,6 @@
 # 001. Milne’s rationality conjecture and algebraic specialization.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

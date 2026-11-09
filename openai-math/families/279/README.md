@@ -1,6 +1,6 @@
 # 279. Exact quantum factoring over a fixed finite gate set.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

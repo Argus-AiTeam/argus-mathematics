@@ -1,6 +1,6 @@
 # 203. Donovan's conjecture over fields and complete mixed-characteristic DVRs.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

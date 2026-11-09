@@ -1,6 +1,6 @@
 # 330. A uniformly discrete counterexample to bounded approximation in Lipschitz-free spaces.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

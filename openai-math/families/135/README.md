@@ -1,6 +1,6 @@
 # 135. Homogeneous depth-five lower bounds for iterated matrix multiplication.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

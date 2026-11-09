@@ -1,6 +1,6 @@
 # 271. Bloch's law, its lattice correction, and the spherical magnetization law.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

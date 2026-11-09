@@ -1,6 +1,6 @@
 # 348. Nonnegative-curvature Einstein classification and an <i>L</i><sup>2</sup> topological gap.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

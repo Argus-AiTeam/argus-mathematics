@@ -1,6 +1,6 @@
 # 256. Nonsingular systems of equations over arbitrary groups.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

@@ -1,6 +1,6 @@
 # 218. Conformal universality for weakly interacting and random-bond Ising models.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

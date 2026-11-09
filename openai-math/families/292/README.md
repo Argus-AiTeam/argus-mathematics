@@ -1,6 +1,6 @@
 # 292. Kirchberg's $`\mathcal O_2`$ norm-ultrapower embedding problem.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 - `first-pass/`: Argus first-pass drafts (proof graph `MATH_STATE.json`, reports, Lean, verifiers).
 

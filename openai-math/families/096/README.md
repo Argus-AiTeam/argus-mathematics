@@ -1,6 +1,6 @@
 # 096. The Gaussian propeller conjecture in every dimension.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

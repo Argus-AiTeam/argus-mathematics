@@ -1,6 +1,6 @@
 # 210. Foulkes' conjecture for sixth powers and quadratic stabilization.
 
-**Result:** improvement over the stated OpenAI result.
+**Category:** improvement over the stated OpenAI result.
 
 | Kind | Verdict | Claim | OpenAI baseline | Check |
 | :--- | :--- | :--- | :--- | :--- |

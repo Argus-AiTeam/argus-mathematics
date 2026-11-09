@@ -1,6 +1,6 @@
 # 303. Weak pure infiniteness and Cuntz-algebra absorption.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

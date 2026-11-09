@@ -1,6 +1,6 @@
 # 109. Integer multiplication below $`n\log n`$.
 
-**Result:** independent confirmation.
+**Category:** verification of the OpenAI result (no error, no improvement).
 
 Main files:
 

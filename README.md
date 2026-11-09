@@ -20,7 +20,7 @@
 
 | Collection | What it contains | Start here |
 | :--- | :--- | :--- |
-| **[`openai-math/`](openai-math/)** | Argus applied to all 373 result families of OpenAI's [`openai/math`](https://github.com/openai/math) collection (721 manuscripts). Every claim was verified against the source. **134 families** contain an improvement over OpenAI's stated result, 55 of them with the key step independently checked. No mathematical error in OpenAI's manuscripts was found. | [Report](openai-math/README.md) · [报告](openai-math/README.zh-CN.md) · [Family index](openai-math/INDEX.md) |
+| **[`openai-math/`](openai-math/)** | Argus applied to all 373 result families of OpenAI's [`openai/math`](https://github.com/openai/math) collection (721 manuscripts). Every claim was verified against the source. Three categories: **improvements** over OpenAI's stated results in 134 families (55 with the key step independently checked); **errors found**: 3 minor issues, no mathematical error; **verification** of OpenAI's results in 229 families. | [Report](openai-math/README.md) · [报告](openai-math/README.zh-CN.md) · [Family index](openai-math/INDEX.md) |
 | **[`open-problems/`](open-problems/)** | 84 result packages on open problems and conjectures. Each package has a technical report (PDF + TeX) and certificates or verifiers. | [Catalog](open-problems/README.md) · [目录](open-problems/README.zh-CN.md) · [`results.json`](open-problems/results.json) |
 
 ## Headline results on the OpenAI collection

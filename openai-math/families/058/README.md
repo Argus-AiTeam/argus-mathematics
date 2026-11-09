@@ -1,6 +1,6 @@
 # 058. Semialgebraic universal covers and bounded domains.
 
-**Result:** nothing substantive.
+**Category:** no substantive output.
 
 Main files:
 
