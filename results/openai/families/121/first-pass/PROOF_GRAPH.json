@@ -1,0 +1,236 @@
+{
+  "goal": "C9000121",
+  "routes": {},
+  "nodes": {
+    "C9000121": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 121 (Almost-linear approximation of edit distance.; papers: An Almost-Linear Approximation Scheme for Edit Distance; Lean status: Partially/Comparator formalized (lean/docs/121.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C121_REFINEMENT"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C121_REFINEMENT": {
+      "statement": "For every fixed complete good integer seed U in the manuscript's large-input branch, the constructed d_S has deterministic lower bound c/a, expected positive excess at most c/ell, and deterministic zero at zero cost.",
+      "status": "open",
+      "depends_on": [
+        "C121_L1_REFINEMENT",
+        "C121_REF_GROUP"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/refinement/statement_fidelity.md",
+        "research/refinement/exact_certificate.json",
+        "research/refinement/verify.py"
+      ]
+    },
+    "C121_REF_INVARIANTS": {
+      "statement": "Initial cones, Bellman propagation, and the refined update preserve c/a and |z|, monotonicity, spatial regularity, and deterministic zero at zero cost.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/04-cones.tex",
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/05-bands.tex",
+        "research/refinement/statement_fidelity.md"
+      ]
+    },
+    "C121_REF_COMPARISON": {
+      "statement": "The fixed exact-alignment comparison tree has the asserted curvature and cost bounds and retains its comparison action in every required predicted band.",
+      "status": "open",
+      "depends_on": [
+        "C121_REF_INVARIANTS"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/06-comparison.tex",
+        "research/refinement/statement_fidelity.md"
+      ]
+    },
+    "C121_REF_GROUP": {
+      "statement": "Shared group sampling gives the stated uniform selected-action inequality, conditional on complete child tables.",
+      "status": "open",
+      "depends_on": [
+        "C121_REF_INVARIANTS"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/05-bands.tex",
+        "research/refinement/statement_fidelity.md"
+      ]
+    },
+    "C121_REF_CONDITIONING": {
+      "statement": "For arbitrary fixed good U, complete strict-descendant tables are independent of fresh current-parent keyed streams; lazy exposure realizes the prescribed conditional laws.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/10-work.tex",
+        "research/refinement/statement_fidelity.md"
+      ]
+    },
+    "C121_REF_REGRET": {
+      "statement": "The fixed-block entropy estimate and whole-band first crossing imply the manuscript's conditional node-regret bound.",
+      "status": "open",
+      "depends_on": [
+        "C121_REF_COMPARISON",
+        "C121_REF_GROUP",
+        "C121_REF_CONDITIONING",
+        "C121_REF_ENTROPY",
+        "C121_DEFECT_TRANSFER"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/07-regret.tex",
+        "research/refinement/statement_fidelity.md",
+        "research/refinement/Main.lean"
+      ]
+    },
+    "C121_REF_TELESCOPE": {
+      "statement": "Tree and time telescoping of clipped node regrets, with the actual large-input parameters, yields expected positive excess at most c/ell.",
+      "status": "open",
+      "depends_on": [
+        "C121_REF_REGRET",
+        "C121_ROOT_TELESCOPE",
+        "C121_PARAMETER_CERTIFICATE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/08-accuracy.tex",
+        "research/refinement/statement_fidelity.md",
+        "research/refinement/exact_certificate.json"
+      ]
+    },
+    "C121_REF_EXECUTION": {
+      "statement": "The finite rational optimizer, keyed sampler, and local rules execute the defined refinement on every seed.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/09-numerics.tex",
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/10-work.tex",
+        "research/refinement/statement_fidelity.md"
+      ]
+    },
+    "C121_DEFECT_TRANSFER": {
+      "statement": "For every antitone action history and clipped update, the complete-band first crossing transfers augmented prefix regret plus actual nonnegative additive oracle defects to accumulated clipped parent regret, without a coarse cap or success-event assumptions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/refinement/Main.lean",
+        "research/refinement/statement_fidelity.md",
+        "research/refinement/certificates/C121_DEFECT_TRANSFER-fe11c907fbfefff1.json"
+      ]
+    },
+    "C121_REF_ENTROPY": {
+      "statement": "The concrete finite-band normalized costs satisfy fixed block masses and the within-block decrement range bound; their entropy mixtures obey the required conditional augmented-action prefix regret inequality.",
+      "status": "open",
+      "depends_on": [
+        "C121_REF_INVARIANTS",
+        "C121_REF_COMPARISON"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/refinement/statement_fidelity.md",
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/07-regret.tex"
+      ]
+    },
+    "C121_ROOT_TELESCOPE": {
+      "statement": "Exact tree telescoping and monotone root estimates transfer expected accumulated node budgets to final positive excess by time averaging.",
+      "status": "open",
+      "depends_on": [
+        "C121_REF_INVARIANTS",
+        "C121_REF_COMPARISON"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/refinement/Main.lean",
+        "research/refinement/statement_fidelity.md",
+        "research/refinement/certificates/C121_DEFECT_TRANSFER-fe11c907fbfefff1.json"
+      ]
+    },
+    "C121_PARAMETER_CERTIFICATE": {
+      "statement": "For every actual large-input parameter choice, the reconstructed five-term baseline is at most 5/(8 ell), and the original selector's normalized defect tax is at most 1/(8 ell).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/refinement/statement_fidelity.md",
+        "research/refinement/exact_certificate.json",
+        "research/refinement/verify.py"
+      ]
+    },
+    "C121_L1_REFINEMENT": {
+      "statement": "For every fixed complete good integer seed, genuine whole-cell group selectors with the prescribed online conditional marginals satisfy E[(d_S-D)+] <= E0 D + Defect, with the original deterministic lower and zero-cost bounds; Defect <= 3D/(8 ell) implies expected excess <= D/ell.",
+      "status": "open",
+      "depends_on": [
+        "C121_DEFECT_TRANSFER",
+        "C121_REF_INVARIANTS",
+        "C121_REF_COMPARISON",
+        "C121_REF_ENTROPY",
+        "C121_REF_CONDITIONING",
+        "C121_ROOT_TELESCOPE",
+        "C121_PARAMETER_CERTIFICATE",
+        "C121_REF_EXECUTION"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/refinement/statement_fidelity.md",
+        "research/refinement/exact_certificate.json",
+        "research/refinement/verify.py"
+      ]
+    },
+    "C121_MAIN": {
+      "statement": "The uniform algorithm returns a (1+epsilon) multiplicative edit-distance estimate with probability at least 2/3 and worst-case expected N^(1+o(1)) work for each fixed rational epsilon.",
+      "status": "open",
+      "depends_on": [
+        "C121_INITIAL_SEED",
+        "C121_REFINEMENT",
+        "C121_SEED_AMPLIFICATION",
+        "C121_EXPECTED_WORK"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/01-introduction.tex"
+      ]
+    },
+    "C121_INITIAL_SEED": {
+      "statement": "The initial lazy integer table is simultaneously good with probability at least 0.99 and has the asserted conditional first-request cost on every seed outcome.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/03-seed.tex"
+      ]
+    },
+    "C121_SEED_AMPLIFICATION": {
+      "statement": "Conditional independent copies, integer median/clamping, and whole-domain union bounds improve the seed factor and yield the final probability guarantee from refinement.",
+      "status": "open",
+      "depends_on": [
+        "C121_REFINEMENT",
+        "C121_INITIAL_SEED"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/08-accuracy.tex"
+      ]
+    },
+    "C121_EXPECTED_WORK": {
+      "statement": "The deterministic dependency count and conditional first-request costs yield the asserted expected almost-linear work and polynomial space without conditioning on correctness.",
+      "status": "open",
+      "depends_on": [
+        "C121_INITIAL_SEED",
+        "C121_REF_EXECUTION"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections/10-work.tex"
+      ]
+    }
+  }
+}

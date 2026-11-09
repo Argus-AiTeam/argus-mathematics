@@ -1,0 +1,129 @@
+{
+  "goal": "C9000329",
+  "routes": [
+    {
+      "name": "R_SPARSE",
+      "status": "parked",
+      "reason": "Superseded by the version carrying the checked formal source, not a mathematical failure.",
+      "evidence": "research/sparse_profile/report.md"
+    },
+    {
+      "name": "R_SPARSE_FORMAL",
+      "status": "current",
+      "evidence": "research/sparse_profile/Main.lean"
+    }
+  ],
+  "nodes": {
+    "C9000329": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 329 (A counterexample to metric-entropy duality.; papers: Counterexamples to the duality conjecture for metric entropy; Lean status: Partially/Comparator formalized (lean/docs/329.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_SPARSE_CORE",
+        "C_SPARSE_SIGNED",
+        "C_SPARSE_ENTROPY"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "M_LOG_PROFILE": {
+      "statement": "The staged logarithmic profile has normalized positive ball weights and dilation loss at most log(3)/log(H+1).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    },
+    "M_DENSE_COMPRESSION": {
+      "statement": "The staged compression proposition and upstream implementation encode all H radii, with coefficient-independent positive list cardinality at most u*q^(H*s)*(1+s*2^u/theta)^(H*s*2^u).",
+      "status": "open",
+      "depends_on": ["M_LOG_PROFILE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    },
+    "M_ROBUST_DIRECTIONS": {
+      "statement": "For p>max(H,H^2*u^(2H)), u=ceil(2*H*D_H/theta), every nonzero symmetric H-linear form has a large retained direction set on whose H-tuples all evaluations are nonzero, including repeated indices.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    },
+    "M_GRAPH_SEPARATION": {
+      "statement": "The staged degree-H contraction partitions have p^D_H rows and at most p^D_(H-1) labels per partition; each distinct pair has a retained-set graph distance greater than H.",
+      "status": "open",
+      "depends_on": ["M_ROBUST_DIRECTIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    },
+    "M_MATRIX_BODY": {
+      "statement": "Separated rows and an epsilon signed column approximation list of size M give N(K,L)>=|X| and N(Lpolar,(6*epsilon+2*t)*Kpolar)<=M, including full-dimensional thickening.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    },
+    "M_ORIGINAL_SIGNED": {
+      "statement": "The staged signed compression corollary gives a list of at most Q^2 functions with uniform error 6*theta and coefficient-ball clusters of image diameter at most 12*theta.",
+      "status": "open",
+      "depends_on": ["M_DENSE_COMPRESSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    },
+    "M_ORIGINAL_PARAMETERS": {
+      "statement": "Choosing r+H-1>8*b*H^2*s and then a prime exceeding max(H,H^2*u^(2H),exp(8*b*C/D_H)) makes both original entropy-ratio terms less than 1/(4*b).",
+      "status": "open",
+      "depends_on": ["M_DENSE_COMPRESSION", "M_GRAPH_SEPARATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    },
+    "M_MANUSCRIPT_MAIN": {
+      "statement": "For every real a,b>=1, the staged main theorem constructs a positive dimension n and an origin-symmetric convex body K in R^n, with L=[-1,1]^n, such that log N(K,L)>b*log N(Lpolar,a^(-1)*Kpolar).",
+      "status": "open",
+      "depends_on": ["M_MATRIX_BODY", "M_GRAPH_SEPARATION", "M_ORIGINAL_SIGNED", "M_ORIGINAL_PARAMETERS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    },
+    "C_SPARSE_PROFILE": {
+      "statement": "For 3^(k-1)<=H<3^k, all real normalized nonnegative radius weights have dilation loss at least 1/k, and equal masses at 3^l-1 attain 1/k.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md", "research/sparse_profile/Main.lean"]
+    },
+    "C_SPARSE_COMPRESSION": {
+      "statement": "Sparse-profile columns on arbitrary finite partition inputs admit a coefficient-independent positive approximation list with interval [-3*theta,theta] and cardinality <=u*q^(k*s)*(floor(s*2^u/theta)+1)^(k*s*2^u).",
+      "status": "open",
+      "depends_on": ["C_SPARSE_PROFILE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md", "research/sparse_profile/Main.lean"]
+    },
+    "C_SPARSE_CORE": {
+      "statement": "The universal real-weight minimax theorem and actual counted real-coefficient sparse partition compression theorem hold with no external mathematical assumptions replacing either proof.",
+      "status": "open",
+      "depends_on": ["C_SPARSE_PROFILE", "C_SPARSE_COMPRESSION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/sparse_profile/report.md",
+        "research/sparse_profile/Main.lean",
+        "research/sparse_profile/statement_fidelity.md",
+        "research/sparse_profile/certificates/C_SPARSE_CORE-4cd1f9daa1d309e9.json"
+      ],
+      "pending_obligation": "Independent statement-fidelity and publishable-significance review"
+    },
+    "C_SPARSE_SIGNED": {
+      "statement": "The positive sparse list yields a signed list of size <=Q^2 and error <=6*theta, coefficient-ball clusters of diameter <=12*theta, and the 38*theta polar covering bridge.",
+      "status": "open",
+      "depends_on": ["C_SPARSE_COMPRESSION", "M_MATRIX_BODY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    },
+    "C_SPARSE_ENTROPY": {
+      "statement": "Replacing only the column profile in the degree-H finite-field construction preserves row separation and gives leading entropy-ratio term 2*k*s*H/(r+H-1), with the prime chosen after all encoding costs.",
+      "status": "open",
+      "depends_on": ["C_SPARSE_CORE", "C_SPARSE_SIGNED", "M_GRAPH_SEPARATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_profile/report.md"]
+    }
+  }
+}

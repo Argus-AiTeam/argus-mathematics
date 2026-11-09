@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-L_MIDPOINT_SIGN-173c4ee685bd",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/370/first-pass/pressure-certificate/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/370/first-pass/pressure-certificate/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15663,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/370/first-pass/pressure-certificate/Main.lean",
+    "source_sha256": "cd14280d48d5d2fa342e7a1570f1924dc98caa784d4fc80fe556486f3d0cbec9",
+    "statement_fidelity": "families/370/first-pass/pressure-certificate/statement_fidelity.md",
+    "statement_fidelity_sha256": "2560ffa6d2e8216770a68cbcd7755223b28473fb83688351b45db8ff13009213",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/pressure-certificate/Main.lean",
+    "text": "import Mathlib\n\nopen MeasureTheory\n\nnamespace PressureCertificate\n\nnoncomputable def overlapProfile (L M r : ℝ) : ℝ :=\n  max 0 (min L (min M ((L + M) / 2 - r)))\n\ntheorem overlapProfile_antitone (L M : ℝ) :\n    Antitone (overlapProfile L M) := by\n  intro r s hrs\n  dsimp [overlapProfile]\n  exact max_le_max le_rfl\n    (min_le_min le_rfl (min_le_min le_rfl (by linarith)))\n\ntheorem paired_midpoint_sign (F : ℝ → ℝ) (h d : ℝ)\n    (hF : Antitone F) (hh : 0 ≤ h) :\n    0 ≤ d * (F |h - d| - F |h + d|) := by\n  by_cases hd : 0 ≤ d\n  · have habs : |h - d| ≤ |h + d| := by\n      rw [abs_of_nonneg (by linarith : 0 ≤ h + d)]\n      exact abs_le.mpr ⟨by linarith, by linarith⟩\n    exact mul_nonneg hd (sub_nonneg.mpr (hF habs))\n  · have hd' : d ≤ 0 := le_of_not_ge hd\n    have habs : |h + d| ≤ |h - d| := by\n      rw [abs_of_nonneg (by linarith : 0 ≤ h - d)]\n      exact abs_le.mpr ⟨by linarith, by linarith⟩\n    exact mul_nonneg_of_nonpos_of_nonpos hd'\n      (sub_nonpos.mpr (hF habs))\n\ntheorem midpoint_integral_sign (μ : Measure ℝ) (F k : ℝ → ℝ)\n    (d : ℝ) (hF : Antitone F)\n    (hk : ∀ h, 0 ≤ h → 0 ≤ k h)\n    (hs : ∀ᵐ h ∂μ, 0 ≤ h)\n    (_hint : Integrable\n      (fun h => k h * (F |h - d| - F |h + d|)) μ) :\n    0 ≤ d * ∫ h, k h * (F |h - d| - F |h + d|) ∂μ := by\n  have hnonneg :\n      0 ≤ ∫ h, d * (k h * (F |h - d| - F |h + d|)) ∂μ := by\n    apply integral_nonneg_of_ae\n    filter_upwards [hs] with h hh\n    have hproduct :=\n      mul_nonneg (hk h hh) (paired_midpoint_sign F h d hF hh)\n    simpa [mul_assoc, mul_left_comm, mul_comm] using hproduct\n  simpa only [integral_const_mul] using hnonneg\n\ntheorem weighted_endpoint_reduction (A BI BJ T cI cJ : ℝ)\n    (hcI : 0 ≤ cI) (hcJ : 0 ≤ cJ)\n    (hBI : 0 ≤ BI) (hBJ : 0 ≤ BJ)\n    (hbase : 2 * A - BI - BJ ≤ T) :\n    (cI + cJ) * A ≤\n      cI * BI + cJ * BJ + min cI cJ * T + |cI - cJ| * A := by\n  by_cases hc : cI ≤ cJ\n  · rw [min_eq_left hc, abs_of_nonpos (sub_nonpos.mpr hc)]\n    have h1 := mul_nonneg hcI (sub_nonneg.mpr hbase)\n    have h2 := mul_nonneg (sub_nonneg.mpr hc) hBJ\n    nlinarith\n  · have hc' : cJ ≤ cI := le_of_not_ge hc\n    rw [min_eq_right hc', abs_of_nonneg (sub_nonneg.mpr hc')]\n    have h1 := mul_nonneg hcJ (sub_nonneg.mpr hbase)\n    have h2 := mul_nonneg (sub_nonneg.mpr hc') hBI\n    nlinarith\n\nend PressureCertificate\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/pressure-certificate/statement_fidelity.md",
+    "text": "# Statement fidelity: interval geometry used by the pressure theorem\n\nClaim `L_MIDPOINT_SIGN` is the geometric sign and finite weighted-reduction\ncore, not the entire Riesz pressure theorem or the main PDE theorem.\n`Main.lean` uses Lean 4.31.0 and Mathlib; its declarations live in namespace\n`PressureCertificate`.\n\n`overlapProfile L M r` is\n`max 0 (min L (min M ((L+M)/2-r)))`. For positive interval lengths L,M and\nnonnegative r this is their overlap length when their centers are separated\nby r. `overlapProfile_antitone` proves that this formula is nonincreasing\non all real r, for all real L,M. It does not formalize the geometric\nidentification of that formula with overlap; that identification is proved\nin the mathematical report.\n\n`paired_midpoint_sign` quantifies over every real-valued antitone function\nF on the reals, every real separation d, and every h>=0. Its conclusion is\n`0 <= d * (F(abs(h-d)) - F(abs(h+d)))`. Neither d>=0 nor d=0 is assumed.\nThere is no assumption that the odd kernel is monotone. Substitution of\n`overlapProfile L M` supplies exactly the paired-overlap sign used after\nthe midpoint integration-by-parts identity.\n\n`midpoint_integral_sign` quantifies over every measure on the real line,\nreal separation d, antitone F, and real function k which is nonnegative\nfor h>=0. The measure must give full measure to h>=0. The paired function\n`k(h)*(F(abs(h-d))-F(abs(h+d)))` is assumed integrable. The conclusion is\nthat d times its integral is nonnegative. This explicitly includes an\nintegrability hypothesis; it does not interpret a divergent integral as\na finite endpoint defect. In the report, use Lebesgue measure restricted\nto the nonnegative half-line, the compactly supported overlap profile,\nand `k(h)=h*K(h)/(lambda^2+h^2)` with lambda>0. The conversion from the\ndouble interval integral to this paired integral is an analytic step\nproved in prose, not an additional claim about what Lean compiled.\n\n`weighted_endpoint_reduction` quantifies over six real scalars A, BI, BJ,\nT, cI, cJ. It assumes cI,cJ,BI,BJ>=0 and `2*A-BI-BJ<=T`, and concludes\n`(cI+cJ)*A <= cI*BI+cJ*BJ+min(cI,cJ)*T+abs(cI-cJ)*A`.\nFor two bounded positive-weight intervals these stand for the finite\nkernel integral, its two integrated endpoint averages, the directional\nterm, and the two component weights. No nonnegativity of A or T is\nneeded for the algebraic implication. Extended infinite integrals and\nthe zero-weight unbounded-interval case are not encoded as real scalars:\nthe report treats those using a pointwise nonnegative inequality.\n\nThe compiler checks these universal statements and their proofs. It\ndoes not check the report's cap differentiation, source-mass cone\nestimate, measurable layer integration, endpoint continuity, Riesz\npotential hypotheses, or dependence of analytic constants. Those\nremain explicit obligations for independent mathematical review.\n"
+  },
+  "subject": {
+    "content_hash": "8cf5af3cc3d097aa50f95162cc4da39d0ba32dadf2086273fe30cda68e612e94",
+    "kind": "claim",
+    "subject_id": "L_MIDPOINT_SIGN"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

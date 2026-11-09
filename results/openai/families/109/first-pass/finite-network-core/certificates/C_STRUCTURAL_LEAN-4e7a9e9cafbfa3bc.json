@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_STRUCTURAL_LEAN-2f5fddad49ff",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/109/first-pass/finite-network-core/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/109/first-pass/finite-network-core/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15448,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/109/first-pass/finite-network-core/Main.lean",
+    "source_sha256": "ae3be92a4c4d5cb595cf2d0033edc69a20bf1293b380728a8b282a32a9a2bfc5",
+    "statement_fidelity": "families/109/first-pass/finite-network-core/statement_fidelity.md",
+    "statement_fidelity_sha256": "977ec3b0f3ab21031d0b0263bca22b6775860ce87e8658a336450198212ad439",
+    "status": "success",
+    "stderr": "",
+    "stdout": "Try this:\n  [apply] abel_nf\nfamilies/109/first-pass/finite-network-core/Main.lean:37:32: warning: This simp argument is unused:\n  Prod.fst\n\nHint: Omit it from the simp argument list.\n  simp only [̵P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]̵[̲P̲r̲o̲d̲.̲s̲n̲d̲]̲\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nfamilies/109/first-pass/finite-network-core/Main.lean:37:42: warning: This simp argument is unused:\n  Prod.snd\n\nHint: Omit it from the simp argument list.\n  simp only [Prod.fst,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/finite-network-core/Main.lean",
+    "text": "import Mathlib\n\nnamespace FiniteNetworkCore\n\nsection Restoration\n\nvariable {X Y A C : Type*}\nvariable [AddCommGroup X] [AddCommGroup Y] [AddCommGroup A] [AddCommGroup C]\n\ndef forward (V : X →+ A) (G : X →+ C) (J : A →+ Y) (R : C →+ Y)\n    (x : X) (y : Y) (a : A) (c : C) : X × Y × A × C :=\n  let y₀ := y - J a\n  let y₁ := y₀ - R c\n  let a₁ := a + V x\n  let c₁ := c + G x\n  let y₂ := y₁ + R c₁\n  let y₃ := y₂ + J a₁\n  let c₂ := c₁ - G x\n  let a₂ := a₁ - V x\n  (x, y₃, a₂, c₂)\n\ntheorem transparent_restoration\n    (V : X →+ A) (G : X →+ C) (J : A →+ Y) (R : C →+ Y)\n    (x : X) (y : Y) (a : A) (c : C) :\n    forward V G J R x y a c =\n      (x, y + (J (V x) + R (G x)), a, c) := by\n  simp only [forward, map_add, add_sub_cancel_right]\n  congr 1\n  abel\n\ntheorem signed_exchange (x y : X) :\n    let y₁ := y + x\n    let x₂ := x - y₁\n    let y₃ := y₁ + x₂\n    (x₂, y₃) = (-y, x) := by\n  dsimp\n  apply Prod.ext <;> simp only [Prod.fst, Prod.snd] <;> abel\n\nend Restoration\n\nsection Frames\n\nvariable {R V ι : Type*}\nvariable [Semiring R] [AddCommMonoid V] [Module R V] [Fintype ι]\n\ntheorem common_frame_gate (D : V →ₗ[R] V) (c : ι → R) (x : ι → V) :\n    D (∑ j, c j • x j) = ∑ j, c j • D (x j) := by\n  simp\n\ntheorem edge_frame_change (D E : V ≃ₗ[R] V) (x : V) :\n    E (D.symm (D x)) = E x := by\n  simp\n\nend Frames\n\nsection ProjectionAlgebra\n\nvariable {S : Type*} [Ring S]\n\ntheorem nested_projection_difference\n    (p q : S) (hp : p * p = p) (hq : q * q = q)\n    (hpq : p * q = p) (hqp : q * p = p) :\n    (q - p) * (q - p) = q - p ∧\n      p * (q - p) = 0 ∧ (q - p) * p = 0 ∧ q = p + (q - p) := by\n  refine ⟨?_, ?_, ?_, ?_⟩\n  · simp only [sub_mul, mul_sub, hp, hq, hpq, hqp, sub_self, sub_zero]\n  · simp only [mul_sub, hpq, hp, sub_self]\n  · simp only [sub_mul, hqp, hp, sub_self]\n  · abel\n\ntheorem orthogonal_sum_projector\n    (p q : S) (hp : p * p = p) (hq : q * q = q)\n    (hpq : p * q = 0) (hqp : q * p = 0) :\n    (p + q) * (p + q) = p + q := by\n  simp only [add_mul, mul_add, hp, hq, hpq, hqp, add_zero, zero_add]\n\nend ProjectionAlgebra\n\nsection ResidualImage\n\nvariable {V : Type*} [AddCommGroup V]\n\ntheorem residual_image\n    (p q : V →+ V)\n    (hp : ∀ x, p (p x) = p x)\n    (hq : ∀ x, q (q x) = q x)\n    (hpq : ∀ x, p (q x) = p x)\n    (hqp : ∀ x, q (p x) = p x)\n    (z : V) :\n    (∃ x, q x - p x = z) ↔ ((∃ x, q x = z) ∧ p z = 0) := by\n  constructor\n  · rintro ⟨x, rfl⟩\n    constructor\n    · refine ⟨x - p x, ?_⟩\n      simp only [map_sub, hqp]\n    · simp only [map_sub, hpq, hp, sub_self]\n  · rintro ⟨⟨x, hx⟩, hpz⟩\n    have hqz : q z = z := by\n      calc\n        q z = q (q x) := congrArg q hx.symm\n        _ = q x := hq x\n        _ = z := hx\n    exact ⟨z, by rw [hqz, hpz, sub_zero]⟩\n\nend ResidualImage\n\nsection NonzeroScalarImage\n\nvariable {K V : Type*} [Field K] [AddCommGroup V] [Module K V]\n\ntheorem nonzero_scalar_image (p : V →ₗ[K] V) (c : K) (hc : c ≠ 0) (z : V) :\n    (∃ x, c • p x = z) ↔ ∃ x, p x = z := by\n  constructor\n  · rintro ⟨x, hx⟩\n    exact ⟨c • x, by simpa only [map_smul] using hx⟩\n  · rintro ⟨x, hx⟩\n    refine ⟨c⁻¹ • x, ?_⟩\n    simpa only [map_smul, smul_smul, mul_inv_cancel₀ hc, one_smul] using hx\n\nend NonzeroScalarImage\n\nsection BinaryWeight\n\nvariable {ι : Type*} [Fintype ι]\n\ndef bit (b : Bool) : ℤ := if b then 1 else 0\n\ndef weight (v : ι → Bool) : ℤ := ∑ j, bit (v j)\n\ndef overlap (v w : ι → Bool) : ℤ := ∑ j, bit (v j) * bit (w j)\n\ndef xorVector (v w : ι → Bool) : ι → Bool := fun j => Bool.xor (v j) (w j)\n\ntheorem bit_xor (b c : Bool) :\n    bit (Bool.xor b c) = bit b + bit c - 2 * (bit b * bit c) := by\n  cases b <;> cases c <;> norm_num [bit]\n\ntheorem weight_xor (v w : ι → Bool) :\n    weight (xorVector v w) = weight v + weight w - 2 * overlap v w := by\n  simp only [weight, xorVector, bit_xor, overlap, Finset.sum_sub_distrib,\n    Finset.sum_add_distrib, Finset.mul_sum]\n\ntheorem orthogonal_weight_additivity\n    (v w : ι → Bool) (orthogonal : ∃ k : ℤ, overlap v w = 2 * k) :\n    ∃ k : ℤ, weight (xorVector v w) = weight v + weight w + 4 * k := by\n  obtain ⟨k, hk⟩ := orthogonal\n  refine ⟨-k, ?_⟩\n  rw [weight_xor, hk]\n  ring\n\ntheorem odd_line_endpoint_phase (w r b : ℤ) (odd : ∃ k : ℤ, r = 2 * k + 1) :\n    ∃ k : ℤ, w - 2 * r * b = w + 2 * b + 4 * k := by\n  obtain ⟨k, hk⟩ := odd\n  refine ⟨-(k + 1) * b, ?_⟩\n  rw [hk]\n  ring\n\nend BinaryWeight\n\nend FiniteNetworkCore\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/finite-network-core/statement_fidelity.md",
+    "text": "# Statement fidelity: finite-network structural core\n\n`Main.lean` uses Lean 4.31.0 and Mathlib. It proves structural ingredients of\nsection 03 of the staged September 23, 2026 manuscript, not its main\ncomplexity theorem. The claim bound to this file is `C_STRUCTURAL_LEAN`.\n\nAll declarations are in `FiniteNetworkCore`.\n\n* `forward` is exactly the eight forward rows of `eq:motif-schedule`, in order.\n  `transparent_restoration` quantifies over arbitrary additive commutative\n  groups X,Y,A,C, arbitrary additive maps V,G,J,R of the indicated types, and\n  arbitrary x,y,a,c. It proves the final tuple is\n  (x, y+J(V(x))+R(G(x)), a, c). Thus it does not assume zero scratch, commuting\n  maps, a field, or a particular dimension. The separate incidence calculation\n  in the report identifies JV+RG with identity for the two triple networks.\n* `signed_exchange` quantifies over every additive commutative group and every\n  x,y, proving the three shears (y+=x, x-=y, y+=x) give (-y,x). It is not a\n  theorem with the second shear pointing in the wrong direction.\n* `common_frame_gate` applies to every semiring, module, finite input index\n  type, linear map D, scalar coefficient family, and vector family. Its\n  conclusion is commutation of a common address frame with the weighted gate\n  sum. `edge_frame_change` states cancellation of an invertible old frame\n  followed by a new frame. These justify the all-input invariant; the file\n  does not encode the entire network graph or claim to have checked its\n  incidence enumeration.\n* `nested_projection_difference` holds in any possibly noncommutative ring.\n  Given idempotents p,q with pq=qp=p, q-p is idempotent, annihilates p in both\n  orders, and adds to p to give q. `orthogonal_sum_projector` proves the\n  analogous sum statement from pq=qp=0. For the manuscript these are\n  endomorphisms of a bilinear space and orthogonal projections.\n* `residual_image` quantifies over every additive commutative group, two\n  additive idempotents p,q with both nesting identities, and every z. It\n  identifies the image of q-p with image(q) intersect kernel(p), pointwise:\n  existence of x with q(x)-p(x)=z iff z is in image(q) and p(z)=0. It is not\n  merely an equality of formal dimension counts. Orthogonality, finite\n  dimension, and the rank interpretation are supplied in the mathematical\n  report.\n* `nonzero_scalar_image` quantifies over every field, module, linear map p,\n  nonzero scalar c and vector z, proving image(c p)=image(p), pointwise. With\n  c=2 in Q, it certifies the image claim required for the N negative-source\n  edges. It does not assert this for c=2 in characteristic two.\n* `bit`, `weight`, `overlap`, and `xorVector` use Bool coordinates indexed by\n  any finite type and integer (not modulo-two) sums. `bit_xor` and\n  `weight_xor` prove the exact Hamming-weight identity. In\n  `orthogonal_weight_additivity`, the hypothesis that integer overlap is\n  twice an integer is exactly zero binary dot product. The existential\n  multiple of four in the conclusion is equality modulo four. No bound on\n  dimension or Hamming weight is imposed. Induction over an orthogonal\n  basis in the report supplies the residual phase formula.\n* `odd_line_endpoint_phase` quantifies over arbitrary integers w,r,b, with r\n  odd, and proves w-2rb is congruent to w+2b modulo four. The intended b is\n  the integer representative of u dot x, w is wt(x), and r=wt(u)=27. Its\n  slightly stronger unrestricted b does not weaken the application.\n\nNot formalized here: construction and classification of binary bilinear\nspaces, the tensor-label incidence list, finite-dimensional ranks, Walsh\nconjugation, the Gaussian 2-by-2 matrices, or tape/analytic/complexity claims.\nThe report and exact Python replay cover the first five items in this list\nof omissions. Compiler success alone does not establish those assertions,\nstatement fidelity, independent review, or novelty.\n"
+  },
+  "subject": {
+    "content_hash": "245a6e6885affa73ff79b68d15c88dd4aa84d4444c4dc75cec57ff64aa27865c",
+    "kind": "claim",
+    "subject_id": "C_STRUCTURAL_LEAN"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

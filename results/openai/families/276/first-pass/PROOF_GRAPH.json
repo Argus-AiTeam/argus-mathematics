@@ -1,0 +1,79 @@
+{
+  "goal": "C9000276",
+  "routes": [
+    {
+      "name": "THERMAL_UNIVERSAL_LIFT",
+      "status": "current",
+      "evidence": "research/thermal_lift/theorem.md"
+    }
+  ],
+  "nodes": {
+    "C9000276": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 276 (Classical capacity of generalized amplitude damping.; papers: Classical capacity and entropy inequalities for generalized amplitude damping; Lean status: Partially/Comparator formalized (lean/docs/276.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_THERMAL", "C_PARTNER"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "exact_certificate.json"
+      ]
+    },
+    "C_THERMAL": {
+      "statement": "The universal rectangular thermal state is normalized and positive and satisfies the stated entropy inequality at all admissible coefficients, including every boundary.",
+      "status": "open",
+      "depends_on": ["C_THERMAL_CORE", "C_TRIANGULAR_INPUT", "C_ENTROPY_INPUT"],
+      "reviewer_confirmed": false,
+      "verification_status": "universal_analytic_proof_awaiting_independent_review",
+      "evidence": ["research/thermal_lift/theorem.md", "research/thermal_lift/statement_fidelity.md", "exact_certificate.json"]
+    },
+    "C_THERMAL_CORE": {
+      "statement": "Universal lifting of the two triangular endpoint bounds by an exact convex decomposition, with Gram factorizations and all zero-coefficient cases.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "verification_status": "closed_kernel_for_conditional_implication_only",
+      "evidence": ["research/thermal_lift/Main.lean", "research/thermal_lift/statement_fidelity.md", "research/thermal_lift/certificates/C_THERMAL_CORE-df31c719d7cfc0b6.json", "verify.py"]
+    },
+    "C_TRIANGULAR_INPUT": {
+      "statement": "Tang arXiv:2609.28592v1 Theorem 4.2 supplies the rectangular triangular inequality, with zero weights and singular blocks permitted, after conversion from bits to nats.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "verification_status": "primary_source_read_independent_attribution_pending",
+      "evidence": ["research/thermal_lift/triangular_excerpt.txt", "research/thermal_lift/theorem.md"]
+    },
+    "C_ENTROPY_INPUT": {
+      "statement": "Entropy is concave on finite-dimensional states and invariant under unitary conjugation and zero padding.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "verification_status": "primary_source_read_independent_attribution_pending",
+      "evidence": ["research/thermal_lift/concavity_excerpt.txt", "research/thermal_lift/theorem.md"]
+    },
+    "C_PARTNER": {
+      "statement": "The common-Kraus-index rectangular construction and channel coefficient substitution satisfy every hypothesis of the thermal theorem for all boundary parameters.",
+      "status": "open",
+      "depends_on": ["C_THERMAL", "C_CHANNEL_CORE", "C_KRAUS_INPUT"],
+      "reviewer_confirmed": false,
+      "verification_status": "universal_kraus_substitution_proved_independent_review_pending",
+      "evidence": ["research/thermal_lift/theorem.md", "research/thermal_lift/Main.lean", "exact_certificate.json"]
+    },
+    "C_CHANNEL_CORE": {
+      "statement": "The generalized amplitude-damping coefficients, common scalar determinant, and common-index Gram identities hold universally.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "verification_status": "universal_channel_and_common_index_declarations_compiled",
+      "evidence": ["research/thermal_lift/Main.lean", "research/thermal_lift/certificates/C_THERMAL_CORE-df31c719d7cfc0b6.json", "verify.py"]
+    },
+    "C_KRAUS_INPUT": {
+      "statement": "Every finite-dimensional completely positive trace-preserving map has a finite trace-preserving Kraus representation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "verification_status": "primary_source_read_independent_attribution_pending",
+      "evidence": ["research/thermal_lift/kraus_excerpt.txt", "research/thermal_lift/theorem.md"]
+    }
+  }
+}

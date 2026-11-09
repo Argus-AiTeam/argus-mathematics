@@ -1,0 +1,1704 @@
+Robotics  Research 
+"fechnical  Report 
+
+
+r'^raf, 
+
+
+°nurT, 
+
+
+The  Structure  of  Polynomial  Ideals 
+and  Grobner  Bases 
+
+by 
+
+T.  Dube 
+
+
+Technical  Report  No.  341 
+
+Robotics  Report  No.  135 
+
+January,  1988 
+
+
+I 
+
+« 
+Eh 
+
+
+(  W 
+
+S 
+
+o 
+
+
+0 
+
+3 
+Q 
+
+
+O  1-1 
+
+a,  0) 
+c 
+
+o  o 
+
+u 
+
+0)  o 
+
+u 
+
+3  T) 
+-<->  C 
+O   (0 
+
+a 
+
+4-i  M 
+
+0) 
+
+Eh 
+
+
+New  York  University 
+it  Institute  of  Mathematical  Sciences 
+
+Computer  Science  Division 
+
+25 1  Mercer  Street   New  York,  N.Y  1 00 1 2 
+
+
+The  Structure  of  Polynomial  Ideals 
+and  Grobner  Bases 
+
+by 
+
+T.  Dube 
+
+
+Technical  Report  No.  341 
+
+Robotics  Report  No.  135 
+
+January,  1988 
+
+
+New  York  University 
+
+Dept.  of  Computer  Science 
+
+Courant  Institute  of  Mathematical  Sciences 
+
+251  Mercer  Street 
+
+New  York,  New  York   10012 
+
+
+Work  supported  in  part  by  NSF  grants  #DCR-84-01898  and  #DCR-84-01633. 
+
+
+The  Structure  of  Polynomial  Ideals  and 
+
+Grobner  Bases 
+
+
+Thomas  W.  Dube  ^ 
+
+Courant  Institute  of  Mathematical  Sciences 
+
+New  York  University 
+
+251  Mercer  Street 
+New  York,  NY  10012. 
+
+
+January  5,  1988 
+
+Abstract 
+
+The  use  of  Grobner  Bases  is  becoming  increasingly  iniportant  in  al- 
+gebraic computational  geometry.  As  a  result,  there  has  been  much  ac- 
+tivity in  the  recent  years  concerning  the  complexity  of  Buchberger's  al- 
+gorithm, and  the  degree  of  polynomials  which  it  may  produce.  Bayer's 
+thesis  in  1982  provided  the  direction  for  recent  research,  and  several 
+recent  papers  have  combined  to  show  that  the  complexity  of  com- 
+puting a  Grobner  Basis  for  a  given  ideal  is  double  exponential  in  the 
+number  of  variables.  This  paper  introduces  a  new  partitioning  of  a 
+polynomial  ideal.  Using  this  partitioning,  the  sharpened  degree  bound 
+can  be  obtained  using  only  combinatorial  arguments,  and  without  the 
+need  to  change  coordinate  systems.  ' 
+
+'Supported  in  part  by  NSF  grants  #DCR-84-01898  and  #DCR-84-01633. 
+
+
+J     REDUCTIONS  AND  GROBNER  BASES  1 
+
+1      Reductions  and  Grobner  Bases 
+
+The  definitions  quoted  here  for  Grobner  bases  are  based  upon  the  writings 
+of  Bruno  Buchberger.  The  properties  of  normal  forms  which  are  cited  in 
+this  section  are  also  results  of  his  work.  Grobner  bases  are  special  bases 
+for  polynomial  ideals  with  several  important  computational  properties  such 
+as  the  ability  to  rapidly  determine  ideal  membership.  Grobnerbases  differ 
+only  slightly  from  the  standard  bases  defined  by  Hironaka,  and  many  of 
+these  concepts  can  be  traced  back  to  the  work  of  Macaulay. 
+
+A  total  ordering  <  on  the  power  products  of  PP[X]  =  PP[xi, . . . ,  x„]  is 
+called  an  admissible  ordering  if  the  following  two  axioms  are  satisfied. 
+
+1.  For  aU  i.  e  X,  Ki,.' 
+
+2.  For  all  a,  6,  c  G  PP[-Y],  a<b  impHes  ac<bc. 
+
+Let  h  he  &  polynomial  of  K[X]  where  K  is  &n  arbitrary  field.  For  any 
+fixed  admissible  ordering  <,  the  <-least  monomial  of  h  is  called  the  head 
+monomial  of  h  with  respect  to  <  and  is  denoted  by  Head^(/i).  If  the 
+ordering  is  understood,  then  we  may  drop  the  subscript  and  denote  the 
+head  monomial  as  simply  Head(/i).  For  I  an  ideal  of  K[X],  Head^(/)  will 
+be  used  to  denote  the  monomial  ideal  generated  by  {Head>i(/i)  :  h  G  I}. 
+
+Let  F  C  A' [A']  be  a  set  of  polynomials,  and  <  a  fixed  admissible  order- 
+ing. A  polynomial  h  is  then  said  to  be  F-reducible,  if  there  exists  /,  6  F, 
+and  c  e  K[X]  such  that  Head^(c/,)  is  a  monomial  of  h.  The  polynomial 
+g  =  h-  cfi  is  then  called  a  reduct  of  /i,  and  this  relationship  is  denoted  as 
+^  — ^  9-  The  transitive  closure  of  the  reduction  operation  h  -^  g  is  defined 
+to  mean  that  there  exists  a  series  of  polynomials  Pi, . . . ,  pjt  such  that  Pi  =  h, 
+Pk  =  g,  and  for  all  i  <  k,  Pi  -^p.+i.  Finally,  g  is  called  an  F- normal  form 
+of  /i  if  /i  ——>■  g,  and  g  is  not  F-reducible. 
+
+Definition:     A  basis  G  is  called  a  Grobner  basis  of  /  with  respect  to  <  if 
+Head^(/)  is  generated  by  the  set  {Head^(^)  -.  g  ^G}. 
+It  is  easy  to  verify  that  the  following  conditions  are  all  equivalent. 
+
+1.  G  is  a  Grobner  basis  for  /  with  respect  to  <  , 
+
+
+J     REDUCTIONS  AND  GROBNER  BASES  2 
+
+2.  G  C  I  £tnd  for  every  h  e  I  there  exists  a  y  G  G  such  that  Head^(y) 
+divides  Head^(/i). 
+
+3.  For  all  /i  €  -K^[-^],  0  is  a  G-normal  form  of  h  if  and  only  if  /i  G  /. 
+
+4.  G  is  a  basb  for  /  and  every  h  G  K[X]  has  a  unique  G-normal  form 
+which  may  be  denoted  as  nfcih). 
+
+It  is  also  easy  to  verify  that  if  F  is  a  monomial  basis  for  a  monomial  ideal  7, 
+
+then  F  is  a  Grobner  basis  for  /  with  respect  to  every  admissible  ordering. 
+
+The  following  lemmas  provide  some  useful  properties  of  normal  forms. 
+
+Lemma  1   Let  G  be  a  Grobner  basis  for  I  with  respect  to  <.    Then  for  all 
+h  €  K[X],  h  -  nicih)  €  /. 
+
+Proof  This  is  a  trivial  consequence  of  the  reduction  algorithm. 
+Q.E.D. 
+
+Lemma  2   Let  G  be  a  Grobner  basis  for  I  with  respect  to  <,  Then  for  any 
+5,  t  €  K[X],  nioinfcis)  +  nfb(O)  =  nfc(5)  +  nfcCO- 
+
+Proof    n£a{9)  and  n^(t)  consists  entirely  of  monomials  not  in  Head^(7). 
+Therefore,nfc(5)4-nfG(0  consists  of  monomials  not  in  Head^(/),  and  hence 
+is  a  normal  form  itself. 
+Q.E.D. 
+
+Lemma  3  Let  G  be  a  Grobner  basis  for  I  with  respect  to  <,  then  for  any 
+s,te  K[x], 
+
+nfb(5  +  t)    =   niais)  +  nfb(<)  . 
+
+
+Proof. 
+
+
+s  +  t-{s  +  t)  =  0    =>  s  +  t-{s  +  t)el 
+
+=^  nfcis)  +  nfb(0  -  nic{s  +  t)  e  I 
+
+=>  Ti£G{niG{s)  +  nfcit)  -  niais  +  t))  =  0 
+
+=>  nfcis)  +  nfcit)  -  nicis  +  t)  =  0 
+
+
+Q.E.D. 
+
+
+1     REDUCTIONS  AND  GROBNER  BASES  3 
+
+Corollary  1  Let  G  be  a  Grobner  basis  for  I  with  respect  to  <,  and  let  /ij 
+and  hi  be  polynomials  such  that  hi  —  hi  ^  I.   Then  nicihi)  =  nioihi). 
+
+From  this  corollary  it  can  be  seen  that  the  set  {nfG(/i)  :  h  €  A'[A^]} 
+is  isomorphic  to  the  quotient  ring  K[X]/I.  We  would  sometimes  like  to 
+consider  sets  of  this  type,  in  which  we  don't  really  care  which  Grobner 
+basis  G  is  being  used  to  define  the  normal  forms.  In  a  slight  abuse  of 
+notation  K[X]/I  will  be  used  to  denote  {nfcih)  :  h  G  A'[-Y]}  where  G  is 
+some  arbitrary  Grobner  basis  for  /. 
+
+The  foUcwing  lemma  has  two  very  important  corollaries. 
+
+Lemma  4  Let  Gi  be  a  Grobner  basis  for  7i  with  respect  to  <,  and  lei  G2 
+be  a  Grobner  basis  for  I2  with  respect  to  <,  where  Headsih)  =  Head^ili). 
+Then  for  any  h  G  K[X],  nfb,(nfb,(^))  =  nfb,(/i). 
+
+Proof.  Once  again,  a  Gj -normal  form  consists  of  monomials  which  are  not 
+in  Head^(/i),  and  hence  are  not  in  HeadB(/2).  This  is  therefore  also  a  Gj- 
+normal  form. 
+Q.E.D. 
+
+Corollary  2  Let  Gi  and  Gj  be  Grobner  bases  for  the  same  ideal  I  with 
+respect  to  <.   Then  for  all  h  6  K[X],  nfGi(/i)  =  nioM. 
+
+Proof  nfG,(/i)  -  nfG,(/i)  =  nia.ih  -  nfoM)  =  nfG.(O)  =  0. 
+Q.E.D. 
+
+Corollary  3  Let  Gi  and  G2  be  as  in  the  lemma.    Then 
+
+{nfc.ih)  :  h  €  K[X])    =    {nfoM  :  h  G  K[X]}  . 
+
+Proof  Let  5  =  {nioM  :  h  e  K[X]},  then 
+
+S   =    {h  :  heS]    =    {nfG,(/i)  :  heS}    C    {nf^.C/i)  :  h  e  K[X]]  . 
+
+The  other  inclusion  is  symmetric. 
+Q.E.D. 
+
+The  most  important  use  of  this  last  corollary  is  in  forming  K[X]/I.  After 
+
+
+]     REDUCTIONS  AND  GROBNER  BASES  4 
+
+selecting  Gi  a  Grobner  basis  for  /  with  respect  to  <,  we  can  choose  G^  = 
+{Headyi(y)  :  g  £  Gi},  and  the  corollary  assures  us  that 
+
+K[X]/I   =   {ufcAh)  :  heK[X]]    =   {nio.ih)  :  h  e  K[X]]  . 
+
+1.1      Minimal  Grobner  Bases 
+
+A  basis  F  for  an  ideal  /  is  called  a  minimal  basis  if  for  each  f  £  F,  f  ^ 
+{F  —  {/}).  Now,  suppose  that  F  is  a  basis  for  /,  but  that  there  exists  an 
+f  e  F  such  that  /  €  (F  -  {/}).  Then  F  -  {/}  is  also  a  basis  for  /.  Given 
+a  basis  F,  it  is  therefore  possible  to  produce  a  minimal  basis  F'  C  F  by 
+discarding  inessential  generators. 
+
+Lemma  5  Every  monomial  ideal  M  C  K[X]  has  a  unique  minimal  basis 
+F  =  {/i, . . .  ,/r}  such  that  each  f,  E  F  is  a  power  product  o/PP[A^]. 
+
+Proof.  Suppose  Fi  and  F2  are  both  power  product  bases  for  7  and  that 
+a  e  Fi  -  F2.  Since  a  G  Fi,  a  6  /.  Therefore  since  F2  is  a  Grobner  basis 
+for  I  there  must  be  a  6  €  /z  such  that  b  divides  a.  But  now  by  a  similar 
+argument  there  must  be  a  c  G  Fj  which  divides  b  and  hence  also  divides  a. 
+And  since  b  ^  a,  c  can  not  be  a.  This  then  contradicts  the  fact  that  Fi  is 
+a  minimal  basis. 
+Q.E.D. 
+
+A  basis  G  for  an  ideal  /  is  called  a  minim.al  Grobner  basis  for  I  if 
+{Head^(y)  :  g  £  G]  is  a.  minimal  basis  for  Head^(/).  Note  that  a  minimal 
+Grobner  basis  for  I  is  not  in  general  a  minimal  basis  for  /.  For  a  Grobner 
+basis  G,  let  G'  be  a  subset  of  G  such  that  {Head^(y)  :  g  G  G'}  is  a  minimal 
+basis  for  Head^(/).  It  follows  from  definition  (2)  above  that  G'  is  a  Grobner 
+basis  for  /,  and  hence  is  a  minimal  Grobner  basis.  As  a  corollary  of  the 
+lemma  above,  if  Gj  and  G2  are  minimal  Grobner  bases  for  /  with  respect 
+to  <  and  all  the  polynomials  in  the  two  bases  are  monic,  then 
+
+
+A 
+
+
+{Head^(^)  :  <?  G  Gi}    =    {Head^(y)  :  g  e  G^} 
+
+
+2    DISJOINT  DECOMPOSITIONS  5 
+
+2     Disjoint  Decompositions 
+
+Let  T  be  a  subset  of  the  polynomiaJ  ring  A'[J\r].  and  let  Sj, . . . ,  S^  be  subsets 
+of  T.  The  sets  5,-  are  said  to  be  a  disjoint  decomposHion  ofT  if  every  p  G  T 
+can  be  uniquely  expressed  in  the  form  p  =  H'^i  p,,  where  p,  G  5,. 
+
+The  following  two  important  properties  of  disjunct  decompositions  can 
+be  easily  verified. 
+
+1.  Let  5i, . . . ,  5^  be  a  disjoint  decomposition  for  T,  and  let  Ri,. . . ,  i?^ 
+be  a  disjoint  decomposition  for  Si.  Then  52, . . . ,  Sk,  /?i, . . . ,  R^  is  a 
+disjoint  decomposition  for  T. 
+
+2.  Let  P  —  {hf  :  h  €^  T},  and  let  5i, . . . ,  5jt  be  a  disjoint  decomposition 
+of  T.  Then  the  sets  Q,  =  {hf  :  h  6  Si]  form  a  disjoint  decomposition 
+of  P. 
+
+Example   1:    For  any  ideal  /  C   K[X],  I  and  K[X]/I  form  a  disjoint 
+
+decomposition  of  A'fA']. 
+
+Proof.  Let  G  be  the  Grobner  basis  of  /  used  to  form  K[X]/I  =  {nfoih)}. 
+
+Since  G  is  a  Grobner  basis,  each  polynomial  h  has  a  unique  G-normal  form, 
+
+and  the  decomposition  h  =  nfoih)  +  {h  —  nfo(/i))  is  imjque. 
+
+Q.E.D. 
+
+Definition:       Let  /  be  any  ideal  of  K[X],  and  h  G  K[X].    The  ideal 
+quotient  operation  I  :  h  is  defined  hy  I  :  h    =    {/  ^  A   :    fh  £  I].   Note 
+that  it  trivially  follows  that  {I :  g)  :  h   =   I :  (gh). 
+Example  2:  Given  F  =  {/i, . . . ,  /^}  be  a  basis  for  /,  let 
+
+J  denote  the  ideal  (/i, . . . ,  /r-i), 
+L  denote  the  ideal  J  :  fr-,  and 
+N  =  {hf,  :  hE  K[X]/L},  then 
+
+J  and  A'^  form  a  disjunct  decomposition  for  /. 
+
+Proof.  Let  G  be  the  Grobner  basis  for  L  used  to  form  N  =  {n{c{h)fr  :  h  G 
+/CfA"]}.  The  sets  J  and  N  are  clearly  subsets  of  7,  so  we  need  to  show  that 
+each  polynomial  h  in  I  can  be  uniquely  decomposed  as  h  =  hj  +  hjsf. 
+
+First,  we  show  that  a  decomposition  exists.  Every  /i  G  /  can  be  written 
+in  the  form  h  =  Ei=i  o-ifi  for  a,  G  K[X].  Since  G  is  a  Grobner  basis  for  L, 
+
+
+3    HOMOGENEITY  AND  HUBERT  FUNCTIONS  6 
+
+we  know  that  a,  -  nfcCor)  €  L.    Now,  by  definition  L  =  {h    :    hf^  e  J}, 
+so  (a^  -  nfG(ar))/r  €  J.  This  leads  to  the  decomposition  hj  =  Ei=i  a,/;  + 
+
+Now  consider  any  two  decompositions  of  /i:  /i  =  oj  +  nfG(6i)/r  =  02  + 
+nfis(fc2)/r,  where  01,02  €  J. 
+
+(nfG(6i)-nfG(fe2))/r    =    02-01    e    J 
+
+nfG(nfG(6i)-nfG(fc2))    =    0 
+nfG(6i)-n{G(i2)    =    0 
+
+Therefore  the  decomposition  is  unique. 
+
+Q.E.D. 
+
+If  we  apply  this  technique  recvirsively,  we  get  the  following  decomposition 
+
+of  ELn  ideal. 
+
+Example  3:   Let  F  =  {/i,...,/r}  be  a  basis  for  /.    For  each  i  <  r,  let 
+
+Ji  =  {fu---,  fi-i)  ■  fi^  and  let  P.  =  {hfi  :  h  €  K[X]/J,}.  Then,  Pi, . . . ,  P, 
+
+form  a  disjoint  decomposition  of  /. 
+
+In  recap,  for  amy  ideal  7,  K[X]  can  be  decomposed  into  I  and  K[X]/I. 
+Furthermore,  I  itself  can  be  decomposed  into  sets  of  the  form  Pi  =  {hfi  : 
+h  E  K[X]/J,},  which  in  turn  could  be  further  decomposed  if  we  could 
+decompose  K[X]/Ji.  We  therefore  need  to  study  sets  of  the  fonn  K[X]/I 
+more  closely.  We  already  have  one  big  step  in  that  direction  though,  because 
+we  know  that  if  M  =  Head(/),  then  K[X]/M  =  K[Xyi.  And  so,  we  can 
+limit  our  attention  to  monomial  ideails. 
+
+3     Homogeneity  and  Hilbert  Functions 
+
+We  now  will  consider  one  special  class  of  polynomial  ideals,  and  disjoint 
+decompositions,  those  ideals  which  are  homogeneous.  For  any  monomial 
+M,  the  total-degree  9(M)  is  defined  by 
+
+«=1 
+
+
+3    HOMOGENEITY  AND  HILBERT  FUNCTIONS  7 
+
+Let  /  be  a  polynomial  in  K[X],  then  /  can  be  written  as  a  finite  sum 
+
+f  =  fo  +  fi  +  •  ■  ■  +  fk,  where  each  /.  is  either  zero,  or  a  sum  of  monomials 
+
+each  of  which  has  degree  i.   In  such  a  decomposition  of  /,  /,  is  called  the 
+
+homogeneous  component  of  f  of  degree  i. 
+
+Definition:  /  is  called  a  homogeneous  polynomial  if  /  consists  of  at  most 
+
+one  non-zero  homogeneous  component. 
+
+Definition:      S  a  subset  of  K[X]  is  called  homogeneous  if  it  satisfies  the 
+
+following  two  properties. 
+
+1.  /  €  S  implies  that  each  homogeneous  component  of  /  is  also  in  5. 
+
+2.  /  e  5  iiiipHes  that  for  each  k  G  K,  kf  £  5. 
+
+A  disjoint  decomposition  Si,...,Sr  of  a  homogeneous  set  T  is  called  a 
+homogeneous  disjoint  decomposition  if  each  5,  is  homogeneous. 
+
+Of  particular  importance  are  homogeneous  ideals.  The  following  theo- 
+rem provides  a  useful  characterization  of  these  ideals. 
+
+Theorem  6  An  ideal  I  is  homogeneous  if  and  only  if  there  is  a  basis  for 
+I  consisting  of  homogeneous  polynomials. 
+
+For  a  homogeneous  set  T,  Tj  is  used  to  denote  the  set 
+
+'^d    =    {/  €  r  :  /  is  homogeneous  of  degree  d}  . 
+
+Note  that  the  sets  ro,ri, . . .  trivially  form  a  homogeneous  disjoint  decom- 
+position of  T. 
+
+[Buchberger  1979]  provided  an  algorithm  for  forming  Grobner  bases. 
+[Giusti  1984]  provides  a  sHghtly  modified  version  of  this  algorithm  which 
+will  calculate  a  minimal  Gr6bner  basis  for  a  homogeneous  ideal.  The  uti- 
+lization of  Giusti's  algorithm  is  one  reason  we  would  hke  to  restict  our 
+attention  to  homogeneous  ideals.  Another  benifit  of  working  with  homoge- 
+neous ideals  is  the  ability  to  define  the  Hilbert  function. 
+
+The  Hilbert  function  of  a  homogeneous  set  T  is  denoted  by  <pt{z)  and 
+defined  by 
+
+(Pt{z)   =   the  dimension  of  T^^  as  a  vector  space  over  K  . 
+
+
+3    HOMOGENEITY  AND  HUBERT  FUNCTIONS  8 
+
+Equivalently,  for  a  fixed  cuiraissible  ordering  the  Hilbert  function  may  be 
+defined  to  be  the  number  of  degree  z  pov.er  products  which  occur  as  the 
+head  monomial  of  a  polynomial  of  T.  That  is, 
+
+friz)   =    \{peFF[X]  :  p  G  Head(r,))|  . 
+
+Lemma  7  Let  5i,...,5r  be  a  homogeneous  disjunct  decomposition  ofT, 
+then  (priz)  =  ELi  V>s,{z)- 
+
+Proof.  This  follows  directly  from  the  definition  of  disjunct  decomposition 
+
+and  the  first  definition  of  the  Hilbert  function. 
+
+Q.E.D. 
+
+Our  interest  in  finding  a  disjoint  decomposition  for  an  ideal  /  is  to  partition 
+/  into  primitive  elements  whose  Hilbert  function  we  can  easily  describe.  In 
+particular,  the  type  of  elements  we  want  are  sets  of  the  form  {ah  :  a  G  i^[u]} 
+where  /i  is  a  homogeneous  polynomial  and  u  is  a  subset  of  X  =  {xi, . . . ,  i„}. 
+Notation:  For  h  a  homogeneous  polynomial  and  u  C  X,  let  S{h,u)  de- 
+note the  set  {ah  :  a  E  K[u]}. 
+
+For  a  set  S{h,u),  the  Hilbert  function  of  S{h,u)  is  dependent  only  on 
+deg(/i)  and  \u\.  Counting  the  number  of  power  products  in  Head(S(/i,  u)) 
+we  find  that  if  u  =  0,  then 
+
+
+r  0     z^  deg{h) 
+^S(k.i){z)   -    I  1     ^  =  deg{h)     ' 
+
+
+and  for  Iu|  >  0, 
+
+<Ps(h,u){z)   =    < 
+
+
+;(M  +  W\-i\ 
+
+u\-l  ) 
+
+
+z  <  deg{h) 
+z  >  deg{h) 
+
+
+3.1     Homogenizing  Affine  Ideals 
+
+
+The  remainder  of  this  paper  builds  results  which  will  allow  us  to  obtain  a 
+degree  bound  for  polynomials  in  a  Grobner  basis  of  a  homogeneous  ideal. 
+But  suppose  we  need  to  compute  a  Grobner  basis  for  an  affine  ideal.  The 
+degree  bound  in  this  case  is  most  easily  obtained  by  reducing  the  affine  case 
+
+
+3    HOMOGENEITY  AND  HUBERT  FUNCTIONS  9 
+
+to  the  homogeneous  case,  as  can  be  done  using  the  following  construction 
+provided  by  [Bayer  1982]. 
+
+Consider  an  affine  ideal  I  C  A  =  A'[xi, . . . ,  x„],  and  a  basis  F  for  /. 
+Each  polynomial  /  €  F,  can  be  written  as  /  =  fff^g  /,,  where  /,  is  the 
+homogeneous  component  of  /  of  degree  t,  and  d  is  the  maximum  degree 
+of  any  monomial  in  /.  Now,  we  can  homogenize  this  ideal  by  the  addition 
+of  a  new  variable  ar„+i.  For  each  /  €  F,  we  produce  the  homogeneous 
+polynomial  /  =  Ef=o  fd^t+i-  Then  F  =  {/}  is  the  basis  for  a  homogeneous 
+ideal  /  C  A^+i  =  -f^fa^i, . . .  ,a;„,i„+i].  Of  course,  to  be  useful  we  must 
+have  a  means  of  returning  to  the  original  ring  A.  We  can  use  the  natural 
+homomorphism 
+
+Lemma  8  LetG=  {gu...,  gk)  be  a  basis  for  I.   Then,  G  =  {a(gi), . . . ,  cT{gk)} 
+is  a  basis  for  I. 
+
+Proof 
+
+(G)  C  /.  Let  h  €  (G),  soh  =  Eo,^(?,)  (a.-  e  A).  Then,  h'  =  Ea.g.-  6  /. 
+But,  since  F  is  also  a  basis  for  /,  h'  =  Zbjj  (6,  e  A„+,)-  But, 
+h  =  E(^ibj)fj,  soke  I. 
+
+I  C  (G).  This  proof  is  symmetric  to  the  other  inclusion.  Let  h  e  I,  then 
+h  =  T.hJ,,  and  h'  =  EbJ,  €  /.  Therefore  h'  =  Ea.g.  (a,  €  A„+i). 
+So,  h  =  Ecr(a,)cr(^,),  and  h  €  (G). 
+
+Q.E.D. 
+
+Now  that  we  are  interested  in  finding  a  GrBbner  basis  for  /,  we  need  to  settle 
+one  more  question.   What  admissible  ordering  >  should  we  impose  on  the 
+
+monomials  of  A„+i?    Our  choice  is  based  upon  satisfying  the  upcoming 
+theorem. 
+
+Definition:     The  admissible  ordering  >  is  defined  as  follows.  Let  M,  N  G 
+A„+-i,  then  M>N  if  either 
+
+B 
+
+1.  a{M)>a{N)  or, 
+
+2.  o{M)  =  a(N)  and  deg(M)  >  deg(iV). 
+
+
+4    PARTITIONING  THE  POLYNOMIAL  SPACE  10 
+
+Lemma  9  Let  h  e  A'[ii, . . . ,  i„+i]  be  a  homogeneous  polynomial.    Then 
+a{HeadB{h))  =  Jea<i^(a(/i)). 
+
+Ptooj.    If  h  is  homogeneous,  then  every  monomial  of  h  has  a  different  a 
+projection.    The  ordering  >  is  defined  such  that  the  monomial  whose  a 
+projection  is  >-least  will  appear  as  HeadB(/i). 
+Q.E.D. 
+
+
+Theorem  10  Lei  G  =  {dii-  ■  'iSk}  be  a  homogeneous  Grdhner  basis  for 
+I  relative  to  >.     Then,  G  =  {cr{g\),-  ■  ■  ■,cr{gk)}   is  a  Grobner  basis  for  I 
+
+B 
+
+relative  to  >. 
+
+A 
+
+Proof.  By  the  previous  lemma,  we  know  that  G  is  a  basis  for  /,  so  we 
+only  need  to  prove  that  G  is  Grobner.  We  use  the  characterization  that 
+G  is  a  Grobner  basis  if  and  only  if  (Head^(G))  =  Headyi{I).  Clearly 
+Head^(G)  C  Head^(7),  so  we  need  to  show  the  other  inclusion. 
+
+Since  G  is  a  basis  for  7,  any  /i  G  /  can  be  written  as  h  =  IIaicr(g,)  with 
+a,  e  K[xi,.  ..,!„].  Let  h'  =  Efliffn  then  a(/j')  =  h. 
+
+Now  h'  G  /,  and  /  is  a  homogeneous  ideal.  Write  h'  =  Hf-o  h'^  where 
+h'^  is  the  degree  z  homogeneous  component  of  h'.  Each  h'^  is  in  /,  so 
+h'  =  Yli=o^'z^'n+i  ^  ^-  This  polynomial  h'  also  has  the  property  that 
+cr{h')  =  /i,  but  moreover  h'  is  a  homogeneo\is  polynomial. 
+
+G  is  a  Grobner  basis  for  7,  so  there  is  a  polynomial  y,  6  G  such  that 
+HeadB(g,)  divides  HeadB(/i*).     But  then,  a(HeadB(^,))   =  Headyi(cr(g,)) 
+divides  (7(Heads(/i*))  =  Head^(a(/i*))  =  Head^(/i). 
+Q.E.D. 
+
+
+4     Partitioning  the  Polynomial  Space 
+
+Definition:  A  set  P  =  {{hi,  Ui), . . . ,  {hr,  u^)}  partitions  T  C  K[X]  if  the 
+sets  S(hi,  Ui)  are  a  homogeneous  disjoint  decomposition  of  T.  In  particular 
+note  that 
+
+1.   {(/i,  u)}  partitions  5(/i,u). 
+
+
+4     PARTITIONING  THE  POLYNOMIAL  SPACE  11 
+
+2.  {(1,A')}  partitions  5(1,  X)  =  K[X]. 
+
+3.  Let  Si  and  S-i  be  a  disjoint  decomposition  of  T,  and  let  Pj  and  P2 
+partition  Si  and  S2  respectively,  then  Pi  U  P2  partitions  T. 
+
+4.  Let  Xj  G  u,  then  {{xjh,u),{h,u  —  {xj})}  partitions  S(/i,u). 
+
+5.  Let  P  partition  T,  {h,u)  €  P,  and  P'  partition  S(h,u). 
+Then  (P  -  {h,u))  U  P'  partitions  T. 
+
+Definition:  For  T  C  A" [A''],  P  is  called  a  standard  partition  of  T  if 
+
+1.  P  is  a  partition  of  T. 
+
+2.  P  is  finite. 
+
+3.  Let  ap  =  min{deg(;j)   :   (;i,ti)  6  P  &  u  ^  0}. 
+
+For  every  {g,v)   G  P  and  degree  (f  such  that  ap  <  d  <  deg{g),  P 
+contains  a  pair  (/i,u)  with  deg{h)  =  d  and  |u|  >  \v\. 
+
+In  particular  note  that 
+
+1.  {{h,u)}  is  a  standard  partition  of  S{h,u). 
+
+2.  Let  Si  and  52  be  a  disjoint  decomposition  of  T,  and  let  Pi  and  P2 
+partition  5i  and  52  respectively  with  ap^  =  ap^.  Then  P  =  Pi  U  P2  is 
+a  standard  partition  of  T  with  ap  =  ap^  =  ap^. 
+
+3.  Let  Si  and  S2  be  a  disjoint  decomposition  of  T,  and  let  Pi  and  P2  be 
+standard  partitions  of  Si  and  S2  respectively  with  ap,  <  ap^.  Then, 
+if  Pi  contains  a  pair  {g,v)  with  deg{g)  =  ap^  —  1  and 
+
+|u|    >    max{|u|  :   {h,u)  €  SJ 
+
+then  P  =  Pi  U  P2  is  a  standard  partition  for  T  with  ap  =  ap^ . 
+
+4.  Let  P  be  a  standard  partition  of  T,  then  for  any  degree  d,  the  set 
+{(/i,  u)  e  P  :  deg(/i)  >  d}  is  a  standard  partition  for  some  set  T'  C  T. 
+
+5.  If  P  =  {(/ii,  Ui), . . . ,  {h„  u,))  is  a  standard  partition  for  T,  then  for 
+any  homogeneous  polynomial  c,  the  set  P'  =  {(c/ii,Ui), . . . ,  (c/i,,u,)} 
+is  a  standard  partition  for  {ch  :  h  ^T]  with  apt  =  ap -\-  deg(c). 
+
+
+4    PARTITIONING  THE  POLYNOmAL  SPACE  12 
+
+There  is  one  speciaJ  partition  which  provides  a  viseful  function  in  manipu- 
+lating standard  partitions. 
+Definition:  Let  u  =  {xj^ , . . . ,  Xj^}  C  X  Then  define  the  set  E{h,  u)  as 
+
+E{h,u)   =    {(/i,0)}u{(x,.ft,{ij.,...,x,„.})   :   l<m}. 
+
+It  is  easy  to  verify  that  E{h,u)  is  a  standard  partition  of  S(h,u). 
+
+Lemma  11  Let  Q  be  a  standard  partition  for  T.  Then,  for  any  degree 
+d  >  aq,  there  exists  a  standard  ■partition  Qd  for  the  set  T  with  qq^  =  d. 
+
+Proof.  The  proof  uses  induction  on  d.  For  d  =  og,  the  set  Q  itself  is  the 
+standard  partition  Qj.  Now,  assume  inductively  that  we  have  a  standard 
+partition  Qd-i  for  T  with  og^^j  =  d—l.  \\'rite  Qd-i  as  Qd-i  =  RuS,  where 
+R  =  {{h,u)  e  Q  :  deg(;i)  =  d  -  1}  and  S  =  {{h,u)  G  Q  :  deg{h)  >  d}. 
+Then  let  R'  =  U^  K^^E(h,u),  and  Qj  =  H' U  5  is  a  partition  for  Tj.  It 
+remains  to  be  proven  that  Qd  is  a  standard  partition.  There  are  two  cases 
+to  consider: 
+
+1.  J?  =  0.  Then  Qd  =  S,  and  S  is  known  to  have  the  form  of  a  standard 
+partition. 
+
+2.  il  7^  0.  Then  Og^.j  =  d  —  I,  and  if  5  is  non-empty  then  5  must 
+contain  a  pair  {h,u)  with  deg(/i)  =  d.  Therefore  S  is  either  empty,  or 
+a  standard  partition  with  as  =  d.  Now,  R'  consists  entirely  of  pairs 
+(/i,  u)  with  deg(/i)  =  d,  and  so  R'  is  trivially  a  standard  partition 
+Cfi'  —  d.  It  then  follows  that  Qd  =  R'  Li  S  is  also  a  standard  partition 
+with  cg^  =  d. 
+
+Q.E.D. 
+
+Corollary  4  iet  5i  antf  52  be  a  disjoint  decomposition  of  T,  and  let  P\ 
+and  P2  be  standard  partitions  of  Si  and  S2  respectively.  Then  there  exists 
+a  standard  partition  P  of  T  with  ap  =  niax{a/'j,opj}. 
+
+
+5    SPLITTING  A  MONOMIAL  IDEAL  13 
+
+5      Splitting  a  Monomial  Ideal 
+
+Let  /  be  an  ideal  of  A' [A']  =  K[xi, . . .  ,x„]  generated  by  the  set  of  monomials 
+F  =  {/i, . .  • ,  /r}-  For  a  given  variable  Xj,  there  is  a  disjoint  decomposition 
+of  /  consisting  of  Iq  and  /i  where 
+
+/o  =   InK[X-{x,}] 
+
+and, 
+
+/i   =   {xjh  :  h  e  K[X]  k  x,h  e  1}  . 
+
+Clearly,  Iq  is  an  ideal  of  K[X  -  {x,}]  generated  by  F  D  K[X  -  {x^]].  It 
+is  also  easy  to  verify  that  I\  is  an  ideal  of  K\X\  generated  by  the  set 
+G  =  {yi,...,gr},  where 
+
+
+^    r  x,U    /.  6  K[ 
+^'  \  fi        otherwi 
+
+
+X  -  {x,}] 
+therwise 
+
+
+Comparing  the  ideal  I^  defined  above  with  /  :  Xj,  we  find  that  /j  =  {xjh  : 
+h  E  I :  Xj}.  Furthermore,  this  leads  us  to  the  fact  that  /  :  Xj  is  generated 
+by  ^  =  {hi, . . . ,  hr}  where 
+
+
+''   -   '^   ^'    -    I  x-7.    ot 
+
+
+€  K[X  -  {xj}] 
+otherwise 
+
+
+Definition:  Let  P  U  Q  be  a  partition  of  T  C  A'[X],  and  let  /  be  an  ideal 
+of  /i'fA].  Then  P  and  Q  are  said  to  split  T  relative  to  I  if 
+
+{h,u)  G  P  impHes  S{h,u)  C  I   (i.e.  h  €  /),  and 
+
+{h,  u)  eQ  imphes  S{h,  u)  D  /  =  0. 
+
+In  other  words,  P  is  a  partition  of  Tfl/,  and  Q  is  a  partition  of  rnA'[A'']//. 
+The  following  two  lemmas  will  provide  us  with  an  algorithm  to  split 
+Ar[A]  relative  to  a  monomial  ideal  /. 
+
+Lemma  12  Let  I  be  a  monomial  ideal  g  E  PP[x],  and  let  F  be  a  monomial 
+basis  for  I  :  g.    Then,  1  G  F  implies  S{g,  X)  C  /. 
+
+
+5    SPLITTING  A  MONOMIAL  IDEAL  14 
+
+Proof. 
+
+leF  =1^  lelig  =^  g  e  I  =)>  Sig,X)ci. 
+Q.E.D. 
+
+Lemma  13  Let  I,g,  and  F  he  the  same  as  in  the  previous  lemma,  and  let 
+uCX.  Then  F  n  K[u]  =  0  implies  S{g,  u)  n  7  =  0. 
+
+Proof.  Assume  that  FnK[u]  =  0,  but  that  S{g,u)r\I  is  non-empty.  Then, 
+there  exists  an  /i  G  K[u]  such  that  gh  e  I.  But  this  impHes  that  h  e  I :  g, 
+and  so  there  must  be  an  /,  G  F  such  that  Head(/i)  is  a  multiple  of  /,.  But 
+this  leads  to  the  contradiction  fi  G  K[u]. 
+Q.E.D. 
+
+Algorithm  for  Splitting  S{h,u)  relative  to  / 
+
+SPLIT(;i,u,F) 
+
+Input  :  h  G  PP[X] 
+
+u  C  X  is  a  set  of  variables 
+F  a  monomial  basis  for  /  :  /i  C  K[X] 
+If  1  G  F  then  return  (P  =  {{/i,u)},Q  =  0) 
+IfFnPP[r]  =  0  then  return  (P  =  0,  g  =  {(/i,u)}) 
+Otherwise 
+Choose  s  C  u  a.  subset  of  maximum  size  such  that  F  n  A'[s]  =  0 
+Choose  Xj  G  u  —  5     [If  s=u  we  would  not  reach  this  point.] 
+
+(Po,Qo):=SPLIT(/i,u-{x,},  F) 
+
+For  /.  G  F,  if  fi  G  K[X  -  {x,}]  then  //  :=  fi 
+
+else  //  :=  xff, 
+F'  :=  {/,'  :  /i  G  F}        [F'  is  a  monomial  basis  for  /  :  Xjh.] 
+(Pi,Qi):=SPLIT(i,7i,tz,  F') 
+return  (P  =  Po  U  P/,  Q  =  QqU  Qi) 
+End. 
+
+Lemma  14   The  algorithm  terminates. 
+
+
+5    SPLITTING  A  MONOMIAL  IDEAL  15 
+
+Proof.  For  a  set  of  arguments  h,  u  and  F,  define  the  rank  of  the  arguments 
+as  |u|  +  IT/eF^^sC/)-  W^  ^°^  claim  if  SPLIT  is  invoked  with  arguments 
+of  rank  r,  then  the  two  recursive  calls  (if  reached)  have  arguments  of  rank 
+<  r  —  1.  For  the  first  call,  this  is  trivial.  For  the  second  call,  we  must  show 
+that  there  is  some  /,  6  F  such  that  /,  ^  PP[A'  —  {xj)].  But,  this  must  be 
+true  since  otherwise  we  would  have  F  C\  K[s  U  {xj}]  =  0  contradicting  the 
+choose  of  5,  and  hence  Xj. 
+
+If  r  =  0,  then  F  must  either  be  {1},  or  0.  In  either  case,  the  recursion 
+stops.  We  can  therefore  conclude  that  the  depth  of  recursion  is  at  most  r, 
+and  hence  the  algorithm  terminates. 
+Q.E.D. 
+
+Corollary  5   Lei  F  be  a  monomial  basis  for  the  ideall  :  h.   Then  SPLIT(h,  u,  F) 
+produces  sets  P,  and  Q  which  split  S(h,u)  relative  to  I.  In  particular,  the 
+set  Q  is  a  partition  of  S{h,u)  n  K[X]/I. 
+
+Our  main  interest  in  splitting  S(h,u)  relative  to  I  is  the  set  Q  which  par- 
+titions 5(/i,  u)  n  K[X]/I.  The  algorithm  produces  P  also  simply  because  it 
+is  so  easy.  In  the  following  material  however,  we  will  often  refer  to  the  set 
+Q  as  the  set  returned  by  SPLIT(1,X,F). 
+
+Lemma  15  If  the  set  Q  returned  by  Partition(h,u,F)  is  non-empty,  then 
+Q  contains  a  pair  of  the  form  {h,s),  and  for  any  {g,v)  €  Q,  \s\  >  \v\. 
+
+Proof.  Assume  that  Q  is  non-empty,  and  let  {g,v)  G  Q.  Then  S{g,v)  C 
+S{h,u),  and  S{g,v)  n  /  =  0.  The  only  power  products  in  S(h,u)  are  the 
+set  {ph  :  p  e  PP[u]},  so  g  =  ch  for  some  c  G  PP[u]. 
+
+S{h,v)  n  /  must  also  be  empty,  since  otherwise  a  p  6  K[v]  such  that 
+ph  £  I  implies  p{ch)  G  I  contradicting  the  fact  that  S(g,v)  H  J  is  empty. 
+
+If  u  =  u,  then  the  algorithm  returns  Q  =  {{h,u)}  satisfying  the  lemma. 
+Otherwise,  the  choice  of  Xj  assures  that  (5(/i,  u)  Ci  K[u  —  {xj}])/I  contains 
+S{h,s)  where  \s\  >  \u\.  Now,  using  induction  on  the  depth  of  recursion,  the 
+partition  Qq  contains  a  pair  {h,s)  where  \s\  >  \u\.  The  lemma  then  follows 
+from  the  fact  that  Qq  is  a  subset  of  Q. 
+Q.E.D. 
+
+
+5    SPLITTING  A  MONOMIAL  IDEAL  16 
+
+Lemma  16  Let  I  be  a  monomial  ideal  of  K[X],  and  let  F  be  the  unique 
+minimal  power  product  basis  for  I.    Then,  for  each  f  E  F,  there  is  a  pair 
+
+{f,^)eP. 
+
+Proof.  Let  /  be  any  element  of  F.  Since  /  6  /  H  A' [AT],  there  is  some 
+{h,u)  E  P  such  that  /  €  S{h,u).  But,  now  h  is  also  in  I,  so  h  =  bg  for 
+some  g  E  F.  But  /  G  S{h,  u),  so  we  can  write  f  as  f  =  ah  =  abg.  We 
+must  therefore  have  f  =  h  =  g,  since  otherwise  we  would  contradict  the 
+fact  that  /  is  a  required  basis  element. 
+Q.E.D. 
+
+Lemma  17  Let  F  be  a  minimal  monomial  basis  for  I  ^  A[A'^],  and  let  Q 
+be  the  set  returned  by  SPLIT(1,X,F).  Then  for  every  f  E  F,  Q  contains 
+a  pair  {h,u)  with  deg{h)  =  deg(/)  -  1. 
+
+Proof  Let  P  be  the  other  set  returned  by  SPLIT(1,  A",  F).  Let  /  be  any 
+element  of  F.  P  is  a  power  product  partition,  so  by  the  preceding  lemma 
+there  is  a  pair  (/,  v)  €  P-  Now,  consider  how  this  pair  got  into  P.  There 
+must  have  been  a  recursive  call  SPLIT(/,  v,  F'),  where  F'  is  a  basis  for 
+/  :  /.  There  also  must  have  been  some  variable  Xj,  such  that  the  parent  of 
+this  recursion  was  an  invocation  of  SPLIT  with  parameters  SPLIT(xJ  /, 
+v,  F").  But  then  from  lemma  (15)  we  find  that  Q  contains  a  pair  of  the 
+form  {x~^f,s)  satisfying  the  lemma. 
+Q.E.D. 
+
+Corollary  6  Let  F  be  a  monomial  basis  for  I,  and  let  Q  be  the  set  returned 
+by  SPLIT(1,X,F).  Then  if  d  =  max{deg(/i)  :  (/i,u)  G  Q],  I  can  be 
+generated  by  the  set  {/  €  F  :  deg(/)  <  <f  +  1}. 
+
+Lemma  18  Let  Q  denote  the  set  returned  by  SPLIT(h,  u,  F).  Q  is  a  stan- 
+dard partition  of  S{h,u)  0  K[X]/{F)  with  Gq  =  deg{h). 
+
+Proof.  If  Q  is  either  0  or  {(/i,u)},  then  the  lemma  follows  trivially.  Oth- 
+erwise, assume  inductively  that  Pq  and  Pj  are  standard  partitions.  Pj  is  a 
+standard  partition  for  some  set  T  with  oj-  =  deg(/i)  +  1.  From  lemma  (15), 
+we  know  that  Q  contains  a  pair  {g,v)  with  deg(g)  =  deg(/i),  and  |i;|  >  |5| 
+for  any  pair  {f,s)  6  Q.  Since  the  pair  {g,v)  cannot  be  in  Pi,  it  must  be  in 
+
+
+6    PARTITIONING  A  HOMOGE^-Z:  IS  IDEAL  17 
+
+Po>  ^^d  hence  Q  is  a  standard  partrioc  with  qq  =  deg{h). 
+Q.E.D. 
+
+Corollary  7  For  any  {h,u)  e  Q,  d'^r/t)  <  \Q\  -  I. 
+
+Corollary  8  /  can  be  generated  by  mj-wmials  of  degree  <  \Q\. 
+
+It  follows  from  the  previous  remancs  -Jiat  the  set  Q  returned  by  SPLIT(1,  X,  F) 
+is  a  standard  partition  of  K[X]/{Fj  »riii  og  =  0.  The  main  result  of  this 
+section  follows  immediately  from  tbi  r^nstruction  provided  by  algorithm 
+SLPIT. 
+
+Theorem  19  For  any  ideal  I,  there  2=Lrtj  a  standard  partition  Q  ofK[X]/I 
+
+with  gq  =  0. 
+
+Proof.  The  set  K[X]/I  =  K[X]/Eeb.'^'.  and  since  Head(/)  is  a  monomial 
+ideal  the  algorithm  SPLIT  may  be  teed  to  produce  a  standard  partition. 
+Q.E.D. 
+
+6     Partitioning  a  Homcgeneous  Ideal 
+
+So  far  we  have  seen  that  for  any  hoirc/^ieous  ideal  /,  there  exists  an  exact 
+partition  of  K[X]/I.  But  what  abotn  J  itself?  The  construction  which  we 
+presented  for  partitioning  /  is  only  vh3£i)r  monomial  ideals,  and  even  this 
+does  not  provide  a  standard  partitioi.  Zhe  answer  is  found  in  the  following 
+lemma. 
+
+Lemma  20  Let  F  =  {/i,---,/r}  hi  c  xomogeneo-as  basis  for  an  ideal  I, 
+then  there  exists  a  standard  pariitioi  ~  yr  I  with 
+
+ap  =  maxjde^J:}  :  t  <  r}. 
+
+Proof.  The  proof  uses  induction  on  -^  aumber  of  generators  r.  If  r  =  1, 
+then  /  is  a  principle  ideal  which  has  izs  standard  partition  P  =  {(/i,  X)}. 
+Now,  assume  inductively  that  the  j=nma  is  true  for  r  -  1.  Recall  that 
+if  J  =  (/i, . . . ,  /._i)  and  L  =  J  :  /„  -G^  J  and  R  =  {hf,  :  /,  €  K[X]/L} 
+form  a  disjunct  decomposition  for  L  lang  the  construction  provided  by 
+
+
+7     THE  EXACT  PARTITION  18 
+
+SPLIT,  we  can  form  a  standard  partition  Q  for  K[X]/L  with  cq  =  0.  If  Q  = 
+{(/ii,ui),...,(/i,,u,)}  then  it  follows  that  Pi  =  {{frhi,Ui),. . .  ,{frh„u,)} 
+is  a  standard  partition  for  R  with  ap^  =  degfr. 
+
+From  the  induction  hypothesis,  there  exists  a  standard  partition  P2  of  J 
+with  apj  =  max{deg(/i)  :  t  <  t  —  1}.  It  then  follows  from  corollary  (4)  that 
+there  exists  a  standard  partition  P  for  /  with  op  =  max{deg(/,)  :  i  <  r). 
+Q.E.D. 
+
+This  result  can  be  slightly  improved  if  we  assume  that  I  ^  ^.  Let  F  = 
+{/i)  •  •  • » /r}  t)e  a  homogeneous  basis  for  I  with  r  >  2,  and  d  =  max{deg(/,)  : 
+t  =  1, . . .  ,r}.  We  have  already  seen  that  if  we  let  Ji  =  {fi,.  . . , /i_i),  and 
+Li  =  Ji  :  fi,  then  the  sets  5,  =  {c/,-  :  c  G  K[X]/Li}  form  a  disjoint 
+partition  of  /.  We  also  know  how  to  form  a  standard  partition  Pi  for  each 
+5,  in  which  op,  =  d.  Now,  we  could  join  these  into  one  standard  partition 
+P  for  7  as  we  did  in  the  previous  lemma.  Instead,  keep  the  set  Si  =  (/i) 
+outside  of  the  standard  partition.  Then  we  find  that  I  is  the  disjoint  union 
+of  (/i)  and  a  standard  partition  P  with  ap  =  d.  ^ 
+
+7     The  Exact  Partition 
+
+Definition:  For  T  C  /v  [X],  Q  is  called  an  exact  partition  of  T  if  Q  is  a 
+standard  partition  of  T  and  additionally  for  every  degree  d,  Q  contains  at 
+most  one  pair  {h,u)  with  deg(/i)  =  d  and  u  7^  0. 
+
+Let  Q  be  an  exact  partition  of  T.  For  i  =  0, . . .  ,n  +  1,  let 
+
+bi  =  min{(f  >  oq  :   {h,u)  G  Q  &c  \u\  >  i   =>   deg(/i)  <  d)  . 
+
+Then  for  each  t  >  0  and  degree  d  such  that  6,+i  <  d  <  b,,  there  is  exactly 
+one  pair  {h,u)  6  Q  such  that  deg(/i)  =  d  and  u  5^  0,  and  in  that  pair 
+|u|  =  i.  It  is  a  simple  consequence  of  their  definition  that  the  6/'s  satisfy 
+
+feo  ^  ^1  ^  •  •  •  ^  ^n+l  =  0.Q- 
+
+Now  finally  we  have  reached  a  type  of  partition  for  which  we  can  write 
+the  Hilbert  function.  For  z  >  60,  pairs  of  the  form  {h,  0)  do  not  contribute 
+to  the  Hilbert  function  since  they  all  have  deg(/i.)  <  z.   Furthermore,  the 
+
+
+^The  ability  to  form  a  standard  partition  is  in  many  ways  similar  to  the  idea  of  placing 
+an  ideal  into  generic  coordinates. 
+
+
+7    THE  EXACT  PARTITION  19 
+
+Hilbert  function  of  all  other  S(h,u)  sets  has  reached  the  point  at  which  it 
+is  described  by  the  binomial  coefficient 
+
+_    (  z-deg{h)  +  \u\-l\ 
+
+And  so,  for  z  >  bo,  the  Hilbert  function  of  a  set  T  which  has  an  exact 
+partition  can  be  expressed  in  the  form: 
+
+
+(^r(2) 
+Using  the  combinatorial  identity 
+
+we  can  write  the  Hilbert  function  of  T  in  the  form: 
+
+
+z  -  bi  +  i 
+i 
+
+
+z  -  6„+i  +  ")_[2-^  +  i)^y((^-  ^'+1  +  M  _  (  ^  -  ^'+1  + ''  +  ^ 
+
+
+V  "      y       \   ^   )   t\    i+'^    J 
+
+V  "      )      roV    '  +  1    ; 
+
+For  P  an  exact  partition  of  T,  we  will  refer  to  the  constants  6o)  •  •  • ,  ^n+i  as 
+the  Macaulay  constants  of  T,  in  reference  to  the  fact  that  in  [Macaulay  1927] 
+it  was  first  shown  that  the  Hilbert  function  of  K[X]II  can  be  written  in 
+this  form. 
+
+The  following  trivial  lemma  provides  a  tool  by  which  any  standard  par- 
+tition may  be  transformed  into  an  exact  partition. 
+
+
+7    THE  EXACT  PARTITION  20 
+
+Lemma  21   Lei  Q  be  a  standard  partition  ofT,  and  let  (/i,iz),  (g,  d)  G  Q 
+such  that  deg(/i)  =  deg(g),  and  \v\  >  \u\  >  0.   Then  for  any  Xj  6  u, 
+
+Q'   =   (Q-{(/i,u)})u{(/i,u-{x,}),(x,/i,u)} 
+
+13  also  a  standard  partition  of  T. 
+
+Proof.  It  must  be  shown  that  Q'  satisfies  the  three  conditions  of  the  defi- 
+nition of  standard  partition.  The  first  two  conditions  follow  trivially.  The 
+presence  of  (^,  v)  G  Q'  is  sufficient  to  show  that  the  third  condition  also 
+holds. 
+Q.E.D. 
+
+This  lemma  provides  us  with  a  tool  to  shift  pairs  away  from  degrees  occu- 
+pied by  other  pairs.  Consider  the  following  algorithm. 
+
+Algorithm  for  Shifting  Pairs  in  a  Standard  Partition 
+
+SHIFT(Q,  (i,m) 
+
+Input  :  Q  a  standard  partition  for  T 
+d  a  degree  >  0 
+
+m  a  size  of  a  subset  of  X,  1  <  m  <  n 
+If  3(h,  u)  6  Q  such  that  deg(/i)  =  d  and  \u\  >  m 
+then  mustkeep  :=  0 
+else  mustkeep  :=  1 
+B   :=    {{h,u)  6  Q  :  deg(/i)  =  d  k  \u\  =  m) 
+While  \B\  >  mustkeep  loop 
+
+Choose  {h,u)  G  B  with  minimal  |u| 
+Choose  Xj  G  u 
+B   :=   B-{{h,u)} 
+
+Q   :=   (Q  -  {{h,u)})l>  {{h,u  -  {xj]),{x,h,u)} 
+End  While  loop 
+retum(Q) 
+End. 
+
+
+If  follows  from  the  previous  discussion  that  the  set  Q'  returned  by  SHIFT(Q,  d,  m) 
+is  also  a  standard  partition  of  T.  Furthermore,  note  that 
+
+\{{h,u)  G  Q'  :  \u\  >  m}   =    \{{h,u)  G  Q  :  \u\  >  m}  . 
+
+
+7     THE  EXACT  PARTITION  21 
+
+Now,  using  the  SHIFT  algorithm  we  can  produce  an  exact  partition  as 
+follows. 
+
+Algorithm  for  Producing  an  Exact  Partition 
+
+EXACT(Q) 
+
+Input  :  Q  a  standard  partition  for  T 
+
+Qn+i    :=    Q 
+
+For  m  :=  n  down  to  1  do 
+
+Qm     '•=     Qm+l 
+
+D   :=   \{{Ku)eQm  :  |"|  >  m}| 
+For  d  :=  0  to  D  -  1  do 
+
+Q„:=SHIFT(Q„,J,m) 
+End  For  d  loop 
+End  For  m  loop 
+retum(Qi) 
+End. 
+
+
+Of  course  this  eJgorithm  could  be  written  without  the  nested  loops.  It  has 
+been  written  in  this  way  so  that  termination  is  obvious.  The  action  of 
+the  SHIFT  algorithm  assures  that  at  all  intermediate  stages,  Q^  remains 
+a  standard  partition  for  T.  The  correctness  of  the  algorithm  then  follows 
+from  the  following  lemma. 
+
+Lemma  22  For  any  m  and  degree  d,  Q^  contains  at  most  one  pair  {h,u) 
+with  deg{h)  =  d  and  \u\  >  m. 
+
+Proof.  Since  the  claim  holds  vacuously  for  m  =  n,  we  proceed  inductively 
+on  decreasing  values  of  m.  Assume  that  the  claim  is  true  for  m  +  1.  The 
+action  of  SHIFT  will  then  assure  that  at  the  conclusion  of  the  For  d  loop, 
+Qm  contains  at  most  one  pair  {h,u)  with  \u\  >  m  and  deg(/i)  =  d  for  each 
+degree  d  <  D.  SHIFT  also  assures  that  each  intermediate  set  Qm  main- 
+tains the  fact  that  \{{h,u)  G  Qm  '■  W\  >  m}\  remains  equal  to  the  constant 
+D.  For  d  >  D  there  cannot  be  a  pair  (/i,  u)  £  Q  with  deg(/i)  =  d  and 
+|u|  >  m  since  then  the  fact  that  Q  is  a  standard  partition  would  require 
+that  |{(/i,u)  €  Qm  ■  \u\  >  m}\  >d+l>D  +  l  which  is  a  contradiction. 
+Q.E.D. 
+
+
+8    BOUNDING  THE  MACAULAY  CONSTANTS.  22 
+
+The  main  result  of  this  section  follows  immediately  from  the  EXACT  algo- 
+rithm. 
+
+Theorem  23  Let  T  be  a  subset  of  K[X]  such  that  there  exists  Q  which  is 
+a  standard  partition  ofT.  Then,  there  also  exists  Q'  which  is  an  exact  par- 
+tition ofT.  Furthermore,  associated  with  this  exact  partition  are  Macaulay 
+constants  bo  >  bi  >  ■  ■  ■  >  bn+i,  where  6„+i  =  aq,  and  6o  >  |<3|  —  aq,  and 
+for  z  >  bo,  the  Hilberi  function  ofT  is  described  by 
+
+(  z  -  hn+\  +  n\       ,       ^(z-bi^-i-\\ 
+
+Corollary  9  Lei  I  ba  a  homogeneous  ideal,  and  let  bo  >  bi  >  •  ■  •  b^+i  =  0 
+be  the  Macaulay  constants  K[X]/I.  Then  for  any  admissible  ordering  >, 
+the  monomial  ideal  EeadA{I)  can  be  generated  by  power  products  of  degree 
+<  bo,  and  hence  a  minimal  Grobner  basis  for  I  with  respect  to  >  consists 
+of  polynomials  whose  degrees  are  also  bounded  by  bo. 
+
+8     Bounding  the  Macaulay  Constants. 
+
+Let  F  =  {/i , . . . ,  /r}  be  a  homogeneous  basis  for  an  ideal  /.  Assume  without 
+loss  of  generality  that  /i  has  the  largest  degree  deg(/i)  =  d.  We  have  shown 
+that  there  exists  a  exact  partition  Q  for  K[X]/I  with  oq  =  0.  Letting 
+bo  ^  bi  >  •  •  •  >  6„+i  =  0  be  the  Macaulay  constants  for  K[X]/I,  we  know 
+that  for  z  >  bo  the  Hilbert  function  of  K[X]/I  is  given  by 
+
+fK[x]/i{z) 
+
+It  was  also  shown  that  /  itself  has  a  disjoint  decomposition  consisting  of 
+the  principle  ideal  (/i)  and  an  exact  partition  P  with  ap  =  d.  Letting 
+o-Q  ^  Oi  >  ■  •  •  >  a„+i  =  d  he  the  Macaulay  constants  for  the  portion  of  I 
+partitioned  by  P,  for  z  >  ao  we  can  write  the  Hilbert  function  of  /  as 
+
+
+8    BOUNDING  THE  MACAULAY  CONSTANTS. 
+
+
+23 
+
+
+N'^v.'  since  I  and  K[X]/I  form  a  disjoint  decomposition  of  /vf-Y],  the  sum 
+of  their  Hilbert  functions  must  be  equal  to  the  Hilbert  function  of  A' [A'] 
+
+■which  is  fKlX]{^)  =  I       „      1        )•  Therefore,  for  z  >  maxjao,  to}  we  find 
+
+
+that 
+
+
+z  +  n-1 
+n-1 
+
+
+n-  1 
+
+
+z-d  +  n-l  \       I   z-d  +  n  \ 
+
+n-1     ry     n     r 
+
+
+-2-E 
+
+
+«=1 
+
+
+z  —  a,  +  I  —  1 
+i 
+
+
++ 
+
+
+z  +  n 
+n 
+
+z  -b,  +  i-l 
+i 
+
+
+The  backw'ards  difference  operator  V  is  defined  for  any  function  F{z) 
+by:    VF{z)   =   F{z)  -  F{z  -  1),   and  V^F{z)   =   V{V^-^F{z)).     Using 
+
+I  —  (  )  ~  I  1  we  induce  that 
+
+Now  if  Fi(2)  =  ^2(2)  for  z  >  k,  then  clearly  VFi(z)  =  VFjCz)  for 
+z  >  k-\-\.  We  can  therefore  apply  the  backwards  difference  operator  to  the 
+equation  above  and  find  that  for  sufficiently  large  2,  for  each  j  =  0, . . . ,  n  — 1 
+we  get  an  equation: 
+
+
+the  identity 
+
+
+2  +  n  -  j  -  1 
+n  —  j  —  \ 
+
+
+z  —  d-r  n  —  j  —  \ 
+n  —  j  —  1 
+
+z  —  Ot  +  i  —  j  —  I 
+
+
+_^  f  z-d  +  n-  j  \       I  z  +  n 
+
+
+-2-  E 
+
+
++ 
+
+
+b,  +  i-j-l 
+i-  j 
+
+
+Now,  each  side  of  these  equations  is  a  polynomial  in  2,  so  they  must  agree 
+for  each  power  of  2.  In  particular,  they  must  have  the  same  constant  term. 
+
+Noting  that  the  constant  term  of  I  j  is  given  by 
+
+
+0  +  Jt 
+n 
+
+
+—    < 
+
+
+k 
+n 
+
+
+(-iri 
+
+
+k  +  n  — 
+
+
+n-l\ 
+n  ) 
+
+
+Jt  >  0 
+k<0 
+
+
+8    BOUNDING  THE  MACAULAY  CONSTANTS. 
+
+
+24 
+
+
+leads  to  the  equations 
+
+1     =    (-1)"-^-' 
+
+
+d-1 
+
+
+n  —  j  —  I 
+
+
++  (-1)"-^! 
+
+
+n-j  J 
+
+
+-1  -  E  (-ir 
+
+
++ 
+
+
+6. 
+
+i-j 
+
+
+At  j  =  n  —  1,  this  yield 
+
+
+1  - 
+
+
+d-l 
+1 
+
+
+1  +  a„  +  6„  =  1  . 
+
+
+So  On  +  bn  =  d.  But  we  already  have  the  conditions  a„  >  cf,  ajid  6„  >  0. 
+Therefore,  it  must  be  the  case  that  a„  =  d.  Substituting  these  values  the 
+series  of  equations  becomes: 
+
+
+2(- 
+
+
+d-\ 
+
+
+n-l 
+
+
+a, 
+
+
++ 
+
+
+hi 
+
+
+Let  Cj+i  denote  the  sum  a^+i  +  tj+i-  Solving  for  this  expression  yields 
+
+
+=  1  . 
+
+
+c,+i     =    2 
+
+
+d-\ 
+
+
+Ti-l 
+
+
++2(-ir-'U-]-ij^£(-i)-' 
+
+
+»-; 
+
+
++ 
+
+
+6.- 
+i-j 
+
+
+At  this  point,  we  note  that  the  sum  on  the  right  is  vacuous  for  ji  =  n  —  2 
+we  can  conclude  that  c„_i  =  2  +  2(d  —  1)  =  2d.  And  since, 
+
+
+a.+i 
+
+
++ 
+
+
+('r)^(i 
+
+
+r  ■ 
+
+
+(1) 
+
+
+is  true  for  all  z,  for  j  =  n  —  3  we  get, 
+
+
+The  expression  for  the  remaining  Cj+i's  contains  the  term 
+
+
+2  +  (-l)"-^' 
+
+
+d-\ 
+
+n  —  j  —  1 
+
+
+n  —  j  —  I 
+
+
+n  —  j  —  I 
+
+
+8    BO UNDING  THE  MA CA ULA Y  CONSTANTS. 
+
+
+25 
+
+
+The  magnitude  of  this  combination  is  bounded  by  (        ^"~^        i    so  W( 
+obtam  the  mequahties 
+
+
+n-2 
+
+
+^i+i 
+
+
+^  U-7-1  +..?(->)-' 
+
+
+.=J+2 
+
+
+I- J 
+
+
++ 
+
+
+b. 
+
+
+Now,  noting  that  the  term  in  the  sum  for  i  =  j  +  3  has  a  negative  sign, 
+we  may  discard  this  term,  and  make  all  other  terms  positive  to  obtain  the 
+simpler  inequalities: 
+
+
+Cj+l      < 
+
+
+n  —  j  —  \ 
+
+
++ 
+
+
+Ci+2 
+
+
+n-l 
+
+
++  E 
+
+
+r  ^  'T 
+
+
+Ci 
+
+
+n-2 
+
+
+<=J+4 
+
+
+a, 
+i-  J 
+
+
++ 
+
+
+»-; 
+
+
+Or,  repairing  the  subscripts, 
+
+
+c.    < 
+
+
+Cj+i 
+
+
+n-l 
+
+
++  E 
+
+
+t=J+3 
+
+
+t  -  ;■  +  1 
+
+
+We  now  claim  that  for  j  <  n  -  2,  Cj  <  2(—  +  (f)2"--'-' 
+
+Proo/.    We  have  already  determined  that  c„_2  <  cf^  +  2 J,  satisfying  this 
+
+claim.  Now,  assume  inductively  that  c.-  has  the  indicated  form  for  i  <i< 
+
+n-2. 
+
+For  i>  j  +  Z  the  inequality  2--'-i  >  t  -  ;  +  1  can  be  used  to  see  that 
+(2"— i)(i  -  i  +  1)  <  2"--'-2.  Therefore, 
+
+
+( 
+
+
+c, 
+
+
+,«-j+i 
+
+
+< 
+
+
+^     C,+  i; 
+
+
+2.-i 
+
+
+t-j  +  1 ;  -  (i->  +  i)!  -  "^+^(f-j  +  i)! 
+
+
+And  so. 
+
+
+c,  < 
+
+
+2' )+£(.■-■■,  I 
+
+
+i=J+3    ^ 
+/~2        ^  n-l 
+
+
+2-J 
+
+
+j+ir 
+
+
+.=^3  ^^'(^-i  +  l)! 
+
+
+8    BOUNDING  THE  MA CA ULAY  CONSTANTS. 
+
+
+26 
+
+
+< 
+
+
+< 
+
+
+2+i 
+2 
+
+
+-  Cj+1 
+
+
+n-1  2'~-' 
+
+
+<f2 
+
+
+jn-j-l 
+
+
+Q.E.D. 
+
+From  this  then  we  can  conclude  that  the  Macaulay  constants  Oi  and 
+6i  are  each  less  than  Ci  <  2(y  +  c/)^"'^  But  what  about  the  constants 
+Oo  and  6o  which  did  not  appear  exphcitly  in  the  Hilbert  function.  Notice 
+that  the  equality  ipi{z)  +  tfK[x]/liz)  =  Va'IX]  which  was  claimed  valid  for 
+z  >  max{ao,6o}  actually  holds  for  z  >  max{ai,6i}.  If  either  partition 
+contained  a  set  S(/i,0)  with  deg(/i)  =  do  >  max{ai,6i),  then  the  this 
+would  increase  the  Hilbert  function  (pi{z)  +  (Pnixyii^)  at  degree  z  =  do 
+destroying  the  equality  which  must  exist  at  every  degree.  Therefore,  both 
+Oo  and  bo  must  be  <  niax{ai,6i}. 
+
+In  conclusion,  if  /  is  a  homogeneous  ideal  generated  by  polynomials 
+of  degree  <  cf,  Then  the  Macaulay  constant  bo  of  K[X]/I  must  satisfy  the 
+bound  given  above  for  Ci.  This  constant  bi  in  turn  provides  an  upper  bound 
+on  the  degree  power  products  which  are  required  to  generate  Head(  J),  and 
+since  these  power  products  appear  as  the  head  terms  of  polynomials  in  a 
+Grobner  basis  for  /,  the  degree  of  required  Grobner  basis  polynomials  is 
+also  bounded  by  the  constant  Ci. 
+
+
+FxEFERENCES  27 
+
+References 
+
+[Bachmair  and  Buchberger  1980]  L.  Bachmair  and  Bruno  Buchberger,  A 
+
+simplified  pToof  of  the  characterization 
+theorem  for  Grobner-bases,  SIGSAM 
+14,  29-34. 
+
+[Bayer  1982]  David   Bayer,     The    Division   Algorithm 
+
+and  the  Hilbert  Scheme  Ph.D.  thesis, 
+Harvard  University  1982. 
+
+[Bayer  1985]  David  Bayer,  An  Introduction  to  the  Di- 
+
+vision Algorithm,  informal  notes. 
+
+[Bayer  and  Stillman  1987]  David  Bayer  and  Michael  Stillman,   A 
+
+criterion  for  detecting  m-regularity,  In- 
+ventiones  mathematicae  87,  1-11. 
+
+[Buchberger  1979]  Bruno  Buchberger,  A  Criterion  for  De- 
+
+tecting Unnecessary  Reductions  in  the 
+Construction  of  Grobner-Basis,  SYM- 
+SAC  1979,  3-20. 
+
+[Buchberger  1985]  Bruno  Puchberger,    Grobner  basis:    An 
+
+algorithmic  method  in  polynomial  ideal 
+theory,  in  chapter  6  of  Multidimen- 
+sional Systems  Theory,  (editor,  N. 
+K.  Bose),  D.Reidel  PubUshing  Company, 
+184-229. 
+
+[Dube,  Mishra  and  Yap  1986]         T.  Dube,  B.  Mishra  and  C.  Yap,  Normal 
+
+form  algorithms  and  admissible  orderings 
+in  Grobner  bases  in  preparation. 
+
+[Giusti  1984]  M.  Giusti,  Some  Effectivity  Problems  in 
+
+Polynomial  Ideal  Theory,  Lecture  Notes 
+in  Computer  Science  174,  1984,159-171. 
+
+
+REFERENCES 
+
+[Lazard  1984] 
+
+
+[Macaulay  1927] 
+
+
+[Mishra  and  Yap  19S6] 
+
+
+[Moller  and  Mora  1984] 
+
+
+[Robbiano  1985] 
+[Stanley  1978] 
+
+[Zariski  and  Samuel  1960] 
+
+
+28 
+
+
+D.  Lazard,  Grobner  basis,  Gaussian 
+elimination  and  resolution  of  systems  of 
+algebraic  equations..  Lecture  Notes  in 
+Computer  Science  174,  1984,  146-156. 
+
+F.S.  Macaulay,  Some  Properties  of  Enu- 
+meration in  the  Theory  of  Modular  Sys- 
+tems, Proceedings  of  the  London 
+Mathematical  Society  26,  1927,  531- 
+555. 
+
+B.  Mishra  and  C.Yap,  Notes  on  Grobner 
+Basis,  in  preparation. 
+
+H.  Michael  Kloller  and  Ferdinand©  Mora, 
+Upper  and  Lower  Bounds  for  the  De- 
+gree of  Groebner  Bases,  Lecture  Notes  in 
+Computer  Science  174,  1984,172-183. 
+
+L.  Robbiano,  Term  Orderings  on  the 
+Polynomial  Ring,  1985,  513-517. 
+
+Richcird  P.  Stanley,  Hilbert  Functions  of 
+Graded  Algebras,  Advances  in  Mathe- 
+matics 18,  1978,57-83. 
+
+Oscar  Zariski  and  Pierre  Samuel,  Com- 
+mutative Algebra,  Volume  II,  Springer- 
+Verlag  1960. 
+
+
+NYU  COMPSCI  TR-341      c  ? 
+Dube,  Thomas  W  '^ 
+
+
+c.2~ 
+
+
+^U  COMPSCI  TR~-,A. 
+Dube  TK^  -^^-341 
+y^  ^'  Thomas  p,^ 
+
+

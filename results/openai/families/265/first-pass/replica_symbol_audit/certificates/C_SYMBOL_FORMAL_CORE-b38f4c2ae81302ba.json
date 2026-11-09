@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_SYMBOL_FORMAL_CORE-09d685a55c61",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/265/first-pass/replica_symbol_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 8459,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/265/first-pass/replica_symbol_audit/Main.lean",
+    "source_sha256": "475dbd0cd88ab044f4e9f619ed232edb72a967575576974ede65c76583395b73",
+    "statement_fidelity": "families/265/first-pass/replica_symbol_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "c91a1ef0baa9e3000447b900ce245c35cd762d16763335415ba842368f6ae17a",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "Try this:\n  [apply] ring_nf\n  \n  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.\n    \n  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.\nTry this:\n  [apply] ring_nf\n  \n  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.\n    \n  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.\nfamilies/265/first-pass/replica_symbol_audit/Main.lean:38:73: error: unsolved goals\ncase «1».«0»\na : ℝ\n⊢ a = 0 ∨ Matrix.vecHead (fun i => Matrix.vecCons (![0, 0] i) (Matrix.transpose ![![a, 0]] i)) 0 = 0\n\ncase «1».«1»\na : ℝ\n⊢ a * Matrix.vecHead (fun i => Matrix.vecCons (![0, 0] i) (Matrix.transpose ![![a, 0]] i)) 1 = a ^ 2\nfamilies/265/first-pass/replica_symbol_audit/Main.lean:50:12: error(lean.unknownIdentifier): Unknown identifier `pow_eq_zero`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/replica_symbol_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace ReplicaSymbol\n\ntheorem complement_product_bounds (xs : List ℝ)\n    (hxs : ∀ x ∈ xs, 0 ≤ x ∧ x ≤ 1) :\n    0 ≤ (xs.map (fun x => 1 - x)).prod ∧\n      1 - xs.sum ≤ (xs.map (fun x => 1 - x)).prod := by\n  induction xs with\n  | nil => simp\n  | cons x xs ih =>\n      have hx : 0 ≤ x ∧ x ≤ 1 := hxs x (by simp)\n      have htail : ∀ y ∈ xs, 0 ≤ y ∧ y ≤ 1 := by\n        intro y hy\n        exact hxs y (by simp [hy])\n      have hi := ih htail\n      have hsum : 0 ≤ xs.sum := List.sum_nonneg (fun y hy => (htail y hy).1)\n      simp only [List.map_cons, List.prod_cons, List.sum_cons]\n      constructor\n      · exact mul_nonneg (sub_nonneg.mpr hx.2) hi.1\n      · calc\n          1 - (x + xs.sum) ≤ (1 - x) * (1 - xs.sum) := by\n            nlinarith [mul_nonneg hx.1 hsum]\n          _ ≤ (1 - x) * (xs.map (fun y => 1 - y)).prod :=\n            mul_le_mul_of_nonneg_left hi.2 (sub_nonneg.mpr hx.2)\n\ndef nilpotent (a : ℝ) : Matrix (Fin 2) (Fin 2) ℝ :=\n  !![0, 0; a, 0]\n\ntheorem nilpotent_square (a : ℝ) :\n    nilpotent a * nilpotent a = 0 := by\n  ext i j\n  fin_cases i <;> fin_cases j <;>\n    simp [nilpotent, Matrix.mul_apply, Fin.sum_univ_two]\n\ntheorem nilpotent_self_commutator (a : ℝ) :\n    nilpotent a * (nilpotent a).transpose -\n      (nilpotent a).transpose * nilpotent a = !![-a ^ 2, 0; 0, a ^ 2] := by\n  ext i j\n  fin_cases i <;> fin_cases j <;>\n    simp [nilpotent, Matrix.mul_apply, Fin.sum_univ_two] <;> ring\n\ntheorem nilpotent_not_normal (a : ℝ) (ha : a ≠ 0) :\n    nilpotent a * (nilpotent a).transpose -\n      (nilpotent a).transpose * nilpotent a ≠ 0 := by\n  intro h\n  rw [nilpotent_self_commutator] at h\n  have hentry := congrArg (fun M : Matrix (Fin 2) (Fin 2) ℝ => M 0 0) h\n  have hsquare : a ^ 2 = 0 := by simpa using neg_eq_zero.mp hentry\n  exact ha (pow_eq_zero hsquare)\n\ntheorem scalar_self_commutator (a b : ℂ) : a * b - b * a = 0 := by\n  ring\n\nend ReplicaSymbol\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/replica_symbol_audit/statement_fidelity.md",
+    "text": "# Formal statement fidelity\n\nThe declarations in namespace `ReplicaSymbol` formalize only\n`C_SYMBOL_FORMAL_CORE`. They do not formalize the full analytic theorem\n`C_SYMBOL_UNIFORM` or the identification of a tensor-sector representation\nin `C_SYMBOL_HALF_SHARP`.\n\n`complement_product_bounds` quantifies over every finite list `xs` of real\nnumbers. Its sole hypothesis says each entry lies in the closed interval\n[0,1]. It proves both nonnegativity of the product of the complements and\nthe lower bound `1 - sum xs <= product (1 - xs)`. This is the arbitrary\nfinite-family union bound used for the donor-collision estimate, not a\nfinite enumeration of list lengths.\n\n`nilpotent` is the real 2-by-2 matrix [[0,0],[a,0]] for an arbitrary real\nparameter `a`. `nilpotent_square` proves its square is zero.\n`nilpotent_self_commutator` proves that its product with its transpose,\nminus the reverse product, equals diag(-a^2,a^2).\n`nilpotent_not_normal` proves that matrix is nonzero whenever `a` is\nnonzero. All matrix identities quantify over every real `a`; they do not\nassume its sign. Transpose here agrees with adjoint because all entries\nare real. In the analytic application, `a=alpha_k` is positive.\n\n`scalar_self_commutator` quantifies over arbitrary complex scalars `a,b`\nand proves `a*b-b*a=0`. Thus the polynomial obstruction is genuinely\nnoncommutative, not a sign convention about a real adjoint.\n\nThe compiler does not verify the Schur labels of the symmetric tensor\nstates, the gamma-weight formula for `alpha_k`, its nonzero limit, the\nHusimi measure, inverse-power estimates, or Bernstein approximation.\nThose links and the application of these formal identities are given\nin `theorem.md` and must be checked by the independent Reviewer.\n"
+  },
+  "subject": {
+    "content_hash": "af3491833ee4dad48f6c569ead835cda5fae506f7b36739931757a8be3c6336b",
+    "kind": "claim",
+    "subject_id": "C_SYMBOL_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

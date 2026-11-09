@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-CC-FORMAL-HUB9000201-a249176a7d0f",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/201/first-pass/cyclic_compatibility/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6839,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/201/first-pass/cyclic_compatibility/Main.lean",
+    "source_sha256": "9ce7738847434370528f5f0891ef12585ce527f15bfa08d2c31ee71aa6de6069",
+    "statement_fidelity": "families/201/first-pass/cyclic_compatibility/statement_fidelity.md",
+    "statement_fidelity_sha256": "a15e42dbb1ba717ed597bbdda87d5b28a94c6a15e02fcea7699c1d3ad5d46b49",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/201/first-pass/cyclic_compatibility/Main.lean:120:6: error: `simp` made no progress\nfamilies/201/first-pass/cyclic_compatibility/Main.lean:175:6: error: Type mismatch: After simplification, term\n  hh\n has type\n  (∑ j, μ i h j • P i h j) r s = (if r = s then (p (Sum.inl i)) c else 0) h\nbut is expected to have type\n  (∑ j, μ i h j • P i h j) r s = if r = s then (p (Sum.inl i)) c h else 0\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/cyclic_compatibility/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace CyclicCompatibility\n\nabbrev Vertex (I R : Type*) := Sum I (Option R)\n\nvariable {K I H R G : Type*} [Field K] [Fintype R] [DecidableEq R]\n  [AddCommGroup G] [Module K G]\n\nstructure HubNull\n    (loopAnn : Vertex I R → (H → K) → Prop)\n    (pairAnn : I → Option R → (H → K) → (H → K) → Prop)\n    (X : I → R → R → H → K) (ν : Option R → H → K) : Prop where\n  leaf_loop : ∀ i r s, loopAnn (.inl i) (X i r s)\n  hub_loop : ∀ q, loopAnn (.inr q) (ν q)\n  individual : ∀ i s r,\n    pairAnn i (some s) (X i r s) (if r = s then ν (some s) else 0)\n  common : ∀ i r, pairAnn i none (fun h => ∑ s, X i r s h) (ν none)\n\ntheorem hub_entry_rigidity [Nonempty I] [Nonempty R]\n    (p : Vertex I R → G →ₗ[K] (H → K))\n    (p_inj : ∀ v, Function.Injective (p v))\n    (loopAnn : Vertex I R → (H → K) → Prop)\n    (loop_zero : ∀ v, loopAnn v 0)\n    (pairAnn : I → Option R → (H → K) → (H → K) → Prop)\n    (pair_exact : ∀ i q x y,\n      loopAnn (.inl i) x → loopAnn (.inr q) y →\n      (pairAnn i q x y ↔ ∃ c : G, x = p (.inl i) c ∧ y = p (.inr q) c))\n    {X : I → R → R → H → K} {ν : Option R → H → K}\n    (hn : HubNull loopAnn pairAnn X ν) :\n    ∃! c : G,\n      (∀ i r s, X i r s = if r = s then p (.inl i) c else 0) ∧\n      (∀ q, ν q = p (.inr q) c) := by\n  classical\n  have off : ∀ i r s, r ≠ s → X i r s = 0 := by\n    intro i r s hrs\n    have hp : pairAnn i (some s) (X i r s) 0 := by\n      simpa [hrs] using hn.individual i s r\n    obtain ⟨c, hx, hz⟩ :=\n      (pair_exact i (some s) _ _ (hn.leaf_loop i r s)\n        (loop_zero (.inr (some s)))).mp hp\n    have hc : c = 0 := p_inj _ (by simpa using hz.symm)\n    simpa [hc] using hx\n  have sum_diag : ∀ i r, (fun h => ∑ s, X i r s h) = X i r r := by\n    intro i r\n    funext h\n    calc\n      ∑ s, X i r s h =\n          ∑ s, if s = r then X i r r h else 0 := by\n        apply Finset.sum_congr rfl\n        intro s _\n        by_cases hsr : s = r\n        · subst s\n          simp\n        · simp [hsr, off i r s (Ne.symm hsr)]\n      _ = X i r r h := by simp\n  have diag : ∀ i r, ∃ c : G,\n      X i r r = p (.inl i) c ∧ ν none = p (.inr none) c := by\n    intro i r\n    apply (pair_exact i none _ _ (hn.leaf_loop i r r) (hn.hub_loop none)).mp\n    simpa only [sum_diag i r] using hn.common i r\n  let i₀ : I := Classical.choice inferInstance\n  let r₀ : R := Classical.choice inferInstance\n  obtain ⟨c, _, hν⟩ := diag i₀ r₀\n  have diag_all : ∀ i r, X i r r = p (.inl i) c := by\n    intro i r\n    obtain ⟨d, hx, hdν⟩ := diag i r\n    have hd : d = c := p_inj _ (hdν.symm.trans hν)\n    simpa [hd] using hx\n  have hubs : ∀ q, ν q = p (.inr q) c := by\n    intro q\n    cases q with\n    | none => exact hν\n    | some r =>\n        have hp : pairAnn i₀ (some r) (X i₀ r r) (ν (some r)) := by\n          simpa using hn.individual i₀ r r\n        obtain ⟨d, hx, hdν⟩ :=\n          (pair_exact i₀ (some r) _ _ (hn.leaf_loop i₀ r r)\n            (hn.hub_loop (some r))).mp hp\n        have hd : d = c := p_inj _ (hx.symm.trans (diag_all i₀ r))\n        simpa [hd] using hdν\n  refine ⟨c, ⟨?_, hubs⟩, ?_⟩\n  · intro i r s\n    by_cases hrs : r = s\n    · subst s\n      simpa using diag_all i r\n    · simp [hrs, off i r s hrs]\n  · intro d hd\n    exact p_inj (.inr none) ((hd.2 none).symm.trans (hubs none))\n\ntheorem canonical_hub_null\n    (p : Vertex I R → G →ₗ[K] (H → K))\n    (loopAnn : Vertex I R → (H → K) → Prop)\n    (loop_p : ∀ v c, loopAnn v (p v c))\n    (pairAnn : I → Option R → (H → K) → (H → K) → Prop)\n    (pair_p : ∀ i q c, pairAnn i q (p (.inl i) c) (p (.inr q) c))\n    (c : G) :\n    HubNull loopAnn pairAnn\n      (fun i r s => if r = s then p (.inl i) c else 0)\n      (fun q => p (.inr q) c) := by\n  classical\n  constructor\n  · intro i r s\n    by_cases hrs : r = s\n    · simpa [hrs] using loop_p (.inl i) c\n    · simpa [hrs] using loop_p (.inl i) 0\n  · intro q\n    exact loop_p (.inr q) c\n  · intro i s r\n    by_cases hrs : r = s\n    · simpa [hrs] using pair_p i (some s) c\n    · simpa [hrs] using pair_p i (some s) 0\n  · intro i r\n    have hs :\n        (fun h => ∑ s, (if r = s then p (.inl i) c else 0) h) =\n          p (.inl i) c := by\n      funext h\n      simp\n    rw [hs]\n    exact pair_p i none c\n\ntheorem orthogonal_weights_unique\n    {J : Type*} [Fintype J] [DecidableEq J]\n    (P : J → Matrix R R K)\n    (orth : ∀ j k, P j * P k = if j = k then P k else 0)\n    (nonzero : ∀ j, P j ≠ 0)\n    (μ : J → K) (c : K)\n    (hs : ∑ j, μ j • P j = c • (1 : Matrix R R K)) :\n    ∀ j, μ j = c := by\n  classical\n  intro k\n  have key : (∑ j, μ j • P j) * P k = μ k • P k := by\n    rw [Finset.sum_mul]\n    simp_rw [smul_mul_assoc, orth]\n    simp\n  have heq : μ k • P k = c • P k := by\n    calc\n      μ k • P k = (∑ j, μ j • P j) * P k := key.symm\n      _ = (c • (1 : Matrix R R K)) * P k := congrArg (fun A => A * P k) hs\n      _ = c • P k := by simp\n  have hz : (μ k - c) • P k = 0 := by\n    rw [sub_smul, heq, sub_self]\n  exact sub_eq_zero.mp ((smul_eq_zero.mp hz).resolve_right (nonzero k))\n\ntheorem hub_projector_rigidity [Nonempty I] [Nonempty R]\n    {J : Type*} [Fintype J] [DecidableEq J]\n    (p : Vertex I R → G →ₗ[K] (H → K))\n    (p_inj : ∀ v, Function.Injective (p v))\n    (loopAnn : Vertex I R → (H → K) → Prop)\n    (loop_zero : ∀ v, loopAnn v 0)\n    (pairAnn : I → Option R → (H → K) → (H → K) → Prop)\n    (pair_exact : ∀ i q x y,\n      loopAnn (.inl i) x → loopAnn (.inr q) y →\n      (pairAnn i q x y ↔ ∃ c : G, x = p (.inl i) c ∧ y = p (.inr q) c))\n    (P : I → H → J → Matrix R R K)\n    (orth : ∀ i h j k, P i h j * P i h k = if j = k then P i h k else 0)\n    (nonzero : ∀ i h j, P i h j ≠ 0)\n    (μ : I → H → J → K) (ν : Option R → H → K)\n    (hn : HubNull loopAnn pairAnn\n      (fun i r s h => (∑ j, μ i h j • P i h j) r s) ν) :\n    ∃! c : G,\n      (∀ i h j, μ i h j = p (.inl i) c h) ∧\n      (∀ q, ν q = p (.inr q) c) := by\n  classical\n  obtain ⟨c, hc, _⟩ :=\n    hub_entry_rigidity p p_inj loopAnn loop_zero pairAnn pair_exact hn\n  refine ⟨c, ⟨?_, hc.2⟩, ?_⟩\n  · intro i h j\n    have hs : ∑ j, μ i h j • P i h j =\n        (p (.inl i) c h) • (1 : Matrix R R K) := by\n      ext r s\n      have hh := congrFun (hc.1 i r s) h\n      simpa [Matrix.smul_apply, Matrix.one_apply] using hh\n    exact orthogonal_weights_unique (P i h) (orth i h) (nonzero i h)\n      (μ i h) (p (.inl i) c h) hs j\n  · intro d hd\n    exact p_inj (.inr none) ((hd.2 none).symm.trans (hc.2 none))\n\nend CyclicCompatibility\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/cyclic_compatibility/statement_fidelity.md",
+    "text": "# Statement fidelity: universal hub-rigidity core\n\nClaim: `CC-FORMAL-HUB9000201`. Source: `Main.lean`.\n\n`CyclicCompatibility.hub_entry_rigidity` quantifies over every field `K`,\nnonempty leaf type `I`, nonempty finite repeat-position type `R`, label type\n`H`, and `K`-module `G`. It does not bound any of their cardinalities.\nThe vertex type is `Sum I (Option R)`: `inl i` is an old leaf,\n`inr (some r)` is an individual hub, and `inr none` is the common hub.\n\nEach `p v` is an injective linear map from the *same* `G` into label\ncovectors `H -> K`. `loopAnn v x` means that `x` annihilates the loop image.\n`pairAnn i q x y` means that `(x,y)` annihilates the fixed-arrow joint pair\nmap. The predicates are abstract, but the essential hypothesis is explicit:\nfor loop-annihilating `x,y`, `pairAnn` holds **if and only if** there is a\nsingle `c : G` with `x=p_leaf(c)` and `y=p_hub(c)`. This is the exact\ncompatible-pair graph assertion of `prop:compatible-relations`, not a\nconclusion proved about arbitrary manuscript responses by the compiler.\n\n`X i r s h` denotes the `(r,s)` entry of the weighted repeat matrix for\nleaf `i`, label `h`; it is not an input-arrow matrix entry.\n`HubNull` states the componentwise leaf-loop equations, hub-loop equations,\nindividual-hub pair equations with hub weight zero unless `r=s`, and\ncommon-hub equations using the row sum `sum_s X i r s`.\nThe trace identity `tr(T E_pr)=T_rp` is used in the report to translate the\nmanuscript columns into exactly this orientation. That trace translation\nis not a separate theorem in this Lean file.\n\nThe conclusion is existence and uniqueness of one `c : G`, with\n`X i r s = if r=s then p_leaf(c) else 0` and every hub weight equal to\n`p_hub(c)`. No differential-rank assumption is used.\n`canonical_hub_null` proves the converse: canonical scalar-diagonal weights\nannihilate the abstract columns when the compatible images annihilate\nloops and pairs.\n\n`orthogonal_weights_unique` states that a scalar weighted sum of nonzero\npairwise orthogonal matrix idempotents can be a scalar identity only if\nevery weight is that scalar. No symmetry, common eigenbasis across labels,\nrank-one condition, or real/complex inner product is assumed.\n`hub_projector_rigidity` applies this result to any finite branch type `J`\nand proves that every branch weight is the corresponding coordinate of\nthe same unique `c`. The manuscript uses `J=R` and complete rank-one\nprojectors; those are stronger conditions than this forward implication\nneeds. Completeness is used in the report for the converse lift.\n\nThis formal source does **not** encode the analytic/formal evaluation of\n`W`, existence of scalar repeated branches, limits of spectral projectors,\nthe Laurent-rank upper bound, the arbitrary-column rank formula, or the\ndirected-cycle trace test. Those have separate universal arguments in\n`report.md` and bounded exact diagnostics in `verify.py`.\nIt does not prove the Kurosh counterexample or algebraic lifting.\nThe compiler checks the abstract universal algebraic core, not the\ntruth of the upstream manuscript hypotheses nor this fidelity document.\n"
+  },
+  "subject": {
+    "content_hash": "6aed888b2c4576d026faf99b49005820892e0d97569adb8be7756626269273b5",
+    "kind": "claim",
+    "subject_id": "CC-FORMAL-HUB9000201"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

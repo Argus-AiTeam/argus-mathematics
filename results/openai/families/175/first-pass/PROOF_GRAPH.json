@@ -1,0 +1,212 @@
+{
+  "goal": "C9000175",
+  "routes": [
+    {
+      "name": "Common-witness reconstruction and factorial full-profile summation",
+      "status": "current",
+      "evidence": "research/selector_certificate/proof.md"
+    },
+    {
+      "name": "Direct iteration of separate single-scale selectors",
+      "status": "ruled_out",
+      "retired_because": "Separate existential members do not give a common member; Pham arXiv:2412.03540v1 Section 2.1 identifies loss of control under iteration.",
+      "evidence": "research/selector_certificate/proof.md"
+    }
+  ],
+  "nodes": {
+    "C9000175": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 175 (Talagrand’s expectation thresholds, discrete convexity, and graph decompositions.; papers: Graph Decompositions at the Integral Expectation Threshold; Integral and fractional expectation thresholds are equivalent; Talagrand’s discrete-convexity conjecture; Lean status: Partially/Comparator formalized (lean/docs/175.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["SEL175"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/selector_certificate/proof.md",
+        "research/selector_certificate/exact_certificate.json"
+      ]
+    },
+    "SCOPE_PRIOR175": {
+      "statement": "Scoped primary-source antecedents only; no external selector theorem or companion manuscript is assumed.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/proof.md"]
+    },
+    "SEL175": {
+      "statement": "Original multiscale selector theorem, at all stated quantifiers, including one member for every scale.",
+      "status": "open",
+      "depends_on": ["SEL_GENERAL175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-and-fractional-expectation-thresholds-are-equivalent-September-23-2026/build/source/sections/selector.tex", "research/selector_certificate/proof.md", "research/selector_certificate/exact_certificate.json"]
+    },
+    "SEL_TRUNC": {
+      "statement": "Largest admissible cutoff exists and has high-weight count at most m/d, with zero weights, ties and endpoints allowed.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/proof.md"]
+    },
+    "SEL_MIN_COVER": {
+      "statement": "Minimum feasible moves exist, cover the family, and have nonempty changed sets on bad colorings.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/proof.md"]
+    },
+    "SEL_RECON": {
+      "statement": "Final coloring plus full crossing profile determine common feasible witnesses; one-level delay forces every changed vertex into the common high-weight set.",
+      "status": "open",
+      "depends_on": ["SEL_CORE175", "SEL_TRUNC", "SEL_MIN_COVER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/proof.md"]
+    },
+    "SEL_COUNT": {
+      "statement": "Injective full-profile encoding and exact product-probability likelihood identity.",
+      "status": "open",
+      "depends_on": ["SEL_RECON"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/proof.md"]
+    },
+    "SEL_PROB": {
+      "statement": "The original rowwise entropy and profile summation imply bad probability at most 1/10.",
+      "status": "open",
+      "depends_on": ["SEL_COUNT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-and-fractional-expectation-thresholds-are-equivalent-September-23-2026/build/source/sections/selector.tex"]
+    },
+    "SEL_CORE175": {
+      "statement": "Universal Lean reconstruction theorem derives shared-profile witness transport and strict high-weight membership from the actual feasibility tests and unrestricted-witness minimum length.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/Main.lean", "research/selector_certificate/statement_fidelity.md", "research/selector_certificate/lean/certificates/SEL_CORE175-fdbcabc141d8f61b.json"]
+    },
+    "SEL_FACTORIAL175": {
+      "statement": "Factorial full-profile summation and the universal coefficient/geometric majorant.",
+      "status": "open",
+      "depends_on": ["SEL_COUNT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/proof.md", "research/selector_certificate/Main.lean"]
+    },
+    "SEL_GENERAL175": {
+      "statement": "For arbitrary positive palette and deficits, (1/2)Pr(bad)<=sum_{t=1}^{|X|}(t^t/t!)R^t, hence Pr(bad)<=2R/(1-3R) if 3R<1.",
+      "status": "open",
+      "depends_on": ["SEL_MIN_COVER", "SEL_FACTORIAL175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/proof.md", "research/selector_certificate/verify.py", "research/selector_certificate/exact_certificate.json"]
+    },
+    "SEL_IMPROVED175": {
+      "statement": "The original selector holds with D=48; at the stated D=256 its success probability is at least 61/62, including s=0.",
+      "status": "open",
+      "depends_on": ["SEL_GENERAL175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/proof.md", "research/selector_certificate/exact_certificate.json"]
+    },
+    "THRESH_IMPROVED175": {
+      "statement": "The same-budget threshold-rounding constant improves to 25*96^4.",
+      "status": "open",
+      "depends_on": ["SEL_IMPROVED175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selector_certificate/proof.md", "research/selector_certificate/exact_certificate.json"]
+    },
+    "THRESH_ROUND175": {
+      "statement": "Selector-to-rounding expectation contradiction, including nonempty set normalization and empty-set fractional mass.",
+      "status": "open",
+      "depends_on": ["SEL175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-and-fractional-expectation-thresholds-are-equivalent-September-23-2026/build/source/sections/rounding.tex"]
+    },
+    "THRESH_MAIN175": {
+      "statement": "Integral and fractional expectation thresholds differ by at most 25*512^4 with the same budget.",
+      "status": "open",
+      "depends_on": ["THRESH_ROUND175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-and-fractional-expectation-thresholds-are-equivalent-September-23-2026/build/source/sections/introduction.tex"]
+    },
+    "DC_COVER175": {
+      "statement": "The uniform-family covering lemma of the companion discrete-convexity manuscript; unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Talagrands-discrete-convexity-conjecture-September-23-2026/build/source/sections/01_covering.tex"]
+    },
+    "DC_SIGNED175": {
+      "statement": "Biased Parseval bound, signed 32-row identity and exceptional weight bound; unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Talagrands-discrete-convexity-conjecture-September-23-2026/build/source/sections/02_weights.tex"]
+    },
+    "DC_HALF175": {
+      "statement": "Measure at least 1/2 implies E_32 is (q/2^70)-small; unverified.",
+      "status": "open",
+      "depends_on": ["DC_COVER175", "DC_SIGNED175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Talagrands-discrete-convexity-conjecture-September-23-2026/build/source/sections/02_weights.tex"]
+    },
+    "DC_DENSITY175": {
+      "statement": "Exclusive-label and mandatory-row couplings upgrade half-density smallness to same-density smallness; unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Talagrands-discrete-convexity-conjecture-September-23-2026/build/source/sections/03_density.tex"]
+    },
+    "DC_MAIN175": {
+      "statement": "At k=2^75, mu_p(D)>=1-1/k implies E_k(D) p-small; unresolved companion theorem, not an assumption.",
+      "status": "open",
+      "depends_on": ["DC_HALF175", "DC_DENSITY175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Talagrands-discrete-convexity-conjecture-September-23-2026/build/source/sections/00_intro.tex"]
+    },
+    "GRAPH_TYPICAL175": {
+      "statement": "Above q(H;n), a high-density graph family has a union of 2^75 members containing H; conditional on the unresolved discrete-convexity theorem.",
+      "status": "open",
+      "depends_on": ["DC_MAIN175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Graph-Decompositions-at-the-Integral-Expectation-Threshold-October-5-2026/build/main.tex"]
+    },
+    "GRAPH_ELEMENTARY175": {
+      "statement": "Lower bounds on q, subgraph monotonicity and degeneracy edge splitting; unverified within this mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Graph-Decompositions-at-the-Integral-Expectation-Threshold-October-5-2026/build/main.tex"]
+    },
+    "GRAPH_COMPRESS175": {
+      "statement": "Finite compressed smoothed tests for bounded-size neighborhood families; unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Graph-Decompositions-at-the-Integral-Expectation-Threshold-October-5-2026/build/main.tex"]
+    },
+    "GRAPH_TRANSFER175": {
+      "statement": "Simultaneous neighborhood transfer via compressed source and target tests and Hall's criterion; unverified.",
+      "status": "open",
+      "depends_on": ["GRAPH_COMPRESS175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Graph-Decompositions-at-the-Integral-Expectation-Threshold-October-5-2026/build/main.tex"]
+    },
+    "GRAPH_EMBED175": {
+      "statement": "Direct bounded-degree/degeneracy embedding proposition; unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Graph-Decompositions-at-the-Integral-Expectation-Threshold-October-5-2026/build/main.tex"]
+    },
+    "GRAPH_STARS175": {
+      "statement": "Star-forest embedding at a constant multiple of q; unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Graph-Decompositions-at-the-Integral-Expectation-Threshold-October-5-2026/build/main.tex"]
+    },
+    "GRAPH_MAIN175": {
+      "statement": "Deterministic constant-size edge partition at the integral expectation threshold; unresolved.",
+      "status": "open",
+      "depends_on": ["GRAPH_TYPICAL175", "GRAPH_ELEMENTARY175", "GRAPH_TRANSFER175", "GRAPH_EMBED175", "GRAPH_STARS175"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Graph-Decompositions-at-the-Integral-Expectation-Threshold-October-5-2026/build/main.tex"]
+    }
+  }
+}

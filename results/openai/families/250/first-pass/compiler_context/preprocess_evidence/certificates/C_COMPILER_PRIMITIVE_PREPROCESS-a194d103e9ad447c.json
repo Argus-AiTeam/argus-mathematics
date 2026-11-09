@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_COMPILER_PRIMITIVE_PREPROCESS-a300635d0906",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/250/first-pass/compiler_context/preprocess_evidence/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/250/first-pass/compiler_context/preprocess_evidence/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16499,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/250/first-pass/compiler_context/preprocess_evidence/Main.lean",
+    "source_sha256": "439e7508072fa77c4ac8f2e8f244f515d95970db1ca03eb066c5dc171b8ed83c",
+    "statement_fidelity": "families/250/first-pass/compiler_context/preprocess_evidence/statement_fidelity.md",
+    "statement_fidelity_sha256": "1a729f64e2dd217a57d87edaa91d386379c53f93c5e621278fc44b0d539d90b6",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/250/first-pass/compiler_context/preprocess_evidence/Main.lean:160:55: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/compiler_context/preprocess_evidence/Main.lean",
+    "text": "import Mathlib\n\nnamespace CompilerPreprocess\n\nuniverse u v\n\ninductive Base (A : Type u)\n  | anchor : A → Base A\n  | cutC\n  | cutD\n  | workspace\n\ninductive Tag (A : Type u) (D : Type v)\n  | clean\n  | dirty : D → Option A → Tag A D\n\nstructure Cell (A : Type u) (D : Type v) where\n  base : Base A\n  tag : Tag A D\n\ninductive Head\n  | raw\n  | quota\n  | cleanup\n\nstructure Sector (A : Type u) (D : Type v) where\n  alpha : Bool\n  left : List (Cell A D)\n  head : Head\n  right : List (Cell A D)\n  omega : Bool\n\nvariable {A : Type u} {D : Type v}\n\ndef anchor (a : A) : Cell A D := ⟨.anchor a, .clean⟩\ndef cutC : Cell A D := ⟨.cutC, .clean⟩\ndef cutD : Cell A D := ⟨.cutD, .clean⟩\ndef workspace : Cell A D := ⟨.workspace, .clean⟩\n\ndef cellGrade (b : Cell A D) : Nat :=\n  match b.base with\n  | .cutC => 2\n  | .workspace => 0\n  | _ => 1\n\ndef cellsGrade : List (Cell A D) → Nat\n  | [] => 0\n  | b :: bs => cellGrade b + cellsGrade bs\n\ndef Sector.grade (s : Sector A D) : Nat :=\n  (if s.alpha then 1 else 0) + cellsGrade s.left + 1 +\n    cellsGrade s.right + (if s.omega then 1 else 0)\n\ndef sectorsGrade : List (Sector A D) → Nat\n  | [] => 0\n  | s :: ss => s.grade + sectorsGrade ss\n\n@[simp] theorem cellsGrade_append (l r : List (Cell A D)) :\n    cellsGrade (l ++ r) = cellsGrade l + cellsGrade r := by\n  induction l with\n  | nil => simp [cellsGrade]\n  | cons b l ih => simp [cellsGrade, ih, Nat.add_assoc]\n\ndef slide : List (Cell A D) → List (Cell A D) →\n    List (Cell A D) × List (Cell A D)\n  | ⟨.anchor a, .clean⟩ :: l, r => slide l (anchor a :: r)\n  | l, r => (l, r)\n\ndef rawNormal (a : Bool) (l r : List (Cell A D)) (o : Bool) : Sector A D :=\n  let p := slide l r\n  ⟨a, p.1, .raw, p.2, o⟩\n\ndef trim : List (Cell A D) → List (Cell A D)\n  | ⟨.workspace, .clean⟩ :: l => trim l\n  | l => l\n\ndef quotaResult (a : Bool) (l r : List (Cell A D)) (o : Bool) :\n    List (Sector A D) :=\n  match l with\n  | ⟨.cutC, .clean⟩ :: rest =>\n      [rawNormal a rest [] true, rawNormal true [] r o]\n  | _ => [⟨a, l, .quota, cutD :: r, o⟩]\n\ndef emit (b : Cell A D) : List (Cell A D) :=\n  match b with\n  | ⟨.anchor _, .dirty _ (some a)⟩ => [anchor a]\n  | _ => []\n\ndef cleanLeft : List (Cell A D) → List (Cell A D) → List (Cell A D)\n  | [], r => r\n  | b :: l, r => cleanLeft l (emit b ++ r)\n\ndef preprocess : Sector A D → List (Sector A D)\n  | ⟨a, l, .raw, r, o⟩ => [rawNormal a l r o]\n  | ⟨a, l, .quota, ⟨.cutD, .clean⟩ :: r, o⟩ => quotaResult a (trim l) r o\n  | s@⟨_, _, .quota, _, _⟩ => [s]\n  | ⟨a, l, .cleanup, r, o⟩ =>\n      [⟨a, [], if a then .raw else .cleanup, cleanLeft l r, o⟩]\n\ntheorem slide_grade (l r : List (Cell A D)) :\n    cellsGrade (slide l r).1 + cellsGrade (slide l r).2 =\n      cellsGrade l + cellsGrade r := by\n  induction l generalizing r with\n  | nil => rfl\n  | cons b l ih =>\n    rcases b with ⟨base, tag⟩\n    cases base with\n    | anchor a =>\n      cases tag with\n      | clean =>\n        change cellsGrade (slide l (anchor a :: r)).1 +\n          cellsGrade (slide l (anchor a :: r)).2 = _\n        rw [ih]\n        simp [cellsGrade, cellGrade, anchor]\n        omega\n      | dirty d out => rfl\n    | cutC => cases tag <;> rfl\n    | cutD => cases tag <;> rfl\n    | workspace => cases tag <;> rfl\n\n@[simp] theorem rawNormal_grade (a o : Bool) (l r : List (Cell A D)) :\n    (rawNormal a l r o).grade = (Sector.mk a l .raw r o).grade := by\n  have h := slide_grade l r\n  dsimp only [rawNormal, Sector.grade]\n  omega\n\n@[simp] theorem trim_grade (l : List (Cell A D)) :\n    cellsGrade (trim l) = cellsGrade l := by\n  induction l with\n  | nil => rfl\n  | cons b l ih =>\n    rcases b with ⟨base, tag⟩\n    cases base <;> cases tag <;> simp [trim, cellsGrade, cellGrade, ih]\n\ntheorem emit_grade (b : Cell A D) : cellsGrade (emit b) ≤ cellGrade b := by\n  rcases b with ⟨base, tag⟩\n  cases base <;> cases tag <;> simp [emit, cellsGrade, cellGrade, anchor]\n  split <;> simp [cellsGrade, cellGrade]\n\ntheorem cleanLeft_grade (l r : List (Cell A D)) :\n    cellsGrade (cleanLeft l r) ≤ cellsGrade l + cellsGrade r := by\n  induction l generalizing r with\n  | nil => simp [cleanLeft, cellsGrade]\n  | cons b l ih =>\n    have h := ih (emit b ++ r)\n    have he := emit_grade b\n    simp only [cellsGrade_append] at h\n    simp only [cleanLeft, cellsGrade]\n    omega\n\n@[simp] theorem quotaResult_grade (a o : Bool) (l r : List (Cell A D)) :\n    sectorsGrade (quotaResult a l r o) =\n      (Sector.mk a l .quota (cutD :: r) o).grade := by\n  cases l with\n  | nil => rfl\n  | cons b l =>\n    rcases b with ⟨base, tag⟩\n    cases base <;> cases tag <;>\n      simp only [quotaResult, sectorsGrade, rawNormal_grade] <;>\n      simp [Sector.grade, cellsGrade, cellGrade, cutD] <;> omega\n\ntheorem preprocess_grade (s : Sector A D) :\n    sectorsGrade (preprocess s) ≤ s.grade := by\n  rcases s with ⟨a, l, head, r, o⟩\n  cases head with\n  | raw => simp [preprocess, sectorsGrade, rawNormal_grade]\n  | cleanup =>\n    have h := cleanLeft_grade l r\n    simp only [preprocess, sectorsGrade, Sector.grade, cellsGrade]\n    omega\n  | quota =>\n    cases r with\n    | nil => simp [preprocess, sectorsGrade]\n    | cons b r =>\n      rcases b with ⟨base, tag⟩\n      cases base <;> cases tag <;>\n        simp [preprocess, sectorsGrade, quotaResult_grade, Sector.grade, trim_grade, cutD]\n\ntheorem raw_slide (a o : Bool) (l r : List (Cell A D)) (x : A) :\n    preprocess ⟨a, l, .raw, anchor x :: r, o⟩ =\n      preprocess ⟨a, anchor x :: l, .raw, r, o⟩ := rfl\n\ntheorem quota_insertion (a o : Bool) (l r : List (Cell A D)) :\n    preprocess ⟨a, l, .quota, cutD :: r, o⟩ =\n      preprocess ⟨a, workspace :: l, .quota, cutD :: r, o⟩ := rfl\n\ntheorem merge (a o : Bool) (l r : List (Cell A D)) :\n    preprocess ⟨a, l, .raw, [], true⟩ ++\n        preprocess ⟨true, [], .raw, r, o⟩ =\n      preprocess ⟨a, cutC :: l, .quota, cutD :: r, o⟩ := rfl\n\ntheorem cleanup_cell (a o : Bool) (b : Cell A D) (l r : List (Cell A D)) :\n    preprocess ⟨a, b :: l, .cleanup, r, o⟩ =\n      preprocess ⟨a, l, .cleanup, emit b ++ r, o⟩ := rfl\n\ntheorem cleanup_boundary (o : Bool) (r : List (Cell A D)) :\n    preprocess ⟨true, [], .cleanup, r, o⟩ =\n      preprocess ⟨true, [], .raw, r, o⟩ := rfl\n\ntheorem raw_slide_step_grade (a o : Bool) (l r : List (Cell A D)) (x : A) :\n    (Sector.mk a l .raw (anchor x :: r) o).grade =\n      (Sector.mk a (anchor x :: l) .raw r o).grade := by\n  simp [Sector.grade, cellsGrade, cellGrade, anchor]\n  omega\n\ntheorem quota_step_grade (a o : Bool) (l r : List (Cell A D)) :\n    (Sector.mk a (workspace :: l) .quota (cutD :: r) o).grade =\n      (Sector.mk a l .quota (cutD :: r) o).grade := by\n  simp [Sector.grade, cellsGrade, cellGrade, workspace]\n\ntheorem merge_step_grade (a o : Bool) (l r : List (Cell A D)) :\n    (Sector.mk a (cutC :: l) .quota (cutD :: r) o).grade =\n      (Sector.mk a l .raw [] true).grade +\n        (Sector.mk true [] .raw r o).grade := by\n  simp [Sector.grade, cellsGrade, cellGrade, cutC, cutD]\n  omega\n\ntheorem cleanup_cell_step_grade (a o : Bool) (b : Cell A D)\n    (l r : List (Cell A D)) :\n    (Sector.mk a l .cleanup (emit b ++ r) o).grade ≤\n      (Sector.mk a (b :: l) .cleanup r o).grade := by\n  have h := emit_grade b\n  simp only [Sector.grade, cellsGrade, cellsGrade_append]\n  omega\n\ntheorem cleanup_boundary_step_grade (o : Bool) (r : List (Cell A D)) :\n    (Sector.mk true [] .raw r o).grade =\n      (Sector.mk true [] .cleanup r o).grade := rfl\n\nend CompilerPreprocess\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/compiler_context/preprocess_evidence/statement_fidelity.md",
+    "text": "# Statement fidelity: primitive preprocessing\n\n`CompilerPreprocess` encodes all headed sectors with raw, quota, or cleanup\nheads. `alpha` and `omega` are independently arbitrary Booleans. The `left`\nlist is a stack with the cell immediately left of the head first; `right`\nis in ordinary left-to-right order. Empty stacks, missing boundaries, dirty\ntags, and arbitrary nonanchor cells are included.\n\n`Base A` has arbitrary anchors, the two distinct cuts, and workspace.\n`Tag A D` distinguishes the completely clean tag from a dirty tag carrying\nan arbitrary decoration of type `D` and an optional output mark. The decoration\nretains all other tag data, not merely a clean/nonclean quotient. This is\nsource-faithful for these operations: raw slides and quota tests require the\nentire tag clean, and cleanup tests only anchor status and the output mark.\nNo finiteness hypothesis is needed, so every finite tag set in the compiler\nis included. The clean tag necessarily has no output mark.\n\n`slide`, `trim`, `quotaResult`, `emit`, `cleanLeft`, and `preprocess` implement\nexactly the source's preprocessing on those three head types. `raw_slide`,\n`quota_insertion`, `merge`, `cleanup_cell`, and `cleanup_boundary` prove equality\nof the **literal preprocessed sector lists** on the two sides of each source\nequation, for every cell context and every choice of outer boundary flags.\n`merge` permits incomplete and dirty outer sectors. The cleanup theorem covers\nboth marked-anchor replacement and deletion of every other tagged cell.\n\n`cellGrade` assigns two to the first cut, zero to workspace, and one to all\nother cells; every head and each present boundary has grade one. `slide_grade`\nand `trim_grade` give exact grade conservation. `emit_grade` and\n`cleanLeft_grade` give cleanup nonincrease. `quotaResult_grade` checks the\nfour-grade unmerge exactly, including its two new interior boundaries.\n`preprocess_grade` proves grade nonincrease for arbitrary sectors of these\nthree head types.\n\n`raw_slide_step_grade`, `quota_step_grade`, `merge_step_grade`,\n`cleanup_cell_step_grade`, and `cleanup_boundary_step_grade` additionally check\nthe grades of the elementary presentation steps themselves. Thus the recursive\nslide, quota-removal, unmerge, and cleanup paths stay within the original grade,\nnot merely their final outputs.\n\nThe claim `C_COMPILER_PRIMITIVE_PREPROCESS` does not include validator or\nmachine heads, entry-component search, the equation from a quota head to an\nentry, or `q_ok omega = Z omega`. These are separate obligations; this source\ndoes not certify the full bounded compiler or the expansion of its scan program.\n"
+  },
+  "subject": {
+    "content_hash": "fee00cbac5dc92f1ac683a145a7747eb959f04c439834ab2fde27584881f20f9",
+    "kind": "claim",
+    "subject_id": "C_COMPILER_PRIMITIVE_PREPROCESS"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

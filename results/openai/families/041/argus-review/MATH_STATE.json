@@ -1,0 +1,865 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "RV_CTX",
+      "version": 1,
+      "statement": "Exploratory review of every old Family 041 draft under OBJECTIVE.md and PRIOR_DRAFTS.json; no new error search and no claim of either manuscript theorem.",
+      "definitions": {
+        "unit": "one substantive argument or independently assessable scope, with copies and evidence versions grouped",
+        "supported": "support for the exact stated hypotheses and conclusion, not global manuscript correctness",
+        "formal_scope": "the PBasisCartier, subring, derivative-stability, scalar-identity and psi-formula hypotheses in the copied Lean statement",
+        "boundary_attack": "an excluded-hypothesis control, never an admissible manuscript counterexample",
+        "acceptance": "only the native independent Reviewer may accept family completion"
+      },
+      "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "RV_ADJOINT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "For every prime p and every finite p-basis field K, additive Cartier coefficient extraction annihilates each coordinate derivative. If R is any subring of K, the derivative-stable coefficient subring A lies in R, psi(r)=Car(s r) lies in R, and s=sum_j c_j partial_word_j(g t_j s) with c_j in A and g,t_j in R, then the explicit element t=sum_j t_j adjoint_word_j(c_j) in R satisfies psi(g t)=psi(1). No regularity of s, completion, normality of R, or extension-degree bound is needed.",
+      "formal_statement": "import Mathlib\n\nnamespace CartierClearing\n\nsection Adjoint\n\nvariable {K : Type*} [CommRing K] {ι J : Type*}\n\ndef applyWord (d : ι → Derivation ℤ K K) : List ι → K → K\n  | [], x => x\n  | i :: w, x => d i (applyWord d w x)\n\ndef adjointCoeff (d : ι → Derivation ℤ K K) : List ι → K → K\n  | [], c => c\n  | i :: w, c => adjointCoeff d w (-(d i c))\n\ntheorem integration_by_parts (d : ι → Derivation ℤ K K)\n    (C : K →+ K) (hC : ∀ i x, C (d i x) = 0) (i : ι) (c x : K) :\n    C (c * d i x) = C ((-(d i c)) * x) := by\n  have h : C (c * d i x) + C (d i c * x) = 0 := by\n    simpa only [Derivation.leibniz, smul_eq_mul, map_add, mul_comm x]\n      using hC i (c * x)\n  calc\n    C (c * d i x) = -C (d i c * x) := eq_neg_of_add_eq_zero_left h\n    _ = C ((-(d i c)) * x) := by simp\n\ntheorem word_adjoint (d : ι → Derivation ℤ K K)\n    (C : K →+ K) (hC : ∀ i x, C (d i x) = 0)\n    (w : List ι) (c x : K) :\n    C (c * applyWord d w x) = C (adjointCoeff d w c * x) := by\n  induction w generalizing c with\n  | nil => rfl\n  | cons i w ih =>\n    exact (integration_by_parts d C hC i c (applyWord d w x)).trans\n      (ih (-(d i c)))\n\ntheorem adjoint_mem (d : ι → Derivation ℤ K K) (A : Subring K)\n    (hA : ∀ i x, x ∈ A → d i x ∈ A) (w : List ι) (c : K)\n    (hc : c ∈ A) : adjointCoeff d w c ∈ A := by\n  induction w generalizing c with\n  | nil => exact hc\n  | cons i w ih => exact ih _ (A.neg_mem (hA i c hc))\n\ntheorem field_clearing [Fintype J] (d : ι → Derivation ℤ K K)\n    (C : K →+ K) (hC : ∀ i x, C (d i x) = 0)\n    (s g : K) (t c : J → K) (w : J → List ι)\n    (hidentity : s = ∑ j, c j * applyWord d (w j) (g * t j * s)) :\n    C s = C (s * g * ∑ j, t j * adjointCoeff d (w j) (c j)) := by\n  classical\n  calc\n    C s = ∑ j, C (c j * applyWord d (w j) (g * t j * s)) := by\n      simpa only [map_sum] using congrArg C hidentity\n    _ = ∑ j, C (adjointCoeff d (w j) (c j) * (g * t j * s)) := by\n      apply Finset.sum_congr rfl\n      intro j _\n      exact word_adjoint d C hC (w j) (c j) (g * t j * s)\n    _ = C (∑ j, adjointCoeff d (w j) (c j) * (g * t j * s)) := by\n      rw [map_sum]\n    _ = C (s * g * ∑ j, t j * adjointCoeff d (w j) (c j)) := by\n      congr 1\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro j _\n      ring\n\ntheorem subring_clearing [Fintype J] (d : ι → Derivation ℤ K K)\n    (C : K →+ K) (hC : ∀ i x, C (d i x) = 0)\n    (A R : Subring K) (hAR : A ≤ R)\n    (hA : ∀ i x, x ∈ A → d i x ∈ A)\n    (s : K) (g : R) (t : J → R) (c : J → A) (w : J → List ι)\n    (ψ : R →+ R) (hψ : ∀ r : R, (ψ r : K) = C (s * (r : K)))\n    (hidentity : s = ∑ j, (c j : K) *\n      applyWord d (w j) ((g : K) * (t j : K) * s)) :\n    ∃ T : R, (T : K) = ∑ j, (t j : K) * adjointCoeff d (w j) (c j : K) ∧\n      ψ (g * T) = ψ 1 := by\n  classical\n  let a : J → R := fun j =>\n    ⟨adjointCoeff d (w j) (c j : K),\n      hAR (adjoint_mem d A hA (w j) (c j : K) (c j).property)⟩\n  let T : R := ∑ j, t j * a j\n  have hT : (T : K) =\n      ∑ j, (t j : K) * adjointCoeff d (w j) (c j : K) := by\n    simp [T, a]\n  refine ⟨T, hT, ?_⟩\n  apply Subtype.ext\n  rw [hψ, hψ]\n  simpa only [Subring.coe_mul, Subring.coe_one, mul_one, hT, mul_assoc]\n    using (field_clearing d C hC s (g : K) (fun j => (t j : K))\n      (fun j => (c j : K)) w hidentity).symm\n\nend Adjoint\n\nsection PBasis\n\nvariable {K : Type*} [Field K] {p n : ℕ} [CharP K p]\n\ndef monomial (u : Fin n → K) (α : Fin n → Fin p) : K :=\n  ∏ i, u i ^ (α i).val\n\ndef lower (α : Fin n → Fin p) (i : Fin n) : Fin n → Fin p :=\n  Function.update α i\n    ⟨(α i).val - 1, lt_of_le_of_lt (Nat.sub_le _ _) (α i).isLt⟩\n\nstructure PBasisCartier (K : Type*) [Field K] (p n : ℕ) [CharP K p] where\n  coordinates : Fin n → K\n  deriv : Fin n → Derivation ℤ K K\n  deriv_coordinates : ∀ i j, deriv i (coordinates j) = if j = i then 1 else 0\n  expansion : ∀ x : K, ∃ a : (Fin n → Fin p) → K,\n    x = ∑ α, (a α) ^ p * monomial coordinates α\n  cartier : K →+ K\n  extraction : ∀ (a : K) (α : Fin n → Fin p),\n    cartier (a ^ p * monomial coordinates α) =\n      if (∀ i, (α i).val = p - 1) then a else 0\n\ntheorem derivation_prod_zero {ι : Type*} [DecidableEq ι]\n    (D : Derivation ℤ K K) (f : ι → K) (S : Finset ι)\n    (h : ∀ i ∈ S, D (f i) = 0) : D (∏ i ∈ S, f i) = 0 := by\n  induction S using Finset.induction_on with\n  | empty => simp\n  | @insert i S hi ih =>\n    rw [Finset.prod_insert hi, Derivation.leibniz]\n    have hS : ∀ j ∈ S, D (f j) = 0 := fun j hj => h j (Finset.mem_insert_of_mem hj)\n    simp [ih hS, h i (Finset.mem_insert_self i S)]\n\ntheorem monomial_derivative (B : PBasisCartier K p n)\n    (i : Fin n) (α : Fin n → Fin p) :\n    B.deriv i (monomial B.coordinates α) =\n      (α i).val • monomial B.coordinates (lower α i) := by\n  classical\n  let f : Fin n → K := fun j => B.coordinates j ^ (α j).val\n  have hprod :\n      B.deriv i (∏ j ∈ Finset.univ.erase i, f j) = 0 := by\n    apply derivation_prod_zero\n    intro j hj\n    have hji : j ≠ i := (Finset.mem_erase.mp hj).1\n    simp [f, B.deriv_coordinates, hji]\n  have hsplit : monomial B.coordinates α =\n      f i * ∏ j ∈ Finset.univ.erase i, f j := by\n    exact (Finset.mul_prod_erase Finset.univ f (Finset.mem_univ i)).symm\n  have hsplitLower : monomial B.coordinates (lower α i) =\n      B.coordinates i ^ ((α i).val - 1) *\n        ∏ j ∈ Finset.univ.erase i, f j := by\n    rw [monomial, ← Finset.mul_prod_erase Finset.univ\n      (fun j => B.coordinates j ^ (lower α i j).val) (Finset.mem_univ i)]\n    simp only [lower, Function.update_self]\n    congr 1\n    apply Finset.prod_congr rfl\n    intro j hj\n    have hji : j ≠ i := (Finset.mem_erase.mp hj).1\n    simp [hji, f]\n  rw [hsplit, Derivation.leibniz, hprod, smul_zero, zero_add, hsplitLower]\n  simp [f, B.deriv_coordinates, smul_eq_mul, nsmul_eq_mul] <;> ring\n\ntheorem pth_power_derivative_zero (D : Derivation ℤ K K) (a : K) :\n    D (a ^ p) = 0 := by\n  simp [Derivation.leibniz_pow, nsmul_eq_mul]\n\ntheorem cartier_partial_zero (B : PBasisCartier K p n)\n    (i : Fin n) (x : K) : B.cartier (B.deriv i x) = 0 := by\n  classical\n  obtain ⟨a, ha⟩ := B.expansion x\n  rw [ha, map_sum, map_sum]\n  apply Finset.sum_eq_zero\n  intro α _\n  have hterm : B.deriv i ((a α) ^ p * monomial B.coordinates α) =\n      (α i).val • ((a α) ^ p * monomial B.coordinates (lower α i)) := by\n    rw [Derivation.leibniz, pth_power_derivative_zero, smul_zero, add_zero,\n      monomial_derivative]\n    simp only [smul_eq_mul, nsmul_eq_mul]\n    ring\n  rw [hterm, map_nsmul]\n  by_cases hzero : (α i).val = 0\n  · simp [hzero]\n  · have hnot : ¬∀ j, (lower α i j).val = p - 1 := by\n      intro h\n      have hi := h i\n      simp only [lower, Function.update_self] at hi\n      have hb := (α i).isLt\n      omega\n    rw [B.extraction, if_neg hnot]\n    simp\n\ntheorem cartier_clearing [Fintype J] (B : PBasisCartier K p n)\n    (A R : Subring K) (hAR : A ≤ R)\n    (hA : ∀ i x, x ∈ A → B.deriv i x ∈ A)\n    (s : K) (g : R) (t : J → R) (c : J → A) (w : J → List (Fin n))\n    (ψ : R →+ R) (hψ : ∀ r : R, (ψ r : K) = B.cartier (s * (r : K)))\n    (hidentity : s = ∑ j, (c j : K) *\n      applyWord B.deriv (w j) ((g : K) * (t j : K) * s)) :\n    ∃ T : R,\n      (T : K) = ∑ j, (t j : K) * adjointCoeff B.deriv (w j) (c j : K) ∧\n      ψ (g * T) = ψ 1 :=\n  subring_clearing B.deriv B.cartier (cartier_partial_zero B)\n    A R hAR hA s g t c w ψ hψ hidentity\n\ntheorem cartier_clearing_noncontainment [Fintype J] (B : PBasisCartier K p n)\n    (A R : Subring K) (hAR : A ≤ R)\n    (hA : ∀ i x, x ∈ A → B.deriv i x ∈ A)\n    (s : K) (g : R) (t : J → R) (c : J → A) (w : J → List (Fin n))\n    (ψ : R →+ R) (hψ : ∀ r : R, (ψ r : K) = B.cartier (s * (r : K)))\n    (hidentity : s = ∑ j, (c j : K) *\n      applyWord B.deriv (w j) ((g : K) * (t j : K) * s))\n    (I : Ideal R) (hunit : ψ 1 ∉ I) :\n    ¬∀ T : R, ψ (g * T) ∈ I := by\n  obtain ⟨T, _, hT⟩ := cartier_clearing B A R hAR hA s g t c w ψ hψ hidentity\n  intro h\n  exact hunit (hT ▸ h T)\n\nend PBasis\n\nend CartierClearing\n\n#print axioms CartierClearing.cartier_clearing\n#print axioms CartierClearing.cartier_clearing_noncontainment\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "16a0f42b41d13dae79d88fd7bb7100cb8f2efb97d57840464f23b5fd5b97766b"
+    },
+    {
+      "claim_id": "RV_DIFF",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "Under the manuscript geometric hypotheses, Lemma bc:differential-identity supplies eta=sum_j D_j(g t_j eta), with t_j in R and regular smooth-base coefficients of bounded ordinary order.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SAITO_STRICT",
+          "statement": "For a projective morphism of smooth complex algebraic varieties and a polarizable pure Hodge module, the filtered direct image is strict and its cohomology objects are pure Hodge modules; strict support and the right-left/Spencer filtration conventions are those of Section 1.2 and Appendices B.2-B.3.",
+          "source": "Morihiko Saito, A young persons guide to mixed Hodge modules, arXiv:1605.00435v3; locally archived and read.",
+          "source_id": "arxiv:1605.00435v3",
+          "locator": "Theorem 1.4; Section 1.2; Appendices B.2-B.3",
+          "filed_by": "engineer:copilot",
+          "content_hash": "67e032d48a5e1546b370605653a9d6159c5e651aaa1944b9a0e77f4c5f46bb7d"
+        },
+        {
+          "assumption_id": "DELIGNE_SEMISIMPLE",
+          "statement": "Geometric rational variations supplied by a smooth proper algebraic morphism fall in the category of Proposition 4.2.5 satisfying conditions 4.2.2; Theorem 4.2.6 makes their underlying monodromy representations semisimple.",
+          "source": "Pierre Deligne, Theorie de Hodge II, IHES 40 (1971), pp. 43-45; primary PDF archived and read.",
+          "source_id": "doi:10.1007/BF02684692",
+          "locator": "Conditions 4.2.2; Proposition 4.2.5(iii); Theorem 4.2.6",
+          "filed_by": "engineer:copilot",
+          "content_hash": "b5f23c1e63a592d99cae45ea84768932a8814be82e4596b02fd6066a05e53d1c"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "dfb47acf2006a2be4c39b949b142c6d9f5cc37031624a0db46d2178e399d8aee"
+    },
+    {
+      "claim_id": "RV_TRACE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "On the generic smooth family, the Serre-dual relative Frobenius scalar s satisfies psi(m) du=Car(F_*(s m du)); pairing the differential identity with a horizontal Frobenius lift gives s=sum_j D_j(g t_j s).",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "FROBENIUS_FACTOR",
+          "statement": "For a scheme X over a characteristic-p base S, absolute Frobenius factors through X^(p)=X times_(S,F_S) S by the relative Frobenius followed by the base-change projection.",
+          "source": "Stacks Project, Frobenii; primary Tag 0CC6 archived and read on 2026-11-05.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0CC6",
+          "locator": "Definition 33.36.4 (Tag 0CC9), within Tag 0CC6",
+          "filed_by": "engineer:copilot",
+          "content_hash": "54f966fa3bc47476ce9a6f2a152f4eb2e2c4634e5262832d8bc80b174ea8167f"
+        },
+        {
+          "assumption_id": "TRACE_FLAT_BASE_CHANGE",
+          "statement": "The duality trace is the counit of the right-adjoint adjunction; for a Tor-independent cartesian square it commutes with the stated derived base-change identifications. Flat base change is a case of this hypothesis.",
+          "source": "Stacks Project, Tags 0E5K and 0E5L, with the Tor-independence hypothesis from Tag 0E5A; primary text read and archived.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0E5L",
+          "locator": "Lemma 86.6.1 (Tag 0E5L); setup 86.4 (Tag 0E5A); counit definition 86.6 (Tag 0E5K)",
+          "filed_by": "engineer:copilot",
+          "content_hash": "5b03cc5efb6b691dc7b092e18b84451157b9215b5c647afa833b0a41bc8ad949"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "73b40a2ecb4ab6d50964b145312fe810358db9d65f4787c45f58833fae1f6de1"
+    },
+    {
+      "claim_id": "RV_COMPLETION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "The manuscript completion and rational field-trace argument is valid under its stated normality, separability, common p-basis, regular-coefficient, and degree less than p hypotheses, without assuming s regular.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "EXCELLENT_NORMAL_COMPLETION",
+          "statement": "Fields and complete noetherian local rings are excellent; localizations of finite type algebras over them are excellent; quasi-excellent rings are Nagata; a normal noetherian local ring with normal formal fibres, in particular an excellent normal local ring, has normal completion.",
+          "source": "Stacks Project, Tag 07QS; primary statements read and archived with hypotheses.",
+          "source_id": "https://stacks.math.columbia.edu/tag/07QS",
+          "locator": "Lemma 15.53.2; Proposition 15.53.3; Lemmas 15.53.5 and 15.53.6 (Tags 07QU,07QW,07QV,0C23)",
+          "filed_by": "engineer:copilot",
+          "content_hash": "68748167b121d8c7b8c24250643606082f6b664acea8cfc809fec69932c30b57"
+        },
+        {
+          "assumption_id": "HENSELIAN_PRODUCTS",
+          "statement": "A complete local ring is henselian, and every finite algebra over a henselian local ring is a finite product of local rings. In particular a finite domain algebra over such a ring is local.",
+          "source": "Stacks Project, Tag 04GE; primary statements read and archived with hypotheses.",
+          "source_id": "https://stacks.math.columbia.edu/tag/04GE",
+          "locator": "Lemma 10.153.3(10); Lemma 10.153.9",
+          "filed_by": "engineer:copilot",
+          "content_hash": "a66bd54e694ae21f8844b35e06afbb6318476af5157e9997bf57beab829487bf"
+        },
+        {
+          "assumption_id": "FINITE_COMPLETION",
+          "statement": "Over a noetherian ring, completion of a finite module is its tensor product with the completed ring. For a finite ring map, tensoring with the completion of a localization gives the product of the completed local algebras over that prime.",
+          "source": "Stacks Project, Tag 0BNH; primary statements read and archived with hypotheses.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0BNH",
+          "locator": "Lemma 10.97.1(3), Tag 00MA; Lemma 10.97.8, Tag 07N9",
+          "filed_by": "engineer:copilot",
+          "content_hash": "6276a1e49aa80f54e145a45e0ae847d08d08c593d23b1ae136cfaad2fb5c550b"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "58fcf83cedad8193eb6159e71a0fcdc70c79d4599de4a56abbb1fcfba5ca6b21"
+    },
+    {
+      "claim_id": "RV_CLEARING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "Conditional on the retained scalar identity, the Cartier formula, derivative-stable regular coefficients, and psi(1) not in the closed-point maximal ideal, the explicit adjoint witness T in R gives psi(g*T)=psi(1), hence psi(g*T)(b) is nonzero. This does not establish the geometric inputs or ordinary base change.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "2f264617d9f3bb453476b777ef17505783efa201cff6d9c122b97ce1e63311fd"
+    },
+    {
+      "claim_id": "RV_SEMIAMPLENESS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "The supplied known-status finding is that Soldatenkov-Verbitsky arXiv:2409.09142v3, Theorems 3.7(v) and 3.8, propagates semiampleness from an already semiample deformation to the specified nef pair; it does not construct an initial semiample deformation. Primary-source attribution remains to be recorded.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SV_PROPAGATION",
+          "statement": "If a hyperkahler pair (M,L) has L nef with q(c1(L))=0 and admits a deformation with semiample L-prime, then L is semiample. Theorem 3.7(v) assumes a nonempty semiample Teichmuller component; it does not supply that nonemptiness.",
+          "source": "Soldatenkov and Verbitsky, The abundance and SYZ conjectures in families of hyperkahler manifolds, arXiv:2409.09142v3; primary HTML archived and read.",
+          "source_id": "arxiv:2409.09142v3",
+          "locator": "Theorem 3.7(v) and its nonemptiness hypothesis; Theorem 3.8",
+          "filed_by": "engineer:copilot",
+          "content_hash": "32f68f94e41a5f26ef40e67446d112f7fc898c2ba03dbef4ff60b310542c2f9c"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "796aacb6596be8e6c83e28cbcf8baf35b0cdfaddb071a068df8c53a37f541ded"
+    },
+    {
+      "claim_id": "RV_ORDINARY",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "Proposition bc:ordinary asserts canonical ordinary coefficient base change for every R-module on each retained chart. This remains unverified beyond the clearing bridge in this mission.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "6d977bf4cc6c9a2b9c68a5d40527f32bd354bb209f45ae10f12d3c848cde4f02"
+    },
+    {
+      "claim_id": "RV_PROJECTIVE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "The projective-space manuscript asserts that the normal projective base of a projective Lagrangian fibration from a compact irreducible holomorphic symplectic Kahler manifold is projective space. The full theorem remains unverified.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f084782d98a5807d5b7d663fe141106ef97200610ed3fc34001d1fbaf580929b"
+    },
+    {
+      "claim_id": "RV_SYZ",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "The strong-SYZ manuscript route requires a full smooth cylinder and a torus with the specified angular marking. The relevant metric_estimates, completion, and rotation constructions are unverified and are outside the clearing implication.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "af62725fc97c2c4b91936c411fe307dd9259b06babde340dac31c472256dd50a"
+    },
+    {
+      "claim_id": "RV_BOUNDARIES",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "For every prime p, R=F_p[u], s=u^(p-1), g=u^p and psi(r)=Cartier(s*r) have psi(1)=1 and psi(g*R) contained in (u). The proposed order-zero coefficient u^(-p) is nonregular; the p-th Hasse derivative is not an allowed ordinary derivative. These examples do not refute the manuscript's retained-hypothesis clearing lemma.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "159229bd1b645a91efd8654a061b85937fcbc38039357cc251d071e3c7e9bceb"
+    },
+    {
+      "claim_id": "RV_LIMITS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "RV_CTX",
+        "content_hash": "e907b029f5d29b75f68e6d4ca2767f0a9f390c311fe95425b07e1caa4b6c4d47"
+      },
+      "natural_statement": "The old inventory has 57 listed artifacts, 21 legacy claim versions and ten substantive units. Historical compiler/source-attribution records, finite diagnostics, local algebra and excluded-hypothesis attacks must not be promoted to an independent verification of either manuscript.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "INHERITED_EVIDENCE_LIMITS",
+          "statement": "The final old certificate concerns only the conditional algebraic source; its human statement reading, source excerpts and geometric instantiations are distinct evidence. Earlier compiler certificates were inconclusive, registry resolutions only established document existence, and the old umbrella audit objective is not a theorem.",
+          "source": "Read-only old research/MATH_STATE.json, PROOF_GRAPH.json, exact_certificate.json and PRIOR_DRAFTS.json; inherited evidence whose mathematical scope is being reviewed here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review",
+          "content_hash": "8953e0fb268c46fd5c9dd5b3a7e2105891ab1c4b0ffbf2776f413d926faad0cb"
+        },
+        {
+          "assumption_id": "EXCLUDED_HYPOTHESIS_ATTACKS",
+          "statement": "The polynomial controls in exact_certificate.json omit regular coefficient stability or replace ordinary derivatives with a p-th Hasse derivative; they cannot serve as counterexamples to the retained geometric hypotheses.",
+          "source": "Old research/cartier-clearing/exact_certificate.json, supplemental_experiments.hypothesis_controls; inspect verify.py before any isolated replay.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review",
+          "content_hash": "9bf42a3deaefc1565cbfde72bca6f39d723c209a3599d56f988bd5b9b399d25e"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "366db5ea45fddd67d283c02feb6a739f244a646419e7caf67a6cb5eea8b0a852"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "citation-SV_PROPAGATION-2ec1a102bbb4",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SV_PROPAGATION",
+        "content_hash": "32f68f94e41a5f26ef40e67446d112f7fc898c2ba03dbef4ff60b310542c2f9c"
+      },
+      "tier": "literature",
+      "verdict": "inconclusive",
+      "produced_by": "citation_check/arxiv",
+      "artifact": "research/draft_reviews/inherited/literature/fbd2619b115e31117b9cad87a24965d0.json"
+    },
+    {
+      "evidence_id": "citation-SAITO_STRICT-bccb743e53ee",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SAITO_STRICT",
+        "content_hash": "67e032d48a5e1546b370605653a9d6159c5e651aaa1944b9a0e77f4c5f46bb7d"
+      },
+      "tier": "literature",
+      "verdict": "inconclusive",
+      "produced_by": "citation_check/arxiv",
+      "artifact": "research/draft_reviews/inherited/literature/6a6545dd35404c2966c6a6aa2f277660.json"
+    },
+    {
+      "evidence_id": "citation-DELIGNE_SEMISIMPLE-ac0a3406a30c",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DELIGNE_SEMISIMPLE",
+        "content_hash": "b5f23c1e63a592d99cae45ea84768932a8814be82e4596b02fd6066a05e53d1c"
+      },
+      "tier": "literature",
+      "verdict": "inconclusive",
+      "produced_by": "citation_check/doi.org",
+      "artifact": "research/draft_reviews/inherited/literature/400308cb5a844e211ecd9f60023d8225.json"
+    },
+    {
+      "evidence_id": "citation-SAITO_STRICT-460e934783d5",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SAITO_STRICT",
+        "content_hash": "67e032d48a5e1546b370605653a9d6159c5e651aaa1944b9a0e77f4c5f46bb7d"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-independent",
+      "artifact": "research/draft_reviews/inherited/literature/a4bbd07bdbd0ddf3e847ac03321415af.json"
+    },
+    {
+      "evidence_id": "citation-DELIGNE_SEMISIMPLE-632699b82613",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DELIGNE_SEMISIMPLE",
+        "content_hash": "b5f23c1e63a592d99cae45ea84768932a8814be82e4596b02fd6066a05e53d1c"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-independent",
+      "artifact": "research/draft_reviews/inherited/literature/8772a75b87aec3848b01f7e44c46f796.json"
+    },
+    {
+      "evidence_id": "citation-FROBENIUS_FACTOR-30eb1358f78b",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "FROBENIUS_FACTOR",
+        "content_hash": "54f966fa3bc47476ce9a6f2a152f4eb2e2c4634e5262832d8bc80b174ea8167f"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-independent",
+      "artifact": "research/draft_reviews/inherited/literature/1f7f06a3687e7ebed91359cd9cb8b3c4.json"
+    },
+    {
+      "evidence_id": "citation-TRACE_FLAT_BASE_CHANGE-ccb47c4182ed",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "TRACE_FLAT_BASE_CHANGE",
+        "content_hash": "5b03cc5efb6b691dc7b092e18b84451157b9215b5c647afa833b0a41bc8ad949"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-independent",
+      "artifact": "research/draft_reviews/inherited/literature/8fbf97ec704afa85b3e1729be9d5c9ed.json"
+    },
+    {
+      "evidence_id": "citation-EXCELLENT_NORMAL_COMPLETION-ca220390580e",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "EXCELLENT_NORMAL_COMPLETION",
+        "content_hash": "68748167b121d8c7b8c24250643606082f6b664acea8cfc809fec69932c30b57"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-independent",
+      "artifact": "research/draft_reviews/inherited/literature/448f3d995ff7d6ec8076a304c7572534.json"
+    },
+    {
+      "evidence_id": "citation-HENSELIAN_PRODUCTS-6760279665af",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "HENSELIAN_PRODUCTS",
+        "content_hash": "a66bd54e694ae21f8844b35e06afbb6318476af5157e9997bf57beab829487bf"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-independent",
+      "artifact": "research/draft_reviews/inherited/literature/649c94d92973c4481922d63091cb9d53.json"
+    },
+    {
+      "evidence_id": "citation-FINITE_COMPLETION-c4b069135203",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "FINITE_COMPLETION",
+        "content_hash": "6276a1e49aa80f54e145a45e0ae847d08d08c593d23b1ae136cfaad2fb5c550b"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-independent",
+      "artifact": "research/draft_reviews/inherited/literature/867bece5d95a24e1d0c07582f53d964f.json"
+    },
+    {
+      "evidence_id": "citation-SV_PROPAGATION-2c5409b2d874",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SV_PROPAGATION",
+        "content_hash": "32f68f94e41a5f26ef40e67446d112f7fc898c2ba03dbef4ff60b310542c2f9c"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-independent",
+      "artifact": "research/draft_reviews/inherited/literature/c0c93be428812149b59ce32a14713b2c.json"
+    },
+    {
+      "evidence_id": "lean-RV_ADJOINT-c6174f82573f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_ADJOINT",
+        "content_hash": "16a0f42b41d13dae79d88fd7bb7100cb8f2efb97d57840464f23b5fd5b97766b"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/draft_reviews/cartier-adjoint/replay/fresh/certificates/RV_ADJOINT-5c13ad9f38695718.json"
+    },
+    {
+      "evidence_id": "engineer-review-cartier-adjoint",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_ADJOINT",
+        "content_hash": "16a0f42b41d13dae79d88fd7bb7100cb8f2efb97d57840464f23b5fd5b97766b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/cartier-adjoint/replay/fresh/certificates/RV_ADJOINT-5c13ad9f38695718.json"
+    },
+    {
+      "evidence_id": "engineer-review-differential-identity",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_DIFF",
+        "content_hash": "dfb47acf2006a2be4c39b949b142c6d9f5cc37031624a0db46d2178e399d8aee"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/differential-identity/report.md"
+    },
+    {
+      "evidence_id": "engineer-review-frobenius-trace-lift",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_TRACE",
+        "content_hash": "73b40a2ecb4ab6d50964b145312fe810358db9d65f4787c45f58833fae1f6de1"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/frobenius-trace-lift/report.md"
+    },
+    {
+      "evidence_id": "engineer-review-completed-trace",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_COMPLETION",
+        "content_hash": "58fcf83cedad8193eb6159e71a0fcdc70c79d4599de4a56abbb1fcfba5ca6b21"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/completed-trace/report.md"
+    },
+    {
+      "evidence_id": "engineer-review-clearing-bridge",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_CLEARING",
+        "content_hash": "2f264617d9f3bb453476b777ef17505783efa201cff6d9c122b97ce1e63311fd"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/clearing-bridge/report.md"
+    },
+    {
+      "evidence_id": "engineer-review-boundary-controls",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_BOUNDARIES",
+        "content_hash": "159229bd1b645a91efd8654a061b85937fcbc38039357cc251d071e3c7e9bceb"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/boundary-controls/report.md"
+    },
+    {
+      "evidence_id": "engineer-review-semiampleness",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_SEMIAMPLENESS",
+        "content_hash": "796aacb6596be8e6c83e28cbcf8baf35b0cdfaddb071a068df8c53a37f541ded"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/semiampleness/report.md"
+    },
+    {
+      "evidence_id": "engineer-review-ordinary-base-change",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_ORDINARY",
+        "content_hash": "6d977bf4cc6c9a2b9c68a5d40527f32bd354bb209f45ae10f12d3c848cde4f02"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/ordinary-base-change/report.md"
+    },
+    {
+      "evidence_id": "engineer-review-projective-base",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_PROJECTIVE",
+        "content_hash": "f084782d98a5807d5b7d663fe141106ef97200610ed3fc34001d1fbaf580929b"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/projective-base/report.md"
+    },
+    {
+      "evidence_id": "engineer-review-strong-syz",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_SYZ",
+        "content_hash": "af62725fc97c2c4b91936c411fe307dd9259b06babde340dac31c472256dd50a"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/draft_reviews/strong-syz/report.md"
+    },
+    {
+      "evidence_id": "engineer-review-scope",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_LIMITS",
+        "content_hash": "366db5ea45fddd67d283c02feb6a739f244a646419e7caf67a6cb5eea8b0a852"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review",
+      "artifact": "research/OLD_ROUND_REVIEW.md"
+    },
+    {
+      "evidence_id": "judgement-RV_ADJOINT-258292364cea",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_ADJOINT",
+        "content_hash": "16a0f42b41d13dae79d88fd7bb7100cb8f2efb97d57840464f23b5fd5b97766b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/cartier-adjoint/replay/fresh/certificates/RV_ADJOINT-5c13ad9f38695718.json"
+    },
+    {
+      "evidence_id": "judgement-RV_DIFF-c156cc8a48bd",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_DIFF",
+        "content_hash": "dfb47acf2006a2be4c39b949b142c6d9f5cc37031624a0db46d2178e399d8aee"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/differential-identity/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_TRACE-1b1cbaf7702c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_TRACE",
+        "content_hash": "73b40a2ecb4ab6d50964b145312fe810358db9d65f4787c45f58833fae1f6de1"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/frobenius-trace-lift/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_COMPLETION-8c023eb6e76e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_COMPLETION",
+        "content_hash": "58fcf83cedad8193eb6159e71a0fcdc70c79d4599de4a56abbb1fcfba5ca6b21"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/completed-trace/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_CLEARING-de393f797747",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_CLEARING",
+        "content_hash": "2f264617d9f3bb453476b777ef17505783efa201cff6d9c122b97ce1e63311fd"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/clearing-bridge/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_BOUNDARIES-0da7abe41c14",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_BOUNDARIES",
+        "content_hash": "159229bd1b645a91efd8654a061b85937fcbc38039357cc251d071e3c7e9bceb"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/boundary-controls/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_SEMIAMPLENESS-f597bd574179",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_SEMIAMPLENESS",
+        "content_hash": "796aacb6596be8e6c83e28cbcf8baf35b0cdfaddb071a068df8c53a37f541ded"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/semiampleness/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_ORDINARY-8c50d4042495",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_ORDINARY",
+        "content_hash": "6d977bf4cc6c9a2b9c68a5d40527f32bd354bb209f45ae10f12d3c848cde4f02"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/ordinary-base-change/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_PROJECTIVE-79cf6a97d1fa",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_PROJECTIVE",
+        "content_hash": "f084782d98a5807d5b7d663fe141106ef97200610ed3fc34001d1fbaf580929b"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/projective-base/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_SYZ-01fb5ce85fcc",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_SYZ",
+        "content_hash": "af62725fc97c2c4b91936c411fe307dd9259b06babde340dac31c472256dd50a"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/draft_reviews/strong-syz/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_LIMITS-afbcff1f8938",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_LIMITS",
+        "content_hash": "366db5ea45fddd67d283c02feb6a739f244a646419e7caf67a6cb5eea8b0a852"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native",
+      "artifact": "research/DRAFT_REVIEW_INDEX.json"
+    },
+    {
+      "evidence_id": "judgement-RV_ADJOINT-d3b4b3d14e43",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_ADJOINT",
+        "content_hash": "16a0f42b41d13dae79d88fd7bb7100cb8f2efb97d57840464f23b5fd5b97766b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/cartier-adjoint/replay/fresh/certificates/RV_ADJOINT-5c13ad9f38695718.json"
+    },
+    {
+      "evidence_id": "judgement-RV_DIFF-4d51056d7156",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_DIFF",
+        "content_hash": "dfb47acf2006a2be4c39b949b142c6d9f5cc37031624a0db46d2178e399d8aee"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/differential-identity/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_TRACE-160ad1348e47",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_TRACE",
+        "content_hash": "73b40a2ecb4ab6d50964b145312fe810358db9d65f4787c45f58833fae1f6de1"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/frobenius-trace-lift/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_COMPLETION-33955d6dda1c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_COMPLETION",
+        "content_hash": "58fcf83cedad8193eb6159e71a0fcdc70c79d4599de4a56abbb1fcfba5ca6b21"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/completed-trace/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_CLEARING-502aabc555de",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_CLEARING",
+        "content_hash": "2f264617d9f3bb453476b777ef17505783efa201cff6d9c122b97ce1e63311fd"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/clearing-bridge/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_BOUNDARIES-b83bab75800d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_BOUNDARIES",
+        "content_hash": "159229bd1b645a91efd8654a061b85937fcbc38039357cc251d071e3c7e9bceb"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/boundary-controls/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_SEMIAMPLENESS-ec3ce0d8d5d9",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_SEMIAMPLENESS",
+        "content_hash": "796aacb6596be8e6c83e28cbcf8baf35b0cdfaddb071a068df8c53a37f541ded"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/semiampleness/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_ORDINARY-108374588c6c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_ORDINARY",
+        "content_hash": "6d977bf4cc6c9a2b9c68a5d40527f32bd354bb209f45ae10f12d3c848cde4f02"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/ordinary-base-change/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_PROJECTIVE-5302c7c8a64f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_PROJECTIVE",
+        "content_hash": "f084782d98a5807d5b7d663fe141106ef97200610ed3fc34001d1fbaf580929b"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/projective-base/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_SYZ-53c9125f0ff5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_SYZ",
+        "content_hash": "af62725fc97c2c4b91936c411fe307dd9259b06babde340dac31c472256dd50a"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/draft_reviews/strong-syz/report.md"
+    },
+    {
+      "evidence_id": "judgement-RV_LIMITS-0fb33b6ec758",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "RV_LIMITS",
+        "content_hash": "366db5ea45fddd67d283c02feb6a739f244a646419e7caf67a6cb5eea8b0a852"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-native-final",
+      "artifact": "research/DRAFT_REVIEW_INDEX.json"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "RV_ADJOINT_ROUTE",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "RV_CLEARING",
+        "content_hash": "2f264617d9f3bb453476b777ef17505783efa201cff6d9c122b97ce1e63311fd"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "RV_ADJOINT",
+          "content_hash": "16a0f42b41d13dae79d88fd7bb7100cb8f2efb97d57840464f23b5fd5b97766b"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "RV_DIFF",
+          "content_hash": "dfb47acf2006a2be4c39b949b142c6d9f5cc37031624a0db46d2178e399d8aee"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "RV_TRACE",
+          "content_hash": "73b40a2ecb4ab6d50964b145312fe810358db9d65f4787c45f58833fae1f6de1"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "RV_COMPLETION_ROUTE",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "RV_CLEARING",
+        "content_hash": "2f264617d9f3bb453476b777ef17505783efa201cff6d9c122b97ce1e63311fd"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "RV_COMPLETION",
+          "content_hash": "58fcf83cedad8193eb6159e71a0fcdc70c79d4599de4a56abbb1fcfba5ca6b21"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "RV_DIFF",
+          "content_hash": "dfb47acf2006a2be4c39b949b142c6d9f5cc37031624a0db46d2178e399d8aee"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "RV_TRACE",
+          "content_hash": "73b40a2ecb4ab6d50964b145312fe810358db9d65f4787c45f58833fae1f6de1"
+        }
+      ],
+      "retired_because": ""
+    }
+  ]
+}

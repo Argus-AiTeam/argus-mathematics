@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CC_FORMAL_CORE-44cd78e0e2fc",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/251/first-pass/circuit-comparison/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/251/first-pass/circuit-comparison/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15129,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/251/first-pass/circuit-comparison/lean/Main.lean",
+    "source_sha256": "ebf9fdcb91b80526b64918801f8615a8cc33207922768229fc5998356d55b809",
+    "statement_fidelity": "families/251/first-pass/circuit-comparison/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "8578562b66cc79d9d7a0cd8e2b7766b34698ba88e5f49191881bec648cf1a254",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/circuit-comparison/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace CircuitComparison\n\ndef descendingProduct {M : Type*} [Monoid M] (f : Nat -> M) : Nat -> M\n  | 0 => 1\n  | n + 1 => f n * descendingProduct f n\n\ntheorem descendingProduct_commute {M : Type*} [Monoid M]\n    (f : Nat -> M) (x : M) (n : Nat)\n    (h : forall i, i < n -> Commute (f i) x) :\n    Commute (descendingProduct f n) x := by\n  revert h\n  induction n with\n  | zero =>\n      intro h\n      simp [descendingProduct, Commute, SemiconjBy]\n  | succ n ih =>\n      intro h\n      have hn := h n (Nat.lt_succ_self n)\n      have hp := ih (fun i hi => h i (Nat.lt_trans hi (Nat.lt_succ_self n)))\n      change (f n * descendingProduct f n) * x =\n        x * (f n * descendingProduct f n)\n      calc\n        (f n * descendingProduct f n) * x =\n            f n * (descendingProduct f n * x) := mul_assoc _ _ _\n        _ = f n * (x * descendingProduct f n) := by rw [hp.eq]\n        _ = (f n * x) * descendingProduct f n := (mul_assoc _ _ _).symm\n        _ = (x * f n) * descendingProduct f n := by rw [hn.eq]\n        _ = x * (f n * descendingProduct f n) := mul_assoc _ _ _\n\ntheorem interleaved_product {M : Type*} [Monoid M]\n    (k m : Nat -> M)\n    (h : forall i j, i < j -> Commute (k i) (m j)) (n : Nat) :\n    descendingProduct (fun i => k i * m i) n =\n      descendingProduct k n * descendingProduct m n := by\n  induction n with\n  | zero => simp [descendingProduct]\n  | succ n ih =>\n      have hc := descendingProduct_commute k (m n) n (fun i hi => h i n hi)\n      change (k n * m n) * descendingProduct (fun i => k i * m i) n =\n        (k n * descendingProduct k n) * (m n * descendingProduct m n)\n      rw [ih]\n      calc\n        (k n * m n) * (descendingProduct k n * descendingProduct m n) =\n            k n * ((m n * descendingProduct k n) * descendingProduct m n) := by\n              simp only [mul_assoc]\n        _ = k n * ((descendingProduct k n * m n) * descendingProduct m n) := by\n              rw [hc.eq]\n        _ = (k n * descendingProduct k n) * (m n * descendingProduct m n) := by\n              simp only [mul_assoc]\n\ndef exchange {R : Type*} [Zero R] (c s : R) : Matrix (Fin 2) (Fin 2) R :=\n  !![0, c; s, 0]\n\ntheorem post_error {R : Type*} [Ring R]\n    (c ci si s : R) (h : c * ci = 1) :\n    exchange c si * exchange s ci = !![1, 0; 0, si * s] := by\n  ext i j\n  fin_cases i <;> fin_cases j <;>\n    simp [exchange, Matrix.mul_apply, Fin.sum_univ_two, h]\n\ntheorem commute_of_annihilating_errors {R : Type*} [Ring R]\n    (k m : R) (hkm : (k - 1) * (m - 1) = 0)\n    (hmk : (m - 1) * (k - 1) = 0) : Commute k m := by\n  change k * m = m * k\n  calc\n    k * m = (k - 1) * (m - 1) + k + m - 1 := by noncomm_ring\n    _ = k + m - 1 := by rw [hkm]; simp\n    _ = m + k - 1 := by rw [add_comm k m]\n    _ = (m - 1) * (k - 1) + m + k - 1 := by rw [hmk]; simp\n    _ = m * k := by noncomm_ring\n\ndef errorSum {R : Type*} [Ring R] (k : Nat -> R) : Nat -> R\n  | 0 => 0\n  | n + 1 => k n - 1 + errorSum k n\n\ntheorem mul_errorSum_zero {R : Type*} [Ring R]\n    (a : R) (k : Nat -> R) (n : Nat)\n    (h : forall i, i < n -> a * (k i - 1) = 0) :\n    a * errorSum k n = 0 := by\n  revert h\n  induction n with\n  | zero => simp [errorSum]\n  | succ n ih =>\n      intro h\n      have hn := h n (Nat.lt_succ_self n)\n      have hp := ih (fun i hi => h i (Nat.lt_trans hi (Nat.lt_succ_self n)))\n      rw [errorSum, mul_add, hn, hp, add_zero]\n\ntheorem disjoint_error_product {R : Type*} [Ring R]\n    (k : Nat -> R)\n    (h : forall i j, Not (i = j) -> (k i - 1) * (k j - 1) = 0) (n : Nat) :\n    descendingProduct k n = 1 + errorSum k n := by\n  induction n with\n  | zero => simp [descendingProduct, errorSum]\n  | succ n ih =>\n      have hz := mul_errorSum_zero (k n - 1) k n\n        (fun i hi => h n i (Nat.ne_of_gt hi))\n      rw [descendingProduct, ih, errorSum]\n      calc\n        k n * (1 + errorSum k n) =\n            1 + (k n - 1 + errorSum k n) + (k n - 1) * errorSum k n := by\n              noncomm_ring\n        _ = 1 + (k n - 1 + errorSum k n) := by rw [hz, add_zero]\n\ntheorem common_right_cancel {G : Type*} [Group G] (p q c : G) :\n    (q * c) * Inv.inv (p * c) = q * Inv.inv p := by\n  simp [mul_assoc]\n\ntheorem rational_constants :\n    And ((8 / 3 + 32 / 9 : Rat) < 7)\n      (And ((9 / 8 * 14 : Rat) <= 16)\n        (And ((9 / 8 * 4 : Rat) <= 5) ((16 + 15 / 4 : Rat) <= 20))) := by\n  norm_num\n\ntheorem truncation_budget (h z : Real) (hh : 0 <= h) (hz : z <= 1 / 4) :\n    16 * h + 15 * h * z <= 20 * h := by\n  have hp : 0 <= h * (1 / 4 - z) := mul_nonneg hh (sub_nonneg.mpr hz)\n  nlinarith\n\nend CircuitComparison\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/circuit-comparison/lean/statement_fidelity.md",
+    "text": "# Statement fidelity for C_CC_FORMAL_CORE\n\nThe declarations in namespace `CircuitComparison` formalize the algebraic\norientation and support-reordering core of Sections 4--6 of\n`../comparison.md`. They are not a formalization of the full analytic bound,\nof the existence of the flags, or of either manuscript's main theorem.\n\n`descendingProduct f n` is the product `f (n-1) ... f 0`; `n=0` gives the\nidentity. `descendingProduct_commute` quantifies over every monoid, every\nsequence, every element, and every finite length. It moves that element\npast the product when it commutes with each factor.\n\n`interleaved_product` quantifies over every monoid and every pair of\nsequences `k,m`. Its hypothesis is precisely that `k i` commutes with\n`m j` for every `i<j`. It proves\n`(k(n-1)m(n-1))...(k0 m0) = (k(n-1)...k0)(m(n-1)...m0)`\nfor every natural length. In the actual circuit, `k` denotes the corrected\narrival-level unitaries and `m` the frame-aligned layers. Their commutation\nis derived from the genuine next-departure projections in the prose\nproof, not certified by this declaration alone.\n\n`exchange` is the two-by-two matrix with off-diagonal entries `c,s`.\n`post_error` quantifies over every possibly noncommutative ring and all\nentries `c,ci,si,s`, requiring only `c*ci=1`. It proves that the new\nexchange times the old inverse exchange is diagonal with entries\n`1,si*s`. With `si=S3^{-1}`, `s=S2`, `ci=C^{-1}`, this is exactly\nequation (12). The lower, arrival block is the priority discrepancy;\nthe formal statement does not reverse their order or assume the\nexchanges are involutions.\n\n`commute_of_annihilating_errors` applies to every ring. Both ordered\nproducts of `k-1` and `m-1` must vanish, and the conclusion is `k*m=m*k`.\nFor the actual operators these annihilations follow from exact fixation\nof the next departure and invariant orthogonal complements. One-sided\nannihilation alone is not encoded as sufficient.\n\n`errorSum` is the corresponding descending sum of `k i-1`.\n`mul_errorSum_zero` and `disjoint_error_product` quantify over every ring\nand every natural length. The latter requires\n`(k i-1)*(k j-1)=0` for all distinct indices, and proves that the\nproduct is `1+errorSum k n`. Orthogonal-level support gives exactly\nthis hypothesis. The Hilbert-space norm of that direct sum is a\nmaximum rather than a sum; this additional norm statement is proved\nin prose, not encoded here.\n\n`common_right_cancel` is the cancellation identity for every group.\nIt does not assert that the common factors can be extracted from the\nactual circuits; the F1 support argument proving extraction is in\nthe prose proof.\n\n`rational_constants` proves the four exact rational arithmetic bounds\nused for the Schur map and truncation. `truncation_budget` proves the\nlast error estimate for all real `h,z` with `h>=0` and `z<=1/4`.\nThese statements make no assertion about spectral calculus.\n\nThere are no external mathematical axioms or admitted obligations in\nthis source. A successful compiler record certifies these declarations\nunder their displayed hypotheses, not the unencoded analytic\ntranslation. That translation and the correctness of this fidelity\ndocument require independent human mathematical review.\n"
+  },
+  "subject": {
+    "content_hash": "4da118c68c018cec8dd1ee86615fc52d506a889b03396443d46220947fd11807",
+    "kind": "claim",
+    "subject_id": "C_CC_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

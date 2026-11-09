@@ -1,0 +1,63 @@
+@LSBiquadratic.root_pow_eq_legendre_mul : ∀ {R : Type u_1} [inst : CommRing R] (p : ℕ) [inst_1 : Fact (Nat.Prime p)]
+  [CharP R p], p ≠ 2 → ∀ (d : ℤ) (a : R), a ^ 2 = ↑d → a ^ p = ↑(legendreSym p d) * a
+LSBiquadratic.not_dvd_of_legendre_neg_one : ∀ (p : ℕ) [inst : Fact (Nat.Prime p)] (d : ℤ),
+  legendreSym p d = -1 → ¬↑p ∣ d
+@LSBiquadratic.prime_dvd_theta_sub_signedTheta : ∀ {R : Type u_1} [inst : CommRing R] (p : ℕ)
+  [inst_1 : Fact (Nat.Prime p)],
+  p ≠ 2 →
+    ∀ (d : ℤ) (a b : R),
+      a ^ 2 = ↑d →
+        b ^ 2 = 2 →
+          legendreSym p d = -1 →
+            ∀ (n : Fin 4 → ℤ), ↑p ∣ LSBiquadratic.theta a b n ^ p - LSBiquadratic.signedTheta a b (legendreSym p 2) n
+@LSBiquadratic.prime_dvd_theta_sub_sigmaTheta : ∀ {R : Type u_1} [inst : CommRing R] (p : ℕ)
+  [inst_1 : Fact (Nat.Prime p)],
+  p ≠ 2 →
+    ∀ (d : ℤ) (a b : R),
+      a ^ 2 = ↑d →
+        b ^ 2 = 2 →
+          legendreSym p d = -1 →
+            legendreSym p 2 = 1 → ∀ (n : Fin 4 → ℤ), ↑p ∣ LSBiquadratic.theta a b n ^ p - LSBiquadratic.sigmaTheta a b n
+@LSBiquadratic.prime_dvd_theta_sub_sigmaTauTheta : ∀ {R : Type u_1} [inst : CommRing R] (p : ℕ)
+  [inst_1 : Fact (Nat.Prime p)],
+  p ≠ 2 →
+    ∀ (d : ℤ) (a b : R),
+      a ^ 2 = ↑d →
+        b ^ 2 = 2 →
+          legendreSym p d = -1 →
+            legendreSym p 2 = -1 →
+              ∀ (n : Fin 4 → ℤ), ↑p ∣ LSBiquadratic.theta a b n ^ p - LSBiquadratic.sigmaTauTheta a b n
+LSBiquadratic.legendre_two_eq_one_or_neg_one : ∀ (p : ℕ) [inst : Fact (Nat.Prime p)],
+  p ≠ 2 → legendreSym p 2 = 1 ∨ legendreSym p 2 = -1
+LSBiquadratic.conjugateProjection_int : ∀ (a b : ℂ) (n : Fin 4 → ℤ),
+  ((LSBiquadratic.conjugateProjection a b) fun i => ↑(n i)) =
+    ![LSBiquadratic.theta a b n, LSBiquadratic.sigmaTheta a b n, LSBiquadratic.sigmaTauTheta a b n]
+LSBiquadratic.conjugateProjection_surjective : ∀ (a b : ℂ),
+  a ≠ 0 → b ≠ 0 → Function.Surjective ⇑(LSBiquadratic.conjugateProjection a b)
+LSBiquadratic.conjugateProjection_eq_zero_iff : ∀ (a b : ℂ),
+  a ≠ 0 →
+    b ≠ 0 →
+      ∀ (x : Fin 4 → ℂ), (LSBiquadratic.conjugateProjection a b) x = 0 ↔ ∃ t, x = t • LSBiquadratic.kernelVector a b
+LSBiquadratic.conjugateProjection_ker : ∀ (a b : ℂ),
+  a ≠ 0 → b ≠ 0 → (LSBiquadratic.conjugateProjection a b).ker = ℂ ∙ LSBiquadratic.kernelVector a b
+LSBiquadratic.linearIndependent_kernelVector_iff : ∀ (a b : ℂ),
+  LinearIndependent ℚ (LSBiquadratic.kernelVector a b) ↔ LinearIndependent ℚ (LSBiquadratic.basisVector a b)
+LSBiquadratic.explicit_projection_data : ∀ (a b : ℂ),
+  a ≠ 0 →
+    b ≠ 0 →
+      LinearIndependent ℚ ![1, a, b, a * b] →
+        Function.Surjective ⇑(LSBiquadratic.conjugateProjection a b) ∧
+          (∀ (x : Fin 4 → ℂ),
+              (LSBiquadratic.conjugateProjection a b) x = 0 ↔ ∃ t, x = t • LSBiquadratic.kernelVector a b) ∧
+            LinearIndependent ℚ (LSBiquadratic.kernelVector a b)
+'LSBiquadratic.prime_dvd_theta_sub_signedTheta' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LSBiquadratic.prime_dvd_theta_sub_sigmaTheta' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LSBiquadratic.prime_dvd_theta_sub_sigmaTauTheta' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LSBiquadratic.not_dvd_of_legendre_neg_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LSBiquadratic.legendre_two_eq_one_or_neg_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LSBiquadratic.conjugateProjection_int' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LSBiquadratic.conjugateProjection_ker' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LSBiquadratic.linearIndependent_kernelVector_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LSBiquadratic.explicit_projection_data' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Lean audit exit code: 0

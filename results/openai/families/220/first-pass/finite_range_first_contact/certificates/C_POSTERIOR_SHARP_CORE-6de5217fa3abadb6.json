@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_POSTERIOR_SHARP_CORE-446967e7e1c7",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/220/first-pass/finite_range_first_contact/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/220/first-pass/finite_range_first_contact/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 17293,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/220/first-pass/finite_range_first_contact/Main.lean",
+    "source_sha256": "13b18efba693162b254253fff6db1718cc2f709014f14d9182552f1dfc01c93f",
+    "statement_fidelity": "families/220/first-pass/finite_range_first_contact/statement_fidelity.md",
+    "statement_fidelity_sha256": "41eba71887055a4418c49786476fe3d7c6a982b1f97acc52f63f7e842b7d327e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/finite_range_first_contact/Main.lean",
+    "text": "import Mathlib\n\nnoncomputable section\n\nnamespace PosteriorContact\n\nlemma two_pow_one_le (i : ℕ) : (1 : ℝ) ≤ 2 ^ i := by\n  induction i with\n  | zero => norm_num\n  | succ i ih =>\n      rw [pow_succ]\n      nlinarith\n\nlemma two_pow_mono {a b : ℕ} (h : a ≤ b) : (2 : ℝ) ^ a ≤ 2 ^ b := by\n  obtain ⟨c, rfl⟩ := Nat.exists_eq_add_of_le h\n  rw [pow_add]\n  have hc := two_pow_one_le c\n  have ha : 0 < (2 : ℝ) ^ a := by positivity\n  nlinarith\n\nlemma unit_pow_le (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (s : ℕ) :\n    (1 - p) ^ s ≤ 1 := by\n  induction s with\n  | zero => simp\n  | succ s ih =>\n      rw [pow_succ]\n      have hpow : 0 ≤ (1 - p) ^ s := pow_nonneg (by linarith) _\n      nlinarith\n\nlemma bernoulli_lower (p : ℝ) (_hp0 : 0 ≤ p) (hp1 : p ≤ 1) (s : ℕ) :\n    1 - (s : ℝ) * p ≤ (1 - p) ^ s := by\n  induction s with\n  | zero => simp\n  | succ s ih =>\n      rw [pow_succ (1 - p) s]\n      push_cast\n      have hmul := mul_le_mul_of_nonneg_right ih (show 0 ≤ 1 - p by linarith)\n      have hsq : 0 ≤ (s : ℝ) * p ^ 2 := mul_nonneg (Nat.cast_nonneg _) (sq_nonneg _)\n      nlinarith\n\ntheorem bonferroni_two (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (s : ℕ) :\n    (s : ℝ) * p - (s : ℝ) * ((s : ℝ) - 1) * p ^ 2 / 2 ≤\n      1 - (1 - p) ^ s := by\n  induction s with\n  | zero => simp\n  | succ s ih =>\n      rw [pow_succ (1 - p) s]\n      push_cast\n      have hb := bernoulli_lower p hp0 hp1 s\n      have hmul := mul_le_mul_of_nonneg_left hb hp0\n      nlinarith\n\ntheorem hit_probability_half (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)\n    (s : ℕ) (hsp : (s : ℝ) * p ≤ 1) :\n    (s : ℝ) * p / 2 ≤ 1 - (1 - p) ^ s := by\n  have hb := bonferroni_two p hp0 hp1 s\n  have hx0 : 0 ≤ (s : ℝ) * p := mul_nonneg (Nat.cast_nonneg _) hp0\n  have hx2 : ((s : ℝ) * p) ^ 2 ≤ (s : ℝ) * p := by nlinarith\n  have hsq : 0 ≤ (s : ℝ) * p ^ 2 := mul_nonneg (Nat.cast_nonneg _) (sq_nonneg _)\n  nlinarith\n\ndef peakTerm (i s : ℕ) : ℝ :=\n  (2 : ℝ) ^ i / 2 * (1 - (1 - 1 / (2 : ℝ) ^ (i + 1)) ^ s)\n\ndef peak (n s : ℕ) : ℝ :=\n  1 + ∑ i ∈ Finset.range n, peakTerm i s\n\nlemma peakTerm_nonneg (i s : ℕ) : 0 ≤ peakTerm i s := by\n  have ha := two_pow_one_le (i + 1)\n  have hp0 : 0 ≤ 1 / (2 : ℝ) ^ (i + 1) := by positivity\n  have hp1 : 1 / (2 : ℝ) ^ (i + 1) ≤ 1 := by\n    exact (div_le_one (by positivity)).2 ha\n  have hu := unit_pow_le _ hp0 hp1 s\n  unfold peakTerm\n  positivity\n\nlemma peakTerm_lower {i s L J : ℕ} (hLi : L ≤ i) (hs : s ≤ J)\n    (hJ : J ≤ 2 ^ L) : (s : ℝ) / 8 ≤ peakTerm i s := by\n  let a : ℝ := 2 ^ i\n  let p : ℝ := 1 / (2 : ℝ) ^ (i + 1)\n  have ha0 : 0 < a := by dsimp [a]; positivity\n  have hp0 : 0 ≤ p := by dsimp [p]; positivity\n  have hp1 : p ≤ 1 := by\n    dsimp [p]\n    exact (div_le_one (by positivity)).2 (two_pow_one_le _)\n  have hsJ : (s : ℝ) ≤ (J : ℝ) := by exact_mod_cast hs\n  have hJr : (J : ℝ) ≤ (2 : ℝ) ^ L := by exact_mod_cast hJ\n  have hsa : (s : ℝ) ≤ a := le_trans hsJ (le_trans hJr (two_pow_mono hLi))\n  have hap : a * p = 1 / 2 := by\n    dsimp [a, p]\n    rw [pow_succ]\n    field_simp\n  have hsp : (s : ℝ) * p ≤ 1 := by\n    have h := mul_le_mul_of_nonneg_right hsa hp0\n    rw [hap] at h\n    linarith\n  have hh := hit_probability_half p hp0 hp1 s hsp\n  have hm := mul_le_mul_of_nonneg_left hh (show 0 ≤ a / 2 by positivity)\n  change (s : ℝ) / 8 ≤ a / 2 * (1 - (1 - p) ^ s)\n  have heq : a / 2 * ((s : ℝ) * p / 2) = (s : ℝ) / 8 := by\n    calc\n      a / 2 * ((s : ℝ) * p / 2) = (s : ℝ) * (a * p) / 4 := by ring\n      _ = (s : ℝ) / 8 := by rw [hap]; ring\n  linarith\n\nlemma tail_sum_lower (a : ℕ → ℝ) (c : ℝ) (L n : ℕ)\n    (hc : 0 ≤ c) (hpos : ∀ i, 0 ≤ a i)\n    (htail : ∀ i, L ≤ i → c ≤ a i) :\n    ((n : ℝ) - (L : ℝ)) * c ≤ ∑ i ∈ Finset.range n, a i := by\n  induction n with\n  | zero =>\n      simp only [Nat.cast_zero, zero_sub, Finset.range_zero, Finset.sum_empty]\n      have h := mul_nonneg (Nat.cast_nonneg L) hc\n      nlinarith\n  | succ n ih =>\n      rw [Finset.sum_range_succ]\n      push_cast\n      by_cases hLn : L ≤ n\n      · have ht := htail n hLn\n        nlinarith\n      · have hLn' : n + 1 ≤ L := by omega\n        have hcast : (n : ℝ) + 1 ≤ (L : ℝ) := by exact_mod_cast hLn'\n        have hleft : ((n : ℝ) + 1 - (L : ℝ)) * c ≤ 0 :=\n          mul_nonpos_of_nonpos_of_nonneg (by linarith) hc\n        have hsum : 0 ≤ ∑ i ∈ Finset.range n, a i :=\n          Finset.sum_nonneg fun i _ => hpos i\n        have hn := hpos n\n        linarith\n\ntheorem reset_peak_lower (n L J s : ℕ) (hJ : J ≤ 2 ^ L)\n    (hLn : 2 * L ≤ n) (hs : s ≤ J) :\n    (s : ℝ) * (n : ℝ) / 16 ≤ peak n s := by\n  have hsum := tail_sum_lower (fun i => peakTerm i s) ((s : ℝ) / 8) L n\n    (by positivity) (fun i => peakTerm_nonneg i s)\n    (fun i hi => peakTerm_lower hi hs hJ)\n  have hLnr : 2 * (L : ℝ) ≤ (n : ℝ) := by exact_mod_cast hLn\n  have hscaled : 0 ≤ ((n : ℝ) - 2 * (L : ℝ)) * (s : ℝ) :=\n    mul_nonneg (by linarith) (Nat.cast_nonneg _)\n  unfold peak\n  nlinarith\n\nlemma sum_range_real (J : ℕ) :\n    (∑ s ∈ Finset.range J, (s : ℝ)) = (J : ℝ) * ((J : ℝ) - 1) / 2 := by\n  induction J with\n  | zero => simp\n  | succ J ih =>\n      rw [Finset.sum_range_succ, ih]\n      push_cast\n      ring\n\ndef lowerMoment (n J : ℕ) (delta : ℝ) : ℝ :=\n  delta / 2 * (∑ s ∈ Finset.range J, peak n s) + delta * peak n J\n\ntheorem sharp_moment_lower (n L J : ℕ) (delta : ℝ) (hd : 0 ≤ delta)\n    (hJ : J ≤ 2 ^ L) (hLn : 2 * L ≤ n) :\n    delta * (n : ℝ) * (J : ℝ) ^ 2 / 64 ≤ lowerMoment n J delta := by\n  have hsum : (n : ℝ) / 16 * ((J : ℝ) * ((J : ℝ) - 1) / 2) ≤\n      ∑ s ∈ Finset.range J, peak n s := by\n    calc\n      _ = ∑ s ∈ Finset.range J, (s : ℝ) * (n : ℝ) / 16 := by\n        rw [← sum_range_real, Finset.mul_sum]\n        apply Finset.sum_congr rfl\n        intro s _\n        ring\n      _ ≤ _ := Finset.sum_le_sum fun s hs => reset_peak_lower n L J s hJ hLn\n        (Nat.le_of_lt (Finset.mem_range.mp hs))\n  have hlast := reset_peak_lower n L J J hJ hLn le_rfl\n  have hsum' := mul_le_mul_of_nonneg_left hsum (show 0 ≤ delta / 2 by positivity)\n  have hlast' := mul_le_mul_of_nonneg_left hlast hd\n  have hnonneg : 0 ≤ delta * (n : ℝ) * (J : ℝ) := by positivity\n  unfold lowerMoment\n  nlinarith\n\nend PosteriorContact\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/finite_range_first_contact/statement_fidelity.md",
+    "text": "# Statement fidelity: exact reset-posterior lower-moment core\n\nThe claim is `C_POSTERIOR_SHARP_CORE`, not the RWRE first-contact\nproposition and not the full probabilistic sharpness construction.\n\n`PosteriorContact.sharp_moment_lower` quantifies over all natural numbers\n`n`, `L`, and `J`, and every real `delta >= 0`. Its only additional\nhypotheses are `J <= 2^L` and `2*L <= n`, with these two inequalities\ntaken in the natural numbers.\n\nThe real-valued definitions are exactly\n\n\\[\n \\operatorname{peak}(n,s)\n =1+\\sum_{i=0}^{n-1}\\frac{2^i}{2}\n           \\left[1-\\left(1-2^{-(i+1)}\\right)^s\\right],\n\\]\n\\[\n \\operatorname{lowerMoment}(n,J,\\delta)\n =\\frac{\\delta}{2}\\sum_{s=0}^{J-1}\\operatorname{peak}(n,s)\n       +\\delta\\operatorname{peak}(n,J).\n\\]\n\nThe conclusion is\n\n\\[\n \\operatorname{lowerMoment}(n,J,\\delta)\n       \\ge \\delta n J^2/64.\n\\]\n\nIn the report, `peak(n,s)` is the expected sum of coordinate posterior\nmaxima after `s` reset rounds on `2^n` equally likely labels.\nWhen `delta=2^(-J)`, `lowerMoment` is a lower bound for `E[S H]` in the\nfinite capped-geometric construction. Neither that probability-space\ninterpretation nor the martingale property is a hypothesis or a\nconclusion of this Lean theorem: both are proved separately in the report\nand tested by exact rational enumeration in `verify.py`.\n\nSupporting declarations `PosteriorContact.bonferroni_two` and\n`PosteriorContact.hit_probability_half` prove the universal binomial\ninequalities used for the reset construction.\n`PosteriorContact.reset_peak_lower` proves\n`peak(n,s) >= s*n/16` for every natural `s <= J` under the same\ndimension constraints.\n\nThe formal source has no probability-space axioms, RWRE assumptions,\nindependence assertions, external theorem assumptions, or proof holes.\nIt does not encode the original stopped-law argument, shared-environment\ntransfer, martingale exponential moment, or upper contact bound.\nA successful compiler run certifies the displayed algebraic inequalities\nonly; the infinite-environment proof and the probabilistic interpretation\nstill require independent mathematical review.\n"
+  },
+  "subject": {
+    "content_hash": "08d6559f5249b75d8369a36c5e79e66b573eaa29eefa19d642a4b252b206113a",
+    "kind": "claim",
+    "subject_id": "C_POSTERIOR_SHARP_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

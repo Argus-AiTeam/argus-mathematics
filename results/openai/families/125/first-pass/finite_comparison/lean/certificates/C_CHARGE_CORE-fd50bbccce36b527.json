@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CHARGE_CORE-98c7acb63233",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/125/first-pass/finite_comparison/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/125/first-pass/finite_comparison/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 17513,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/125/first-pass/finite_comparison/lean/Main.lean",
+    "source_sha256": "6e929ed5cfda32c2e6817174850fc8f35c32a4a5c6cec53c0ed2901255d83b1b",
+    "statement_fidelity": "families/125/first-pass/finite_comparison/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "ddd4ace4a087fe0609ddea9a08229f6592f681527d761d3230f0de32c2add7ef",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'FiniteComparison.comparison_excess' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FiniteComparison.row_excess' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FiniteComparison.positive_radius' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FiniteComparison.donor_threshold' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FiniteComparison.paying_charges' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FiniteComparison.quadratic_discriminant' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/finite_comparison/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace FiniteComparison\n\ntheorem comparison_excess (P q R u D Z : ℝ)\n    (hq0 : 0 ≤ q) (hq1 : q ≤ 1) (hu : u ≤ R * (1 - P))\n    (hcomparison : q < 1 → R * (1 - P * q) ≤ D + Z) :\n    (1 - q) * R + q * u - (D + Z) ≤\n      if q = 1 then max (u - D - Z) 0 else 0 := by\n  by_cases hq : q = 1\n  · subst q\n    simp only [sub_self, zero_mul, one_mul, zero_add, ite_true]\n    have h := le_max_left (u - D - Z) (0 : ℝ)\n    linarith\n  · rw [if_neg hq]\n    have hlt : q < 1 := lt_of_le_of_ne hq1 hq\n    have hmul := mul_le_mul_of_nonneg_left hu hq0\n    have hc := hcomparison hlt\n    nlinarith\n\ntheorem row_excess {ι : Type*} [Fintype ι]\n    (weight Z q : ι → ℝ) (P R u D C r F : ℝ)\n    (hw : ∀ t, 0 ≤ weight t)\n    (hw1 : ∑ t, weight t = 1)\n    (hmean : ∑ t, weight t * Z t = 1)\n    (hr : r = ∑ t, weight t * q t)\n    (hC : 0 ≤ C)\n    (hq0 : ∀ t, 0 ≤ q t) (hq1 : ∀ t, q t ≤ 1)\n    (hu : u ≤ R * (1 - P))\n    (hcomparison : ∀ t, q t < 1 → R * (1 - P * q t) ≤ D + Z t)\n    (hrow : F ≤ C * ((1 - r) * R + r * u - (D + 1))) :\n    F ≤ C * ∑ t, weight t *\n      (if q t = 1 then max (u - D - Z t) 0 else 0) := by\n  have hexp :\n      (∑ t, weight t * ((1 - q t) * R + q t * u - (D + Z t))) =\n        (1 - r) * R + r * u - (D + 1) := by\n    calc\n      _ = ∑ t, (weight t * (R - D) +\n          (weight t * q t) * (u - R) - weight t * Z t) := by\n            apply Finset.sum_congr rfl\n            intro t _\n            ring\n      _ = (∑ t, weight t) * (R - D) +\n          (∑ t, weight t * q t) * (u - R) -\n          (∑ t, weight t * Z t) := by\n            simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib,\n              Finset.sum_mul]\n      _ = (1 - r) * R + r * u - (D + 1) := by\n            rw [hw1, hmean, ← hr]\n            ring\n  have hsum :\n      (∑ t, weight t * ((1 - q t) * R + q t * u - (D + Z t))) ≤\n        ∑ t, weight t *\n          (if q t = 1 then max (u - D - Z t) 0 else 0) := by\n    apply Finset.sum_le_sum\n    intro t _\n    exact mul_le_mul_of_nonneg_left\n      (comparison_excess P (q t) R u D (Z t)\n        (hq0 t) (hq1 t) hu (hcomparison t)) (hw t)\n  calc\n    F ≤ C * ((1 - r) * R + r * u - (D + 1)) := hrow\n    _ = C * ∑ t, weight t * ((1 - q t) * R + q t * u - (D + Z t)) := by\n      rw [hexp]\n    _ ≤ _ := mul_le_mul_of_nonneg_left hsum hC\n\ntheorem positive_radius (P r C F R u D : ℝ)\n    (hr0 : 0 ≤ r) (hr1 : r ≤ 1)\n    (hP : P < 1) (hden : 0 < 1 - P * r)\n    (hC : 0 < C) (hF : 0 < F)\n    (hrow : F ≤ C * ((1 - r) * R + r * u - (D + 1)))\n    (hfirst : (1 - P * r) * u ≤ (D + 1) * (1 - P)) :\n    D + 1 < (1 - P * r) * R ∧ u ≤ R * (1 - P) := by\n  have hmix : 0 < (1 - r) * R + r * u - (D + 1) := by\n    by_contra hn\n    have hm := le_of_not_gt hn\n    have hp := mul_nonpos_of_nonneg_of_nonpos (le_of_lt hC) hm\n    linarith\n  have hrad : D + 1 < (1 - P * r) * R := by\n    by_contra hn\n    have hR := le_of_not_gt hn\n    have h1 := mul_le_mul_of_nonneg_left hR (sub_nonneg.mpr hr1)\n    have h2 := mul_le_mul_of_nonneg_left hfirst hr0\n    have hp := mul_pos hden hmix\n    nlinarith\n  have hbound := mul_le_mul_of_nonneg_right (le_of_lt hrad)\n    (sub_nonneg.mpr (le_of_lt hP))\n  have hh : (1 - P * r) * u ≤ (1 - P * r) * (R * (1 - P)) := by\n    nlinarith [hfirst, hbound]\n  refine ⟨hrad, ?_⟩\n  by_contra hn\n  have hp := mul_pos hden (sub_pos.mpr (lt_of_not_ge hn))\n  nlinarith [hh]\n\ntheorem donor_threshold (C r G K L D H b beta z u : ℝ)\n    (hC : 0 < C) (hr : 0 < r) (hG : 0 < G)\n    (hL : 0 ≤ L) (hlocation : K ≤ D * G)\n    (hcharge : 0 ≤ ((C * H - b) * r + beta * z) * G + K * L)\n    (hidentity : C * r * (u - D) = b * r - beta * z - L * D) :\n    u - D ≤ H := by\n  have hKL := mul_le_mul_of_nonneg_right hlocation hL\n  have hp : 0 ≤ (((C * H - b) * r + beta * z) + D * L) * G := by\n    nlinarith [hcharge, hKL]\n  have hnum : 0 ≤ ((C * H - b) * r + beta * z) + D * L := by\n    by_contra hn\n    have hn' := lt_of_not_ge hn\n    have hnprod := mul_neg_of_neg_of_pos hn' hG\n    linarith\n  have hh : (C * r) * (u - D) ≤ (C * r) * H := by\n    nlinarith [hidentity, hnum]\n  by_contra hn\n  have hp := mul_pos (mul_pos hC hr) (sub_pos.mpr (lt_of_not_ge hn))\n  nlinarith [hh]\n\ntheorem paying_charges {ι : Type*} [Fintype ι]\n    (weight F : ι → ℝ) (charge : ι → ι → ℝ)\n    (hw : ∀ i, 0 ≤ weight i)\n    (hsource : ∀ i t, F i ≤ 0 → charge i t = 0)\n    (htarget : ∀ i t, 0 < F t → charge i t = 0)\n    (hpositive : ∀ i, 0 < F i → F i ≤ ∑ t, weight t * charge i t)\n    (hnonpositive : ∀ i, F i ≤ 0 →\n      F i + (∑ t, weight t * charge t i) ≤ 0) :\n    ∑ i, weight i * F i ≤ 0 := by\n  have hrow : ∀ i, F i ≤\n      (∑ t, weight t * charge i t) - (∑ t, weight t * charge t i) := by\n    intro i\n    by_cases hi : 0 < F i\n    · have incoming : (∑ t, weight t * charge t i) = 0 := by\n        apply Finset.sum_eq_zero\n        intro t _\n        rw [htarget t i hi, mul_zero]\n      rw [incoming, sub_zero]\n      exact hpositive i hi\n    · have hi' : F i ≤ 0 := le_of_not_gt hi\n      have outgoing : (∑ t, weight t * charge i t) = 0 := by\n        apply Finset.sum_eq_zero\n        intro t _\n        rw [hsource i t hi', mul_zero]\n      rw [outgoing]\n      have h := hnonpositive i hi'\n      linarith\n  have swap :\n      (∑ i, weight i * ∑ t, weight t * charge i t) =\n        ∑ i, weight i * ∑ t, weight t * charge t i := by\n    simp_rw [Finset.mul_sum]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro i _\n    apply Finset.sum_congr rfl\n    intro t _\n    ring\n  calc\n    (∑ i, weight i * F i) ≤\n        ∑ i, weight i *\n          ((∑ t, weight t * charge i t) - (∑ t, weight t * charge t i)) := by\n      apply Finset.sum_le_sum\n      intro i _\n      exact mul_le_mul_of_nonneg_left (hrow i) (hw i)\n    _ = 0 := by\n      simp only [mul_sub, Finset.sum_sub_distrib]\n      rw [swap]\n      ring\n\ntheorem quadratic_zero_constant (b1 b2 r : ℝ)\n    (hr0 : 0 ≤ r) (hr1 : r ≤ 1) (h1 : 0 ≤ b1) (h12 : 0 ≤ b1 + b2) :\n    0 ≤ b1 * r + b2 * r ^ 2 := by\n  have hm : 0 ≤ (1 - r) * b1 + r * (b1 + b2) :=\n    add_nonneg (mul_nonneg (sub_nonneg.mpr hr1) h1) (mul_nonneg hr0 h12)\n  calc\n    0 ≤ r * ((1 - r) * b1 + r * (b1 + b2)) := mul_nonneg hr0 hm\n    _ = b1 * r + b2 * r ^ 2 := by ring\n\ntheorem quadratic_discriminant (b0 b1 b2 r : ℝ)\n    (h0 : 0 ≤ b0) (hd : 0 < 4 * b0 * b2 - b1 ^ 2) :\n    0 < b0 + b1 * r + b2 * r ^ 2 := by\n  have h2 : 0 < b2 := by\n    by_contra hn\n    have hp := mul_nonpos_of_nonneg_of_nonpos h0 (le_of_not_gt hn)\n    nlinarith [sq_nonneg b1]\n  have hid : 4 * b2 * (b0 + b1 * r + b2 * r ^ 2) =\n      (2 * b2 * r + b1) ^ 2 + (4 * b0 * b2 - b1 ^ 2) := by ring\n  have hp : 0 < 4 * b2 * (b0 + b1 * r + b2 * r ^ 2) := by\n    rw [hid]\n    nlinarith [sq_nonneg (2 * b2 * r + b1)]\n  by_contra hn\n  have hc := mul_nonpos_of_nonneg_of_nonpos\n    (show 0 ≤ 4 * b2 by positivity) (le_of_not_gt hn)\n  linarith\n\ntheorem quadratic_endpoints (b0 b1 b2 r : ℝ)\n    (hr0 : 0 ≤ r) (hr1 : r ≤ 1)\n    (h0 : 0 ≤ b0) (hs : 0 ≤ b0 + b1 + b2) (hg : 0 ≤ b0 - b2) :\n    0 ≤ b0 + b1 * r + b2 * r ^ 2 := by\n  have hm : 0 ≤ (1 - r) * b0 + r * (b0 - b2) :=\n    add_nonneg (mul_nonneg (sub_nonneg.mpr hr1) h0) (mul_nonneg hr0 hg)\n  calc\n    0 ≤ r * (b0 + b1 + b2) +\n        (1 - r) * ((1 - r) * b0 + r * (b0 - b2)) :=\n      add_nonneg (mul_nonneg hr0 hs) (mul_nonneg (sub_nonneg.mpr hr1) hm)\n    _ = b0 + b1 * r + b2 * r ^ 2 := by ring\n\ntheorem bernstein_cubic_nonnegative (a0 a1 a2 a3 t : ℝ)\n    (h0 : 0 ≤ a0) (h1 : 0 ≤ a1) (h2 : 0 ≤ a2) (h3 : 0 ≤ a3)\n    (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :\n    0 ≤ a0 * (1 - t) ^ 3 + 3 * a1 * t * (1 - t) ^ 2 +\n      3 * a2 * t ^ 2 * (1 - t) + a3 * t ^ 3 := by\n  have hmt : 0 ≤ 1 - t := sub_nonneg.mpr ht1\n  positivity\n\ntheorem bernstein_cubic_partition (t : ℝ) :\n    (1 - t) ^ 3 + 3 * t * (1 - t) ^ 2 +\n      3 * t ^ 2 * (1 - t) + t ^ 3 = 1 := by ring\n\n#print axioms comparison_excess\n#print axioms row_excess\n#print axioms positive_radius\n#print axioms donor_threshold\n#print axioms paying_charges\n#print axioms quadratic_discriminant\n\nend FiniteComparison\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/finite_comparison/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: algebraic and directed charging core\n\nThe declarations are in namespace `FiniteComparison` in `Main.lean`. All\nscalar variables are real. Finite sums range over an arbitrary `Fintype`;\nweights are nonnegative, may vanish, and are not assumed uniform.\n\n`comparison_excess` encodes a single directed column. Its hypotheses are\n`0 <= q <= 1`, `u <= R(1-P)`, and `R(1-Pq) <= D+Z` **only if q<1**.\nIts conclusion bounds `(1-q)R+qu-D-Z` by zero for q<1 and by\n`max(u-D-Z,0)` for q=1. There is deliberately no comparison hypothesis at\nq=1, no symmetry, and no hidden radius bound.\n\n`row_excess` takes an arbitrary finite weighted row with total weight one,\nweighted mean Z equal to one, and r the weighted mean of q. From the preceding\ncolumn hypotheses, C>=0, and a stated upper bound on F, it deduces the\nweighted q=1 excess bound. It does not assert that F is the manuscript's\ncontribution without the algebraic identification given in the report.\n\n`positive_radius` assumes r in [0,1], P<1, 1-Pr>0, C>0, F>0, the\nrow upper bound, and the denominator-cleared first scalar bound on u.\nIt proves `(1-Pr)R>D+1` and `u<=R(1-P)`. These hypotheses are explicit;\nthis is not a claim that arbitrary positive F satisfies them.\n\n`donor_threshold` assumes C,r,G>0, L>=0, K<=DG, the scalar charge\ninequality, and the exact numerator identity for u-D. It proves u-D<=H\nfor an arbitrary real beta. It therefore applies both to the printed\nbeta=1.6 and to the independently certified beta=1.59; it does not prove\nthe scalar inequalities by itself.\n\n`paying_charges` is the weighted finite directed cancellation theorem.\nIt assumes outgoing charges vanish at nonpositive rows, incoming charges\nvanish at positive rows, positive rows are bounded by outgoing charge,\nand every nonpositive row plus its incoming charge is nonpositive.\nIt concludes that the weighted sum of F is nonpositive. Charge symmetry\nand strictly positive weights are not assumed. Total weight one and\nnonnegativity of the charge are unnecessary for this abstract implication.\nThe report derives these input inequalities from the manuscript's constants\nand scalar estimates rather than assuming them for the finite theorem.\n\n`quadratic_zero_constant`, `quadratic_discriminant`, and\n`quadratic_endpoints` prove the three scalar sign implications used after\nthe eta Bernstein conversion. The discriminant criterion covers every real r;\nthe other two cover r in [0,1]. `bernstein_cubic_nonnegative` and\n`bernstein_cubic_partition` encode nonnegativity and unit sum of the\ndegree-three Bernstein basis used for w=(1-x)eta.\n\nScope: this file formalizes load-bearing algebra and finite combinatorics,\nnot the defining exponential integrals, interpolation remainder theorem, all\nprinted coefficient computations, the full finite inequality as one Lean\ndeclaration, or either complete approximation algorithm. The exact rational\ncomputations are checked separately by `../verify.py`; the remaining analytic\nand statement-identification reasoning is in `../report.md` and needs an\nindependent human Reviewer. A compiler success alone is not full verification\nof those unformalized parts or evidence of novelty or publishability.\n"
+  },
+  "subject": {
+    "content_hash": "27837b973be030b7e54a2106f138030161f194c4aa3dbe4b5a478f8244ecd67a",
+    "kind": "claim",
+    "subject_id": "C_CHARGE_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

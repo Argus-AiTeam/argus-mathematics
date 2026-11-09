@@ -1,0 +1,981 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX9000120",
+      "version": 1,
+      "statement": "OpenAI Math Audit #120: Almost-linear-time exact matching and prescribed-degree factors in general graphs.",
+      "definitions": {
+        "openai_family": "120"
+      },
+      "content_hash": "89dc26219ce03b8cb87942a4d3fe02fa2609c543ec309ceebf0a28227201bbf3"
+    },
+    {
+      "context_id": "CTX_RAW",
+      "version": 1,
+      "statement": "Deletion-stable raw-length verification for the staged September 24, 2026 matching manuscript, sections 05, 07, and 08. This context does not certify the full matching theorem.",
+      "definitions": {
+        "raw_length": "sum of mapped edge lengths over every actual traversal, including opposite traversals and repetitions; null traversals cost zero",
+        "length_norm": "sum of edge length times the absolute net coefficient; construction null edges have length one",
+        "admissible_state": "arbitrary current epoch state with every copy of a dead frozen edge deleted, immutable surviving prices, new edge identities, verified covers, and selected-support paths of at most p hops"
+      },
+      "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C9000120",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000120",
+        "content_hash": "89dc26219ce03b8cb87942a4d3fe02fa2609c543ec309ceebf0a28227201bbf3"
+      },
+      "natural_statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 120 (Almost-linear-time exact matching and prescribed-degree factors in general graphs.; papers: Almost-Linear-Time Maximum-Cardinality Matching in General Graphs; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "2d41fdf36b01ceeb83ce9b8ee3a8ea57df2ec594a03cc1e25bd6329a4c148eaa"
+    },
+    {
+      "claim_id": "C_RAW_SCOPE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Source facts and limitations: raw and net lengths are distinct; verified geometric data and bounded selected-support paths are the exact inputs of the quality argument; external dynamic-cycle literature alone does not establish this raw-length or lifetime interface.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "dbe72e8c72cee52e1a380ff10daaa9fb3da5182e619c481a162478c4babafa4d"
+    },
+    {
+      "claim_id": "C_RAW_SCOPE",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Source facts and limitations: raw and net lengths are distinct; verified geometric data and bounded selected-support paths are the exact inputs of the quality argument; external dynamic-cycle literature alone does not establish this raw-length or lifetime interface.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "STAGED_DEFINITIONS",
+          "statement": "The manuscript uses raw traversal length for returned candidates and net weighted l1 norm only for existential comparison vectors. Null links have construction length one and physical length zero.",
+          "source": "Staged 07-backend-quality.tex, Parameters, scores, and the bottom level; staged 05-engine.tex, lem:flat-cycle and engine:flat-quality, September 24, 2026 source.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "e168cefc50aa681c1b3717991c94e812b0f99d5e8e2327cdba2c0bc7bf15d1bd"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "dbe72e8c72cee52e1a380ff10daaa9fb3da5182e619c481a162478c4babafa4d"
+    },
+    {
+      "claim_id": "C_RAW_SCOPE",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Source facts and limitations: raw and net lengths are distinct; verified geometric data and bounded selected-support paths are the exact inputs of the quality argument; external dynamic-cycle literature alone does not establish this raw-length or lifetime interface.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "STAGED_DEFINITIONS",
+          "statement": "The manuscript uses raw traversal length for returned candidates and net weighted l1 norm only for existential comparison vectors. Null links have construction length one and physical length zero.",
+          "source": "Staged 07-backend-quality.tex, Parameters, scores, and the bottom level; staged 05-engine.tex, lem:flat-cycle and engine:flat-quality, September 24, 2026 source.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "e168cefc50aa681c1b3717991c94e812b0f99d5e8e2327cdba2c0bc7bf15d1bd"
+        },
+        {
+          "assumption_id": "PARAMETER_PREREQUISITES",
+          "statement": "The literal source requires a>=1000 for the engine, u positive and divisible by 2a^2, S^(1/a)<=M=2^u<=S^2, P_*<=b, and 20 Z_* A_*<=b^2. Small stress configurations are not by themselves counterexamples in this range.",
+          "source": "Staged 05-engine.tex, engine:parameters and lem:flat-cycle; 06-routing-helper.tex, route:parameters; 07-backend-quality.tex, back:helper-parameters through back:guards.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "da0c5ad76a3cb25034700af40027a5cbb5f6b7d536dfa7e8105ee388bc3d7c52"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "dbe72e8c72cee52e1a380ff10daaa9fb3da5182e619c481a162478c4babafa4d"
+    },
+    {
+      "claim_id": "C_RAW_SCOPE",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Source facts and limitations: raw and net lengths are distinct; verified geometric data and bounded selected-support paths are the exact inputs of the quality argument; external dynamic-cycle literature alone does not establish this raw-length or lifetime interface.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "PARAMETER_PREREQUISITES",
+          "statement": "The literal source requires a>=1000 for the engine, u positive and divisible by 2a^2, S^(1/a)<=M=2^u<=S^2, P_*<=b, and 20 Z_* A_*<=b^2. Small stress configurations are not by themselves counterexamples in this range.",
+          "source": "Staged 05-engine.tex, engine:parameters and lem:flat-cycle; 06-routing-helper.tex, route:parameters; 07-backend-quality.tex, back:helper-parameters through back:guards.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "da0c5ad76a3cb25034700af40027a5cbb5f6b7d536dfa7e8105ee388bc3d7c52"
+        },
+        {
+          "assumption_id": "STAGED_DEFINITIONS",
+          "statement": "The manuscript uses raw traversal length for returned candidates and net weighted l1 norm only for existential comparison vectors. Null links have construction length one and physical length zero.",
+          "source": "Staged 07-backend-quality.tex, Parameters, scores, and the bottom level; staged 05-engine.tex, lem:flat-cycle and engine:flat-quality, September 24, 2026 source.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "e168cefc50aa681c1b3717991c94e812b0f99d5e8e2327cdba2c0bc7bf15d1bd"
+        },
+        {
+          "assumption_id": "VERIFIED_GEOMETRIC_INPUT",
+          "statement": "Input geometry consists of K_h partitions per layer with cell-tree radius at most Gamma R_j and a verified cell containing every closed R_j-ball. The finite family realizes arbitrary OUT choices at two distinct lower slots per layer. These are geometric hypotheses, not the disputed norm inequalities.",
+          "source": "Staged 07-backend-quality.tex, back:covers, back:forest-family, and back:path-law.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "4bf318837453a34a653830142cc7ae4ee0de514604c8a52d4e215ff4442fa417"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "dbe72e8c72cee52e1a380ff10daaa9fb3da5182e619c481a162478c4babafa4d"
+    },
+    {
+      "claim_id": "C_RAW_SCOPE",
+      "version": 5,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Source facts and limitations: raw and net lengths are distinct; verified geometric data and bounded selected-support paths are the exact inputs of the quality argument; external dynamic-cycle literature alone does not establish this raw-length or lifetime interface.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "PARAMETER_PREREQUISITES",
+          "statement": "The literal source requires a>=1000 for the engine, u positive and divisible by 2a^2, S^(1/a)<=M=2^u<=S^2, P_*<=b, and 20 Z_* A_*<=b^2. Small stress configurations are not by themselves counterexamples in this range.",
+          "source": "Staged 05-engine.tex, engine:parameters and lem:flat-cycle; 06-routing-helper.tex, route:parameters; 07-backend-quality.tex, back:helper-parameters through back:guards.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "da0c5ad76a3cb25034700af40027a5cbb5f6b7d536dfa7e8105ee388bc3d7c52"
+        },
+        {
+          "assumption_id": "STAGED_DEFINITIONS",
+          "statement": "The manuscript uses raw traversal length for returned candidates and net weighted l1 norm only for existential comparison vectors. Null links have construction length one and physical length zero.",
+          "source": "Staged 07-backend-quality.tex, Parameters, scores, and the bottom level; staged 05-engine.tex, lem:flat-cycle and engine:flat-quality, September 24, 2026 source.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "e168cefc50aa681c1b3717991c94e812b0f99d5e8e2327cdba2c0bc7bf15d1bd"
+        },
+        {
+          "assumption_id": "VERIFIED_GEOMETRIC_INPUT",
+          "statement": "Input geometry consists of K_h partitions per layer with cell-tree radius at most Gamma R_j and a verified cell containing every closed R_j-ball. The finite family realizes arbitrary OUT choices at two distinct lower slots per layer. These are geometric hypotheses, not the disputed norm inequalities.",
+          "source": "Staged 07-backend-quality.tex, back:covers, back:forest-family, and back:path-law.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "4bf318837453a34a653830142cc7ae4ee0de514604c8a52d4e215ff4442fa417"
+        },
+        {
+          "assumption_id": "ASSIGNMENT_INPUT",
+          "statement": "Every active chord has a logical path between its current classes using live selected chords of the same forest and bucket with at most p_* hops. Its legs are live paths of length at most 8W. Constructing assignments and proving their update cost are outside the one-level theorem.",
+          "source": "Staged 07-backend-quality.tex, Portal legs and local correction cycles and lem:backend-reduction; 08-backend-updates.tex, update:snapshot-bounds and update:hop-induction.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "6a07edbbd4fc04ccabe29f51ad4125cebed6c5791b70b7d6d6061fda0fd946d3"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "dbe72e8c72cee52e1a380ff10daaa9fb3da5182e619c481a162478c4babafa4d"
+    },
+    {
+      "claim_id": "C_MAIN",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000120",
+        "content_hash": "89dc26219ce03b8cb87942a4d3fe02fa2609c543ec309ceebf0a28227201bbf3"
+      },
+      "natural_statement": "Manuscript thm:main asserts a single uniform randomized word-RAM algorithm returning an exact maximum matching with probability at least 2/3 and halting on every path within C p^(1+eta(p)), eta(p) tending to zero.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "ea1184fcec7022ad95de54875cc136be9b3d91e54f712b0f201ddb2d4d5af9cc"
+    },
+    {
+      "claim_id": "C_MAIN_OTHER",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000120",
+        "content_hash": "89dc26219ce03b8cb87942a4d3fe02fa2609c543ec309ceebf0a28227201bbf3"
+      },
+      "natural_statement": "Matching-state correctness, projection analysis, uniformization, and witness decoding remain unresolved by this bounded raw-length audit.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "b9c345f50c568cede9a1dc6405358dc30fbda5b90436dbd063847512e3042ae7"
+    },
+    {
+      "claim_id": "C_PRICED",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000120",
+        "content_hash": "89dc26219ce03b8cb87942a4d3fe02fa2609c543ec309ceebf0a28227201bbf3"
+      },
+      "natural_statement": "Manuscript lem:priced-steps uses the raw-traversal quality guarantee of the flat-cycle backend; net-circulation quality alone is insufficient.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a21d1538e2e35ffdebe1a02812238c9aa4ab8c5c6a7b3f4f82d6dd153eaceffd"
+    },
+    {
+      "claim_id": "C_FLAT_INTERFACE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Manuscript engine:flat-quality requires |gamma^T c|/V >= M^(-10/a) OPT, where V counts every mapped traversal without net cancellation.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "ebac12f25bad273fe0beb64b8dcd1a57853af57335db359a344e2cade3170dbb"
+    },
+    {
+      "claim_id": "C_MAINTENANCE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Construction costs, adaptive failure probabilities, assignment availability, multiplicity budgets, and persistent recourse are not certified by the raw-length theorem alone.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "e0d7f0daf522744ce0da95a7e74f7bbd6e1f11952855a3833dfd6bcd919e3a8b"
+    },
+    {
+      "claim_id": "C_RAW_TRANSFER",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "For every admissible verified frozen hierarchy, deletion state, and selected-support assignment, the complete one-level raw-length comparison and shared-arm lift hold with transfer loss at most (2Z+6beta+3)A <= 5ZA, beta=17(p+1), Z=40(p+1). The coefficient and remainder bounds are derived, not assumed.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f42b0b355dbcab46576b04114a44bd8714476a7318ef77894ccab587cb289829"
+    },
+    {
+      "claim_id": "C_FROZEN",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Fixed endpoint marginals and the verified finite forest family give the full frozen identity and coefficient/residual bounds; deletion of all copies commutes with signed projection.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "e2aa0a15e2554c8636ebdc36aafe1dc33e5e49af749244d5b3f9125837ca817b"
+    },
+    {
+      "claim_id": "C_LOCAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Every local correction is a current circulation with raw traversal length at most beta W, including opposite traversals and logical loops, where beta=17(p+1).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "3cc3f5b24504d8ddfa99fc134abde7f6254076ee2341e684594e2988e08923ae"
+    },
+    {
+      "claim_id": "C_COMPRESSION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "A forest vector with divergence supported at promoted terminals compresses with its net length norm and gradient exactly preserved.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "14e0b26f400236193335273d941e3001ca86997192624191c061390f8db08c28"
+    },
+    {
+      "claim_id": "C_HUB",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Unit null edges complete a physically balanced copied vector to a child circulation with norm at most three times its old-edge part plus its hub-to-hub new-edge norm. The factor three is sharp.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "9f8250645d8691f9486d92588c084c919aa7bbeb8188011ca54031f550929304"
+    },
+    {
+      "claim_id": "C_LIFT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Shared-arm substitution followed by forest-path reduction preserves signed projection and cannot increase raw mapped length, for all traversal multiplicities and valid null maps.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "0384184223c4e7b02589c3026958d515bca6c99ae45fb6ade5834336466b8b73"
+    },
+    {
+      "claim_id": "C_RAW_ALGEBRA",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "General finite-dimensional signed-projection/deletion, incidence norm, cancellation, and scalar transfer inequalities supporting the complete raw-length theorem.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "551291010536de7dfb12420666da3cff79205b054530724245f7e3d01d16c6d0"
+    },
+    {
+      "claim_id": "C_REDUCTION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Manuscript lem:backend-reduction follows with its literal constants 2ZA, 12ZA, and b^2 from the stronger one-level theorem.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "5cecab0b025caccb2e686af8170ebd47e1d91176e075c6595383848aa016500d"
+    },
+    {
+      "claim_id": "C_RECURSION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Conditional on the stated assignments and lifts at all levels, the one-level comparison yields the raw-score recursion and the factor M^(-10/a); it does not certify runtime.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f4c157a979a5ec6fe60dafe4b6eb039e88a69bc5ecc738c7cf89c0b83b1b5bb8"
+    },
+    {
+      "claim_id": "C_RAW_ALGEBRA",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "General finite-dimensional signed-projection/deletion, incidence norm, cancellation, and scalar transfer inequalities supporting the complete raw-length theorem.",
+      "formal_statement": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace RawLength\n\nvariable {E V I F : Type*}\n\nnoncomputable def mass [Fintype E] (w x : E → ℝ) : ℝ :=\n  ∑ e, w e * |x e|\n\nnoncomputable def projection [Fintype E]\n    (image : E → Option I) (sign x : E → ℝ) (i : I) : ℝ := by\n  classical\n  exact ∑ e, if image e = some i then sign e * x e else 0\n\nnoncomputable def clipped (live : I → Prop)\n    (image : E → Option I) (x : E → ℝ) (e : E) : ℝ := by\n  classical\n  exact if (match image e with | none => True | some i => live i) then x e else 0\n\ntheorem projection_clip [Fintype E]\n    (live : I → Prop) (image : E → Option I) (sign x : E → ℝ) (i : I) :\n    projection image sign (clipped live image x) i =\n      if live i then projection image sign x i else 0 := by\n  classical\n  by_cases hi : live i\n  · simp only [hi, if_true, projection]\n    apply Finset.sum_congr rfl\n    intro e _\n    by_cases he : image e = some i\n    · simp [he, clipped, hi]\n    · simp [he]\n  · simp only [hi, if_false, projection]\n    apply Finset.sum_eq_zero\n    intro e _\n    by_cases he : image e = some i\n    · simp [he, clipped, hi]\n    · simp [he]\n\ntheorem projection_add [Fintype E]\n    (image : E → Option I) (sign x y : E → ℝ) (i : I) :\n    projection image sign (fun e => x e + y e) i =\n      projection image sign x i + projection image sign y i := by\n  classical\n  simp only [projection, ← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro e _\n  split_ifs <;> ring\n\ntheorem mass_nonneg [Fintype E] (w x : E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    0 ≤ mass w x :=\n  Finset.sum_nonneg fun e _ => mul_nonneg (hw e) (abs_nonneg _)\n\ntheorem mass_add [Fintype E] (w x y : E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    mass w (fun e => x e + y e) ≤ mass w x + mass w y := by\n  unfold mass\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_le_sum\n  intro e _\n  calc\n    w e * |x e + y e| ≤ w e * (|x e| + |y e|) :=\n      mul_le_mul_of_nonneg_left (abs_add _ _) (hw e)\n    _ = w e * |x e| + w e * |y e| := by ring\n\ntheorem mass_sub [Fintype E] (w x y : E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    mass w (fun e => x e - y e) ≤ mass w x + mass w y := by\n  simpa only [sub_eq_add_neg, mass, abs_neg] using\n    mass_add w x (fun e => -y e) hw\n\ntheorem mass_scale [Fintype E] (w x : E → ℝ) (a : ℝ) :\n    mass w (fun e => a * x e) = |a| * mass w x := by\n  simp only [mass, abs_mul, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro e _\n  ring\n\ntheorem mass_sum [Fintype E] [Fintype F]\n    (w : E → ℝ) (x : F → E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    mass w (fun e => ∑ f, x f e) ≤ ∑ f, mass w (x f) := by\n  calc\n    mass w (fun e => ∑ f, x f e)\n        ≤ ∑ e, w e * ∑ f, |x f e| := by\n      apply Finset.sum_le_sum\n      intro e _\n      exact mul_le_mul_of_nonneg_left (Finset.abs_sum_le_sum_abs _ _) (hw e)\n    _ = ∑ f, mass w (x f) := by\n      simp only [mass, Finset.mul_sum]\n      rw [Finset.sum_comm]\n\ntheorem linear_mass_le [Fintype E] [Fintype V]\n    (A : V → E → ℝ) (w : V → ℝ) (u x : E → ℝ)\n    (hw : ∀ v, 0 ≤ w v)\n    (hcol : ∀ e, (∑ v, w v * |A v e|) ≤ u e) :\n    mass w (fun v => ∑ e, A v e * x e) ≤ mass u x := by\n  calc\n    mass w (fun v => ∑ e, A v e * x e)\n        ≤ ∑ e, mass w (fun v => A v e * x e) :=\n      mass_sum w (fun e v => A v e * x e) hw\n    _ = ∑ e, (∑ v, w v * |A v e|) * |x e| := by\n      apply Finset.sum_congr rfl\n      intro e _\n      simp only [mass, abs_mul, Finset.sum_mul, mul_assoc]\n    _ ≤ mass u x := by\n      apply Finset.sum_le_sum\n      intro e _\n      exact mul_le_mul_of_nonneg_right (hcol e) (abs_nonneg _)\n\nnoncomputable def incidence [Fintype E]\n    (tail head : E → V) (x : E → ℝ) (v : V) : ℝ := by\n  classical\n  exact ∑ e, ((if head e = v then (1 : ℝ) else 0) -\n    (if tail e = v then (1 : ℝ) else 0)) * x e\n\ntheorem incidence_mass_le [Fintype E] [Fintype V]\n    (tail head : E → V) (x : E → ℝ) :\n    mass (fun _ => 1) (incidence tail head x) ≤ 2 * mass (fun _ => 1) x := by\n  classical\n  have hcol : ∀ e, (∑ v,\n      |(if head e = v then (1 : ℝ) else 0) -\n        (if tail e = v then (1 : ℝ) else 0)|) ≤ 2 := by\n    intro e\n    calc\n      _ ≤ ∑ v, (|(if head e = v then (1 : ℝ) else 0)| +\n          |(if tail e = v then (1 : ℝ) else 0)|) :=\n        Finset.sum_le_sum fun v _ => abs_sub _ _\n      _ = 2 := by\n        simp only [Finset.sum_add_distrib]\n        simp [eq_comm]\n  have h := linear_mass_le\n    (fun v e => (if head e = v then (1 : ℝ) else 0) -\n      (if tail e = v then (1 : ℝ) else 0))\n    (fun _ => 1) (fun _ => 2) x (fun _ => by norm_num)\n    (by simpa only [one_mul] using hcol)\n  simpa only [incidence, mass, one_mul, Finset.mul_sum] using h\n\ntheorem completion_cost_le [Fintype E] [Fintype V]\n    (tail head : E → V) (w x : E → ℝ) (n : ℝ)\n    (hw : ∀ e, 1 ≤ w e) :\n    mass w x + mass (fun _ => 1) (incidence tail head x) + n\n      ≤ 3 * mass w x + n := by\n  have hweight : mass (fun _ => 1) x ≤ mass w x := by\n    apply Finset.sum_le_sum\n    intro e _\n    exact mul_le_mul_of_nonneg_right (hw e) (abs_nonneg _)\n  have hi := incidence_mass_le tail head x\n  linarith\n\ndef walkNet [DecidableEq E] (walk : List (E × Bool)) (e : E) : ℝ :=\n  (walk.map fun p => if p.1 = e then if p.2 then 1 else -1 else 0).sum\n\ndef walkRaw (w : E → ℝ) (walk : List (E × Bool)) : ℝ :=\n  (walk.map fun p => w p.1).sum\n\ntheorem cancel_pair [DecidableEq E]\n    (pre post : List (E × Bool)) (e v : E) (w : E → ℝ) :\n    walkNet (pre ++ [(e, true), (e, false)] ++ post) v =\n        walkNet (pre ++ post) v ∧\n      walkRaw w (pre ++ [(e, true), (e, false)] ++ post) =\n        walkRaw w (pre ++ post) + 2 * w e := by\n  constructor\n  · by_cases he : e = v <;> simp [walkNet, he]\n  · simp only [walkRaw, List.map_append, List.sum_append,\n      List.map_cons, List.map_nil, List.sum_cons, List.sum_nil]\n    ring\n\ntheorem cancellation_nonexpansive [DecidableEq E]\n    (pre post : List (E × Bool)) (e : E) (w : E → ℝ) (hw : 0 ≤ w e) :\n    walkRaw w (pre ++ post) ≤\n      walkRaw w (pre ++ [(e, true), (e, false)] ++ post) := by\n  have h := (cancel_pair pre post e e w).2\n  linarith\n\ntheorem raw_score_preserved (g score childRaw parentRaw : ℝ)\n    (hs : 0 ≤ score) (hlen : parentRaw ≤ childRaw)\n    (hscore : score * childRaw ≤ |g|) :\n    score * parentRaw ≤ |g| :=\n  (mul_le_mul_of_nonneg_left hlen hs).trans hscore\n\ntheorem transfer_bound (A X Y beta Z L O q v local child : ℝ)\n    (hO : 0 ≤ O)\n    (hq : q ≤ (2 * beta + 1) * A * X)\n    (hv : v ≤ 3 * q + Y)\n    (hl : |local| ≤ 2 * Z * A * X * L)\n    (hc : |child| ≤ v * O) :\n    |local + child| ≤\n      2 * Z * A * X * L + ((6 * beta + 3) * A * X + Y) * O := by\n  have hv' : v ≤ (6 * beta + 3) * A * X + Y := by\n    calc\n      v ≤ 3 * q + Y := hv\n      _ ≤ 3 * ((2 * beta + 1) * A * X) + Y := by linarith\n      _ = (6 * beta + 3) * A * X + Y := by ring\n  calc\n    |local + child| ≤ |local| + |child| := abs_add _ _\n    _ ≤ 2 * Z * A * X * L + ((6 * beta + 3) * A * X + Y) * O :=\n      add_le_add hl (hc.trans (mul_le_mul_of_nonneg_right hv' hO))\n\ntheorem max_transfer (A X Y beta Z L O T : ℝ)\n    (hA : 1 ≤ A) (hX : 0 ≤ X) (hY : 0 ≤ Y)\n    (hb : 0 ≤ beta) (hZ : 1 ≤ Z) (hT : 0 ≤ T)\n    (hL : L ≤ T) (hO : O ≤ T) :\n    2 * Z * A * X * L + ((6 * beta + 3) * A * X + Y) * O\n      ≤ (2 * Z + 6 * beta + 3) * A * (X + Y) * T := by\n  have hA0 : 0 ≤ A := le_trans (by norm_num) hA\n  have hZ0 : 0 ≤ Z := le_trans (by norm_num) hZ\n  have hlocal : 0 ≤ 2 * Z * A * X := by positivity\n  have hchild : 0 ≤ (6 * beta + 3) * A * X + Y := by positivity\n  have hcoef : 1 ≤ (2 * Z + 6 * beta + 3) * A := by\n    have hbase : 1 ≤ 2 * Z + 6 * beta + 3 := by linarith\n    nlinarith\n  have hy : Y * T ≤ ((2 * Z + 6 * beta + 3) * A) * (Y * T) :=\n    le_mul_of_one_le_left (mul_nonneg hY hT) hcoef\n  calc\n    _ ≤ 2 * Z * A * X * T + ((6 * beta + 3) * A * X + Y) * T :=\n      add_le_add (mul_le_mul_of_nonneg_left hL hlocal)\n        (mul_le_mul_of_nonneg_left hO hchild)\n    _ ≤ (2 * Z + 6 * beta + 3) * A * (X + Y) * T := by\n      nlinarith only [hy]\n\ntheorem improved_constant (p A : ℝ) (hp : 0 ≤ p) (hA : 0 ≤ A) :\n    (2 * (40 * (p + 1)) + 6 * (17 * (p + 1)) + 3) * A\n      ≤ 5 * (40 * (p + 1)) * A := by\n  have h : 2 * (40 * (p + 1)) + 6 * (17 * (p + 1)) + 3\n      ≤ 5 * (40 * (p + 1)) := by linarith\n  nlinarith\n\ntheorem manuscript_child_constant (p : ℝ) (hp : 0 ≤ p) :\n    6 * (17 * (p + 1)) + 3 ≤ 12 * (40 * (p + 1)) := by\n  linarith\n\ntheorem guarded_loss (A Z b : ℝ) (hA : 0 ≤ A) (hZ : 0 ≤ Z)\n    (hguard : 20 * Z * A ≤ b ^ 2) :\n    5 * Z * A ≤ b ^ 2 := by\n  nlinarith [mul_nonneg hA hZ]\n\ntheorem recursive_choice (eta L O child : ℝ)\n    (hL : 0 ≤ L) (heta : eta ≤ 1) (hchild : eta * O ≤ child) :\n    eta * max L O ≤ max L child := by\n  by_cases h : L ≤ O\n  · rw [max_eq_right h]\n    exact hchild.trans (le_max_right _ _)\n  · rw [max_eq_left (le_of_not_ge h)]\n    have h' : eta * L ≤ L := by nlinarith\n    exact h'.trans (le_max_left _ _)\n\ntheorem outer_exponent_margin (a u : ℝ)\n    (ha : 1 ≤ a) (hu : 2 * a ^ 2 ≤ u) :\n    a ^ 2 ≤ (6 * a + 8) * u := by\n  have hu0 : 0 ≤ u := by nlinarith [sq_nonneg a]\n  have hcoef : 1 ≤ 6 * a + 8 := by linarith\n  have hsmall : a ^ 2 ≤ u := by nlinarith [sq_nonneg a]\n  exact hsmall.trans (le_mul_of_one_le_left hu0 hcoef)\n\nend RawLength\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d3c1b69771fb34f8441631a057faa7c798af2e1354d243aced3b3394e1cb280b"
+    },
+    {
+      "claim_id": "C_RAW_ALGEBRA",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "General finite-dimensional signed-projection/deletion, incidence norm, cancellation, and scalar transfer inequalities supporting the complete raw-length theorem.",
+      "formal_statement": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace RawLength\n\nvariable {E V I F : Type*}\n\nnoncomputable def mass [Fintype E] (w x : E → ℝ) : ℝ :=\n  ∑ e, w e * |x e|\n\nnoncomputable def projection [Fintype E]\n    (image : E → Option I) (sign x : E → ℝ) (i : I) : ℝ := by\n  classical\n  exact ∑ e, if image e = some i then sign e * x e else 0\n\nnoncomputable def clipped (live : I → Prop)\n    (image : E → Option I) (x : E → ℝ) (e : E) : ℝ := by\n  classical\n  exact if (match image e with | none => True | some i => live i) then x e else 0\n\ntheorem projection_clip [Fintype E]\n    (live : I → Prop) [DecidablePred live]\n    (image : E → Option I) (sign x : E → ℝ) (i : I) :\n    projection image sign (clipped live image x) i =\n      if live i then projection image sign x i else 0 := by\n  classical\n  by_cases hi : live i\n  · simp only [hi, if_true, projection]\n    apply Finset.sum_congr rfl\n    intro e _\n    by_cases he : image e = some i\n    · simp [he, clipped, hi]\n    · simp [he]\n  · simp only [hi, if_false, projection]\n    apply Finset.sum_eq_zero\n    intro e _\n    by_cases he : image e = some i\n    · simp [he, clipped, hi]\n    · simp [he]\n\ntheorem projection_add [Fintype E]\n    (image : E → Option I) (sign x y : E → ℝ) (i : I) :\n    projection image sign (fun e => x e + y e) i =\n      projection image sign x i + projection image sign y i := by\n  classical\n  simp only [projection, ← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro e _\n  split_ifs <;> ring\n\ntheorem mass_nonneg [Fintype E] (w x : E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    0 ≤ mass w x :=\n  Finset.sum_nonneg fun e _ => mul_nonneg (hw e) (abs_nonneg _)\n\ntheorem mass_add [Fintype E] (w x y : E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    mass w (fun e => x e + y e) ≤ mass w x + mass w y := by\n  unfold mass\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_le_sum\n  intro e _\n  calc\n    w e * |x e + y e| ≤ w e * (|x e| + |y e|) :=\n      mul_le_mul_of_nonneg_left (abs_add_le _ _) (hw e)\n    _ = w e * |x e| + w e * |y e| := by ring\n\ntheorem mass_sub [Fintype E] (w x y : E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    mass w (fun e => x e - y e) ≤ mass w x + mass w y := by\n  simpa only [sub_eq_add_neg, mass, abs_neg] using\n    mass_add w x (fun e => -y e) hw\n\ntheorem mass_scale [Fintype E] (w x : E → ℝ) (a : ℝ) :\n    mass w (fun e => a * x e) = |a| * mass w x := by\n  simp only [mass, abs_mul, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro e _\n  ring\n\ntheorem mass_sum [Fintype E] [Fintype F]\n    (w : E → ℝ) (x : F → E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    mass w (fun e => ∑ f, x f e) ≤ ∑ f, mass w (x f) := by\n  calc\n    mass w (fun e => ∑ f, x f e)\n        ≤ ∑ e, w e * ∑ f, |x f e| := by\n      apply Finset.sum_le_sum\n      intro e _\n      exact mul_le_mul_of_nonneg_left (Finset.abs_sum_le_sum_abs _ _) (hw e)\n    _ = ∑ f, mass w (x f) := by\n      simp only [mass, Finset.mul_sum]\n      rw [Finset.sum_comm]\n\ntheorem linear_mass_le [Fintype E] [Fintype V]\n    (A : V → E → ℝ) (w : V → ℝ) (u x : E → ℝ)\n    (hw : ∀ v, 0 ≤ w v)\n    (hcol : ∀ e, (∑ v, w v * |A v e|) ≤ u e) :\n    mass w (fun v => ∑ e, A v e * x e) ≤ mass u x := by\n  calc\n    mass w (fun v => ∑ e, A v e * x e)\n        ≤ ∑ e, mass w (fun v => A v e * x e) :=\n      mass_sum w (fun e v => A v e * x e) hw\n    _ = ∑ e, (∑ v, w v * |A v e|) * |x e| := by\n      apply Finset.sum_congr rfl\n      intro e _\n      simp only [mass, abs_mul, Finset.sum_mul, mul_assoc]\n    _ ≤ mass u x := by\n      apply Finset.sum_le_sum\n      intro e _\n      exact mul_le_mul_of_nonneg_right (hcol e) (abs_nonneg _)\n\nnoncomputable def incidence [Fintype E]\n    (tail head : E → V) (x : E → ℝ) (v : V) : ℝ := by\n  classical\n  exact ∑ e, ((if head e = v then (1 : ℝ) else 0) -\n    (if tail e = v then (1 : ℝ) else 0)) * x e\n\ntheorem incidence_mass_le [Fintype E] [Fintype V]\n    (tail head : E → V) (x : E → ℝ) :\n    mass (fun _ => 1) (incidence tail head x) ≤ 2 * mass (fun _ => 1) x := by\n  classical\n  have hcol : ∀ e, (∑ v,\n      |(if head e = v then (1 : ℝ) else 0) -\n        (if tail e = v then (1 : ℝ) else 0)|) ≤ 2 := by\n    intro e\n    calc\n      _ ≤ ∑ v, (|(if head e = v then (1 : ℝ) else 0)| +\n          |(if tail e = v then (1 : ℝ) else 0)|) :=\n        Finset.sum_le_sum fun v _ => abs_sub _ _\n      _ = 2 := by\n        have habs (z v : V) :\n            |if z = v then (1 : ℝ) else 0| =\n              (if z = v then (1 : ℝ) else 0) := by\n          split_ifs <;> norm_num\n        simp only [Finset.sum_add_distrib]\n        simp_rw [habs]\n        simp [eq_comm]\n  have h := linear_mass_le\n    (fun v e => (if head e = v then (1 : ℝ) else 0) -\n      (if tail e = v then (1 : ℝ) else 0))\n    (fun _ => 1) (fun _ => 2) x (fun _ => by norm_num)\n    (by simpa only [one_mul] using hcol)\n  simpa only [incidence, mass, one_mul, Finset.mul_sum] using h\n\ntheorem completion_cost_le [Fintype E] [Fintype V]\n    (tail head : E → V) (w x : E → ℝ) (n : ℝ)\n    (hw : ∀ e, 1 ≤ w e) :\n    mass w x + mass (fun _ => 1) (incidence tail head x) + n\n      ≤ 3 * mass w x + n := by\n  have hweight : mass (fun _ => 1) x ≤ mass w x := by\n    apply Finset.sum_le_sum\n    intro e _\n    exact mul_le_mul_of_nonneg_right (hw e) (abs_nonneg _)\n  have hi := incidence_mass_le tail head x\n  linarith\n\ndef walkNet [DecidableEq E] (walk : List (E × Bool)) (e : E) : ℝ :=\n  (walk.map fun p => if p.1 = e then if p.2 then 1 else -1 else 0).sum\n\ndef walkRaw (w : E → ℝ) (walk : List (E × Bool)) : ℝ :=\n  (walk.map fun p => w p.1).sum\n\ntheorem cancel_pair [DecidableEq E]\n    (pre post : List (E × Bool)) (e v : E) (w : E → ℝ) :\n    walkNet (pre ++ [(e, true), (e, false)] ++ post) v =\n        walkNet (pre ++ post) v ∧\n      walkRaw w (pre ++ [(e, true), (e, false)] ++ post) =\n        walkRaw w (pre ++ post) + 2 * w e := by\n  constructor\n  · by_cases he : e = v <;> simp [walkNet, he]\n  · simp only [walkRaw, List.map_append, List.sum_append,\n      List.map_cons, List.map_nil, List.sum_cons, List.sum_nil]\n    ring\n\ntheorem cancellation_nonexpansive [DecidableEq E]\n    (pre post : List (E × Bool)) (e : E) (w : E → ℝ) (hw : 0 ≤ w e) :\n    walkRaw w (pre ++ post) ≤\n      walkRaw w (pre ++ [(e, true), (e, false)] ++ post) := by\n  have h := (cancel_pair pre post e e w).2\n  linarith\n\ntheorem raw_score_preserved (g score childRaw parentRaw : ℝ)\n    (hs : 0 ≤ score) (hlen : parentRaw ≤ childRaw)\n    (hscore : score * childRaw ≤ |g|) :\n    score * parentRaw ≤ |g| :=\n  (mul_le_mul_of_nonneg_left hlen hs).trans hscore\n\ntheorem transfer_bound (A X Y beta Z L O q v localPart childPart : ℝ)\n    (hO : 0 ≤ O)\n    (hq : q ≤ (2 * beta + 1) * A * X)\n    (hv : v ≤ 3 * q + Y)\n    (hl : |localPart| ≤ 2 * Z * A * X * L)\n    (hc : |childPart| ≤ v * O) :\n    |localPart + childPart| ≤\n      2 * Z * A * X * L + ((6 * beta + 3) * A * X + Y) * O := by\n  have hv' : v ≤ (6 * beta + 3) * A * X + Y := by\n    calc\n      v ≤ 3 * q + Y := hv\n      _ ≤ 3 * ((2 * beta + 1) * A * X) + Y := by linarith\n      _ = (6 * beta + 3) * A * X + Y := by ring\n  calc\n    |localPart + childPart| ≤ |localPart| + |childPart| := abs_add_le _ _\n    _ ≤ 2 * Z * A * X * L + ((6 * beta + 3) * A * X + Y) * O :=\n      add_le_add hl (hc.trans (mul_le_mul_of_nonneg_right hv' hO))\n\ntheorem max_transfer (A X Y beta Z L O T : ℝ)\n    (hA : 1 ≤ A) (hX : 0 ≤ X) (hY : 0 ≤ Y)\n    (hb : 0 ≤ beta) (hZ : 1 ≤ Z) (hT : 0 ≤ T)\n    (hL : L ≤ T) (hO : O ≤ T) :\n    2 * Z * A * X * L + ((6 * beta + 3) * A * X + Y) * O\n      ≤ (2 * Z + 6 * beta + 3) * A * (X + Y) * T := by\n  have hA0 : 0 ≤ A := le_trans (by norm_num) hA\n  have hZ0 : 0 ≤ Z := le_trans (by norm_num) hZ\n  have hlocal : 0 ≤ 2 * Z * A * X := by positivity\n  have hchild : 0 ≤ (6 * beta + 3) * A * X + Y := by positivity\n  have hcoef : 1 ≤ (2 * Z + 6 * beta + 3) * A := by\n    have hbase : 1 ≤ 2 * Z + 6 * beta + 3 := by linarith\n    nlinarith\n  have hy : Y * T ≤ ((2 * Z + 6 * beta + 3) * A) * (Y * T) :=\n    le_mul_of_one_le_left (mul_nonneg hY hT) hcoef\n  calc\n    _ ≤ 2 * Z * A * X * T + ((6 * beta + 3) * A * X + Y) * T :=\n      add_le_add (mul_le_mul_of_nonneg_left hL hlocal)\n        (mul_le_mul_of_nonneg_left hO hchild)\n    _ ≤ (2 * Z + 6 * beta + 3) * A * (X + Y) * T := by\n      nlinarith only [hy]\n\ntheorem improved_constant (p A : ℝ) (hp : 0 ≤ p) (hA : 0 ≤ A) :\n    (2 * (40 * (p + 1)) + 6 * (17 * (p + 1)) + 3) * A\n      ≤ 5 * (40 * (p + 1)) * A := by\n  have h : 2 * (40 * (p + 1)) + 6 * (17 * (p + 1)) + 3\n      ≤ 5 * (40 * (p + 1)) := by linarith\n  nlinarith\n\ntheorem manuscript_child_constant (p : ℝ) (hp : 0 ≤ p) :\n    6 * (17 * (p + 1)) + 3 ≤ 12 * (40 * (p + 1)) := by\n  linarith\n\ntheorem guarded_loss (A Z b : ℝ) (hA : 0 ≤ A) (hZ : 0 ≤ Z)\n    (hguard : 20 * Z * A ≤ b ^ 2) :\n    5 * Z * A ≤ b ^ 2 := by\n  nlinarith [mul_nonneg hA hZ]\n\ntheorem recursive_choice (eta L O child : ℝ)\n    (hL : 0 ≤ L) (heta : eta ≤ 1) (hchild : eta * O ≤ child) :\n    eta * max L O ≤ max L child := by\n  by_cases h : L ≤ O\n  · rw [max_eq_right h]\n    exact hchild.trans (le_max_right _ _)\n  · rw [max_eq_left (le_of_not_ge h)]\n    have h' : eta * L ≤ L := by nlinarith\n    exact h'.trans (le_max_left _ _)\n\ntheorem outer_exponent_margin (a u : ℝ)\n    (ha : 1 ≤ a) (hu : 2 * a ^ 2 ≤ u) :\n    a ^ 2 ≤ (6 * a + 8) * u := by\n  have hu0 : 0 ≤ u := by nlinarith [sq_nonneg a]\n  have hcoef : 1 ≤ 6 * a + 8 := by linarith\n  have hsmall : a ^ 2 ≤ u := by nlinarith [sq_nonneg a]\n  exact hsmall.trans (le_mul_of_one_le_left hu0 hcoef)\n\nend RawLength\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "dfe5da4fd5f716df436e7bc02794a781f480137d60d9ad984b234a235b9c0bb1"
+    },
+    {
+      "claim_id": "C_RAW_ALGEBRA",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "General finite-dimensional signed-projection/deletion, incidence norm, cancellation, and scalar transfer inequalities supporting the complete raw-length theorem.",
+      "formal_statement": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace RawLength\n\nvariable {E V I F : Type*}\n\nnoncomputable def mass [Fintype E] (w x : E → ℝ) : ℝ :=\n  ∑ e, w e * |x e|\n\nnoncomputable def projection [Fintype E]\n    (image : E → Option I) (sign x : E → ℝ) (i : I) : ℝ := by\n  classical\n  exact ∑ e, if image e = some i then sign e * x e else 0\n\nnoncomputable def clipped (live : I → Prop)\n    (image : E → Option I) (x : E → ℝ) (e : E) : ℝ := by\n  classical\n  exact if (match image e with | none => True | some i => live i) then x e else 0\n\ntheorem projection_clip [Fintype E]\n    (live : I → Prop) [DecidablePred live]\n    (image : E → Option I) (sign x : E → ℝ) (i : I) :\n    projection image sign (clipped live image x) i =\n      if live i then projection image sign x i else 0 := by\n  classical\n  by_cases hi : live i\n  · simp only [hi, if_true, projection]\n    apply Finset.sum_congr rfl\n    intro e _\n    by_cases he : image e = some i\n    · simp [he, clipped, hi]\n    · simp [he]\n  · simp only [hi, if_false, projection]\n    apply Finset.sum_eq_zero\n    intro e _\n    by_cases he : image e = some i\n    · simp [he, clipped, hi]\n    · simp [he]\n\ntheorem projection_add [Fintype E]\n    (image : E → Option I) (sign x y : E → ℝ) (i : I) :\n    projection image sign (fun e => x e + y e) i =\n      projection image sign x i + projection image sign y i := by\n  classical\n  simp only [projection, ← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro e _\n  split_ifs <;> ring\n\ntheorem mass_nonneg [Fintype E] (w x : E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    0 ≤ mass w x :=\n  Finset.sum_nonneg fun e _ => mul_nonneg (hw e) (abs_nonneg _)\n\ntheorem mass_add [Fintype E] (w x y : E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    mass w (fun e => x e + y e) ≤ mass w x + mass w y := by\n  unfold mass\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_le_sum\n  intro e _\n  calc\n    w e * |x e + y e| ≤ w e * (|x e| + |y e|) :=\n      mul_le_mul_of_nonneg_left (abs_add_le _ _) (hw e)\n    _ = w e * |x e| + w e * |y e| := by ring\n\ntheorem mass_sub [Fintype E] (w x y : E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    mass w (fun e => x e - y e) ≤ mass w x + mass w y := by\n  simpa only [sub_eq_add_neg, mass, abs_neg] using\n    mass_add w x (fun e => -y e) hw\n\ntheorem mass_scale [Fintype E] (w x : E → ℝ) (a : ℝ) :\n    mass w (fun e => a * x e) = |a| * mass w x := by\n  simp only [mass, abs_mul, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro e _\n  ring\n\ntheorem mass_sum [Fintype E] [Fintype F]\n    (w : E → ℝ) (x : F → E → ℝ) (hw : ∀ e, 0 ≤ w e) :\n    mass w (fun e => ∑ f, x f e) ≤ ∑ f, mass w (x f) := by\n  calc\n    mass w (fun e => ∑ f, x f e)\n        ≤ ∑ e, w e * ∑ f, |x f e| := by\n      apply Finset.sum_le_sum\n      intro e _\n      exact mul_le_mul_of_nonneg_left (Finset.abs_sum_le_sum_abs _ _) (hw e)\n    _ = ∑ f, mass w (x f) := by\n      simp only [mass, Finset.mul_sum]\n      rw [Finset.sum_comm]\n\ntheorem linear_mass_le [Fintype E] [Fintype V]\n    (A : V → E → ℝ) (w : V → ℝ) (u x : E → ℝ)\n    (hw : ∀ v, 0 ≤ w v)\n    (hcol : ∀ e, (∑ v, w v * |A v e|) ≤ u e) :\n    mass w (fun v => ∑ e, A v e * x e) ≤ mass u x := by\n  calc\n    mass w (fun v => ∑ e, A v e * x e)\n        ≤ ∑ e, mass w (fun v => A v e * x e) :=\n      mass_sum w (fun e v => A v e * x e) hw\n    _ = ∑ e, (∑ v, w v * |A v e|) * |x e| := by\n      apply Finset.sum_congr rfl\n      intro e _\n      simp only [mass, abs_mul, Finset.sum_mul, mul_assoc]\n    _ ≤ mass u x := by\n      apply Finset.sum_le_sum\n      intro e _\n      exact mul_le_mul_of_nonneg_right (hcol e) (abs_nonneg _)\n\nnoncomputable def incidence [Fintype E]\n    (tail head : E → V) (x : E → ℝ) (v : V) : ℝ := by\n  classical\n  exact ∑ e, ((if head e = v then (1 : ℝ) else 0) -\n    (if tail e = v then (1 : ℝ) else 0)) * x e\n\ntheorem incidence_mass_le [Fintype E] [Fintype V]\n    (tail head : E → V) (x : E → ℝ) :\n    mass (fun _ => 1) (incidence tail head x) ≤ 2 * mass (fun _ => 1) x := by\n  classical\n  have hcol : ∀ e, (∑ v,\n      |(if head e = v then (1 : ℝ) else 0) -\n        (if tail e = v then (1 : ℝ) else 0)|) ≤ 2 := by\n    intro e\n    calc\n      _ ≤ ∑ v, (|(if head e = v then (1 : ℝ) else 0)| +\n          |(if tail e = v then (1 : ℝ) else 0)|) :=\n        Finset.sum_le_sum fun v _ => abs_sub _ _\n      _ = 2 := by\n        have habs (z v : V) :\n            |if z = v then (1 : ℝ) else 0| =\n              (if z = v then (1 : ℝ) else 0) := by\n          split_ifs <;> norm_num\n        simp only [Finset.sum_add_distrib]\n        simp_rw [habs]\n        norm_num [eq_comm]\n  have h := linear_mass_le\n    (fun v e => (if head e = v then (1 : ℝ) else 0) -\n      (if tail e = v then (1 : ℝ) else 0))\n    (fun _ => 1) (fun _ => 2) x (fun _ => by norm_num)\n    (by simpa only [one_mul] using hcol)\n  simpa only [incidence, mass, one_mul, Finset.mul_sum] using h\n\ntheorem completion_cost_le [Fintype E] [Fintype V]\n    (tail head : E → V) (w x : E → ℝ) (n : ℝ)\n    (hw : ∀ e, 1 ≤ w e) :\n    mass w x + mass (fun _ => 1) (incidence tail head x) + n\n      ≤ 3 * mass w x + n := by\n  have hweight : mass (fun _ => 1) x ≤ mass w x := by\n    apply Finset.sum_le_sum\n    intro e _\n    exact mul_le_mul_of_nonneg_right (hw e) (abs_nonneg _)\n  have hi := incidence_mass_le tail head x\n  linarith\n\ndef walkNet [DecidableEq E] (walk : List (E × Bool)) (e : E) : ℝ :=\n  (walk.map fun p => if p.1 = e then if p.2 then 1 else -1 else 0).sum\n\ndef walkRaw (w : E → ℝ) (walk : List (E × Bool)) : ℝ :=\n  (walk.map fun p => w p.1).sum\n\ntheorem cancel_pair [DecidableEq E]\n    (pre post : List (E × Bool)) (e v : E) (w : E → ℝ) :\n    walkNet (pre ++ [(e, true), (e, false)] ++ post) v =\n        walkNet (pre ++ post) v ∧\n      walkRaw w (pre ++ [(e, true), (e, false)] ++ post) =\n        walkRaw w (pre ++ post) + 2 * w e := by\n  constructor\n  · by_cases he : e = v <;> simp [walkNet, he]\n  · simp only [walkRaw, List.map_append, List.sum_append,\n      List.map_cons, List.map_nil, List.sum_cons, List.sum_nil]\n    ring\n\ntheorem cancellation_nonexpansive [DecidableEq E]\n    (pre post : List (E × Bool)) (e : E) (w : E → ℝ) (hw : 0 ≤ w e) :\n    walkRaw w (pre ++ post) ≤\n      walkRaw w (pre ++ [(e, true), (e, false)] ++ post) := by\n  have h := (cancel_pair pre post e e w).2\n  linarith\n\ntheorem raw_score_preserved (g score childRaw parentRaw : ℝ)\n    (hs : 0 ≤ score) (hlen : parentRaw ≤ childRaw)\n    (hscore : score * childRaw ≤ |g|) :\n    score * parentRaw ≤ |g| :=\n  (mul_le_mul_of_nonneg_left hlen hs).trans hscore\n\ntheorem transfer_bound (A X Y beta Z L O q v localPart childPart : ℝ)\n    (hO : 0 ≤ O)\n    (hq : q ≤ (2 * beta + 1) * A * X)\n    (hv : v ≤ 3 * q + Y)\n    (hl : |localPart| ≤ 2 * Z * A * X * L)\n    (hc : |childPart| ≤ v * O) :\n    |localPart + childPart| ≤\n      2 * Z * A * X * L + ((6 * beta + 3) * A * X + Y) * O := by\n  have hv' : v ≤ (6 * beta + 3) * A * X + Y := by\n    calc\n      v ≤ 3 * q + Y := hv\n      _ ≤ 3 * ((2 * beta + 1) * A * X) + Y := by linarith\n      _ = (6 * beta + 3) * A * X + Y := by ring\n  calc\n    |localPart + childPart| ≤ |localPart| + |childPart| := abs_add_le _ _\n    _ ≤ 2 * Z * A * X * L + ((6 * beta + 3) * A * X + Y) * O :=\n      add_le_add hl (hc.trans (mul_le_mul_of_nonneg_right hv' hO))\n\ntheorem max_transfer (A X Y beta Z L O T : ℝ)\n    (hA : 1 ≤ A) (hX : 0 ≤ X) (hY : 0 ≤ Y)\n    (hb : 0 ≤ beta) (hZ : 1 ≤ Z) (hT : 0 ≤ T)\n    (hL : L ≤ T) (hO : O ≤ T) :\n    2 * Z * A * X * L + ((6 * beta + 3) * A * X + Y) * O\n      ≤ (2 * Z + 6 * beta + 3) * A * (X + Y) * T := by\n  have hA0 : 0 ≤ A := le_trans (by norm_num) hA\n  have hZ0 : 0 ≤ Z := le_trans (by norm_num) hZ\n  have hlocal : 0 ≤ 2 * Z * A * X := by positivity\n  have hchild : 0 ≤ (6 * beta + 3) * A * X + Y := by positivity\n  have hcoef : 1 ≤ (2 * Z + 6 * beta + 3) * A := by\n    have hbase : 1 ≤ 2 * Z + 6 * beta + 3 := by linarith\n    nlinarith\n  have hy : Y * T ≤ ((2 * Z + 6 * beta + 3) * A) * (Y * T) :=\n    le_mul_of_one_le_left (mul_nonneg hY hT) hcoef\n  calc\n    _ ≤ 2 * Z * A * X * T + ((6 * beta + 3) * A * X + Y) * T :=\n      add_le_add (mul_le_mul_of_nonneg_left hL hlocal)\n        (mul_le_mul_of_nonneg_left hO hchild)\n    _ ≤ (2 * Z + 6 * beta + 3) * A * (X + Y) * T := by\n      nlinarith only [hy]\n\ntheorem improved_constant (p A : ℝ) (hp : 0 ≤ p) (hA : 0 ≤ A) :\n    (2 * (40 * (p + 1)) + 6 * (17 * (p + 1)) + 3) * A\n      ≤ 5 * (40 * (p + 1)) * A := by\n  have h : 2 * (40 * (p + 1)) + 6 * (17 * (p + 1)) + 3\n      ≤ 5 * (40 * (p + 1)) := by linarith\n  nlinarith\n\ntheorem manuscript_child_constant (p : ℝ) (hp : 0 ≤ p) :\n    6 * (17 * (p + 1)) + 3 ≤ 12 * (40 * (p + 1)) := by\n  linarith\n\ntheorem guarded_loss (A Z b : ℝ) (hA : 0 ≤ A) (hZ : 0 ≤ Z)\n    (hguard : 20 * Z * A ≤ b ^ 2) :\n    5 * Z * A ≤ b ^ 2 := by\n  nlinarith [mul_nonneg hA hZ]\n\ntheorem recursive_choice (eta L O child : ℝ)\n    (hL : 0 ≤ L) (heta : eta ≤ 1) (hchild : eta * O ≤ child) :\n    eta * max L O ≤ max L child := by\n  by_cases h : L ≤ O\n  · rw [max_eq_right h]\n    exact hchild.trans (le_max_right _ _)\n  · rw [max_eq_left (le_of_not_ge h)]\n    have h' : eta * L ≤ L := by nlinarith\n    exact h'.trans (le_max_left _ _)\n\ntheorem outer_exponent_margin (a u : ℝ)\n    (ha : 1 ≤ a) (hu : 2 * a ^ 2 ≤ u) :\n    a ^ 2 ≤ (6 * a + 8) * u := by\n  have hu0 : 0 ≤ u := by nlinarith [sq_nonneg a]\n  have hcoef : 1 ≤ 6 * a + 8 := by linarith\n  have hsmall : a ^ 2 ≤ u := by nlinarith [sq_nonneg a]\n  exact hsmall.trans (le_mul_of_one_le_left hu0 hcoef)\n\nend RawLength\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "860717869f84800dd41b5475f469338f321f63ed414c4f23188266fbf4dc0772"
+    },
+    {
+      "claim_id": "C_HUB",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "For copied old-edge graphs with lengths at least one and physically balanced Q+N, where N touches hubs only, the canonical unit-null completion retaining Q and N costs at most 3||Q||+||N||. The factor three for this specified operation is sharp, not a lower bound over all representations of the same projection.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "6829b6c9e0363129d16d3e725c793d0cf93aa147dd8721bcdd14c8422363f41a"
+    },
+    {
+      "claim_id": "C_RAW_SCOPE",
+      "version": 6,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RAW",
+        "content_hash": "8864e4e6062ec121c11462b2a445f02b2ee088dad13e9b2747da9baf6a05932a"
+      },
+      "natural_statement": "Source facts and limitations: raw and net lengths are distinct; verified geometric data and bounded selected-support paths are the exact inputs of the quality argument; external dynamic-cycle literature alone does not establish this raw-length or lifetime interface.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "ASSIGNMENT_INPUT",
+          "statement": "Every active chord has a logical path between its current classes using live selected chords of the same forest and bucket with at most p_* hops. Its legs are live paths of length at most 8W. Constructing assignments and proving their update cost are outside the one-level theorem.",
+          "source": "Staged 07-backend-quality.tex, Portal legs and local correction cycles and lem:backend-reduction; 08-backend-updates.tex, update:snapshot-bounds and update:hop-induction.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "6a07edbbd4fc04ccabe29f51ad4125cebed6c5791b70b7d6d6061fda0fd946d3"
+        },
+        {
+          "assumption_id": "PARAMETER_PREREQUISITES",
+          "statement": "The literal source requires a>=1000 for the engine, u positive and divisible by 2a^2, S^(1/a)<=M=2^u<=S^2, P_*<=b, and 20 Z_* A_*<=b^2. Small stress configurations are not by themselves counterexamples in this range.",
+          "source": "Staged 05-engine.tex, engine:parameters and lem:flat-cycle; 06-routing-helper.tex, route:parameters; 07-backend-quality.tex, back:helper-parameters through back:guards.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "da0c5ad76a3cb25034700af40027a5cbb5f6b7d536dfa7e8105ee388bc3d7c52"
+        },
+        {
+          "assumption_id": "STAGED_DEFINITIONS",
+          "statement": "The manuscript uses raw traversal length for returned candidates and net weighted l1 norm only for existential comparison vectors. Null links have construction length one and physical length zero.",
+          "source": "Staged 07-backend-quality.tex, Parameters, scores, and the bottom level; staged 05-engine.tex, lem:flat-cycle and engine:flat-quality, September 24, 2026 source.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "e168cefc50aa681c1b3717991c94e812b0f99d5e8e2327cdba2c0bc7bf15d1bd"
+        },
+        {
+          "assumption_id": "VERIFIED_GEOMETRIC_INPUT",
+          "statement": "Input geometry consists of K_h partitions per layer with cell-tree radius at most Gamma R_j and a verified cell containing every closed R_j-ball. The finite family realizes arbitrary OUT choices at two distinct lower slots per layer. These are geometric hypotheses, not the disputed norm inequalities.",
+          "source": "Staged 07-backend-quality.tex, back:covers, back:forest-family, and back:path-law.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "4bf318837453a34a653830142cc7ae4ee0de514604c8a52d4e215ff4442fa417"
+        },
+        {
+          "assumption_id": "LITERATURE_CONTEXT_LIMIT",
+          "statement": "The separate bounded primary-source lookup distinguishes the net projected-circulation denominator of Chen et al. from mapped path-length domination in the flat-forest lifting literature. It does not establish novelty or the stronger raw-ratio interface. These contextual source findings are not external premises of C_RAW_TRANSFER.",
+          "source": "research/raw-length-core/literature.md: Chen et al., arXiv:2311.18295v1, Definitions 2.3 and 3.1 and Theorem 3.5; Kyng--Meierhans--Probst Gutenberg, arXiv:2311.06402v1, Lemma 3.21 and Algorithm 5; primary excerpts read by the raw-length-literature research agent.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:raw-length",
+          "content_hash": "dfad08ba1b99896c3118c373b81bf9941755f663a02d80e81df9c1d853e85874"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "dbe72e8c72cee52e1a380ff10daaa9fb3da5182e619c481a162478c4babafa4d"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-C_RAW_ALGEBRA-f594c42a80ee",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RAW_ALGEBRA",
+        "content_hash": "d3c1b69771fb34f8441631a057faa7c798af2e1354d243aced3b3394e1cb280b"
+      },
+      "tier": "mechanical",
+      "verdict": "inconclusive",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/raw-length-core/certificates/C_RAW_ALGEBRA-8717f29c68653a2c.json"
+    },
+    {
+      "evidence_id": "lean-C_RAW_ALGEBRA-27fa17a1caab",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RAW_ALGEBRA",
+        "content_hash": "dfe5da4fd5f716df436e7bc02794a781f480137d60d9ad984b234a235b9c0bb1"
+      },
+      "tier": "mechanical",
+      "verdict": "inconclusive",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/raw-length-core/certificates/C_RAW_ALGEBRA-262aa97251d51f0a.json"
+    },
+    {
+      "evidence_id": "lean-C_RAW_ALGEBRA-c9f089f9036f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RAW_ALGEBRA",
+        "content_hash": "860717869f84800dd41b5475f469338f321f63ed414c4f23188266fbf4dc0772"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/raw-length-core/certificates/C_RAW_ALGEBRA-b59175c014d81e67.json"
+    },
+    {
+      "evidence_id": "judgement-C_RAW_SCOPE-0b42d0186619",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RAW_SCOPE",
+        "content_hash": "dbe72e8c72cee52e1a380ff10daaa9fb3da5182e619c481a162478c4babafa4d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_FROZEN-0928c4266033",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FROZEN",
+        "content_hash": "e2aa0a15e2554c8636ebdc36aafe1dc33e5e49af749244d5b3f9125837ca817b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_LOCAL-7c382652552b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LOCAL",
+        "content_hash": "3cc3f5b24504d8ddfa99fc134abde7f6254076ee2341e684594e2988e08923ae"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_COMPRESSION-dc1b52bc5f8c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_COMPRESSION",
+        "content_hash": "14e0b26f400236193335273d941e3001ca86997192624191c061390f8db08c28"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_HUB-3b8b0f57861d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_HUB",
+        "content_hash": "6829b6c9e0363129d16d3e725c793d0cf93aa147dd8721bcdd14c8422363f41a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_LIFT-33d4be4ff5dc",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LIFT",
+        "content_hash": "0384184223c4e7b02589c3026958d515bca6c99ae45fb6ade5834336466b8b73"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_RAW_ALGEBRA-542578d9d0ca",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RAW_ALGEBRA",
+        "content_hash": "860717869f84800dd41b5475f469338f321f63ed414c4f23188266fbf4dc0772"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/certificates/C_RAW_ALGEBRA-b59175c014d81e67.json"
+    },
+    {
+      "evidence_id": "judgement-C_RAW_TRANSFER-b13720419f65",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RAW_TRANSFER",
+        "content_hash": "f42b0b355dbcab46576b04114a44bd8714476a7318ef77894ccab587cb289829"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REDUCTION-5e3b097a116d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REDUCTION",
+        "content_hash": "5cecab0b025caccb2e686af8170ebd47e1d91176e075c6595383848aa016500d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_RECURSION-a81d881f27eb",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RECURSION",
+        "content_hash": "f4c157a979a5ec6fe60dafe4b6eb039e88a69bc5ecc738c7cf89c0b83b1b5bb8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:raw-length",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_RAW_ALGEBRA-548cc6479da5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RAW_ALGEBRA",
+        "content_hash": "860717869f84800dd41b5475f469338f321f63ed414c4f23188266fbf4dc0772"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/certificates/C_RAW_ALGEBRA-b59175c014d81e67.json"
+    },
+    {
+      "evidence_id": "judgement-C_RAW_SCOPE-b49a129662d2",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RAW_SCOPE",
+        "content_hash": "dbe72e8c72cee52e1a380ff10daaa9fb3da5182e619c481a162478c4babafa4d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_FROZEN-ca7deb25ff3a",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FROZEN",
+        "content_hash": "e2aa0a15e2554c8636ebdc36aafe1dc33e5e49af749244d5b3f9125837ca817b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_LOCAL-6b7d546ac0f9",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LOCAL",
+        "content_hash": "3cc3f5b24504d8ddfa99fc134abde7f6254076ee2341e684594e2988e08923ae"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_COMPRESSION-c0800dd90d9e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_COMPRESSION",
+        "content_hash": "14e0b26f400236193335273d941e3001ca86997192624191c061390f8db08c28"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_HUB-0f579d35d0e4",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_HUB",
+        "content_hash": "6829b6c9e0363129d16d3e725c793d0cf93aa147dd8721bcdd14c8422363f41a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_LIFT-9683a52b3247",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LIFT",
+        "content_hash": "0384184223c4e7b02589c3026958d515bca6c99ae45fb6ade5834336466b8b73"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_RAW_TRANSFER-c4a139bbe049",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RAW_TRANSFER",
+        "content_hash": "f42b0b355dbcab46576b04114a44bd8714476a7318ef77894ccab587cb289829"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REDUCTION-e52f43b00a2e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REDUCTION",
+        "content_hash": "5cecab0b025caccb2e686af8170ebd47e1d91176e075c6595383848aa016500d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_RECURSION-7ca440af1aeb",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RECURSION",
+        "content_hash": "f4c157a979a5ec6fe60dafe4b6eb039e88a69bc5ecc738c7cf89c0b83b1b5bb8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:raw-length-independent",
+      "artifact": "research/raw-length-core/report.md"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_RAW_TRANSFER",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C9000120",
+        "content_hash": "2d41fdf36b01ceeb83ce9b8ee3a8ea57df2ec594a03cc1e25bd6329a4c148eaa"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_RAW_TRANSFER",
+          "content_hash": "f42b0b355dbcab46576b04114a44bd8714476a7318ef77894ccab587cb289829"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_RAW_GEOMETRY_ALGEBRA",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_RAW_TRANSFER",
+        "content_hash": "f42b0b355dbcab46576b04114a44bd8714476a7318ef77894ccab587cb289829"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_FROZEN",
+          "content_hash": "e2aa0a15e2554c8636ebdc36aafe1dc33e5e49af749244d5b3f9125837ca817b"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_LOCAL",
+          "content_hash": "3cc3f5b24504d8ddfa99fc134abde7f6254076ee2341e684594e2988e08923ae"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_COMPRESSION",
+          "content_hash": "14e0b26f400236193335273d941e3001ca86997192624191c061390f8db08c28"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_HUB",
+          "content_hash": "9f8250645d8691f9486d92588c084c919aa7bbeb8188011ca54031f550929304"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_LIFT",
+          "content_hash": "0384184223c4e7b02589c3026958d515bca6c99ae45fb6ade5834336466b8b73"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_RAW_ALGEBRA",
+          "content_hash": "551291010536de7dfb12420666da3cff79205b054530724245f7e3d01d16c6d0"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_REDUCTION",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_REDUCTION",
+        "content_hash": "5cecab0b025caccb2e686af8170ebd47e1d91176e075c6595383848aa016500d"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_RAW_TRANSFER",
+          "content_hash": "f42b0b355dbcab46576b04114a44bd8714476a7318ef77894ccab587cb289829"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_RECURSION",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_RECURSION",
+        "content_hash": "f4c157a979a5ec6fe60dafe4b6eb039e88a69bc5ecc738c7cf89c0b83b1b5bb8"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_REDUCTION",
+          "content_hash": "5cecab0b025caccb2e686af8170ebd47e1d91176e075c6595383848aa016500d"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_LIFT",
+          "content_hash": "0384184223c4e7b02589c3026958d515bca6c99ae45fb6ade5834336466b8b73"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_MAIN_LOAD_BEARING",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_MAIN",
+        "content_hash": "ea1184fcec7022ad95de54875cc136be9b3d91e54f712b0f201ddb2d4d5af9cc"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_PRICED",
+          "content_hash": "a21d1538e2e35ffdebe1a02812238c9aa4ab8c5c6a7b3f4f82d6dd153eaceffd"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_MAIN_OTHER",
+          "content_hash": "b9c345f50c568cede9a1dc6405358dc30fbda5b90436dbd063847512e3042ae7"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_PRICED_BACKEND",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_PRICED",
+        "content_hash": "a21d1538e2e35ffdebe1a02812238c9aa4ab8c5c6a7b3f4f82d6dd153eaceffd"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_FLAT_INTERFACE",
+          "content_hash": "ebac12f25bad273fe0beb64b8dcd1a57853af57335db359a344e2cade3170dbb"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_FLAT_QUALITY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_FLAT_INTERFACE",
+        "content_hash": "ebac12f25bad273fe0beb64b8dcd1a57853af57335db359a344e2cade3170dbb"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_RECURSION",
+          "content_hash": "f4c157a979a5ec6fe60dafe4b6eb039e88a69bc5ecc738c7cf89c0b83b1b5bb8"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_MAINTENANCE",
+          "content_hash": "e0d7f0daf522744ce0da95a7e74f7bbd6e1f11952855a3833dfd6bcd919e3a8b"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NET_LENGTH_ONLY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_RAW_TRANSFER",
+        "content_hash": "f42b0b355dbcab46576b04114a44bd8714476a7318ef77894ccab587cb289829"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_RAW_ALGEBRA",
+          "content_hash": "860717869f84800dd41b5475f469338f321f63ed414c4f23188266fbf4dc0772"
+        }
+      ],
+      "retired_because": "Net-only certification cannot meet the raw-traversal denominator in engine:flat-quality. The exact local correction has raw length 19 and net length 9; proving only its net ratio is insufficient."
+    },
+    {
+      "route_id": "R_PARTIAL_COPY_DELETION",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_RAW_TRANSFER",
+        "content_hash": "f42b0b355dbcab46576b04114a44bd8714476a7318ef77894ccab587cb289829"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_FROZEN",
+          "content_hash": "e2aa0a15e2554c8636ebdc36aafe1dc33e5e49af749244d5b3f9125837ca817b"
+        }
+      ],
+      "retired_because": "Deleting only one occurrence of a dead edge violates the literal source hypothesis. The source deletes every mapped copy in family and raw forests, and projection_clip proves commutation for that rule."
+    }
+  ]
+}

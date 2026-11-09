@@ -1,0 +1,124 @@
+{
+  "goal": "C9000252",
+  "routes": [
+    {
+      "name": "Q_UNIVERSAL",
+      "status": "current",
+      "evidence": "research/openai_manuscript/a-torsion-free-hyperbolic-group-that-is-not-residually-finite-September-23-2026/build/sections/construction.tex"
+    }
+  ],
+  "nodes": {
+    "C9000252": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 252 (A torsion-free hyperbolic group that is neither residually finite nor linear over any field.; papers: A torsion-free hyperbolic group that is not residually finite; Lean status: Partially/Comparator formalized (lean/docs/252.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["Q_RESIDUAL", "Q_GEOMETRY", "Q_INCIDENCE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "Q_OBSTRUCTION": {
+      "statement": "For fixed admissible punctured-line data satisfying the strict budget, no finite-group assignment satisfying the triangular factorizations makes every rectangular word nonidentity; q may divide the group order.",
+      "status": "open",
+      "depends_on": ["Q_TRACE", "Q_REDUCTION", "Q_LOCAL", "Q_INTERPOLATION", "Q_TENSOR"],
+      "reviewer_confirmed": false,
+      "source_locator": "construction.tex, lem:rank-reduction through eq:tensor-certificate",
+      "evidence": ["research/quotient_uniform/proof.md", "research/quotient_uniform/exact_certificate.json"],
+      "review_note": "Complete universal prose proof submitted for independent review; this is not a kernel claim."
+    },
+    "Q_TRACE": {
+      "statement": "Regular permutation block arrays whose rectangular words are nonidentity have first Gram trace r^2 D and second Gram trace (2r^3-r^2)D, hence real rank at least r^2 D/(2r-1).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_locator": "construction.tex, eq:trace-first and eq:trace-second",
+      "evidence": ["research/quotient_uniform/proof.md", "research/quotient_uniform/Main.lean", "research/quotient_uniform/exact_certificate.json"]
+    },
+    "Q_REDUCTION": {
+      "statement": "Every integer matrix of squared row norms at most r has rank over F_q at least half its real rank whenever q is prime and q>r.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_locator": "construction.tex, lem:rank-reduction",
+      "evidence": ["research/quotient_uniform/proof.md", "research/quotient_uniform/exact_certificate.json"],
+      "review_note": "The strict half-rank comparison is proved using Hadamard and integer-minor divisibility; this argument is not formalized in Main.lean."
+    },
+    "Q_LOCAL": {
+      "statement": "Summing the shifted L-inverse R products over a Cartesian block factors the entire rD by rD matrix through D dimensions, without commuting the factors.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_locator": "construction.tex, eq:group-factorization and eq:matrix-factorization",
+      "evidence": ["research/quotient_uniform/proof.md", "research/quotient_uniform/Main.lean", "research/quotient_uniform/exact_certificate.json"]
+    },
+    "Q_INTERPOLATION": {
+      "statement": "Distinct grid marks and 2h(|S|-1)<q-1 yield rank-one weights H with H(a_i)=E_ii and sum over each punctured line equal to -E_ii.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_locator": "construction.tex, eq:line-certificate",
+      "evidence": ["research/quotient_uniform/proof.md", "research/quotient_uniform/Main.lean", "research/quotient_uniform/exact_certificate.json"]
+    },
+    "Q_TENSOR": {
+      "statement": "The punctured-line sums imply the negative direct-sum tensor identity, whose rank bounds contradict Nr/4>2|P|+r|E|.",
+      "status": "open",
+      "depends_on": ["Q_LOCAL", "Q_INTERPOLATION", "Q_TRACE", "Q_REDUCTION"],
+      "reviewer_confirmed": false,
+      "source_locator": "construction.tex, eq:tensor-certificate and final rank comparison",
+      "evidence": ["research/quotient_uniform/proof.md", "research/quotient_uniform/Main.lean", "research/quotient_uniform/exact_certificate.json"]
+    },
+    "Q_PRODUCT": {
+      "statement": "For a finite family of words, if no finite quotient preserves them all, some fixed member is killed by every finite-group homomorphism.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_locator": "construction.tex, final paragraph",
+      "evidence": ["research/quotient_uniform/proof.md", "research/quotient_uniform/Main.lean"]
+    },
+    "Q_FORMAL_CORE": {
+      "statement": "Universal regular permutation laws and expanded trace sums, noncommutative shifted Cartesian factorization, constructed interpolation tensor certificate over every finite field, and finite-product quantifier; excludes the rank arguments.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/quotient_uniform/Main.lean",
+        "research/quotient_uniform/statement_fidelity.md",
+        "research/quotient_uniform/lean_check.json",
+        "research/quotient_uniform/certificates/Q_FORMAL_CORE-8eb74f0574b0b4e3.json"
+      ],
+      "review_note": "Official Lean 4.31.0 evidence derives closed_kernel for this core claim only, exit_code=0 and proof_holes=[]. Independent statement-fidelity review remains required."
+    },
+    "Q_BUDGET_EXTENSION": {
+      "statement": "With all the same non-budget assumptions, the obstruction also holds under the weak inequality Nr/4 >= 2|P|+r|E|, because each nonzero integer array has strictly greater than half its real rank after reduction.",
+      "status": "open",
+      "depends_on": ["Q_TRACE", "Q_REDUCTION", "Q_LOCAL", "Q_INTERPOLATION", "Q_TENSOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quotient_uniform/proof.md"],
+      "review_note": "A mathematical strengthening relative to the staged statement; novelty and significance have not been independently assessed."
+    },
+    "Q_RESIDUAL": {
+      "statement": "With admissible incidence data and nonidentity rectangular words established, the constructed group has nontrivial finite residual.",
+      "status": "open",
+      "depends_on": ["Q_OBSTRUCTION", "Q_PRODUCT", "Q_INCIDENCE", "Q_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/a-torsion-free-hyperbolic-group-that-is-not-residually-finite-September-23-2026/build/sections/construction.tex"]
+    },
+    "Q_INCIDENCE": {
+      "statement": "For sufficiently large primes q the manuscript's alteration supplies the stated incidence data and strict budget.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_locator": "construction.tex, lem:incidence",
+      "evidence": ["research/openai_manuscript/a-torsion-free-hyperbolic-group-that-is-not-residually-finite-September-23-2026/build/sections/construction.tex"]
+    },
+    "Q_GEOMETRY": {
+      "statement": "The triangle complex is torsion-free hyperbolic and every specified rectangular word is nonidentity.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_locator": "construction.tex, thm:triangle-complex, lem:links, eq:rectangles; geometry-foundations.tex and geometry-thinness.tex",
+      "evidence": ["research/openai_manuscript/a-torsion-free-hyperbolic-group-that-is-not-residually-finite-September-23-2026/build/sections/construction.tex"]
+    }
+  }
+}

@@ -43,17 +43,19 @@
 
 ---
 
-## 用 Argus 核验 OpenAI `openai/math` 论文集（截至 2026-11-09）
+## 用 Argus 核验 OpenAI `openai/math` 论文集
 
-上游版本：`openai/math` @ `4eaee875`，共 373 个在架结果家族、721 篇论文。另有 3 篇论文 OpenAI 已于 2026-10-06 撤回，不在范围内。
+- **对 OpenAI 原文结论的改进。** 373 个家族中，有 **134 个**的改进经核查成立；其中 **55 个**的关键一步做过独立验证。
+- **重点成果：**
+  - `127`：主定理 `I(f) ≤ 8d√n` 改进为 `4d√n`。
+  - `332`：主定理 `N₂(ℓ₁) ≤ 12√21` 改进为 `6√14`。
+  - `175`：主要常数缩小约 809 倍。
+  - `318`：在 p = 5 时，弱色分裂在高度 3 不成立。这是 OpenAI 留下的未解问题，推导仍需专家审核。
+- **OpenAI 论文中的问题。** 没有发现数学错误。确认的只有 3 处小问题：一个引理编号（`320`）、一个失效的 DOI（`318`）、一处措辞（`247`）。
+- **Lean。** 314 个家族共有 384 份 Lean 4.31.0 核心引理证书，Argus 原创的去重代码约 12 万行。
+- **底稿。** 373 个家族的全部 Argus 底稿都在 [`results/openai/`](results/openai/)。
 
-- **做了什么。** 第一轮是探索性工作，每个家族跑一个 Argus campaign；这不是逐篇审查，按供应商 token 计量花费 $1,861.55。目前正在对第一轮成果做系统复核，已审完 **54 / 373 个家族**。
-- **OpenAI 论文的错误。** **没有确认任何数学错误。** 成立的只有 3 处小问题：一个引理编号写错（`320`）、一个失效的 DOI（`318`）、一处在某种读法下缺少前提的措辞（`247`）。
-- **改进。** 在已审的 54 个家族中，有 **38 个**至少有一项对 OpenAI 原文结论的改进得到审查支持，包括更好的常数或指数、更弱的假设、推广，以及锐性例子。例如：给出最优的障碍常数并构造了与之匹配的例子（`071`），指数中去掉一个 `d` 因子（`028`），误差项从 `L^{-t-1/2}` 改进到 `L^{-t-1}`（`026`）。其余 16 个已审家族独立确认了 OpenAI 的结果。
-- **Lean。** 在 314 个家族中共有 384 份 Lean 4.31.0 核心引理证书，都有编译通过的记录，没有 `sorry`。其中 Argus 原创的去重代码约 12 万行；另有约 5.2 万行移植自 OpenAI 的 Lean，`156` 还有一份 346,954 行的机器生成 SAT 证明重放。
-- **前提。** 目前的验收都由 Argus 自己的 AI Reviewer 完成，没有经过人类专家审核；也没有任何一项改进查过文献、核实是否为新结果。
-
-报告：[中文](docs/openai-math-audit-findings.zh-CN.md) · [English](docs/openai-math-audit-findings.md) · 台账：[`data/openai-math-373-audit.json`](data/openai-math-373-audit.json)
+报告：[中文](docs/openai-math-audit-findings.zh-CN.md) · [English](docs/openai-math-audit-findings.md) · 核查数据：[`data/openai-verification.json`](data/openai-verification.json) · 台账：[`data/openai-math-373-audit.json`](data/openai-math-373-audit.json)
 
 ---
 

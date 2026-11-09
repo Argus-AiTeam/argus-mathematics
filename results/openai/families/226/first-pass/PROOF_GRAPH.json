@@ -1,0 +1,169 @@
+{
+  "goal": "C9000226",
+  "routes": [
+    {
+      "name": "R_CAP_VERIFIED_EXTENSION",
+      "status": "current",
+      "evidence": "research/cap_positivity/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000226": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 226 (The double-dimer loop ensemble converges to CLE<sub>4</sub>.; papers: The curve scaling limit of half-plane double dimers; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_CAP_VERIFICATION", "C_CAP_GENERALIZED"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_CAP_VERIFICATION": {
+      "statement": "Universal verification of the signed marked-cap positivity and event-detection mechanism, not the full CLE4 convergence theorem.",
+      "status": "in_progress",
+      "depends_on": ["C_CAP_DETECTION", "C_CAP_GENERALIZED"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md"]
+    },
+    "C_CAP_DETECTION": {
+      "statement": "The literal eq:pointwise-detection holds on all legal odd corner-rooted rectangle configurations.",
+      "status": "in_progress",
+      "depends_on": ["C_CAP_GLUE", "C_CAP_COLOR", "C_CAP_WEIGHT", "C_CAP_CHAIN", "C_CAP_EVENT_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md", "research/cap_positivity/exact_certificate.json", "research/cap_positivity/verify.py"]
+    },
+    "C_CAP_GLUE": {
+      "statement": "Formal cap tears preserve uncolored configuration multiplicities and satisfy the marked-cap norm comparison.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md"]
+    },
+    "C_CAP_COLOR": {
+      "statement": "Direct signed color counting gives uv/2 on one loop and -t_g t_h/4 on distinct loops.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md", "research/cap_positivity/exact_certificate.json"]
+    },
+    "C_CAP_WEIGHT": {
+      "statement": "Nested separating loops have cap totals decreasing by at least one half.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md"]
+    },
+    "C_CAP_CHAIN": {
+      "statement": "The complete two-chain distinct-loop sum is nonnegative and detects an off-diagonal positive product at level q^2/16.",
+      "status": "in_progress",
+      "depends_on": ["C_CAP_FORMAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md", "research/cap_positivity/Main.lean"]
+    },
+    "C_CAP_GENERALIZED": {
+      "statement": "For real M>=1 and B>=1 with B>M-1, unchanged legal configurations with weights B^(-b(A)) have detection coefficient (B-M+1)^2/(2B^(2M)); B=M gives 1/(2M^(2M)).",
+      "status": "in_progress",
+      "depends_on": ["C_CAP_GLUE", "C_CAP_COLOR", "C_CAP_SHARP_WEIGHT", "C_CAP_EVENT_REDUCTION", "C_CAP_FORMAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md", "research/cap_positivity/exact_certificate.json"]
+    },
+    "C_CAP_SHARP_WEIGHT": {
+      "statement": "Actual cap containment and the total cutoff give the sharper decay (M-1)/B, not only M/B.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md", "research/cap_positivity/verify.py"]
+    },
+    "C_CAP_EVENT_REDUCTION": {
+      "statement": "Finite cell parity, exact color gluing and remote eligible arches give the two chains and the same-loop or head-threshold detection witnesses without assuming positivity.",
+      "status": "in_progress",
+      "depends_on": ["C_CAP_GLUE", "C_CAP_COLOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md", "research/cap_positivity/exact_certificate.json"]
+    },
+    "C_CAP_FORMAL": {
+      "statement": "Kernel-checked arbitrary-finite-chain positivity, head thresholds, integer signs, bilinear color sums and local source/sink trace counts; independent statement-fidelity review remains pending.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/certificates/C_CAP_FORMAL-6497b8a72c5b7d9c.json", "research/cap_positivity/statement_fidelity.md"]
+    },
+    "C226_MAIN": {
+      "statement": "The full all-macroscopic-curves half-plane convergence theorem, outside this mission's certification scope.",
+      "status": "open",
+      "depends_on": ["C226_CROSSINGS", "C226_SHORT", "C226_LOCALIZATION", "C226_TIGHTNESS", "C226_IDENTIFICATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/10-introduction.tex"]
+    },
+    "C226_CROSSINGS": {
+      "statement": "Uniform rectangle traversal tightness.",
+      "status": "open",
+      "depends_on": ["C_CAP_GLUE", "C226_SPECTRUM", "C226_CAP_NORMALIZATION", "C226_CROSSING_RECURSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/20-transfer.tex"]
+    },
+    "C226_SHORT": {
+      "statement": "Rectangle short-interval exclusion, also requiring the analytic sandwiched insertion estimate.",
+      "status": "open",
+      "depends_on": ["C_CAP_DETECTION", "C226_CROSSINGS", "C226_INSERTION_ANALYTIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/30-short-segment.tex"]
+    },
+    "C226_LOCALIZATION": {
+      "statement": "Uniform localization from rectangles to the half-plane.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/40-localization.tex"]
+    },
+    "C226_TIGHTNESS": {
+      "statement": "Preliminary curve-collection compactness.",
+      "status": "open",
+      "depends_on": ["C226_CROSSINGS", "C226_LOCALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/40-localization.tex"]
+    },
+    "C226_IDENTIFICATION": {
+      "statement": "Visible signatures, trace identification and no reverse passage identify the limiting curves.",
+      "status": "open",
+      "depends_on": ["C226_TOPOLOGICAL", "C226_SHORT", "C226_TIGHTNESS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/50-identification.tex"]
+    },
+    "C226_TOPOLOGICAL": {
+      "statement": "The finite-puncture CLE4 law used by the manuscript; no claim that it implies curve convergence.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cap_positivity/report.md"]
+    },
+    "C226_SPECTRUM": {
+      "statement": "Odd-width singular modes, delocalization, sector penalty and all-state summability; outside this certification.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/20-transfer.tex"]
+    },
+    "C226_CAP_NORMALIZATION": {
+      "statement": "The finite-root cap partition comparison; outside this certification.",
+      "status": "open",
+      "depends_on": ["C226_SPECTRUM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/20-transfer.tex"]
+    },
+    "C226_CROSSING_RECURSION": {
+      "statement": "Closure of the crossing recursion with the seam maximum; outside this certification.",
+      "status": "open",
+      "depends_on": ["C_CAP_GLUE", "C226_SPECTRUM", "C226_CAP_NORMALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/20-transfer.tex"]
+    },
+    "C226_INSERTION_ANALYTIC": {
+      "statement": "The short-interval sandwiched insertion and marked-contraction bounds; outside this certification.",
+      "status": "open",
+      "depends_on": ["C226_SPECTRUM", "C226_CAP_NORMALIZATION", "C_CAP_GLUE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-curve-scaling-limit-of-half-plane-double-dimers-September-23-2026/build/sections/30-short-segment.tex"]
+    }
+  }
+}

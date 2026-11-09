@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FLAT18-de6fe3797108",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/332/first-pass/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/332/first-pass/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16376,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/332/first-pass/lean/Main.lean",
+    "source_sha256": "774eca3495192ce083939ddd0ed1282d1038f4676b2f0ae730a37463483ef7a2",
+    "statement_fidelity": "families/332/first-pass/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "9231338ebe6813ccf21abdf6e5396b8eeb33a3c22d3d87b6f8823967d67a5d24",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'CubicFlatness.flat18' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace CubicFlatness\n\ndef phi (x : ℝ) : ℝ := 3 * x ^ 2 - 2 * x ^ 3\n\ndef energy {ι : Type*} (s : Finset ι) (w x : ι → ℝ) : ℝ :=\n  ∑ i ∈ s, w i * x i ^ 2\n\ndef pairing {ι : Type*} (s : Finset ι) (w x y : ι → ℝ) : ℝ :=\n  ∑ i ∈ s, w i * x i * y i\n\ntheorem phi_reflection (x : ℝ) : phi (1 - x) = 1 - phi x := by\n  unfold phi\n  ring\n\ntheorem scalar_zero (x y : ℝ)\n    (hx0 : 0 ≤ x) (hx1 : x ≤ 1) (hy0 : 0 ≤ y) (hy1 : y ≤ 1) :\n    |phi y - phi x| ≤ 3 * |y ^ 2 - x ^ 2| := by\n  let k := 3 * (x + y) - 2 * (x ^ 2 + x * y + y ^ 2)\n  have hk : 0 ≤ k := by\n    dsimp [k]\n    nlinarith [mul_nonneg hx0 (sub_nonneg.mpr hx1),\n      mul_nonneg hy0 (sub_nonneg.mpr hy1),\n      mul_nonneg hx0 (sub_nonneg.mpr hy1),\n      mul_nonneg hy0 (sub_nonneg.mpr hx1)]\n  have hk3 : k ≤ 3 * (x + y) := by\n    dsimp [k]\n    nlinarith [sq_nonneg x, sq_nonneg y, mul_nonneg hx0 hy0]\n  calc\n    |phi y - phi x| = |y - x| * k := by\n      rw [show phi y - phi x = (y - x) * k by dsimp [phi, k]; ring,\n        abs_mul, abs_of_nonneg hk]\n    _ ≤ |y - x| * (3 * (x + y)) :=\n      mul_le_mul_of_nonneg_left hk3 (abs_nonneg _)\n    _ = 3 * |y ^ 2 - x ^ 2| := by\n      rw [show y ^ 2 - x ^ 2 = (y - x) * (x + y) by ring,\n        abs_mul, abs_of_nonneg (add_nonneg hx0 hy0)]\n      ring\n\ntheorem scalar_bit (x y e : ℝ)\n    (hx : 0 ≤ x ∧ x ≤ 1) (hy : 0 ≤ y ∧ y ≤ 1)\n    (he : e = 0 ∨ e = 1) :\n    |phi y - phi x| ≤ 3 * |(y - e) ^ 2 - (x - e) ^ 2| := by\n  rcases he with rfl | rfl\n  · simpa only [sub_zero] using scalar_zero x y hx.1 hx.2 hy.1 hy.2\n  · have h := scalar_zero (1 - x) (1 - y)\n      (by linarith [hx.2]) (by linarith [hx.1])\n      (by linarith [hy.2]) (by linarith [hy.1])\n    rw [phi_reflection, phi_reflection] at h\n    have ha : |(1 - phi y) - (1 - phi x)| = |phi y - phi x| := by\n      rw [show (1 - phi y) - (1 - phi x) = -(phi y - phi x) by ring, abs_neg]\n    have hb : (1 - y) ^ 2 - (1 - x) ^ 2 = (y - 1) ^ 2 - (x - 1) ^ 2 := by\n      ring\n    rwa [ha, hb] at h\n\ntheorem gap_sos (A B C : ℝ) :\n    2 * (B ^ 2 + 3 * A ^ 2 - 4 * A * C) -\n        (A + B - 2 * C) * (A + B + 2 * C) =\n      (B - A) ^ 2 + 4 * (A - C) ^ 2 := by\n  ring\n\ntheorem weighted_cauchy {ι : Type*} (s : Finset ι) (w a b : ι → ℝ)\n    (hw : ∀ i ∈ s, 0 ≤ w i) :\n    (∑ i ∈ s, w i * |b i ^ 2 - a i ^ 2|) ^ 2 ≤\n      (∑ i ∈ s, w i * (b i - a i) ^ 2) *\n        (∑ i ∈ s, w i * (b i + a i) ^ 2) := by\n  apply Finset.sum_sq_le_sum_mul_sum_of_sq_le_mul s\n    (fun i hi => mul_nonneg (hw i hi) (sq_nonneg _))\n    (fun i hi => mul_nonneg (hw i hi) (sq_nonneg _))\n  intro i hi\n  have h : (w i * |b i ^ 2 - a i ^ 2|) ^ 2 =\n      (w i * (b i - a i) ^ 2) * (w i * (b i + a i) ^ 2) := by\n    rw [mul_pow, sq_abs]\n    ring\n  exact h.le\n\ntheorem energy_sub {ι : Type*} (s : Finset ι) (w a b : ι → ℝ) :\n    (∑ i ∈ s, w i * (b i - a i) ^ 2) =\n      energy s w a + energy s w b - 2 * pairing s w a b := by\n  calc\n    _ = ∑ i ∈ s, (w i * a i ^ 2 + w i * b i ^ 2 - 2 * (w i * a i * b i)) := by\n      apply Finset.sum_congr rfl\n      intro i hi\n      ring\n    _ = _ := by\n      simp only [energy, pairing, Finset.sum_sub_distrib,\n        Finset.sum_add_distrib, Finset.mul_sum]\n\ntheorem energy_add {ι : Type*} (s : Finset ι) (w a b : ι → ℝ) :\n    (∑ i ∈ s, w i * (b i + a i) ^ 2) =\n      energy s w a + energy s w b + 2 * pairing s w a b := by\n  calc\n    _ = ∑ i ∈ s, (w i * a i ^ 2 + w i * b i ^ 2 + 2 * (w i * a i * b i)) := by\n      apply Finset.sum_congr rfl\n      intro i hi\n      ring\n    _ = _ := by\n      simp only [energy, pairing, Finset.sum_add_distrib, Finset.mul_sum]\n\ntheorem quadratic_flatness {ι : Type*} (s : Finset ι) (w a b : ι → ℝ)\n    (hw : ∀ i ∈ s, 0 ≤ w i) :\n    (∑ i ∈ s, w i * |b i ^ 2 - a i ^ 2|) ^ 2 ≤\n      2 * ((energy s w b) ^ 2 + 3 * (energy s w a) ^ 2 -\n        4 * energy s w a * pairing s w a b) := by\n  have hcs := weighted_cauchy s w a b hw\n  rw [energy_sub, energy_add] at hcs\n  have hgap := gap_sos (energy s w a) (energy s w b) (pairing s w a b)\n  nlinarith [sq_nonneg (energy s w b - energy s w a),\n    sq_nonneg (energy s w a - pairing s w a b)]\n\ntheorem flat18 {ι : Type*} (s : Finset ι) (w u v e : ι → ℝ)\n    (hw : ∀ i ∈ s, 0 ≤ w i)\n    (hu : ∀ i ∈ s, 0 ≤ u i ∧ u i ≤ 1)\n    (hv : ∀ i ∈ s, 0 ≤ v i ∧ v i ≤ 1)\n    (he : ∀ i ∈ s, e i = 0 ∨ e i = 1) :\n    (∑ i ∈ s, w i * |phi (v i) - phi (u i)|) ^ 2 ≤\n      18 * ((energy s w (fun i => v i - e i)) ^ 2 -\n        (energy s w (fun i => u i - e i)) ^ 2 -\n        4 * energy s w (fun i => u i - e i) *\n          pairing s w (fun i => u i - e i) (fun i => v i - u i)) := by\n  let a := fun i => u i - e i\n  let b := fun i => v i - e i\n  let L := ∑ i ∈ s, w i * |b i ^ 2 - a i ^ 2|\n  let V := ∑ i ∈ s, w i * |phi (v i) - phi (u i)|\n  have hL : 0 ≤ L := Finset.sum_nonneg fun i hi =>\n    mul_nonneg (hw i hi) (abs_nonneg _)\n  have hV : 0 ≤ V := Finset.sum_nonneg fun i hi =>\n    mul_nonneg (hw i hi) (abs_nonneg _)\n  have hinc : V ≤ 3 * L := by\n    calc\n      V ≤ ∑ i ∈ s, w i * (3 * |b i ^ 2 - a i ^ 2|) := by\n        apply Finset.sum_le_sum\n        intro i hi\n        exact mul_le_mul_of_nonneg_left\n          (scalar_bit (u i) (v i) (e i) (hu i hi) (hv i hi) (he i hi)) (hw i hi)\n      _ = 3 * L := by\n        dsimp [L]\n        rw [Finset.mul_sum]\n        apply Finset.sum_congr rfl\n        intro i hi\n        ring\n  have hsq : V ^ 2 ≤ 9 * L ^ 2 := by\n    nlinarith [mul_nonneg (sub_nonneg.mpr hinc)\n      (show 0 ≤ 3 * L + V by positivity)]\n  have hquad := quadratic_flatness s w a b hw\n  have hpair : pairing s w a (fun i => v i - u i) =\n      pairing s w a b - energy s w a := by\n    calc\n      _ = ∑ i ∈ s, (w i * a i * b i - w i * a i ^ 2) := by\n        apply Finset.sum_congr rfl\n        intro i hi\n        dsimp [a, b]\n        ring\n      _ = _ := by simp only [pairing, energy, Finset.sum_sub_distrib]\n  change V ^ 2 ≤ 18 * ((energy s w b) ^ 2 - (energy s w a) ^ 2 -\n    4 * energy s w a * pairing s w a (fun i => v i - u i))\n  rw [hpair]\n  change L ^ 2 ≤ _ at hquad\n  nlinarith\n\nend CubicFlatness\n\n#print axioms CubicFlatness.flat18\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: dimension-free cubic flatness\n\nClaim: `C_FLAT18`. Main declaration: `CubicFlatness.flat18`.\n\nThe quantified index type `ι` is arbitrary and `s : Finset ι` is any\nfinite set, including the empty set. All coordinates and all weights\nare real. For every index in `s`, `w >= 0`, `0 <= u,v <= 1`, and\n`e = 0 or e = 1`. There is no bound on dimension, weights, or the\nnumber of distinct coordinate values. In particular the theorem\nincludes the manuscript's positive-weight finite cube.\n\n`phi x = 3*x^2 - 2*x^3` is applied coordinatewise.\n`energy s w x = sum w*x^2` is the weighted Hilbert squared norm.\n`pairing s w x y = sum w*x*y` is its real bilinear inner product.\nThe conclusion is exactly\n\n    (sum w*|phi(v)-phi(u)|)^2\n      <= 18 * (energy(v-e)^2 - energy(u-e)^2\n               - 4*energy(u-e)*pairing(u-e,v-u)).\n\nThus the right side is the quartic potential remainder centered at\nthe binary vector e, based at u, with increment v-u. In particular\nneither the base point nor the sign of the linear correction has\nbeen reversed. Squaring `energy` gives the FOURTH power of the\nweighted Hilbert norm; squaring the sum on the left gives the\nSQUARED weighted ell_1 norm, not a sum of coordinate squares.\n\n`scalar_zero` and `scalar_bit` prove the scalar cubic bound;\n`weighted_cauchy` invokes Mathlib's exact finite Cauchy--Schwarz\ntheorem, allowing zero weights; `gap_sos` proves the universal\npolynomial identity in three arbitrary real variables; and\n`quadratic_flatness` combines these ingredients. No local axiom,\nunproved helper, `sorry`, `admit`, or numerical approximation is\nused.\n\nThis formal source does NOT encode a Markov chain, stationarity,\nthe matrix inverse, arbitrary countable ell_1 input, the sharpness\nlimit, the Cesaro comparison, or a Lipschitz extension theorem.\nThose are separate assertions proved in `research/verification.md`.\nCompilation certifies the encoded weighted core, not the entire\ncotype theorem and not this document's interpretation. The latter\nrequires independent human/Reviewer scrutiny.\n"
+  },
+  "subject": {
+    "content_hash": "1cd2a8871e5011c429e163000e3439cdc5dc8e45a9c83be9e90ee7f2bcc6f196",
+    "kind": "claim",
+    "subject_id": "C_FLAT18"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_LA_CORE-59b71a563334",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/338/first-pass/linear_alignment/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/338/first-pass/linear_alignment/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15588,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/338/first-pass/linear_alignment/lean/Main.lean",
+    "source_sha256": "c5219a2ebec34ded22a6fba4fc2dc61445b50f60f3c3acdb5497e95c95ae2515",
+    "statement_fidelity": "families/338/first-pass/linear_alignment/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "32ecb611401dc82d09bfb3fdadf544be86f7a2293760f9b9551bb011ff775dbb",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/linear_alignment/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace LinearAlignment\n\ntheorem perturbed_rayleigh_polynomial (r R e : ℝ)\n    (he : 0 ≤ e) (he_small : e ≤ 1 / 4) (hr : r ≤ R) (hR : 0 ≤ R) :\n    r + R * (2 * e + e ^ 2) ≤ (r + 8 * R * e) * (1 - e) ^ 2 := by\n  have hfirst : 0 ≤ e * (2 - e) * (R - r) :=\n    mul_nonneg (mul_nonneg he (by linarith)) (by linarith)\n  have hsecond : 0 ≤ 4 * R * e * (1 - 4 * e + 2 * e ^ 2) :=\n    mul_nonneg (mul_nonneg (mul_nonneg (by norm_num) hR) he)\n      (by nlinarith [sq_nonneg e])\n  have identity :\n      (r + 8 * R * e) * (1 - e) ^ 2 - (r + R * (2 * e + e ^ 2)) =\n        e * (2 - e) * (R - r) + 4 * R * e * (1 - 4 * e + 2 * e ^ 2) := by\n    ring\n  apply sub_nonneg.mp\n  rw [identity]\n  exact add_nonneg hfirst hsecond\n\ntheorem projection_energy (r R delta p : ℝ)\n    (hdelta : 0 < delta) (hr : r ≤ R) (hdeltaR : delta ≤ R)\n    (hp : 0 ≤ p) (henergy : (r + delta) * (1 - p) ≤ r + delta / 2) :\n    delta / (4 * R) ≤ p := by\n  have hR : 0 < R := lt_of_lt_of_le hdelta hdeltaR\n  apply (div_le_iff₀ (by positivity : 0 < 4 * R)).2\n  have hproduct := mul_le_mul_of_nonneg_right (show r + delta ≤ 2 * R by linarith) hp\n  nlinarith\n\ntheorem bootstrap_tail (n A d j : ℝ)\n    (hA : 0 < A) (hd : 0 < d) (hj : 0 < j)\n    (hgate : 256 * n ^ 3 * A ^ 2 ≤ d ^ 2 * j) :\n    16 * n ^ 3 * A / (d ^ 2 * j ^ 3) ≤ 1 / (16 * A * j ^ 2) := by\n  apply (div_le_div_iff₀ (by positivity : 0 < d ^ 2 * j ^ 3)\n    (by positivity : 0 < 16 * A * j ^ 2)).2\n  have hproduct := mul_le_mul_of_nonneg_right hgate (sq_nonneg j)\n  nlinarith\n\nsection GraphExtension\n\nvariable {E V : Type*} [AddCommGroup E] [Module ℂ E]\n  [AddCommGroup V] [Module ℂ V]\n\ndef graphExtension (R S : E →ₗ[ℂ] V) (Y : E →ₗ[ℂ] E) : E →ₗ[ℂ] V :=\n  R + S.comp (LinearMap.id - Y)\n\ntheorem graphExtension_projection (P : V →ₗ[ℂ] E)\n    (R S : E →ₗ[ℂ] V) (Y : E →ₗ[ℂ] E)\n    (hR : P.comp R = Y) (hS : P.comp S = LinearMap.id) :\n    P.comp (graphExtension R S Y) = LinearMap.id := by\n  ext x\n  change P (R x + S (x - Y x)) = x\n  have hRx : P (R x) = Y x := LinearMap.congr_fun hR x\n  have hSx : P (S (x - Y x)) = x - Y x := LinearMap.congr_fun hS (x - Y x)\n  rw [map_add, hRx, hSx]\n  abel\n\ntheorem graphExtension_contains (R S : E →ₗ[ℂ] V) (Y : E →ₗ[ℂ] E)\n    (hY : Y.comp Y = Y) (hR : R.comp Y = R) :\n    (graphExtension R S Y).comp Y = R := by\n  ext x\n  change R (Y x) + S (Y x - Y (Y x)) = R x\n  have hYx : Y (Y x) = Y x := LinearMap.congr_fun hY x\n  have hRx : R (Y x) = R x := LinearMap.congr_fun hR x\n  rw [hYx, sub_self, map_zero, add_zero, hRx]\n\ntheorem graphExtension_nested (Z : Submodule ℂ V)\n    (R S : E →ₗ[ℂ] V) (Y : E →ₗ[ℂ] E)\n    (hR : ∀ x, R x ∈ Z) (hS : ∀ x, S x ∈ Z) (x : E) :\n    graphExtension R S Y x ∈ Z := by\n  exact Z.add_mem (hR x) (hS (x - Y x))\n\nend GraphExtension\n\nend LinearAlignment\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/linear_alignment/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: algebraic core of linear alignment\n\nThe claim `C_LA_CORE` is only the following universally quantified algebraic\ncore, not the whole conditional alignment theorem `C_LA_UNIFORM`.\n\n* `LinearAlignment.perturbed_rayleigh_polynomial`: for real `r,R,e`, if\n  `0 <= e <= 1/4`, `r <= R`, and `0 <= R`, then\n  `r + R(2e+e^2) <= (r+8Re)(1-e)^2`. In the report, division by the positive\n  `(1-e)^2` bounds the perturbed Rayleigh quotient. This declaration alone\n  does not establish that a given matrix has that quotient bound.\n* `LinearAlignment.projection_energy`: for real `r,R,delta,p`, if\n  `delta > 0`, `r <= R`, `delta <= R`, `p >= 0`, and\n  `(r+delta)(1-p) <= r+delta/2`, then `delta/(4R) <= p`. Here `p` represents\n  squared projection norm, not projection norm. No square-root estimate\n  is silently built into the formal statement.\n* `LinearAlignment.bootstrap_tail`: for real `n,A,d,j`, if `A,d,j` are\n  positive and `256 n^3 A^2 <= d^2 j`, the displayed rational tail estimate\n  holds. The proof does not formalize the exponential Taylor lower bounds,\n  identify `d` with `c0 h^4/1536`, or require `n` to be a natural number.\n  The alignment application imposes those additional conditions.\n* `graphExtension_projection`, `graphExtension_contains`, and\n  `graphExtension_nested`: `E,V` are arbitrary complex modules.\n  `R,S : E -> V` and `Y : E -> E` are complex linear maps, and\n  `graphExtension R S Y = R + S (id-Y)`. A projection `P : V -> E` with\n  `P R=Y` and `P S=id` gives `P T=id`. If also `Y^2=Y` and `R Y=R`,\n  then `T Y=R`, so the new graph contains the required lifted image.\n  If both summands take values in a submodule `Z`, their sum takes values\n  in `Z`. In the report `R=R_A P_Y` and `S=T_+|_E`; the latter restriction\n  is justified by `E` being a coordinate subspace of `E_+`.\n\nThe scalar declarations are over the real numbers; the graph declarations\nare over the complex numbers, as required for the manuscript. There are no\nextra axioms, placeholders, or theorem-specific typeclass hypotheses.\nFinite dimensionality, orthogonal projections, their norm estimates,\nthe propagated-weight argument, and compactness of bounded finite-dimensional\nfamilies are proved or explained in the report, not formalized here.\nCompiler acceptance therefore certifies these six declarations and does not\nby itself certify the entire manuscript lemma or the uniformization theorem.\n"
+  },
+  "subject": {
+    "content_hash": "0d886f24c133edfb8aff802d95c1826403bc3142403a407b3c886182e6e84678",
+    "kind": "claim",
+    "subject_id": "C_LA_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

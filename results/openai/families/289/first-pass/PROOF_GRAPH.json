@@ -1,0 +1,192 @@
+{
+  "goal": "C9000289",
+  "routes": [
+    {
+      "name": "R_FW289_VERIFICATION",
+      "status": "current",
+      "goal": "C9000289",
+      "obligations": ["C_FW289", "C_TL289"],
+      "evidence": "research/free_word_audit/exact_certificate.json"
+    },
+    {
+      "name": "R_FW289_FINITE_ONLY",
+      "status": "ruled_out",
+      "goal": "C_FW289",
+      "retired_because": "Finite length/dimension/tail testing cannot establish the all-parameter claim or exact scalar freeness.",
+      "evidence": "research/free_word_audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000289": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 289 (Strong Kadison–Kastler stability and its spatial boundaries.; papers: Universal strong Kadison–Kastler stability; Near Inclusions of von Neumann Algebras Without Small Spatial Embeddings; Close Separable C*-Algebras Without Spatial Conjugacy; Lean status: Partially/Comparator formalized (lean/docs/289.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_FW289", "C_TL289"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_FW289": {
+      "statement": "For every r>=1, sufficiently large d depending only on r, all scalar-free unital copies of M_d with normalized trace, and every r-label multiset W: ||B_W|| is bounded by the manuscript beta_W, with constant 7 sqrt((r-1)!) for distinct labels.",
+      "status": "open",
+      "depends_on": ["C_CUT289", "C_TUPLE289", "C_COMB289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/free_word_audit/report.md", "research/free_word_audit/exact_certificate.json"]
+    },
+    "C_TL289": {
+      "statement": "For every finite N there is one threshold d_0(N) giving sum_(W containing a) beta_W^2<=64 for every label a and all 1<=r<=N, with each multiset counted once.",
+      "status": "open",
+      "depends_on": ["C_FW289", "C_COMB289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/free_word_audit/report.md", "research/free_word_audit/exact_certificate.json"]
+    },
+    "C_CUT289": {
+      "statement": "The reduced-free-product model, exact cut decomposition, label-independent source projections, tensor reversals, arbitrary tails, and d^(-(p+q)/2) factorization in equations fw-fock through fw-cut-factorization are valid.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/free_word_audit/report.md"]
+    },
+    "C_TUPLE289": {
+      "statement": "Distinct-label scalar tuple matrices have norm sqrt(p!q!), and missing-label projection matrices are contractions before normalized permutation replication; preservation is bounded by sqrt(p!q!)(1+sqrt((p+1)(q+1))/d).",
+      "status": "open",
+      "depends_on": ["C_MATCH289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/free_word_audit/report.md", "research/free_word_audit/jacobian_payload.json"]
+    },
+    "C_COMB289": {
+      "statement": "The reciprocal-binomial sum is at most 5 for every length; scalar restoration and repeated-label counting give the manuscript H_r, C_r and A_r bounds and a finite simultaneous threshold.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/free_word_audit/report.md"]
+    },
+    "C_MATCH289": {
+      "statement": "For arbitrary multiplicities, A+B+{a}=W determines either submultiset from the other and a. The induced edge-coordinate maps are injective, so nonnegative input-label energy is not overcounted. All-ones order replication has squared coefficient mn, attained on constants; the scalar tail and product defects are nonnegative.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/free_word_audit/Main.lean", "research/free_word_audit/statement_fidelity.md", "research/free_word_audit/certificates/C_MATCH289-28ba50dda16eb32c.json"]
+    },
+    "C_MULTI289": {
+      "statement": "For all scalar-free equiprobable projection partitions and all label multisets, the explicit dimension threshold in report.md gives ||B_W||<=5 sqrt((r-1)!)d^(-(r-1)/2) and the common through-label squared sum <=26, simultaneously through any finite N.",
+      "status": "open",
+      "depends_on": ["C_CUT289", "C_MATCH289", "C_COMB289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/free_word_audit/report.md", "research/free_word_audit/exact_certificate.json"]
+    },
+    "C_UNIVERSAL289": {
+      "statement": "For every epsilon>0 a universal delta>0 makes any two unital von Neumann algebras on any complex Hilbert space at KK distance below delta conjugate by a unitary u with ||u-I||<epsilon (Universal manuscript thm:main).",
+      "status": "open",
+      "depends_on": ["C_FINITE289", "C_MODULAR289", "C_CORE289", "C_REDUCTIONS289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/01-introduction.tex"]
+    },
+    "C_AMP289": {
+      "statement": "An absolute C_amp bounds ||ad_h|M||_cb by C_amp ||ad_h|M|| for every separably acting II_1 factor, every representation and selfadjoint h (thm:amplification).",
+      "status": "open",
+      "depends_on": ["C_COLUMN289", "C_FW289", "C_TL289", "C_LIFTS289", "C_SCALAR_RECOVERY289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/03-amplification.tex"]
+    },
+    "C_COLUMN289": {
+      "statement": "For every unital represented Cstar algebra A and h, ||([h,a_i])||_col <=8 ||ad_h|A|| ||(a_i)||_col (lem:column-commutator).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/03-amplification.tex"]
+    },
+    "C_LIFTS289": {
+      "statement": "For every matrix level n, P=M_n(M) has an ultrapower Haar unitary scalar-free from P with full-matrix unitary lifts s_j satisfying ||[I_n tensor h,s_j]||<=2||ad_h|M|| (lem:free-lifts).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/03-amplification.tex"]
+    },
+    "C_SCALAR_RECOVERY289": {
+      "statement": "The controlled lifts, clipping and scalar recovery arguments after cor:through-label imply the claimed positive scalar weak limit detecting all matrix commutators; this downstream burden is not settled by the present mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/03-amplification.tex"]
+    },
+    "C_BOUNDARY289": {
+      "statement": "The boundary correction, intertwiner and diagonal-unitary implications lem:boundary-correction, lem:boundary-intertwiner and lem:boundary-diagonal-unitary hold with their stated uniform bounds (Section 04).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/04-boundary.tex"]
+    },
+    "C_FINITE289": {
+      "statement": "The finite-factor uniform stability theorem thm:finite follows with uniform constants as stated in Section 05.",
+      "status": "open",
+      "depends_on": ["C_AMP289", "C_BOUNDARY289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/05-finite.tex"]
+    },
+    "C_MODULAR289": {
+      "statement": "Prepared-pair, modular-graph/cut and modular-alignment implications (prop:prepared-pair, prop:modular-graphs, cor:modular-cuts, prop:modular-alignment) and normalizer correction in Sections 06-07 are valid.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/06-modular-preparation.tex", "research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/07-modular-alignment.tex"]
+    },
+    "C_CORE289": {
+      "statement": "Core descent prop:core-descent and the uniform separably acting factor theorem thm:factors hold as stated in Section 08.",
+      "status": "open",
+      "depends_on": ["C_FINITE289", "C_MODULAR289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/08-cores.tex"]
+    },
+    "C_REDUCTIONS289": {
+      "statement": "Center matching, fiber-gap, measurable implementers, separable tests and thm:separable-algebras in Section 09 extend the factor theorem to the full arbitrary-cardinality main theorem.",
+      "status": "open",
+      "depends_on": ["C_CORE289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Universal-strong-Kadison-Kastler-stability-September-23-2026/build/sections/09-reductions.tex"]
+    },
+    "C_NEAR289": {
+      "statement": "There are common-identity von Neumann pairs M_n,N_n on separable H_n with one-sided gap gamma(M_n,N_n)->0, but a fixed epsilon_0>0 lower-bounds ||u-I|| for every spatial embedding u M_n u* subset N_n for all sufficiently large n (Near-Inclusions thm:main).",
+      "status": "open",
+      "depends_on": ["C_NEAR_CONSTRUCTION289", "C_CLOCK_CORNER289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-Inclusions-of-von-Neumann-Algebras-Without-Small-Spatial-Embeddings-October-5-2026/build/sections/introduction.tex"]
+    },
+    "C_NEAR_CONSTRUCTION289": {
+      "statement": "The uniform Fourier circle construction prop:circle and near-inclusion estimate prop:near convert a vanishing unitary commutator into vanishing one-sided gap.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-Inclusions-of-von-Neumann-Algebras-Without-Small-Spatial-Embeddings-October-5-2026/build/sections/circle.tex", "research/openai_manuscript/Near-Inclusions-of-von-Neumann-Algebras-Without-Small-Spatial-Embeddings-October-5-2026/build/sections/near.tex"]
+    },
+    "C_CLOCK_CORNER289": {
+      "statement": "The clock/shift obstruction lem:clock and corner recovery lem:corner rule out small spatial embeddings despite the small commutator.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-Inclusions-of-von-Neumann-Algebras-Without-Small-Spatial-Embeddings-October-5-2026/build/sections/obstruction.tex"]
+    },
+    "C_CSTAR289": {
+      "statement": "For every epsilon>0 there exist common-identity norm-separable Cstar algebras A,B on a separable H with KK(A,B)<epsilon and A''=B'', but no unitary spatially conjugates A and B (Cstar manuscript thm:main).",
+      "status": "open",
+      "depends_on": ["C_CSTAR_INVARIANT289", "C_CSTAR_NORM289"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Close-Separable-Cstar-Algebras-Without-Spatial-Conjugacy-October-5-2026/build/main.tex"]
+    },
+    "C_CSTAR_INVARIANT289": {
+      "statement": "The sequence-space invariant prop:sequences/lem:invariant/cor:obstruction and the tree deformation lem:tree give the claimed nonconjugacy obstruction.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Close-Separable-Cstar-Algebras-Without-Spatial-Conjugacy-October-5-2026/build/main.tex"]
+    },
+    "C_CSTAR_NORM289": {
+      "statement": "Absorption, ambient representation, good/bad inclusions and free-norm comparison (lem:absorption, lem:ambient, lem:good-inclusion, lem:free-norm, lem:bad-inclusion) supply the closeness and common bicommutant of the Cstar construction.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Close-Separable-Cstar-Algebras-Without-Spatial-Conjugacy-October-5-2026/build/main.tex"]
+    }
+  }
+}

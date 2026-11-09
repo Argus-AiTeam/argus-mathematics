@@ -1,0 +1,190 @@
+{
+  "goal": "C9000150",
+  "routes": [],
+  "nodes": {
+    "C9000150": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 150 (Weak mixing of triangular billiards with an irrational angle.; papers: Weak mixing of triangular billiards with an irrational angle; Ergodicity of triangular billiards with an irrational angle; Lean status: Partially/Comparator formalized (lean/docs/150.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_SR"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "S_SCOPE_FM": {
+      "statement": "Forni-Moll Corollary 4.2 assumes horizontal H^(1,0) regularity and does not directly supply measurable spectral rigidity.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_rigidity/report.md"]
+    },
+    "L_DOUBLE": {
+      "statement": "The triangle double carries an almost-everywhere complete Liouville-preserving regular geodesic flow, with the billiard flow as factor.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/geometry.tex",
+        "research/spectral_rigidity/report.md"
+      ]
+    },
+    "C_SR": {
+      "statement": "Weak-mixing Proposition prop:rigidity for every real spectral parameter and bounded measurable flow eigenfunction.",
+      "status": "open",
+      "depends_on": ["L_DOUBLE", "L_SR_SHARP"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/spectral_rigidity/report.md",
+        "research/spectral_rigidity/exact_certificate.json"
+      ]
+    },
+    "L_SR_ALGEBRA": {
+      "statement": "Arbitrary-index consecutive spectral telescoping and the sharp two-boundary-mode energy algebra.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/spectral_rigidity/Main.lean",
+        "research/spectral_rigidity/statement_fidelity.md",
+        "research/spectral_rigidity/lean_verify.json",
+        "research/spectral_rigidity/certificates/L_SR_ALGEBRA-37129f9529c64acd.json",
+        "research/spectral_rigidity/verify.py",
+        "research/spectral_rigidity/exact_certificate.json"
+      ]
+    },
+    "L_SR_SMOOTH": {
+      "statement": "Spatial regularization with derivative, support, commutation, and approximate-identity properties on the regular cone surface.",
+      "status": "open",
+      "depends_on": ["L_DOUBLE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/energy.tex"]
+    },
+    "L_SR_ENERGY": {
+      "statement": "The localized coefficient estimate including the lambda-squared correction.",
+      "status": "open",
+      "depends_on": ["L_SR_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/energy.tex"]
+    },
+    "L_SR_MODES": {
+      "statement": "Uniform individual coefficient-gradient bounds for bounded local distributional solutions, without summability.",
+      "status": "open",
+      "depends_on": ["L_SR_ENERGY", "L_SR_SMOOTH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/energy.tex"]
+    },
+    "L_SR_TAIL": {
+      "statement": "The full upper Fourier tail has exactly the two lower boundary modes under A=X-i lambda.",
+      "status": "open",
+      "depends_on": ["L_SR_MODES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/rigidity.tex"]
+    },
+    "L_SR_AVERAGE": {
+      "statement": "Safe length-T segment averages with T=s/epsilon have discarded measure O(s+epsilon^2), residual O(epsilon/s), and the required cone-clear support.",
+      "status": "open",
+      "depends_on": ["L_DOUBLE", "L_SR_SMOOTH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/rigidity.tex"]
+    },
+    "L_SR_LIMIT1": {
+      "statement": "At fixed s, bounded YAw converges weakly to zero; test closure and coefficient weak limits transfer the pairing to an exact bounded local solution h_s.",
+      "status": "open",
+      "depends_on": ["L_SR_AVERAGE", "L_SR_TAIL", "L_SR_ENERGY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/rigidity.tex"]
+    },
+    "L_SR_LIMIT2": {
+      "statement": "The individual-coefficient lemma restores s-independent bounds for h_s and transfers the endpoint pairing as s tends to zero.",
+      "status": "open",
+      "depends_on": ["L_SR_LIMIT1", "L_SR_MODES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/rigidity.tex"]
+    },
+    "L_SR_ENDPOINT": {
+      "statement": "The two-boundary-mode pairing vanishes and gives endpoint energy at most lambda^2/4 times the two coefficient masses.",
+      "status": "open",
+      "depends_on": ["L_SR_LIMIT2", "L_SR_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_rigidity/report.md"]
+    },
+    "L_SR_SHARP": {
+      "statement": "Summing the endpoint energies gives horizontal L2 regularity and forces Yf=0 with equality.",
+      "status": "open",
+      "depends_on": ["L_SR_ENDPOINT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_rigidity/report.md"]
+    },
+    "L_WM_EIGEN": {
+      "statement": "Weak-mixing Proposition prop:eigenfunctions: irrational-vertex reflection phases eliminate all nonconstant L2 billiard eigenfunctions.",
+      "status": "open",
+      "depends_on": ["L_DOUBLE", "C_SR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/conclusion.tex"]
+    },
+    "L_WM_SPECTRAL": {
+      "statement": "Weak-mixing Lemma lem:spectral: no nonconstant eigenfunctions implies ergodicity of the full self-product flow.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/conclusion.tex"]
+    },
+    "C_WM_MAIN": {
+      "statement": "Weak-mixing Theorem thm:main: the full Liouville flow of every nondegenerate irrational-angle triangle has ergodic self-product.",
+      "status": "open",
+      "depends_on": ["L_DOUBLE", "L_WM_EIGEN", "L_WM_SPECTRAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-mixing-of-triangular-billiards-with-an-irrational-angle-October-5-2026/build/sections/introduction.tex"]
+    },
+    "L_ERG_SMOOTH": {
+      "statement": "Companion Lemma lem:smoothing, main.tex:303-364, including its fixed-input small derivative property and adjoint identity.",
+      "status": "open",
+      "depends_on": ["L_DOUBLE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Ergodicity-of-triangular-billiards-with-an-irrational-angle-September-25-2026/build/source/main.tex"]
+    },
+    "L_ERG_ENERGY": {
+      "statement": "Companion Lemma lem:energy, main.tex:378-423, for compactly supported w and defect supported over E.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Ergodicity-of-triangular-billiards-with-an-irrational-angle-September-25-2026/build/source/main.tex"]
+    },
+    "L_ERG_MODES": {
+      "statement": "Companion Lemma lem:bounded-modes, main.tex:425-461, for bounded local solutions Xh=0.",
+      "status": "open",
+      "depends_on": ["L_ERG_SMOOTH", "L_ERG_ENERGY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Ergodicity-of-triangular-billiards-with-an-irrational-angle-September-25-2026/build/source/main.tex"]
+    },
+    "L_ERG_RIGIDITY": {
+      "statement": "Companion Proposition prop:rigidity, main.tex:476-676: every bounded invariant function has parallel Fourier coefficients.",
+      "status": "open",
+      "depends_on": ["L_ERG_MODES", "L_ERG_SMOOTH", "L_ERG_ENERGY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Ergodicity-of-triangular-billiards-with-an-irrational-angle-September-25-2026/build/source/main.tex"]
+    },
+    "L_ERG_HOLONOMY": {
+      "statement": "Irrational cone holonomy eliminates all nonzero parallel angular degrees; degree zero is constant.",
+      "status": "open",
+      "depends_on": ["L_DOUBLE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Ergodicity-of-triangular-billiards-with-an-irrational-angle-September-25-2026/build/source/main.tex"]
+    },
+    "C_ERG_MAIN": {
+      "statement": "Companion Theorem thm:main, main.tex:88-104: every nondegenerate irrational-angle triangle has ergodic full Liouville billiard flow.",
+      "status": "open",
+      "depends_on": ["L_DOUBLE", "L_ERG_RIGIDITY", "L_ERG_HOLONOMY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Ergodicity-of-triangular-billiards-with-an-irrational-angle-September-25-2026/build/source/main.tex"]
+    },
+    "C_SR_L2": {
+      "statement": "The same transverse rigidity and exact energy equality hold for every complex L2 flow eigenfunction, by bounded equivariant truncation and closedness of weak derivatives.",
+      "status": "open",
+      "depends_on": ["C_SR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_rigidity/report.md"]
+    }
+  }
+}

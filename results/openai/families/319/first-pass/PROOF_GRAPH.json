@@ -1,0 +1,205 @@
+{
+  "goal": "C9000319",
+  "active_mission_goal": "C_OBS_GROWTH",
+  "dependency_scope": "The campaign dependencies below describe the verification route. An admissible refutation is an alternative route, not a proof of the manuscript's main theorem.",
+  "routes": [
+    {
+      "name": "universal-joint-kernel-verification",
+      "status": "current",
+      "evidence": "research/joint_kernel/report.md"
+    },
+    {
+      "name": "admissible-joint-kernel-counterexample",
+      "status": "untried",
+      "evidence": "OBJECTIVE.md"
+    }
+  ],
+  "nodes": {
+    "C9000319": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 319 (Counterexamples to finite generation at chromatic height two.; papers: Counterexamples to the Hahn-Wilson conjecture at height two; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN": {
+      "statement": "For sufficiently large p, the manuscript constructs a connective p-complete spectrum X of exact fp-type two, outside Thick(BP<2>_p-complete), with L_2^f X = L_2 X and L_T(2) X = L_K(2) X (thm:main).",
+      "status": "open",
+      "depends_on": ["C_TRANSFER", "C_EXACT_TYPE", "C_TELESCOPES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/main.tex"]
+    },
+    "C_CHART": {
+      "statement": "The actual height-two chart has faithful tangent-to-identity H-action on k[[x]], Gamma_s = H(2s+1), g_i^(p^s) in Gamma_s, and gr k[[H]] = k[A,B,C] with weights 1,1,3 (geom:thickened-charts, geom:group-filtration, geom:skew-filtration).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/geometry.tex"]
+    },
+    "C_ORBIT_INPUTS": {
+      "statement": "Orbit congruences z_h = h(x)/x have nested finite-index subgroups H_l, balanced representatives b_j, exact congruence counts, and sum_l 1/N_l <= p/(p-1) (op:displacement and the balanced-sequence construction).",
+      "status": "open",
+      "depends_on": ["C_CHART"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/operator.tex"]
+    },
+    "C_LEVEL_INPUTS": {
+      "statement": "For every s >= 1, Gamma_s is contained in H_(p^s) and N_(p^s) >= p^(3(s-1)) (op:displacement).",
+      "status": "open",
+      "depends_on": ["C_CHART", "C_ORBIT_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/operator.tex"]
+    },
+    "C_ORBIT_LATTICE": {
+      "statement": "A family independent modulo x^n gives an integral orbit-function lattice of the same rank; its reduction is injective, and every coefficient in this lattice has valuation at least -3(n+L_0).",
+      "status": "open",
+      "depends_on": ["C_ORBIT_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/joint_kernel/report.md", "research/joint_kernel/exact_certificate.json"]
+    },
+    "C_RESIDUE_LEVEL": {
+      "statement": "Residues of the orbit lattice are represented by integral-valued polynomials of degree J = 3n+4L_0 and factor through H/Gamma_s when N_(p^s) > J.",
+      "status": "open",
+      "depends_on": ["C_ORBIT_LATTICE", "C_ORBIT_INPUTS", "C_LEVEL_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/joint_kernel/report.md", "research/joint_kernel/exact_certificate.json"]
+    },
+    "C_SEMILINEAR_ANN": {
+      "statement": "Both equations integral h(mu(g)) phi(hg) = 0 persist under K_0-linear orbit-function combinations and reduce to annihilation of all left translates of bar a_1 and bar b_1.",
+      "status": "open",
+      "depends_on": ["C_ORBIT_LATTICE", "C_RESIDUE_LEVEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/joint_kernel/report.md", "research/joint_kernel/exact_certificate.json"]
+    },
+    "C_GROUP_QUOTIENT": {
+      "statement": "If (sigma(bar a_1)) = (C), sigma(bar b_1) is outside (C), and t = p^s, then dim Omega/(Omega bar a_1 + Omega bar b_1 + ker(Omega -> k[H/Gamma_s])) <= d t, where d is the degree of sigma(bar b_1) modulo C.",
+      "status": "open",
+      "depends_on": ["C_CHART"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/joint_kernel/report.md", "research/joint_kernel/exact_certificate.json"]
+    },
+    "C_OBS_GROWTH": {
+      "statement": "Under the exact hypotheses of obs:growth, every n >= 1 and fixed L_0 >= 0 satisfy dim_k image({f in x^(-L_0)R: a_1(f)=b_1(f)=0} -> K_0/x^n R) = O((1+n)^(1/3)).",
+      "status": "open",
+      "depends_on": ["C_ORBIT_LATTICE", "C_RESIDUE_LEVEL", "C_SEMILINEAR_ANN", "C_GROUP_QUOTIENT"],
+      "reviewer_confirmed": false,
+      "engineer_result": "Universal prose proof gives v(n)^3 <= D^3 p^6 (3n+4L_0); exact subclaim replay passed. Three upstream chart assumptions and independent Reviewer acceptance remain outstanding.",
+      "evidence": ["research/joint_kernel/report.md", "research/joint_kernel/verify.py", "research/joint_kernel/exact_certificate.json"]
+    },
+    "C_OPERATOR": {
+      "statement": "The prescribed integral operator has reduction U_3 and initial symbol C, finite crossing, and persistent unmatched rows and columns of growth exponent beta > 1/3 (op:operator).",
+      "status": "open",
+      "depends_on": ["C_ORBIT_INPUTS", "C_DIVIDED_DIFFERENCES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/operator.tex"]
+    },
+    "C_GLUE": {
+      "statement": "The paired overlap lattice produces U with finite homotopy in each degree and completion Y, and supplies at least c N^beta simultaneous pairs independent at Laurent precision qN+1 (glue:overlap, glue:pairs, glue:object).",
+      "status": "open",
+      "depends_on": ["C_OPERATOR", "C_COMPLETION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/gluing.tex"]
+    },
+    "C_MICROLOCAL": {
+      "statement": "The coefficient extension to S[t^+-1] is flat on both sides; S is a left and right principal domain and S/aS is nonzero torsion (obs:microlocal-flat, obs:principal).",
+      "status": "open",
+      "depends_on": ["C_CHART", "C_OPERATOR", "C_COMPLETION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/obstruction.tex"]
+    },
+    "C_DUAL_GHOST": {
+      "statement": "For every global map g:U -> P with P in Thick(T'), vanishing of microlocal ordinary homology implies vanishing of microlocal dual homology (obs:dual-ghost).",
+      "status": "open",
+      "depends_on": ["C_OBS_GROWTH", "C_GLUE", "C_MICROLOCAL", "C_ANNIHILATOR_REMOVAL", "C_ADJOINT", "C_GLOBAL_MAPS", "C_COMPLETION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/obstruction.tex"]
+    },
+    "C_TOWER": {
+      "statement": "The two-test torsion criterion excludes all finite towers and retracts, not merely finite sums (rew:obs:tower-criterion).",
+      "status": "open",
+      "depends_on": ["C_PERIODIC_SPLITTING", "C_TOWER_NORMAL_FORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/obstruction.tex"]
+    },
+    "C_NONMEMBERSHIP": {
+      "statement": "The glued object U does not belong to Thick(T') (obs:nonmembership).",
+      "status": "open",
+      "depends_on": ["C_DUAL_GHOST", "C_TOWER", "C_MICROLOCAL", "C_GLUE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/obstruction.tex"]
+    },
+    "C_TRANSFER": {
+      "statement": "Comparison and connective-cover transfer turn U into a connective p-complete fp-type-at-most-two spectrum outside the prescribed finite-construction category (transfer:criterion).",
+      "status": "open",
+      "depends_on": ["C_NONMEMBERSHIP", "C_GLUE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/transfer.tex"]
+    },
+    "C_EXACT_TYPE": {
+      "statement": "The transferred spectrum has exact fp-type two (scope:exact-height).",
+      "status": "open",
+      "depends_on": ["C_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/consequences.tex"]
+    },
+    "C_TELESCOPES": {
+      "statement": "The transferred spectrum satisfies both asserted finite/Bousfield and T(2)/K(2) localization comparisons (scope:telescopes).",
+      "status": "open",
+      "depends_on": ["C_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/consequences.tex"]
+    },
+    "C_DIVIDED_DIFFERENCES": {
+      "statement": "The balanced divided-difference operators D_m are integral, kill u_g^j for j<m, take u_g^m to x^r_m, and take u_g^j for j>m into x^(r_m+j-m)R (op:divided-differences).",
+      "status": "open",
+      "depends_on": ["C_ORBIT_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/operator.tex"]
+    },
+    "C_COMPLETION": {
+      "statement": "Completion is exact; completed finite constructions admit strict realization by perfect operation modules, and maps between the relevant objects induce continuous overlap maps (complete:fracture, complete:realization, complete:topology).",
+      "status": "open",
+      "depends_on": ["C_CHART"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/completion.tex"]
+    },
+    "C_ANNIHILATOR_REMOVAL": {
+      "statement": "A right x-saturated ideal J containing a Delta with JS=S has an integral member whose reduced symbol is outside (C); separately, an operator outside Sa annihilating V in ker(a) yields an integral annihilator of V with reduced symbol outside (C) (obs:right-annihilator).",
+      "status": "open",
+      "depends_on": ["C_MICROLOCAL", "C_OPERATOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/obstruction.tex"]
+    },
+    "C_ADJOINT": {
+      "statement": "The constant-term pairing gives every integral operator an integral adjoint; reduction induces group inversion and preserves both symbol conditions of obs:growth (obs:adjoint).",
+      "status": "open",
+      "depends_on": ["C_CHART"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/obstruction.tex"]
+    },
+    "C_GLOBAL_MAPS": {
+      "statement": "Global maps out of the glued object preserve the discrete overlap lattice images needed in the paired-lattice argument (glue:global-maps).",
+      "status": "open",
+      "depends_on": ["C_GLUE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/gluing.tex"]
+    },
+    "C_PERIODIC_SPLITTING": {
+      "statement": "Over a left and right principal domain, finite modules split into finite free and torsion parts with free resolution length at most one; perfect positive-even-periodic dg modules split into periodizations of homology (obs:periodic-splitting).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/obstruction.tex"]
+    },
+    "C_TOWER_NORMAL_FORM": {
+      "statement": "Every object in Thick(T_0) is a retract of a finite tower whose layers are finite sums of arbitrary shifts of T_0 (rew:obs:tower-normal-form).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Counterexamples-to-the-Hahn-Wilson-conjecture-at-height-two-September-26-2026/build/sections/obstruction.tex"]
+    }
+  }
+}

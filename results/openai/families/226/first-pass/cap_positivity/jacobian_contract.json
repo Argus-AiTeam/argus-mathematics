@@ -1,0 +1,85 @@
+{
+  "protocol_version": "2025-11-25",
+  "schema_version": 1,
+  "server": {
+    "description": "Search and run atomic, composable Jacobian tools for higher mathematics.",
+    "icons": null,
+    "name": "jacobian",
+    "title": "Jacobian Mathematical Workbench",
+    "version": "0.14.0",
+    "websiteUrl": null
+  },
+  "transport": "mcp-stdio",
+  "operation_id": "graph.polynomial.matching.compute",
+  "description": "Compute the exact matching polynomial M_G(x) of a finite simple graph by the deletion recurrence on graphs with at most 16 vertices.",
+  "input_schema": {
+    "$defs": {
+      "GraphEdge": {
+        "additionalProperties": false,
+        "description": "One undirected edge between two non-negative vertex indices.",
+        "properties": {
+          "u": {"minimum": 0, "title": "U", "type": "integer"},
+          "v": {"minimum": 0, "title": "V", "type": "integer"}
+        },
+        "required": ["u", "v"],
+        "title": "GraphEdge",
+        "type": "object"
+      },
+      "GraphSpec": {
+        "additionalProperties": false,
+        "description": "A finite simple undirected graph as vertex count + edge list.",
+        "properties": {
+          "edges": {
+            "default": [],
+            "items": {"$ref": "#/$defs/GraphEdge"},
+            "maxItems": 512,
+            "title": "Edges",
+            "type": "array"
+          },
+          "vertex_count": {
+            "maximum": 64,
+            "minimum": 0,
+            "title": "Vertex Count",
+            "type": "integer"
+          }
+        },
+        "required": ["vertex_count"],
+        "title": "GraphSpec",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Request a matching polynomial on a graph this recurrence can exhaust.",
+    "properties": {"graph": {"$ref": "#/$defs/GraphSpec"}},
+    "required": ["graph"],
+    "title": "MatchingPolynomialRequest",
+    "type": "object"
+  },
+  "output_schema": {
+    "$defs": {
+      "PolynomialTerm": {
+        "additionalProperties": false,
+        "description": "One monomial term: coefficient times x^degree.",
+        "properties": {
+          "coefficient": {"title": "Coefficient", "type": "integer"},
+          "degree": {"minimum": 0, "title": "Degree", "type": "integer"}
+        },
+        "required": ["coefficient", "degree"],
+        "title": "PolynomialTerm",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "A sparse polynomial represented as a list of (coefficient, degree) terms.",
+    "properties": {
+      "terms": {
+        "items": {"$ref": "#/$defs/PolynomialTerm"},
+        "title": "Terms",
+        "type": "array"
+      }
+    },
+    "required": ["terms"],
+    "title": "GraphPolynomialResult",
+    "type": "object"
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "goal": "C9000016",
+  "routes": [
+    {"name": "R_SHARED_VERIFY", "goal": "C_SHARED_RESULT", "obligations": ["C_SHARED_VERIFY"], "status": "current", "evidence": "research/shared_interpolation/interpolation.md"},
+    {"name": "R_SHARED_OBSTRUCT", "goal": "C_SHARED_RESULT", "obligations": ["C_SHARED_OBSTRUCTION"], "status": "parked", "evidence": "research/shared_interpolation/interpolation.md"},
+    {"name": "R_LOG_GENERALIZATION", "goal": "C_SHARED_VERIFY", "obligations": ["C_SHARED_GENERAL"], "status": "current", "evidence": "research/shared_interpolation/interpolation.md"},
+    {"name": "R_GR_MISSING_NUMERATOR", "goal": "C9000016", "status": "ruled_out", "retired_because": "The primary period theorem has the degree numerator; omission of that numerator is not an available attack.", "evidence": "research/shared_interpolation/interpolation.md"},
+    {"name": "R_DO_AUTOMATIC_HEIGHT", "goal": "C9000016", "status": "ruled_out", "retired_because": "Daw-Orr conditional finiteness requires large Galois orbits and does not independently supply unrestricted height bounds.", "evidence": "research/shared_interpolation/interpolation.md"},
+    {"name": "R_KPS_PREPRINT_NUMBERING", "goal": "C9000016", "status": "ruled_out", "retired_because": "The apparent projection-locator mismatch arises only in arXiv v1; the published author PDF correctly has the projection estimate at Lemma 2.6.", "evidence": "research/shared_interpolation/kps_published.txt"}
+  ],
+  "nodes": {
+    "C9000016": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 016 (Zilber–Pink in abelian varieties and the Siegel threefold.; papers: The abelian Zilber–Pink conjecture; The E×CM component of Zilber–Pink for curves in A2; Quaternionic division points on curves in the Siegel threefold; Elliptic squares and Zilber–Pink for curves in A2; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_SHARED_RESULT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SHARED_RESULT": {
+      "statement": "The common interpolation mechanism has a source-faithful, independently reviewable exact obstruction or a parameter-uniform verification theorem; this does not assert the four applications.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "remaining_review": ["Theorem U proof and complete source coverage", "formal statement fidelity", "independent primary-source attribution", "novelty and publishable significance"],
+      "evidence": ["research/shared_interpolation/interpolation.md", "research/shared_interpolation/exact_certificate.json", "research/shared_interpolation/verification_result.json"]
+    },
+    "C_AB_MAIN": {
+      "statement": "Every irreducible subvariety X of an abelian variety over a number field has finitely many maximal atypical subvarieties in its special closure (thm:main).",
+      "status": "open", "depends_on": ["C_AB_OPTIMAL", "C_AB_MAXIMAL_OPTIMAL"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Abelian-Zilber-Pink-Conjecture-September-24-2026/build/sections/01-introduction.tex", "research/openai_manuscript/The-Abelian-Zilber-Pink-Conjecture-September-24-2026/build/sections/09-finiteness.tex"]
+    },
+    "C_AB_NONDENSITY": {
+      "statement": "The abelian manuscript's thm:nondensity asserts non-density of X intersect A^[dim X+1] under its stated nondegeneracy hypotheses; those hypotheses and its proof remain unaudited.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Abelian-Zilber-Pink-Conjecture-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "C_AB_OPTIMAL": {
+      "statement": "The abelian manuscript's prop:optimal-finite deduces finiteness of optimal subvarieties from non-density and the Barroero-Dill reduction.",
+      "status": "open", "depends_on": ["C_AB_NONDENSITY", "C_BD_REDUCTION"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Abelian-Zilber-Pink-Conjecture-September-24-2026/build/sections/09-finiteness.tex"]
+    },
+    "C_AB_MAXIMAL_OPTIMAL": {
+      "statement": "Every maximal atypical subvariety in the abelian manuscript's special closure is optimal (lem:maximal-optimal).",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Abelian-Zilber-Pink-Conjecture-September-24-2026/build/sections/09-finiteness.tex"]
+    },
+    "C_BD_REDUCTION": {
+      "statement": "The external Barroero-Dill Theorem 1.9 applies to the non-density-to-optimal-finiteness reduction as used in the abelian manuscript; source applicability is not yet checked.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Abelian-Zilber-Pink-Conjecture-September-24-2026/build/sections/09-finiteness.tex"]
+    },
+    "C_ECM_MAIN": {
+      "statement": "A reduced irreducible closed Hodge-generic curve C in A_2 over Qbar contains only finitely many points whose abelian surface is isogenous to E_1 x E_2 with at least one E_i CM (thm:main).",
+      "status": "open", "depends_on": ["C_ECM_ORBITS", "C_DO_CONDITIONAL", "C_AO"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-E-times-CM-Component-of-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/paper.tex"]
+    },
+    "C_ECM_ORBITS": {
+      "statement": "The E-times-CM manuscript claims a lower bound c times complexity(s)^(1/42) for the Galois orbit of every mixed point (thm:orbits).",
+      "status": "open", "depends_on": ["C_ECM_HEIGHT_PERIOD"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-E-times-CM-Component-of-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/paper.tex"]
+    },
+    "C_ECM_HEIGHT_PERIOD": {
+      "statement": "The E-times-CM manuscript's gluing, height, essential-period and arithmetic-complexity estimates jointly give its mixed-point orbit bound; application hypotheses remain unchecked.",
+      "status": "open", "depends_on": ["C_GR_PERIOD"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-E-times-CM-Component-of-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/paper.tex"]
+    },
+    "C_DO_CONDITIONAL": {
+      "statement": "Daw-Orr arXiv:1902.10483v4 Theorem 1.2 gives finiteness of the non-special E-times-CM intersection of a Hodge-generic curve under Conjecture 1.3, the large-Galois-orbit hypothesis; it does not itself give an unrestricted height estimate.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/shared_interpolation/interpolation.md", "research/shared_interpolation/daw_orr_v4.txt"]
+    },
+    "C_GR_PERIOD": {
+      "statement": "Gaudron-Remond Theorem 1.2 has a factor (deg_L A)^(1/g) in the numerator of its averaged inverse-square essential-period bound and a dimension-only constant; the missing-numerator attack is excluded.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/shared_interpolation/interpolation.md", "research/shared_interpolation/gaudron_remond.txt"]
+    },
+    "C_AO": {
+      "statement": "The cited Andre-Oort theorem implies that a Hodge-generic algebraic curve in A_2 has finitely many special points; the primary source applicability has not been audited here.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/08-finiteness.tex"]
+    },
+    "C_QM_MAIN": {
+      "statement": "For a reduced irreducible closed Hodge-generic curve C in A_2 over Qbar, points with End^0(A_s) an indefinite quaternion division algebra over Q form a finite set (thm:main).",
+      "status": "open", "depends_on": ["C_QM_HEIGHT", "C_QM_COUNTING"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/00-introduction.tex"]
+    },
+    "C_QM_HEIGHT": {
+      "statement": "At quaternionic division points, max(2,h(s)) is bounded polynomially in max(2,[K(s):K]) (thm:height).",
+      "status": "open", "depends_on": ["C_SHARED_VERIFY", "C_QM_COMMON_RELATIONS", "C_QM_NONIDENTITY"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/04-height.tex"]
+    },
+    "C_QM_COMMON_RELATIONS": {
+      "statement": "The quaternionic application supplies common equations and global, local-positive-logarithm, coefficient and tail bounds required by thm:interpolation.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/04-height.tex"]
+    },
+    "C_QM_NONIDENTITY": {
+      "statement": "The quaternionic application's prop:nonidentity supplies nonidentity on every relevant algebraic normalization branch, including descended varieties.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/04-height.tex"]
+    },
+    "C_QM_COUNTING": {
+      "statement": "Quaternionic points satisfying h(t) <= A d(t)^kappa on the fixed Hodge-generic curve form a finite set (prop:counting-finiteness).",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/05-counting.tex"]
+    },
+    "C_ES_FULL": {
+      "statement": "For every nonempty reduced irreducible closed Hodge-generic curve C in A_2 over Qbar, its intersection with the union of special subvarieties of dimension at most one is finite (intro:zp).",
+      "status": "open", "depends_on": ["C_ES_SQUARES", "C_ECM_MAIN", "C_QM_MAIN", "C_ES_CLASSIFICATION", "C_AO"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/01-introduction.tex", "research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/08-finiteness.tex"]
+    },
+    "C_ES_SQUARES": {
+      "statement": "A nonempty reduced irreducible closed Hodge-generic curve C in A_2 over Qbar contains only finitely many elliptic-square points (intro:squares).",
+      "status": "open", "depends_on": ["C_ES_HEIGHT", "C_ES_COUNTING"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "C_ES_HEIGHT": {
+      "statement": "The elliptic-square height conclusion nid:height follows if its local inputs and universal branch nonidentity meet int:height.",
+      "status": "open", "depends_on": ["C_SHARED_VERIFY", "C_ES_LOCAL", "C_ES_NONIDENTITY"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/07-nonidentities.tex"]
+    },
+    "C_ES_LOCAL": {
+      "statement": "The elliptic-square application's loc:groups supplies conditions (i)-(iii) of int:height.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/06-local-equations.tex"]
+    },
+    "C_ES_NONIDENTITY": {
+      "statement": "The elliptic-square application's nid:nonidentity supplies condition (iv) of int:height on all relevant branches.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/07-nonidentities.tex"]
+    },
+    "C_ES_COUNTING": {
+      "statement": "The elliptic-square manuscript's arithmetic orbit growth and definable counting argument convert its height bound into intro:squares; this argument remains unaudited.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/08-finiteness.tex"]
+    },
+    "C_ES_CLASSIFICATION": {
+      "statement": "The classification used in fin:classification reduces non-special points on special curves in A_2 to E-times-CM, non-CM elliptic-square, or indefinite quaternion division cases.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/08-finiteness.tex"]
+    },
+    "C_SHARED_VERIFY": {
+      "statement": "Under every hypothesis of elliptic int:height and quaternionic thm:interpolation, the height parameter h is polynomially bounded in d, uniformly in coefficient fields and varying descended branches.",
+      "status": "open", "depends_on": ["C_SHARED_GENERAL"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/02-interpolation.tex", "research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/09-interpolation-proof.tex", "research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/02-interpolation.tex"]
+    },
+    "C_SHARED_ALGEBRA": {
+      "statement": "Fixed-dimensional Groebner, actual-ideal membership, elimination, component and equation-recovery operations have polynomial degree bounds and bounds linear in joint logarithmic coefficient height, with no coefficient-field-degree loss.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/09-interpolation-proof.tex"]
+    },
+    "C_SHARED_ZERO": {
+      "statement": "Allowed nonzero ordinary differential expressions have divisorial order divided by ord(a) bounded polynomially in the degree of the varying algebraic branch, independently of coefficient heights (int:multiplicity; lem:zero-estimate).",
+      "status": "open", "depends_on": ["C_LOG_ZERO"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/09-interpolation-proof.tex", "research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/02-interpolation.tex"]
+    },
+    "C_SHARED_GRAPH": {
+      "statement": "If f/a^m has a pole on every normalized boundary divisor of a k-dimensional affine irreducible W, its graph boundary projected to W and the constrained graph boundary a=q+g=0 have dimension at most k-2.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/09-interpolation-proof.tex", "research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/02-interpolation.tex"]
+    },
+    "C_SHARED_LAYER": {
+      "statement": "The constrained codimension-two graph boundary yields a nonzero-on-W' polynomial P of degree <= L in the actual ideal (I,a^n,F_n), for n=rL with arbitrary prescribed polynomial r, with polynomial degree and logarithmic height controls.",
+      "status": "open", "depends_on": ["C_SHARED_ALGEBRA", "C_SHARED_GRAPH", "C_SHARED_FORMAL_CORE"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/09-interpolation-proof.tex", "research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/02-interpolation.tex"]
+    },
+    "C_SHARED_DESCENT": {
+      "statement": "Actual-ideal evaluation, small positive selected logarithms and the product formula force either a polynomial height bound or a controlled dimension drop; a fixed number of drops terminates.",
+      "status": "open", "depends_on": ["C_SHARED_ALGEBRA", "C_SHARED_ZERO", "C_SHARED_GRAPH", "C_SHARED_LAYER"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Elliptic-Squares-and-Zilber-Pink-for-Curves-in-A2-September-24-2026/build/sections/09-interpolation-proof.tex", "research/openai_manuscript/Quaternionic-Division-Points-on-Curves-in-the-Siegel-Threefold-September-24-2026/build/sections/02-interpolation.tex"]
+    },
+    "C_SHARED_GENERAL": {
+      "statement": "Theorem U in research/shared_interpolation/interpolation.md: the complete common-relation polynomial height implication remains valid for holomorphic horizontal germs of fixed logarithmic connections at fixed centers, evaluated at finitely many fixed polynomial maps a P_i(a,U), under the stated coefficient, tail, selected-logarithm and universal normalization-branch hypotheses.",
+      "status": "open", "depends_on": ["C_SHARED_ALGEBRA", "C_LOG_ZERO", "C_SHARED_GRAPH", "C_SHARED_LAYER", "C_SHARED_DESCENT"], "reviewer_confirmed": false,
+      "evidence": ["research/shared_interpolation/interpolation.md", "research/shared_interpolation/exact_certificate.json", "research/shared_interpolation/verify.py"]
+    },
+    "C_LOG_ZERO": {
+      "statement": "For a holomorphic horizontal solution of a logarithmic connection on a smooth projective curve, a nonzero f=r_0 y satisfies ord_p f <= (2 rho-1)P+Lambda+rho-1 when the first rho derivative rows have a common pole divisor of degree P and residue eigenvalues have absolute value <= Lambda; bounded-degree varying pullbacks consequently have polynomial branch-order bounds independent of coefficient heights.",
+      "status": "open", "depends_on": ["C_SHARED_FORMAL_CORE"], "reviewer_confirmed": false,
+      "evidence": ["research/shared_interpolation/interpolation.md"]
+    },
+    "C_SHARED_FORMAL_CORE": {
+      "statement": "For arbitrary field and matrix rank, a nonzero coefficient solution of t y'=A(t)y has its first nonzero vector coefficient in the residue eigenspace with eigenvalue its index; bounding all natural residue eigenvalues bounds that index. For all natural k,B,B',r,L with L>0 and (k+2)! B' r (2+Br+B)^k<L, one has (k+2)! B'(rL)(1+L+B(rL)+B)^k<L^(k+2).",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "observed_ledger_status": "closed_kernel",
+      "independent_statement_fidelity_review": "pending",
+      "evidence": ["research/shared_interpolation/Main.lean", "research/shared_interpolation/statement_fidelity.md", "research/shared_interpolation/certificates/C_SHARED_FORMAL_CORE-03e8cd78ddc7b92e.json", "research/shared_interpolation/verification_result.json"]
+    },
+    "C_LIT_BB": {
+      "statement": "Bertrand-Beukers 1985 Theorems 1 and 1 bis already bound polynomial-expression orders for a fixed rational differential system with holomorphic solution at zero, including singular zero; the constants depend on the system.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/shared_interpolation/bertrand_beukers.txt"]
+    },
+    "C_LIT_ORR": {
+      "statement": "Orr arXiv:2607.09565v1 Proposition 4.6 and Theorems 4.2 and 5.1 already provide selected-place, field-degree-independent G-function interpolation bounds and actual-specialization-ideal amplification under their finite arithmetic-size and nontriviality hypotheses; this comparison does not establish novelty of Theorem U.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/shared_interpolation/interpolation.md"]
+    },
+    "C_SHARED_OBSTRUCTION": {
+      "statement": "There exists an exact source-faithful obstruction to a literal load-bearing assertion of the shared interpolation proofs; no such obstruction is asserted to have been found at scope.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/shared_interpolation/interpolation.md"]
+    }
+  }
+}

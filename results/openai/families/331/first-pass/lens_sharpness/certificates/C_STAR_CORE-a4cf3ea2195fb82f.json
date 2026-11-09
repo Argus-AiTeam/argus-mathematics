@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_STAR_CORE-5934021f4008",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/331/first-pass/lens_sharpness/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/331/first-pass/lens_sharpness/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16944,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/331/first-pass/lens_sharpness/Main.lean",
+    "source_sha256": "02728d7aa60004138601c6455ba1d573918aa631a44ad438852da81512f4fbbb",
+    "statement_fidelity": "families/331/first-pass/lens_sharpness/statement_fidelity.md",
+    "statement_fidelity_sha256": "22ac360959607e4f7ec2ae6f3a27ae7be6d05568924067f4813cff799f78d337",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/lens_sharpness/Main.lean",
+    "text": "import Mathlib\n\nnamespace LensSharpness\n\ndef starEnergy (u v w : ℝ) : ℝ :=\n  max (u ^ 2 + v ^ 2 + w ^ 2)\n    (max ((u + v) ^ 2 + w ^ 2) ((u + w) ^ 2 + v ^ 2))\n\ndef HasSquaredDualNorm (a b c n : ℝ) : Prop :=\n  0 ≤ n ∧\n    (∀ u v w : ℝ, (a * u + b * v + c * w) ^ 2 ≤ n * starEnergy u v w) ∧\n    ∃ u v w : ℝ, 0 < starEnergy u v w ∧\n      (a * u + b * v + c * w) ^ 2 = n * starEnergy u v w\n\nlemma singleton_energy_le (u v w : ℝ) :\n    u ^ 2 + v ^ 2 + w ^ 2 ≤ starEnergy u v w :=\n  le_max_left _ _\n\nlemma left_energy_le (u v w : ℝ) :\n    (u + v) ^ 2 + w ^ 2 ≤ starEnergy u v w :=\n  le_trans (le_max_left _ _) (le_max_right _ _)\n\nlemma starEnergy_swap (u v w : ℝ) :\n    starEnergy u w v = starEnergy u v w := by\n  unfold starEnergy\n  rw [show u ^ 2 + w ^ 2 + v ^ 2 = u ^ 2 + v ^ 2 + w ^ 2 by ring]\n  rw [max_comm ((u + w) ^ 2 + v ^ 2) ((u + v) ^ 2 + w ^ 2)]\n\nlemma center_bound (u v w : ℝ) :\n    (4 * u) ^ 2 ≤ 16 * starEnergy u v w := by\n  have h := singleton_energy_le u v w\n  nlinarith [sq_nonneg v, sq_nonneg w]\n\nlemma tail_bound (u v w : ℝ) :\n    (3 * v - 3 * w) ^ 2 ≤ 18 * starEnergy u v w := by\n  have h := singleton_energy_le u v w\n  nlinarith [sq_nonneg u, sq_nonneg (v + w)]\n\nlemma plus_bound (u v w : ℝ) :\n    (4 * u + 3 * v - 3 * w) ^ 2 ≤ 25 * starEnergy u v w := by\n  have hleft := left_energy_le u v w\n  have hsingle := singleton_energy_le u v w\n  have hf : (4 * (u + v) - 3 * w) ^ 2 ≤ 25 * starEnergy u v w := by\n    nlinarith [sq_nonneg (3 * (u + v) + 4 * w)]\n  have hg : (4 * u - 3 * w) ^ 2 ≤ 25 * starEnergy u v w := by\n    nlinarith [sq_nonneg v, sq_nonneg (3 * u + 4 * w)]\n  have identity :\n      4 * (4 * u + 3 * v - 3 * w) ^ 2 =\n        3 * (4 * (u + v) - 3 * w) ^ 2 + (4 * u - 3 * w) ^ 2 -\n          12 * v ^ 2 := by ring\n  nlinarith [sq_nonneg v]\n\nlemma minus_bound (u v w : ℝ) :\n    (4 * u - 3 * v + 3 * w) ^ 2 ≤ 25 * starEnergy u v w := by\n  calc\n    (4 * u - 3 * v + 3 * w) ^ 2 = (4 * u + 3 * w - 3 * v) ^ 2 := by ring\n    _ ≤ 25 * starEnergy u w v := plus_bound u w v\n    _ = 25 * starEnergy u v w := by rw [starEnergy_swap]\n\ntheorem center_squared_norm : HasSquaredDualNorm 4 0 0 16 := by\n  refine ⟨by norm_num, ?_, ?_⟩\n  · intro u v w\n    simpa using center_bound u v w\n  · refine ⟨1, 0, 0, ?_, ?_⟩ <;> norm_num [starEnergy]\n\ntheorem tail_squared_norm : HasSquaredDualNorm 0 3 (-3) 18 := by\n  refine ⟨by norm_num, ?_, ?_⟩\n  · intro u v w\n    simpa [sub_eq_add_neg] using tail_bound u v w\n  · refine ⟨0, 3, -3, ?_, ?_⟩ <;> norm_num [starEnergy]\n\ntheorem plus_squared_norm : HasSquaredDualNorm 4 3 (-3) 25 := by\n  refine ⟨by norm_num, ?_, ?_⟩\n  · intro u v w\n    simpa [sub_eq_add_neg] using plus_bound u v w\n  · refine ⟨4, 0, -3, ?_, ?_⟩ <;> norm_num [starEnergy]\n\ntheorem minus_squared_norm : HasSquaredDualNorm 4 (-3) 3 25 := by\n  refine ⟨by norm_num, ?_, ?_⟩\n  · intro u v w\n    simpa [sub_eq_add_neg] using minus_bound u v w\n  · refine ⟨4, -3, 0, ?_, ?_⟩ <;> norm_num [starEnergy]\n\ntheorem exact_star_certificate :\n    HasSquaredDualNorm 4 0 0 16 ∧\n    HasSquaredDualNorm 0 3 (-3) 18 ∧\n    HasSquaredDualNorm 4 3 (-3) 25 ∧\n    HasSquaredDualNorm 4 (-3) 3 25 :=\n  ⟨center_squared_norm, tail_squared_norm, plus_squared_norm, minus_squared_norm⟩\n\ntheorem exact_lens_ratio : (18 : ℝ) = 2 * (25 - 16) := by norm_num\n\ntheorem excludes_smaller_constant (k : ℝ) (hk : k < 2) :\n    ¬ ((18 : ℝ) ≤ k * (25 - 16)) := by\n  nlinarith\n\ntheorem joint_scalar_bound (a b c : ℝ) (h : a ^ 2 + b ^ 2 = 2 * c ^ 2) :\n    (a + b) ^ 2 ≤ 4 * c ^ 2 := by\n  nlinarith [sq_nonneg (a - b)]\n\ntheorem joint_scalar_coefficient_not_two :\n    ¬ (∀ a b c : ℝ, 0 ≤ a → 0 ≤ b → 0 ≤ c →\n      a ^ 2 + b ^ 2 = 2 * c ^ 2 → (a + b) ^ 2 ≤ 2 * c ^ 2) := by\n  intro h\n  have bad := h 1 1 1 (by norm_num) (by norm_num) (by norm_num) (by norm_num)\n  norm_num at bad\n\nend LensSharpness\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/lens_sharpness/statement_fidelity.md",
+    "text": "# Statement fidelity: the exact rooted-star certificate\n\n`Main.lean` formalizes a finite polar-norm certificate, not the unresolved\nuniversal upper estimate and not an infinite-dimensional Banach-space theorem.\n\nThe objects are three real coordinates, ordered as a root and two distinct\nchildren. `LensSharpness.starEnergy u v w` is the maximum of the squared\nsegment-test energies for the three partitions of this star into disjoint\nsegments: all singletons, root joined to the first child, and root joined to\nthe second child. Every smaller disjoint family extends to one of these\npartitions by adding unused singletons.\n\n`HasSquaredDualNorm a b c n` asserts nonnegativity of `n`, the bound\n`(a*u+b*v+c*w)^2 <= n*starEnergy u v w` for every real test, and equality\nat a test of strictly positive energy. Since the singleton partition makes\nthe energy positive definite and homogeneous of degree two, this is exactly\na squared polar-norm certificate, rather than a bound on a sampled set.\n\n`center_squared_norm`, `tail_squared_norm`, `plus_squared_norm`, and\n`minus_squared_norm`, combined in `exact_star_certificate`, certify respectively\nthe coefficient vectors `(4,0,0)`, `(0,3,-3)`, `(4,3,-3)`, and `(4,-3,3)`\nwith squared dual norms `16`, `18`, `25`, and `25`. The equality witnesses\nare `(1,0,0)`, `(0,3,-3)`, `(4,0,-3)`, and `(4,-3,0)`.\nThere are no restrictions on the universally quantified primal tests.\n`exact_lens_ratio` and `excludes_smaller_constant` certify the resulting\nratio `18/(25-16)=2` and exclusion of every real `k<2`.\n\nThe transfer to the two manuscript spaces is a separate prose argument in\n`report.md`: the star is finite ancestral in each ambient tree, restriction\nof an arbitrary disjoint segment family to it consists of disjoint segments,\nand therefore its coordinate projection is contractive. This is what\nidentifies the finite polar norm with the inherited ambient dual norm.\nLean does not encode that transfer, the ambient completions, arbitrary\nancestral heads, arbitrary displacement heads, or a universal upper bound.\n\n`joint_scalar_bound` proves the last scalar estimate of the manuscript's\nexisting budget argument. Its real variables satisfy only\n`a^2+b^2=2*c^2`; no nonnegativity is needed for that squared estimate.\n`joint_scalar_coefficient_not_two` refutes the proposed improvement of\nthat scalar estimate to coefficient two, even with nonnegative variables.\nIt concerns our attempted shortcut, not an assertion made by the manuscript.\n\nThe formal certificate supplies neither independent review of this\ntranslation nor a novelty or publishability verdict.\n"
+  },
+  "subject": {
+    "content_hash": "2b56b79842b631232a9821aa855febecf51f56b5421ac007d141562a8f695f1f",
+    "kind": "claim",
+    "subject_id": "C_STAR_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

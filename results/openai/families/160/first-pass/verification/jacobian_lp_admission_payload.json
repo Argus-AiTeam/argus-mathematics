@@ -1,0 +1,33 @@
+{
+  "program": {
+    "variables": [
+      {"name": "normalized_anchor_radius", "lower_bound": null, "upper_bound": null},
+      {"name": "normalized_target_radius", "lower_bound": null, "upper_bound": null},
+      {"name": "target_width_ratio", "lower_bound": null, "upper_bound": null}
+    ],
+    "objective": {
+      "sense": "MINIMIZE",
+      "coefficients": [{"num": "0", "den": "1"}, {"num": "0", "den": "1"}, {"num": "1", "den": "1"}]
+    },
+    "constraints": [
+      {
+        "label": "anchor_upper_width",
+        "coefficients": [{"num": "1", "den": "1"}, {"num": "0", "den": "1"}, {"num": "0", "den": "1"}],
+        "relation": "GE",
+        "rhs": {"num": "1", "den": "2"}
+      },
+      {
+        "label": "lipschitz_loss_H_at_most_one_eighth",
+        "coefficients": [{"num": "-1", "den": "1"}, {"num": "1", "den": "1"}, {"num": "0", "den": "1"}],
+        "relation": "GE",
+        "rhs": {"num": "-1", "den": "4"}
+      },
+      {
+        "label": "target_lower_width",
+        "coefficients": [{"num": "0", "den": "1"}, {"num": "-1", "den": "4"}, {"num": "1", "den": "1"}],
+        "relation": "GE",
+        "rhs": {"num": "0", "den": "1"}
+      }
+    ]
+  }
+}

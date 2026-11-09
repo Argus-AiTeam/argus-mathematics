@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C53_LOC_NUMERICS-c43d574979d6",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/053/first-pass/localization_audit/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/053/first-pass/localization_audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16654,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/053/first-pass/localization_audit/lean/Main.lean",
+    "source_sha256": "317544ba1e098aa6d0fe18cb083e50786ff98b53b46a4d2d16b3d4b104bed01c",
+    "statement_fidelity": "families/053/first-pass/localization_audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "9a622d3c72cd4480eec892fc974b5bacff913a986317679d8ad6f9b322121f3a",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/localization_audit/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace LocalizationAudit\n\ndef chi (q : ℤ) : ℤ := q ^ 2\ndef surfaceSquare (q : ℤ) : ℤ := 8 * chi q\ndef t (q : ℤ) : ℤ := 25 * chi q - 1\ndef nu (q : ℤ) : ℤ := t q - 1\ndef lengthN (q : ℤ) : ℤ := nu q + 3 * surfaceSquare q\ndef virtualRank (q : ℤ) : ℤ := 2 * t q + chi q - 3\n\ntheorem chi_lower_bound (q : ℤ) (hq : 4 ≤ q) : 16 ≤ chi q := by\n  dsimp [chi]\n  nlinarith\n\ntheorem rank_gap (q : ℤ) (hq : 4 ≤ q) : 2 * t q < virtualRank q := by\n  have hc := chi_lower_bound q hq\n  dsimp [virtualRank]\n  omega\n\ntheorem numerical_parameters (q : ℤ) :\n    lengthN q = 49 * chi q - 2 ∧\n    virtualRank q = 51 * chi q - 5 ∧\n    chi q + 3 * surfaceSquare q - 1 = t q := by\n  dsimp [lengthN, nu, virtualRank, t, surfaceSquare]\n  constructor\n  · ring\n  constructor <;> ring\n\ntheorem branch_thresholds (q : ℤ) (hq : 4 ≤ q) :\n    t q ≤ lengthN q ∧ nu q < t q ∧ nu q - surfaceSquare q < t q := by\n  have hc := chi_lower_bound q hq\n  dsimp [lengthN, nu, surfaceSquare]\n  omega\n\ntheorem high_index_exists (a b s : ℚ) (hs : 0 < s) (h : a + b = 3 * s) :\n    s < a ∨ s < b := by\n  by_contra! hn\n  linarith\n\ntheorem support_factorization (q p : ℚ) :\n    (p - 2 * q) * (8 * q ^ 2 - 2 * q - p) =\n      8 * q ^ 2 * p - p ^ 2 - 16 * q ^ 3 + 4 * q ^ 2 := by\n  ring\n\ntheorem integral_support_bound (q n : ℤ) (p : ℚ)\n    (hq : 1 ≤ q)\n    (hp0 : 2 * (q : ℚ) ≤ p)\n    (hp1 : p ≤ 8 * (q : ℚ) ^ 2 - 2 * (q : ℚ))\n    (hH : 8 * (q : ℚ) ^ 2 * (2 * (n : ℚ) + p) ≤ p ^ 2) :\n    n ≤ -q := by\n  have hqQ : (1 : ℚ) ≤ (q : ℚ) := by exact_mod_cast hq\n  have hqpos : (0 : ℚ) < (q : ℚ) := by linarith\n  have hq2 : (0 : ℚ) < (q : ℚ) ^ 2 := by positivity\n  have hprod :\n      0 ≤ (p - 2 * (q : ℚ)) *\n        (8 * (q : ℚ) ^ 2 - 2 * (q : ℚ) - p) :=\n    mul_nonneg (by linarith) (by linarith)\n  have hscaled :\n      16 * (q : ℚ) ^ 2 * ((n : ℚ) + (q : ℚ)) ≤\n        4 * (q : ℚ) ^ 2 := by\n    nlinarith [hprod]\n  by_contra hn\n  have hnI : 1 ≤ n + q := by omega\n  have hnQ : (1 : ℚ) ≤ (n : ℚ) + (q : ℚ) := by exact_mod_cast hnI\n  have hmul := mul_le_mul_of_nonneg_left hnQ\n    (show (0 : ℚ) ≤ 16 * (q : ℚ) ^ 2 by positivity)\n  nlinarith\n\ntheorem short_length_exclusion (t n k : ℤ) (hn : n < t) :\n    4 * t - 2 * k < 2 * (3 * t - k - n) := by\n  omega\n\ndef blockCost (k : ℕ) : ℤ :=\n  if k = 1 then 2 else if k = 2 then 4 else 2 * ((k : ℤ) - 1)\n\ntheorem block_budget (k : ℕ) (hk : 1 ≤ k) :\n    4 * (k : ℤ) ≤ 3 * blockCost k ∧\n    (4 * (k : ℤ) = 3 * blockCost k ↔ k = 3) := by\n  unfold blockCost\n  split_ifs with h1 h2\n  · subst k\n    norm_num\n  · subst k\n    norm_num\n  · have hk3 : 3 ≤ k := by omega\n    constructor\n    · omega\n    · constructor <;> intro h <;> omega\n\ndef slack (k : ℕ) : ℤ := 3 * blockCost k - 4 * (k : ℤ)\n\ntheorem slack_sum_nonneg (ks : List ℕ)\n    (hp : ∀ k ∈ ks, 1 ≤ k) : 0 ≤ (ks.map slack).sum := by\n  induction ks with\n  | nil => simp\n  | cons a ks ih =>\n    have ha := (block_budget a (hp a (by simp))).1\n    have ht := ih (fun k hk => hp k (by simp [hk]))\n    simp only [List.map_cons, List.sum_cons]\n    dsimp [slack]\n    linarith\n\ntheorem zero_slack_only_triples (ks : List ℕ)\n    (hp : ∀ k ∈ ks, 1 ≤ k) (hz : (ks.map slack).sum = 0) :\n    ∀ k ∈ ks, k = 3 := by\n  induction ks with\n  | nil => simp\n  | cons a ks ih =>\n    have hpa : 1 ≤ a := hp a (by simp)\n    have hpt : ∀ k ∈ ks, 1 ≤ k := fun k hk => hp k (by simp [hk])\n    have hsa : 0 ≤ slack a := by\n      dsimp [slack]\n      linarith [(block_budget a hpa).1]\n    have hst := slack_sum_nonneg ks hpt\n    simp only [List.map_cons, List.sum_cons] at hz\n    have hza : slack a = 0 := by linarith\n    have hzt : (ks.map slack).sum = 0 := by linarith\n    have ha : a = 3 := (block_budget a hpa).2.mp (by\n      dsimp [slack] at hza\n      linarith)\n    intro k hk\n    simp only [List.mem_cons] at hk\n    rcases hk with hka | hkt\n    · simpa [hka] using ha\n    · exact ih hpt hzt k hkt\n\ntheorem based_trace_cancellation (a : ℚ) : -a - (1 - a) = -1 := by\n  ring\n\ntheorem riemann_roch_rank (nu l1d l2d kd dsq chi : ℚ) :\n    (2 * (nu + l1d - dsq / 2) - (kd + l1d + l2d) + dsq) + chi - 1 =\n      2 * nu + (l1d - l2d - kd) + chi - 1 := by\n  ring\n\nend LocalizationAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/localization_audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: localization arithmetic, not virtual geometry\n\nThis source formalizes only claim `C53_LOC_NUMERICS`. It does not formalize\n`C53_LOCALIZATION`, the existence of an obstruction theory, Hodge index,\nRiemann--Roch as a geometric theorem, a tensor realization, or Chow\nvanishing. All geometric uses of these arithmetic statements are in\n`research/localization_audit/REPORT.md`.\n\nThe namespace is `LocalizationAudit`. The integer parameter `q` is b-1.\nThe definitions `chi`, `surfaceSquare`, `t`, `nu`, `lengthN`, and\n`virtualRank` are respectively q^2, 8q^2, 25q^2-1, t-1, nu+3s, and\n2t+chi-3. They are defined on every integer; the assertions needing the\nmanuscript genus range explicitly assume q>=4.\n\n* `chi_lower_bound`, `rank_gap`, `numerical_parameters`, and\n  `branch_thresholds` prove the uniform virtual-rank gap, parameter\n  identities, and the length thresholds for the four ordered branches.\n  The lengths supplied by geometry are N, nu, nu, and nu-s. The theorem\n  does not assert that these are all geometric fixed loci.\n* `high_index_exists` quantifies over rational a,b,s with s>0 and\n  a+b=3s. Its conclusion s<a or s<b is only the numerical high-index\n  selection, not obstruction-map surjectivity.\n* `support_factorization` is an identity for all rational q,p.\n* `integral_support_bound` quantifies over integers q,n and rational p.\n  It assumes q>=1, 2q<=p<=8q^2-2q, and\n  8q^2(2n+p)<=p^2, and concludes n<=-q. In the geometric application\n  p=K.P, n=P(P-K)/2 is integral, and the last hypothesis is Hodge index.\n  Those geometric facts are not proved by Lean.\n* `short_length_exclusion` quantifies over all integers t,n,k, assumes\n  n<t, and concludes 4t-2k<2(3t-k-n). The support interpretation of\n  this inequality is not encoded.\n* `blockCost` assigns cost 2 to k=1, cost 4 to k=2, and 2(k-1)\n  otherwise. `block_budget` assumes k>=1, proves 4k<=3 cost(k),\n  and proves equality if and only if k=3. `slack` is 3 cost(k)-4k.\n  `slack_sum_nonneg` and `zero_slack_only_triples` quantify over\n  arbitrary finite lists of positive block sizes. The latter says\n  zero total slack forces every size to be 3. Geometry supplies the\n  cost hypotheses and the zero total slack.\n* `based_trace_cancellation` and `riemann_roch_rank` are rational\n  polynomial identities only. In the second theorem `nu,l1d,l2d,kd,\n  dsq,chi` are independent rational scalars, representing the indicated\n  intersections when the identity is applied in the report.\n\nNo external axioms or manuscript statements are added. The imported\nMathlib facts and the Lean kernel check the algebra. Correct translation\nof these statements, their geometric hypotheses, the prose proof, and\nindependent review are not compiler verdicts.\n"
+  },
+  "subject": {
+    "content_hash": "88045c6194e3734e5f4d2c29dfe6e0b2d7b7d1af2e4c4959d125d8a4201a3b66",
+    "kind": "claim",
+    "subject_id": "C53_LOC_NUMERICS"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

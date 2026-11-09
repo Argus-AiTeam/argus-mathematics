@@ -1,0 +1,67 @@
+{
+  "evidence_id": "lean-C189_COMPATIBILITY-c4831ca25d29",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/189/first-pass/verification_189/compatibility/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean",
+      "families/189/first-pass/verification_189/compatibility/Main.lean"
+    ],
+    "cwd": "families/189/first-pass/verification_189/compatibility",
+    "duration_ms": 25459,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/189/first-pass/verification_189/compatibility/Main.lean",
+    "source_sha256": "15b7362b2685927c2f66380a8fe024860946edd0d1691c7a9daffbc1710b82a1",
+    "statement_fidelity": "families/189/first-pass/verification_189/compatibility/statement_fidelity.md",
+    "statement_fidelity_sha256": "e5f01ca6a97b1b61e128c62b5e577d42e0bc0a574e16651d2c62f80415f5efda",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/189/first-pass/verification_189/compatibility/Main.lean:98:17: warning: This simp argument is unused:\n  Fin.val_mk\n\nHint: Omit it from the simp argument list.\n  simp only [̵F̵i̵n̵.̵v̵a̵l̵_̵m̵k̵]̵ ̵at hab\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'SimpleGraph.cycleGraph_isContained_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'List.Nodup.head_eq_getLast_iff' depends on axioms: [propext, Quot.sound]\n'SimpleGraph.Walk.getVert_append'' depends on axioms: [propext, Quot.sound]\n",
+    "tool": "lean",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/verification_189/compatibility/Main.lean",
+    "text": "import Mathlib\n\ntheorem ite_eq_left {α : Sort*} {p : Prop} [Decidable p] {x y : α} (h : p) :\n    (if p then x else y) = x := if_pos h\n\ntheorem ite_eq_right {α : Sort*} {p : Prop} [Decidable p] {x y : α} (h : ¬ p) :\n    (if p then x else y) = y := if_neg h\n\ntheorem dite_eq_left {α : Sort*} {p : Prop} [Decidable p]\n    {x : p → α} {y : ¬ p → α} (h : p) :\n    (if h : p then x h else y h) = x h := dif_pos h\n\ntheorem dite_eq_right {α : Sort*} {p : Prop} [Decidable p]\n    {x : p → α} {y : ¬ p → α} (h : ¬ p) :\n    (if h : p then x h else y h) = y h := dif_neg h\n\ntheorem Set.mem_ofPred_eq {α : Type*} {p : α → Prop} {a : α} :\n    a ∈ {x | p x} ↔ p a := Iff.rfl\n\ntheorem List.Nodup.getD_inj {α : Type*} {l : List α} {i j : ℕ} {fallback : α}\n    (hi : i < l.length) (hj : j < l.length) (h : l.Nodup) :\n    l.getD i fallback = l.getD j fallback ↔ i = j :=\n  List.getD_inj hi hj h\n\ntheorem List.Nodup.head_eq_getLast_iff {α : Type*} {l : List α}\n    (hne : l ≠ []) (hnd : l.Nodup) :\n    l.head hne = l.getLast hne ↔ ∃ a, l = [a] := by\n  cases l with\n  | nil => contradiction\n  | cons a l =>\n    cases l with\n    | nil => simp\n    | cons b l =>\n      constructor\n      · intro he\n        have hnot := (List.nodup_cons.mp hnd).1\n        have hm := List.getLast_mem (show b :: l ≠ [] by simp)\n        simp only [List.head_cons, List.getLast_cons_cons] at he\n        rw [← he] at hm\n        exact False.elim (hnot hm)\n      · rintro ⟨c, hc⟩\n        simp at hc\n\nnamespace SimpleGraph.Walk\n\nattribute [simp] support_mapLe_eq_support\n\ntheorem IsPath.map {V W : Type*} {G : SimpleGraph V} {H : SimpleGraph W}\n    {u v : V} {p : G.Walk u v} (hp : p.IsPath) {f : G →g H}\n    (hf : Function.Injective f) : (p.map f).IsPath :=\n  map_isPath_of_injective hf hp\n\n@[simp] theorem length_tail {V : Type*} {G : SimpleGraph V} {u v : V}\n    (p : G.Walk u v) : p.tail.length = p.length - 1 := by\n  cases p <;> simp\n\n@[simp] theorem length_mapLe {V : Type*} {G H : SimpleGraph V} (h : G ≤ H)\n    {u v : V} (p : G.Walk u v) : (p.mapLe h).length = p.length :=\n  length_map _ _\n\ntheorem getVert_append' {V : Type*} {G : SimpleGraph V} {u v w : V}\n    (p : G.Walk u v) (q : G.Walk v w) (i : ℕ) :\n    (p.append q).getVert i =\n      if i ≤ p.length then p.getVert i else q.getVert (i - p.length) := by\n  rw [getVert_append]\n  by_cases hi : i < p.length\n  · simp [hi, hi.le]\n  · by_cases he : i = p.length\n    · subst i\n      simp\n    · have hnot : ¬ i ≤ p.length := by omega\n      simp [hi, hnot]\n\nend SimpleGraph.Walk\n\nnamespace SimpleGraph\n\nopen scoped SimpleGraph\nopen Walk\n\n-- Backport of Mathlib CycleGraph.lean at d13f23b, Apache-2.0.\ntheorem cycleGraph_isContained_iff {V : Type*} {G : SimpleGraph V}\n    {n : ℕ} (hn : 2 < n) :\n    cycleGraph n ⊑ G ↔ ∃ (v : V) (p : G.Walk v v), p.IsCycle ∧ p.length = n := by\n  have hn' : n - 3 + 3 = n := by omega\n  refine ⟨fun ⟨h⟩ ↦\n    ⟨_, _, cycleGraph.isCycle_cycle.map (hn' ▸ h).injective, by simp [hn']⟩, ?_⟩\n  intro ⟨a, p, hp₁, hp₂⟩\n  refine ⟨⟨fun i ↦ p.support[i.succ]'(by grind [not_nil_iff_lt_length]), ?_⟩, ?_⟩\n  · intro ⟨x, hx⟩ ⟨y, hy⟩ hab\n    wlog hle : x > y\n    · have hne : x ≠ y := by simpa using hab.ne\n      exact this hn hn' a p hp₁ hp₂ y hy x hx hab.symm (by omega) |>.symm\n    rcases cycleGraph_adj'.mp hab with hab | hab\n    · simp_rw [show x = y + 1 by grind [Fin.sub_val_of_le]]\n      exact p.isChain_adj_support.getElem _ _ |>.symm\n    · rw [Fin.coe_sub_iff_lt.mpr hle] at hab\n      simp only [Fin.val_mk] at hab\n      simp_rw [show x = n - 1 by omega, show y = 0 by omega, Fin.succ_mk,\n        show n - 1 + 1 = n by omega]\n      simp [← hp₂, hp₁.not_nil]\n  · have hlen : p.tail.support.length = n := by\n      rw [length_support, length_tail_add_one hp₁.not_nil, hp₂]\n    have (i : Fin n) : p.support[i.succ]'(by grind) = p.tail.support[i] := by\n      simp [support_tail_of_not_nil p hp₁.not_nil]\n    simp_rw [this]\n    exact hlen ▸ (isPath_iff_injective_get_support _).mp hp₁.isPath_tail\n\nend SimpleGraph\n\n#print axioms SimpleGraph.cycleGraph_isContained_iff\n#print axioms List.Nodup.head_eq_getLast_iff\n#print axioms SimpleGraph.Walk.getVert_append'\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/verification_189/compatibility/statement_fidelity.md",
+    "text": "# Lean 4.31.0 compatibility propositions\n\n`Main.lean` in this directory proves library facts missing from the older\nMathlib interface. It introduces no axioms and changes no graph definition\nor manuscript hypothesis. The Ramsey proof itself remains the frozen\nupstream source, with an additional import of these proved propositions.\n\n`ite_eq_left`, `ite_eq_right`, `dite_eq_left`, and `dite_eq_right` specialize conditional\nexpressions under a proof of their condition or its negation.\n`Set.mem_ofPred_eq` unfolds membership in the set defined by a predicate.\n`List.Nodup.head_eq_getLast_iff` states that a nonempty duplicate-free list\nhas equal first and last entries exactly when it is a singleton. Its\nquantifiers range over arbitrary lists and arbitrary element types.\n`List.Nodup.getD_inj` gives injectivity of bounded list lookup for a\nduplicate-free list; both indices must be strictly below its length.\n\n`SimpleGraph.Walk.length_mapLe` preserves the length of a walk when\nregarded as a walk in a supergraph on the same vertices. The existing\n`support_mapLe_eq_support` is also made a simplification lemma.\n`SimpleGraph.Walk.length_tail` gives the length after dropping the first\nedge, using natural subtraction so that it also covers the empty walk.\n`SimpleGraph.Walk.IsPath.map` preserves a path under an injective graph\nhomomorphism; injectivity is an explicit hypothesis, not an assumption\nabout arbitrary graph maps.\n`SimpleGraph.Walk.getVert_append'` gives the vertex at index `i` of an\nappended walk, using the first walk when `i <= p.length` and otherwise the\nsecond walk at index `i-p.length`. At equality both walks give their\ncommon endpoint, so this is equivalent to the older strict-inequality\nversion.\n\n`SimpleGraph.cycleGraph_isContained_iff` states, for every natural `n > 2`\nand every simple graph on any vertex type, that a non-induced copy of\n`cycleGraph n` is equivalent to a closed walk that is a simple cycle and\nhas length exactly `n`. The reverse direction constructs an injective\nadjacency-preserving map using the entries after the initial vertex of\nthe walk. This is a backport of the proposition and proof in Mathlib's\n`Mathlib/Combinatorics/SimpleGraph/CycleGraph.lean`, lines 167--186, at\ncommit `d13f23b723b8a846827a245b89c10fc7d3f11612` (Apache-2.0). The source\npassage is retained in the third-party source archive, and the backport\nmust itself compile; citing the newer library is not an assumption that\nthe backport is correct.\n\nThese are compatibility facts, not a new Ramsey result or independent\nreview. Their transitive axioms must be confined to `propext`,\n`Quot.sound`, and `Classical.choice`, just like the main certificate.\n"
+  },
+  "subject": {
+    "content_hash": "886adab0b42a56b4e6fe59adc062d1a966e9e5a74ea6619496e5f986269088fa",
+    "kind": "claim",
+    "subject_id": "C189_COMPATIBILITY"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,49 @@
+{
+  "operation_id": "matrix.normal_form.smith.certified.compute",
+  "server_version": "0.14.0",
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "discovery_query": "certified integer Smith normal form of a two by two crossing kernel lattice",
+  "inspected_before_run": true,
+  "read_only": true,
+  "description": "Compute the canonical Smith diagonal D and explicit unimodular matrices U and V satisfying D = U A V for one integer matrix of at most 16 by 16.",
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "matrix": {
+        "additionalProperties": false,
+        "properties": {
+          "column_count": {"maximum": 16, "minimum": 1, "type": "integer"},
+          "domain": {"const": "ZZ", "default": "ZZ", "type": "string"},
+          "entries": {
+            "default": [],
+            "items": {"items": {"pattern": "^(?:0|-?[1-9][0-9]*)$", "type": "string"}, "type": "array"},
+            "maxItems": 32,
+            "type": "array"
+          },
+          "row_count": {"maximum": 16, "minimum": 1, "type": "integer"}
+        },
+        "required": ["row_count", "column_count"],
+        "type": "object"
+      }
+    },
+    "required": ["matrix"],
+    "type": "object"
+  },
+  "output_contract": {
+    "required": ["certificate"],
+    "certificate_required": [
+      "source", "diagonal", "left_transformation", "right_transformation",
+      "rank", "invariant_factors", "left_determinant", "right_determinant"
+    ],
+    "integer_matrix_domain": "ZZ",
+    "integer_entry_pattern": "^(?:0|-?[1-9][0-9]*)$",
+    "relation": "DIAGONAL_EQUALS_LEFT_TIMES_SOURCE_TIMES_RIGHT",
+    "convention": "POSITIVE_DIVISIBILITY_DIAGONAL",
+    "transformation_scope": "FULL_BASIS_BOTH_SIDES",
+    "completeness": "FULL_MATRIX_TRANSFORMATIONS",
+    "determinism": "DETERMINISTIC",
+    "exactness": "EXACT_INTEGER"
+  },
+  "scope": "Replays one mixed crossing lattice ker((x,y) -> (x+y mod 4,y mod 2)) with basis columns (4,0),(-2,2). It does not encode geometric descent, resolution, infinitude, or the surface theorem."
+}

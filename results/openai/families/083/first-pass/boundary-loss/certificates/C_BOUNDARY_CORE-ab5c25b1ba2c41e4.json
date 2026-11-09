@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_BOUNDARY_CORE-127f83f4069d",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/083/first-pass/boundary-loss/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/083/first-pass/boundary-loss/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15381,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/083/first-pass/boundary-loss/Main.lean",
+    "source_sha256": "d89cc0e060f81bac8908eab278398b3bfcaa499b7cd735a3053371797ab004b7",
+    "statement_fidelity": "families/083/first-pass/boundary-loss/statement_fidelity.md",
+    "statement_fidelity_sha256": "6b20e27829e882b5b36cfbdc3c3bcdb5239082f53198cb87c532a884f654144e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/boundary-loss/Main.lean",
+    "text": "import Mathlib\n\nopen Finset\n\nnoncomputable section\n\nnamespace BoundaryLoss\n\ndef partialSum (a : ℕ → ℝ) (k : ℕ) : ℝ :=\n  ∑ i ∈ range k, a i\n\ntheorem prefix_succ (a : ℕ → ℝ) (k : ℕ) :\n    partialSum a (k + 1) = partialSum a k + a k := by\n  exact sum_range_succ a k\n\ntheorem offset_telescope (a : ℕ → ℝ) (k r : ℕ) :\n    (∑ i ∈ range k, (a i - a (i + r))) =\n      partialSum a r - ∑ j ∈ range r, a (k + j) := by\n  have hkr := sum_range_add a k r\n  have hrk := sum_range_add a r k\n  rw [Nat.add_comm r k] at hrk\n  have hs : (∑ i ∈ range k, a (i + r)) = ∑ i ∈ range k, a (r + i) := by\n    apply sum_congr rfl\n    intro i hi\n    rw [Nat.add_comm]\n  rw [sum_sub_distrib, hs]\n  dsimp [partialSum]\n  linarith\n\ntheorem prefix_truncate (a : ℕ → ℝ) (k r : ℕ)\n    (hz : ∀ i, k ≤ i → a i = 0) :\n    partialSum a r = partialSum a (min r k) := by\n  by_cases hr : r ≤ k\n  · rw [min_eq_left hr]\n  · have hkr : k ≤ r := by omega\n    rw [min_eq_right hkr]\n    exact eventually_constant_sum hz hkr\n\ntheorem stopped_telescope (a : ℕ → ℝ) (k r : ℕ)\n    (hz : ∀ i, k ≤ i → a i = 0) :\n    (∑ i ∈ range k, (a i - a (i + r))) = partialSum a (min r k) := by\n  rw [offset_telescope]\n  have ht : (∑ j ∈ range r, a (k + j)) = 0 := by\n    apply sum_eq_zero\n    intro j hj\n    exact hz (k + j) (by omega)\n  rw [ht, sub_zero, prefix_truncate a k r hz]\n\ntheorem geometric_layers (q : ℝ) (a : ℕ → ℝ) (k : ℕ) :\n    (∑ r ∈ range k, (q ^ r - q ^ (r + 1)) * partialSum a (r + 1)) +\n        q ^ k * partialSum a k =\n      ∑ j ∈ range k, q ^ j * a j := by\n  induction k with\n  | zero => simp [partialSum]\n  | succ k ih =>\n      rw [sum_range_succ, sum_range_succ, prefix_succ]\n      nlinarith [ih]\n\ntheorem stopped_layers (q : ℝ) (a : ℕ → ℝ) (k : ℕ)\n    (hz : ∀ i, k ≤ i → a i = 0) :\n    (∑ r ∈ range k, (q ^ r - q ^ (r + 1)) *\n        (∑ i ∈ range k, (a i - a (i + (r + 1))))) +\n        q ^ k * partialSum a k =\n      ∑ j ∈ range k, q ^ j * a j := by\n  have hs :\n      (∑ r ∈ range k, (q ^ r - q ^ (r + 1)) *\n          (∑ i ∈ range k, (a i - a (i + (r + 1))))) =\n        ∑ r ∈ range k, (q ^ r - q ^ (r + 1)) * partialSum a (r + 1) := by\n    apply sum_congr rfl\n    intro r hr\n    rw [stopped_telescope a k (r + 1) hz,\n      min_eq_left (Nat.succ_le_of_lt (mem_range.mp hr))]\n  rw [hs, geometric_layers]\n\ntheorem geometric_sum_identity (q : ℝ) (k : ℕ) :\n    (1 - q) * (∑ i ∈ range k, q ^ i) = 1 - q ^ k := by\n  induction k with\n  | zero => simp\n  | succ k ih =>\n      rw [sum_range_succ, pow_succ]\n      nlinarith [ih]\n\ntheorem geometric_sum_finite (q : ℝ) (k : ℕ) (hq : q < 1) :\n    (∑ i ∈ range k, q ^ i) = (1 - q ^ k) / (1 - q) := by\n  apply (eq_div_iff (ne_of_gt (sub_pos.mpr hq))).2\n  nlinarith [geometric_sum_identity q k]\n\ntheorem geometric_sum_uniform (q : ℝ) (k : ℕ) (hq0 : 0 ≤ q) (hq1 : q < 1) :\n    (∑ i ∈ range k, q ^ i) ≤ 1 / (1 - q) := by\n  apply (le_div_iff₀ (sub_pos.mpr hq1)).2\n  nlinarith [geometric_sum_identity q k, pow_nonneg hq0 k]\n\ntheorem potential_finite (q A : ℝ) (a : ℕ → ℝ) (k : ℕ)\n    (hq0 : 0 ≤ q) (hq1 : q < 1) (ha : ∀ i < k, a i ≤ A) :\n    (∑ i ∈ range k, q ^ i * a i) ≤ A * (1 - q ^ k) / (1 - q) := by\n  calc\n    (∑ i ∈ range k, q ^ i * a i) ≤ ∑ i ∈ range k, q ^ i * A := by\n      apply sum_le_sum\n      intro i hi\n      exact mul_le_mul_of_nonneg_left (ha i (mem_range.mp hi)) (pow_nonneg hq0 i)\n    _ = A * (∑ i ∈ range k, q ^ i) := by rw [← sum_mul]; ring\n    _ = A * (1 - q ^ k) / (1 - q) := by rw [geometric_sum_finite q k hq1]; ring\n\ntheorem potential_uniform (q A : ℝ) (a : ℕ → ℝ) (k : ℕ)\n    (hq0 : 0 ≤ q) (hq1 : q < 1) (hA : 0 ≤ A) (ha : ∀ i < k, a i ≤ A) :\n    (∑ i ∈ range k, q ^ i * a i) ≤ A / (1 - q) := by\n  calc\n    (∑ i ∈ range k, q ^ i * a i) ≤ ∑ i ∈ range k, q ^ i * A := by\n      apply sum_le_sum\n      intro i hi\n      exact mul_le_mul_of_nonneg_left (ha i (mem_range.mp hi)) (pow_nonneg hq0 i)\n    _ = A * (∑ i ∈ range k, q ^ i) := by rw [← sum_mul]; ring\n    _ ≤ A * (1 / (1 - q)) :=\n      mul_le_mul_of_nonneg_left (geometric_sum_uniform q k hq0 hq1) hA\n    _ = A / (1 - q) := by ring\n\ntheorem boundary_log_compare {x u v e : ℝ}\n    (hu : 0 < u) (hux : u ≤ x) (he : 0 ≤ e) (hev : e ≤ v - u) :\n    Real.log ((x + e) / x) ≤ Real.log (v / u) := by\n  have hx : 0 < x := lt_of_lt_of_le hu hux\n  have hvu : 0 ≤ v - u := le_trans he hev\n  have hmul := mul_le_mul_of_nonneg_right hev (le_of_lt hu)\n  have hprod := mul_nonneg (sub_nonneg.mpr hux) hvu\n  have hratio : (x + e) / x ≤ v / u := by\n    apply (div_le_div_iff₀ hx hu).2\n    nlinarith\n  exact Real.log_le_log (div_pos (by linarith) hx) hratio\n\ntheorem central_log_cancel (n m : ℕ → ℝ) (k : ℕ) :\n    Real.log (n 0) - Real.log (n k) +\n        (∑ i ∈ range k, (Real.log (n (i + 1)) - Real.log (m i))) =\n      ∑ i ∈ range k, (Real.log (n i) - Real.log (m i)) := by\n  have ht := sum_range_sub (fun i => Real.log (n i)) k\n  simp only [sum_sub_distrib] at ht ⊢\n  linarith\n\ntheorem abel_suffix {V : Type*} [AddCommGroup V] [Module ℝ V]\n    (e : ℕ → ℝ) (x : ℕ → V) (n : ℕ) :\n    (∑ l ∈ range n, partialSum e (l + 1) • x l) =\n      ∑ j ∈ range n, e j • (∑ l ∈ Ico j n, x l) := by\n  symm\n  simp_rw [smul_sum]\n  simpa only [Nat.Ico_zero_eq_range, partialSum, sum_smul] using\n    sum_Ico_Ico_comm 0 n (fun j l => e j • x l)\n\ntheorem abel_suffix_bound {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]\n    (e : ℕ → ℝ) (x : ℕ → V) (n : ℕ) (H D : ℝ)\n    (he : ∀ j < n, 0 ≤ e j) (hH : 0 ≤ H)\n    (hs : ∀ j < n, ‖∑ l ∈ Ico j n, x l‖ ≤ H)\n    (hD : partialSum e n ≤ D) :\n    ‖∑ l ∈ range n, partialSum e (l + 1) • x l‖ ≤ D * H := by\n  rw [abel_suffix]\n  calc\n    ‖∑ j ∈ range n, e j • (∑ l ∈ Ico j n, x l)‖ ≤\n        ∑ j ∈ range n, ‖e j • (∑ l ∈ Ico j n, x l)‖ := norm_sum_le _ _\n    _ = ∑ j ∈ range n, e j * ‖∑ l ∈ Ico j n, x l‖ := by\n      apply sum_congr rfl\n      intro j hj\n      rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg (he j (mem_range.mp hj))]\n    _ ≤ ∑ j ∈ range n, e j * H := by\n      apply sum_le_sum\n      intro j hj\n      exact mul_le_mul_of_nonneg_left (hs j (mem_range.mp hj)) (he j (mem_range.mp hj))\n    _ = partialSum e n * H := by rw [← sum_mul]; rfl\n    _ ≤ D * H := mul_le_mul_of_nonneg_right hD hH\n\ntheorem monotone_deficit_bound {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]\n    (delta : ℕ → ℝ) (x : ℕ → V) (n : ℕ) (H : ℝ)\n    (hd0 : delta 0 = 0) (hmono : ∀ j < n, delta j ≤ delta (j + 1))\n    (hH : 0 ≤ H) (hs : ∀ j < n, ‖∑ l ∈ Ico j n, x l‖ ≤ H) :\n    ‖∑ l ∈ range n, delta (l + 1) • x l‖ ≤ delta n * H := by\n  let e : ℕ → ℝ := fun j => delta (j + 1) - delta j\n  have hp (r : ℕ) : partialSum e r = delta r := by\n    simpa only [partialSum, e, hd0, sub_zero] using sum_range_sub delta r\n  have he : ∀ j < n, 0 ≤ e j := by\n    intro j hj\n    exact sub_nonneg.mpr (hmono j hj)\n  have hb := abel_suffix_bound e x n H (delta n) he hH hs (by rw [hp])\n  simpa only [hp] using hb\n\nend BoundaryLoss\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/boundary-loss/statement_fidelity.md",
+    "text": "# Statement fidelity: BoundaryLoss\n\n`Main.lean` formalizes the finite algebraic, order, and normed-vector core of\nthe boundary-weight removal argument, for claim `C_BOUNDARY_CORE`.\nAll natural-number depth and offset variables are universally quantified;\nthere is no numerical depth cap. It imports the installed Mathlib and uses\nthe real numbers and arbitrary real normed vector spaces.\n\n`partialSum a k` means the sum of `a i` over `0 <= i < k`.\n`offset_telescope` is the unrestricted shifted finite-sum identity.\n`prefix_truncate` and `stopped_telescope` assume exactly that `a i = 0`\nfor every `i >= k`. Their conclusion is\n`sum_{i<k}(a i-a(i+r))=sum_{j<min(r,k)}a j`.\nThis includes zero depth, zero offset, an offset equal to the depth, and\nan offset larger than the depth. Positivity is not needed for this identity.\nFor the manuscript application, `a i` is `log(M_i(epsilon)/h_T)` before\n`k_T` and zero at and after it; it is not the possibly undefined logarithm\nof an ineligible top's later mass.\n\n`geometric_layers` proves the exact finite geometric-layer formula (8) in\n`proof.md`, including the terminal tail `q^k * partialSum a k`.\n`stopped_layers` substitutes the exact stopped telescope into that formula.\nThese identities hold for every real `q`; the identities themselves need no\npositivity hypothesis. `geometric_sum_identity` and `geometric_sum_finite`\ngive the finite geometric sum, the latter under `q < 1`.\n`geometric_sum_uniform` requires `0 <= q < 1` and bounds every such finite\nsum by `1/(1-q)`.\n`potential_finite` assumes `a i <= A` for `i < k` and `0 <= q < 1`,\nand proves the finite-depth bound\n`sum_{i<k} q^i*a i <= A*(1-q^k)/(1-q)`.\n`potential_uniform` additionally assumes `0 <= A` and proves the\ndepth-independent bound `A/(1-q)`.\nIn the application, `q=1/G` and `A=log(n/h_T) >= 0`.\n\n`boundary_log_compare` takes arbitrary real masses `0 < u <= x` and\n`0 <= e <= v-u`, and proves\n`log((x+e)/x) <= log(v/u)`.\nHere `x` is the full eligible parent mass, `e` is extra boundary mass,\n`u=M_i(b)`, and `v=M_i(epsilon)`. Thus it does not replace the parent\ndenominator by an unrelated mass.\n\n`central_log_cancel` proves the telescoping equality between the logarithm\nof the root/terminal normalization and the sum of consecutive-mass\ntransition logarithms, and the sum of the boundary logarithms.\nIt is a real additive identity involving `Real.log`; it does not assert\nan exponential or real-power identity without positivity. The application\nto the positive masses, exponential, and real powers in `eq:src-30` is\njustified in (9) of `proof.md` and checked on exact rational products by\n`verify.py`.\n\n`abel_suffix` is the exact finite triangular exchange:\nthe sum of packet vectors `x l` weighted by `sum_{j<=l} e j` equals the\nsum of `e j` times the suffix from `j` through `n-1`. It holds in any real\nmodule whose additive group is commutative.\n`abel_suffix_bound` is its norm bound in any real normed vector space:\nif `e j >= 0`, all those suffix norms are at most `H >= 0`, and\n`sum_{j<n}e j <= D`, the weighted sum has norm at most `D*H`.\n`monotone_deficit_bound` specializes this to `delta 0=0`,\n`delta j <= delta(j+1)` for every `j<n`, and the same suffix bound;\nit proves `norm(sum_{l<n}delta(l+1) * x l) <= delta n * H`.\nIn the manuscript, the group of packets stopped at zero has deficit zero\nand is omitted; `x l` in this last theorem is the group stopped at `l+1`,\n`n=k_T`, and `delta l=1-kappa_l`. Empty groups are permitted. A complex\nHilbert space can be viewed as a real normed vector space, so this statement\ndoes not impose a dimension restriction.\n\nThe Lean file does **not** encode the slopes, interval geometry, eligibility\nsets, Lebesgue measure, common translated grids, or the analytic upstream\ntop-interval/mass estimates. It proves the uniform stopped cancellation,\nfinite-layer integration algebra, logarithmic comparison, and packet\nsummation lemma used after those objects are supplied. Equations (2)-(7)\nand (9)-(14) of `proof.md` supply the source-faithful geometric and analytic\napplication. In particular, the matching marginal distribution under a\nsingle common translation is a prose proof, not a Lean theorem. Neither\nthis formal core nor a compiler result certifies the main Hilbert-transform\ntheorem or novelty. Independent review of this correspondence is required.\n"
+  },
+  "subject": {
+    "content_hash": "16c902fbcd6ab13f98148ad70322a73574b32d51e19cdc0cf1780c6a4b879c12",
+    "kind": "claim",
+    "subject_id": "C_BOUNDARY_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,243 @@
+{
+  "goal": "C9000262",
+  "routes": [
+    {
+      "name": "independent-trace-verification",
+      "status": "current",
+      "goal": "C9000262",
+      "obligations": ["C_TD_TRACE", "C_TD_GAPLESS"],
+      "evidence": "research/trace_deficit_audit/report.md"
+    },
+    {
+      "name": "literal-trace-refutation",
+      "status": "parked",
+      "goal": "C9000262",
+      "obligations": ["C_TD_REFUTATION"],
+      "evidence": "No false literal trace assertion has been established; finite survival is not an exclusion."
+    },
+    {
+      "name": "commuting-only-certification",
+      "status": "ruled_out",
+      "goal": "C_TD_TRACE",
+      "evidence": "research/MATH_STATE.json: R_TD_COMMUTING_ONLY retirement reason"
+    }
+  ],
+  "nodes": {
+    "C9000262": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 262 (Sharp finite-matrix Lieb–Thirring inequalities and all equality cases.; papers: Equality cases in the sharp one-dimensional matrix Lieb–Thirring inequality; Sharp one-dimensional Lieb–Thirring inequalities for matrix potentials; Sharp one-dimensional Lieb–Thirring constants; Lean status: Partially/Comparator formalized (lean/docs/262.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_TD_TRACE", "C_TD_GAPLESS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/trace_deficit_audit/report.md",
+        "research/trace_deficit_audit/exact_certificate.json"
+      ]
+    },
+    "C_TD_SCOPE": {
+      "statement": "The staged trace theorems have uniform full-symbol positivity and a separate N>=0 hypothesis; trace verification alone does not certify the other manuscript dependencies.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/trace_deficit_audit/report.md"]
+    },
+    "C_TD_TRACE": {
+      "statement": "For every n>=1, Hermitian B,V with X_s=(sI-B)^2+V>=bI for every real s and some b>0, and 0<sigma<1, N is norm convergent. If separately N>=0, continuous Hermitian L=R^-1>0,Z satisfy V+tI=L^2+Z^2+i[B,Z], LZ+ZL+i[B,L]=0, and tr(NV)-tr(N^q)=c_sigma integral t^beta (tr(RZ^2)+q||R^(-1/2)-R^(1/2)(tI+N^r)^(1/2)||_HS^2)dt.",
+      "status": "in_progress",
+      "depends_on": ["C_TD_HALFLINE", "C_TD_LOG", "C_TD_ENDPOINTS", "C_TD_ALGEBRA", "C_TD_SCALAR"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/trace_deficit_audit/report.md",
+        "research/trace_deficit_audit/exact_certificate.json",
+        "research/trace_deficit_audit/verification_result.json"
+      ]
+    },
+    "C_TD_HALFLINE": {
+      "statement": "For a nonnegative symbol X_s=(sI-B)^2+V and every t>0, the coercive half-line boundary problems give unique H^1 solutions, Hermitian S,T with V+tI=S^2+i[B,S]=T^2-i[B,T], spectrum(B+iS) in the upper half-plane, and (S+T)/2=R(t)^-1.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_TD_LOG": {
+      "statement": "The stable spectral factor evaluates the absolutely convergent logarithmic integral; its derivative is the resolvent trace difference.",
+      "status": "in_progress",
+      "depends_on": ["C_TD_HALFLINE"],
+      "reviewer_confirmed": false
+    },
+    "C_TD_ENDPOINTS": {
+      "statement": "The weighted integrals converge and the integration-by-parts boundary terms vanish under the stated symbol and exponent hypotheses.",
+      "status": "in_progress",
+      "depends_on": ["C_TD_LOG", "C_TD_ALGEBRA"],
+      "reviewer_confirmed": false
+    },
+    "C_TD_ALGEBRA": {
+      "statement": "Universal finite complex-matrix Riccati, inverse-trace, and ordered adjoint-square identities require no commutation of the comparison matrix with R.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/trace_deficit_audit/lean/Main.lean",
+        "research/trace_deficit_audit/lean/statement_fidelity.md",
+        "research/trace_deficit_audit/lean/certificates/C_TD_ALGEBRA-d021227c8d9d36f6.json"
+      ]
+    },
+    "C_TD_SCALAR": {
+      "statement": "The positive scalar normalization, scaling, and Tonelli identity give the exact p,q coefficients for every PSD comparison D.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_TD_GAPLESS": {
+      "statement": "For every finite Hermitian B,V with X_s=(sI-B)^2+V>=0, let 2m be the largest real inverse-symbol Laurent pole, or m=0 if none. N converges in norm exactly when sigma>alpha_m, where alpha_0=0 and alpha_m=(m-1)/(2m) otherwise. Then the original exact deficit holds with N_+ in place of N in the power and square terms, without assuming N>=0, and equality holds exactly when V>=0 and [B,V]=0. The theorem includes the exact matrix resolvent asymptotic and power/log divergence constants in report equations (0)-(0a).",
+      "status": "in_progress",
+      "depends_on": ["C_TD_TRACE", "C_TD_POLES", "C_TD_ASYMPTOTIC", "C_TD_SHARPNESS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/trace_deficit_audit/report.md", "research/trace_deficit_audit/exact_certificate.json"]
+    },
+    "C_TD_POLES": {
+      "statement": "For a PSD Hermitian quadratic symbol X_s=(sI-B)^2+V, each real singularity has even inverse-symbol pole 2m_j<=2n with nonzero PSD leading coefficient. If m=max m_j, tr R(t) is comparable to t^(-1+1/(2m)); N is norm convergent exactly for sigma>(m-1)/(2m), with every 0<sigma<1 allowed if there is no real singularity.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/trace_deficit_audit/report.md"]
+    },
+    "C_TD_ASYMPTOTIC": {
+      "statement": "For a nonnegative symbol X_s in CTX_TD with m>=1 and A_j=lim_(x->0) x^(2m_j)X_(s_j+x)^(-1), the matrix-norm limit t^(1-1/(2m))R(t) equals K=(1/m)csc(pi/(2m)) sum_(m_j=m) A_j^(1/(2m)). Put alpha_m=(m-1)/(2m). For m>1, epsilon^(alpha_m-sigma)N_epsilon tends to -c_sigma K/(alpha_m-sigma) if 0<sigma<alpha_m, and N_epsilon/log(1/epsilon) tends to -c_sigma K at sigma=alpha_m.",
+      "status": "in_progress",
+      "depends_on": ["C_TD_POLES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/trace_deficit_audit/report.md"]
+    },
+    "C_TD_SHARPNESS": {
+      "statement": "For every n>=1 the nilpotent Jordan factor X_s=(sI-J)^*(sI-J), with B=(J+J^*)/2 and V=J^*J-B^2, realizes inverse-symbol pole 2n with leading coefficient e_1 e_1^*. Thus sigma>(n-1)/(2n) is the sharp dimension-only convergence condition. The leading resolvent coefficient is (1/n)csc(pi/(2n))e_1 e_1^*.",
+      "status": "in_progress",
+      "depends_on": ["C_TD_ASYMPTOTIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/trace_deficit_audit/report.md", "research/trace_deficit_audit/exact_certificate.json"]
+    },
+    "C_TD_INDEFINITE_ADMISSIBLE": {
+      "statement": "The exact n=2 matrices B=[[0,1/2],[1/2,0]], V=diag(-3/16,13/16), sigma=1/2048 have noncommuting Hermitian B,V, indefinite V, X_s>=I/16 for all real s, and N>=252 c_sigma I>0; every original trace hypothesis is met.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/trace_deficit_audit/report.md", "research/trace_deficit_audit/exact_certificate.json"]
+    },
+    "C_TD_N_SEPARATE": {
+      "statement": "Uniform full-symbol positivity alone does not imply N>=0: B=[[0,1/2],[1/2,0]], V=diag(-11/48,37/48), sigma=1/2 have X_s>=I/48 but N=diag((1/sqrt(3)-pi/3)/2,(1/sqrt(3)+pi/3)/2), whose first eigenvalue is negative. This is not a counterexample to the manuscript, which assumes N>=0 separately.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/trace_deficit_audit/report.md", "research/trace_deficit_audit/exact_certificate.json"]
+    },
+    "C_TD_HALF_EXACT": {
+      "statement": "For B=[[0,1/2],[1/2,0]], V=diag(-1/4,3/4), sigma=1/2, the gapless symbol is PSD with inverse pole four, N=diag(-pi/4,pi/4), and tr(NV)-tr(N_+^3)=pi(16-pi^2)/64>0.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/trace_deficit_audit/report.md", "research/trace_deficit_audit/exact_certificate.json"]
+    },
+    "C_TD_REFUTATION": {
+      "statement": "An exact counterexample satisfies every hypothesis of a literal staged trace assertion.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_MATRIX_FIELD": {
+      "statement": "The matrix paper's regularized field has the primitive, positivity, and boundary properties required for the action argument (field.tex).",
+      "status": "open",
+      "depends_on": ["C_TD_TRACE"],
+      "reviewer_confirmed": false
+    },
+    "C_MATRIX_PATHS": {
+      "statement": "The matrix paper's lower-triangular connecting paths and homotopy estimates exist with the required endpoint and continuation properties (paths.tex).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_MATRIX_ACTION": {
+      "statement": "The matrix finite-interval action estimate and penalty limit hold (action-framework.tex, action-limit.tex).",
+      "status": "open",
+      "depends_on": ["C_MATRIX_FIELD", "C_MATRIX_PATHS"],
+      "reviewer_confirmed": false
+    },
+    "C_MATRIX_SPECTRAL": {
+      "statement": "Form compactness, finite-interval approximation, realification, and spectral exhaustion justify the matrix spectral passage (spectral.tex).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_MATRIX_LT": {
+      "statement": "The matrix paper's sharp finite-channel Lieb-Thirring inequality holds for 1/2<gamma<3/2 (introduction.tex, Theorem 1.1).",
+      "status": "open",
+      "depends_on": ["C_MATRIX_ACTION", "C_MATRIX_SPECTRAL"],
+      "reviewer_confirmed": false
+    },
+    "C_SCALAR_FIELD": {
+      "statement": "The scalar constants paper's matrix-field construction and directional estimates hold (matrix-field.tex).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_SCALAR_RANKONE": {
+      "statement": "The scalar constants paper's rank-one implication and tangent/averaging lemmas hold (rank-one.tex, prop:rankone).",
+      "status": "open",
+      "depends_on": ["C_SCALAR_FIELD"],
+      "reviewer_confirmed": false
+    },
+    "C_SCALAR_PATHS": {
+      "statement": "The scalar constants paper's connecting path, parity, and continuation arguments hold (connecting-path.tex).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_SCALAR_ACTION": {
+      "statement": "The scalar constants paper's finite-interval action theorem and penalty limit hold.",
+      "status": "open",
+      "depends_on": ["C_SCALAR_RANKONE", "C_SCALAR_PATHS"],
+      "reviewer_confirmed": false
+    },
+    "C_SCALAR_LT": {
+      "statement": "The scalar constants paper's spectral exhaustion proves its claimed sharp scalar Lieb-Thirring constant.",
+      "status": "open",
+      "depends_on": ["C_SCALAR_ACTION", "C_SCALAR_SPECTRAL"],
+      "reviewer_confirmed": false
+    },
+    "C_SCALAR_SPECTRAL": {
+      "statement": "The scalar constants paper's form construction, Dirichlet approximation, spectral exhaustion, and signed-potential reduction hold (spectral.tex).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_EQUAL_FIELD_PATHS": {
+      "statement": "The equality paper's regularized field, primitive, positivity properties, and connecting-path foundations hold for n by d fields (appendix-paths.tex).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_EQUAL_ACTION": {
+      "statement": "The equality paper's quantitative action estimate, including dimension-independent constraint coercivity, holds (action.tex).",
+      "status": "open",
+      "depends_on": ["C_TD_TRACE", "C_EQUAL_FIELD_PATHS"],
+      "reviewer_confirmed": false
+    },
+    "C_EQUAL_COMPACT": {
+      "statement": "Equality defects can be exhausted through infinitely many rows to obtain the pointwise auxiliary relations (compactness.tex).",
+      "status": "open",
+      "depends_on": ["C_EQUAL_ACTION", "C_MATRIX_SPECTRAL"],
+      "reviewer_confirmed": false
+    },
+    "C_EQUAL_RIGID": {
+      "statement": "The auxiliary relations imply fixed orthogonal channels, scalar profiles, and complex-Hermitian classification (rigidity.tex).",
+      "status": "open",
+      "depends_on": ["C_EQUAL_COMPACT"],
+      "reviewer_confirmed": false
+    },
+    "C_EQUAL_MAIN": {
+      "statement": "All equality cases in the sharp finite-matrix Lieb-Thirring inequality have the stated fixed-channel sech-squared form.",
+      "status": "open",
+      "depends_on": ["C_MATRIX_LT", "C_EQUAL_RIGID"],
+      "reviewer_confirmed": false
+    }
+  }
+}

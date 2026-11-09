@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_RANGE_CORE-37be16c94c03",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/228/first-pass/range_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/228/first-pass/range_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 19422,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/228/first-pass/range_audit/Main.lean",
+    "source_sha256": "1264dff631457f4f00ca38f5c5d067c5f0e9472ff1f4a60237f3cc70e7beefbb",
+    "statement_fidelity": "families/228/first-pass/range_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "93078be22f4d7044b14496b3407f55f7857677f7f8d9b7772b8874a69d6bb70e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/range_audit/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace RangeAudit\n\ntheorem symmetric_kernel_domination\n    {ι : Type*} [Fintype ι] (K : ι → ι → ℝ) (n : ι → ℝ) (r : ℝ)\n    (hK : ∀ i j, 0 ≤ K i j)\n    (hsym : ∀ i j, K i j = K j i)\n    (hrow : ∀ i, ∑ j, K i j ≤ r) :\n    (∑ i, ∑ j, K i j * n i * n j) ≤ r * ∑ i, (n i) ^ 2 := by\n  have hp (i j : ι) :\n      2 * (K i j * n i * n j) ≤\n        K i j * (n i) ^ 2 + K i j * (n j) ^ 2 := by\n    nlinarith [mul_nonneg (hK i j) (sq_nonneg (n i - n j))]\n  have hsum :\n      2 * (∑ i, ∑ j, K i j * n i * n j) ≤\n        (∑ i, ∑ j, K i j * (n i) ^ 2) +\n        (∑ i, ∑ j, K i j * (n j) ^ 2) := by\n    calc\n      2 * (∑ i, ∑ j, K i j * n i * n j) =\n          ∑ i, ∑ j, 2 * (K i j * n i * n j) := by\n            simp_rw [Finset.mul_sum]\n      _ ≤ ∑ i, ∑ j, (K i j * (n i) ^ 2 + K i j * (n j) ^ 2) :=\n        Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun j _ => hp i j\n      _ = _ := by simp_rw [Finset.sum_add_distrib]\n  have hswap :\n      (∑ i, ∑ j, K i j * (n j) ^ 2) =\n        ∑ i, ∑ j, K i j * (n i) ^ 2 := by\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro i _\n    apply Finset.sum_congr rfl\n    intro j _\n    rw [hsym j i]\n  have hdiag :\n      (∑ i, ∑ j, K i j * (n i) ^ 2) ≤ r * ∑ i, (n i) ^ 2 := by\n    calc\n      (∑ i, ∑ j, K i j * (n i) ^ 2) =\n          ∑ i, (∑ j, K i j) * (n i) ^ 2 := by\n            simp_rw [Finset.sum_mul]\n      _ ≤ ∑ i, r * (n i) ^ 2 :=\n        Finset.sum_le_sum fun i _ =>\n          mul_le_mul_of_nonneg_right (hrow i) (sq_nonneg (n i))\n      _ = r * ∑ i, (n i) ^ 2 := by rw [Finset.mul_sum]\n  linarith\n\ntheorem count_cutoff_bound\n    {ι : Type*} (s : Finset ι) (w : ι → ℝ) (cap tail : ℝ)\n    (hcap : 1 ≤ cap) (htail : tail ≤ 1) (hw : ∀ i ∈ s, w i ≤ cap) :\n    (∑ i ∈ s, w i) + tail ≤ ((s.card : ℝ) + 1) * cap := by\n  have hsum : (∑ i ∈ s, w i) ≤ (s.card : ℝ) * cap := by\n    calc\n      (∑ i ∈ s, w i) ≤ ∑ _i ∈ s, cap := Finset.sum_le_sum hw\n      _ = _ := by simp\n  nlinarith\n\ntheorem independent_pair_lower\n    {ι : Type*} [Fintype ι] (K : ι → ι → ℝ) (d r : ℝ)\n    (hrow : ∀ i, r ≤ ∑ j, K i j) :\n    (Fintype.card ι : ℝ) * r * d ^ 2 ≤\n      ∑ i, ∑ j, K i j * d ^ 2 := by\n  calc\n    (Fintype.card ι : ℝ) * r * d ^ 2 =\n        ∑ _i : ι, r * d ^ 2 := by simp; ring\n    _ ≤ ∑ i, (∑ j, K i j) * d ^ 2 :=\n      Finset.sum_le_sum fun i _ =>\n        mul_le_mul_of_nonneg_right (hrow i) (sq_nonneg d)\n    _ = _ := by simp_rw [Finset.sum_mul]\n\ntheorem arbitrary_box_density_lower\n    (c η d u D q qb qs T δ : ℝ)\n    (hc : 0 ≤ c) (hη : 0 ≤ η) (hd : d ^ 2 ≤ D ^ 2)\n    (hbox : qs - δ ≤ qb)\n    (hbase : qb + c * (-u * d + (1 - η) / 2 * d ^ 2) - δ ≤ q)\n    (hactive : T = qs - c / 2 * u ^ 2) :\n    T - 2 * δ - c * η / 2 * D ^ 2 ≤ q := by\n  have hid :\n      qb + c * (-u * d + (1 - η) / 2 * d ^ 2) - δ -\n          (T - 2 * δ - c * η / 2 * D ^ 2) =\n        (qb - (qs - δ)) + c / 2 * (d - u) ^ 2 +\n          c * η / 2 * (D ^ 2 - d ^ 2) := by\n    rw [hactive]\n    ring\n  have hsq : 0 ≤ c / 2 * (d - u) ^ 2 :=\n    mul_nonneg (by positivity) (sq_nonneg _)\n  have herr : 0 ≤ c * η / 2 * (D ^ 2 - d ^ 2) :=\n    mul_nonneg (by positivity) (sub_nonneg.mpr hd)\n  linarith\n\ntheorem balanced_ratios\n    (r p s : ℝ) (hr : 0 < r) (hp : 0 < p)\n    (hlower : r * p / 2 ≤ s) (hupper : s ≤ r * p) :\n    r / s + s / (r * p ^ 2) ≤ 3 / p := by\n  have hs : 0 < s := lt_of_lt_of_le (by positivity : 0 < r * p / 2) hlower\n  have hden : 0 < r * p ^ 2 := by positivity\n  have hfirst : r / s ≤ 2 / p := by\n    apply (div_le_div_iff₀ hs hp).2\n    nlinarith\n  have hsecond : s / (r * p ^ 2) ≤ 1 / p := by\n    apply (div_le_div_iff₀ hden hp).2\n    nlinarith [mul_le_mul_of_nonneg_right hupper (le_of_lt hp)]\n  calc\n    r / s + s / (r * p ^ 2) ≤ 2 / p + 1 / p := add_le_add hfirst hsecond\n    _ = 3 / p := by ring\n\ntheorem two_sided_pressure_balance\n    (q T C r p s : ℝ) (hC : 0 ≤ C) (hr : 0 < r) (hp : 0 < p)\n    (hlower : r * p / 2 ≤ s) (hupper : s ≤ r * p)\n    (hlo : T - C * (r / s + s / (r * p ^ 2)) ≤ q)\n    (hhi : q ≤ T + C * (r / s + s / (r * p ^ 2))) :\n    |q - T| ≤ 3 * C / p := by\n  have hb := mul_le_mul_of_nonneg_left\n    (balanced_ratios r p s hr hp hlower hupper) hC\n  have hnorm : C * (3 / p) = 3 * C / p := by ring\n  rw [hnorm] at hb\n  apply abs_le.mpr\n  constructor <;> linarith\n\ntheorem small_mass_crossover\n    (e a ε L B : ℝ) (ha : 0 < a) (hε : 0 < ε)\n    (hL : 1 ≤ L) (hB : 0 ≤ B)\n    (hsmall : e ≤ B * a)\n    (hlarge : L * ε ≤ a → e ≤ B * Real.sqrt (a * ε)) :\n    e ≤ B * Real.sqrt L * min a (Real.sqrt (a * ε)) := by\n  have ha0 : 0 ≤ a := le_of_lt ha\n  have hε0 : 0 ≤ ε := le_of_lt hε\n  have hL0 : 0 ≤ L := le_trans (by norm_num) hL\n  have hsL : 1 ≤ Real.sqrt L := by\n    have hs := Real.sq_sqrt hL0\n    have hn := Real.sqrt_nonneg L\n    nlinarith\n  have hs : 0 ≤ Real.sqrt (a * ε) := Real.sqrt_nonneg _\n  have hs2 : (Real.sqrt (a * ε)) ^ 2 = a * ε :=\n    Real.sq_sqrt (mul_nonneg ha0 hε0)\n  by_cases h : a ≤ ε\n  · have ham : a ≤ Real.sqrt (a * ε) := by\n      nlinarith [mul_nonneg ha0 (sub_nonneg.mpr h)]\n    rw [min_eq_left ham]\n    calc\n      e ≤ B * a := hsmall\n      _ ≤ B * Real.sqrt L * a := by\n        nlinarith [mul_nonneg (mul_nonneg hB ha0) (sub_nonneg.mpr hsL)]\n  · have hεa : ε < a := lt_of_not_ge h\n    have ham : Real.sqrt (a * ε) ≤ a := by\n      nlinarith [mul_nonneg ha0 (le_of_lt (sub_pos.mpr hεa))]\n    rw [min_eq_right ham]\n    by_cases hla : L * ε ≤ a\n    · have hprod : B * Real.sqrt (a * ε) ≤\n          B * Real.sqrt L * Real.sqrt (a * ε) := by\n        nlinarith [mul_nonneg (mul_nonneg hB hs) (sub_nonneg.mpr hsL)]\n      exact le_trans (hlarge hla) hprod\n    · have haL : a ≤ L * ε := le_of_lt (lt_of_not_ge hla)\n      have hroot : a ≤ Real.sqrt L * Real.sqrt (a * ε) := by\n        have hprod0 : 0 ≤ Real.sqrt L * Real.sqrt (a * ε) :=\n          mul_nonneg (Real.sqrt_nonneg _) hs\n        have hprod2 :\n            (Real.sqrt L * Real.sqrt (a * ε)) ^ 2 = L * (a * ε) := by\n          rw [mul_pow, Real.sq_sqrt hL0, hs2]\n        nlinarith [mul_nonneg ha0 (sub_nonneg.mpr haL)]\n      exact le_trans hsmall (by nlinarith [mul_le_mul_of_nonneg_left hroot hB])\n\nend RangeAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/range_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: the finite-volume core of Theorem k:range\n\nThe declarations in `Main.lean`, all in namespace `RangeAudit`, are real-algebra and finite-sum results. They\nare not a formalization of continuum Gibbs integration or of thermodynamic\nlimits. The all-parameter analytic pressure comparison is proved separately\nin `report.md`; the compiler is not being asked to certify that report.\n\n- `symmetric_kernel_domination` quantifies over every finite type,\n  every real vector of counts, and every nonnegative symmetric real kernel.\n  A common upper bound `r` on its row sums bounds the quadratic form by\n  `r * sum_i n_i^2`. In the pressure proof use the block kernel `K+`; adding\n  diagonal self terms and interpreting particle counts are analytic steps\n  outside this declaration.\n- `count_cutoff_bound` quantifies over an arbitrary finite sum.\n  Each retained summand is bounded by `cap >= 1`, and the entire omitted\n  tail is at most one. The total is at most `(number retained + 1) * cap`.\n  Substituting exponential grand weights, taking logarithms, and establishing\n  the uniform grand-tail bound are outside the formal statement.\n- `independent_pair_lower` bounds a finite constant-density\n  pair sum from below using lower row sums. It applies after independence\n  of distinct whole boxes has replaced pair expectations by products of\n  means. Independence, the diagonal omission, boundary-row restriction,\n  volume normalizations, and the large-volume limit are not encoded here.\n- `arbitrary_box_density_lower` has arbitrary real box density\n  `d`, active shift `u`, and a bound `d^2 <= D^2`. Its coefficient `c >= 0`\n  represents `beta * a`. Given the Jensen lower bound `hbase`, the finite-box\n  comparison `hbox`, and the active-value identity `hactive`, it proves the\n  pressure lower bound with deletion error `2*delta` and kernel error\n  `c*eta*D^2/2`. It assumes neither `d = u` nor convergence of `d`, and allows\n  `c = 0`. Its premises, not the compiler, carry the continuum probability.\n- `balanced_ratios` has arbitrary positive reals `r,p` and any\n  real `s` between `r*p/2` and `r*p`. It proves\n  `r/s + s/(r*p^2) <= 3/p`. For the manuscript take `r=R0`,\n  `p=sqrt(R/R0)`. Constructing the aligned rounded side satisfying these\n  inequalities and absorbing the count entropy are proved in the report.\n- `two_sided_pressure_balance` takes the same scale conditions\n  and two-sided pressure inequalities as explicit hypotheses. It concludes\n  an absolute pressure error at most `3*C/p`. The analytic upper and lower\n  inequalities are not silently discharged by this statement.\n- `small_mass_crossover` has arbitrary reals `e,a,epsilon,L,B`,\n  with positive `a,epsilon`, `L >= 1`, and `B >= 0`. From `e <= B*a` and,\n  whenever `L*epsilon <= a`, `e <= B*sqrt(a*epsilon)`, it concludes\n  `e <= B*sqrt(L)*min(a,sqrt(a*epsilon))`. The report supplies these two\n  hypotheses for the absolute pressure error. It makes no claim about\n  novelty, phase transitions, or the companion manuscript.\n\nNo result here assumes pressure differentiability, an active density lower\nbound, a lower bound on the positive added mass, or a bound on the number of\nreference interactions. No declaration purports to formalize either\nmanuscript's main phase-transition theorem.\n"
+  },
+  "subject": {
+    "content_hash": "011cf6273609c89669acbb186ca75f4e5bede6b5f24b2902b83cffa056f08468",
+    "kind": "claim",
+    "subject_id": "C_RANGE_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

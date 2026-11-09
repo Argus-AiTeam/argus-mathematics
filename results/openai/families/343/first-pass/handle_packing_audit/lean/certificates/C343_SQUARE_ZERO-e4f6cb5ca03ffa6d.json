@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C343_SQUARE_ZERO-9b9ea9bbc394",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/343/first-pass/handle_packing_audit/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/343/first-pass/handle_packing_audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14474,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/343/first-pass/handle_packing_audit/lean/Main.lean",
+    "source_sha256": "0736830e45adbc276e84108db0087750dd0814c8504ed1ef624bd50b17f3215a",
+    "statement_fidelity": "families/343/first-pass/handle_packing_audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "f869f1bc06473539017230494e9bafd8c335219fca0edf9ccdb4b6598e1a55e1",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/handle_packing_audit/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace HandlePackingAudit\n\ntheorem square_zero_binomial {R : Type*} [CommRing R]\n    (a b : R) (hb : b * b = 0) (n : ℕ) :\n    (a + b) ^ (n + 1) =\n      a ^ (n + 1) + ((n + 1 : ℕ) : R) * a ^ n * b := by\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      calc\n        (a + b) ^ (n + 1 + 1) =\n            ((a + b) ^ (n + 1)) * (a + b) := by\n              rw [pow_succ]\n        _ = (a ^ (n + 1) + ((n + 1 : ℕ) : R) * a ^ n * b) *\n            (a + b) := by rw [ih]\n        _ = a ^ (n + 1 + 1) +\n            ((n + 1 + 1 : ℕ) : R) * a ^ (n + 1) * b +\n            ((n + 1 : ℕ) : R) * a ^ n * (b * b) := by\n              push_cast\n              ring\n        _ = a ^ (n + 1 + 1) +\n            ((n + 1 + 1 : ℕ) : R) * a ^ (n + 1) * b := by\n              rw [hb]\n              simp\n\ntheorem square_zero_top_power {R : Type*} [CommRing R]\n    (a b : R) (hb : b * b = 0) (m : ℕ)\n    (ha : a ^ (m + 1) = 0) :\n    (a + b) ^ (m + 1) = ((m + 1 : ℕ) : R) * a ^ m * b := by\n  rw [square_zero_binomial a b hb m, ha, zero_add]\n\nend HandlePackingAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/handle_packing_audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: square-zero top-power algebra\n\nClaim: `C343_SQUARE_ZERO`.\n\nThe declaration `square_zero_binomial` in namespace `HandlePackingAudit`\nquantifies over every type `R`\nwith a commutative-ring structure, every `a b : R`, and every natural\nnumber `n`, including zero. Its sole extra hypothesis is `b * b = 0`.\nIts conclusion is exactly\n`(a+b)^(n+1) = a^(n+1) + (n+1)*a^n*b`,\nwhere the natural coefficient is cast into `R`. It assumes neither a\ncharacteristic-zero field nor a bound on dimension.\n\nThe declaration `square_zero_top_power` in the same namespace adds the hypothesis\n`a^(m+1) = 0` and concludes\n`(a+b)^(m+1) = (m+1)*a^m*b`.\n\nIn the analytic report, these identities apply to the commutative\neven-degree subalgebra of differential forms, with `a` the vertical\nsymplectic two-form and `b = c ds wedge dt + eta wedge dt`.\nBoth summands of `b` contain `dt`, so `b*b = 0`; vertical dimension\n`2m` gives `a^(m+1) = 0`. The remaining vertical-degree argument\neliminating `a^m wedge eta` is in the report, not this formal source.\n\nThe Lean declarations do not encode manifolds, exterior algebras,\nHamiltonian isotopies, compactness, axes, Moser flows, thin planar\nembeddings, or the packing theorem. Compilation certifies only the\ndisplayed universal ring identities. The applicability of the\neven-degree algebra and the analytic interpretation require independent\nmathematical review. There are no assumptions about comparison\nexistence or the main ball-packing conjecture in these Lean statements.\n"
+  },
+  "subject": {
+    "content_hash": "8a7bd7b6f3f49c2704c0b123eee842bb55f3f2d0e89d600ee3feaee46d7da66d",
+    "kind": "claim",
+    "subject_id": "C343_SQUARE_ZERO"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

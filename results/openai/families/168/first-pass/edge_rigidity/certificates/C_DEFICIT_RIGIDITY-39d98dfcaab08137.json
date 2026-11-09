@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_DEFICIT_RIGIDITY-2bbccd5d3c61",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/168/first-pass/edge_rigidity/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/168/first-pass/edge_rigidity/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14767,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/168/first-pass/edge_rigidity/Main.lean",
+    "source_sha256": "37d592e803abd70ea20f441b18d3f303a4a04158fd67799cbb74a3d50a86ebb6",
+    "statement_fidelity": "families/168/first-pass/edge_rigidity/statement_fidelity.md",
+    "statement_fidelity_sha256": "312ad172f01e1ea5788475008671379c02be454e102b5cc07b148642faeb739e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/edge_rigidity/Main.lean",
+    "text": "import Mathlib\n\nnamespace TransportedEdgeRigidity\n\nvariable {ι : Type*} [DecidableEq ι]\n\ndef transfer (a b : ι) (t : ℝ) (v : ι → ℝ) (i : ι) : ℝ :=\n  v i + if i = a then t * v b else 0\n\ntheorem transfer_mono (a b : ι) (t : ℝ) (ht : 0 ≤ t)\n    {v w : ι → ℝ} (h : ∀ i, v i ≤ w i) :\n    ∀ i, transfer a b t v i ≤ transfer a b t w i := by\n  intro i\n  by_cases hi : i = a\n  · simp only [transfer, if_pos hi]\n    exact add_le_add (h i) (mul_le_mul_of_nonneg_left (h b) ht)\n  · simpa only [transfer, if_neg hi, add_zero] using h i\n\ntheorem no_hidden_deficits\n    (r : ℕ) (D U : ℕ → ι → ℝ) (a b : ℕ → ι) (t : ℕ → ℝ)\n    (ht : ∀ k, k < r → 0 ≤ t k)\n    (hinit : D 0 = U 0)\n    (hexact : ∀ k, k < r →\n      U (k + 1) = transfer (a k) (b k) (t k) (U k))\n    (hactual : ∀ k, k < r → ∀ i,\n      D (k + 1) i ≤ transfer (a k) (b k) (t k) (D k) i)\n    (hfinal : D r = U r) :\n    (∀ k, k ≤ r → D k = U k) ∧\n      (∀ k, k < r →\n        D (k + 1) = transfer (a k) (b k) (t k) (D k)) := by\n  have dom : ∀ k, k ≤ r → ∀ i, D k i ≤ U k i := by\n    intro k\n    induction k with\n    | zero =>\n        intro _ i\n        exact le_of_eq (congrFun hinit i)\n    | succ k ih =>\n        intro hk i\n        have hkr : k < r := by omega\n        calc\n          D (k + 1) i ≤ transfer (a k) (b k) (t k) (D k) i :=\n            hactual k hkr i\n          _ ≤ transfer (a k) (b k) (t k) (U k) i :=\n            transfer_mono (a k) (b k) (t k) (ht k hkr) (ih (by omega)) i\n          _ = U (k + 1) i := (congrFun (hexact k hkr) i).symm\n  have gapStep (k : ℕ) (hk : k < r) (i : ι) :\n      U k i - D k i ≤ U (k + 1) i - D (k + 1) i := by\n    have hD := hactual k hk i\n    have hU := congrFun (hexact k hk) i\n    have hmul := mul_nonneg (ht k hk)\n      (sub_nonneg.mpr (dom k (Nat.le_of_lt hk) (b k)))\n    by_cases hi : i = a k\n    · simp only [transfer, if_pos hi] at hD hU\n      nlinarith\n    · simp only [transfer, if_neg hi, add_zero] at hD hU\n      linarith\n  have gapMono : ∀ m, m ≤ r → ∀ k, k ≤ m → ∀ i,\n      U k i - D k i ≤ U m i - D m i := by\n    intro m\n    induction m with\n    | zero =>\n        intro _ k hk i\n        have hk0 : k = 0 := by omega\n        subst k\n        exact le_rfl\n    | succ m ih =>\n        intro hm k hk i\n        by_cases hkm : k ≤ m\n        · exact le_trans (ih (by omega) k hkm i) (gapStep m (by omega) i)\n        · have hkeq : k = m + 1 := by omega\n          subst k\n          exact le_rfl\n  have states (k : ℕ) (hk : k ≤ r) : D k = U k := by\n    funext i\n    apply le_antisymm (dom k hk i)\n    have hgap := gapMono r (le_refl r) k hk i\n    have hend := congrFun hfinal i\n    linarith\n  constructor\n  · exact states\n  · intro k hk\n    calc\n      D (k + 1) = U (k + 1) := states (k + 1) (by omega)\n      _ = transfer (a k) (b k) (t k) (U k) := hexact k hk\n      _ = transfer (a k) (b k) (t k) (D k) := by\n        rw [states k (Nat.le_of_lt hk)]\n\nend TransportedEdgeRigidity\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/edge_rigidity/statement_fidelity.md",
+    "text": "# Statement fidelity: conditional deficit rigidity\n\nClaim: `C_DEFICIT_RIGIDITY`.\n\nThe declarations are in namespace `TransportedEdgeRigidity`.\n`transfer a b t v` is the real vector whose coordinate `i` is\n`v i + (if i=a then t*v b else 0)`. Thus it is exactly the elementary\noperator `id + t E_ab` used for an edge transition in the manuscript.\n`transfer_mono` proves pointwise monotonicity when `t` is nonnegative.\n\n`no_hidden_deficits` quantifies over an arbitrary index type `iota`\nwith decidable equality, an arbitrary finite schedule length `r`, two\nsequences `D,U` of real vectors, arbitrary endpoint-index sequences\n`a,b`, and arbitrary real weights `t`. No finiteness of `iota`,\nacyclicity, distinctness of `a,b`, positivity of the state vectors, or\nstrict positivity of the weights is required.\n\nIts hypotheses are exactly:\n\n- For every `k<r`, `t k >= 0`.\n- `D 0 = U 0`.\n- For every `k<r`, `U (k+1) = transfer (a k) (b k) (t k) (U k)`.\n- For every `k<r` and coordinate `i`, the actual value `D (k+1) i`\n  is at most that transfer applied to `D k`.\n- `D r = U r`.\n\nIt concludes both `D k = U k` for every `k<=r` and exact attainment\nof each transfer bound for every `k<r`. All comparisons and equalities\nare of actual real-valued functions, not numerical approximations.\nThe proof uses no axioms beyond those of Lean/Mathlib and no `sorry`.\n\nThis formalizes the uniform no-hidden-deficit implication in\n`05-comparison.tex`, subsection \"Equality forces all edge images\".\nIt does NOT formalize Bruhat intervals, reflection-order realizability,\nBMP sheaves, the edge-image inclusion, the normalization of their\nHilbert series, positivity of the Hilbert series of a nonzero quotient,\nKL invariance, or the simultaneous freeness induction. In particular,\nthe required local step inequalities and endpoint equality are explicit\nhypotheses, not proved for every actual BMP sheaf by this source.\nThe formal certificate must not be reported as a proof of\n`C_IMAGE_EQUALITY` or as completion of the campaign.\n"
+  },
+  "subject": {
+    "content_hash": "0e802598be79b840674cb7d94218be7be17f782b7bb6d7fdbb08dd76b497e3bb",
+    "kind": "claim",
+    "subject_id": "C_DEFICIT_RIGIDITY"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

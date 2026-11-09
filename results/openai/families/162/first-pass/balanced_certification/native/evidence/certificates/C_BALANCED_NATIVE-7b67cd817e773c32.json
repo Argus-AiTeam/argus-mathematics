@@ -1,0 +1,67 @@
+{
+  "evidence_id": "lean-C_BALANCED_NATIVE-b893e75a1d3e",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/162/first-pass/balanced_certification/native/evidence/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+      "families/162/first-pass/balanced_certification/native/evidence/Main.lean"
+    ],
+    "cwd": "families/162/first-pass/balanced_certification/native/evidence",
+    "duration_ms": 11229,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/162/first-pass/balanced_certification/native/evidence/Main.lean",
+    "source_sha256": "3b87cf393032ea396a42787f9b0385890e3480d92ef93cd192e81f9fc57fd4d3",
+    "statement_fidelity": "families/162/first-pass/balanced_certification/native/evidence/statement_fidelity.md",
+    "statement_fidelity_sha256": "86c8ed91e69678077bae61072b8f8dc537ffb78bec4c280281048da157d8be82",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'balanced_manuscript_statement' depends on axioms: [propext, Classical.choice, Quot.sound]\ndef OAI.Balanced.MainResult : Prop :=\n∃ q₀, ∀ (q : ℕ), q₀ ≤ q → Nat.Prime q → OAI.Balanced.BalancedCounterexample q\ndef OAI.Balanced.BalancedCounterexample : ℕ → Prop :=\nfun q => ∃ H, H.Intersecting ∧ H.Nonisolated ∧ H.HasCoverNumber (q + 1)\ndef OAI.Balanced.PartiteHypergraph.Covers : {r n : ℕ} →\n  OAI.Balanced.PartiteHypergraph r n → Finset (OAI.Balanced.PartiteHypergraph.Vertex r n) → Prop :=\nfun {r n} H C => ∀ e ∈ H.edges, ∃ i, (i, e i) ∈ C\ndef OAI.Balanced.PartiteHypergraph.Intersecting : {r n : ℕ} → OAI.Balanced.PartiteHypergraph r n → Prop :=\nfun {r n} H => H.edges.Nonempty ∧ ∀ e ∈ H.edges, ∀ f ∈ H.edges, ∃ i, e i = f i\ndef OAI.Balanced.PartiteHypergraph.Nonisolated : {r n : ℕ} → OAI.Balanced.PartiteHypergraph r n → Prop :=\nfun {r n} H => ∀ (i : Fin r) (v : Fin n), ∃ e ∈ H.edges, e i = v\ndef OAI.Balanced.PartiteHypergraph.HasCoverNumber : {r n : ℕ} → OAI.Balanced.PartiteHypergraph r n → ℕ → Prop :=\nfun {r n} H k =>\n  (∃ C, H.Covers C ∧ C.card = k) ∧ ∀ (C : Finset (OAI.Balanced.PartiteHypergraph.Vertex r n)), H.Covers C → k ≤ C.card\n",
+    "tool": "lean",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake",
+        "version": "Lake version 5.0.0-src+5045d00 (Lean version 4.34.1)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+        "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/balanced_certification/native/evidence/Main.lean",
+    "text": "import OAI.Combinatorics.BalancedRyser.Results\n\ntheorem balanced_manuscript_statement :\n    ∃ q₀ : ℕ, ∀ q : ℕ, q₀ ≤ q → q.Prime →\n      ∃ H : OAI.Balanced.PartiteHypergraph (q + 1) (q + 1),\n        H.Intersecting ∧ H.Nonisolated ∧ H.HasCoverNumber (q + 1) :=\n  OAI.Balanced.main_result\n\n#print axioms balanced_manuscript_statement\n#print OAI.Balanced.MainResult\n#print OAI.Balanced.BalancedCounterexample\n#print OAI.Balanced.PartiteHypergraph.Covers\n#print OAI.Balanced.PartiteHypergraph.Intersecting\n#print OAI.Balanced.PartiteHypergraph.Nonisolated\n#print OAI.Balanced.PartiteHypergraph.HasCoverNumber\n"
+  },
+  "produced_by": "lean_evidence/lean 4.34.1",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/balanced_certification/native/evidence/statement_fidelity.md",
+    "text": "# Statement fidelity: full balanced theorem, native Lean 4.34.1\n\nThe declaration `balanced_manuscript_statement` in `NativeMain.lean`\nstates the balanced manuscript's entire Theorem `thm:main`, not a\nfixed finite example and not an extension-field result. Its proof\nis the pinned upstream declaration `OAI.Balanced.main_result`.\n\nThe quantifiers are `exists q0 : Nat, forall q : Nat,\nq0 <= q -> q.Prime -> exists H`. The threshold is chosen before q\nand does not depend on q. No numerical threshold is asserted.\nThe field order is a natural prime q, not an arbitrary prime power.\nThe number of parts and the size of each part are both q+1.\n\nThe definitions printed by the compiler and present in the pinned\n`Model.lean` are:\n\n* `PartiteHypergraph r n`: a finite set of functions `Fin r -> Fin n`.\n* `Vertex r n`: `Fin r x Fin n`. Part i is `{i} x Fin n`.\n* `Covers H C`: for every edge function e, some `(i,e i)` lies in C.\n  C is any finite vertex set, with no one-part restriction.\n* `Intersecting H`: the edge set is nonempty and every two edge\n  functions agree in some coordinate.\n* `Nonisolated H`: every pair `(i,v)` occurs on an edge.\n* `HasCoverNumber H k`: there exists a cover of cardinality k and\n  every cover has cardinality at least k.\n\nReplace each edge function e by its graph `{(i,e i) : i in Fin r}`.\nThe parts are disjoint, each part has cardinality n, and every edge\ncontains exactly one vertex from each part and has cardinality r.\nThe graph map is injective, so these are ordinary finite\nset-hypergraphs. Two graph edges meet exactly when their functions\nagree in a coordinate. A vertex set hits every graph edge exactly\nwhen `Covers` holds. Nonisolated means every declared vertex belongs\nto a graph edge. Hence the printed formal conclusion gives exactly\nthe ordinary finite-hypergraph conclusion in the manuscript.\n\nThe independent Lean 4.31.0 source `Main.lean` proves the generic\ngraph-cardinality, graph-injectivity and ordinary-cover equivalence\nstatements in `Audit162.PartiteHypergraph`. Its definitions are the\nsame displayed finite-function definitions, rather than a weaker\nproxy. The coordinate argument above supplies the direct reading\nof the upstream namespace as an ordinary hypergraph. No claim is\nmade that the Lean 4.31.0 source reproves the asymptotic construction.\n\n`NativeMain.lean` prints the transitive axiom answer for the full\nstatement. The replay gate allows only `propext`, `Classical.choice`\nand `Quot.sound`; source scans alone are not substituted for that\nanswer. The 668 upstream source modules are bound to their public\nrevision before being compiled. Mathlib and its packages retain\ntheir native pinned versions. Their standard cache is a trusted\nlibrary-build input, not a purported independent rebuild of Mathlib.\n\nThis document states the intended reading, not an independent\nReviewer verdict. It asserts neither a new construction nor novelty\nor publishable significance; those are not compiler conclusions.\n"
+  },
+  "subject": {
+    "content_hash": "2f1cabd0942d513871be5b232e4b4d7c957c405a719ca44e247d0d31bb1ef7e3",
+    "kind": "claim",
+    "subject_id": "C_BALANCED_NATIVE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

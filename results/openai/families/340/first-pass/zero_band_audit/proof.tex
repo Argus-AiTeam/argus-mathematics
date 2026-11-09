@@ -1,0 +1,534 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Hs}{H^{\mathrm s}}
+\newcommand{\Int}{\operatorname{int}}
+\title{A family-level verification of the zero-band deduction}
+\author{Campaign 9000340: Engineer mathematical argument}
+\date{November 5, 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Result and scope.}
+This note proves the band identification and product-complement assertion
+used in the staged manuscript's Lemmas \texttt{band-is-stabilization} and
+\texttt{product-complement}. It then proves the stated detection of the
+original family class, using the explicitly identified external connectivity
+theorems. In particular, this audit finds no refutation of that deduction.
+The proof is over the entire parameter space; it does not infer a product
+family from a collection of fiberwise product diffeomorphisms.
+
+The previously supplied findings established the availability of the tube
+fibration and connectivity inputs. The additional result here is the
+geometric, transition-compatible identification to which those estimates
+apply. The argument also works for the compact parameter manifolds and
+dimension bounds in Theorem~\ref{thm:vanishing} below.
+No novelty or publishability verdict is claimed. Independent review is
+outstanding. Neither the kernel-class calculation, the embedded Lagrangian
+realization, nor Hamiltonian transport is certified here.
+
+\paragraph{External inputs and source boundaries.}
+We use the following results about the \emph{lower} product stabilization
+of smooth h-cobordisms:
+\begin{enumerate}
+\item The operation is $(D,X)\mapsto(D\times J,X\times J)$.
+The outgoing face in the bent model is
+$(\partial_+D\times J)\cup(D\times\partial J)$, not just
+$\partial_+D\times J$. Codimension-zero extension adjoins the
+trivial target cylinder and commutes with stabilization.
+See \cite[Definition 2.7, Remark 2.13, Definition 2.15]{CP}.
+\item If $\dim X\geq\max(2r+8,3r+5)$, the stabilization
+$H(X)\to H(X\times J)$ is $r$-connected
+\cite[Theorem 2.16]{CP}. An $(r+1)$-connected map of underlying
+manifolds induces an $r$-connected map of stable h-cobordism spaces
+\cite[Theorem 2.17]{CP}. Here $r$-connected means an isomorphism
+on $\pi_i$ for $i<r$ and a surjection on $\pi_r$.
+\item For a compact parameter manifold $B$, smooth h-cobordism bundles
+on the fixed incoming $X$, up to incoming-relative bundle isomorphism,
+are classified by $[B,H(X)]$ \cite[Proposition 2.11]{CP}.
+\item We use integral homological Whitehead for simply connected CW
+spaces and Poincare--Lefschetz duality for a compact oriented manifold
+whose boundary is split into its incoming and outgoing parts
+\cite[Corollary 4.33 and Theorem 3.43]{Hatcher}.
+\end{enumerate}
+The first three inputs were read in the exact cited arXiv version,
+\texttt{2506.06110v1}, retained as \texttt{cp2025.html} and
+\texttt{cp2025.txt}. The topology statements were read in the author's
+current electronic text, retained as \texttt{hatcher2002.pdf} and
+\texttt{hatcher2002.txt}; their locators are unchanged in the cited edition.
+These are external mathematical inputs, not outputs of our verifier.
+Their independent citation attribution remains for the Host-invoked Reviewer.
+
+As an additional convention check, the author-hosted WJR PDF retained as
+\texttt{wjr2013.pdf} explicitly gives the same product and collar-pushout
+formulas in Definitions 1.1.1 and 1.1.3, and the product-component
+classifying-space description in Remark 1.1.11. Its PDF creation metadata
+is February 29, 2012. We therefore do not represent that download as an
+inspection of the final 2013 book edition; the versioned CP source is
+sufficient for the external inputs above.
+
+Elementary differential topology used below consists of partitions of
+unity, the implicit function theorem, and existence, uniqueness and smooth
+parameter dependence of smooth ODE solutions. The bundle and hitting-time
+arguments are supplied explicitly. Basic exact sequences, excision, the
+universal coefficient theorem and van Kampen are used with integral
+coefficients.
+
+\section{A geometric assertion not requiring stable topology}
+
+Let $B$ be a compact smooth manifold and $Y$ a closed smooth manifold.
+Suppose $s:B\times Y\times[0,1]\to\R$ is smooth, equals a fixed $h^0$
+on a collar of $t=0$, and equals $h_b^1$ on a collar of $t=1$.
+Both end functions have zero as a regular value. Let $r(t)>0$, $r'(t)>0$,
+and assume
+\[
+ F_b(u,t)=r(t)^2s_b(u,t),\qquad d_{(u,t)}F_b\ne0
+ \quad\hbox{on }Y\times[0,1].
+\]
+All differentials and fields in the proof are vertical for projection to
+$B$. Put $\Sigma=(h^0)^{-1}(0)$ and $C_b=s_b^{-1}(0)$.
+
+\begin{lemma}[Parametric band and signs]\label{lem:band}
+For sufficiently small uniform $\epsilon>0$ there is a smooth band
+identification
+\[
+ \Phi:C\times[-\epsilon,\epsilon]\longrightarrow
+ \mathcal R=\{|s|\leq\epsilon\}
+\]
+over $B$, with $s(\Phi(c,z))=z$, which preserves the end collar coordinates
+and is fixed in $b$ at the incoming end. On
+$P_{\delta,b}=\{\delta s_b\geq\epsilon\}$, for $\delta\in\{-1,1\}$,
+there are smooth parameter-dependent fields $V_\delta$ with
+\[
+ \delta\,dF(V_\delta)>0,\quad
+ dt(V_\delta)>0\text{ near the ends},\quad
+ \delta\,ds(V_\delta)>0\text{ on }\delta s=\epsilon.
+\]
+At each end the two fields are restrictions of one whole-sphere
+prescription.
+\end{lemma}
+\begin{proof}
+The differential identity
+\[
+ dF=r^2ds+2rr's\,dt                                      \tag{1}
+\]
+implies $ds\ne0$ on $C$. The end regularity makes $C$ transverse to
+the end faces. By compactness, $ds$ stays nonzero in a uniform band.
+In its interior use $\nabla s/|\nabla s|^2$.
+On an end collar use $\nabla_Yh/|\nabla_Yh|^2$, which is angular
+and independent of $t$. Patching these choices preserves the affine
+equation $ds(U)=1$. At the incoming collar the choice is fixed for
+all $b$, since $h^0$ is fixed. The flow of $U$, for a uniform small
+positive and negative time, gives $\Phi$; its inverse returns a point
+to level zero in time $-s$. This is a global construction over $B$,
+not a selection of trivializations of $C$.
+
+Here is a quantitative local sign check. Write $a=\min r>0$,
+$M=\max r'>0$ and choose a positive lower bound $m_0$ for $|ds|$
+in the band. With the product metric, $V=\delta\nabla s$ satisfies
+\[
+ \delta ds(V)=|ds|^2,\qquad
+ \delta dF(V)\geq r^2|ds|^2-2rr'|s||ds|.
+\]
+Taking $\epsilon\leq a m_0/(4M)$ gives a lower bound
+$r^2|ds|^2/2>0$ on the sides.
+On either end collar the common prescription is
+\[
+ V_0=\partial_t+h\nabla_Yh,\qquad
+ dt(V_0)=1,\quad ds(V_0)=h|\nabla_Yh|^2,\quad
+ dF(V_0)=h(2rr'+r^2|\nabla_Yh|^2).                       \tag{2}
+\]
+These have the required signs in the relevant sign region; on its side
+$dh\ne0$ gives strictness for $ds$ as well.
+Away from sides and prescribed end collars use $\delta\nabla F$.
+All applicable inequalities are strict linear inequalities in the field.
+A partition of unity subordinate to the corresponding neighborhoods
+therefore patches the fields, retaining $V_0$ on smaller end collars.
+The constructions and choices are smooth over $B$ and have uniform
+margins by compactness.
+\end{proof}
+
+\begin{lemma}[Product complement over its varying entry bundle]
+\label{lem:complement}
+Let
+\[
+ W_b=(Y\times[-1,0])\cup\mathcal R_b
+ \ \subset\ A=Y\times[-1,2].
+\]
+After compatible rounding of the interior interface, its complement
+$K_b=\overline{A\setminus W_b}$ is a smooth product cobordism
+over $E_b=\partial_+W_b$, smoothly in $b$. Moreover $W$ itself
+is an incoming-relative product family on $Y$.
+\end{lemma}
+\begin{proof}
+Before rounding, $K_b$ consists of $P_{-,b}$, $P_{+,b}$ and
+$Y\times[1,2]$. Use Lemma~\ref{lem:band} in the sign regions.
+The common end prescription (2) extends to the upper cylinder over
+the entire $Y$, with $dt(V)=1$. Thus the field points into $K_b$
+from all the faces of its entry interface and has just one exit,
+$Y\times\{2\}$.
+
+We give the rounding with its orientation. At a lower corner use
+\[
+ v=t,\qquad w=\delta s-\epsilon.
+\]
+The complementary region is the quadrant $v,w\geq0$. At an upper
+corner use $v=t-1$ and the same $w$; the complementary region is
+the union $\{v\geq0\}\cup\{w\geq0\}$.
+In both cases $dv(V),dw(V)>0$ in a uniform small neighborhood.
+Round the lower interface in the first quadrant and the upper one
+in the third quadrant, with conormal into the complement
+\[
+ A\,dv+B\,dw,\qquad A,B\geq0,\quad A+B>0.               \tag{3}
+\]
+Then (3) evaluates positively on $V$.
+
+For completeness a genuinely smooth profile, rather than a circular arc
+joined only with matching tangent, can be obtained as follows.
+Choose a smooth nondecreasing $\alpha:[0,1]\to[0,\pi/2]$, equal to
+zero near zero and $\pi/2$ near one, with
+$\alpha(1-u)=\pi/2-\alpha(u)$. Up to a common small positive scale set
+\[
+ v(u)=\int_0^u\sin\alpha(x)\,dx,\qquad
+ w(u)=\int_u^1\cos\alpha(x)\,dx.
+\]
+This joins the two positive axes with straight segments near its ends;
+its conormal is $\cos\alpha\,dv+\sin\alpha\,dw$.
+Negate both coordinates for the upper profile, retaining the conormal
+pointing into the complement. It has the same positive evaluation on
+$V$. The rational circular profiles in \texttt{verify.py} check these
+quadrant and conormal signs, not the smooth gluing of a circular arc.
+
+The coordinates $t,s$ are preserved by the collar transition maps:
+at the lower end all transitions are identity, and at the upper end
+they act only on the remaining level-set variable. Consequently the
+same two-dimensional profile works over the whole family. If the
+extended stabilized piece and the target collar are kept separately
+labelled, choose their new separating wall in this fixed planar model.
+It is a fixed adjustment at an identity transition seam. This keeps
+the original collared models of both pieces; no parameter-dependent
+choice of a tangential framing is needed.
+
+Every trajectory reaches the top in finite time, uniformly on the
+compact family. Indeed, take two thresholds inside the prescribed
+lower and upper end collars. There $dt(V)$ has a uniform positive
+lower bound, so the times spent in these collars are bounded, and
+their thresholds cannot be crossed backwards in forward time.
+Between the thresholds a trajectory stays in one sign region and
+$\delta F$ increases at a uniform positive rate while remaining in
+a bounded range. Its time in the middle is at most that range divided
+by the positive lower bound. It cannot leave across the entry interface.
+The same argument backwards reaches $E_b$. This also covers a trajectory
+in the upper band: it meets the band-end entry without entering a
+middle sign region.
+
+ODE uniqueness and transversality give a smooth positive top hitting
+time $\tau(b,e)$ for every $e\in E_b$, and smooth dependence of the
+reverse hitting time. Hence
+\[
+ (b,e,u)\longmapsto
+       (b,\operatorname{Fl}^{u\tau(b,e)}_V(e)),
+ \qquad 0\leq u\leq1,
+                                                               \tag{4}
+\]
+is a bundle diffeomorphism $E\times[0,1]\to K$ relative to $E$.
+It does not presume a trivialization of $E\to B$.
+
+Extend the coordinate of (4) a small uniform distance into $W$ by
+extending its transverse field; this gives a collar $E\times[-\eta,0]$.
+Choose one increasing smooth diffeomorphism
+$\rho:[-\eta,1]\to[-\eta,0]$, equal to the identity near $-\eta$.
+On the collar plus added complement apply $(e,u)\mapsto(e,\rho(u))$,
+and apply the identity on the rest of $W$.
+This identifies $W\cup_E K$ with $W$ over $B$, relative to the incoming
+$Y$. The left side is the fixed product $B\times A$.
+Thus $W$ is a product family. All roundings are internal interfaces
+in the same ambient cylinder; they do not change this total product.
+\end{proof}
+
+\begin{lemma}[Which stabilization the band represents]\label{lem:which}
+If $C\to B$ is an h-cobordism family with its incoming $\Sigma$ fixed,
+then
+\[
+ [W]=e_!\sigma([C])\quad\hbox{in }[B,H(Y)],
+\]
+where $\sigma$ is precisely the lower interval-product stabilization
+and $e:\Sigma\times J\to Y$ is the fixed incoming band embedding.
+\end{lemma}
+\begin{proof}
+Adjoin the fixed collar to get
+$C^-=(\Sigma\times[-1,0])\cup_\Sigma C$.
+In the product $C^-\times J$ the faces are
+\[
+\begin{array}{ll}
+\text{incoming}&\Sigma\times\{-1\}\times J,\\
+\text{fixed vertical collar}&\Sigma\times[-1,0]\times\partial J,\\
+\text{movable outgoing}&(\partial_+C\times J)\cup(C\times\partial J).
+\end{array}                                                     \tag{5}
+\]
+Bending the fixed vertical collar into the outgoing face converts
+(5) into the product model of the external input. In particular,
+both copies of $C$ on $\partial J$ are movable outgoing faces.
+The construction is neither an upper stabilization nor a double.
+
+Extension is the collar pushout
+\[
+ (Y\times[-1,0])\cup_{\Sigma\times[-1,0]\times J}(C^-\times J).
+                                                               \tag{6}
+\]
+Cancelling the common collar in (6) leaves $Y\times[-1,0]$ with
+$C\times J$ attached. The band map $\Phi$ identifies this with $W$.
+Near its incoming seam $\Phi(x,t,z)=(e(x,z),t)$, because the band
+field is angular and independent of $t$ there. Thus the identification
+also preserves the prescribed smooth gluing data.
+
+Here is the transition-map check. The projection $C\to B$ is a proper
+submersion with its boundary faces also submersive. To construct local
+trivializations, lift base coordinate fields, correcting them vertically
+by $ds(U)=1$ so that they are tangent to $C$. At the incoming end the
+lift can be the fixed product lift. At the outgoing end choose lifts
+independent of the collar coordinate. Partitions of unity retain these
+prescriptions, and their local flows give collar-preserving trivializations.
+Consequently their transitions $g_{ij}$ fix the incoming collar and,
+on outgoing collars, have the form $(x,t)\mapsto(g^+_{ij}(x),t)$.
+The band transitions are $g_{ij}\times\operatorname{id}_J$.
+Extend them by identity over the added collar and over its complement
+in $Y$. At the lower seam they are identity; at the upper seam they
+preserve both planar coordinates. Every fixed planar bending or rounding
+used above therefore commutes with the transitions. This proves equality
+of the entire families represented by (6) and $W$, not merely equality
+of their fiberwise diffeomorphism types.
+\end{proof}
+
+\section{Why the actual zero levels are h-cobordisms}
+
+We check the prerequisite rather than hiding it in the notation $[C]$.
+Suppose $k,l\geq3$, $n=k+l$, $Y=S^{n-1}$, and
+$f:B\times\R^n\to\R$ is smooth, has its only fiber critical point at
+zero, equals the fixed $q=-|x|^2+|y|^2$ near zero, and is exactly
+degree-two homogeneous outside a common ball, with angular data in
+$T_{k,l}$. Choose the inner and outer radii in those fixed collars,
+and take $F=f|_{\text{annulus}}$, $s=F/r^2$; decrease the band width
+further so that $\epsilon<1/2$.
+
+Here $T_{k,l}$ means the path component of $q|_{S^{n-1}}$ in the
+$C^1$ angular functions with zero a regular value. For each smooth
+member $h$, its negative domain is diffeomorphic to
+$S^{k-1}\times D^l$ and its zero set to
+$S^{k-1}\times S^{l-1}$. Indeed a compact path of regular functions
+has a positive regularity margin, so it can be smoothed relative to
+its endpoints. Near its zero sets solve
+$\partial_a h_a+dh_a(X_a)=0$ using the nonzero angular gradient and
+extend $X_a$ by a cutoff. Its flow is an ambient isotopy of the
+domains. This is only a fiberwise fact: no coherent selection of
+these paths over $B$ is made or used.
+
+\begin{lemma}\label{lem:hcob}
+The zero-level family $C$ is an incoming-identified smooth h-cobordism
+family on $\Sigma=S^{k-1}\times S^{l-1}$.
+\end{lemma}
+\begin{proof}
+For a small uniform $\delta>0$ let $M_\pm=\{f\leq\pm\delta\}$.
+The negative sublevel $M_-$ retracts to its portion outside the outer
+sphere. On its compact inner portion choose a strictly descending field,
+radial outward near that sphere, where $df(\partial_r)=2f/r<0$.
+It cannot escape through $f=-\delta$, and its bounded function range
+and strict descent force finite-time transverse exit through the sphere.
+Stopped flow gives the continuous retraction, including at the boundary.
+Angular projection of the remaining portion has the contractible radial
+fibers
+\[
+ \left[\max\{R_0,\sqrt{\delta/(-h_b^1(u))}\},\infty\right),
+ \qquad h_b^1(u)<0.
+\]
+Contract to their continuous lower endpoints. Thus $M_-\simeq S^{k-1}$.
+On $f\geq\delta$, normalized negative gradient has derivative $-1$
+on $f$ and bounded speed: the gradient is nonzero on the compact
+part and grows linearly at infinity. Stopped flow retracts $\R^n$
+onto $M_+$, so $M_+$ is contractible.
+
+The local negative sphere is a homology generator of $M_-$.
+Here is the relative local-handle argument needed for that assertion.
+Choose $\mu$ with $-1<\mu'\leq0$, $\mu(0)>\delta$, and $\mu(s)=0$
+for $s\geq2\delta$, and use
+\[
+ \widetilde f=f-\mu(|x|^2+2|y|^2)
+\]
+inside the fixed quadratic neighborhood. Its support is contained
+in $f<\delta$, and its component derivatives are
+\[
+ -2(1+\mu')x,\qquad 2(1-2\mu')y.                       \tag{7}
+\]
+Thus its only critical point has value below $-\delta$.
+Normalized descent across its regular slab retracts $M_+$, relative
+to $M_-$, to $\{\widetilde f\leq-\delta\}$.
+Outside $M_-$ shrink $y$ to zero when $|x|^2\leq\delta$, and to norm
+$\sqrt{|x|^2-\delta}$ otherwise, leaving points of $M_-$ fixed.
+The derivative in $|y|^2$ is $1-2\mu'>0$, so this is a relative
+deformation onto $M_-\cup D$, where
+$D=\{y=0,\ |x|^2\leq\delta\}$.
+The disk is included because
+$u+\mu(u)\geq\mu(0)>\delta$ for $0\leq u\leq\delta$.
+The deformation is continuous at the fixed set and at $y=0$.
+The pair therefore attaches one $k$-disk. Its long exact sequence,
+using $M_+$ contractible, shows that $\partial D$ generates
+$H_{k-1}(M_-;\Z)$. Expand this sphere within the local negative cone
+to the core on the inner sphere.
+
+Apply the negative field of Lemma~\ref{lem:band} to
+$P_-=\{s\leq-\epsilon\}$. Its entry faces are the inner truncated
+tube $T_-^0$ and the band side; its sole exit is the outer truncated
+tube $T_-^1$. The strict decrease of $f$ and compactness force
+finite exit in both time directions. Flow to the exit embeds
+\[
+ j_b:T_-^0\longrightarrow\Int T_{-,b}^1.
+\]
+The band side maps diffeomorphically to the residual region
+$T_{-,b}^1\setminus\Int j_b(T_-^0)$.
+Uniqueness of trajectories makes the two images disjoint except on
+their common edge; backward exit shows that together they cover
+$T_{-,b}^1$. Smooth exit times and the transverse side condition give
+full rank, including at the corner edges and at the side's zero-time
+outer edge. The band map identifies the side with $C_b$, with its
+prescribed incoming parametrization.
+
+Choose $\delta$ also small enough to contain the inner core in $M_-$.
+Its negative-flow path stays in $M_-$. The generator just established
+therefore maps to a generator in the outer negative angular domain.
+Truncating this domain at a small regular negative level does not
+change its homotopy type. Since both tubes have the homotopy type of
+the simply connected $S^{k-1}$, $j_b$ is a homotopy equivalence.
+
+Excision, using collars, gives
+\[
+ H_*(C_b,\partial_-C_b;\Z)
+   =H_*(T_{-,b}^1,j_b(T_-^0);\Z)=0.
+\]
+This implies connectedness. The two tubes and their common boundary
+$\Sigma$ are simply connected, so van Kampen gives $\pi_1(C_b)=0$.
+The coorientation $ds$ makes $C_b$ orientable in the oriented annulus.
+Integral duality and the universal coefficient theorem give
+$H_*(C_b,\partial_+C_b;\Z)=0$. Both boundaries are diffeomorphic to
+$S^{k-1}\times S^{l-1}$ and are simply connected.
+Homological Whitehead now makes both boundary inclusions homotopy
+equivalences. The local bundle construction in Lemma~\ref{lem:which}
+includes the boundary collars and the fixed incoming identification.
+\end{proof}
+
+\section{Detection and the manuscript implication}
+
+\begin{theorem}[Parametric zero-band vanishing]\label{thm:vanishing}
+Let $B$ be a compact smooth manifold of dimension $d$, and let $f$ have
+the normalized one-critical properties in the preceding section.
+If
+\[
+ \min(k,l)\geq d+3,\qquad
+ k+l-2\geq\max(2d+10,3d+8),                            \tag{8}
+\]
+then $C$ is a product h-cobordism family relative to its fixed incoming
+$\Sigma$. The implication uses the external connectivity and
+classification results stated at the start of this note.
+\end{theorem}
+\begin{proof}
+The previous lemmas give $e_!\sigma([C])=[W]=0$.
+Set $r=d+1$ and $m=k+l-2$. Every subsequent stabilization stage
+has dimension at least $m$. The stability estimate makes
+\[
+ H(\Sigma)\longrightarrow\Hs(\Sigma\times J)
+\]
+$r$-connected. One can see the passage to the telescope directly:
+maps and homotopies from finite spheres factor through a finite
+initial telescope, which retracts to its last stage.
+
+The space $\Sigma\times J$ is $(\min(k,l)-2)$-connected, whereas
+$Y=S^{k+l-1}$ has zero homotopy in all degrees up to
+$\min(k,l)-1$. Thus the fixed collar inclusion $e$ is
+$(\min(k,l)-1)$-connected, independently of any knotting.
+Its stable extension is $(\min(k,l)-2)$-connected, at least
+$r$ by (8). Naturality with stabilization identifies the resulting
+$r$-connected composite with
+\[
+ H(\Sigma)\xrightarrow{\sigma}H(\Sigma\times J)
+ \xrightarrow{e_!}H(Y)\longrightarrow\Hs(Y).           \tag{9}
+\]
+
+An $r$-connected map induces an injection on homotopy classes out of
+a finite CW complex of dimension at most $r-1$.
+To justify the needed version, replace it by a fibration with
+$(r-1)$-connected fibers. A nullhomotopy of the image, with the
+specified original lift at time zero and the product lift at time
+one, lifts over the relative CW pair
+$(B\times I,B\times\partial I)$: its cells have dimension at most
+$d+1=r$, and all the corresponding fiber obstruction groups vanish.
+The lift nullhomotopes $[C]$. This argument also detects components
+and does not require $H(\Sigma)$ to be connected in advance.
+Finally the family classification identifies the null class with an
+actual smooth incoming-relative product family.
+\end{proof}
+
+\begin{corollary}[The requested deduction]
+For $B=S^9$ and $k,l\geq20$, the deduction
+$e_!\sigma(c_B)=[W]=0\Longrightarrow c_B=0$
+in the staged manuscript is valid, under its normalized one-critical
+hypotheses and the stated external inputs.
+\end{corollary}
+\begin{proof}
+Take $r=10$. The stability bound is
+$\max(28,35)=35$, while $\dim\Sigma=k+l-2\geq38$.
+The inclusion $e$ is at least $19$-connected, so its stable map is
+at least $18$-connected. Consequently (9) is an isomorphism on
+$\pi_9$ in the product component.
+For a direct sphere formulation, a free null class is the orbit of
+zero under the fundamental-group action, and that orbit contains
+only zero. Thus free nullity is detected as well. No choice of a
+globally based trivialization of the varying outgoing boundary is used.
+\end{proof}
+
+\paragraph{Relation to the original hypotheses.}
+Proposition \texttt{one-critical} begins with a smooth family on
+$\R^{2p}$, $p\geq20$, with one nondegenerate critical section and
+trivial stable spherical infinity class. The preceding manuscript
+normalization uses its negative-eigensphere comparison and the stated
+injectivity of $J_8$ to make the local quadratic form fixed.
+Its smoothing and positive stabilization then give the normalized family
+used here, with $k=p$ and $l>k+9$.
+Those are upstream claims, recorded separately in the proof graph;
+this note does not assume the main theorem, the existence of its
+nonzero kernel class, or a family product trivialization in order to
+verify the zero-band step.
+The extra inequality $l>k+9$ is needed later for straightening tube
+cores, not for the argument just proved. In its actual integer range
+$k=20+u$, $l=30+u+v$, the stability margin here is $13+2u+v$.
+The verification of this central implication therefore does not close
+the other dependencies of \texttt{one-critical} or of the main theorem.
+
+\paragraph{Computational boundary.}
+The companion \texttt{verify.py} recomputes differential and local-handle
+identities, the quadratic sphere-gradient identity, both corner-conormal
+signs, product-boundary corner cancellation, the exact connectivity
+arithmetic, and an independently replayed rational enclosure returned
+by one bounded Jacobian operation. It reads \texttt{exact\_certificate.json}.
+The Jacobian result is a sign check on a specified rational box, not a
+search over functions or a certificate of a bundle isomorphism.
+The universal geometric assertions, smooth dependence, transition
+compatibility and use of external theorems are the prose proof above.
+No script assertion stands in for those topological steps, and no Lean
+or other kernel verification is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{CP}
+S. Courte and N. Porcelli,
+\emph{On the parametrised Whitehead torsion of families of nearby
+Lagrangian submanifolds}, arXiv:2506.06110v1 (June 6, 2025).
+\bibitem{Hatcher}
+A. Hatcher, \emph{Algebraic Topology}, Cambridge University Press, 2002,
+ISBN 9780521795401. Author's corrected electronic text
+\texttt{https://pi.math.cornell.edu/\string~hatcher/AT/AT.pdf},
+retrieved November 5, 2026.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,89 @@
+{
+  "goal": "C9000007",
+  "routes": [
+    {
+      "name": "R_FOREST_STRUCTURE",
+      "status": "current",
+      "goal": "C_FOREST_UNIFORM",
+      "evidence": "research/forest_coding/report.md"
+    },
+    {
+      "name": "R_FOREST_FIXED_COEFFICIENT_ONLY",
+      "status": "ruled_out",
+      "goal": "C_FOREST_UNIFORM",
+      "evidence": "research/forest_coding/report.md#scope-and-source-findings"
+    }
+  ],
+  "nodes": {
+    "C9000007": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 007 (Ordinary two-point correlations and the corrected Elliott conjecture.; papers: Ordinary two-point correlations of multiplicative functions; Lean status: Partially/Comparator formalized (lean/docs/007.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_FOREST_SPECIALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_FOREST_UNIFORM": {
+      "statement": "For n>=1 and r>=1, the union over all fields, coefficients, lit sets and block choices satisfying the stated geometry and joint-pair bound has at most 2^(10n+3)(2n)^((6r-4)B+I) equality patterns, with one coefficient-free injective encoding and decoder.",
+      "status": "in_progress",
+      "depends_on": ["C_FOREST_QUOTIENT", "C_FOREST_PATH", "C_FOREST_DECODER", "C_FOREST_COUNT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/forest_coding/report.md"]
+    },
+    "C_FOREST_QUOTIENT": {
+      "statement": "A maximal m-pair independent collection omits exactly 2m coordinate labels; every remaining label's lit starts lie on one line in its nonzero independent quotient direction.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/forest_coding/report.md"]
+    },
+    "C_FOREST_PATH": {
+      "statement": "Independent-direction incidence graphs are forests, and nonzero regular runs give the unique simple endpoint path for every regular segment.",
+      "status": "in_progress",
+      "depends_on": ["C_FOREST_QUOTIENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/forest_coding/report.md"]
+    },
+    "C_FOREST_DECODER": {
+      "statement": "The discrete masks, typed ordered forest, endpoint pairs and representative positions recover the entire equality pattern, including imperfect-only labels, uniformly over numerical witnesses.",
+      "status": "in_progress",
+      "depends_on": ["C_FOREST_PATH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/forest_coding/report.md"]
+    },
+    "C_FOREST_COUNT": {
+      "statement": "The same finite code universe has size at most 2^(10n+3)(2n)^((6r-4)B+I); choosing the first decoding code injects the union over all witnesses.",
+      "status": "in_progress",
+      "depends_on": ["C_FOREST_DECODER", "C_FOREST_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/forest_coding/report.md"]
+    },
+    "C_FOREST_GEOMETRY": {
+      "statement": "The literal nonzero mixed-difference terms supply lit blocks with interval-shaped occurrences and nonzero run sums by the prohibited-word deletion argument, without translated-residue independence.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/forest_coding/report.md"]
+    },
+    "C_FOREST_SPECIALIZATION": {
+      "statement": "The structural theorem recovers the literal q:forest-code bound exp(2048k) per column and exp(2048Jk) in all columns, for every admissible coefficient and padding choice, for L>=1024.",
+      "status": "in_progress",
+      "depends_on": ["C_FOREST_UNIFORM", "C_FOREST_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/forest_coding/report.md"]
+    },
+    "C_FOREST_FORMAL_CORE": {
+      "statement": "Universal maximal-pair saturation, independent-vector cycle exclusion, forest endpoint decoding, record/code-cardinality bounds, and a union-over-witnesses injection under one shared decoder law; not an end-to-end formalization of the witness encoder.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/forest_coding/Main.lean",
+        "research/forest_coding/statement_fidelity.md",
+        "research/forest_coding/certificates/C_FOREST_FORMAL_CORE-3c1ca974c1f2bf14.json"
+      ]
+    }
+  }
+}

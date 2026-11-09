@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-JET_ALGEBRA-fd64490a121c",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/341/first-pass/restricted-jet-audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6308,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/341/first-pass/restricted-jet-audit/Main.lean",
+    "source_sha256": "7b5b670dccffcccad621c97d3ff466278510e4c4dd89fb98a42db3e6e1cd74f9",
+    "statement_fidelity": "families/341/first-pass/restricted-jet-audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "97dc150f68231cb55c48a21aa0232775410515a91e3f94d529e3e1da3dfe6fab",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/341/first-pass/restricted-jet-audit/Main.lean:9:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/341/first-pass/restricted-jet-audit/Main.lean:11:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/341/first-pass/restricted-jet-audit/Main.lean:111:39: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/341/first-pass/restricted-jet-audit/Main.lean:113:39: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/341/first-pass/restricted-jet-audit/Main.lean:111:39: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/341/first-pass/restricted-jet-audit/Main.lean:113:39: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/341/first-pass/restricted-jet-audit/Main.lean:117:38: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/341/first-pass/restricted-jet-audit/Main.lean:117:38: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/restricted-jet-audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace RestrictedJet\n\nabbrev V := Fin 4 -> Real\n\ndef J (v : V) : V := ![-v 1, v 0, -v 3, v 2]\n\ndef anti (a b : V) : V := fun i => (a i + J b i) / 2\n\ndef holo (a b : V) : V := fun i => (a i - J b i) / 2\n\ndef formA (u v : V) : Real :=\n  u 0 * v 2 - u 2 * v 0 - u 1 * v 3 + u 3 * v 1\n\ndef formH (u v : V) : Real :=\n  u 0 * v 3 - u 3 * v 0 + u 1 * v 2 - u 2 * v 1\n\ndef symbol (s t : Real) (v : V) : V :=\n  fun i => s * v i + t * J v i\n\ntheorem J_squared (v : V) : J (J v) = -v := by\n  ext i\n  fin_cases i <;> simp [J]\n\ntheorem pullback_identity_A (u v : V) :\n    formA u v = -2 * formA u (J (anti u v)) := by\n  simp [formA, J, anti]\n  ring\n\ntheorem pullback_identity_H (u v : V) :\n    formH u v = -2 * formH u (J (anti u v)) := by\n  simp [formH, J, anti]\n  ring\n\ntheorem normal_A (a b : Real) (e : V) :\n    -2 * formA ![a, b, 0, 0] (J e) =\n      2 * b * e 2 + 2 * a * e 3 := by\n  simp [formA, J]\n  ring\n\ntheorem normal_C (a b x y : Real) (e : V) :\n    -2 * (x * formA ![a, b, 0, 0] (J e) +\n      y * formH ![a, b, 0, 0] (J e)) =\n      2 * (x * b - y * a) * e 2 +\n      2 * (x * a + y * b) * e 3 := by\n  simp [formA, formH, J]\n  ring\n\ntheorem normal_determinant (a b x y : Real) :\n    (2 * b) * (2 * (x * a + y * b)) -\n      (2 * a) * (2 * (x * b - y * a)) =\n      4 * y * (a ^ 2 + b ^ 2) := by\n  ring\n\ntheorem normal_kernel (a b x y r s : Real)\n    (hy : y ≠ 0) (hn : a ^ 2 + b ^ 2 ≠ 0)\n    (hA : 2 * b * r + 2 * a * s = 0)\n    (hC : 2 * (x * b - y * a) * r +\n      2 * (x * a + y * b) * s = 0) :\n    r = 0 ∧ s = 0 := by\n  have hr : (2 * y * (a ^ 2 + b ^ 2)) * r = 0 := by\n    linear_combination (x * a + y * b) * hA - a * hC\n  have hs : (2 * y * (a ^ 2 + b ^ 2)) * s = 0 := by\n    linear_combination b * hC - (x * b - y * a) * hA\n  have hc : 2 * y * (a ^ 2 + b ^ 2) ≠ 0 :=\n    mul_ne_zero (mul_ne_zero (by norm_num) hy) hn\n  exact ⟨(mul_eq_zero.mp hr).resolve_left hc,\n    (mul_eq_zero.mp hs).resolve_left hc⟩\n\ntheorem real_symbol_norm (s t : Real) (h : s ≠ 0 ∨ t ≠ 0) :\n    s ^ 2 + t ^ 2 ≠ 0 := by\n  intro hz\n  have hs : s ^ 2 = 0 := by\n    nlinarith [sq_nonneg s, sq_nonneg t]\n  have ht : t ^ 2 = 0 := by\n    nlinarith [sq_nonneg s, sq_nonneg t]\n  rcases h with h | h\n  · exact (pow_ne_zero 2 h) hs\n  · exact (pow_ne_zero 2 h) ht\n\ntheorem symbol_product (s t : Real) (v : V) :\n    symbol s (-t) (symbol s t v) =\n      fun i => (s ^ 2 + t ^ 2) * v i := by\n  ext i\n  fin_cases i <;> simp [symbol, J] <;> ring\n\ntheorem symbol_kernel (s t : Real) (v : V)\n    (hn : s ^ 2 + t ^ 2 ≠ 0) (hv : symbol s t v = 0) :\n    v = 0 := by\n  have hc : symbol s (-t) (symbol s t v) = 0 := by\n    rw [hv]\n    ext i\n    fin_cases i <;> simp [symbol, J]\n  rw [symbol_product] at hc\n  ext i\n  have hi := congrFun hc i\n  change (s ^ 2 + t ^ 2) * v i = 0 at hi\n  exact (mul_eq_zero.mp hi).resolve_left hn\n\ntheorem symbol_injective_nonzero (s t : Real) (v : V)\n    (h : s ≠ 0 ∨ t ≠ 0) (hv : symbol s t v = 0) :\n    v = 0 :=\n  symbol_kernel s t v (real_symbol_norm s t h) hv\n\ntheorem independent_first_jets (e h : V) :\n    anti (fun i => e i + h i) (J (fun i => h i - e i)) = e ∧\n      holo (fun i => e i + h i) (J (fun i => h i - e i)) = h := by\n  constructor\n  · ext i\n    fin_cases i <;> simp [anti, J] <;> ring\n  · ext i\n    fin_cases i <;> simp [holo, J] <;> ring\n\ntheorem period_recovery (b p q : Real) (hb : b ≠ 0) :\n    -b * (-p / b) = p ∧ -b * (-q / b) = q := by\n  constructor <;> field_simp [hb] <;> ring\n\nend RestrictedJet\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/restricted-jet-audit/statement_fidelity.md",
+    "text": "# Statement fidelity: restricted first-jet algebra\n\nThe formal source is `Main.lean`, namespace `RestrictedJet`.\nEvery coordinate and scalar is real. `V = Fin 4 -> Real` is the\nreal tangent space of a complex surface in a complex-linear frame.\n`J(v0,v1,v2,v3)=(-v1,v0,-v3,v2)` is the standard complex structure.\n`formA` and `formH` are respectively the real and imaginary parts\nof `dz_1 wedge dz_2`, with the real coordinate ordering\n`(Re z_1, Im z_1, Re z_2, Im z_2)`.\n\nAll theorems universally quantify over their displayed vector and\nscalar arguments. There are no hidden smoothness, positivity,\nnonvanishing, or geometric-existence hypotheses.\n\n- `J_squared` states `J^2=-I`.\n- `pullback_identity_A` and `pullback_identity_H` state the exact\n  identities `Q(u,v)=-2 Q(u,J((u+Jv)/2))` for arbitrary real\n  vectors `u,v`, not merely a holomorphic tangent pair. These\n  encode the algebra used before differentiating the manuscript's\n  `eq:pencil-pullback-linearization`.\n- `normal_A` and `normal_C` compute the two pullback linear forms\n  for tangent vector `(a,b,0,0)` and arbitrary residual `e`.\n  Here `C=x A+y H`. No nonvanishing is assumed for these identities.\n- `normal_determinant` states that the determinant of their\n  two-by-two normal matrix is `4*y*(a^2+b^2)`.\n- `normal_kernel` states that zero values of both normal\n  pullbacks imply `r=s=0`, **assuming explicitly** `y!=0` and\n  `a^2+b^2!=0`. It does not assert invertibility at a critical\n  tangent or a degenerate pair. Geometrically those hypotheses\n  hold on the immersion locus of a definite pair.\n- `real_symbol_norm`, `symbol_product`, `symbol_kernel`, and\n  `symbol_injective_nonzero` prove the real Cauchy--Riemann\n  symbol's injectivity at every nonzero real covector.\n  `symbol(s,t)=s I+t J`, and its product with `s I-t J`\n  is `(s^2+t^2)I`. The factor of one half in the geometric\n  operator does not affect injectivity. This is the algebra\n  used in the highest-order comparison in\n  `eq:pencil-point-distribution`; distributions, variable\n  coefficients, and that comparison are not formalized.\n- `independent_first_jets` proves that prescribing\n  `w_s=e+h`, `w_t=J(h-e)` realizes independently the\n  antiholomorphic and holomorphic derivatives `e,h`.\n  It is an algebra statement, not an assertion that an arbitrary\n  Sobolev jet admits point evaluation. The prose proof applies\n  it to smooth variations at a critical point with `w(z)=0`.\n- `period_recovery` proves surjectivity of the period derivative\n  `-b I_2` by the preimage `(-p/b,-q/b)`, for arbitrary\n  `p,q` and **explicitly nonzero** `b`. The geometric input\n  `b=<B,F>>0` supplies this hypothesis.\n\nThe source does not prove a global analytic surjectivity theorem,\nthe exactness or support of an ambient perturbation, curve\ncompactness, nonsplitting, positivity of a perturbed triple,\nSard--Smale, a Fredholm index formula, or the manuscript's main\ntheorem. These conclusions and their assumptions are separated in\n`argument.md`. A successful compiler run supports `JET_ALGEBRA`\nonly. This fidelity reading is authored by Engineer and still\nrequires independent Reviewer assessment.\n"
+  },
+  "subject": {
+    "content_hash": "1540f28d2900350ba57797f1779abe9de081855ecf5571df0e75ebb33f69b139",
+    "kind": "claim",
+    "subject_id": "JET_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,51 @@
+{
+  "command": [
+    "$WORKSPACE/argus-live-update/.venv/bin/python",
+    "-m",
+    "argus_skill.verticals.math.lean_evidence",
+    "verify",
+    "research/two_frame_compression/formal_hierarchy/Main.lean",
+    "--statement-fidelity",
+    "research/two_frame_compression/formal_hierarchy/statement_fidelity.md",
+    "--claim",
+    "C_TFC_PROTOCOL_EXTRACTION",
+    "--project-root",
+    "campaigns/9000124",
+    "--artifact-dir",
+    "research/two_frame_compression/formal_hierarchy/evidence",
+    "--lean-bin",
+    "$WORKSPACE/.elan/bin/lean",
+    "--lake-bin",
+    "$WORKSPACE/.elan/bin/lake",
+    "--lake"
+  ],
+  "exit_code": 1,
+  "post_mutation_checks": [
+    {
+      "command": [
+        "$WORKSPACE/argus-live-update/.venv/bin/python",
+        "-m",
+        "argus_skill.verticals.math.math_state",
+        "check",
+        "--project-root",
+        "campaigns/9000124"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"issues\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "$WORKSPACE/argus-live-update/.venv/bin/python",
+        "-m",
+        "argus_skill.verticals.math.proof_graph_check",
+        "check",
+        "--project-root",
+        "campaigns/9000124"
+      ],
+      "exit_code": 0,
+      "stdout": "proof graph valid: 15 node(s)\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,247 @@
+{
+  "goal": "C9000143",
+  "routes": [
+    {
+      "name": "quadratic-endpoint-obstruction",
+      "status": "current",
+      "evidence": "research/openai_manuscript/two-limit-cycles-for-quintic-lienard-systems-September-24-2026/build/sections/model.tex"
+    }
+  ],
+  "nodes": {
+    "C9000143": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 143 (Hilbert's sixteenth problem: uniform bounds for limit cycles.; papers: Uniform bounds for planar polynomial limit cycles; Two limit cycles for quintic Liénard systems; Lean status: Partially/Comparator formalized (lean/docs/143.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["Q_ZERO_SIGN", "H_INDEPENDENT_REVIEW"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "H_INDEPENDENT_REVIEW": {
+      "statement": "Host-invoked independent Reviewer replays the endpoint certificate, reads its analytic fidelity bridge, and assesses substantive scope and novelty. No review verdict is supplied by Engineer.",
+      "status": "open",
+      "depends_on": ["Q_ZERO_SIGN"],
+      "reviewer_confirmed": false,
+      "audit_status": "pending_host_review"
+    },
+    "Q_MAIN": {
+      "statement": "Quintic thm:main: every classical Lienard system x'=y-F(x), y'=-x with real polynomial deg F<=5 has at most two geometrically distinct isolated periodic orbits, and two are attained.",
+      "status": "open",
+      "depends_on": ["Q_MATCHING", "Q_APPLICATION", "Q_SHARPNESS"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited"
+    },
+    "Q_ARC_DATA": {
+      "statement": "arcs.tex lem:arc-data and lem:arc-scaling: entire smooth profiles have smooth transverse base-zero arcs at every width, |H|<r, |H_r|<1, t_r>0, and differentiable parabolic small-width expansions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "audit_status": "analytic_premise_not_formalized"
+    },
+    "Q_VARIATION": {
+      "statement": "arcs.tex lem:variation: the positive integrating-factor endpoint formula gives strictly positive midpoint variations for positive interior profile variations.",
+      "status": "open",
+      "depends_on": ["Q_ARC_DATA"],
+      "reviewer_confirmed": false,
+      "audit_status": "analytic_premise_not_formalized"
+    },
+    "Q_REFERENCES": {
+      "statement": "fitting.tex fit:references and lem:curvature-comparison: finite-peak reference characteristics exist globally, j decreases for positive curvature, partial_z L>0, and the from-zero curvature comparison has a positive kernel.",
+      "status": "open",
+      "depends_on": ["Q_ARC_DATA", "Q_VARIATION"],
+      "reviewer_confirmed": false,
+      "audit_status": "analytic_premise_not_formalized"
+    },
+    "Q_GLOBAL_FIT": {
+      "statement": "fitting.tex thm:quadratic-fit: (lambda,kappa,r)->(H,H_r,r) is a global smooth diffeomorphism onto r>0, |H|<r, |H_r|<1; P,Q,R,S,G are positive.",
+      "status": "open",
+      "depends_on": ["Q_REFERENCES", "Q_VARIATION", "Q_PR_POSITIVE"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_global_inverse; only P>0 and R>0 used_by_endpoint_bridge"
+    },
+    "Q_PR_POSITIVE": {
+      "statement": "For positive-curvature base-zero quadratic arcs P>0 by the positive profile-variation formula, and R=r(1-H_r^2)t_r(partial_z L_kappa)/(r^2-H^2)>0 by finite-peak reference differentiation. No global-fit inverse or positivity of G is needed.",
+      "status": "open",
+      "depends_on": ["Q_ARC_DATA", "Q_VARIATION", "Q_REFERENCES"],
+      "reviewer_confirmed": false,
+      "audit_status": "engineer_prose_derivation_pending_independent_review",
+      "evidence": ["research/quadratic-zero-sign/report.md"]
+    },
+    "Q_FIT_TRANSPORT": {
+      "statement": "fitting.tex lem:fit-transport: P lambda_r+Q kappa_r=0, D kappa=-(R/G)(lambda-k), D lambda-kappa=(S/G)(lambda-k).",
+      "status": "open",
+      "depends_on": ["Q_GLOBAL_FIT", "Q_ARC_DATA"],
+      "reviewer_confirmed": false,
+      "audit_status": "read_not_independently_certified"
+    },
+    "V_ENDPOINT_DETERMINANT": {
+      "statement": "For n_m=ell, ell_m=ell*w, w_m=S+w^2/2, the endpoint determinant X_m Z_mm-Z_m X_mm equals ell^2(m+n)^2 Dstar/[m^2 n^2(1+ell)^3]; its fixed-model r form is 3 kappa^2 W/m_r^3.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "audit_status": "engineer_exact_replay_passed_pending_independent_review",
+      "evidence": ["research/quadratic-zero-sign/verify.py", "research/quadratic-zero-sign/exact_certificate.json"]
+    },
+    "V_GAMMA_FACTOR": {
+      "statement": "If m,n,ell>0, m!=n, X_m>0 and the endpoint determinant vanishes, gamma_mm-(X_mm/X_m)gamma_m = ell(m+n)^2(wstar-w)/[(1+ell)m^2 n^2(m-n)].",
+      "status": "open",
+      "depends_on": ["V_ENDPOINT_DETERMINANT"],
+      "reviewer_confirmed": false,
+      "audit_status": "engineer_exact_replay_passed_pending_independent_review",
+      "evidence": ["research/quadratic-zero-sign/verify.py", "research/quadratic-zero-sign/exact_certificate.json"]
+    },
+    "Q_RICCATI": {
+      "statement": "model:Riccati: an actual positive quadratic arc supplies the Schwarzian formula and, when d<0 and d^2>=4bm, the inverse-square comparison w<=1/m-ell/n+d*ell-2sqrt(d^2/4-bm), including equality of the radicand to zero.",
+      "status": "open",
+      "depends_on": ["Q_ARC_DATA"],
+      "reviewer_confirmed": false,
+      "audit_status": "engineer_prose_derivation_pending_independent_review",
+      "evidence": ["research/quadratic-zero-sign/report.md"]
+    },
+    "Q_BRANCH_CONSTRAINTS": {
+      "statement": "Actual positive-curvature arcs satisfy: m<=n implies ell>1,w>0; m>n implies d<0; m>n and ell>=1 implies w>=0. Also d<X=(ell/m-1/n)/(1+ell) because kappa P>0.",
+      "status": "open",
+      "depends_on": ["Q_REFERENCES", "Q_VARIATION", "Q_RICCATI"],
+      "reviewer_confirmed": false,
+      "audit_status": "engineer_prose_derivation_pending_independent_review",
+      "evidence": ["research/quadratic-zero-sign/report.md"]
+    },
+    "V_ENDPOINT_NORMALIZATION": {
+      "statement": "With N=n fixed at the point, y=N*ytilde and u=N^2*utilde send (m,n,d,b,ell,w,S,Dstar,wstar) to (m/N,1,Nd,N^3b,ell,Nw,N^2S,NDstar,Nwstar), preserving all sign hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "audit_status": "engineer_exact_replay_passed_pending_independent_review",
+      "evidence": ["research/quadratic-zero-sign/verify.py", "research/quadratic-zero-sign/exact_certificate.json"]
+    },
+    "V_QUADRATIC_ZERO_SIGN": {
+      "statement": "Universally quantified normalized endpoint obstruction: for z,ell,b>0 and real d,w,S, impose the quadratic Schwarzian formula, d<(ell/z-1)/(1+ell), the three actual-arc branch constraints, and the conditional Riccati upper bound (including zero radicand). If Dstar=0 then z!=1 and (wstar-w)/(z-1)>0. No desired sign is a hypothesis.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "audit_status": "kernel_verified_pending_independent_review",
+      "evidence": ["research/quadratic-zero-sign/Main.lean", "research/quadratic-zero-sign/statement-fidelity.md", "research/quadratic-zero-sign/certificates/V_QUADRATIC_ZERO_SIGN-599e35625443b276.json"]
+    },
+    "Q_ZERO_SIGN": {
+      "statement": "model:zero-sign: at an actual quadratic-model point with kappa>0 and W=0, gamma_rr-(R_r/R)gamma_r>0, where r derivatives fix lambda and kappa.",
+      "status": "open",
+      "depends_on": ["V_ENDPOINT_DETERMINANT", "V_GAMMA_FACTOR", "V_ENDPOINT_NORMALIZATION", "V_QUADRATIC_ZERO_SIGN", "Q_RICCATI", "Q_BRANCH_CONSTRAINTS", "Q_PR_POSITIVE"],
+      "reviewer_confirmed": false,
+      "audit_status": "engineer_complete_conditional_verification_pending_independent_review",
+      "evidence": ["research/quadratic-zero-sign/report.md", "research/quadratic-zero-sign/exact_certificate.json"]
+    },
+    "Q_MODEL_INEQUALITY": {
+      "statement": "model.tex thm:model-inequality: the explicit fixed-model derivative (R/G)_r<=0 for every real lambda,kappa and r>0.",
+      "status": "open",
+      "depends_on": ["Q_ZERO_SIGN", "Q_GLOBAL_FIT", "Q_ARC_DATA"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_characteristic_propagation"
+    },
+    "Q_SHAPE": {
+      "statement": "transport.tex prop:third-derivative, prop:intercept and lem:fitted-curvature-range: strict profile shape conditions control fitted slope, curvature-width derivative and slope intercept, with curvature in the traversed curvature range.",
+      "status": "open",
+      "depends_on": ["Q_MODEL_INEQUALITY", "Q_FIT_TRANSPORT", "Q_REFERENCES", "Q_VARIATION"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited"
+    },
+    "Q_MATCHING": {
+      "statement": "arcs.tex lem:axis-extension and prop:cycle-matching: isolated periodic orbits correspond to isolated zeros of the two height-zero midpoint difference on one common transverse width interval.",
+      "status": "open",
+      "depends_on": ["Q_ARC_DATA"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited"
+    },
+    "Q_APPLICATION": {
+      "statement": "application.tex: the four quintic coefficient sign cases, shape comparisons and lem:isolated-zero-count bound the matching difference by two isolated zeros, including multiple and nonisolated zeros.",
+      "status": "open",
+      "depends_on": ["Q_SHAPE", "Q_MATCHING", "Q_GLOBAL_FIT"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited"
+    },
+    "Q_SHARPNESS": {
+      "statement": "sharpness.tex: a perturbative quintic construction attains two isolated periodic orbits.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited"
+    },
+    "U_MAIN": {
+      "statement": "Uniform manuscript thm:uniform: for each integer d>=1 there is a finite integer B(d) bounding all geometric limit cycles of every real planar polynomial vector field of degree at most d in the whole plane.",
+      "status": "open",
+      "depends_on": ["U_MATCHING", "U_PROJECTION", "U_ROTATION"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited"
+    },
+    "U_FLAGS": {
+      "statement": "02-flags.tex lem:flags-saturation: finite large-input collections admit finite saturated flags, and promotion of a vanishing ordinary input can preserve old free coordinates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited"
+    },
+    "U_SEPARATION": {
+      "statement": "03-separation.tex thm:separation: on a saturated flag satisfying def:packet, vanishing paired terminal coefficients imply exact vanishing; otherwise the first nonzero paired exponent determines the leading real asymptotics.",
+      "status": "open",
+      "depends_on": ["U_FLAGS"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_packet_hypotheses"
+    },
+    "U_CALCULUS": {
+      "statement": "04-calculus.tex thm:calculus assumes the flag estimates, separation and ass:calculus-primitive to obtain differentiated packet arithmetic, positive cleaned realizations and implicit closure.",
+      "status": "open",
+      "depends_on": ["U_FLAGS", "U_SEPARATION", "U_PACKETS"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_differentiated_implicit_closure"
+    },
+    "U_ABSOLUTE_ZERO": {
+      "statement": "05-elimination.tex thm:absolute-zero: a finite open equation system has finitely many isolated solutions if every distinct-solution sequence has an analytic finite-limit chart or an anchored saturated retestable flag with a recoverable old free input and all required positive normalizations.",
+      "status": "open",
+      "depends_on": ["U_CALCULUS", "U_SEPARATION", "U_FLAGS"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_escape_and_retestability_hypotheses"
+    },
+    "U_PACKETS": {
+      "statement": "06-additive.tex thm:additive-packets, 07-regular.tex thm:regular-packets, 08-mixed.tex thm:mixed-packets assert packet, independent-derivative, safe-column and refinement-invariant terminal-germ properties for their stated small-input passage models.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_analytic_models_and_primitive_assumption"
+    },
+    "U_TEMPLATES": {
+      "statement": "09-subdivision.tex thm:finite-templates: bounded polynomial degree supplies finitely many globally subanalytic scalar pieces, passage rules and word-length/crossing bounds, with uniform analytic neighborhoods and fixed tolerances.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_geometric_preparation_and_cited_literature"
+    },
+    "U_TERMINAL": {
+      "statement": "10-terminal.tex thm:terminal-reduction: finitely refined prepared passages reduce to analytic, additive, one-rate or mixed actual ODE transfers with locally unique argument graphs and retained strict domain margins.",
+      "status": "open",
+      "depends_on": ["U_TEMPLATES", "U_PACKETS"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_geometric_analytic_interface"
+    },
+    "U_MATCHING": {
+      "statement": "11-counting.tex thm:matching-system: finitely many fixed open matching systems represent all but degree-boundedly many cycles; their full differential/algebraic closure has the absolute-zero property, hyperbolic representations have full row rank, and distinct cycles occupy distinct regular fiber components.",
+      "status": "open",
+      "depends_on": ["U_TERMINAL", "U_ABSOLUTE_ZERO", "U_TEMPLATES"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_full_closure_and_component_separation"
+    },
+    "U_PROJECTION": {
+      "statement": "11-counting.tex thm:projection-count: admissible open data F(p,x)=0 with full row rank F_x and the absolute-zero property for their finite differential/algebraic closure have uniformly bounded fiber components.",
+      "status": "open",
+      "depends_on": ["U_ABSOLUTE_ZERO"],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited_projection_and_full_closure"
+    },
+    "U_ROTATION": {
+      "statement": "11-counting.tex lem:counting-rotation: one sufficiently small common-sign perturbation V+mu(-Q,P) realizes at least any prescribed finite collection of isolated cycles as distinct nearby hyperbolic periodic orbits, preserving degree.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "audit_status": "unaudited"
+    }
+  }
+}

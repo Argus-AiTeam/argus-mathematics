@@ -1,0 +1,42 @@
+{
+  "unit_id": "finite-certificates",
+  "find_query": "matrix rank over a prime finite field",
+  "find_limit": 3,
+  "candidate_count": 3,
+  "candidates": [
+    "finite_field.linear_map.rank.compute",
+    "prime_field.matrix.rank.compute",
+    "matrix.symbolic.rank.compute"
+  ],
+  "selected_operation_id": "prime_field.matrix.rank.compute",
+  "server_version": "0.14.0",
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "exact_contract_file": "jacobian_inspect.json",
+  "input_contract": {
+    "type": "PrimeFieldMatrixRequest",
+    "additional_properties": false,
+    "required": ["matrix"],
+    "matrix_type": "PrimeFieldMatrix",
+    "matrix_required": ["prime", "entries", "columns"],
+    "prime": "An explicit prime integer in [2, 2147483647].",
+    "shape": "At most 256 rows; nonempty rows have 1..256 columns; equal row lengths matching columns. Zero rows carry the explicit columns axis.",
+    "entries": "Integer canonical residues in [0, prime)."
+  },
+  "output_contract": {
+    "type": "PrimeFieldMatrixRankResult",
+    "additional_properties": false,
+    "required": ["prime", "source", "rank"],
+    "prime": "Integer greater than 1 and at most 2147483647.",
+    "source": "PrimeFieldMatrixRequest retaining the exact source matrix.",
+    "rank": "Nonnegative integer."
+  },
+  "read_only": true,
+  "payload_file": "jacobian_payload.json",
+  "matches_historical_payload": true,
+  "payload_fits_contract": true,
+  "fit_reason": "Prime 2; two rows of two integer canonical residues; explicit columns=2. This is exactly the requested finite-field matrix rank, not a nearby symbolic operation.",
+  "inspected_before_run": true,
+  "authorized_mathematical_run_count": 1,
+  "boundary": "Only the rank of the characteristic-two linear 2x2 matrix is requested. No nonlinear formal map, reshaping theorem, composition theorem, or maximality assertion is encoded."
+}

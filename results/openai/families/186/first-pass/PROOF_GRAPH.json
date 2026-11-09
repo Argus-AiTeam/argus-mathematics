@@ -1,0 +1,149 @@
+{
+  "goal": "C9000186",
+  "routes": [
+    {
+      "name": "Hypergraph principal-theorem certification",
+      "status": "current",
+      "goal": "C9000186",
+      "obligations": ["H_VARIANCE"],
+      "evidence": "research/certificates/hypergraph_influence/Main.lean"
+    },
+    {
+      "name": "Graph-family theorem certification",
+      "status": "parked",
+      "goal": "C9000186",
+      "obligations": ["G_THRESHOLD"],
+      "evidence": "research/MATH_STATE.json: R_AUDIT_GRAPH"
+    },
+    {
+      "name": "Exact refutation of a literal manuscript assertion",
+      "status": "untried",
+      "goal": "C9000186",
+      "evidence": "OBJECTIVE.md"
+    }
+  ],
+  "nodes": {
+    "C9000186": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 186 (Uniform influence and sharp thresholds for graph and hypergraph properties.; papers: A uniform influence bound for hypergraph properties; A Sharp Threshold Bound for Monotone Graph Properties; Lean status: Partially/Comparator formalized (lean/docs/186.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["H_VARIANCE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "G_FOURIER": {
+      "statement": "Biased Fourier derivative/Parseval identities and the arbitrary-coordinate low-degree influence estimate (graph fourier.tex).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Sharp-Threshold-Bound-for-Monotone-Graph-Properties-September-25-2026/build/sections/fourier.tex"]
+    },
+    "G_RESTRICTION": {
+      "statement": "Exact averaging of restricted Fourier mass and influences, without imposing an exterior degree cutoff.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hypergraph_influence/upstream/port/OAI/Combinatorics/SharpThreshold/FourierRestrictionMass.lean", "research/certificates/hypergraph_influence/block_support/Restriction.lean"]
+    },
+    "G_BLOCK": {
+      "statement": "All block permutations survive exterior conditioning and free-edge orbits have size at least m; averaged graph block estimate.",
+      "status": "open",
+      "depends_on": ["G_FOURIER", "G_RESTRICTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Sharp-Threshold-Bound-for-Monotone-Graph-Properties-September-25-2026/build/sections/graph.tex"]
+    },
+    "G_CAPTURE": {
+      "statement": "Graph support degree witness and fixed-size one-vertex capture imply captured Fourier mass up to k^2/2.",
+      "status": "open",
+      "depends_on": ["G_BLOCK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Sharp-Threshold-Bound-for-Monotone-Graph-Properties-September-25-2026/build/sections/graph.tex"]
+    },
+    "G_VARIANCE": {
+      "statement": "For every graph property, n>=2 and 0<p<1, Var_p(f)<=2^17 I_p(f)/(log n)^2, without monotonicity.",
+      "status": "open",
+      "depends_on": ["G_FOURIER", "G_CAPTURE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Sharp-Threshold-Bound-for-Monotone-Graph-Properties-September-25-2026/build/sections/graph.tex"]
+    },
+    "G_THRESHOLD": {
+      "statement": "Finite Russo identity and log-odds integration give graph quantile width <=2^19 log(1/(2 epsilon))/(log n)^2.",
+      "status": "open",
+      "depends_on": ["G_VARIANCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Sharp-Threshold-Bound-for-Monotone-Graph-Properties-September-25-2026/build/sections/threshold.tex"]
+    },
+    "H_FOURIER": {
+      "statement": "Arbitrary-coordinate biased Fourier identities and low-degree mass estimate, independently of monotonicity.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hypergraph_influence/upstream/port/OAI/Combinatorics/SharpThreshold/LowDegree.lean", "research/certificates/hypergraph_influence/upstream/port/OAI/Combinatorics/SharpThreshold/FourierDirichlet.lean", "research/certificates/hypergraph_influence/Model.lean"]
+    },
+    "H_BLOCK": {
+      "statement": "For r+1<=m, all free-edge block orbits have size binomial(m,j)>=m; averaged block mass <=m^(-1/4)(rm/n)I.",
+      "status": "in_progress",
+      "depends_on": ["H_FOURIER", "G_RESTRICTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hypergraph_influence/Block.lean", "research/certificates/hypergraph_influence/block_support/Orbit.lean", "research/certificates/hypergraph_influence/block_support/Restriction.lean"]
+    },
+    "H_DEGREE_WITNESS": {
+      "statement": "Derive a support vertex of positive degree at most real k from simplicity, uniformity, incidence counting, and |S|<=(k/r)^(r/(r-1)).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hypergraph_capture/Main.lean", "research/certificates/hypergraph_capture/statement_fidelity.md"]
+    },
+    "H_UNIFORM_ISOLATION": {
+      "statement": "Uniform m-subset isolation probability >=(m/n)(1-(|V|-1)(m-1)/(n-1)), including m=1.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hypergraph_capture/Main.lean", "research/certificates/hypergraph_capture/statement_fidelity.md"]
+    },
+    "V_HYPERGRAPH_CAPTURE": {
+      "statement": "Literal hypergraph lem:capture for all n>=r>=3, 1<=m<=n and real k>0, with its original real cutoff and sampling law.",
+      "status": "proved",
+      "depends_on": ["H_DEGREE_WITNESS", "H_UNIFORM_ISOLATION"],
+      "reviewer_confirmed": true,
+      "evidence": ["research/certificates/hypergraph_capture/Main.lean", "research/certificates/hypergraph_capture/statement_fidelity.md", "research/certificates/hypergraph_capture/exact_certificate.json", "research/certificates/hypergraph_capture/certificates/V_HYPERGRAPH_CAPTURE-7809279e9d93ed0e.json", "research/certificates/hypergraph_capture/verification_result.json"]
+    },
+    "H_CAPTURED_MASS": {
+      "statement": "Averaged block and capture estimates imply mass up to L <=2r m^(-1/4)I; L<1 gives an empty sum.",
+      "status": "in_progress",
+      "depends_on": ["H_BLOCK", "V_HYPERGRAPH_CAPTURE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hypergraph_influence/Transfer.lean"]
+    },
+    "H_VARIANCE": {
+      "statement": "For each r>=3, all n>=r and 0<p<1, Var_p(f)<=C_r I_p(f)/(log n)^(r/(r-1)); tail cancellation has positive bias exponent.",
+      "status": "in_progress",
+      "depends_on": ["H_FOURIER", "H_CAPTURED_MASS", "H_TAIL", "H_UNIFORM_CONSTANTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hypergraph_influence/Main.lean", "research/certificates/hypergraph_influence/statement_fidelity.md", "research/certificates/hypergraph_influence/exact_certificate.json"]
+    },
+    "H_TAIL": {
+      "statement": "For every positive real L, genuine product variance is at most the low-degree Fourier mass plus p(1-p)I/L; also Var<=p(1-p)I. No symmetry or monotonicity is required.",
+      "status": "in_progress",
+      "depends_on": ["H_FOURIER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hypergraph_influence/Transfer.lean"]
+    },
+    "H_UNIFORM_CONSTANTS": {
+      "statement": "For each r>=3, a positive finite constant and a small-n/large-n numerical dichotomy exist uniformly for every 0<sigma<=1/2, with a bias-independent fixed-size block witness and the full capture-plus-tail coefficient bound.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hypergraph_influence/Constants.lean"]
+    },
+    "H_THRESHOLD": {
+      "statement": "Finite Russo identity and log-odds integration give hypergraph quantile width <=2C_r log((1-epsilon)/epsilon)/(log n)^(r/(r-1)).",
+      "status": "open",
+      "depends_on": ["H_VARIANCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-uniform-influence-bound-for-hypergraph-properties-October-5-2026/build/completion.tex"]
+    }
+  }
+}

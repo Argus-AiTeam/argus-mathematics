@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C359_ALGEBRA-7f06d7c4611c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/359/first-pass/certificates/hartogs_real_planes/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/359/first-pass/certificates/hartogs_real_planes/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 19512,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/359/first-pass/certificates/hartogs_real_planes/Main.lean",
+    "source_sha256": "847fc4cddab982d16d03359b5e1eba9812fb21caaececbe0debd3d8c904240c2",
+    "statement_fidelity": "families/359/first-pass/certificates/hartogs_real_planes/statement_fidelity.md",
+    "statement_fidelity_sha256": "42b8e3ece9cb69d473762fc02951f3fce06dd5858a36edb72efc010c091f59c9",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/certificates/hartogs_real_planes/Main.lean",
+    "text": "import Mathlib\n\nnamespace Hartogs\n\ndef mixedP (d b1 b2 r c1 c2 e1 e2 : Real) : Real :=\n  d + 4 * (b1 + b2)^2 + 4 * r^2 +\n    e1 * (c1 + 4 * b1 * r) + e2 * (c2 + 4 * b2 * r)\n\ntheorem corner11 (d b1 b2 r c1 c2 : Real) :\n    mixedP d b1 b2 r c1 c2 1 1 =\n      (d + 4 * b1 * b2) + c1 + c2 +\n        2 * (b1 + b2 + r)^2 + 2 * (b1^2 + b2^2 + r^2) := by\n  unfold mixedP\n  ring\n\ntheorem corner12 (d b1 b2 r c1 c2 : Real) :\n    mixedP d b1 b2 r c1 c2 1 2 =\n      (d + 4 * b1 * b2) + c1 + 2 * c2 +\n        (2 * b1 + b2 + r)^2 + 3 * (b2 + r)^2 := by\n  unfold mixedP\n  ring\n\ntheorem corner21 (d b1 b2 r c1 c2 : Real) :\n    mixedP d b1 b2 r c1 c2 2 1 =\n      (d + 4 * b1 * b2) + 2 * c1 + c2 +\n        (b1 + 2 * b2 + r)^2 + 3 * (b1 + r)^2 := by\n  unfold mixedP\n  ring\n\ntheorem corner22 (d b1 b2 r c1 c2 : Real) :\n    mixedP d b1 b2 r c1 c2 2 2 =\n      d + 2 * (c1 + c2) + 4 * (b1 + b2 + r)^2 := by\n  unfold mixedP\n  ring\n\ntheorem four_corner_interpolation (d b1 b2 r c1 c2 e1 e2 : Real) :\n    mixedP d b1 b2 r c1 c2 e1 e2 =\n      (2 - e1) * (2 - e2) * mixedP d b1 b2 r c1 c2 1 1 +\n      (2 - e1) * (e2 - 1) * mixedP d b1 b2 r c1 c2 1 2 +\n      (e1 - 1) * (2 - e2) * mixedP d b1 b2 r c1 c2 2 1 +\n      (e1 - 1) * (e2 - 1) * mixedP d b1 b2 r c1 c2 2 2 := by\n  unfold mixedP\n  ring\n\ntheorem mixed_coercivity (d b1 b2 r c1 c2 e1 e2 : Real)\n    (hd : 0 <= d) (hc1 : 0 <= c1) (hc2 : 0 <= c2)\n    (hc12 : 0 <= d + 4 * b1 * b2)\n    (he1lo : 1 <= e1) (he1hi : e1 <= 2)\n    (he2lo : 1 <= e2) (he2hi : e2 <= 2) :\n    c1 + c2 <= mixedP d b1 b2 r c1 c2 e1 e2 := by\n  have h11 : c1 + c2 <= mixedP d b1 b2 r c1 c2 1 1 := by\n    rw [corner11]\n    nlinarith [sq_nonneg (b1 + b2 + r), sq_nonneg b1, sq_nonneg b2, sq_nonneg r]\n  have h12 : c1 + c2 <= mixedP d b1 b2 r c1 c2 1 2 := by\n    rw [corner12]\n    nlinarith [sq_nonneg (2 * b1 + b2 + r), sq_nonneg (b2 + r)]\n  have h21 : c1 + c2 <= mixedP d b1 b2 r c1 c2 2 1 := by\n    rw [corner21]\n    nlinarith [sq_nonneg (b1 + 2 * b2 + r), sq_nonneg (b1 + r)]\n  have h22 : c1 + c2 <= mixedP d b1 b2 r c1 c2 2 2 := by\n    rw [corner22]\n    nlinarith [sq_nonneg (b1 + b2 + r)]\n  let w11 := (2 - e1) * (2 - e2)\n  let w12 := (2 - e1) * (e2 - 1)\n  let w21 := (e1 - 1) * (2 - e2)\n  let w22 := (e1 - 1) * (e2 - 1)\n  have hw11 : 0 <= w11 := mul_nonneg (sub_nonneg.mpr he1hi) (sub_nonneg.mpr he2hi)\n  have hw12 : 0 <= w12 := mul_nonneg (sub_nonneg.mpr he1hi) (sub_nonneg.mpr he2lo)\n  have hw21 : 0 <= w21 := mul_nonneg (sub_nonneg.mpr he1lo) (sub_nonneg.mpr he2hi)\n  have hw22 : 0 <= w22 := mul_nonneg (sub_nonneg.mpr he1lo) (sub_nonneg.mpr he2lo)\n  calc\n    c1 + c2 = w11 * (c1 + c2) + w12 * (c1 + c2) +\n        w21 * (c1 + c2) + w22 * (c1 + c2) := by\n      dsimp [w11, w12, w21, w22]\n      ring\n    _ <= w11 * mixedP d b1 b2 r c1 c2 1 1 +\n        w12 * mixedP d b1 b2 r c1 c2 1 2 +\n        w21 * mixedP d b1 b2 r c1 c2 2 1 +\n        w22 * mixedP d b1 b2 r c1 c2 2 2 :=\n      add_le_add\n        (add_le_add\n          (add_le_add (mul_le_mul_of_nonneg_left h11 hw11)\n            (mul_le_mul_of_nonneg_left h12 hw12))\n          (mul_le_mul_of_nonneg_left h21 hw21))\n        (mul_le_mul_of_nonneg_left h22 hw22)\n    _ = mixedP d b1 b2 r c1 c2 e1 e2 := by\n      dsimp [w11, w12, w21, w22]\n      exact (four_corner_interpolation d b1 b2 r c1 c2 e1 e2).symm\n\ntheorem young_absorption (k a m : Real) :\n    k * a * m <= m^2 / 4 + (k * a)^2 := by\n  nlinarith [sq_nonneg (m / 2 - k * a)]\n\ntheorem gap_absorption (a s t delta : Real)\n    (ha : 0 <= a) (has : a <= s)\n    (hdlo : 0 <= delta) (hdhi : delta <= 1) :\n    delta * a^2 / 4 <= (s - 2 * t)^2 / 4 + delta * a * t := by\n  have h1 : 0 <= delta * a * (s - a) / 2 :=\n    div_nonneg\n      (mul_nonneg (mul_nonneg hdlo ha) (sub_nonneg.mpr has)) (by norm_num)\n  have h2 : 0 <= delta * (1 - delta) * a^2 / 4 :=\n    div_nonneg\n      (mul_nonneg (mul_nonneg hdlo (sub_nonneg.mpr hdhi)) (sq_nonneg a))\n      (by norm_num)\n  have identity :\n      (s - 2 * t)^2 / 4 + delta * a * t - delta * a^2 / 4 =\n        (t - (s - delta * a) / 2)^2 +\n        delta * a * (s - a) / 2 + delta * (1 - delta) * a^2 / 4 := by ring\n  nlinarith [sq_nonneg (t - (s - delta * a) / 2)]\n\ntheorem area_control (a s t : Real) (hs : s^2 <= 4 * a^2) :\n    t^2 <= 2 * a^2 + (s - 2 * t)^2 / 2 ∧\n      a * t <= 2 * a^2 + (s - 2 * t)^2 / 4 := by\n  have hu : t^2 <= 2 * a^2 + (s - 2 * t)^2 / 2 := by\n    nlinarith [sq_nonneg (s - t)]\n  constructor\n  · exact hu\n  · nlinarith [sq_nonneg (a - t), sq_nonneg a]\n\ntheorem imaginary_pairing_bound (a b s : Real)\n    (_ha : 0 <= a) (_hb : 0 <= b) (hs : 0 <= s)\n    (heq : s^2 = a^2 + 3 * b^2) :\n    (a + 3 * b) / 2 <= s := by\n  by_contra hn\n  have h1 : 0 < a + 3 * b - 2 * s := by linarith\n  have h2 : 0 < a + 3 * b + 2 * s := by linarith\n  have hp := mul_pos h1 h2\n  nlinarith [sq_nonneg (a - b)]\n\ntheorem threshold (alpha B C lam x : Real)\n    (ha : 0 < alpha) (hB : 1 <= B) (hC : 0 <= C) (hx : 1 <= x)\n    (hlam : B^2 * (B + C) / alpha <= lam) :\n    B * x <= lam + alpha * x^3 / (lam + C * x) := by\n  have hBp : 0 < B := by linarith\n  have hxp : 0 < x := by linarith\n  have hbase : 0 < B^2 * (B + C) :=\n    mul_pos (sq_pos_of_pos hBp) (by linarith)\n  have hscaled : B^2 * (B + C) <= alpha * lam := by\n    have h := (div_le_iff₀ ha).mp hlam\n    nlinarith\n  have hlamp : 0 < lam := by nlinarith\n  have hden : 0 < lam + C * x := by\n    nlinarith [mul_nonneg hC (le_of_lt hxp)]\n  by_cases hlarge : B * x <= lam\n  · have hfrac : 0 <= alpha * x^3 / (lam + C * x) :=\n      div_nonneg (mul_nonneg (le_of_lt ha) (pow_nonneg (le_of_lt hxp) 3))\n        (le_of_lt hden)\n    linarith\n  · have hsmall : lam < B * x := lt_of_not_ge hlarge\n    have hnorm : B * (B * (B + C)) < B * (alpha * x) := by\n      calc\n        B * (B * (B + C)) = B^2 * (B + C) := by ring\n        _ <= alpha * lam := hscaled\n        _ < alpha * (B * x) := mul_lt_mul_of_pos_left hsmall ha\n        _ = B * (alpha * x) := by ring\n    have hax : B * (B + C) < alpha * x := by\n      by_contra hn\n      have hnot : alpha * x <= B * (B + C) := le_of_not_gt hn\n      have hp := mul_nonneg (le_of_lt hBp) (sub_nonneg.mpr hnot)\n      nlinarith\n    have hden_upper : lam + C * x <= (B + C) * x := by nlinarith\n    have hprod : B * x * (lam + C * x) <= alpha * x^3 := by\n      calc\n        B * x * (lam + C * x) <= B * x * ((B + C) * x) :=\n          mul_le_mul_of_nonneg_left hden_upper\n            (mul_nonneg (le_of_lt hBp) (le_of_lt hxp))\n        _ = (B * (B + C)) * x^2 := by ring\n        _ <= (alpha * x) * x^2 :=\n          mul_le_mul_of_nonneg_right (le_of_lt hax) (sq_nonneg x)\n        _ = alpha * x^3 := by ring\n    have hfrac : B * x <= alpha * x^3 / (lam + C * x) :=\n      (le_div_iff₀ hden).mpr hprod\n    linarith\n\nend Hartogs\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/certificates/hartogs_real_planes/statement_fidelity.md",
+    "text": "# Statement fidelity for C359_ALGEBRA\n\nAll declarations in `Main.lean` are in namespace `Hartogs` and quantify over\nthe real numbers. There are no additional axioms or external assumptions.\n\n`mixedP` is\n`d + 4*(b1+b2)^2 + 4*r^2 + e1*(c1+4*b1*r) + e2*(c2+4*b2*r)`.\nIn the geometric application, after making h the identity and diagonalizing\nE, `b1,b2,r` are the imaginary Hermitian pairings of the two horizontal\ncoordinates and the vertical coordinate. `d` is the squared modulus of the\nhorizontal complex minor, and `c1,c2` are squared moduli of the two mixed\nentries of Xi. The identity `d+4*b1*b2=|Xi12|^2` is checked separately by\n`verify.py`; Lean does not encode complex vectors or prove this bridge.\n\n`corner11`, `corner12`, `corner21`, `corner22` are exact polynomial identities\nwithout hypotheses. `four_corner_interpolation` is their exact convex-weight\ninterpolation formula, again without hypotheses.\n\n`mixed_coercivity` assumes `d>=0`, `c1>=0`, `c2>=0`,\n`d+4*b1*b2>=0`, and `1<=e1,e2<=2`. Its conclusion is\n`mixedP>=c1+c2`. No independence or nonzero-projection hypothesis is imposed.\nIt is a universal scalar implication, not a sampled-plane test.\n\n`young_absorption` assumes nothing and proves\n`k*a*m <= m^2/4 + (k*a)^2`.\n\n`gap_absorption` assumes `a>=0`, `s>=a`, `0<=delta<=1` and proves\n`(s-2*t)^2/4 + delta*a*t >= delta*a^2/4`, for every real t.\nIn the proof, a is sqrt(a_h), s is sqrt(a_h+3*b_h^2), and\nt is sqrt(a_V); the encoded lemma is stronger in allowing arbitrary real t.\n\n`area_control` assumes only `s^2<=4*a^2` and proves both\n`t^2<=2*a^2+(s-2*t)^2/2` and\n`a*t<=2*a^2+(s-2*t)^2/4`. `imaginary_pairing_bound` assumes a,b,s\nnonnegative and `s^2=a^2+3*b^2`, and concludes `(a+3*b)/2<=s`.\n\n`threshold` assumes `alpha>0`, `B>=1`, `C>=0`, `x>=1` and\n`lambda>=B^2*(B+C)/alpha`, and concludes\n`lambda+alpha*x^3/(lambda+C*x)>=B*x`. The denominator's positivity\nis derived, not assumed. This theorem covers every unbounded x and lambda,\nincluding their competing scale lambda proportional to x^(3/2).\n\nThe compiled claim is the collection of these scalar identities and\nimplications. It does NOT formalize the Hartogs potential, the tensor norm\nestimates, spectral diagonalization, sectional normalization, either complete\nmanuscript, or novelty. Those bridges and the complete quantified pinching\ntheorem are proved in `proof.md` and checked symbolically where specified.\nIndependent review of this document and those bridges remains necessary even\nwhen the compiler reports success.\n"
+  },
+  "subject": {
+    "content_hash": "22800ac1a345ae6b29fe8db3f94285a525daf10f437de546f07ffd78cf89d520",
+    "kind": "claim",
+    "subject_id": "C359_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

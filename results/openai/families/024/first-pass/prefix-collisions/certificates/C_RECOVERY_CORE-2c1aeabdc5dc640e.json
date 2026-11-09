@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_RECOVERY_CORE-1b4aa11b07a6",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/024/first-pass/prefix-collisions/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6172,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/024/first-pass/prefix-collisions/Main.lean",
+    "source_sha256": "1693985429090be789fdeed961696a1371baf53bfa714e319c572044b7c0081e",
+    "statement_fidelity": "families/024/first-pass/prefix-collisions/statement_fidelity.md",
+    "statement_fidelity_sha256": "20aac111f039cc94129023a3cdc3cbcc3423a078c476a9706baa385b96054bd6",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/024/first-pass/prefix-collisions/Main.lean:116:47: error: Application type mismatch: The argument\n  Nat.pow_le_pow_left hk₁\nhas type\n  ∀ (i : ℕ), k₁ ^ i ≤ k ^ i\nbut is expected to have type\n  k₁ ^ n.primeFactorsList.length ≤ k ^ n.primeFactorsList.length\nin the application\n  LE.le.trans (ordered_factorizations_bound k₁ n) (Nat.pow_le_pow_left hk₁)\nfamilies/024/first-pass/prefix-collisions/Main.lean:117:48: error: Application type mismatch: The argument\n  Nat.pow_le_pow_left hk₂\nhas type\n  ∀ (i : ℕ), k₂ ^ i ≤ k ^ i\nbut is expected to have type\n  k₂ ^ n'.primeFactorsList.length ≤ k ^ n'.primeFactorsList.length\nin the application\n  LE.le.trans (ordered_factorizations_bound k₂ n') (Nat.pow_le_pow_left hk₂)\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/prefix-collisions/Main.lean",
+    "text": "import Mathlib\n\nnamespace PrefixCollisions\n\nopen Finset\n\nnoncomputable section\n\ndef allocations (k : ℕ) : List ℕ → Finset (Fin k → ℕ)\n  | [] => by classical exact {fun _ => 1}\n  | p :: ps => by\n      classical\n      exact univ.biUnion fun j =>\n        (allocations k ps).image fun f => Function.update f j (p * f j)\n\ntheorem prod_update_mul (k p : ℕ) (f : Fin k → ℕ) (j : Fin k) :\n    (∏ a, Function.update f j (p * f j) a) = p * ∏ a, f a := by\n  classical\n  rw [prod_update_of_mem (mem_univ j),\n    prod_eq_mul_prod_sdiff_singleton_of_mem (mem_univ j) f]\n  ac_rfl\n\ntheorem card_allocations_le (k : ℕ) (ps : List ℕ) :\n    (allocations k ps).card ≤ k ^ ps.length := by\n  classical\n  induction ps with\n  | nil => simp [allocations]\n  | cons p ps ih =>\n      have h := card_biUnion_le_card_mul\n        (univ : Finset (Fin k))\n        (fun j => (allocations k ps).image\n          (fun f => Function.update f j (p * f j)))\n        (k ^ ps.length)\n        (fun _ _ => card_image_le.trans ih)\n      simpa [allocations, pow_succ, Nat.mul_comm] using h\n\ntheorem allocations_sound (k : ℕ) (ps : List ℕ) (f : Fin k → ℕ)\n    (hf : f ∈ allocations k ps) :\n    (∏ a, f a) = ps.prod := by\n  classical\n  induction ps generalizing f with\n  | nil =>\n      simp only [allocations, mem_singleton] at hf\n      subst f\n      simp\n  | cons p ps ih =>\n      obtain ⟨j, _, himage⟩ := mem_biUnion.mp hf\n      obtain ⟨g, hg, rfl⟩ := mem_image.mp himage\n      rw [prod_update_mul, ih g hg, List.prod_cons]\n\ntheorem allocations_complete (k : ℕ) (ps : List ℕ)\n    (hps : ∀ p ∈ ps, Nat.Prime p) (f : Fin k → ℕ)\n    (hf : (∏ a, f a) = ps.prod) :\n    f ∈ allocations k ps := by\n  classical\n  induction ps generalizing f with\n  | nil =>\n      have hf1 : (∏ a, f a) = 1 := by simpa using hf\n      have heq : f = fun _ => 1 := by\n        funext j\n        apply Nat.eq_one_of_dvd_one\n        rw [← hf1]\n        exact dvd_prod_of_mem f (mem_univ j)\n      simp [allocations, heq]\n  | cons p ps ih =>\n      have hp : Nat.Prime p := hps p (by simp)\n      have hdiv : p ∣ ∏ a, f a := by\n        rw [hf, List.prod_cons]\n        exact dvd_mul_right p ps.prod\n      obtain ⟨j, _, hj⟩ := (hp.prime.dvd_finsetProd_iff f).mp hdiv\n      obtain ⟨z, hz⟩ := hj\n      let g : Fin k → ℕ := Function.update f j z\n      have hfg : Function.update g j (p * g j) = f := by\n        funext a\n        by_cases ha : a = j\n        · subst a\n          simp [g, hz]\n        · simp [g, ha]\n      have hprod : (∏ a, f a) = p * ∏ a, g a := by\n        calc\n          (∏ a, f a) = ∏ a, Function.update g j (p * g j) a := by rw [hfg]\n          _ = p * ∏ a, g a := prod_update_mul k p g j\n      have hg : (∏ a, g a) = ps.prod := by\n        apply Nat.eq_of_mul_eq_mul_left hp.pos\n        calc\n          p * (∏ a, g a) = ∏ a, f a := hprod.symm\n          _ = p * ps.prod := by simpa using hf\n      have hmem : g ∈ allocations k ps :=\n        ih (fun q hq => hps q (List.mem_cons_of_mem p hq)) g hg\n      exact mem_biUnion.mpr ⟨j, mem_univ j, mem_image.mpr ⟨g, hmem, hfg⟩⟩\n\ndef factorizations (k n : ℕ) : Finset (Fin k → ℕ) :=\n  allocations k n.primeFactorsList\n\ntheorem mem_factorizations_iff (k n : ℕ) (hn : n ≠ 0) (f : Fin k → ℕ) :\n    f ∈ factorizations k n ↔ (∏ a, f a) = n := by\n  constructor\n  · intro hf\n    exact (allocations_sound k n.primeFactorsList f hf).trans\n      (Nat.prod_primeFactorsList hn)\n  · intro hf\n    exact allocations_complete k n.primeFactorsList\n      (fun _ hp => Nat.prime_of_mem_primeFactorsList hp) f\n      (hf.trans (Nat.prod_primeFactorsList hn).symm)\n\ntheorem ordered_factorizations_bound (k n : ℕ) :\n    (factorizations k n).card ≤ k ^ n.primeFactorsList.length :=\n  card_allocations_le k n.primeFactorsList\n\ntheorem two_residuals_bound (k₁ k₂ k n n' : ℕ)\n    (hk₁ : k₁ ≤ k) (hk₂ : k₂ ≤ k) :\n    ((factorizations k₁ n).product (factorizations k₂ n')).card ≤\n      k ^ (n.primeFactorsList.length + n'.primeFactorsList.length) := by\n  rw [Finset.product_eq_sprod, Finset.card_product, pow_add]\n  exact Nat.mul_le_mul\n    ((ordered_factorizations_bound k₁ n).trans (Nat.pow_le_pow_left hk₁))\n    ((ordered_factorizations_bound k₂ n').trans (Nat.pow_le_pow_left hk₂))\n\ndef collisionPairs {α β : Type*} [DecidableEq α] [DecidableEq β]\n    (T : Finset α) (F : α → β) : Finset (α × α) :=\n  (T.product T).filter fun z => z.1 ≠ z.2 ∧ F z.1 = F z.2\n\ntheorem collisionPairs_mono {α β : Type*} [DecidableEq α] [DecidableEq β]\n    (T U : Finset α) (F : α → β) (h : U ⊆ T) :\n    collisionPairs U F ⊆ collisionPairs T F := by\n  intro z hz\n  obtain ⟨hpair, hval⟩ := mem_filter.mp hz\n  obtain ⟨ha, hb⟩ := mem_product.mp hpair\n  exact mem_filter.mpr ⟨mem_product.mpr ⟨h ha, h hb⟩, hval⟩\n\ntheorem endpoint_restriction_bound {α β : Type*}\n    [DecidableEq α] [LinearOrder β] (T : Finset α) (F : α → β) (t : β) :\n    (collisionPairs (T.filter fun a => F a ≤ t) F).card ≤\n      (collisionPairs T F).card :=\n  card_le_card (collisionPairs_mono T _ F (filter_subset _ _))\n\nend\n\nend PrefixCollisions\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/prefix-collisions/statement_fidelity.md",
+    "text": "# Statement fidelity: ordered residual recovery and endpoints\n\n`Main.lean` is a formalization of the finite combinatorial core, not a\nformalization of the analytic collision proposition.\n\n`allocations k ps` distributes the entries of an arbitrary finite list `ps`\namong **k labeled slots** and multiplies each slot. Slots with no entries\nhave product 1. Different occurrences of an equal prime remain separate\nentries in `ps`; taking a finite-set image removes duplicate resulting\nfactorizations. No squarefreeness or bound on k or list length is assumed.\n\n`card_allocations_le` proves for all natural k and all lists ps that the\nnumber of resulting ordered factorizations is at most k to the length of\nps. `allocations_sound` proves that every resulting tuple has total product\n`ps.prod`. `allocations_complete` proves the converse for any list of primes:\nevery function from `Fin k` to the natural numbers with that total product\nis present. Its proof extracts one prime occurrence from one divisible\ncoordinate at a time; it does not identify repeated occurrences.\n\n`factorizations k n` uses `n.primeFactorsList`, including all multiplicities.\nFor **n nonzero**, `mem_factorizations_iff` proves that its members are\nexactly all k-tuples of natural numbers with total product n. Their entries\nare therefore positive. The nonzero hypothesis is essential: this file\ndoes not identify the finite set with all factorizations of zero.\n`ordered_factorizations_bound` bounds this finite set by\n`k ^ n.primeFactorsList.length`. For nonzero n, the exponent is exactly\nOmega(n). In particular n=1 and zero prime occurrences are included.\n\n`two_residuals_bound` simultaneously bounds the **Cartesian product** of\nthe ordered factorizations of arbitrary n and n', in k1 and k2 slots, by\n`k ^ (Omega(n)+Omega(n'))`, provided k1 <= k and k2 <= k. The formal bound is\nfor all natural n,n'; its interpretation as all multiplicative\nfactorizations is restricted to nonzero n,n' by the preceding equivalence.\nFor the manuscript use k=h+1. The proof in `proof.md` shows that each pair\nof missing tuple tails maps injectively into the corresponding pair of\nfactorizations. Prime entries are recovered from their shifts by adding 1.\nThat source-specific injection is a prose proof, not a Lean theorem here.\n\n`collisionPairs` counts ordered pairs of **unequal** elements of a finite\nset having equal values under F. `collisionPairs_mono` proves inclusion\nunder restricting the tuple set. `endpoint_restriction_bound` proves the\ncorresponding cardinality inequality for the closed value condition\nF(a) <= t. Beta can be any linearly ordered type, including the reals.\nThe source-specific assertion that good tuple membership is unchanged\nwhen the endpoint moves from x to x/c (parameters still formed from x)\nis proved separately in prose.\n\nNo axioms about Ford, primes in progressions, real logarithms, asymptotic\nuniformity, or the manuscript's main theorem are introduced into this file.\nCompilation establishes these named declarations only. Independent review\nmust still assess the interpretation and the analytic argument.\n"
+  },
+  "subject": {
+    "content_hash": "60df0c479ee0b44652955e17df50813a03548762f460919f488749d975afb780",
+    "kind": "claim",
+    "subject_id": "C_RECOVERY_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

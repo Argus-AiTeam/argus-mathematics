@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_SECTOR_BOUND-7516ff42facd",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/279/first-pass/order_trial/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6398,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/279/first-pass/order_trial/Main.lean",
+    "source_sha256": "631ee36dc9fe5060ec506ff71ca8a943d04e07679d292d67bdf517db30a0799f",
+    "statement_fidelity": "families/279/first-pass/order_trial/statement_fidelity.md",
+    "statement_fidelity_sha256": "52e59e80a70374af5dc7e2e9b51453e6a047efc4006d90f94aae263e05db80ae",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/279/first-pass/order_trial/Main.lean:5:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/279/first-pass/order_trial/Main.lean:6:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/279/first-pass/order_trial/Main.lean:7:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/279/first-pass/order_trial/Main.lean:8:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/279/first-pass/order_trial/Main.lean:9:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/279/first-pass/order_trial/Main.lean:10:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/order_trial/Main.lean",
+    "text": "import Mathlib\n\nnamespace OrderTrial\n\ndef R0 (s a : ℝ) : ℝ := a * (1 - s) - a ^ 2 / 2\ndef I0 (s a : ℝ) : ℝ := -a * s - a ^ 2 / 2\ndef R1 (x y : ℝ) : ℝ := (x ^ 2 - y ^ 2) / 2\ndef I1 (x y : ℝ) : ℝ := (x ^ 2 + y ^ 2) / 2 - x - y\ndef R2 (x y : ℝ) : ℝ := (x ^ 2 + y ^ 2) / 2 - y - 1 / 2\ndef I2 (x y : ℝ) : ℝ := (x ^ 2 + y ^ 2) / 2 - x - 1 / 2\n\ntheorem sector_zero (s a : ℝ) :\n    0 ≤ (R0 s a) ^ 2 + (I0 s a) ^ 2 - a ^ 2 / 4 := by\n  have identity :\n      (R0 s a) ^ 2 + (I0 s a) ^ 2 - a ^ 2 / 4 =\n        2 * (a * (s + a / 2 - 1 / 2)) ^ 2 + (a / 2) ^ 2 := by\n    unfold R0 I0\n    ring\n  rw [identity]\n  positivity\n\ntheorem sector_one (x y : ℝ) (hx : 0 ≤ x) (hy : 0 ≤ y)\n    (hx1 : x ≤ 1) (hy1 : y ≤ 1) :\n    0 ≤ (R1 x y) ^ 2 + (I1 x y) ^ 2 - (x + y) ^ 2 / 4 := by\n  have he : 0 ≤ x * (1 - x) + y * (1 - y) :=\n    add_nonneg (mul_nonneg hx (sub_nonneg.mpr hx1))\n      (mul_nonneg hy (sub_nonneg.mpr hy1))\n  have ha : 0 ≤ x + y := add_nonneg hx hy\n  have identity :\n      (R1 x y) ^ 2 + (I1 x y) ^ 2 - (x + y) ^ 2 / 4 =\n        (R1 x y) ^ 2 +\n          (x + y) * (x * (1 - x) + y * (1 - y)) / 2 +\n          ((x * (1 - x) + y * (1 - y)) / 2) ^ 2 := by\n    unfold R1 I1\n    ring\n  rw [identity]\n  positivity\n\ntheorem sector_two (x y : ℝ) (hx : 0 ≤ x) (hy : 0 ≤ y)\n    (hxy : x + y ≤ 1) :\n    0 ≤ (R2 x y) ^ 2 + (I2 x y) ^ 2 - (1 + x + y) ^ 2 / 4 := by\n  have hp : 0 ≤ x + y := add_nonneg hx hy\n  have hz : 0 ≤ 1 - (x + y) := sub_nonneg.mpr hxy\n  have identity :\n      (R2 x y) ^ 2 + (I2 x y) ^ 2 - (1 + x + y) ^ 2 / 4 =\n        2 * x ^ 2 * y ^ 2 +\n          2 * (1 - (x + y)) * (x + y) * x * y +\n          (1 - (x + y)) / 4 +\n          3 * (1 - (x + y)) * (x + y) / 4 +\n          (x + y) ^ 2 * (1 - (x + y)) ^ 2 / 2 := by\n    unfold R2 I2\n    ring\n  rw [identity]\n  positivity\n\ntheorem sharp_endpoint :\n    (R2 1 0) ^ 2 + (I2 1 0) ^ 2 = (1 + (1 : ℝ) + 0) ^ 2 / 4 := by\n  norm_num [R2, I2]\n\ntheorem power_sum_one (M : ℕ) :\n    (∑ i ∈ Finset.range M, (i : ℚ)) = (M : ℚ) * ((M : ℚ) - 1) / 2 := by\n  induction M with\n  | zero => norm_num\n  | succ M ih =>\n    rw [Finset.sum_range_succ, ih]\n    push_cast\n    ring\n\ntheorem power_sum_two (M : ℕ) :\n    (∑ i ∈ Finset.range M, (i : ℚ) ^ 2) =\n      (M : ℚ) * ((M : ℚ) - 1) * (2 * (M : ℚ) - 1) / 6 := by\n  induction M with\n  | zero => norm_num\n  | succ M ih =>\n    rw [Finset.sum_range_succ, ih]\n    push_cast\n    ring\n\ntheorem power_sum_three (M : ℕ) :\n    (∑ i ∈ Finset.range M, (i : ℚ) ^ 3) =\n      ((M : ℚ) * ((M : ℚ) - 1) / 2) ^ 2 := by\n  induction M with\n  | zero => norm_num\n  | succ M ih =>\n    rw [Finset.sum_range_succ, ih]\n    push_cast\n    ring\n\ntheorem power_sum_four (M : ℕ) :\n    (∑ i ∈ Finset.range M, (i : ℚ) ^ 4) =\n      (M : ℚ) * ((M : ℚ) - 1) * (2 * (M : ℚ) - 1) *\n        (3 * (M : ℚ) ^ 2 - 3 * (M : ℚ) - 1) / 30 := by\n  induction M with\n  | zero => norm_num\n  | succ M ih =>\n    rw [Finset.sum_range_succ, ih]\n    push_cast\n    ring\n\ntheorem correction_mass (P U c rho S lam : ℚ)\n    (hS : S = U / 2) (hrho : rho = lam - c * S) :\n    c / 2 * P + c / 2 * (U - P) + rho = lam := by\n  rw [hrho, hS]\n  ring\n\nend OrderTrial\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/order_trial/statement_fidelity.md",
+    "text": "# Statement fidelity: algebraic core of the order-trial verification\n\n`Main.lean` uses Lean 4.31.0 and Mathlib. It proves exact universally\nquantified algebraic statements, not a formal model of quantum circuits.\n\nThe declarations `OrderTrial.R0`, `I0`, `R1`, `I1`, `R2`, and `I2` are\nthe real and imaginary coordinates of integrals of the polygonal phase in\nthe coordinate `w = 4z`. They are unnormalized integrals in `w`.\nQuarter-turn multiplication has unit modulus, and division by the interval\nlength converts each pair into the phase average. These identifications,\nthe reduction to the three sectors, and the zero-length case are proved\nin the mathematical report, not inside Lean.\n\n`OrderTrial.sector_zero` quantifies over arbitrary real `s,a`, without\nhypotheses, and proves `R0^2+I0^2 >= a^2/4`. Its application uses\n`0 <= s <= 1` and `0 <= a <= 1-s`.\n\n`OrderTrial.sector_one` quantifies over real `x,y` with\n`0 <= x <= 1` and `0 <= y <= 1`. It proves\n`R1^2+I1^2 >= (x+y)^2/4`. Here `x` and `y` are the portions before\nand after one crossed vertex, and the interval length is `x+y`.\n\n`OrderTrial.sector_two` quantifies over real `x,y` with `x,y >= 0` and\n`x+y <= 1`. It proves `R2^2+I2^2 >= (1+x+y)^2/4`. The interval\ncontains one whole segment and two partial segments. The length is\n`1+x+y`. `OrderTrial.sharp_endpoint` proves equality at `x=1,y=0`,\nwhich corresponds to an interval of two quarter segments. Thus the\nresulting average-modulus bound `1/2` is sharp.\n\n`OrderTrial.power_sum_one`, `power_sum_two`, `power_sum_three`, and\n`power_sum_four` quantify over every natural `M`. The sums are over\n`0 <= i < M`, with powers and closed formulas evaluated in the rationals.\nThey justify constant-degree polynomial summation without iterating\nthrough the residues. The degree-zero formula is simply the count.\n\n`OrderTrial.correction_mass` quantifies over arbitrary rationals\n`P,U,c,rho,S,lam`, assumes `S=U/2` and `rho=lam-c*S`, and proves the\nthree-mode mass identity. Here `P,U` denote sums over residues, not\nindividual residue values. The theorem does not prove probability\nvalidity, the floor bounds, or the correspondence to a quantum event.\n\nThe mechanical ledger claim `C_SECTOR_BOUND` is restricted to the three\nsector inequalities. The other declarations are additional exact algebraic\nfacts. The larger claims `C_POLYGON_CORE` and `C_ORDER_TRIAL` also require\nthe report's mathematical arguments and independent statement-fidelity\nreview. No compilation of this file certifies the full factoring theorem.\n"
+  },
+  "subject": {
+    "content_hash": "29a9614134f984e3241cbf61ee7a322a07af3ced48806924a748a9d0c81a47c6",
+    "kind": "claim",
+    "subject_id": "C_SECTOR_BOUND"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

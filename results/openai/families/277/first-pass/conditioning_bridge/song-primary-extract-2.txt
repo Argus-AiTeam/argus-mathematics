@@ -1,0 +1,471 @@
+Content type text/plain; charset=utf-8 cannot be simplified to markdown. Here is the raw content:
+Contents of https://r.jina.ai/https://eccc.weizmann.ac.il/report/2026/199/download/:
+-stable rounding converts this error into a single-game strategy. Third, greedy conditioning and near-perfect rounding give the parallel-repetition contradiction. We use the trace norm ∥M ∥1 := Tr[ √M ∗M ]. For unit vectors |u⟩ and |v⟩ we repeatedly use 
+
+∥| u⟩⟨ u| − | v⟩⟨ v|∥ 1 ≤ 2∥| u⟩ − | v⟩∥ .
+
+6Table 2: State-preparation and rounding losses for quantum correlated sampling. Write t := 
+
+∥| ψ⟩ − | φ⟩∥ , D := E[t2], and η for the information cost in the conditioned single-game experiment. Arbitrarily small finite-resource accuracy terms are suppressed. The 2019 result is an operational promised-distance statement and does not by itself give a uniform Chapter 6 rounding bound. Year Authors Reference Statement ID Sampler error Rounding loss 2015 Dinur–Steurer–Vidick [DSV15] Lemma 17 O(t1/6) O(η1/12 )2019 Lasecki [Las19] Theorem 3.1.1 O(t1/5) promised distance 2026 This paper This paper Lemma 4.1 O(D1/4) O(η1/4)
+
+4.1 Smooth operational correlated sampling 
+
+The rounding argument supplies a distribution of pairs of state descriptions together with an upper bound on their mean squared distance. The construction below bounds the output infidelity pointwise by a quantity linear in the squared description distance. Averaging over the distribution therefore incurs no Jensen loss, removing the square-root losses of the earlier argument. 
+
+Lemma 4.1 (Smooth operational correlated sampling) . There is a universal constant Csm ≥ 1
+
+with the following property. Let Z be finite, let ν be a probability distribution on Z, and for every 
+
+z ∈ Z let |ψz ⟩, |φz ⟩ ∈ Cd ⊗ Cd be unit vectors. Set 
+
+D := Ez∼ν [∥| ψz ⟩ − | φz ⟩∥ 2].
+
+For every h ∈ (0 , 1/2) and ζ > 0 there are a finite-dimensional shared state Ω, which may depend on the finite family, ν, h, and ζ but not on the realized z, and families of local channels {A ψ}
+
+and {B φ} indexed separately by Alice’s and Bob’s local state descriptions. Their joint output ρz := (Aψz ⊗ B φz )(Ω) satisfies 
+
+Ez∼ν [1 − ⟨ ψz |ρz |ψz ⟩] ≤ Csm (h2 + D/h 2 + D) + ζ. (3) 
+
+Consequently, optimizing h and rescaling ζ gives 
+
+Ez∼ν [∥ρz − | ψz ⟩⟨ ψz |∥ 1] ≤ Csm D1/4 + ζ. (4) 
+
+The channels use only finite shared randomness and finite-dimensional shared entanglement, and hence can be absorbed into a tensor-product strategy. Proof. We give a pointwise construction and then average. It suffices to treat 0 < ζ < 1, since a smaller accuracy parameter only strengthens the conclusion. Fix an internal finite-resource accuracy 
+
+ξ ∈ (0 , 1), to be chosen at the end. If D ≥ 1/16, use a fixed product shared state and fixed local output channels. Since D1/4 ≥ 1/2, both assertions hold after increasing Csm , since an infidelity is at most one and a trace distance at most two. For the h-dependent bound, we may therefore assume D < 1/16 and fix an arbitrary h ∈ (0 , 1/2); this choice is admissible, including when D = 0. Fix one pair of descriptions and write 
+
+|ψ⟩ = X
+
+> i
+
+λi|ui⟩| u′
+
+> i
+
+⟩, |φ⟩ = X
+
+> j
+
+μj |vj ⟩| v′ 
+
+> j
+
+⟩
+
+in the standard correlated-sampling convention. Complete the Schmidt vectors to orthonormal bases and allow zero coefficients. We define ∆ := ∥| ψ⟩ − | φ⟩∥ 2, wij := |⟨ ui|vj ⟩| 2.
+
+7The Schmidt transport inequality used in the proof of the quantum correlated-sampling lemma is 
+
+X
+
+> i,j
+
+(λi − μj )2wij ≤ 2∆ . (5) To justify Eq. (5), let ρ := Tr 2[|ψ⟩⟨ ψ|] and σ := Tr 2[|φ⟩⟨ φ|]. The left-hand side is ∥√ρ −√σ∥2 
+
+> F
+
+. If F (ρ, σ ) := ∥√ρ√σ∥1 is the root fidelity, the affinity–fidelity inequality F (ρ, σ )2 ≤
+
+Tr[ √ρ√σ] [LYM +19, Eq. (4.2)] and monotonicity of fidelity under partial trace give 
+
+∥√ρ − √σ∥2 
+
+> F
+
+≤ 2(1 − F (ρ, σ )2) ≤ 2(1 − |⟨ ψ|φ⟩| 2) ≤ 2∆ .
+
+The constant two is necessary: if |ψ⟩ and |φ⟩ are product states whose second-register vectors agree and whose first-register vectors have overlap cos θ, the left side equals 2 sin 2 θ while ∆ = 2 − 2 cos θ.
+
+Smooth logarithmic labels. We replace hard logarithmic bins by overlapping two-bin wave packets. For s ∈ R, set k := ⌊s⌋ and t := s − k ∈ [0 , 1), and define 
+
+|g(s)⟩ := cos( πt/ 2) |k⟩ + sin( πt/ 2) |k + 1 ⟩.
+
+For λ > 0 put sλ := − log( λ)/h and |gλ⟩ := |g(sλ)⟩. Put |g0⟩ := | ⊥⟩ , where | ⊥⟩ is orthogonal to all integer-labelled vectors. Since the family of descriptions is finite, there is a common integer 
+
+kmax ≥ 0 such that every positive coefficient has sλ ∈ [0 , k max ]. On the label space set 
+
+T := 
+
+> kmax +1
+
+X
+
+> k=0
+
+τk|k⟩⟨ k|, τk := e−kh , T | ⊥⟩ := 0 ,
+
+and write T := T ⊗ Id.We first record the scalar estimates. The two T -eigenvalues on the support of gλ are between 
+
+e−hλ and ehλ, and hence 
+
+∥(T − λI )|gλ⟩∥ ≤ Chλ. (6) The map s 7 → g(s) is globally Lipschitz after truncating its distance at 2, so 
+
+∥gλ − gμ∥ ≤ C min {1, | log λ − log μ|/h }.
+
+Together with the elementary estimates for ex − 1, this gives 
+
+μ|1 − ⟨ gλ|gμ⟩| ≤ C|λ − μ|/h, (7) 
+
+λμ (1 − |⟨ gλ|gμ⟩| 2) ≤ C(λ − μ)2/h 2. (8) For completeness, let x := | log λ−log μ| and M := max {λ, μ }. If x ≤ h, then |λ−μ| = M (1 −e−x) ≥
+
+M x/ 2. Lipschitz continuity of the labels, together with |1 − ⟨ u|v⟩| ≤ ∥ u − v∥ and 1 − |⟨ u|v⟩| 2 ≤∥u − v∥2 for unit vectors, gives the two displayed bounds. If x > h , then |λ − μ| = M (1 − e−x) ≥
+
+M (1 − e−h) ≥ M h/ 2; the trivial bounds |1 − ⟨ gλ|gμ⟩| ≤ 2 and 1 − |⟨ gλ|gμ⟩| 2 ≤ 1 again give the two displayed inequalities. The definitions at zero make the same bounds immediate if one coefficient vanishes. 8Filter synchronization. Define orthonormal vectors and their projectors by 
+
+|pi⟩ := |gλi ⟩| ui⟩, |qj ⟩ := |gμj ⟩| vj ⟩, P := X
+
+> i
+
+|pi⟩⟨ pi|, Q := X
+
+> j
+
+|qj ⟩⟨ qj |.
+
+Thus P and Q are legal local filters. Set S := d Pkmax +1  
+
+> k=0
+
+τ 2 
+
+> k
+
+. Consider the normalized shared trial with vector S−1/2 times kmax +1 X
+
+> k=0
+
+τk|k, k ⟩ ⊗ 
+
+> d
+
+X
+
+> r=1
+
+|r, r ⟩.
+
+Alice applies P and Bob applies Q, where the bar is the standard conjugation on Bob’s half of a maximally entangled state. Define the unnormalized weights associated with the events that Alice succeeds, Bob succeeds, and both succeed by 
+
+a := ∥P T∥2 
+
+> F
+
+, b := ∥TQ∥2 
+
+> F
+
+, c := ∥QTP ∥2 
+
+> F
+
+.
+
+Indeed, the actual one-trial probabilities are a/S , b/S , and c/S , respectively. The coefficient of 
+
+pi ⊗ qj in the both-success branch is ⟨pi|T|qj ⟩. Since P, Q are projectors and T is self-adjoint, their synchronization defect has the exact form 
+
+m := a + b − 2c = ∥P T − TQ∥2 
+
+> F
+
+. (9) We define 
+
+Aψ := X
+
+> i
+
+λi|pi⟩⟨ pi|, Aφ := X
+
+> j
+
+μj |qj ⟩⟨ qj |.
+
+The eigenvalue sandwich preceding Eq. (6) gives 
+
+∥P T − Aψ∥2 
+
+> F
+
++ ∥TQ − Aφ∥2 
+
+> F
+
+≤ Ch 2.
+
+Moreover, 
+
+∥Aψ − Aφ∥2 
+
+> F
+
+= X
+
+> i,j
+
+(( λi − μj )2 + 2 λiμj (1 − |⟨ gλi |gμj ⟩| 2)) wij .
+
+The squared triangle inequality gives 
+
+m ≤ 3( ∥P T − Aψ∥2 
+
+> F
+
++ ∥Aψ − Aφ∥2 
+
+> F
+
++ ∥Aφ − TQ∥2 
+
+> F
+
+).
+
+Using Eq. (5) and Eq. (8) in Eq. (9) yields 
+
+m ≤ C(h2 + ∆ /h 2). (10) 
+
+Output-state comparison. It remains to compare the synchronized output with the target after the local label erasures. Because the pi are orthonormal, Alice has a local isometry sending pi to ui
+
+with a fixed label register. Similarly, Bob has a local isometry sending qj to v′ 
+
+> j
+
+. Under the standard vectorization convention, the resulting unnormalized synchronized vector is 
+
+|x⟩ = X
+
+> i,j
+
+βij ⟨ui|vj ⟩| ui⟩| v′ 
+
+> j
+
+⟩, βij := ⟨gλi |T |gμj ⟩,
+
+and ∥x∥2 = c. On the other hand, 
+
+|φ⟩ = X
+
+> i,j
+
+μj ⟨ui|vj ⟩| ui⟩| v′ 
+
+> j
+
+⟩.
+
+9Indeed, 
+
+βij − μj = ⟨gλi |(T − μj I)|gμj ⟩ + μj (⟨gλi |gμj ⟩ − 1) .
+
+Therefore Eq. (6) and Eq. (7) imply 
+
+|βij − μj |2 ≤ C(h2μ2 
+
+> j
+
++ ( λi − μj )2/h 2).
+
+The vectors |ui⟩| v′ 
+
+> j
+
+⟩ are orthonormal. Therefore 
+
+∥| x⟩ − | φ⟩∥ 2 ≤ C(h2 + ∆ /h 2). (11) Let H := C(h2 + ∆ /h 2). If H < 1/4, Eq. (11) implies |∥ x∥ − 1| ≤ ∥| x⟩ − | φ⟩∥ ≤ √H, so x̸ = 0 and 
+
+∥| x⟩/∥x∥ − | φ⟩∥ ≤ | 1 − ∥ x∥| + ∥| x⟩ − | φ⟩∥ ≤ 2√H. 
+
+Hence normalization changes this squared distance by at most a universal factor; if it is bounded below by a constant, the trivial infidelity bound suffices. Thus the normalized synchronized state has infidelity at most C(h2 + ∆ /h 2) with |φ⟩.
+
+Repeated trials and finite resources. To finish the protocol, the parties use independent trials and each keeps the first trial on which its local filter succeeds. The eigenvalue sandwich preceding Eq. (6) gives a, b ≥ e−2h. In each trial the probability that at least one filter succeeds is (a + b − c)/S . Conditioning on the first such trial, the probability that the two first-success times differ is 1 − ca + b − c = m
+
+a + b − c ≤ e2hm.
+
+On this branch charge infidelity one. Combining this estimate with Eq. (10) and Eq. (11) shows that the pointwise output has infidelity at most 
+
+C(h2 + ∆ /h 2)with |φ⟩, apart from a finite-timeout error. All resources can be made finite directly. Since S is the trial normalization, take 
+
+N := ⌈e2hS log(2 /ξ )⌉.
+
+By the union bound, the probability that either party aborts is at most 2(1 − e−2h/S )N ≤
+
+2 exp( −N e −2h/S ) ≤ ξ. Take Ω to be the N -fold tensor power of the normalized trial state. On timeout, each party outputs a fixed local basis state. These prescriptions define local completely positive trace-preserving channels. The common kmax , the trial state, and N depend only on the finite family and the global parameters, not on the realized z. The local filters and label-erasing isometries depend only on the corresponding local description. 
+
+Averaging and trace-distance conversion. Finally, write fφ := 1 − ⟨ φ|ρ|φ⟩. The triangle inequality for purified distance gives 1 − ⟨ ψ|ρ|ψ⟩ ≤ 2fφ + 2(1 − |⟨ ψ|φ⟩| 2),
+
+and 1 − |⟨ ψ|φ⟩| 2 ≤ ∆. Hence changing the target from |φ⟩ to |ψ⟩ adds at most C∆ to the infidelity. Averaging the pointwise estimate gives Ez∼ν [1 − ⟨ ψz |ρz |ψz ⟩] ≤ Csm (h2 + D/h 2 + D) + 2 ξ. Choosing 
+
+ξ := ζ/ 2 proves Eq. (3). To prove Eq. (4), set ζ0 := ζ2/16 and rerun the construction with ξ := ζ0/2. 10 If 0 < D < 1/16, take h := D1/4, which gives average infidelity O(D1/2) + ζ0. If D = 0, choose h
+
+so that Csm h2 ≤ ζ0; the average infidelity is then at most 2 ζ0, so the average trace distance is at most 2 √2ζ0 < ζ . The case D ≥ 1/16 was handled at the outset. The pure-target bound 
+
+∥ρ − | ψ⟩⟨ ψ|∥ 1 ≤ 2p1 − ⟨ ψ|ρ|ψ⟩
+
+and Jensen’s inequality give Eq. (4), since 2 √ζ0 ≤ ζ/ 2; the zero-D and large-D cases were handled above. Stinespring dilation turns the local channels into local unitaries with private environments, so the construction is a valid finite-dimensional tensor-product strategy. 
+
+Remark 4.2. Although Lemma 4.1 is stated for a distribution, its proof gives a pointwise infidelity bound for each pair once the common finite label range is fixed. The distributional formulation is the one needed below: the shared state and the global parameters depend on the finite family, but not on the realized questions or state descriptions. 
+
+4.2 Postselection-stable single-game rounding 
+
+Definition 4.3 (Postselection parameters) . Fix a finite-dimensional strategy for the repeated game and a proper subset D0 ⊊ [n] such that p := Pr[ WD0 ] > 0. Define 
+
+m := n − | D0|, q := 1
+
+m
+
+X
+
+> i∈[n]\D0
+
+Pr[ Wi | WD0 ], η := log(1 /p ) + |D0|ℓm .
+
+Postselected objects. Let Q and |Ψ⟩ denote the objects from the shared setup in Subsection 3.3, and let JA, JB , |ΨA⟩, |ΨB ⟩ denote the objects supplied by Lemma 3.3. Unless stated otherwise, all expectations below are taken with respect to Q. The candidate-pair consequence in Eq. (2) is 
+
+D := E[∥| ΨA⟩ − | ΨB ⟩∥ 2], hence D ≤ 32 η. 
+
+Generic acceptance probabilities. Here we make no assumption that the ideal conditioned experiment wins with probability close to one. The argument combines the ideal coordinate mea-surements from Lemma 3.2, the locally sampled histories from Lemma 3.3, and the trace-distance guarantee from Lemma 4.1. This gives a general O(η1/4) rounding loss; the near-perfect argument below improves the dependence when q is close to one. 
+
+Lemma 4.4 (Improved postselection-stable rounding) . There is a universal constant B4 ≥ 1 such that, in the postselected setup above, 0 ≤ η ≤ 1 implies 
+
+ω∗(G) ≥ q − B4η1/4. (12) 
+
+Proof. Lemma 3.2 supplies local coordinate measurements for which the ideal experiment has aver-age winning probability q. Invoke Lemma 3.3 and apply Lemma 4.1 to its finite family of candidate pairs with D ≤ 32 η. The shared resource and smoothing parameter are fixed from this finite family and the global parameters before the fresh questions arrive. For a tuple in the support of Q, let ρi,r,x,y be the prepared state and put 
+
+s(i, r, x, y ) := ∥ρi,r,x,y − | Ψr,x,y ⟩⟨ Ψr,x,y |∥ 1.
+
+Eq. (4), the first estimate in Eq. (1), and Jensen’s inequality give 
+
+EQ[s] ≤ Csm D1/4 + ζ + 2 EQ[∥| ΨA⟩ − | Ψ⟩∥ ] ≤ Csm D1/4 + ζ + 4 p2η. 
+
+11 We now describe the resulting legal strategy. On fresh questions ( x, y ) ∼ μ, the players use the finite shared randomness from Lemma 3.3 to choose a common coordinate i and local histo-ries rA, r B . They apply the channels of Lemma 4.1 to |ΨArA,x ⟩ and |ΨBrB ,y ⟩, then apply the local coordinate POVMs from Lemma 3.2. On tuples outside the support of Q, fix arbitrary default descriptions and POVMs. Let w(i, r, x, y ) ∈ [0 , 1] be the ideal branch winning probability, extended by zero outside the support of Q, and extend s by the value 2 there. Since the trace-norm distance between two states is at most 2, this gives 0 ≤ s ≤ 2 everywhere. Lemma 3.2 gives EQ[w] = q. Since dTV (Q, JA) ≤ κ
+
+and Pr[ rA̸ = rB ] ≤ 4κ, where κ := p3η/ 2, 
+
+EJA [w] ≥ q − κ, EJA [s] ≤ EQ[s] + 2 κ. 
+
+On the event rA = rB =: r, a tuple in the support of Q uses the same history on both sides, and replacing the ideal state by a state at trace-norm distance s changes its winning probability by at most s/ 2. Outside the support of Q, the inequality is trivial because w − s/ 2 = −1. Therefore win ≥ EJA [w − s/ 2] − Pr[ rA̸ = rB ] ≥ q − κ − 12 (EQ[s] + 2 κ) − 4κ = q − 12 EQ[s] − 6κ, 
+
+where the first step follows from the pointwise s/ 2 measurement comparison on the event rA = rB
+
+and charging loss one when rA̸ = rB , the second step follows from EJA [w] ≥ q − κ, EJA [s] ≤
+
+EQ[s] + 2 κ, and Pr[ rA̸ = rB ] ≤ 4κ, the third step follows from collecting the κ terms. Using D ≤ 32 η, κ = p3η/ 2, and √η ≤ η1/4 for 0 ≤ η ≤ 1, we obtain win ≥ q − B4η1/4 − ζ
+
+2after increasing the universal constant B4. Every positive ζ produces a finite-dimensional strategy, so the definition of ω∗(G) and the limit ζ → 0 give Eq. (12). 
+
+Near-perfect acceptance. The preceding lemma treats an arbitrary acceptance probability. In the repetition argument the ideal conditional experiment already wins with probability close to one. Keeping squared fidelity until the final measurement gives a stronger estimate in that regime. 
+
+Lemma 4.5 (Near-perfect rounding) . There is a universal constant Bnp ≥ 1 such that, whenever 
+
+0 ≤ η ≤ 1 in the postselected single-game experiment, 
+
+ω∗(G) ≥ q − Bnp ((1 − q)1/2η1/4 + η1/2). (13) 
+
+Proof. Let Bnp be a universal constant to be fixed at the end, with Bnp ≥ √512. If η ≥ 1/512, then, since q ≤ 1, 
+
+q − Bnp ((1 − q)1/2η1/4 + η1/2) ≤ q − Bnp η1/2 ≤ 0 ≤ ω∗(G).
+
+Thus the claim is immediate in this case. Assume for now that 0 < η < 1/512. Apply the infidelity part of Lemma 4.1 to the candidate pairs supplied by Lemma 3.3, with 
+
+z = ( i, r, x, y ) ∼ Q, |ψz ⟩ := |ΨAr,x ⟩, and |φz ⟩ := |ΨBr,y ⟩. Their mean squared distance is at most 
+
+D ≤ 32 η. Set h := (32 η)1/4 ∈ (0 , 1/2), let ρz be the output state, and put 
+
+fcand (z) := 1 − ⟨ ΨAr,x |ρz |ΨAr,x ⟩.
+
+12 Eq. (3) and D ≤ 32 η give 
+
+EQ[fcand ] ≤ Csm (h2 + D/h 2 + D) + ζ ≤ C0η1/2 + ζ (14) for a universal constant C0.We next transfer the target from the locally described candidate state to the ideal conditioned state. Write 
+
+f (z) := 1 − ⟨ Ψr,x,y |ρz |Ψr,x,y ⟩
+
+and write P for purified distance. The triangle inequality for P, followed by the scalar inequality (u + v)2 ≤ 2u2 + 2 v2, gives 
+
+f (z) = P(ρz , |Ψr,x,y ⟩⟨ Ψr,x,y |)2
+
+≤ 2P(ρz , |ΨAr,x ⟩⟨ ΨAr,x |)2 + 2 P(|ΨAr,x ⟩, |Ψr,x,y ⟩)2 ≤ 2fcand (z) + 2 ∥| ΨAr,x ⟩ − | Ψr,x,y ⟩∥ 2.
+
+Therefore Eq. (1) and Eq. (14) imply 
+
+R := EQ[f ] ≤ C1η1/2 + 2 ζ (15) for a universal constant C1.Use the same legal strategy and the same default conventions outside the support of Q as in the proof of Lemma 4.4. For z in the support of Q, let Lz be the losing effect of the ideal coordinate POVMs and put 
+
+α(z) := ⟨Ψr,x,y |Lz |Ψr,x,y ⟩.
+
+Extend α and f by the value 1 outside the support of Q. Then 0 ≤ α, f ≤ 1, and Lemma 3.2 gives 
+
+EQ[α] = 1 − q.We record the measurement estimate used in the hybrid. Suppose a pure state |Ψ⟩ is rejected by an effect L with probability α, while a state ρ has infidelity f := 1 − ⟨ Ψ|ρ|Ψ⟩. By Uhlmann’s theorem [Uhl76, NC10], choose purifications | eΨ⟩ and |eρ⟩ satisfying ∥| eΨ⟩ − | eρ⟩∥ ≤ √2f . Put eL := √L ⊗ I. Since 0 ≤ L ≤ I, we have ∥eL∥ ≤ 1 and ∥eL| eΨ⟩∥ = √α. Hence the triangle inequality gives 
+
+pTr[ Lρ ] = ∥eL|eρ⟩∥ ≤ ∥ eL| eΨ⟩∥ + ∥eL(|eρ⟩ − | eΨ⟩)∥ ≤ √α + p2f . 
+
+After squaring, the rejection probability on ρ is at most α + C√αf + Cf for a universal constant 
+
+C.We now apply this estimate under the actual history coupling. On rA = rB =: r, the players use the common tuple z = ( i, r, x, y ); on rA̸ = rB , charge rejection probability one. Consequently, 1 − win ≤ 4κ + EJA [α + Cpαf + Cf ]. (16) Set A := EJA [α] and R′ := EJA [f ]. Since α, f ∈ [0 , 1] and dTV (Q, JA) ≤ κ,
+
+A ≤ 1 − q + κ, R′ ≤ R + κ. 
+
+Put u := 1 − q and t := η1/2. Since κ = p3η/ 2 and R ≤ C1η1/2 + 2 ζ, there is a universal constant 
+
+C2 such that 
+
+A ≤ u + C2t, R′ ≤ C2t + 2 ζ. 
+
+We may assume 0 < ζ ≤ 1. Using √x + y ≤ √x + √y, we obtain 
+
+√AR ′ ≤ p(u + C2t)( C2t + 2 ζ) ≤ C3(u1/2η1/4 + η1/2 + ζ1/2)13 for a universal constant C3. Cauchy–Schwarz in Eq. (16) now gives 1 − win ≤ 4κ + A + C√AR ′ + CR ′ ≤ 1 − q + C4((1 − q)1/2η1/4 + η1/2 + ζ1/2).
+
+Every 0 < ζ ≤ 1 produces a finite-dimensional strategy. Sending ζ → 0 and using the definition of 
+
+ω∗(G) therefore proves Eq. (13) for 0 < η < 1/512, after choosing Bnp ≥ C4.It remains to handle η = 0. In this case D = 0, κ = 0, and Eq. (1) forces both candidate-to-ideal mean squared errors to be zero. Apply Lemma 4.1 with arbitrary h ∈ (0 , 1/2) and ζ > 0. The preceding argument then gives 1 − win ≤ 1 − q + Cp(1 − q)( Csm h2 + 2 ζ) + C(Csm h2 + 2 ζ).
+
+Sending first ζ → 0 and then h → 0 yields ω∗(G) ≥ q, which is Eq. (13) when η = 0. 
+
+4.3 Proof of the parallel-repetition theorem 
+
+We now combine Lemma 3.1 with the near-perfect rounding estimate in Lemma 4.5. 
+
+Theorem 4.6 (Improved parallel-repetition exponent, formal version of Theorem 1.1) . There is a universal constant c3 > 0 such that every finite two-player entangled game G with ω∗(G) = 1 − ϵ
+
+satisfies 
+
+ω∗(G⊗n) ≤ exp( −c3
+
+ϵ3
+
+ϵ + log( |A|| B|) n) (17) 
+
+for every integer n ≥ 1.Proof. If ϵ = 0, then the right-hand side of Eq. (17) is 1, so the claim follows from ω∗(G⊗n) ≤ 1. If 
+
+ϵ = 1, then ω∗(G⊗n) ≤ ω∗(G) = 0: winning all coordinates implies winning any fixed coordinate, and marginalizing a repeated strategy gives a single-game strategy. Assume henceforth that 0 <ϵ < 1 and put 
+
+ℓ := log( |A|| B|), δ := ϵ
+
+4 , K := (8 Bnp )−4, c3 := K
+
+8 , γ := c3
+
+ϵ3
+
+ϵ + ℓ .
+
+Fix n ≥ 1 and suppose for contradiction that Eq. (17) fails. By the definition of the entangled value as a supremum, there is a finite-dimensional repeated strategy whose probability ϑ of winning every coordinate satisfies 
+
+ϑ > exp( −γn ).
+
+Since Bnp ≥ 1, we have K ≤ 1 and c3 ≤ 1/8. Together with 0 < ϵ < 1 and ϵ + ℓ ≥ ϵ, this gives 
+
+γ ≤ c3ϵ2 ≤ ϵ/ 8 = δ/ 2,
+
+where the first step uses ϵ + ℓ ≥ ϵ and the definition of γ, the second step uses c3 ≤ 1/8 and 0 < ϵ < 1, the third step uses δ = ϵ/ 4. The preceding strict bound on ϑ therefore implies log(1 /ϑ ) < γn ≤ δn/ 2 < δn, 
+
+where the first step uses ϑ > exp( −γn ) and monotonicity of log, the second step uses γ ≤ δ/ 2, the third step uses δ > 0 and n ≥ 1. Lemma 3.1 supplies a proper set of conditioned coordinates D0 ⊊ [n]. Its size bound gives 
+
+|D0| ≤ log(1 /ϑ )
+
+δ < γn δ ≤ n
+
+2 ,
+
+14 where the first step uses the size bound in Lemma 3.1, the second step uses log(1 /ϑ ) 
+
+<note>Content truncated. Call the fetch tool with a start_index of 38000 to get more content.</note>

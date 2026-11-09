@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_TV_FORMAL_CORE-9678c7b62fad",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/068/first-pass/toroidal_volume_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/068/first-pass/toroidal_volume_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15675,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/068/first-pass/toroidal_volume_audit/Main.lean",
+    "source_sha256": "aa20a30000fee4bad1e0c6c4581e40f83ec394be71f506b9a9d77d852957763a",
+    "statement_fidelity": "families/068/first-pass/toroidal_volume_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "bc0bc8ac15319be1195167c2cfb3e7221eb11e1a737b7a63bb9ab159e91aa1de",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/toroidal_volume_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace ToroidalVolumeAudit\n\nopen Matrix\n\ntheorem cleared_logarithmic_determinant\n    {I R : Type*} [Fintype I] [DecidableEq I] [CommRing R]\n    (A : Matrix I I R) (k : I) (m : I → R) (t : R) :\n    (A.updateRow k (m + t • A k)).det =\n      (A.updateRow k m).det + t * A.det := by\n  rw [Matrix.det_updateRow_add, Matrix.det_updateRow_smul,\n    Matrix.updateRow_eq_self]\n\ntheorem at_most_simple_logarithmic_pole\n    {I K : Type*} [Fintype I] [DecidableEq I] [Field K]\n    (A : Matrix I I K) (k : I) (m : I → K) (t : K) (ht : t ≠ 0) :\n    t * (A.updateRow k (A k + t⁻¹ • m)).det =\n      t * A.det + (A.updateRow k m).det := by\n  rw [Matrix.det_updateRow_add, Matrix.det_updateRow_smul,\n    Matrix.updateRow_eq_self]\n  calc\n    t * (A.det + t⁻¹ * (A.updateRow k m).det) =\n        t * A.det + (t * t⁻¹) * (A.updateRow k m).det := by ring\n    _ = t * A.det + (A.updateRow k m).det := by\n      rw [mul_inv_cancel₀ ht, one_mul]\n\ndef correction (lam : ℚ) : ℚ := max 0 (lam - 1)\n\ndef room (lam : ℚ) : ℚ := min lam 1\n\ntheorem correction_nonnegative (lam : ℚ) : 0 ≤ correction lam :=\n  le_max_left _ _\n\ntheorem room_identity (lam : ℚ) : lam - correction lam = room lam := by\n  unfold correction room\n  by_cases h : lam ≤ 1\n  · rw [max_eq_left (by linarith), min_eq_left h]\n    ring\n  · rw [max_eq_right (by linarith), min_eq_right (by linarith)]\n    ring\n\ntheorem correction_bounded_by_jacobian\n    (a e lam : ℚ) (ha : 0 ≤ a) (he : 1 ≤ e)\n    (hmin : e * lam ≤ a + 1) :\n    e * correction lam ≤ a := by\n  unfold correction\n  by_cases h : lam ≤ 1\n  · rw [max_eq_left (by linarith), mul_zero]\n    exact ha\n  · rw [max_eq_right (by linarith)]\n    nlinarith\n\ntheorem nonexceptional_branch_forces_zero\n    (e lam : ℚ) (he : 1 ≤ e) (hmin : e * lam ≤ 1) :\n    correction lam = 0 := by\n  have hlam : lam ≤ 1 := by\n    by_contra h\n    have hpos : 0 < e := by linarith\n    have hmul := mul_lt_mul_of_pos_left (show 1 < lam by linarith) hpos\n    nlinarith\n  exact max_eq_left (by linarith)\n\ntheorem minimum_positive\n    {I : Type*} (a e : I → ℚ) (lam : ℚ)\n    (ha : ∀ i, 0 ≤ a i) (he : ∀ i, 0 < e i)\n    (hatt : ∃ i, e i * lam = a i + 1) :\n    0 < lam := by\n  obtain ⟨i, hi⟩ := hatt\n  have hnum : 0 < a i + 1 := by linarith [ha i]\n  have hprod : 0 < e i * lam := by linarith\n  exact (mul_pos_iff_of_pos_left (he i)).mp hprod\n\ntheorem positive_room (lam : ℚ) (hlam : 0 < lam) : 0 < room lam :=\n  lt_min hlam (by norm_num)\n\ntheorem sharp_prime_threshold\n    {I : Type*} (a e : I → ℚ) (lam b : ℚ)\n    (he : ∀ i, 0 < e i)\n    (hmin : ∀ i, e i * lam ≤ a i + 1)\n    (hatt : ∃ i, e i * lam = a i + 1) :\n    (∀ i, -1 < a i - e i * (correction lam + b)) ↔ b < room lam := by\n  constructor\n  · intro h\n    obtain ⟨i, hi⟩ := hatt\n    have hmul : e i * (correction lam + b) < e i * lam := by\n      linarith [h i]\n    have hc : correction lam + b < lam :=\n      (mul_lt_mul_iff_right₀ (he i)).mp hmul\n    rw [← room_identity]\n    linarith\n  · intro hb i\n    rw [← room_identity] at hb\n    have hc : correction lam + b < lam := by linarith\n    have hmul := mul_lt_mul_of_pos_left hc (he i)\n    linarith [hmin i]\n\ntheorem full_support_discrepancy\n    {V : Type*} (lc cartier : V → ℚ)\n    (hlc : ∀ v, 0 ≤ lc v)\n    (hcartier : ∀ v, 0 ≤ cartier v)\n    (hfull : ∀ v, lc v = 0 → 0 < cartier v) :\n    ∀ v, 0 < lc v + cartier v := by\n  intro v\n  by_cases h : lc v = 0\n  · linarith [hfull v h]\n  · have hpos : 0 < lc v := lt_of_le_of_ne (hlc v) (Ne.symm h)\n    linarith [hcartier v]\n\ntheorem klt_type_monotonicity\n    {V : Type*} (klt effective : V → ℚ)\n    (hklt : ∀ v, 0 < klt v)\n    (heffective : ∀ v, 0 ≤ effective v) :\n    ∀ v, 0 < klt v + effective v := by\n  intro v\n  exact add_pos_of_pos_of_nonneg (hklt v) (heffective v)\n\ntheorem blowup_endpoint (codim s : ℚ) :\n    (-1 < (codim - 1) - (codim - 1 + s)) ↔ s < 1 := by\n  constructor <;> intro h <;> linarith\n\nend ToroidalVolumeAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/toroidal_volume_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: algebra and valuation core, not the analytic theorem\n\nThe declarations below are in namespace `ToroidalVolumeAudit` in `Main.lean`.\nThe natural-language claim they formalize is `C_TV_FORMAL_CORE`.\nThey do **not** encode the entire claim `C_G_VOLUME`.\n\n`cleared_logarithmic_determinant` quantifies over every finite index type,\nevery commutative ring, every square matrix `A`, row `k`, row vector `m`,\nand scalar `t`. Replacing row `k` by `m + t * A k` makes the determinant\nexactly `det(updateRow A k m) + t * det A`. In particular, as a polynomial\nin a uniformizer, there is no term of degree greater than one. This is\nthe cancellation behind the logarithmic-top-form argument in report.md.\n\n`at_most_simple_logarithmic_pole` quantifies over every field and the\nsame finite matrix data, with `t != 0`. Its exact identity says that\nmultiplying a determinant whose only polar row is `A k + m/t` by `t`\nclears its denominator. Passing from this identity to an order along\na geometric divisor still requires the regularity of the other\ncoefficients, supplied in the prose proof by writing rational\ncharacters as powers of a uniformizer times units.\n\n`correction`, `room`, `correction_nonnegative`, and `room_identity` use\nrational numbers: `correction lam = max(0, lam-1)` and\n`room lam = min(lam, 1) = lam-correction lam`.\n\n`correction_bounded_by_jacobian` quantifies over rational `a,e,lam`,\nassuming `a >= 0`, `e >= 1`, and `e*lam <= a+1`. It proves\n`e*correction lam <= a`, equivalently the manuscript boundary\ncoefficient `-a+e*correction lam <= 0`. The geometric multiplicities\nare positive integers; the formal result allows all rational `e >= 1`,\nso it covers, rather than weakens, that case.\n\n`nonexceptional_branch_forces_zero` assumes `e >= 1` and\n`e*lam <= 1` and proves the correction is zero. In the geometric\napplication this is the branch with Jacobian discrepancy `a=0`.\n\n`minimum_positive` quantifies over any index type, rational functions\n`a,e` with `a(i)>=0`, `e(i)>0`, and an index attaining\n`e(i)*lam = a(i)+1`. It proves `lam>0`. `positive_room` then proves\nthat the allowed perturbation interval has positive length.\n\n`sharp_prime_threshold` quantifies over any index type and rational\n`a,e,lam,b`. All `e(i)` are positive; every\n`e(i)*lam <= a(i)+1`, with equality at at least one index. It proves\nthe exact equivalence\n\n    (for every i, a(i)-e(i)*(correction lam+b) > -1)\n        if and only if b < room lam.\n\nThe existence of a minimizing branch, not finite numerical sampling,\nis a formal hypothesis. Geometrically it follows from the finite\nnonempty collection of components over a fixed base prime. The formal\nequivalence does not need `b>=0`; the metric perturbation theorem\nseparately imposes that condition for semipositivity.\n\n`full_support_discrepancy` quantifies over an arbitrary valuation index\ntype and rational-valued functions `lc,cartier`. Its hypotheses are\nnonnegativity of both functions and strict positivity of `cartier`\nwhere `lc=0`; its conclusion is strict positivity of their sum at\nevery index. The prose proof, not Lean, verifies the geometric\nidentification `A_Theta = A_D + v(D-Theta)`, rational Cartierness,\neffectivity, and the full-support property for all divisorial valuations,\nincluding non-toric valuations.\n\n`klt_type_monotonicity` proves the analogous universal implication\nwith a strictly positive initial discrepancy and a nonnegative\neffective-Cartier contribution. This is the numerical core of the\nnon-toroidal, locally-klt-type extension in report.md; Lean does not\nconstruct a klt boundary on a variety.\n\n`blowup_endpoint` proves for all rational `codim,s` that the corrected\nexponent `(codim-1)-(codim-1+s)` is greater than `-1` exactly when\n`s<1`. The geometric example separately has integer codimension at\nleast two and verifies all model, metric, rank, and strictness hypotheses.\n\nNo declaration formalizes Berndtsson's theorem, plurisubharmonic\nremovability, fiber integration, resolution of singularities, or\nthe equality between analytic integrability and discrepancies.\nThose are proved or explicitly cited in report.md. A compiler success\ncertifies exactly this algebraic core, not a fully formalized\nanticanonical nonvanishing theorem, novelty, or publication significance.\n"
+  },
+  "subject": {
+    "content_hash": "7b23c776e6c6cc0c75e1b753b20a17475109e2293ca535953c75ee915a060fed",
+    "kind": "claim",
+    "subject_id": "C_TV_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

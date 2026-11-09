@@ -1,0 +1,533 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,geometry,hyperref}
+\geometry{margin=1in}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\len}{\operatorname{length}}
+\newcommand{\ord}{\operatorname{ord}}
+\title{An independent local-algebra verification of the Milnor-number
+formula in manuscript family 059}
+\author{Campaign 9000059: Engineer submission for independent review}
+\date{November 5, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For the actual Weierstrass-prepared four-variable germs in the
+multiplicities-four-and-five manuscript, we prove
+\[
+ \mu(f_{0,s})=\mu(f_{1,s})=24ab+6a+6b+51
+\]
+for every fixed complex \(s\ne0\) and integers \(a,b>1\) satisfying
+\(ab>5(a+b)\).  The two explicit inequalities in its tube theorem
+imply this condition.  The proof is a local intersection-length
+calculation; it does not use a tube identification, a Seifert form,
+or an unjustified replacement of a Weierstrass unit.  Exact rational
+finite-jet calculations certify the three plane Jacobian-algebra
+inputs, with a Nakayama argument proving that the truncations suffice.
+This verifies a necessary numerical consequence, not the tube theorem
+or either manuscript's ambient-homeomorphism assertion.  The analytic
+proof is not kernel-formalized, and independent Reviewer certification
+and novelty assessment are outstanding.
+\end{abstract}
+
+\section{Scope, sources, and the precise result}
+
+Write M45 for the staged September 27, 2026 manuscript
+\emph{Ambiently homeomorphic isolated hypersurface germs in
+\(\C^4\) with multiplicities four and five}, and M23 for the staged
+September 24, 2026 manuscript
+\emph{Ambiently homeomorphic isolated hypersurfaces of multiplicities
+two and three}.  They are independent arguments.
+
+All 22 staged \texttt{.tex} files were read and inventoried.
+\texttt{PROOF\_GRAPH.json} and \texttt{MATH\_STATE.json} contain
+114 source-qualified assertions: all theorem, lemma, proposition,
+corollary, and remark environments, the labeled displayed identities,
+and the three central M45 construction definitions.  Source paths,
+line intervals, original statements, and logical dependencies are
+retained; merely citing another section is not treated as a proof
+dependency.  None of these source assertions was certified merely
+by being inventoried.
+
+The local mission concerns M45, Section 03, and the numerical
+consequence of \texttt{thm:tube} in Section 04.  Its equations are
+\begin{align*}
+ h(X,T)&=T(X-T^2)(X-2T^2),\\
+ q_1(u,w)&=(u-w-w^8)(u-w-2w^8)(u-w^2),\\
+ q_2(u,w)&=q_1(u,w)-u^2,\\
+ \varphi(u,w)&=u^2+q_1(u,w),\\
+ \psi(X,w)&=u(u-w^2)q_2(u,w),\qquad u=X+w .
+\end{align*}
+Let
+\[
+ F_0=X-T^2-q_1(T,w)=U_0R_0,\qquad
+ F_1=T-\psi(X,w)=U_1R_1
+\]
+be the exact Weierstrass preparations in \(w\).  With
+\[
+ R_{i,s}(p,w)=s^4R_i(p,w/s),\quad
+ C_{i,s}=\{yz=R_{i,s}(p,w)\},\quad
+ f_{i,s}=h(p)+w(y^a+z^b),
+\]
+the functions are restricted to the indicated smooth ambient germs.
+Here and throughout this report, \(\mu\) means the dimension of the
+Jacobian quotient in the convergent local ring at the origin.
+
+\begin{theorem}[Actual prepared germs]\label{thm:actual}
+For every fixed \(s\in\C^*\) and every pair of integers \(a,b>1\)
+with \(ab>5(a+b)\), both \(f_{i,s}\) have isolated critical point at
+the origin and
+\[
+ \mu(f_{i,s})=24ab+6a+6b+51,\qquad i=0,1.
+\]
+This includes every pair satisfying the two strict inequalities in
+M45's \texttt{thm:tube}, hence the eventual common parameter choice
+in \texttt{lem:simultaneous-parameters}.
+\end{theorem}
+
+The assertion for every fixed \(s\ne0\) concerns germs: neighborhoods
+may shrink with \(s\).  It asserts neither uniform isolation in the
+manuscript's fixed outer tube nor any property at \(s=0\).
+In particular, it does not establish \texttt{lem:local}.
+
+\section{Local-algebra tools and the analytic input}
+
+We use only local rings.  If \(g_1,\ldots,g_d\) have isolated common
+zero in a regular local analytic ring of dimension \(d\), denote the
+length of their quotient by \(I(g_1,\ldots,g_d)\).
+Whenever the relevant intersections are finite,
+\begin{equation}\label{eq:add}
+ I(g_1,\ldots,g_{d-1},uv)
+ =I(g_1,\ldots,g_{d-1},u)+I(g_1,\ldots,g_{d-1},v).
+\end{equation}
+Indeed the first \(d-1\) equations give a one-dimensional
+Cohen--Macaulay ring \(A\), in which \(u,v\) are nonzerodivisors.
+The exact sequence
+\[
+ 0\longrightarrow A/(u)\xrightarrow{\ \cdot v\ }A/(uv)
+       \longrightarrow A/(v)\longrightarrow0
+\]
+proves the formula.  Finiteness of the two intersections on the
+right also implies finiteness on the left, so the formula is not
+being used to assume isolation.  The regular-sequence and
+Cohen--Macaulay facts used here are precisely
+\cite[Tags 00NQ and 02JN]{stacks}.
+
+\begin{lemma}[A monic free quotient]\label{lem:free}
+For any commutative coefficient ring \(B\), any \(\rho\in B\), and
+integers \(a,b>1\), the polynomial quotient
+\[
+ B[y,z]/(yz-\rho,\ y^a+z^b)
+\]
+is free over \(B\), with basis
+\[
+ 1,y,\ldots,y^{a-1},z,\ldots,z^b.
+\]
+If \(B\) is local Artinian and \(\rho\) is in its maximal ideal,
+this is also the corresponding local power-series quotient.
+\end{lemma}
+\begin{proof}
+For the weighted monomial order of weights \((b,a)\), with \(y\)
+first in ties, a monic basis is
+\[
+ g_1=yz-\rho,\quad g_2=y^a+z^b,\quad
+ g_3=z^{b+1}+\rho y^{a-1}.
+\]
+Its leading monomials are \(yz,y^a,z^{b+1}\).
+The three pair reductions are
+\[
+ y^{a-1}g_1-zg_2=-g_3,\qquad
+ z^bg_1-yg_3=-\rho g_2,
+\]
+\[
+ z^{b+1}g_2-y^ag_3=z^bg_3-\rho y^{a-1}g_2.
+\]
+Thus monic division gives exactly the displayed basis, without any
+division by a coefficient of \(B\).
+In the Artinian case,
+\(y^{a+b}=-\rho^b\) and \(z^{a+b}=-\rho^a\), so both variables
+are nilpotent.  Localization and completion therefore add no points
+and change no length.
+\end{proof}
+
+The essential analytic step is the following small-perturbation
+calculation.  It applies to analytic coefficients, not merely to
+polynomial approximations of the prepared equation.
+
+\begin{lemma}[Exact polar intersection]\label{lem:polar}
+Let \(p=(v,u)\), let \(h(p)\) have an isolated critical point, and
+suppose for every nonconstant analytic \(p\)-arc
+\[
+ \nu(\nabla h)\le L\nu(p),\qquad
+ \nu(p)=\min(\nu v,\nu u).
+\]
+Let \(R(p,w)=w^k+\sum_{j<k}A_j(p)w^j\), with \(A_j(0)=0\).
+Put \(m=a+b,\ n=ab,\ N=n-m\), and assume \(N/m>L\).
+For any \(\xi\ne0\), the four equations
+\begin{align}
+ R-\xi t^m&=0,\qquad mR+nwR_w=0,\label{eq:polar-geometry}\\
+ \nabla h+\lambda(b/\xi)wt^N\nabla_pR&=0\label{eq:polar-gradient}
+\end{align}
+in \((p,w,t)\) have isolated intersection at the origin of
+length \(km\mu(h)\), for every finite complex \(\lambda\).
+\end{lemma}
+\begin{proof}
+The equation \(mR+nwR_w=0\) is a degree-\(k\) Weierstrass
+equation in \(w\): its leading coefficient is \(m+nk\ne0\),
+and all lower coefficients vanish at \(p=0\).
+On an arc with \(p\not\equiv0\), it forces
+\(\nu w\ge\nu p/k\), since otherwise its leading term has
+strictly smaller order than every other term.  The first equation
+in \eqref{eq:polar-geometry} then implies
+\(m\nu t=\nu R\ge\nu p\).  Consequently the perturbing vector
+in \eqref{eq:polar-gradient} has order at least
+\[
+ \nu w+N\nu t\ \ge\ (1/k+N/m)\nu p\ >\ L\nu p .
+\]
+It cannot cancel the lowest-order component of \(\nabla h\).
+The same reasoning applies to arcs with variable \(\lambda\)
+near any finite \(\lambda_0\), because \(\lambda\) has no pole.
+If \(p\equiv0\), the second equation gives \(w\equiv0\), and
+the first then gives \(t\equiv0\).
+
+For completeness, this arc argument gives uniform local isolation
+in \(\lambda\), not just an assertion about individual fibers.
+An analytic component off the parameter axis would, after a generic
+linear slice, contain a one-dimensional analytic germ off that
+axis; a Puiseux parametrization supplies the forbidden arc.
+These are the local-parametrization and Puiseux statements
+in \cite[Theorems 6.7.4 and 6.7.6]{lebl}.
+
+The analytic quotient defined by the four equations near
+\((0,\lambda_0)\) is therefore finite over
+\(\C\{\lambda-\lambda_0\}\) and has support the parameter axis.
+It is a dimension-one complete intersection in a regular local
+ring of dimension five.  It is Cohen--Macaulay, and the base is a
+regular local ring of dimension one with zero-dimensional fiber.
+Thus the precise hypotheses of miracle flatness
+\cite[Tag 00R4]{stacks} hold.  The finite flat module is free locally,
+so its fiber length is constant.  Connecting \(0\) to any finite
+\(\lambda\) proves equality of the lengths.
+
+At \(\lambda=0\), first quotient by \(\nabla h\), giving an Artinian
+ring of length \(\mu(h)\).  The second equation in
+\eqref{eq:polar-geometry}, divided by \(m+nk\), is monic of degree
+\(k\) in \(w\); the first is monic of degree \(m\) in \(t\), up
+to its nonzero constant coefficient.  Successive Weierstrass
+division gives free ranks \(k\) and \(m\).  The length is
+\(km\mu(h)\).
+\end{proof}
+
+\section{The general intersection-length formula}
+
+\begin{theorem}\label{thm:general}
+In the situation of Lemma~\ref{lem:polar}, assume in addition that
+\(R_v(0)\ne0\), that \(d=h|_{\{R=0\}}\), in coordinates \((u,w)\),
+has an isolated critical point, and that \(d(u,0)\not\equiv0\).
+Then on the smooth germ \(yz=R(p,w)\),
+\[
+ f=h(p)+w(y^a+z^b)
+\]
+has an isolated critical point and
+\[
+ \mu(f)=\mu(d)+(kab+a+b)\mu(h).
+\]
+\end{theorem}
+\begin{proof}
+Solve \(R(v,u,w)=q\) exactly for \(v\), and put
+\(H(u,w,q)=h(v(u,w,q),u)\).  No unit is suppressed.
+All derivatives of \(R\) below are evaluated at this exact solution.
+Implicit differentiation gives
+\begin{equation}\label{eq:chain}
+ H_q=h_v/R_v,\qquad
+ H_u=h_u-(R_u/R_v)h_v,\qquad
+ H_w=-R_wH_q.
+\end{equation}
+The function in the four smooth coordinates is
+\[
+ f=H(u,w,yz)+w(y^a+z^b).
+\]
+Set
+\[
+ A=ay^a-bz^b,\quad
+ F_1=H_u,\quad F_2=H_w+y^a+z^b,\quad
+ F_3=zH_q+aw y^{a-1}.
+\]
+Then \(F_1=f_u,F_2=f_w,F_3=f_y\), and
+\(yF_3-zf_z=wA\).  Define
+\[
+ L_A=I(F_1,F_2,F_3,A),\quad
+ L_w=I(F_1,F_2,F_3,w),\quad
+ L_z=I(F_1,F_2,F_3,z).
+\]
+We first compute these finite lengths, without assuming isolation
+of \(f\).
+
+Write \(\ell=\ord d(u,0)-1\).  At \(z=0\), the three remaining
+equations are \(d_u,d_w+y^a,aw y^{a-1}\), so
+\begin{equation}\label{eq:Lz}
+ L_z=a\ell+(a-1)\mu(d).
+\end{equation}
+Indeed the \(w=0\) factor has length \(a\ell\), by monic
+division in \(y\), and the \(y=0\) factor has length \(\mu(d)\).
+
+At \(w=0\), the last equation is \(zH_q\).
+Its \(z=0\) contribution again has length \(a\ell\).
+On \(H_q=H_u=0\), equations \eqref{eq:chain} are exactly
+\(\nabla h=0\); also \(H_w=0\).  The remaining equations are
+\(yz=R(p,0)\) and \(y^a+z^b=0\).
+Apply Lemma~\ref{lem:free} over
+\(B=\C\{p\}/(\nabla h)\), with \(\rho=R(p,0)\) nilpotent.
+This proves
+\begin{equation}\label{eq:Lw}
+ L_w=a\ell+(a+b)\mu(h).
+\end{equation}
+
+To compute \(L_A\), make the finite free cover
+\[
+ y=Y^b,\qquad z=Z^a.
+\]
+Its degree is \(ab=n\): the monomials \(Y^iZ^j\),
+\(0\le i<b,\ 0\le j<a\), form a free basis.
+The pulled-back equation \(A\) is
+\(aY^n-bZ^n\), a product of \(n\) distinct linear factors.
+On a factor \(Y=\eta Z\), where \(\eta^n=b/a\), set \(t=Z\)
+and \(\xi=\eta^b\).  Thus
+\[
+ y=\xi t^b,\quad z=t^a,\quad
+ q=\xi t^m,\quad \xi^a=b/a.
+\]
+All occurrences of \(H\) in the following formulas are at
+\((u,w,\xi t^m)\).  The three equations become
+\[
+ H_u,\qquad H_w+(m/a)t^n,\qquad
+ t^a\bigl(H_q+(b/\xi)wt^N\bigr).
+\]
+The factor \(t^a\) contributes \(a\mu(d)\).
+Put \(D=H_q+(b/\xi)wt^N\).  Modulo \(D\), the middle equation
+can be replaced, using \eqref{eq:chain}, by
+\[
+ t^N\bigl((m/a)t^m+(b/\xi)wR_w\bigr).
+\]
+The \(t^N\) factor contributes \(Nk\mu(h)\):
+at \(t=0\), the equations \(H_u=H_q=0\) are the gradient
+equations of \(h\) on \(R=0\), and monic division in \(w\)
+gives rank \(k\) over its Jacobian algebra.
+
+For the last factor, use \(R=\xi t^m\) and multiply by the unit
+\(a\xi\); its equation is \(mR+nwR_w=0\).
+Using \eqref{eq:chain}, the other two equations are equivalent to
+\[
+ \nabla h+(b/\xi)wt^N\nabla_pR=0.
+\]
+Lemma~\ref{lem:polar} at \(\lambda=1\) gives length \(km\mu(h)\).
+The length on each of the \(n\) linear factors is therefore
+\[
+ a\mu(d)+Nk\mu(h)+mk\mu(h)=a\mu(d)+nk\mu(h).
+\]
+All these lengths are finite.  Repeated application of
+\eqref{eq:add}, followed by division by the free-cover degree
+\(n\), proves
+\begin{equation}\label{eq:LA}
+ L_A=a\mu(d)+kab\mu(h).
+\end{equation}
+
+Now \(I(F_1,F_2,F_3,wA)=L_w+L_A\) is finite.  Since its ideal
+also equals \((F_1,F_2,F_3,zf_z)\), the Jacobian ideal is
+zero-dimensional and \(f\) is isolated.  Applying
+\eqref{eq:add} one last time gives
+\[
+ \mu(f)+L_z=L_w+L_A.
+\]
+Substituting \eqref{eq:Lz}--\eqref{eq:LA} proves the assertion.
+In particular, the terms involving the slice order \(\ell\)
+cancel exactly.
+\end{proof}
+
+\section{Certified inputs for the actual germs}
+
+The exact polynomial graph pullbacks are
+\[
+ d_0(u,w)=u q_1(u,w)q_2(u,w),\qquad
+ d_1(X,w)=\psi(X,w)(X-\psi(X,w)^2)(X-2\psi(X,w)^2).
+\]
+The verifier constructs these expressions from their factors,
+using rational coefficients only.
+
+\subsection*{Why the finite jets prove the local dimensions}
+For a polynomial \(g(x,w)\), the verifier computes
+\[
+ L_D(g)=\dim_\Q \Q[x,w]/(g_x,g_w,(x,w)^D)
+\]
+by exact rational row reduction.  Columns are all monomials of
+total degree below \(D\); rows are all monomial multiples of the
+two derivatives that survive modulo \((x,w)^D\).
+This is the entire ideal in that finite quotient, not a sampled
+set of relations.
+
+If \(L_D=L_{D+1}\), put \(M=\C\{x,w\}/J(g)\).  The natural
+surjection \(M/\mathfrak m^{D+1}M\to M/\mathfrak m^DM\)
+then has zero-dimensional kernel, hence
+\(\mathfrak m^DM=\mathfrak m^{D+1}M\).
+The module \(\mathfrak m^DM\) is finitely generated over the
+Noetherian local ring, even before \(M\) is known Artinian.
+Nakayama's lemma \cite[Tag 00DV, part (2)]{stacks} gives
+\(\mathfrak m^DM=0\).  Thus \(L_D\) is the exact local length
+and proves isolation.  Extending rational scalars to \(\C\)
+does not change these finite ranks.
+
+The certificate records the following exact outputs:
+\[
+\begin{array}{c|c|c|c}
+g&D&D(D+1)/2-L_D&L_D=L_{D+1}\\ \hline
+h&6&15&6\\
+d_0&24&249&51\\
+d_1&24&249&51
+\end{array}
+\]
+The next-cutoff ranks are respectively \(22,274,274\).
+For the plane pullbacks, function terms of degree at least 26
+cannot affect either tested derivative quotient.  Equality of the
+two quotient lengths supplies the missing justification that an
+arbitrary truncation would lack.
+Both \(d_i(u,0)\) have initial term \(-u^6\), so the slice order
+is six.  These computations independently recover the numerical
+part of M45's \texttt{lem:plane-data}; they do not verify its
+Seifert-form or monodromy assertions.
+
+As a separate bounded operation, the approved Jacobian adapter
+computed the exact lexicographic basis
+\[
+ J(h)=\left(X^2-\tfrac72T^4,\ XT-\tfrac32T^3,\ T^5\right).
+\]
+This ideal is supported only at the origin.  Its six standard
+monomials are \(1,T,T^2,T^3,T^4,X\).
+The dedicated JSON certificate preserves the operation ID,
+exact payload, full typed response, server version, protocol, and
+successful adapter status.  The standalone verifier replays the
+basis and the local jet calculation.  No adapter result concerning
+a global ideal is used as a substitute for either four-variable
+local algebra.
+
+\subsection*{Analytic units and all nonzero \(s\)}
+Direct polynomial identities give
+\[
+ F_0(0,0,w)=w^4(1+w^7)(1+2w^7),
+\]
+\[
+ F_1(0,0,w)=w^4\bigl((1-w)-2w^{15}(1-w)^2\bigr).
+\]
+The two factors after \(w^4\) have constant term one, and
+\(F_{0,X}(0)=F_{1,T}(0)=1\).
+The hypotheses of Weierstrass preparation
+\cite[Theorem 6.2.3]{lebl} therefore hold exactly:
+\[
+ R_i(0,w)=w^4,\qquad R_{0,X}(0)=R_{1,T}(0)=1.
+\]
+For each fixed \(s\ne0\), \(R_{i,s}\) is still monic of degree
+four with lower coefficients vanishing at \(p=0\), and the indicated
+base derivative is \(s^4\ne0\).
+Its root surface is the exact graph with \(w\) replaced by \(w/s\).
+Consequently its plane pullback is analytically equivalent to \(d_i\)
+by an invertible linear change in \(w\), and its Jacobian length is
+51.  The proof of Theorem~\ref{thm:general} applies directly to
+\(R_{i,s}\); it never sets \(U_i\) equal to one, nor truncates
+these prepared analytic functions.
+
+\subsection*{Gradient and admissible parameters}
+The derivatives of \(h\) are
+\[
+ h_X=T(2X-3T^2),\qquad h_T=X^2-9XT^2+10T^4.
+\]
+If \(\nu X<2\nu T\), the initial term of \(h_T\) is \(X^2\);
+if \(\nu X>2\nu T\), the initial term of \(h_X\) is \(-3T^3\).
+Both give \(\nu\nabla h\le4\min(\nu X,\nu T)\).
+In the equality case, writing \(X=cT^2+\cdots\), the identity
+\[
+ (2c-15)(2c-3)-4(c^2-9c+10)=5
+\]
+excludes simultaneous cancellation.  Arcs on either coordinate
+axis satisfy the bound directly.  Hence \(L=4\).
+
+Let \(\alpha=4b/(a+b)\) and \(\beta=4a/(a+b)\).
+The exact identity
+\[
+ \frac{ab-a-b}{a+b}-4
+ =\frac12\left(\frac{(a-2)\alpha}{4}-4\right)
+  +\frac12\left(\frac{(b-2)\beta}{4}-4\right)
+\]
+shows that both strict tube inequalities imply \(N/m>4\).
+The general formula, with \(k=4,\mu(h)=6,\mu(d_i)=51\),
+now proves Theorem~\ref{thm:actual}.  The universal inequality is
+checked symbolically, not inferred from finitely many parameter
+examples.  No claim about the manuscript's unspecified
+``sufficiently small'' threshold is needed: the local conclusion
+holds for every fixed nonzero \(s\).
+
+\section{What is, and is not, certified by the computation}
+
+\texttt{verify.py} checks the source inventory, the exact plane
+Jacobian lengths with a termination certificate, the graph-unit
+identities and base derivatives, the gradient noncancellation
+identity, the monic-quotient reductions, the parameter inequality,
+and the polar and final length identities.  It is rerunnable using
+Python with SymPy; the plane rank computation itself uses only the
+standard-library \texttt{Fraction} class.  It needs neither a
+Jacobian server nor Singular when replaying the stored result.
+The software-side distinction between a local and a global
+Jacobian quotient is explicitly documented in the primary
+Singular manual \cite[Section A.4.1]{singular}.
+
+The analytic arc argument, finite-flatness application, and use of
+intersection-length additivity are the mathematical proof above,
+not outcomes of a proof kernel.  The independent Reviewer must
+check these arguments and the fidelity of the cited foundational
+statements.  Citations have been read by the Engineer and recorded
+as assumptions; this is not an independent citation attestation.
+
+Compared with the prior state, which contained no verified local
+Milnor computation, this supplies an all-parameter local-algebra
+theorem rather than matching examples or a finite exclusion.
+A focused literature search did not locate this exact formula;
+that does not establish novelty.  Attempts to obtain the original
+Milnor monograph from two public endpoints did not yield a readable
+source, so no unread theorem locator from that book is relied upon.
+Here the Milnor number is the local-algebra invariant itself.
+
+The equality of Milnor numbers neither proves integral Seifert
+congruence nor identifies the custom large tube with a local Milnor
+representative.  Acyclicity alone would not justify that
+identification.  All those obligations, the existential M45 main
+theorem, and the independent M23 manuscript remain open in the
+campaign.  No refutation of either existential assertion is claimed.
+
+\begin{thebibliography}{9}
+\bibitem{stacks}
+The Stacks Project Authors, \emph{The Stacks Project}, read November
+5, 2026:
+\href{https://stacks.math.columbia.edu/tag/00DV}{Tag 00DV},
+Lemma 10.20.1(2) (Nakayama);
+\href{https://stacks.math.columbia.edu/tag/00NQ}{Tag 00NQ},
+Lemma 10.106.3 (regular local rings are Cohen--Macaulay);
+\href{https://stacks.math.columbia.edu/tag/02JN}{Tag 02JN},
+Lemma 10.104.2 (regular sequences and dimension);
+\href{https://stacks.math.columbia.edu/tag/00R4}{Tag 00R4},
+Lemma 10.128.1 (miracle flatness).
+\bibitem{lebl}
+J.~Lebl, \emph{Tasty Bits of Several Complex Variables},
+version 4.4, May 31, 2026, ISBN 979-8866906680.
+Theorems 6.2.3 and 6.2.5 (preparation and division);
+Theorems 6.7.4 and 6.7.6 (local parametrization and Puiseux).
+\url{https://www.jirka.org/scv/scv.pdf}.
+\bibitem{singular}
+The Singular authors, \emph{Singular 4.4 Manual},
+Section A.4.1, ``Milnor and Tjurina number'',
+\url{https://www.singular.uni-kl.de/Manual/4-4/sing_960.htm}.
+See also the local/global contrast in Section 2.3.4,
+\url{https://www.singular.uni-kl.de/Manual/latest/sing_9.htm}.
+\end{thebibliography}
+\end{document}

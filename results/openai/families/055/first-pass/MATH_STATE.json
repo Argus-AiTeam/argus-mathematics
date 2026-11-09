@@ -1,0 +1,487 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX9000055",
+      "version": 1,
+      "statement": "OpenAI Math Audit #055: Gepner symmetry and large-volume stability on threefolds.",
+      "definitions": {
+        "openai_family": "055"
+      },
+      "content_hash": "22e0d9e92bbe00cb783701aedb0fffcc68c5c45867dc8bdfe562c4ce5902c1c2"
+    },
+    {
+      "context_id": "CTX55_AISLE",
+      "version": 1,
+      "statement": "Source-faithful audit and quantitative verification of the Gepner double-tilt and grid mechanism on a smooth complex quintic threefold.",
+      "definitions": {
+        "Phi": "T_OX composed with tensor OX(1), tensor acts first",
+        "v": "(r,c,d,e) are manuscript-normalized Chern coordinates",
+        "uG": "(5-sqrt(5))/10",
+        "aisle": "nonpositive part of a bounded t-structure, closed under [1]",
+        "perp": "right Hom orthogonal, all extension closures finite"
+      },
+      "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C9000055",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000055",
+        "content_hash": "22e0d9e92bbe00cb783701aedb0fffcc68c5c45867dc8bdfe562c4ce5902c1c2"
+      },
+      "natural_statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 055 (Gepner symmetry and large-volume stability on threefolds.; papers: A Gepner stability condition on every smooth quintic threefold; Prescribed large-volume charges on threefolds with trivial canonical bundle; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "e243320411c3110bc7ab313cc420d59341b0b3fdc91465dcdbdb6ab8b4a06069"
+    },
+    {
+      "claim_id": "C55_CORE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "The exact matrix, golden-parameter, slope-criterion, perturbation, positive-circuit, endpoint-coordinate, refinement-separation, and support-arithmetic statements declared in GepnerAisle Main.lean hold for all real variables under exactly their displayed hypotheses; this is algebraic certification, not categorical formalization.",
+      "formal_statement": "import Mathlib\n\nnamespace GepnerAisle\n\n@[ext]\nstructure V where\n  r : ℝ\n  c : ℝ\n  d : ℝ\n  e : ℝ\n\ndef phi (v : V) : V :=\n  ⟨-4 * v.r - (20 / 3) * v.c - 5 * v.d - 5 * v.e,\n    v.r + v.c, v.r / 2 + v.c + v.d,\n    v.r / 6 + v.c / 2 + v.d + v.e⟩\n\ndef phiInv (v : V) : V :=\n  ⟨v.r + (25 / 6) * v.c + 5 * v.e,\n    -v.r - (19 / 6) * v.c - 5 * v.e,\n    v.r / 2 + (13 / 12) * v.c + v.d + (5 / 2) * v.e,\n    -v.r / 6 - (7 / 36) * v.c - v.d + v.e / 6⟩\n\ndef cut (u : ℝ) (v : V) : ℝ := v.d + v.c / 2 + u * v.r\n\ndef uG : ℝ := (5 - Real.sqrt 5) / 10\n\ntheorem phi_inverse (v : V) : phiInv (phi v) = v := by\n  ext <;> dsimp [phiInv, phi] <;> ring\n\ntheorem inverse_phi (v : V) : phi (phiInv v) = v := by\n  ext <;> dsimp [phiInv, phi] <;> ring\n\ntheorem phi_period_five (v : V) :\n    phi (phi (phi (phi (phi v)))) = v := by\n  ext <;> dsimp [phi] <;> ring\n\ntheorem gepner_polynomial : 5 * uG ^ 2 - 5 * uG + 1 = 0 := by\n  have hs := Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num)\n  dsimp [uG]\n  nlinarith\n\ntheorem gepner_bounds :\n    (27 / 100 : ℝ) ≤ uG ∧ uG < (138197 / 500000 : ℝ) := by\n  have hs := Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num)\n  have hp := Real.sqrt_nonneg (5 : ℝ)\n  dsimp [uG]\n  constructor <;> nlinarith\n\ntheorem slope_criterion_threshold (u s : ℝ)\n    (hstrip : 20 * u + 13 * s ≤ 13) (hcompare : 2 * u ≤ s) :\n    u ≤ 13 / 46 := by\n  linarith\n\ntheorem slope_criterion_attained :\n    20 * (13 / 46 : ℝ) + 13 * (13 / 23 : ℝ) = 13 ∧\n      2 * (13 / 46 : ℝ) = 13 / 23 := by\n  norm_num\n\ntheorem parameter_margins (u δ : ℝ)\n    (hu : 0 < u) (hub : u < 13 / 46)\n    (hδ : 0 < δ) (hsmall : δ ≤ u / 4)\n    (hgap : δ ≤ (13 / 46 - u) / 10) :\n    0 < u - δ ∧\n      0 < 3 / 10 - u - (3 / 2) * δ ∧\n      0 < 13 / 46 - u - (36 / 23) * δ ∧\n      0 < 1 / 2 - (23 / 13) * u - 3 * δ := by\n  constructor\n  · linarith\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem concrete_margins (u : ℝ)\n    (hl : (27 / 100 : ℝ) ≤ u)\n    (hu : u ≤ (138197 / 500000 : ℝ)) :\n    0 < u - 1 / 2000 ∧\n      0 < 3 / 10 - u - (3 / 2) * (1 / 2000) ∧\n      0 < 13 / 46 - u - (36 / 23) * (1 / 2000) ∧\n      0 < 1 / 2 - (23 / 13) * u - 3 * (1 / 2000) := by\n  constructor\n  · linarith\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem comparison_separation (s u δ C R D err : ℝ)\n    (hs : 0 < s) (hu : 0 ≤ u) (hC : 0 < C)\n    (hR : s * R ≤ C) (hD : D ≤ 0)\n    (herr : -3 * δ * C ≤ err)\n    (hmargin : 0 < s / 2 - u - 3 * δ * s) :\n    0 < C / 2 - u * R - D + err := by\n  have h1 := mul_nonneg hu (sub_nonneg.mpr hR)\n  have h2 := mul_pos hmargin hC\n  have h3 := mul_nonneg (le_of_lt hs) (show 0 ≤ err + 3 * δ * C by linarith)\n  have h4 := mul_nonpos_of_nonneg_of_nonpos (le_of_lt hs) hD\n  by_contra h\n  have h5 := mul_nonpos_of_nonneg_of_nonpos\n    (le_of_lt hs) (le_of_not_gt h)\n  nlinarith\n\ntheorem four_corner_control (ε N r c : ℝ)\n    (hpp : 0 ≤ N + ε * r + ε * c)\n    (hpm : 0 ≤ N + ε * r - ε * c)\n    (hmp : 0 ≤ N - ε * r + ε * c)\n    (hmm : 0 ≤ N - ε * r - ε * c) :\n    ε * (|r| + |c|) ≤ N := by\n  rcases le_total 0 r with hr | hr\n  · rcases le_total 0 c with hc | hc\n    · rw [abs_of_nonneg hr, abs_of_nonneg hc]\n      linarith\n    · rw [abs_of_nonneg hr, abs_of_nonpos hc]\n      linarith\n  · rcases le_total 0 c with hc | hc\n    · rw [abs_of_nonpos hr, abs_of_nonneg hc]\n      linarith\n    · rw [abs_of_nonpos hr, abs_of_nonpos hc]\n      linarith\n\ntheorem four_cut_circuit (u : ℝ) (v : V)\n    (hu : 5 * u ^ 2 - 5 * u + 1 = 0) :\n    cut u v + (5 * u - 1) * cut u (phiInv v) +\n      (5 * u - 1) * cut u (phiInv (phiInv v)) +\n      cut u (phiInv (phiInv (phiInv v))) = 0 := by\n  calc\n    _ = -(3 * v.r + (35 / 6) * v.c + 5 * v.d + 10 * v.e) *\n        (5 * u ^ 2 - 5 * u + 1) := by\n      dsimp [cut, phiInv]\n      ring\n    _ = 0 := by rw [hu]; ring\n\ntheorem endpoint_r0 (u : ℝ) (w : V) :\n    u * (phi w).r =\n      u * (5 * u - 4) * w.r - w.c +\n        (1 - 5 * u) * cut u w - cut u (phiInv w) := by\n  dsimp [phi, phiInv, cut]\n  ring\n\ntheorem endpoint_r3 (u : ℝ) (w : V) :\n    u * (phiInv (phiInv w)).r =\n      u * (5 * u - 4) * w.r + (5 * u - 3) * w.c +\n        (3 - 5 * u) * cut u w - 3 * cut u (phiInv w) := by\n  dsimp [phiInv, cut]\n  ring\n\ntheorem endpoint_c3 (u : ℝ) (w : V) :\n    u * (phiInv (phiInv w)).c =\n      u * (3 - 5 * u) * w.r + (2 - 4 * u) * w.c +\n        (5 * u - 2) * cut u w + 2 * cut u (phiInv w) := by\n  dsimp [phiInv, cut]\n  ring\n\ntheorem numerical_kernel_separation (u : ℝ) (w : V)\n    (hu : u ≠ 0) (hr : w.r = 0) (hc : w.c = 0)\n    (h1 : cut u w = 0) (h2 : cut u (phiInv w) = 0) :\n    w.d = 0 ∧ w.e = 0 := by\n  have hd : w.d = 0 := by simpa [cut, hr, hc] using h1\n  have he : u * w.e = 0 := by\n    dsimp [cut, phiInv] at h2\n    rw [hr, hc, hd] at h2\n    nlinarith [h2]\n  exact ⟨hd, (mul_eq_zero.mp he).resolve_left hu⟩\n\ntheorem explicit_refinement_separation (a n0 n1 n2 n3 X T : ℝ)\n    (ha : (7 / 20 : ℝ) ≤ a) (h1 : 0 ≤ n1) (h2 : 0 ≤ n2)\n    (hX : 0 ≤ X) (hmid : X / 8000 ≤ n1)\n    (hend : T ≤ 16 * X + 24 * (n1 + n2))\n    (h0 : -T / 500000 ≤ n0) (h3 : -T / 500000 ≤ n3)\n    (hcircuit : n0 + a * n1 + a * n2 + n3 = 0) :\n    n1 = 0 ∧ n2 = 0 ∧ X = 0 := by\n  have hX' : X ≤ 8000 * n1 := by linarith\n  have hend' : T ≤ 128024 * (n1 + n2) := by linarith\n  have hweight : (7 / 20 : ℝ) * (n1 + n2) ≤ a * n1 + a * n2 := by\n    nlinarith [mul_nonneg (sub_nonneg.mpr ha) (add_nonneg h1 h2)]\n  have hsum : n1 + n2 = 0 := by linarith\n  have hn1 : n1 = 0 := by linarith\n  have hn2 : n2 = 0 := by linarith\n  exact ⟨hn1, hn2, by linarith⟩\n\ntheorem explicit_support_arithmetic (Q N X D E : ℝ)\n    (hQ : 0 ≤ Q) (hN : N ≤ (2 / 5) * Q)\n    (hX : X ≤ 1000000 * N)\n    (hD : D ≤ N + X / 2)\n    (hE : E ≤ Q / 5 + X / 2 + D / 2) :\n    X + D + E ≤ 1000000 * Q := by\n  linarith\n\ntheorem explicit_support_transport (Q W P : ℝ)\n    (hQ : 0 ≤ Q) (hW : W ≤ 1000000 * Q)\n    (hP : P ≤ (82 / 3) * W) :\n    P ≤ 30000000 * Q := by\n  linarith\n\n#print axioms phi_period_five\n#print axioms gepner_bounds\n#print axioms comparison_separation\n#print axioms four_corner_control\n#print axioms four_cut_circuit\n#print axioms explicit_refinement_separation\n#print axioms explicit_support_transport\n\nend GepnerAisle\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "8db6b77c26581c5b61841522b56cdfd141e2c44bb2d33d07c8c946cdb0e85f13"
+    },
+    {
+      "claim_id": "C55_AISLE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "Under Xu Theorem 1.3 and the explicit standard coherent-sheaf background, for every 0<u<13/46 the manuscript double-tilt definitions with N_b=d-bc+ur+eta1*c+eta0*r give independent-parameter Phi U_eta subset U_theta on some open square; for u=uG the square |eta_j|<1/4000 is valid. In particular the original square |eta_j|<1/200000 is valid.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f5d399ca114c55b50b7e7deb8fed94ea830911cf428f1dd4423b01a7c048b808"
+    },
+    {
+      "claim_id": "C55_REFINEMENT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "For u=uG, the actual manuscript aisles satisfy Phi^3 U_alpha subset U_beta[1] for independently varying |alpha_j|,|beta_j|<1/500000. This uses the categorical Phi^5=[2] relation, the verified extended comparison square, and actual common-heart membership, not a search over numerical classes.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "588494f41254aa4d385ed11479807006a35e55d2c6d442f19f633becff949858"
+    },
+    {
+      "claim_id": "C55_BLOCKS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "For the unperturbed manuscript fifth-step blocks, every nonzero object has charge in its closed pi/5 sector and Euclidean numerical norm at most 30000000 times absolute charge; the blocks admit finite refinements, the shared endpoint convention produces a Gepner-equivariant slicing, and every phase interval of width less than one is quasi-abelian of finite length.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a0739759e3f9c87c40fb70a885d8e7ed8d05c52176e180c2dfef732eafd26265"
+    },
+    {
+      "claim_id": "C55_GEPNER_VERIFY",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "Relative to the explicit external geometric inputs, the exact Gepner double-tilt mechanism in the staged manuscript yields the claimed normalized numerical Bridgeland stability condition on every smooth complex quintic threefold. Quantitative extensions certify comparison on |eta_j|<1/4000, fifth-step refinement on |eta_j|<1/500000, and full numerical support constant 30000000. No manuscript refutation is claimed.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a5ea7ab06754b4b7967d2918d735f2f8759bb67c5dccb0c2984dd9fbdc3b96d4"
+    },
+    {
+      "claim_id": "C55_GEPNER_VERIFY",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "Relative to the explicit external geometric inputs, the exact Gepner double-tilt mechanism in the staged manuscript yields the claimed normalized numerical Bridgeland stability condition on every smooth complex quintic threefold. Quantitative extensions certify comparison on |eta_j|<1/4000, fifth-step refinement on |eta_j|<1/500000, and full numerical support constant 30000000. No manuscript refutation is claimed.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "XU_1_3",
+          "statement": "For torsion-free H-slope-semistable sheaves on any smooth complex quintic with slope in [-1,1], the normalized second character is bounded by the six-piece function g transcribed in xu_theorem_1_3.txt.",
+          "source": "Chunkai Xu, Stronger Bogomolov-Gieseker type inequality on quintic threefold; primary passage read, independent attribution pending.",
+          "source_id": "arxiv:2511.21288v2",
+          "locator": "Theorem 1.3 and the preceding definitions of mu_H and xi_H",
+          "filed_by": "engineer:copilot",
+          "content_hash": "869ba4022e6aee8afab3328c16cfae4041637bcef2578289308ca930a588b21c"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a5ea7ab06754b4b7967d2918d735f2f8759bb67c5dccb0c2984dd9fbdc3b96d4"
+    },
+    {
+      "claim_id": "C55_GEPNER_VERIFY",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "Relative to the explicit external geometric inputs, the exact Gepner double-tilt mechanism in the staged manuscript yields the claimed normalized numerical Bridgeland stability condition on every smooth complex quintic threefold. Quantitative extensions certify comparison on |eta_j|<1/4000, fifth-step refinement on |eta_j|<1/500000, and full numerical support constant 30000000. No manuscript refutation is claimed.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "XU_1_3",
+          "statement": "For torsion-free H-slope-semistable sheaves on any smooth complex quintic with slope in [-1,1], the normalized second character is bounded by the six-piece function g transcribed in xu_theorem_1_3.txt.",
+          "source": "Chunkai Xu, Stronger Bogomolov-Gieseker type inequality on quintic threefold; primary passage read, independent attribution pending.",
+          "source_id": "arxiv:2511.21288v2",
+          "locator": "Theorem 1.3 and the preceding definitions of mu_H and xi_H",
+          "filed_by": "engineer:copilot",
+          "content_hash": "869ba4022e6aee8afab3328c16cfae4041637bcef2578289308ca930a588b21c"
+        },
+        {
+          "assumption_id": "PHI_PERIOD",
+          "statement": "For Phi=T_OX composed with tensor OX(1) on a smooth quintic, Phi is an exact autoequivalence and Phi^5 is naturally isomorphic to [2].",
+          "source": "Yukinobu Toda, Gepner point and strong Bogomolov-Gieseker inequality for quintic 3-folds; also directly proved in the staged periodicity appendix.",
+          "source_id": "arxiv:1305.0345v3",
+          "locator": "Section 3.3, paragraph following equation (13)",
+          "filed_by": "engineer:copilot",
+          "content_hash": "f62dff344eace3fc8667e5480748bb7c698651cdbee16f85e20b6ffd932dfda6"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a5ea7ab06754b4b7967d2918d735f2f8759bb67c5dccb0c2984dd9fbdc3b96d4"
+    },
+    {
+      "claim_id": "C55_GEPNER_VERIFY",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "Relative to the explicit external geometric inputs, the exact Gepner double-tilt mechanism in the staged manuscript yields the claimed normalized numerical Bridgeland stability condition on every smooth complex quintic threefold. Quantitative extensions certify comparison on |eta_j|<1/4000, fifth-step refinement on |eta_j|<1/500000, and full numerical support constant 30000000. No manuscript refutation is claimed.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "PHI_PERIOD",
+          "statement": "For Phi=T_OX composed with tensor OX(1) on a smooth quintic, Phi is an exact autoequivalence and Phi^5 is naturally isomorphic to [2].",
+          "source": "Yukinobu Toda, Gepner point and strong Bogomolov-Gieseker inequality for quintic 3-folds; also directly proved in the staged periodicity appendix.",
+          "source_id": "arxiv:1305.0345v3",
+          "locator": "Section 3.3, paragraph following equation (13)",
+          "filed_by": "engineer:copilot",
+          "content_hash": "f62dff344eace3fc8667e5480748bb7c698651cdbee16f85e20b6ffd932dfda6"
+        },
+        {
+          "assumption_id": "XU_1_3",
+          "statement": "For torsion-free H-slope-semistable sheaves on any smooth complex quintic with slope in [-1,1], the normalized second character is bounded by the six-piece function g transcribed in xu_theorem_1_3.txt.",
+          "source": "Chunkai Xu, Stronger Bogomolov-Gieseker type inequality on quintic threefold; primary passage read, independent attribution pending.",
+          "source_id": "arxiv:2511.21288v2",
+          "locator": "Theorem 1.3 and the preceding definitions of mu_H and xi_H",
+          "filed_by": "engineer:copilot",
+          "content_hash": "869ba4022e6aee8afab3328c16cfae4041637bcef2578289308ca930a588b21c"
+        },
+        {
+          "assumption_id": "STANDARD_GEOMETRY",
+          "statement": "Use the standard coherent-sheaf package explicitly listed in report.md: noetherianity of Coh(X), slope HN, reflexive hull behavior, Serre duality with Serre functor [3], coherent cohomology in its support dimension, ordinary derived truncations and octahedra, integral Chern characters, weak Lefschetz and HRR. These are not conclusions of the audit.",
+          "source": "Standard geometric background, stated as explicit hypotheses in report.md; source-only dependency, not a new checked literature citation.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "5844719fd9dcfda9e9303fd7ac436922954ad57fb09897986c50a760c93091b2"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a5ea7ab06754b4b7967d2918d735f2f8759bb67c5dccb0c2984dd9fbdc3b96d4"
+    },
+    {
+      "claim_id": "C55_CORE",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "The exact matrix, golden-parameter, slope-criterion, perturbation, positive-circuit, endpoint-coordinate, refinement-separation, and support-arithmetic statements declared in GepnerAisle Main.lean hold for all real variables under exactly their displayed hypotheses; this is algebraic certification, not categorical formalization.",
+      "formal_statement": "import Mathlib\n\nnamespace GepnerAisle\n\n@[ext]\nstructure V where\n  r : ℝ\n  c : ℝ\n  d : ℝ\n  e : ℝ\n\ndef phi (v : V) : V :=\n  ⟨-4 * v.r - (20 / 3) * v.c - 5 * v.d - 5 * v.e,\n    v.r + v.c, v.r / 2 + v.c + v.d,\n    v.r / 6 + v.c / 2 + v.d + v.e⟩\n\ndef phiInv (v : V) : V :=\n  ⟨v.r + (25 / 6) * v.c + 5 * v.e,\n    -v.r - (19 / 6) * v.c - 5 * v.e,\n    v.r / 2 + (13 / 12) * v.c + v.d + (5 / 2) * v.e,\n    -v.r / 6 - (7 / 36) * v.c - v.d + v.e / 6⟩\n\ndef cut (u : ℝ) (v : V) : ℝ := v.d + v.c / 2 + u * v.r\n\ndef uG : ℝ := (5 - Real.sqrt 5) / 10\n\ntheorem phi_inverse (v : V) : phiInv (phi v) = v := by\n  ext <;> dsimp [phiInv, phi] <;> ring\n\ntheorem inverse_phi (v : V) : phi (phiInv v) = v := by\n  ext <;> dsimp [phiInv, phi] <;> ring\n\ntheorem phi_period_five (v : V) :\n    phi (phi (phi (phi (phi v)))) = v := by\n  ext <;> dsimp [phi] <;> ring\n\ntheorem gepner_polynomial : 5 * uG ^ 2 - 5 * uG + 1 = 0 := by\n  have hs := Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num)\n  dsimp [uG]\n  nlinarith\n\ntheorem gepner_bounds :\n    (27 / 100 : ℝ) ≤ uG ∧ uG < (138197 / 500000 : ℝ) := by\n  have hs := Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num)\n  have hp := Real.sqrt_nonneg (5 : ℝ)\n  dsimp [uG]\n  constructor <;> nlinarith\n\ntheorem slope_criterion_threshold (u s : ℝ)\n    (hstrip : 20 * u + 13 * s ≤ 13) (hcompare : 2 * u ≤ s) :\n    u ≤ 13 / 46 := by\n  linarith\n\ntheorem slope_criterion_attained :\n    20 * (13 / 46 : ℝ) + 13 * (13 / 23 : ℝ) = 13 ∧\n      2 * (13 / 46 : ℝ) = 13 / 23 := by\n  norm_num\n\ntheorem parameter_margins (u δ : ℝ)\n    (hu : 0 < u) (hub : u < 13 / 46)\n    (hδ : 0 < δ) (hsmall : δ ≤ u / 4)\n    (hgap : δ ≤ (13 / 46 - u) / 10) :\n    0 < u - δ ∧\n      0 < 3 / 10 - u - (3 / 2) * δ ∧\n      0 < 13 / 46 - u - (36 / 23) * δ ∧\n      0 < 1 / 2 - (23 / 13) * u - 3 * δ := by\n  constructor\n  · linarith\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem concrete_margins (u : ℝ)\n    (hl : (27 / 100 : ℝ) ≤ u)\n    (hu : u ≤ (138197 / 500000 : ℝ)) :\n    0 < u - 1 / 2000 ∧\n      0 < 3 / 10 - u - (3 / 2) * (1 / 2000) ∧\n      0 < 13 / 46 - u - (36 / 23) * (1 / 2000) ∧\n      0 < 1 / 2 - (23 / 13) * u - 3 * (1 / 2000) := by\n  constructor\n  · linarith\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem comparison_separation (s u δ C R D err : ℝ)\n    (hs : 0 < s) (hu : 0 ≤ u) (hC : 0 < C)\n    (hR : s * R ≤ C) (hD : D ≤ 0)\n    (herr : -3 * δ * C ≤ err)\n    (hmargin : 0 < s / 2 - u - 3 * δ * s) :\n    0 < C / 2 - u * R - D + err := by\n  have h1 := mul_nonneg hu (sub_nonneg.mpr hR)\n  have h2 := mul_pos hmargin hC\n  have h3 := mul_nonneg (le_of_lt hs) (show 0 ≤ err + 3 * δ * C by linarith)\n  have h4 := mul_nonpos_of_nonneg_of_nonpos (le_of_lt hs) hD\n  by_contra h\n  have h5 := mul_nonpos_of_nonneg_of_nonpos\n    (le_of_lt hs) (le_of_not_gt h)\n  nlinarith\n\ntheorem four_corner_control (ε N r c : ℝ)\n    (hpp : 0 ≤ N + ε * r + ε * c)\n    (hpm : 0 ≤ N + ε * r - ε * c)\n    (hmp : 0 ≤ N - ε * r + ε * c)\n    (hmm : 0 ≤ N - ε * r - ε * c) :\n    ε * (|r| + |c|) ≤ N := by\n  rcases le_total 0 r with hr | hr\n  · rcases le_total 0 c with hc | hc\n    · rw [abs_of_nonneg hr, abs_of_nonneg hc]\n      linarith\n    · rw [abs_of_nonneg hr, abs_of_nonpos hc]\n      linarith\n  · rcases le_total 0 c with hc | hc\n    · rw [abs_of_nonpos hr, abs_of_nonneg hc]\n      linarith\n    · rw [abs_of_nonpos hr, abs_of_nonpos hc]\n      linarith\n\ntheorem four_cut_circuit (u : ℝ) (v : V)\n    (hu : 5 * u ^ 2 - 5 * u + 1 = 0) :\n    cut u v + (5 * u - 1) * cut u (phiInv v) +\n      (5 * u - 1) * cut u (phiInv (phiInv v)) +\n      cut u (phiInv (phiInv (phiInv v))) = 0 := by\n  calc\n    _ = -(3 * v.r + (35 / 6) * v.c + 5 * v.d + 10 * v.e) *\n        (5 * u ^ 2 - 5 * u + 1) := by\n      dsimp [cut, phiInv]\n      ring\n    _ = 0 := by rw [hu]; ring\n\ntheorem endpoint_r0 (u : ℝ) (w : V) :\n    u * (phi w).r =\n      u * (5 * u - 4) * w.r - w.c +\n        (1 - 5 * u) * cut u w - cut u (phiInv w) := by\n  dsimp [phi, phiInv, cut]\n  ring\n\ntheorem endpoint_r3 (u : ℝ) (w : V) :\n    u * (phiInv (phiInv w)).r =\n      u * (5 * u - 4) * w.r + (5 * u - 3) * w.c +\n        (3 - 5 * u) * cut u w - 3 * cut u (phiInv w) := by\n  dsimp [phiInv, cut]\n  ring\n\ntheorem endpoint_c3 (u : ℝ) (w : V) :\n    u * (phiInv (phiInv w)).c =\n      u * (3 - 5 * u) * w.r + (2 - 4 * u) * w.c +\n        (5 * u - 2) * cut u w + 2 * cut u (phiInv w) := by\n  dsimp [phiInv, cut]\n  ring\n\ntheorem numerical_kernel_separation (u : ℝ) (w : V)\n    (hu : u ≠ 0) (hr : w.r = 0) (hc : w.c = 0)\n    (h1 : cut u w = 0) (h2 : cut u (phiInv w) = 0) :\n    w.d = 0 ∧ w.e = 0 := by\n  have hd : w.d = 0 := by simpa [cut, hr, hc] using h1\n  have he : u * w.e = 0 := by\n    dsimp [cut, phiInv] at h2\n    rw [hr, hc, hd] at h2\n    nlinarith [h2]\n  exact ⟨hd, (mul_eq_zero.mp he).resolve_left hu⟩\n\ntheorem explicit_refinement_separation (a n0 n1 n2 n3 X T : ℝ)\n    (ha : (7 / 20 : ℝ) ≤ a) (h1 : 0 ≤ n1) (h2 : 0 ≤ n2)\n    (hX : 0 ≤ X) (hmid : X / 8000 ≤ n1)\n    (hend : T ≤ 16 * X + 24 * (n1 + n2))\n    (hends : -T / 500000 ≤ n0 + n3)\n    (hcircuit : n0 + a * n1 + a * n2 + n3 = 0) :\n    n1 = 0 ∧ n2 = 0 ∧ X = 0 := by\n  have hX' : X ≤ 8000 * n1 := by linarith\n  have hend' : T ≤ 128024 * (n1 + n2) := by linarith\n  have hweight : (7 / 20 : ℝ) * (n1 + n2) ≤ a * n1 + a * n2 := by\n    nlinarith [mul_nonneg (sub_nonneg.mpr ha) (add_nonneg h1 h2)]\n  have hsum : n1 + n2 = 0 := by linarith\n  have hn1 : n1 = 0 := by linarith\n  have hn2 : n2 = 0 := by linarith\n  exact ⟨hn1, hn2, by linarith⟩\n\ntheorem explicit_support_arithmetic (Q N X D E : ℝ)\n    (hQ : 0 ≤ Q) (hN : N ≤ (2 / 5) * Q)\n    (hX : X ≤ 1000000 * N)\n    (hD : D ≤ N + X / 2)\n    (hE : E ≤ Q / 5 + X / 2 + D / 2) :\n    X + D + E ≤ 1000000 * Q := by\n  linarith\n\ntheorem explicit_support_transport (Q W P : ℝ)\n    (hQ : 0 ≤ Q) (hW : W ≤ 1000000 * Q)\n    (hP : P ≤ (82 / 3) * W) :\n    P ≤ 30000000 * Q := by\n  linarith\n\n#print axioms phi_period_five\n#print axioms gepner_bounds\n#print axioms comparison_separation\n#print axioms four_corner_control\n#print axioms four_cut_circuit\n#print axioms explicit_refinement_separation\n#print axioms explicit_support_transport\n\nend GepnerAisle\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "779f63b0ed42cc911eb85157b310734226964f530bca02d3aa3e29077f32c488"
+    },
+    {
+      "claim_id": "C55_CORE",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_AISLE",
+        "content_hash": "e68d767b83a823ce06c407f709f8005e0ebb16389e085c4917bcb60a0b1261e3"
+      },
+      "natural_statement": "The exact matrix, golden-parameter, slope-criterion, perturbation, positive-circuit, endpoint-coordinate, refinement-separation, and support-arithmetic statements declared in GepnerAisle Main.lean hold for all real variables under exactly their displayed hypotheses; this is algebraic certification, not categorical formalization.",
+      "formal_statement": "import Mathlib\n\nnamespace GepnerAisle\n\nnoncomputable section\n\n@[ext]\nstructure V where\n  r : ℝ\n  c : ℝ\n  d : ℝ\n  e : ℝ\n\ndef phi (v : V) : V :=\n  ⟨-4 * v.r - (20 / 3) * v.c - 5 * v.d - 5 * v.e,\n    v.r + v.c, v.r / 2 + v.c + v.d,\n    v.r / 6 + v.c / 2 + v.d + v.e⟩\n\ndef phiInv (v : V) : V :=\n  ⟨v.r + (25 / 6) * v.c + 5 * v.e,\n    -v.r - (19 / 6) * v.c - 5 * v.e,\n    v.r / 2 + (13 / 12) * v.c + v.d + (5 / 2) * v.e,\n    -v.r / 6 - (7 / 36) * v.c - v.d + v.e / 6⟩\n\ndef cut (u : ℝ) (v : V) : ℝ := v.d + v.c / 2 + u * v.r\n\ndef uG : ℝ := (5 - Real.sqrt 5) / 10\n\ntheorem phi_inverse (v : V) : phiInv (phi v) = v := by\n  ext <;> dsimp [phiInv, phi] <;> ring\n\ntheorem inverse_phi (v : V) : phi (phiInv v) = v := by\n  ext <;> dsimp [phiInv, phi] <;> ring\n\ntheorem phi_period_five (v : V) :\n    phi (phi (phi (phi (phi v)))) = v := by\n  ext <;> dsimp [phi] <;> ring\n\ntheorem gepner_polynomial : 5 * uG ^ 2 - 5 * uG + 1 = 0 := by\n  have hs := Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num)\n  dsimp [uG]\n  nlinarith\n\ntheorem gepner_bounds :\n    (27 / 100 : ℝ) ≤ uG ∧ uG < (138197 / 500000 : ℝ) := by\n  have hs := Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num)\n  have hp := Real.sqrt_nonneg (5 : ℝ)\n  dsimp [uG]\n  constructor <;> nlinarith\n\ntheorem slope_criterion_threshold (u s : ℝ)\n    (hstrip : 20 * u + 13 * s ≤ 13) (hcompare : 2 * u ≤ s) :\n    u ≤ 13 / 46 := by\n  linarith\n\ntheorem slope_criterion_attained :\n    20 * (13 / 46 : ℝ) + 13 * (13 / 23 : ℝ) = 13 ∧\n      2 * (13 / 46 : ℝ) = 13 / 23 := by\n  norm_num\n\ntheorem parameter_margins (u δ : ℝ)\n    (hu : 0 < u) (hub : u < 13 / 46)\n    (hδ : 0 < δ) (hsmall : δ ≤ u / 4)\n    (hgap : δ ≤ (13 / 46 - u) / 10) :\n    0 < u - δ ∧\n      0 < 3 / 10 - u - (3 / 2) * δ ∧\n      0 < 13 / 46 - u - (36 / 23) * δ ∧\n      0 < 1 / 2 - (23 / 13) * u - 3 * δ := by\n  constructor\n  · linarith\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem concrete_margins (u : ℝ)\n    (hl : (27 / 100 : ℝ) ≤ u)\n    (hu : u ≤ (138197 / 500000 : ℝ)) :\n    0 < u - 1 / 2000 ∧\n      0 < 3 / 10 - u - (3 / 2) * (1 / 2000) ∧\n      0 < 13 / 46 - u - (36 / 23) * (1 / 2000) ∧\n      0 < 1 / 2 - (23 / 13) * u - 3 * (1 / 2000) := by\n  constructor\n  · linarith\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem comparison_separation (s u δ C R D err : ℝ)\n    (hs : 0 < s) (hu : 0 ≤ u) (hC : 0 < C)\n    (hR : s * R ≤ C) (hD : D ≤ 0)\n    (herr : -3 * δ * C ≤ err)\n    (hmargin : 0 < s / 2 - u - 3 * δ * s) :\n    0 < C / 2 - u * R - D + err := by\n  have h1 := mul_nonneg hu (sub_nonneg.mpr hR)\n  have h2 := mul_pos hmargin hC\n  have h3 := mul_nonneg (le_of_lt hs) (show 0 ≤ err + 3 * δ * C by linarith)\n  have h4 := mul_nonpos_of_nonneg_of_nonpos (le_of_lt hs) hD\n  by_contra h\n  have h5 := mul_nonpos_of_nonneg_of_nonpos\n    (le_of_lt hs) (le_of_not_gt h)\n  nlinarith\n\ntheorem four_corner_control (ε N r c : ℝ)\n    (hpp : 0 ≤ N + ε * r + ε * c)\n    (hpm : 0 ≤ N + ε * r - ε * c)\n    (hmp : 0 ≤ N - ε * r + ε * c)\n    (hmm : 0 ≤ N - ε * r - ε * c) :\n    ε * (|r| + |c|) ≤ N := by\n  rcases le_total 0 r with hr | hr\n  · rcases le_total 0 c with hc | hc\n    · rw [abs_of_nonneg hr, abs_of_nonneg hc]\n      linarith\n    · rw [abs_of_nonneg hr, abs_of_nonpos hc]\n      linarith\n  · rcases le_total 0 c with hc | hc\n    · rw [abs_of_nonpos hr, abs_of_nonneg hc]\n      linarith\n    · rw [abs_of_nonpos hr, abs_of_nonpos hc]\n      linarith\n\ntheorem four_cut_circuit (u : ℝ) (v : V)\n    (hu : 5 * u ^ 2 - 5 * u + 1 = 0) :\n    cut u v + (5 * u - 1) * cut u (phiInv v) +\n      (5 * u - 1) * cut u (phiInv (phiInv v)) +\n      cut u (phiInv (phiInv (phiInv v))) = 0 := by\n  calc\n    _ = -(3 * v.r + (35 / 6) * v.c + 5 * v.d + 10 * v.e) *\n        (5 * u ^ 2 - 5 * u + 1) := by\n      dsimp [cut, phiInv]\n      ring\n    _ = 0 := by rw [hu]; ring\n\ntheorem endpoint_r0 (u : ℝ) (w : V) :\n    u * (phi w).r =\n      u * (5 * u - 4) * w.r - w.c +\n        (1 - 5 * u) * cut u w - cut u (phiInv w) := by\n  dsimp [phi, phiInv, cut]\n  ring\n\ntheorem endpoint_r3 (u : ℝ) (w : V) :\n    u * (phiInv (phiInv w)).r =\n      u * (5 * u - 4) * w.r + (5 * u - 3) * w.c +\n        (3 - 5 * u) * cut u w - 3 * cut u (phiInv w) := by\n  dsimp [phiInv, cut]\n  ring\n\ntheorem endpoint_c3 (u : ℝ) (w : V) :\n    u * (phiInv (phiInv w)).c =\n      u * (3 - 5 * u) * w.r + (2 - 4 * u) * w.c +\n        (5 * u - 2) * cut u w + 2 * cut u (phiInv w) := by\n  dsimp [phiInv, cut]\n  ring\n\ntheorem numerical_kernel_separation (u : ℝ) (w : V)\n    (hu : u ≠ 0) (hr : w.r = 0) (hc : w.c = 0)\n    (h1 : cut u w = 0) (h2 : cut u (phiInv w) = 0) :\n    w.d = 0 ∧ w.e = 0 := by\n  have hd : w.d = 0 := by simpa [cut, hr, hc] using h1\n  have he : u * w.e = 0 := by\n    dsimp [cut, phiInv] at h2\n    rw [hr, hc, hd] at h2\n    nlinarith [h2]\n  exact ⟨hd, (mul_eq_zero.mp he).resolve_left hu⟩\n\ntheorem explicit_refinement_separation (a n0 n1 n2 n3 X T : ℝ)\n    (ha : (7 / 20 : ℝ) ≤ a) (h1 : 0 ≤ n1) (h2 : 0 ≤ n2)\n    (hX : 0 ≤ X) (hmid : X / 8000 ≤ n1)\n    (hend : T ≤ 16 * X + 24 * (n1 + n2))\n    (hends : -T / 500000 ≤ n0 + n3)\n    (hcircuit : n0 + a * n1 + a * n2 + n3 = 0) :\n    n1 = 0 ∧ n2 = 0 ∧ X = 0 := by\n  have hX' : X ≤ 8000 * n1 := by linarith\n  have hend' : T ≤ 128024 * (n1 + n2) := by linarith\n  have hweight : (7 / 20 : ℝ) * (n1 + n2) ≤ a * n1 + a * n2 := by\n    nlinarith [mul_nonneg (sub_nonneg.mpr ha) (add_nonneg h1 h2)]\n  have hsum : n1 + n2 = 0 := by linarith\n  have hn1 : n1 = 0 := by linarith\n  have hn2 : n2 = 0 := by linarith\n  exact ⟨hn1, hn2, by linarith⟩\n\ntheorem explicit_support_arithmetic (Q N X D E : ℝ)\n    (hQ : 0 ≤ Q) (hN : N ≤ (2 / 5) * Q)\n    (hX : X ≤ 1000000 * N)\n    (hD : D ≤ N + X / 2)\n    (hE : E ≤ Q / 5 + X / 2 + D / 2) :\n    X + D + E ≤ 1000000 * Q := by\n  linarith\n\ntheorem explicit_support_transport (Q W P : ℝ)\n    (hQ : 0 ≤ Q) (hW : W ≤ 1000000 * Q)\n    (hP : P ≤ (82 / 3) * W) :\n    P ≤ 30000000 * Q := by\n  linarith\n\n#print axioms phi_period_five\n#print axioms gepner_bounds\n#print axioms comparison_separation\n#print axioms four_corner_control\n#print axioms four_cut_circuit\n#print axioms explicit_refinement_separation\n#print axioms explicit_support_transport\n\nend\n\nend GepnerAisle\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "ce28fe7a7a5ffdaa766128ffbfe6ea45139c4aaf9f9e8fa441ae414bc0c3bb74"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-C55_CORE-048a129ed1db",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_CORE",
+        "content_hash": "8db6b77c26581c5b61841522b56cdfd141e2c44bb2d33d07c8c946cdb0e85f13"
+      },
+      "tier": "mechanical",
+      "verdict": "inconclusive",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/gepner-aisle-audit/lean-evidence/certificates/C55_CORE-e393ee80fc5c34ff.json"
+    },
+    {
+      "evidence_id": "lean-C55_CORE-c88a3ff575b9",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_CORE",
+        "content_hash": "779f63b0ed42cc911eb85157b310734226964f530bca02d3aa3e29077f32c488"
+      },
+      "tier": "mechanical",
+      "verdict": "inconclusive",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/gepner-aisle-audit/lean-evidence/certificates/C55_CORE-c2b8d2e30941f034.json"
+    },
+    {
+      "evidence_id": "lean-C55_CORE-2957f392d2cb",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_CORE",
+        "content_hash": "ce28fe7a7a5ffdaa766128ffbfe6ea45139c4aaf9f9e8fa441ae414bc0c3bb74"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/gepner-aisle-audit/lean-evidence/certificates/C55_CORE-16b808fb34f65fe6.json"
+    },
+    {
+      "evidence_id": "judgement-C55_AISLE-aef1d2d2c17a",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_AISLE",
+        "content_hash": "f5d399ca114c55b50b7e7deb8fed94ea830911cf428f1dd4423b01a7c048b808"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/gepner-aisle-audit/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_REFINEMENT-0fff8f7c234d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_REFINEMENT",
+        "content_hash": "588494f41254aa4d385ed11479807006a35e55d2c6d442f19f633becff949858"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/gepner-aisle-audit/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_BLOCKS-5dd12a9d22ce",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_BLOCKS",
+        "content_hash": "a0739759e3f9c87c40fb70a885d8e7ed8d05c52176e180c2dfef732eafd26265"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/gepner-aisle-audit/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_GEPNER_VERIFY-6522e0fa99f9",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_GEPNER_VERIFY",
+        "content_hash": "a5ea7ab06754b4b7967d2918d735f2f8759bb67c5dccb0c2984dd9fbdc3b96d4"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/gepner-aisle-audit/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_CORE-b3f3e40ca869",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_CORE",
+        "content_hash": "ce28fe7a7a5ffdaa766128ffbfe6ea45139c4aaf9f9e8fa441ae414bc0c3bb74"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/gepner-aisle-audit/lean-evidence/certificates/C55_CORE-16b808fb34f65fe6.json"
+    },
+    {
+      "evidence_id": "citation-XU_1_3-d712c3a7ebde",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "XU_1_3",
+        "content_hash": "869ba4022e6aee8afab3328c16cfae4041637bcef2578289308ca930a588b21c"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-cli",
+      "artifact": "research/literature/d8f8206a52ab7e149113782a52a1872f.json"
+    },
+    {
+      "evidence_id": "citation-PHI_PERIOD-e040eefd1c82",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "PHI_PERIOD",
+        "content_hash": "f62dff344eace3fc8667e5480748bb7c698651cdbee16f85e20b6ffd932dfda6"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-cli",
+      "artifact": "research/literature/0ccc879eaccb2a1c8a7e2856d0fbbb27.json"
+    },
+    {
+      "evidence_id": "judgement-C55_CORE-85a7c61f7345",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_CORE",
+        "content_hash": "ce28fe7a7a5ffdaa766128ffbfe6ea45139c4aaf9f9e8fa441ae414bc0c3bb74"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-cli",
+      "artifact": "research/gepner-aisle-audit/lean-evidence/certificates/C55_CORE-16b808fb34f65fe6.json"
+    },
+    {
+      "evidence_id": "judgement-C55_AISLE-c411fbcf3520",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_AISLE",
+        "content_hash": "f5d399ca114c55b50b7e7deb8fed94ea830911cf428f1dd4423b01a7c048b808"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-cli",
+      "artifact": "research/gepner-aisle-audit/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_REFINEMENT-198d21b6ee65",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_REFINEMENT",
+        "content_hash": "588494f41254aa4d385ed11479807006a35e55d2c6d442f19f633becff949858"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-cli",
+      "artifact": "research/gepner-aisle-audit/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_BLOCKS-54e3468bf73f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_BLOCKS",
+        "content_hash": "a0739759e3f9c87c40fb70a885d8e7ed8d05c52176e180c2dfef732eafd26265"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-cli",
+      "artifact": "research/gepner-aisle-audit/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_GEPNER_VERIFY-1214c482c69e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_GEPNER_VERIFY",
+        "content_hash": "a5ea7ab06754b4b7967d2918d735f2f8759bb67c5dccb0c2984dd9fbdc3b96d4"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-cli",
+      "artifact": "research/gepner-aisle-audit/report.md"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R55_VERIFY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C55_GEPNER_VERIFY",
+        "content_hash": "a5ea7ab06754b4b7967d2918d735f2f8759bb67c5dccb0c2984dd9fbdc3b96d4"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C55_AISLE",
+          "content_hash": "f5d399ca114c55b50b7e7deb8fed94ea830911cf428f1dd4423b01a7c048b808"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C55_REFINEMENT",
+          "content_hash": "588494f41254aa4d385ed11479807006a35e55d2c6d442f19f633becff949858"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C55_BLOCKS",
+          "content_hash": "a0739759e3f9c87c40fb70a885d8e7ed8d05c52176e180c2dfef732eafd26265"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C55_CORE",
+          "content_hash": "8db6b77c26581c5b61841522b56cdfd141e2c44bb2d33d07c8c946cdb0e85f13"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R55_CAMPAIGN",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C9000055",
+        "content_hash": "e243320411c3110bc7ab313cc420d59341b0b3fdc91465dcdbdb6ab8b4a06069"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C55_GEPNER_VERIFY",
+          "content_hash": "a5ea7ab06754b4b7967d2918d735f2f8759bb67c5dccb0c2984dd9fbdc3b96d4"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R55_NUMERICAL_ONLY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C55_GEPNER_VERIFY",
+        "content_hash": "a5ea7ab06754b4b7967d2918d735f2f8759bb67c5dccb0c2984dd9fbdc3b96d4"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C55_CORE",
+          "content_hash": "8db6b77c26581c5b61841522b56cdfd141e2c44bb2d33d07c8c946cdb0e85f13"
+        }
+      ],
+      "retired_because": "Even exact numerical identities do not establish that actual objects have the required torsion decompositions, truncations, or common-heart membership. This is a logically insufficient certification route, not a negative counterexample experiment."
+    }
+  ]
+}

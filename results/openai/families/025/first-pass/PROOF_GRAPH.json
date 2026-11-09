@@ -1,0 +1,108 @@
+{
+  "goal": "C9000025",
+  "routes": {},
+  "nodes": {
+    "C9000025": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 025 (Short Egyptian fractions.; papers: Short Egyptian fractions; Lean status: Partially/Comparator formalized (lean/docs/025.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_DIVISOR_MOMENT_REAL", "C_GROWING_DIVISOR_THRESHOLD", "C_GROWING_DIVISOR_NOVELTY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_DIVISOR_MOMENT_REAL": {
+      "statement": "For every fixed real D,r >= 1, the full shifted truncated-divisor r-th moment in build/divisors.tex::lem:divisor holds eventually in S, uniformly in the stated real X,Y and natural N.",
+      "status": "proved",
+      "depends_on": ["C_DIVISOR_MOMENT_NAT", "C_DIVISOR_MOMENT_BRIDGE"],
+      "reviewer_confirmed": true,
+      "evidence": [
+        "research/openai_manuscript/Short-Egyptian-fractions-September-25-2026/build/divisors.tex",
+        "research/divisor_moment/Main.lean",
+        "research/divisor_moment/statement_fidelity.md",
+        "research/divisor_moment/certificates/C_DIVISOR_MOMENT_REAL-fc7c571de81c7bb9.json",
+        "research/divisor_moment/exact_certificate.json"
+      ]
+    },
+    "C_DIVISOR_MOMENT_NAT": {
+      "statement": "The upstream uniform_divisor_moment natural-exponent theorem and all of its non-Mathlib proof dependencies compile without holes under Lean 4.31.0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/divisor_moment/upstream/OAI/NumberTheory/ShortEgyptian/MomentAsymptotics.lean.txt",
+        "research/divisor_moment/Main.lean",
+        "research/divisor_moment/lean_check.json"
+      ]
+    },
+    "C_DIVISOR_MOMENT_BRIDGE": {
+      "statement": "The natural-exponent theorem implies the manuscript's real-exponent theorem using an integer ceiling, X=exp(log X), the shifted-sum bijection, and exact natural-floor endpoints.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/divisor_moment/bridge.lean.txt",
+        "research/divisor_moment/statement_fidelity.md",
+        "research/divisor_moment/lean_check.json"
+      ]
+    },
+    "C_GROWING_DIVISOR_THRESHOLD": {
+      "statement": "A single S0(D) supports all real moments up to log(S)/(200000 log(log(S))); an infinite primorial family fails at every fixed C>1/2 times log(S)/log(log(S)).",
+      "status": "open",
+      "depends_on": ["C_GROWING_DIVISOR_UPPER", "C_GROWING_DIVISOR_OBSTRUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/growing_divisor_moments/proof.md",
+        "research/growing_divisor_moments/exact_certificate.json"
+      ]
+    },
+    "C_GROWING_DIVISOR_UPPER": {
+      "statement": "The universal real-order upper theorem with c=1/200000, the original right-hand side, and the full manuscript shift range.",
+      "status": "open",
+      "depends_on": ["C_MOMENT_SERIES_EXPLICIT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/growing_divisor_moments/proof.md",
+        "research/growing_divisor_moments/Main.lean",
+        "research/growing_divisor_moments/statement_fidelity.md",
+        "research/growing_divisor_moments/certificates/C_GROWING_DIVISOR_UPPER-7711f0443152c62e.json"
+      ]
+    },
+    "C_MOMENT_SERIES_EXPLICIT": {
+      "statement": "For every natural k, sum_j (j+2)^k (3/4)^j <= 16(4k)^k.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/growing_divisor_moments/proof.md",
+        "research/growing_divisor_moments/Main.lean"
+      ]
+    },
+    "C_GROWING_DIVISOR_OBSTRUCTION": {
+      "statement": "For t=2^m, S=2t, N=product_{p<=t}p-1, X=exp(S/(2log S)), Y=sqrt X, every fixed C>1/2 eventually violates the moment bound at r=C log(S)/log(log(S)).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/growing_divisor_moments/proof.md",
+        "research/growing_divisor_moments/verify.py",
+        "research/growing_divisor_moments/exact_certificate.json"
+      ]
+    },
+    "C_GROWING_DIVISOR_NOVELTY": {
+      "statement": "Publishable significance and novelty of the paired growing-moment result remain to be established against applicable primary literature.",
+      "status": "open",
+      "depends_on": ["C_GROWING_DIVISOR_COMPARISON"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/growing_divisor_moments/literature/comparison.md"]
+    },
+    "C_GROWING_DIVISOR_COMPARISON": {
+      "statement": "The retrieved Nair--Tenenbaum and Henriot theorems retain fixed growth-class and positive-power interval parameter dependencies and do not directly assert the target growing-order uniformity.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/growing_divisor_moments/literature/comparison.md"]
+    }
+  }
+}

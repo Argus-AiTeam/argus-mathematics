@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "type_error",
+  "source": "families/174/first-pass/extraction_consistency/Main.lean",
+  "tool": "lake",
+  "tools": {
+    "lean": {
+      "available": true,
+      "path": "$WORKSPACE/.elan/bin/lake env lean",
+      "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+    },
+    "lake": {
+      "available": true,
+      "path": "$WORKSPACE/.elan/bin/lake",
+      "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+    },
+    "elan": {
+      "available": true,
+      "path": "$WORKSPACE/.elan/bin/elan",
+      "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+    }
+  },
+  "command": [
+    "$WORKSPACE/.elan/bin/lake",
+    "env",
+    "lean",
+    "families/174/first-pass/extraction_consistency/Main.lean"
+  ],
+  "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+  "exit_code": 1,
+  "stdout": "families/174/first-pass/extraction_consistency/Main.lean:25:0: warning: automatically included section variable(s) unused in theorem `ExtractionConsistency.quadratic_nonneg`:\n  [DecidableEq V]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq V] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/174/first-pass/extraction_consistency/Main.lean:84:0: warning: automatically included section variable(s) unused in theorem `ExtractionConsistency.quadratic_mixture`:\n  [DecidableEq V]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq V] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/174/first-pass/extraction_consistency/Main.lean:204:32: warning: Variable name `hdelta` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\nfamilies/174/first-pass/extraction_consistency/Main.lean:305:0: warning: automatically included section variable(s) unused in theorem `ExtractionConsistency.nearby_response_fixed_point`:\n  [DecidableEq V]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq V] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/174/first-pass/extraction_consistency/Main.lean:430:8: error: linarith failed to find a contradiction\nV : Type u_1\nE : Type u_3\ninst✝³ : Fintype V\ninst✝² : DecidableEq V\ninst✝¹ : Fintype E\ninst✝ : DecidableEq E\nK : Set (Matrix V V ℝ)\nhcompact : IsCompact K\nhconvex : Convex ℝ K\nhpd : ∀ X ∈ K, X.PosDef\nhfixed : ∀ (f : C(↑K, ↑K)), ∃ x, f x = x\nb : E → V → ℝ\nhcontinuous : ∀ (e : E), Continuous fun x => resistance (↑x) (b e)\nB : ↑K → ℝ → Finset E\nhpattern : ∀ (x y : ↑K) (s : ℝ), (∀ (e : E), resistance (↑x) (b e) ≤ s ↔ resistance (↑y) (b e) ≤ s) → B x s = B y s\nPacked : ↑K → ℝ → Prop\nhmono : ∀ (x : ↑K) {s t : ℝ}, s ≤ t → Packed x s → Packed x t\nhclosed : IsClosed {z | Packed z.1 z.2}\na delta u r q : ℝ\nha : 0 < a\nhu : 0 < u\nhdelta0 : 0 ≤ delta\nhdeltau : delta < u\nhq : 0 < q\nhrq : q < r\nhslack : r - q = u * r\nhobstruction :\n  ∀ (x : ↑K) (s : ℝ),\n    0 < s → ¬Packed x s → ∃ d, 0 < d ∧ r * d ≤ ↑(#(B x s)) ∧ ↑(#({e ∈ B x s | resistance (↑x) (b e) ≤ s})) < q * d\nthis✝¹ : TopologicalSpace.PseudoMetrizableSpace ↑K := PseudoEMetricSpace.pseudoMetrizableSpace\nthis✝ : CompactSpace ↑K := isCompact_iff_compactSpace.mp hcompact\nresponse : ↑K → ↑K\nhresp : ∀ (x : ↑K) (s : ℝ), 0 < s → ↑(#({e ∈ B x s | a < resistance (↑(response x)) (b e)})) ≤ delta * ↑(#(B x s))\nhr : 0 < r\nt : ℝ\nht : a * u / (u - delta) < t\ntheta : ℝ\nhtheta0 : 0 < theta\nhtheta1 : theta < 1\nhdelta_theta : delta < theta * u\nhtheta_t : a / (1 - theta) < t\nheps : ∀ (n : ℕ), 0 < 1 / (↑n + 1)\nxp : ℕ → ↑K\nhxp : ∀ (n : ℕ), ↑(xp n) ∈ (convexHull ℝ) ((fun c => ↑(response c)) '' Metric.ball (xp n) (1 / (↑n + 1)))\nx : ↑K\nphi : ℕ → ℕ\nhphi : StrictMono phi\nhlim : Tendsto (xp ∘ phi) atTop (𝓝 x)\ns : ℝ\nhs : s ∈ Set.Ioo (a / (1 - theta)) t\nhsavoid : s ∉ Finset.image (fun e => resistance (↑x) (b e)) Finset.univ\nhs0 : 0 < s\nhregular : ∀ (e : E), resistance (↑x) (b e) ≠ s\nrho : ℝ\nhrho : rho > 0\nhstable : ∀ {y : ↑K}, dist y x < rho → ∀ (e : E), resistance (↑y) (b e) ≤ s ↔ resistance (↑x) (b e) ≤ s\nhxnear✝ : ∀ᶠ (x_1 : ℕ) in atTop, dist ((xp ∘ phi) x_1) x < rho / 2\nhepslim : Tendsto (fun n => 1 / (↑(phi n) + 1)) atTop (𝓝 0)\nhepsnear✝ : ∀ᶠ (b : ℕ) in atTop, 1 / (↑(phi b) + 1) < rho / 2\nn : ℕ\nhxnear : dist ((xp ∘ phi) n) x < rho / 2\nhepsnear : 1 / (↑(phi n) + 1) < rho / 2\nI : Type\nhI : Fintype I\nw : I → ℝ\nz : I → Matrix V V ℝ\nhw : ∀ (i : I), 0 ≤ w i\nhone : ∑ i, w i = 1\nhz : ∀ (i : I), z i ∈ (fun c => ↑(response c)) '' Metric.ball (xp (phi n)) (1 / (↑(phi n) + 1))\nhsum : ∑ i, w i • z i = ↑(xp (phi n))\nthis : Fintype I := hI\nc : I → ↑K\nhc : ∀ (i : I), dist (c i) (xp (phi n)) < 1 / (↑(phi n) + 1)\nhcz : ∀ (i : I), ↑(response (c i)) = z i\nY : I → Matrix V V ℝ := fun i => ↑(response (c i))\nhsumY : ∑ i, w i • Y i = ↑(xp (phi n))\nhY : ∀ (i : I), (Y i).PosDef\nhX : (∑ i, w i • Y i).PosDef\ni : I\nhtriangle : dist (c i) x ≤ dist (c i) (xp (phi n)) + dist (xp (phi n)) x\na✝ : rho ≤ dist (c i) x\n⊢ False\nfailed\nfamilies/174/first-pass/extraction_consistency/Main.lean:456:53: error: linarith failed to find a contradiction\nV : Type u_1\nE : Type u_3\ninst✝³ : Fintype V\ninst✝² : DecidableEq V\ninst✝¹ : Fintype E\ninst✝ : DecidableEq E\nK : Set (Matrix V V ℝ)\nhcompact : IsCompact K\nhconvex : Convex ℝ K\nhpd : ∀ X ∈ K, X.PosDef\nhfixed : ∀ (f : C(↑K, ↑K)), ∃ x, f x = x\nb : E → V → ℝ\nhcontinuous : ∀ (e : E), Continuous fun x => resistance (↑x) (b e)\nB : ↑K → ℝ → Finset E\nhpattern : ∀ (x y : ↑K) (s : ℝ), (∀ (e : E), resistance (↑x) (b e) ≤ s ↔ resistance (↑y) (b e) ≤ s) → B x s = B y s\nPacked : ↑K → ℝ → Prop\nhmono : ∀ (x : ↑K) {s t : ℝ}, s ≤ t → Packed x s → Packed x t\nhclosed : IsClosed {z | Packed z.1 z.2}\na delta u r q : ℝ\nha : 0 < a\nhu : 0 < u\nhdelta0 : 0 ≤ delta\nhdeltau : delta < u\nhq : 0 < q\nhrq : q < r\nhslack : r - q = u * r\nhobstruction :\n  ∀ (x : ↑K) (s : ℝ),\n    0 < s → ¬Packed x s → ∃ d, 0 < d ∧ r * d ≤ ↑(#(B x s)) ∧ ↑(#({e ∈ B x s | resistance (↑x) (b e) ≤ s})) < q * d\nthis✝¹ : TopologicalSpace.PseudoMetrizableSpace ↑K := PseudoEMetricSpace.pseudoMetrizableSpace\nthis✝ : CompactSpace ↑K := isCompact_iff_compactSpace.mp hcompact\nresponse : ↑K → ↑K\nhresp : ∀ (x : ↑K) (s : ℝ), 0 < s → ↑(#({e ∈ B x s | a < resistance (↑(response x)) (b e)})) ≤ delta * ↑(#(B x s))\nhr : 0 < r\nt : ℝ\nht : a * u / (u - delta) < t\ntheta : ℝ\nhtheta0 : 0 < theta\nhtheta1 : theta < 1\nhdelta_theta : delta < theta * u\nhtheta_t : a / (1 - theta) < t\nheps : ∀ (n : ℕ), 0 < 1 / (↑n + 1)\nxp : ℕ → ↑K\nhxp : ∀ (n : ℕ), ↑(xp n) ∈ (convexHull ℝ) ((fun c => ↑(response c)) '' Metric.ball (xp n) (1 / (↑n + 1)))\nx : ↑K\nphi : ℕ → ℕ\nhphi : StrictMono phi\nhlim : Tendsto (xp ∘ phi) atTop (𝓝 x)\ns : ℝ\nhs : s ∈ Set.Ioo (a / (1 - theta)) t\nhsavoid : s ∉ Finset.image (fun e => resistance (↑x) (b e)) Finset.univ\nhs0 : 0 < s\nhregular : ∀ (e : E), resistance (↑x) (b e) ≠ s\nrho : ℝ\nhrho : rho > 0\nhstable : ∀ {y : ↑K}, dist y x < rho → ∀ (e : E), resistance (↑y) (b e) ≤ s ↔ resistance (↑x) (b e) ≤ s\nhxnear✝ : ∀ᶠ (x_1 : ℕ) in atTop, dist ((xp ∘ phi) x_1) x < rho / 2\nhepslim : Tendsto (fun n => 1 / (↑(phi n) + 1)) atTop (𝓝 0)\nhepsnear✝ : ∀ᶠ (b : ℕ) in atTop, 1 / (↑(phi b) + 1) < rho / 2\nn : ℕ\nhxnear : dist ((xp ∘ phi) n) x < rho / 2\nhepsnear : 1 / (↑(phi n) + 1) < rho / 2\nI : Type\nhI : Fintype I\nw : I → ℝ\nz : I → Matrix V V ℝ\nhw : ∀ (i : I), 0 ≤ w i\nhone : ∑ i, w i = 1\nhz : ∀ (i : I), z i ∈ (fun c => ↑(response c)) '' Metric.ball (xp (phi n)) (1 / (↑(phi n) + 1))\nhsum : ∑ i, w i • z i = ↑(xp (phi n))\nthis : Fintype I := hI\nc : I → ↑K\nhc : ∀ (i : I), dist (c i) (xp (phi n)) < 1 / (↑(phi n) + 1)\nhcz : ∀ (i : I), ↑(response (c i)) = z i\nY : I → Matrix V V ℝ := fun i => ↑(response (c i))\nhsumY : ∑ i, w i • Y i = ↑(xp (phi n))\nhY : ∀ (i : I), (Y i).PosDef\nhX : (∑ i, w i • Y i).PosDef\nhrows : ∀ (i : I), ↑(#({e ∈ B x s | a < resistance (Y i) (b e)})) ≤ delta * ↑(#(B x s))\nhnot : ¬Packed x t\nhnot_s : ¬Packed x s\nd : ℝ\nhd : 0 < d\nhpacking : r * d ≤ ↑(#(B x s))\nhcrossing : ↑(#({e ∈ B x s | resistance (↑x) (b e) ≤ s})) < q * d\nhparameter : delta * r ≤ theta * (r - q)\nhcount : q * d ≤ ↑(#({e ∈ B x s | resistance (∑ j, w j • Y j) (b e) ≤ a / (1 - theta)}))\ne : E\nhe : e ∈ {e ∈ B x s | resistance (∑ i, w i • Y i) (b e) ≤ a / (1 - theta)}\nheB : e ∈ B x s\nheR : resistance (↑(xp (phi n))) (b e) ≤ a / (1 - theta)\na✝ : rho ≤ dist (xp (phi n)) x\n⊢ False\nfailed\n",
+  "stderr": "",
+  "proof_holes": [],
+  "audit_command": [],
+  "audit_exit_code": null,
+  "audit_stdout": "",
+  "audit_stderr": "",
+  "duration_ms": 5615,
+  "source_sha256": "5cb807a619393a9b95a0ddacfbd2933d54c55e76c868380de9d16ffd1d6f8fcc",
+  "statement_fidelity": "families/174/first-pass/extraction_consistency/statement_fidelity.md",
+  "statement_fidelity_sha256": "9168fad94cff4da5952cae0effe76418f6511240fd564eb6edc67d686e17c03f",
+  "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+  "environment_failure": "",
+  "kernel": {
+    "recorded": {
+      "evidence_id": "lean-C_TC_COMPACT_CORE-26b300cd460d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_TC_COMPACT_CORE",
+        "content_hash": "31171a7ec4cf86579f2385c5a55a897f6549227c92d847a3cff8d75d196a610e"
+      },
+      "tier": "mechanical",
+      "verdict": "inconclusive",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/extraction_consistency/certificates/C_TC_COMPACT_CORE-0f2cc1f2a684e957.json"
+    },
+    "changed": true,
+    "refusals": [],
+    "statement_fidelity": {
+      "document": "research/extraction_consistency/statement_fidelity.md",
+      "verified_by": null,
+      "note": "a proof kernel established the formal statement recorded on this claim; nothing has checked that the formal statement says what the natural statement says, and no tier in this schema encodes that it has"
+    }
+  }
+}

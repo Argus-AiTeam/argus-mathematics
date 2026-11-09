@@ -1,0 +1,48 @@
+{
+  "server": {
+    "name": "jacobian",
+    "version": "0.14.0"
+  },
+  "protocol_version": "2025-11-25",
+  "operation_id": "number_theory.compute.legendre_symbol",
+  "discovery_queries": [
+    "optimal embeddings imaginary quadratic order quaternion Eichler genus character weighted trace",
+    "Kronecker symbol binary quadratic form imaginary class group",
+    "Kronecker Jacobi quadratic residue symbol"
+  ],
+  "applicability": "Exact diagnostic for the sign of negation on the inert-prime trace-zero line; not an operation for CM reduction.",
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "a": {
+        "minimum": -9007199254740991,
+        "maximum": 9007199254740991,
+        "type": "integer"
+      },
+      "prime": {
+        "minimum": 3,
+        "maximum": 10000000,
+        "type": "integer"
+      }
+    },
+    "required": ["a", "prime"],
+    "type": "object"
+  },
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "a": {"type": "integer"},
+      "prime": {
+        "minimum": 3,
+        "maximum": 10000000,
+        "type": "integer"
+      },
+      "symbol": {"enum": [-1, 0, 1], "type": "integer"}
+    },
+    "required": ["a", "prime", "symbol"],
+    "type": "object"
+  },
+  "adapter_exit_code": 0,
+  "adapter_error": null,
+  "adapter_timeout": false
+}

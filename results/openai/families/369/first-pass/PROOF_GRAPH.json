@@ -1,0 +1,177 @@
+{
+  "goal": "C9000369",
+  "routes": [
+    {
+      "name": "reciprocal-kernel universal certification",
+      "status": "current",
+      "evidence": "research/reciprocal_kernel_audit/REPORT.md"
+    },
+    {
+      "name": "direct finite-RKHS literature shortcut",
+      "status": "ruled_out",
+      "evidence": "research/MATH_STATE.json",
+      "retired_because": "Corollary 1.12 of arxiv:1610.01997v1 does not directly apply to an infinite-diagonal PDE Green kernel. The manuscript's separate regularization and limit arguments must be checked."
+    }
+  ],
+  "nodes": {
+    "C9000369": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 369 (The hot spots conjecture for simply connected planar domains.; papers: Strict hot spots and absence of interior critical points on smooth simply connected planar domains; Lean status: Partially/Comparator formalized (lean/docs/369.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_RK"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_RK": {
+      "statement": "For every bounded nonnegative subcritical disk potential and every interior p, the exact kernel D_p=K(p,s)K(p,t)/N(s,t), with diagonal zero, is conditionally negative semidefinite.",
+      "status": "open",
+      "depends_on": ["L_RK_ESTIMATES", "L_RK_REG", "L_RK_UPDATE", "L_RK_RESOLVENT", "L_RK_BOUNDARY", "L_RK_BORDER_CND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/reciprocal_kernel_audit/REPORT.md", "research/reciprocal_kernel_audit/exact_certificate.json"]
+    },
+    "L_RK_ESTIMATES": {
+      "statement": "Bounded density and the strict Dirichlet form bound imply the Green contraction and the pointwise and integral finiteness of the exact chain kernels.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/04-boundary-kernels.tex"]
+    },
+    "L_RK_REG": {
+      "statement": "The logarithmic-mean defect is a positive mixture of positive semidefinite disk kernels and yields bounded reciprocal-one-positive Green regularizations.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/05-reciprocal-kernels.tex"]
+    },
+    "L_RK_UPDATE": {
+      "statement": "A nonnegative update along a column of a strictly entrywise positive matrix preserves reciprocal inertia with at most one positive eigenvalue.",
+      "status": "open",
+      "depends_on": ["C_RK_SCHUR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/05-reciprocal-kernels.tex"]
+    },
+    "C_RK_SCHUR": {
+      "statement": "For every finite real PSD matrix U, a>0, c>=0 and U_ii<a, the matrix U_ij/((1+ca)(1+ca-cU_ij)) is PSD.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/reciprocal_kernel_audit/lean/Main.lean", "research/reciprocal_kernel_audit/lean/statement_fidelity.md", "research/reciprocal_kernel_audit/lean/certificates/C_RK_SCHUR-7622a1be83f4dbb4.json"]
+    },
+    "L_RK_RESOLVENT": {
+      "statement": "Positive quadrature, exact column elimination and monotone Green regularization give reciprocal-one-positive interior resolvents for compactly supported subpotentials.",
+      "status": "open",
+      "depends_on": ["C_RK_MEASURE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/05-reciprocal-kernels.tex"]
+    },
+    "L_RK_BOUNDARY": {
+      "statement": "Radial limits at fixed compact support, followed by monotone potential exhaustion, give the correctly normalized bordered reciprocal boundary matrix.",
+      "status": "open",
+      "depends_on": ["L_RK_ESTIMATES", "L_RK_RESOLVENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/05-reciprocal-kernels.tex"]
+    },
+    "L_RK_BORDER_CND": {
+      "statement": "The zero-diagonal bordered one-positive condition implies nonpositivity on the border-orthogonal hyperplane, hence the weighted conditional negativity.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/05-reciprocal-kernels.tex"]
+    },
+    "C_RK_MEASURE": {
+      "statement": "For every finite nonnegative measure compactly supported inside the disk, with Green operator norm less than one and square-integrable Green sections at every interior point, the interior reciprocal resolvent has at most one positive eigenvalue and the boundary D_p kernel is conditionally negative semidefinite.",
+      "status": "open",
+      "depends_on": ["L_RK_REG", "L_RK_UPDATE", "L_RK_COMPACT_LIMITS", "L_RK_BORDER_CND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/reciprocal_kernel_audit/REPORT.md", "research/reciprocal_kernel_audit/exact_certificate.json"]
+    },
+    "L_RK_COMPACT_LIMITS": {
+      "statement": "For compact finite measures with Green contraction and L2 Green sections, positive fixed-epsilon quadrature converges in operator norm, monotone regularization converges to the Green-chain resolvent, and the correctly scaled radial evaluations converge to the exact finite boundary chain kernels.",
+      "status": "open",
+      "depends_on": ["L_RK_REG"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/reciprocal_kernel_audit/REPORT.md"]
+    },
+    "C_MAIN_HOTSPOTS": {
+      "statement": "Manuscript thm:main: every nonzero first positive Neumann eigenfunction on a bounded smooth simply connected planar domain has no interior critical point.",
+      "status": "open",
+      "depends_on": ["C_RK", "L_HS_VECTOR", "L_HS_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "L_HS_VECTOR": {
+      "statement": "The tangent-vector variational inequality has precisely the first-eigenfunction gradients as equality space; curvature is positive on convex circles.",
+      "status": "open",
+      "depends_on": ["L_HS_GAP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/03-vector-form.tex"]
+    },
+    "L_HS_REDUCTION": {
+      "statement": "The spectral gap, conformal regularity, multiplicity bound, boundary multiplier identity and Hilbert-distance argument supply the remaining dependencies of the full hot-spots proof; these are outside this mission's certification.",
+      "status": "open",
+      "depends_on": ["L_HS_CONFORMAL", "L_HS_MULTIPLICITY", "L_HS_MULTIPLIER", "L_HS_EMBEDDING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/02-preliminaries.tex", "research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/04-boundary-kernels.tex", "research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/06-conclusion.tex"]
+    },
+    "L_HS_GAP": {
+      "statement": "Manuscript lem:gap: the first positive Neumann eigenvalue is strictly below the first Dirichlet eigenvalue.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/02-preliminaries.tex"]
+    },
+    "L_HS_CONFORMAL": {
+      "statement": "Manuscript lem:conformal: a conformal disk map extends to a smooth diffeomorphism of closures with nonvanishing derivative.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/02-preliminaries.tex"]
+    },
+    "L_HS_WEIGHT": {
+      "statement": "Manuscript lem:boundary-weight: one smooth positive boundary weight annihilates all first-eigenfunction traces, and every nonzero such trace changes sign.",
+      "status": "open",
+      "depends_on": ["L_HS_GAP", "L_HS_CONFORMAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/02-preliminaries.tex"]
+    },
+    "L_HS_NODAL": {
+      "statement": "Manuscript lem:nodal: a nonzero first Neumann eigenfunction has connected positive and negative sets, and its boundary trace has no four cyclically alternating strict signs.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/02-preliminaries.tex"]
+    },
+    "L_HS_MULTIPLICITY": {
+      "statement": "Manuscript prop:multiplicity: the real first-positive-Neumann eigenspace has dimension at most two.",
+      "status": "open",
+      "depends_on": ["L_HS_WEIGHT", "L_HS_NODAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/02-preliminaries.tex"]
+    },
+    "L_HS_CURVATURE": {
+      "statement": "Manuscript lem:curvature: for tangent vector fields, the divergence-curl energy equals the Cartesian gradient energy plus the boundary integral of curvature times squared length, with curvature positive on convex circles.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/03-vector-form.tex"]
+    },
+    "L_HS_MULTIPLIER": {
+      "statement": "Manuscript prop:multiplier: E(bg) equals one half the double integral of N(s,t)(b(s)-b(t))^2 g(s) dot g(t), for every real Lipschitz scalar b and the boundary gradient g of a first Neumann eigenfunction.",
+      "status": "open",
+      "depends_on": ["L_HS_VECTOR", "L_HS_CURVATURE", "L_HS_CONFORMAL", "L_RK_ESTIMATES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/04-boundary-kernels.tex"]
+    },
+    "L_HS_EMBEDDING": {
+      "statement": "Manuscript Section 6: the conditional-negative D_p kernel admits an injective Lipschitz Hilbert-space map whose squared distances equal D_p.",
+      "status": "open",
+      "depends_on": ["C_RK", "L_RK_ESTIMATES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Strict-hot-spots-and-absence-of-interior-critical-points-on-smooth-simply-connected-planar-domains-September-24-2026/build/sections/06-conclusion.tex"]
+    }
+  }
+}

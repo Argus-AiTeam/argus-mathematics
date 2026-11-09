@@ -1,0 +1,249 @@
+{
+  "goal": "C9000243",
+  "routes": [
+    {
+      "name": "R243_MODEL_COMPARISON",
+      "status": "current",
+      "evidence": "research/STATEMENT_FIDELITY.md"
+    },
+    {
+      "name": "R243_FIXED_RANK",
+      "status": "ruled_out",
+      "retired_because": "A singleton chain has rank t but only t+1 hereditary objects; polynomial trace size does not imply a fixed rank bound.",
+      "evidence": "research/STATEMENT_FIDELITY.md"
+    }
+  ],
+  "nodes": {
+    "C9000243": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 243 (Separating choiceless counting from polynomial time and witnessed choice.; papers: Choiceless polynomial time with counting does not capture polynomial time; Witnessed symmetric choice is strictly stronger than choiceless polynomial time with counting; Lean status: Partially/Comparator formalized (lean/docs/243.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C243_MODEL_FIDELITY",
+        "C243_NEW_RESULT",
+        "C243_INDEPENDENT_REPLAY"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C243_CPT_MAIN": {
+      "statement": "P1 thm:main: the specified all-input eight-relation query is invariant, polynomial-time and not full counting CPT-definable.",
+      "status": "open",
+      "depends_on": ["C243_QUERY_PTIME", "C243_LOWER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_QUERY_PTIME": {
+      "statement": "P1 prop:query-ptime: invariance and polynomial-time consistency testing on every finite input.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_GRID_PAIR": {
+      "statement": "P1 lem:universe-size and prop:opposite-answers: equal-size zero/unit-charge grids with opposite query answers for L>=2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_GRID_ACTION": {
+      "statement": "P1 lem:H-automorphisms: the specified central extension acts on each charged input and has the displayed signed commutator.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_SPARSE_COCHAIN": {
+      "statement": "P1 lem:sparse-cochain: t nonzero face curls admit a cohomologous cochain on at most 2Lt edges, including t=0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_SUPPORT": {
+      "statement": "P1 prop:small-orbit-support/cor:transitive-support and P2 counterparts: polynomial orbit gives rank-independent K-support.",
+      "status": "open",
+      "depends_on": ["C243_GRID_ACTION", "C243_SPARSE_COCHAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_BASE_EQUIV": {
+      "statement": "P1 prop:base-equivalence and P2 base:equivalence: the two analytical expansions agree in C^floor(L^(7/4)) for sufficiently large L.",
+      "status": "open",
+      "depends_on": ["C243_GRID_PAIR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_HOMOGENEITY": {
+      "statement": "P1 prop:base-homogeneity and P2 counterpart: equal wide types imply the same central-flow orbit under the quantitative tuple-width bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_HF_TRANSFER": {
+      "statement": "P1 thm:hf-transfer and P2 hf:transfer: nonempty base equivalence and quantitative orbit homogeneity transfer counting to all hereditarily supported finite ranks.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_CHARACTERIZATION": {
+      "statement": "GSW arXiv:2003.10935v1 Section 6 Theorem 18: full counting CPT properties are decided by polynomial-cost two-dimensional FO+H interpretation programs.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/C243_MODEL_FIDELITY/gsw-v1-section6.txt"]
+    },
+    "C243_TRACE": {
+      "statement": "P1 lem:trace-size: an interpreted run bounded by B has an invariant transitive vertex-code family of at most 9B^3 objects.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_STATE_EXACT": {
+      "statement": "P1 lem:state-exactness: the common stage formulas define actual tagged quotient states, halt and output exactly, including empty states.",
+      "status": "open",
+      "depends_on": ["C243_TRACE", "C243_SUPPORT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_WIDTH": {
+      "statement": "P1 lem:substitution-width and its application: the fully expanded comparison formulas have a variable bound depending only on the fixed program.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_LOWER": {
+      "statement": "P1 07-separation.tex: every fixed full counting CPT program agrees on the zero/unit-charge pair for sufficiently large grids.",
+      "status": "open",
+      "depends_on": ["C243_GRID_PAIR", "C243_SUPPORT", "C243_BASE_EQUIV", "C243_HOMOGENEITY", "C243_HF_TRANSFER", "C243_CHARACTERIZATION", "C243_TRACE", "C243_STATE_EXACT", "C243_WIDTH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_UPSTREAM_SUPPORT": {
+      "statement": "Pinned U/Grid.lean proves subgroup_support_edges and small_orbit_support_edges for arbitrary group actions; these proofs have not been compiled locally.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_UPSTREAM_LOWER": {
+      "statement": "Pinned U/Separation.lean states invariant polynomial-time query and non-FullCPT.EvaluationDefinable; correctness is an unreplayed external premise here.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_INTERPRETATION_MATCH": {
+      "statement": "P1 06-coding.tex, GSWv1 Section 6, and U/Interpretations.lean agree on FO+H, generated quotients, existential relation saturation, first halt and state-size-sum cost.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_IL_SIMULATION": {
+      "statement": "Every total polynomial-cost binary interpretation program has a FullCPT simulation with polynomial time and cumulative occurring-object bounds, without fixed rank.",
+      "status": "open",
+      "depends_on": ["C243_INTERPRETATION_MATCH", "C243_TRACE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_MODEL_FIDELITY": {
+      "statement": "GSW18 plus the one-way simulation embeds the manuscript counting class in EvaluationDefinable, so accepting the pinned formal lower bound covers it without a rank restriction.",
+      "status": "open",
+      "depends_on": ["C243_CHARACTERIZATION", "C243_INTERPRETATION_MATCH", "C243_IL_SIMULATION", "C243_UPSTREAM_LOWER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_RANK_WITNESS": {
+      "statement": "The singleton chain x_0=a, x_(t+1)={x_t} has rank t and t+1 hereditary objects; polynomial object count does not imply constant rank.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_FINITE_CHECKS": {
+      "statement": "Exact finite quotient, Hartig and one-face Heisenberg checks plus the universal trace-size polynomial identity pass; they do not prove a universal separation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/C243_MODEL_FIDELITY/exact_certificate.json"]
+    },
+    "C243_WSC_MAIN": {
+      "statement": "P2 thm:main: one fixed one-WSC Boolean sentence on all finite inputs defines a property outside full counting CPT.",
+      "status": "open",
+      "depends_on": ["C243_WSC_BOOLEAN", "C243_WSC_GRID", "C243_WSC_LOWER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_WSC_SEMANTICS": {
+      "statement": "P2 01-formalism.tex requires witnesses on every first-stabilization path fixing parameters and the whole previous history, with polynomial temporary-object bounds.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_WSC_BOOLEAN": {
+      "statement": "P2 sen:all-input and sen:polynomial: the guarded one-WSC sentence is Boolean with one fixed resource polynomial on every finite input.",
+      "status": "open",
+      "depends_on": ["C243_WSC_SEMANTICS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_WSC_WITNESS": {
+      "statement": "P2 grid:transitivity: every resolving parameter and compatible prefix has history-fixing full-input automorphism witnesses for every ordered candidate pair.",
+      "status": "open",
+      "depends_on": ["C243_GRID_ACTION", "C243_WSC_SEMANTICS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_WSC_GRID": {
+      "statement": "P2 grid:separation: all terminal paths accept zero charge and reject unit charge without dagger.",
+      "status": "open",
+      "depends_on": ["C243_WSC_WITNESS", "C243_GRID_PAIR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_WSC_TRACE": {
+      "statement": "P2 eval:trace: the complete deterministic evaluation trace is polynomial, invariant and membership-transitive, including rejected and stationarity candidates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_WSC_DESCRIPTION": {
+      "statement": "P2 eval:description: actual activations have fixed-width exact evaluation descriptions, unique over the whole supported domain.",
+      "status": "open",
+      "depends_on": ["C243_WSC_TRACE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_WSC_LOWER": {
+      "statement": "P2 eval:pair-equivalence: every fixed CPT sentence agrees on the pair for sufficiently large L.",
+      "status": "open",
+      "depends_on": ["C243_SUPPORT", "C243_BASE_EQUIV", "C243_HOMOGENEITY", "C243_HF_TRANSFER", "C243_WSC_TRACE", "C243_WSC_DESCRIPTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_NEW_RESULT": {
+      "statement": "A genuinely new publishable independent theorem or exact manuscript counterexample remains to be established, not replaced by a source inventory or finite exclusion.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md", "research/STATEMENT_FIDELITY.md"]
+    },
+    "C243_INDEPENDENT_REPLAY": {
+      "statement": "The independent Reviewer must replay and accept a publishable new result before campaign completion.",
+      "status": "open",
+      "depends_on": ["C243_NEW_RESULT"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md", "research/STATEMENT_FIDELITY.md"]
+    }
+  }
+}

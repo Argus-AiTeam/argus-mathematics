@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_SHARP_LATTICE_CORE-bba6b610d720",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/179/first-pass/sharp_character_comparison/lattice/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/179/first-pass/sharp_character_comparison/lattice/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6942,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/179/first-pass/sharp_character_comparison/lattice/Main.lean",
+    "source_sha256": "96350870d40b82fe0d217a86a69ae5a80df2f7067d2037d39ab6b99668940600",
+    "statement_fidelity": "families/179/first-pass/sharp_character_comparison/lattice/statement_fidelity.md",
+    "statement_fidelity_sha256": "ab2eaed37b4580b51b0d3a6610e3d57395c0db8f0a0988024001dbbc4dfbc2f7",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'SharpCharacterComparison.companion_image_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'SharpCharacterComparison.scalar_class_annihilator' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/sharp_character_comparison/lattice/Main.lean",
+    "text": "import Mathlib.Tactic.Ring\nimport Mathlib.Tactic.Choose\n\nnamespace SharpCharacterComparison\n\nuniverse uA\n\nvariable {A : Type uA} [CommRing A]\n\ndef CompanionImage (p : A) (t n : ℕ) (c0 : Aˣ) (c : Fin n → A)\n    (x : A) (v : Fin n → A) : Prop :=\n  ∃ q : A, ∃ w : Fin n → A,\n    x = -p ^ (t + 1) * (c0 : A) * q ∧\n    ∀ i, v i = p ^ t * w i - p ^ (t + 1) * q * c i\n\ntheorem companion_image_iff (p : A) (t n : ℕ) (c0 : Aˣ) (c : Fin n → A)\n    (x : A) (v : Fin n → A) :\n    CompanionImage p t n c0 c x v ↔ p ^ (t + 1) ∣ x ∧ ∀ i, p ^ t ∣ v i := by\n  constructor\n  · rintro ⟨q, w, hx, hv⟩\n    constructor\n    · refine ⟨-(c0 : A) * q, ?_⟩\n      rw [hx]\n      ring\n    · intro i\n      refine ⟨w i - p * q * c i, ?_⟩\n      rw [hv i, pow_succ]\n      ring\n  · rintro ⟨⟨u, hu⟩, hv⟩\n    choose w hw using hv\n    let q : A := -(↑c0⁻¹ : A) * u\n    refine ⟨q, (fun i => w i + p * q * c i), ?_, ?_⟩\n    · calc\n        x = p ^ (t + 1) * u := hu\n        _ = -p ^ (t + 1) * (c0 : A) * q := by\n          symm\n          calc\n            -p ^ (t + 1) * (c0 : A) * q =\n                p ^ (t + 1) * ((c0 : A) * (↑c0⁻¹ : A)) * u := by\n              dsimp [q]\n              ring\n            _ = p ^ (t + 1) * u := by rw [Units.mul_inv, mul_one]\n    · intro i\n      rw [hw i, pow_succ]\n      ring\n\ntheorem scalar_class_annihilator (p : A) (t n : ℕ) (c0 : Aˣ) (c : Fin n → A)\n    (x : A) :\n    CompanionImage p t n c0 c x (fun _ => 0) ↔ p ^ (t + 1) ∣ x := by\n  rw [companion_image_iff]\n  simp only [dvd_zero, implies_true, and_true]\n\nend SharpCharacterComparison\n\n#print axioms SharpCharacterComparison.companion_image_iff\n#print axioms SharpCharacterComparison.scalar_class_annihilator\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/sharp_character_comparison/lattice/statement_fidelity.md",
+    "text": "# Statement fidelity: exact companion-coordinate lattice\n\nThe declarations are `SharpCharacterComparison.companion_image_iff`\n(`companion_image_iff`) and\n`SharpCharacterComparison.scalar_class_annihilator`\n(`scalar_class_annihilator`). The definition `CompanionImage` gives the\nliteral image equations used by both.\n\nThe type `A` is any commutative ring; `p : A`, the exponent `t : Nat`,\nand the tail dimension `n : Nat` are arbitrary. A unit `c0 : Aˣ` and a\nvector `c : Fin n -> A` are universally quantified. There is no\nbounded-dimension hypothesis or numerical computation. Allowing `t=0`\nand `n=0` is stronger than the application's `t>=1`, `n=p-2>=1`.\n\nIn the report's free quotient `T=A[Z]/h`, write the monic relation as\n\n`Z^(n+1) = -p*c0 - p*sum_i c_i*Z^(i+1)`.\n\nThe basis of `T` is `1,Z,...,Z^n`, with constant coordinate `x` and\ntail coordinate `v : Fin n -> A`. Multiplication by `p^t*Z`, with\ninput coordinates reordered as the last coordinate `q` followed by\nthe first `n` coordinates `w`, has output\n\n`x = -p^(t+1)*c0*q`,\n\n`v_i = p^t*w_i - p^(t+1)*q*c_i`.\n\nThese are exactly the equations in `CompanionImage`, not an assumption\nof the desired divisibility. `companion_image_iff` proves that this\nimage consists exactly of vectors whose constant coordinate is\ndivisible by `p^(t+1)` and whose every tail coordinate is divisible\nby `p^t`. Both inclusions are formalized. The reverse inclusion\nconstructs the preimage using the inverse of `c0`.\n\nConsequently, when `A` is the coefficient DVR, the cokernel of this\nexplicit companion-coordinate map is the coordinate quotient\n`A/(p^(t+1)) direct_sum (A/(p^t))^n`.\n`scalar_class_annihilator` proves the exact membership criterion for\n`(x,0,...,0)`, namely `p^(t+1) divides x`. Thus the annihilator of\nthe scalar class is precisely this principal ideal, not just an upper\nbound. The function-type equations are formalized; the conventional\nmodule-quotient isomorphism phrasing is their mathematical interpretation.\n\nIn the application `n=p-2`, `c0=1-a^(-1)`, and\n`c_i=binom(p,i+2)/p`. The proof that the original cyclic-ring cokernel\nreduces to this companion image, including the unit recurrence\n`Y^(p^t)-1=p^t*a^(-1)*Z*V_t`, remains the all-parameter proof in\n`report.md`. This file neither presumes nor certifies that reduction.\nIt certifies its decisive coordinate-lattice calculation and the exact\nscalar-class annihilator for all parameters, separately from\n`Main.lean`'s complete comparison theorem.\n\nBoth printed transitive axiom closures must be contained in\n`{propext, Classical.choice, Quot.sound}`. No `sorryAx`, additional\narithmetic axiom, or assumption of the classification is acceptable.\nMechanical evidence attaches only to `C_SHARP_LATTICE_CORE`, not to\nthe full cyclic-ring classification or a novelty claim.\n"
+  },
+  "subject": {
+    "content_hash": "ed487ea401cb9355bbdd65eeb3e064c7f3e678ff1df5c84ce1290011e2ec9376",
+    "kind": "claim",
+    "subject_id": "C_SHARP_LATTICE_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

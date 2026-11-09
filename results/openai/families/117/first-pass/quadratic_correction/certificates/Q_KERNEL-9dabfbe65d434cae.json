@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-Q_KERNEL-90c626943646",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/117/first-pass/quadratic_correction/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/117/first-pass/quadratic_correction/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15546,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/117/first-pass/quadratic_correction/Main.lean",
+    "source_sha256": "23cb294c9e288938a0cc83c0d29eef1804df661285c378fa7e40c9a83f46521b",
+    "statement_fidelity": "families/117/first-pass/quadratic_correction/statement_fidelity.md",
+    "statement_fidelity_sha256": "516cf598c40c0877ee1dbfaee088b5d2eca214b3014a10c56c3df335b1e8759d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/quadratic_correction/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace Argus9000117\n\ntheorem weighted_grid_comm\n    {I J R : Type*} [Fintype I] [Fintype J] [CommRing R]\n    (a : I → R) (b : J → R) (z : I → J → R) :\n    (∑ i, a i * ∑ j, b j * z i j) =\n      ∑ j, b j * ∑ i, a i * z i j := by\n  simp_rw [Finset.mul_sum]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro j _\n  apply Finset.sum_congr rfl\n  intro i _\n  ring\n\ntheorem grid_predictions_agree\n    {I J R : Type*} [Fintype I] [Fintype J] [CommRing R]\n    (a : I → R) (b : J → R) (z : I → J → R)\n    (u : I → R) (v : J → R)\n    (hu : ∀ i, u i = ∑ j, b j * z i j)\n    (hv : ∀ j, v j = ∑ i, a i * z i j) :\n    (∑ i, a i * u i) = ∑ j, b j * v j := by\n  calc\n    (∑ i, a i * u i) = ∑ i, a i * ∑ j, b j * z i j := by\n      apply Finset.sum_congr rfl\n      intro i _\n      rw [hu i]\n    _ = ∑ j, b j * ∑ i, a i * z i j := weighted_grid_comm a b z\n    _ = ∑ j, b j * v j := by\n      apply Finset.sum_congr rfl\n      intro j _\n      rw [hv j]\n\ntheorem translated_relations_transfer\n    {I J R : Type*} [Fintype I] [Fintype J] [CommRing R]\n    (c : I → R) (b : J → R) (z : I → J → R)\n    (v : I → R)\n    (hv : ∀ i, v i = ∑ j, b j * z i j)\n    (hz : ∀ j, ∑ i, c i * z i j = 0) :\n    ∑ i, c i * v i = 0 := by\n  calc\n    (∑ i, c i * v i) = ∑ i, c i * ∑ j, b j * z i j := by\n      apply Finset.sum_congr rfl\n      intro i _\n      rw [hv i]\n    _ = ∑ j, b j * ∑ i, c i * z i j := weighted_grid_comm c b z\n    _ = 0 := by simp [hz]\n\ntheorem collision_le_modal\n    {I : Type*} [Fintype I]\n    (p : I → ℝ) (hp : ∀ i, 0 ≤ p i) (hs : ∑ i, p i = 1)\n    (m : I) (hm : ∀ i, p i ≤ p m) :\n    (∑ i, (p i) ^ 2) ≤ p m := by\n  calc\n    (∑ i, (p i) ^ 2) ≤ ∑ i, p m * p i := by\n      apply Finset.sum_le_sum\n      intro i _\n      nlinarith [mul_nonneg (hp i) (sub_nonneg.mpr (hm i))]\n    _ = p m := by rw [← Finset.mul_sum, hs, mul_one]\n\ntheorem modal_mass_from_collision\n    {I : Type*} [Fintype I] [Nonempty I]\n    (p : I → ℝ) (hp : ∀ i, 0 ≤ p i) (hs : ∑ i, p i = 1)\n    (eta : ℝ) (hc : 1 - eta ≤ ∑ i, (p i) ^ 2) :\n    ∃ m, (∀ i, p i ≤ p m) ∧ 1 - eta ≤ p m := by\n  obtain ⟨m, _, hm⟩ :=\n    Finset.exists_max_image (Finset.univ : Finset I) p Finset.univ_nonempty\n  have hmax : ∀ i, p i ≤ p m := fun i => hm i (Finset.mem_univ i)\n  exact ⟨m, hmax, hc.trans (collision_le_modal p hp hs m hmax)⟩\n\ntheorem collision_budget (r gamma rho : ℝ) :\n    (r + r) * gamma + (r * r) * gamma + 2 * rho =\n      (r ^ 2 + 2 * r) * gamma + 2 * rho := by ring\n\ntheorem shared_direction_completion_budget (r gamma rho : ℝ) :\n    ((r ^ 2 + 2 * r) * gamma + 2 * rho) +\n        rho + (r * (r + 1)) * gamma =\n      (2 * r ^ 2 + 3 * r) * gamma + 3 * rho := by ring\n\ntheorem quadratic_specialization (gamma rho : ℝ) :\n    (2 * (3 : ℝ) ^ 2 + 3 * 3) * gamma + 3 * rho =\n      27 * gamma + 3 * rho := by ring\n\ntheorem manuscript_completion_implies_improved\n    (gamma delta : ℝ) (hd : 0 ≤ delta)\n    (h : 27 * gamma + 5 * delta < 1) :\n    27 * gamma + 3 * delta < 1 := by linarith\n\ntheorem manuscript_cleanup_margin\n    (delta lambda : ℝ)\n    (hd : delta ≤ 1 / 16000) (hl : lambda ≤ 1 / 1000000) :\n    (187 : ℝ) / 500000 ≤ 1 / 2000 - 2 * delta - lambda := by\n  linarith\n\ntheorem nonvacuity_numerator_identities (s : ℝ) :\n    192 * (s + 1) ^ 2 + 271 * (s + 1) - 22 =\n        192 * s ^ 2 + 655 * s + 441 ∧\n      224 * (s + 1) ^ 2 + 336 * (s + 1) - 3 =\n        224 * s ^ 2 + 784 * s + 557 := by\n  constructor <;> ring\n\ntheorem all_degree_margins_positive\n    (r : ℝ) (hr : 1 ≤ r) :\n    0 < (192 * r ^ 2 + 271 * r - 22) /\n        (128 * (2 * r ^ 2 + 3 * r)) ∧\n      0 < (224 * r ^ 2 + 336 * r - 3) /\n        (128 * (2 * r ^ 2 + 3 * r)) := by\n  have hc : 0 < 2 * r ^ 2 + 3 * r := by nlinarith [sq_nonneg r]\n  have hden : 0 < 128 * (2 * r ^ 2 + 3 * r) := by positivity\n  constructor\n  · apply div_pos _ hden\n    nlinarith [sq_nonneg (r - 1)]\n  · apply div_pos _ hden\n    nlinarith [sq_nonneg (r - 1)]\n\nend Argus9000117\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/quadratic_correction/statement_fidelity.md",
+    "text": "# Statement fidelity: Q_KERNEL\n\n`Main.lean` formalizes the algebraic and finite-probability core of\nthe proof in `report.md`. It does **not** encode `Q_GENERAL` or\n`H_QC`, the complete correction theorem, or the manuscript's hardness\ntheorem. The finite induction, scalar-invariant direction law,\ninternal-edge estimate, root bound, and event union bounds remain in\nthe mathematical proof and require independent reading.\n\nAll declarations are in namespace `Argus9000117`:\n\n* `weighted_grid_comm` quantifies over arbitrary finite index types\n  `I,J`, any commutative ring `R`, coefficient functions `a,b`,\n  and every array `z`. It interchanges the two weighted finite sums.\n  There is no dimension bound or characteristic restriction.\n* `grid_predictions_agree` additionally takes two vectors `u,v`\n  satisfying the displayed row and column reconstruction equations,\n  and proves equality of their weighted predictions. These hypotheses\n  are local linear equations on one grid, not the existence of a\n  global correction.\n* `translated_relations_transfer` takes reconstructed center values\n  and assumes each translated linear relation is zero. It proves\n  the center relation is zero. Again the hypotheses concern only a\n  fixed finite array, not the correction conclusion.\n* `collision_le_modal` quantifies over every real-valued nonnegative\n  probability vector on a finite type and every maximal atom. It\n  proves that its collision sum is at most that atom.\n* `modal_mass_from_collision` adds a nonempty index type and any real\n  `eta` with collision sum at least `1-eta`. It proves existence of\n  a modal atom of mass at least `1-eta`, including the maximality\n  property. The finite type can be the field alphabet; it is not the\n  direction set.\n* `collision_budget` and `shared_direction_completion_budget` are\n  polynomial identities for arbitrary real `r,gamma,rho`.\n  Substituting integer `r=d+1` gives the counts of axis, grid, and\n  translated-center events in the proof. They do not prove the\n  probabilistic bounds on those events.\n* `quadratic_specialization` substitutes `r=3`.\n  `manuscript_completion_implies_improved` proves, for nonnegative\n  `delta`, that the manuscript's completion inequality implies the\n  improved one.\n* `manuscript_cleanup_margin` proves the exact lower bound\n  `187/500000` on the cleanup margin for all real\n  `delta<=1/16000`, `lambda<=1/1000000`. Nonnegativity is unnecessary\n  for this lower-bound implication, so is not assumed there.\n* `nonvacuity_numerator_identities` proves the two displayed\n  change-of-variable identities for all real `s`.\n  `all_degree_margins_positive` proves positivity of both rational\n  margins for every real `r>=1`, with their exact denominators.\n\nNo imported manuscript theorem, unproved spectral assertion, or\nstatement about a desired corrected function is used by this Lean\nfile. Successful compilation certifies these declarations and only\nthese declarations. It cannot certify the prose interpretation,\nnovelty, publishability, or the full parameterized correction result.\n"
+  },
+  "subject": {
+    "content_hash": "26371c822272400a122c747a2f29f9932edcc9fe4efa202805609cb4aabf6a48",
+    "kind": "claim",
+    "subject_id": "Q_KERNEL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

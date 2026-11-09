@@ -1,0 +1,34 @@
+{
+  "discovery": {
+    "query": "exact rational linear inequalities feasibility certificate",
+    "server_name": "jacobian",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "schema_version": 1,
+    "transport": "mcp-stdio",
+    "candidates": [
+      "matrix.rational_linear_system.solve",
+      "linear.rational_solution.compute",
+      "linear.rational_inconsistency.compute",
+      "optimization.linear.rational_general_optimum.compute",
+      "optimization.linear.rational_optimum.compute"
+    ]
+  },
+  "inspected_operation": "optimization.linear.rational_general_optimum.compute",
+  "inspected_contract": {
+    "input": "program with named bounded or free variables, a rational objective, and labeled LE/EQ/GE rational rows",
+    "canonical_rational": "object with reduced decimal-string num and positive decimal-string den",
+    "maximum_variables": 32,
+    "maximum_constraints": 64,
+    "relations": ["LE", "EQ", "GE"],
+    "objective_senses": ["MINIMIZE", "MAXIMIZE"],
+    "output_statuses": ["OPTIMAL", "PRIMAL_FEASIBLE", "INFEASIBLE", "UNBOUNDED", "UNKNOWN"],
+    "infeasibility_fields": ["farkas_constraints", "farkas_lower_bounds", "farkas_upper_bounds"],
+    "strict_inequality_support": "Closed rows only; caller must use an explicit margin if needed."
+  },
+  "application": "One closed relaxation of the final improved-occupation contradiction, after normalizing the positive z to one. The dropped equation z+c=1 only enlarges the feasible set.",
+  "payload_file": "research/selected_bin_coefficient/jacobian_payload.json",
+  "output_file": "research/selected_bin_coefficient/jacobian_output.json",
+  "outcome": "Adapter exit 2: operation_validation rejected normalization because possible simplex bases exceed the 1000000-candidate admission bound.",
+  "mathematical_conclusion": "NONE. This is an adapter admission mismatch, not INFEASIBLE, UNKNOWN, a proof, or a counterexample. The exact question is unchanged and will be settled by independent rational replay and Lean."
+}

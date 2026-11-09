@@ -1,0 +1,309 @@
+{
+  "unit": "char-p-intersection",
+  "assessment_date": "2026-11-07",
+  "assessment_role": "mathematical_assistant_to_engineer",
+  "verdict": "supported",
+  "verdict_scope": "The local intersection proposition, its full common-exponent conclusion and uniqueness from either inclusion, and the mathematically justified removal of ambient finiteness.",
+  "independent_review": "pending_native_host_reviewer",
+  "acceptance_authority": "native Host-invoked independent Reviewer",
+  "mission_acceptance_performed": false,
+  "novelty_claimed": false,
+  "manuscript_certified": false,
+  "manuscript_refuted": false,
+  "family_certified": false,
+  "attribution": {
+    "original_statement": "Manuscript Proposition prop:intersection",
+    "original_method_attribution": "03-intersection.tex:12-15 cites Cadoret-Pirutka, Sections 3.4-3.5; priority was not independently investigated.",
+    "argus_contribution_type": "alternate local proof and formal reconstruction, with a supported generalization",
+    "not_a_counterexample": true
+  },
+  "bindings": {
+    "historical_root": "campaigns/9000009",
+    "manuscript": {
+      "id": "Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026",
+      "root": "openai-math/preprints/Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026",
+      "revision": "4eaee87548250b2682affda7d05d947c05554bae",
+      "target": "build/build/sections/03-intersection.tex",
+      "target_sha256": "e97a074e701ad33c335018882b71eed89ef5e0f3e6fb9b4789488af72181c83b",
+      "statement_lines": [17, 37],
+      "proof_lines": [43, 138],
+      "direct_setup": [
+        {
+          "path": "build/build/sections/02-symbols.tex",
+          "lines": [9, 13],
+          "purpose": "Distinguish C-projective scalar representatives and the multiplicative F_p-vector-space structure."
+        },
+        {
+          "path": "build/build/sections/02-symbols.tex",
+          "lines": [41, 84],
+          "purpose": "Definition of p-independence and the required p-basis, Euler, kernel, eigenvector and subfield-intersection facts."
+        }
+      ]
+    },
+    "formal_source": {
+      "path": "research/char-p-intersection/Main.lean",
+      "sha256": "96ef99bfd773341718ab4e220167f05778a27ab97db1ebb52d6a095faff078b1",
+      "source_facing_theorem": "CharPIntersection.prop_intersection",
+      "source_facing_lines": [988, 1010],
+      "generalized_theorem": "CharPIntersection.intersection_exponent",
+      "generalized_lines": [868, 982]
+    },
+    "fidelity_documents": {
+      "paths": [
+        "research/char-p-intersection/statement-fidelity.md",
+        "research/char-p-intersection/statement_fidelity.md"
+      ],
+      "sha256_each": "4cb12a6c193626fdd9aee018fc7514b6ab439a6444d0ed5d5f29bcadf53dcfce",
+      "duplicate_not_separate_result": true
+    },
+    "claim": {
+      "id": "V_CHARP_INTERSECTION",
+      "version": 3,
+      "content_hash": "bc454725f6e3913984e01e96fb83ae34f15ce44a47d81fa073dac264680d9bcb"
+    },
+    "supporting_certificate": {
+      "path": "research/char-p-intersection/certificates/V_CHARP_INTERSECTION-8ee0aa52ccd7bea2.json",
+      "sha256": "4a8a534637ab71d6167ee5771b450b5a2fe5827ed34cc0d543be32bda00a7417",
+      "historical_judgement": "judgement-V_CHARP_INTERSECTION-d2a910e000f2",
+      "historical_reviewer": "reviewer:copilot",
+      "judgement_supports_exact_v3_hash_and_certificate": true
+    },
+    "integrity_provenance": "Parent-verified facts explicitly reused; no duplicate integrity audit was run.",
+    "parent_verified_inventory": {
+      "inventoried_files_existing_and_size_matching": 35,
+      "snapshot_manifest_files_sha256_matching": 20,
+      "characteristic_p_manuscript_tex_files_manifest_matching": 7,
+      "all_inventory_files_claimed_snapshot_hashed": false
+    }
+  },
+  "exact_statement": {
+    "prime_and_field": "p is an arbitrary natural prime, including 2; F is an arbitrary field of characteristic p.",
+    "coefficient_field": "C is exactly F^p, the image of Frobenius.",
+    "source_ambient_hypothesis": "[F:C] is finite.",
+    "coordinate_hypotheses": "X,Y are nonzero and [C(X,Y):C]=p^2.",
+    "input_hypotheses": "U in C(X)^x and V in C(Y)^x.",
+    "nonmonomial_meaning": "For every 0<=i<p and c in C, U != c X^i; likewise V != d Y^j. With nonzero inputs this is equivalent to excluding every C^x-scaled integer power.",
+    "quotient_scalar_meaning": "F_p[X] is the F_p-span of [X] in F^x/C^x, not a polynomial ring; r[U]=[U^r].",
+    "witness": "Nonzero Z,s,t with s in C(Y/X), t in C(V/U), and Z=Xs=Ut.",
+    "existence": "One n in N with 0<n<p and a,b,c,d in C^x satisfies U^n=a+bX^n and V^n=c+dY^n.",
+    "uniqueness": "For every r in N with 0<r<p, either U^r in C+CX^r or V^r in C+CY^r forces r=n, without initially requiring the tested coefficients to be nonzero.",
+    "representative_invariance": "Independent multiplication of X,Y,U,V by elements of C^x does not change the conclusion or its exponent."
+  },
+  "formal_quantifier_assessment": {
+    "verdict": "supported",
+    "source_facing_parameters": "Arbitrary F : Type*, Field F, p : N, Fact p.Prime, CharP F p, and FiniteDimensional (PthPowers F p) F; arbitrary X,Y,U,V,Z,s,t : F satisfying the displayed hypotheses.",
+    "actual_coefficient_field": "PthPowers = (frobenius F p).fieldRange at Main.lean:984-986.",
+    "constructed_not_assumed": [
+      "p^2-element monomial basis",
+      "commuting Euler derivations and their kernel/eigenvector descriptions",
+      "common nonzero residue weight",
+      "integration exponent",
+      "both affine-power identities"
+    ],
+    "conclusion_definition": "ExponentConclusion at Main.lean:820-825 uses one existential natural n and universal single-inclusion uniqueness via an or.",
+    "redundant_source_hypotheses": "Explicit s != 0 and t != 0 follow from Z != 0 and the witness equations.",
+    "generalized_parameters": "Arbitrary embedded fields k,F of characteristic p, every ambient p-th power in algebraMap k F, local degree p^2, corresponding input conditions and actual witness; no ambient finite-dimensional hypothesis.",
+    "generalized_local_only_powers_signature": false
+  },
+  "components": [
+    {
+      "id": "euler-setup",
+      "verdict": "supported",
+      "source_anchors": [
+        "Main.lean:17-141",
+        "Main.lean:189-202",
+        "Main.lean:222-279",
+        "Main.lean:285-344",
+        "Main.lean:442-483",
+        "Main.lean:882-917",
+        "02-symbols.tex:41-84"
+      ],
+      "assessment": "Exponent reduction and inverse closure identify the monomial span with the actual coordinate field. Spanning plus degree p^2 constructs the basis. Basis-product weights prove the product rule; diagonality proves commutation and eigenspace classification."
+    },
+    {
+      "id": "common-weight",
+      "verdict": "supported",
+      "source_anchors": [
+        "Main.lean:503-532",
+        "Main.lean:561-668",
+        "03-intersection.tex:53-109"
+      ],
+      "assessment": "The actual witness yields two Euler equations. Nonmonomiality proves nonzero derivatives and nonconstant nonzero corrections A,B. Differentiation and elimination force DA/A=EB/B. One-variable memberships force a scalar eigenvalue; injective residue casts force the same nonzero m for both coordinates.",
+      "decisive_identity": "(B*DA-A*EB)*DZ=0 with DZ nonzero."
+    },
+    {
+      "id": "integration",
+      "verdict": "supported",
+      "source_anchors": [
+        "Main.lean:705-755",
+        "Main.lean:849-853",
+        "03-intersection.tex:111-123"
+      ],
+      "assessment": "For n=p-m, S=X^n+c_X X^p=X^n U/DU is nonzero. Equality of logarithmic derivatives puts U^n/S in the nonzero scalar kernel. Coefficients t_X*c_X*X^p and t_X are both nonzero. The Y calculation uses the same n; p=2 is included."
+    },
+    {
+      "id": "single-inclusion-uniqueness",
+      "verdict": "supported",
+      "source_anchors": [
+        "Main.lean:757-817",
+        "Main.lean:820-825",
+        "Main.lean:854-857",
+        "03-intersection.tex:125-137"
+      ],
+      "assessment": "An unqualified affine identity at r forces correction weight -r, even though its coefficient hypothesis allows zero. Nonzero correction and weight m give m+r=0 in characteristic p, hence r=p-m. Either input separately determines the exponent."
+    },
+    {
+      "id": "ambient-finiteness-removal",
+      "verdict": "supported",
+      "source_anchors": [
+        "Main.lean:859-982",
+        "report.md: Ambient finiteness: rigorous scope of the strengthening"
+      ],
+      "assessment": "All inputs, witness factors and witness lie in k(X,Y). The generalized declaration constructs and works in that degree-p^2 field, without finite ambient p-rank. For k=F^p this removes [F:F^p]<infinity."
+    },
+    {
+      "id": "local-coordinate-powers-only-strengthening",
+      "verdict": "supported",
+      "formalization": "prose localization consequence, not the literal generalized Lean signature",
+      "assessment": "For W=sum k X^iY^j, exponent reduction gives multiplication closure and Frobenius gives w^p=sum c_ij^p (X^p)^i (Y^p)^j in k. Nonzero w has inverse w^(p-1)/w^p in W, so W=k(X,Y). The degree condition gives a basis and every witness object lies there. No condition on ambient p-th powers outside this field is needed.",
+      "concrete_gap": null
+    },
+    {
+      "id": "statement-fidelity",
+      "verdict": "supported",
+      "assessment": "The actual Frobenius coefficient field, degree notion of p-independence, scalar-monomial exclusion, genuine witness, shared exponent, coefficient nonvanishing and uniqueness from either inclusion match the pinned original proposition."
+    },
+    {
+      "id": "bounded-experiments",
+      "verdict": "supported",
+      "scope": "Supplementary historical examples and arithmetic checks only; not a universal proof.",
+      "source_anchors": [
+        "verify.py:22-203",
+        "verify.py:206-227",
+        "requirements.txt:1"
+      ]
+    }
+  ],
+  "reused_historical_evidence": {
+    "fresh_replay": false,
+    "compiler": {
+      "version": "Lean 4.31.0",
+      "commit": "68218e876d2a38b1985b8590fff244a83c321783",
+      "mathlib_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+      "compiler_exit_code": 0,
+      "axiom_audit_exit_code": 0,
+      "proof_holes": [],
+      "final_theorem_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "evidence_status": "historical unchanged source-bound evidence, not a new compilation"
+    },
+    "finite_experiments": {
+      "primes": [2, 3, 5, 7],
+      "basis_product_rule_checks": 6246,
+      "explicit_witness_exponent_cases": 13,
+      "coefficient_field": "F_p(a,b) with algebraically independent a,b",
+      "ambient_model": "C[x,y]/(x^p-a,y^p-b), a genuine degree-p^2 exponent-one field",
+      "negative_control": {
+        "p": 3,
+        "U": "1+x+x^2",
+        "V": "1+y",
+        "intersection_matrix_rank": 6,
+        "intersection_dimension": 0,
+        "universal_claim": false
+      },
+      "universal_proof": false
+    },
+    "jacobian": {
+      "operation": "prime_field.matrix.nullspace.compute",
+      "scope": "Complete p=2 4x4 Euler-sum matrix nullspace",
+      "kernel": "span(1,xy)",
+      "not_joint_euler_kernel": true,
+      "proposition_proof": false,
+      "result_files_reaudited_here": false
+    }
+  },
+  "superseded_versions": [
+    {
+      "version": 1,
+      "status": "superseded_prose_only"
+    },
+    {
+      "version": 2,
+      "content_hash": "72f6234871ac133422667ae120703d2286e2a12b4bb44ada9a328c5281b3fd2d",
+      "certificate": "research/char-p-intersection/certificates/V_CHARP_INTERSECTION-c094f6f68594aaca.json",
+      "historical_mechanical_result": "inconclusive",
+      "historical_status": "proof_hole",
+      "compiler_executed": false,
+      "compiler_command": "",
+      "compiler_exit_code": null,
+      "formal_strings_compared_here": true,
+      "literal_difference_to_v3": "Only Chart.constant -> Chart.scalar_of_zero and the corresponding five q.constant calls -> q.scalar_of_zero.",
+      "changed_lines": [438, 565, 572, 656, 851, 853],
+      "mathematical_statement_or_proof_step_changed": false,
+      "assessment": "Lexical scanner false positive, not a failed mathematical proof; use the later exactly bound supporting certificate."
+    }
+  ],
+  "foundations": {
+    "external_mathematical_assumptions_beyond_explicit_hypotheses": [],
+    "formal_library": "Mathlib",
+    "trust_boundary": "Lean kernel/toolchain and Mathlib proved dependencies, the listed logical axioms, and parent-established source/certificate bindings.",
+    "cadoret_pirutka_citation_is_proof_premise": false,
+    "sympy": "1.14.0 for supplementary Python computations only"
+  },
+  "gaps_and_limits": {
+    "concrete_local_mathematical_gaps_found": [],
+    "formalization_boundary": "The weaker hypothesis X^p,Y^p in k is justified by localization in the assessment, but no existing declaration is claimed to have that exact ambient signature.",
+    "larger_reconstruction": "out_of_scope_not_certified_or_refuted",
+    "other_exclusions": [
+      "global exponent propagation between distinct pairs",
+      "line recovery across a multiplicative or symbol isomorphism",
+      "projective lifting",
+      "perfect-core recovery",
+      "entire manuscript or family correctness"
+    ],
+    "stale_labels_not_adopted": "Old open labels and pending_host_reviewer metadata do not override the exact historical v3 support; current native independent review remains pending."
+  },
+  "replay_decision": {
+    "needed_for_this_assessment": false,
+    "fresh_compilation": false,
+    "old_verify_py_executed": false,
+    "jacobian_executed": true,
+    "historical_jacobian_payload_replayed": false,
+    "reason": "No theorem-dependent replay was needed. A separate parent diagnostic on the different stacked joint Euler operator clarifies the scope of the old sum-operator check without extending the mathematics.",
+    "decision_relevant_question": null
+  },
+  "current_scope_diagnostic": {
+    "operation_id": "prime_field.matrix.nullspace.compute",
+    "payload": "jacobian-joint-euler-input.json",
+    "typed_output": "jacobian-joint-euler-output.json",
+    "contract": "../jacobian-nullspace-contract.json",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "adapter_exit_code": 0,
+    "structured_error": null,
+    "timeout": false,
+    "complete": true,
+    "operator": "8-by-4 stacked (D_X,D_Y) over F_2, coordinates (1,x,y,xy)",
+    "nullity": 1,
+    "basis": [[1, 0, 0, 0]],
+    "historical_sum_operator_nullity": 2,
+    "universal_theorem_evidence": false
+  },
+  "ledger_handoff": {
+    "owner": "parent Engineer",
+    "current_ledger_inspected_or_modified": false,
+    "source_translation_premise_to_record_if_absent": "Pinned 03-intersection.tex:17-37 states the exact local proposition, with p-independence defined at 02-symbols.tex:41-44 and quotient scalar notation at 02-symbols.tex:9-13. This is a source-reading premise, not an assumption that the proposition is true.",
+    "bind_reused_support_to": "V_CHARP_INTERSECTION@3, content hash bc454725f6e3913984e01e96fb83ae34f15ce44a47d81fa073dac264680d9bcb, and certificate V_CHARP_INTERSECTION-8ee0aa52ccd7bea2.json",
+    "additional_external_mathematical_premises_needed": [],
+    "keep_separate": [
+      "original proposition",
+      "formal generalization with all ambient p-th powers in k",
+      "prose consequence requiring only X^p,Y^p in k",
+      "downstream reconstruction obligations",
+      "current native independent review"
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CONT_CORE-28477b0a8751",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/204/first-pass/continuation/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/204/first-pass/continuation/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15773,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/204/first-pass/continuation/Main.lean",
+    "source_sha256": "ac8654f1e9d2771651c7e8fc043558617d35656e319e0f6e535da944f81aa259",
+    "statement_fidelity": "families/204/first-pass/continuation/statement_fidelity.md",
+    "statement_fidelity_sha256": "b72699d2c80b1bbd8872751842b0f8fb28d75b1c2e11cd18239a7c9920b5d35f",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/continuation/Main.lean",
+    "text": "import Mathlib\n\nnamespace Continuation\n\ntheorem interior_integer_hit\n    (s d : ℝ) (z : ℤ) (hs : 0 < s) (hs' : s < 1)\n    (hd : |d| ≤ 1) (hz : (1 - s) * d = (z : ℝ)) :\n    d = 0 := by\n  have hsmall : |(1 - s) * d| < 1 := by\n    rw [abs_mul, abs_of_pos (by linarith : 0 < 1 - s)]\n    calc\n      (1 - s) * |d| ≤ (1 - s) * 1 :=\n        mul_le_mul_of_nonneg_left hd (by linarith)\n      _ < 1 := by linarith\n  rw [hz, abs_lt] at hsmall\n  have hzsmall : (-1 : ℤ) < z ∧ z < 1 := by\n    exact_mod_cast hsmall\n  have hz0 : z = 0 := by omega\n  have hmul : (1 - s) * d = 0 := by simpa [hz0] using hz\n  exact (mul_eq_zero.mp hmul).resolve_left (by linarith)\n\ntheorem root_sum_time_strict_between\n    (f g : ℝ → ℝ) (hf : StrictMono f) (hg : StrictMono g)\n    (a b c : ℝ) (ha : f a = 0) (hb : g b = 0)\n    (hc : f c + g c = 0) (hab : a < b) :\n    a < c ∧ c < b := by\n  constructor\n  · by_contra hn\n    have hca : c ≤ a := le_of_not_gt hn\n    have hfc : f c ≤ f a := hf.monotone hca\n    have hgc : g c < g b := hg (lt_of_le_of_lt hca hab)\n    linarith\n  · by_contra hn\n    have hbc : b ≤ c := le_of_not_gt hn\n    have hgc : g b ≤ g c := hg.monotone hbc\n    have hfc : f a < f c := hf (lt_of_lt_of_le hab hbc)\n    linarith\n\ntheorem root_sum_time_tie\n    (f g : ℝ → ℝ) (hf : StrictMono f) (hg : StrictMono g)\n    (a c : ℝ) (ha : f a = 0) (hb : g a = 0)\n    (hc : f c + g c = 0) :\n    c = a := by\n  rcases lt_trichotomy c a with h | h | h\n  · have hfc := hf h\n    have hgc := hg h\n    linarith\n  · exact h\n  · have hfc := hf h\n    have hgc := hg h\n    linarith\n\ndef MedianOrder (i j h : ℝ) : Prop :=\n  (i < j ∧ i < h ∧ h < j) ∨\n  (i = j ∧ h = i) ∨\n  (j < i ∧ j < h ∧ h < i)\n\ntheorem root_sum_median_order\n    (f g : ℝ → ℝ) (hf : StrictMono f) (hg : StrictMono g)\n    (i j h : ℝ) (hi : f i = 0) (hj : g j = 0)\n    (hh : f h + g h = 0) :\n    MedianOrder i j h := by\n  rcases lt_trichotomy i j with hij | hij | hij\n  · exact Or.inl ⟨hij, root_sum_time_strict_between f g hf hg i j h hi hj hh hij⟩\n  · subst j\n    exact Or.inr (Or.inl ⟨rfl, root_sum_time_tie f g hf hg i h hi hj hh⟩)\n  · have hm := root_sum_time_strict_between g f hg hf j i h hj hi\n      (by linarith) hij\n    exact Or.inr (Or.inr ⟨hij, hm⟩)\n\ntheorem a2_diamond_descent (i j h : ℝ) (hm : MedianOrder i j h) :\n    (j < i → j < i) ∧\n    (h < j → i < j) ∧\n    (h < i → j < i) ∧\n    (i < j → i < j) ∧\n    (i < j → h < j) ∧\n    (j < h → j < h) ∧\n    (j < i → h < i) ∧\n    (i < h → i < h) := by\n  rcases hm with ⟨_, _, _⟩ | ⟨_, _⟩ | ⟨_, _, _⟩ <;>\n    refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> intro H <;> linarith\n\ntheorem pair_replacement_lex\n    (pre post : List ℝ) (a b c d : ℝ) (hca : c < a) :\n    List.Lex (· < ·) (pre ++ c :: d :: post)\n      (pre ++ a :: b :: post) := by\n  exact List.Lex.append_left _ (List.Lex.rel hca) pre\n\ntheorem finite_sorting_normal_form\n    {A V : Type*} [Fintype A] [LinearOrder V]\n    (score : A → V) (step : A → A → Prop)\n    (decreases : ∀ {a b}, step a b → score b < score a) (start : A) :\n    ∃ finish, Relation.ReflTransGen step start finish ∧\n      ∀ next, ¬ step finish next := by\n  classical\n  let reached : Finset A :=\n    Finset.univ.filter (fun a => Relation.ReflTransGen step start a)\n  have hne : reached.Nonempty := by\n    refine ⟨start, ?_⟩\n    simp [reached, Relation.ReflTransGen.refl]\n  obtain ⟨finish, hfinish, hmin⟩ := reached.exists_min_image score hne\n  have hreach : Relation.ReflTransGen step start finish := by\n    simpa [reached] using hfinish\n  refine ⟨finish, hreach, ?_⟩\n  intro next hstep\n  have hnext : next ∈ reached := by\n    simpa [reached] using hreach.tail hstep\n  exact (not_lt_of_ge (hmin next hnext)) (decreases hstep)\n\ntheorem strict_descent_card_bound\n    {A V : Type*} [Fintype A] [LinearOrder V]\n    (score : A → V) (m : ℕ) (states : Fin (m + 1) → A)\n    (h : StrictAnti (fun i => score (states i))) :\n    m + 1 ≤ Fintype.card A := by\n  have hinj : Function.Injective states := by\n    intro i j hij\n    exact h.injective (congrArg score hij)\n  simpa using Fintype.card_le_of_injective states hinj\n\ntheorem orthogonal_parity_singularity\n    {I : Type*} [Fintype I] [DecidableEq I]\n    (P : Matrix I I ℝ) (ho : P * P.transpose = 1)\n    (hp : (-1 : ℝ) ^ Fintype.card I * P.det = -1) :\n    (1 - P).det = 0 := by\n  have hid : (-P) * (1 - P).transpose = 1 - P := by\n    rw [Matrix.transpose_sub, Matrix.transpose_one, mul_sub, mul_one, neg_mul, ho]\n    abel\n  have hdet := congrArg Matrix.det hid\n  rw [Matrix.det_mul, Matrix.det_neg, Matrix.det_transpose, hp] at hdet\n  linarith\n\ntheorem common_potential_of_fixed_vector\n    {E V : Type*} [AddCommGroup E] [Module ℝ E]\n    [AddCommGroup V] [Module ℝ V]\n    (B : V →ₗ[ℝ] E) (G : E →ₗ[ℝ] V) (P : E →ₗ[ℝ] E)\n    (ht : B.comp G = LinearMap.id - P)\n    (hG : Function.Injective G) (d : V)\n    (hk : ∀ v, B v = 0 → ∃ a : ℝ, v = a • d)\n    (x : E) (hx : x ≠ 0) (hfix : P x = x) :\n    ∃ L, G L = d := by\n  have hzero : B (G x) = 0 := by\n    have heq := LinearMap.congr_fun ht x\n    simpa [hfix] using heq\n  obtain ⟨a, ha⟩ := hk (G x) hzero\n  have ha0 : a ≠ 0 := by\n    intro hz\n    have hGx : G x = 0 := by simpa [hz] using ha\n    apply hx\n    apply hG\n    simpa using hGx\n  refine ⟨a⁻¹ • x, ?_⟩\n  rw [map_smul, ha, smul_smul, inv_mul_cancel₀ ha0, one_smul]\n\ntheorem endpoint_of_compact_right_extension\n    (S : Set ℝ) (hcompact : IsCompact S) (hne : S.Nonempty)\n    (hbound : ∀ s ∈ S, s ≤ 1)\n    (hextend : ∀ s ∈ S, s < 1 → ∃ t ∈ S, s < t) :\n    1 ∈ S := by\n  obtain ⟨s, hs⟩ := hcompact.exists_isGreatest hne\n  have hsle : s ≤ 1 := hbound s hs.1\n  have hseq : s = 1 := by\n    by_contra hne\n    obtain ⟨t, ht, hst⟩ := hextend s hs.1 (lt_of_le_of_ne hsle hne)\n    exact (not_lt_of_ge (hs.2 ht)) hst\n  simpa [hseq] using hs.1\n\nend Continuation\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/continuation/statement_fidelity.md",
+    "text": "# Statement fidelity: continuation core\n\nThe declarations in `Main.lean`, namespace `Continuation`, formalize universal\nalgebraic, order-theoretic, and compactness facts used in the independent\ncorank-one continuation alternative in `report.md`. This is not a Lean\nformalization of the entire schedule theorem or of type-D saturation.\n\n`interior_integer_hit` quantifies over real `s,d` and integer `z`. With\n`0<s<1`, `|d|<=1`, and `(1-s)d=z`, it concludes `d=0`. Both coefficient\nand gap strictness use exactly this arithmetic statement.\n\n`root_sum_time_strict_between` concerns arbitrary strictly increasing real\nfunctions `f,g`, their zeros `a,b`, and a zero `c` of their sum. For `a<b`\nit proves `a<c<b`. `root_sum_time_tie` proves that coincident zeros force\nthe sum's zero to be the same. `root_sum_median_order` combines these into\nthe two strict orders or the all-equal case. No differentiability or\nlinearity is assumed, so these results apply across polygonal shape\nbreaks. Existence of candidate zeros and orientation of the root level\nfunctions are established in the mathematical report, not assumed\nconsequences of these Lean declarations.\n\n`a2_diamond_descent` takes that median order for candidate times `i,j,h`\nand proves the eight first-time inequalities for the four manuscript\ndiamonds, in both directions. The implications are listed in this order:\n`ij -> jh`, `jh -> ij`, `ih -> ji`, `ji -> ih`,\n`ji -> hj`, `hj -> ji`, `ij -> hi`, `hi -> ij`.\nThe antecedent in each implication is inversion of the old pair's times;\nthe conclusion says that the new pair's first time is strictly earlier.\nThe admissible S3 diamond classification and root coefficient maps are\nindependently checked by `verify.py` and proved in `report.md`; the Lean\ntheorem does not itself classify Bruhat intervals.\n\n`pair_replacement_lex` allows arbitrary unchanged real-list prefix and\nsuffix and arbitrary old and new second times. If the new first time\nis earlier, the whole new time list is strictly smaller in `List.Lex`.\n\n`finite_sorting_normal_form` quantifies over any finite state type `A`,\nany linearly ordered score type `V`, and any relation whose steps\nstrictly decrease the score. From every starting state it proves\nexistence of a reachable state with no further step. When every\nunsorted state has an allowed decreasing step, this is a sorted state.\n`strict_descent_card_bound` proves that a strictly score-decreasing\nsequence of `m+1` such states has `m+1<=card(A)`. The report identifies\nthe finite root-word states and the lexicographic score; that\nidentification and the bound on their number are not hidden hypotheses\nabout arbitrary real time lists.\n\n`orthogonal_parity_singularity` quantifies over matrices on an arbitrary\nfinite index type, over the real field. It assumes `P P^T=I` and\n`(-1)^card(I) det(P)=-1` and concludes `det(I-P)=0`. A product of `n+1`\nroot reflections in dimension `n` satisfies exactly that parity condition.\nThe determinant-zero-to-fixed-vector implication is ordinary linear\nalgebra used explicitly in the report, not a separately formalized\nexistence conclusion of this declaration.\n\n`common_potential_of_fixed_vector` quantifies over real vector spaces\n`E,V` and linear maps `B:V->E`, `G:E->V`, `P:E->E`. Its hypotheses are\n`B G=I-P`, injectivity of `G`, that every vector in `ker(B)` is a\nscalar multiple of a specified `d`, and a nonzero fixed vector `x` of\n`P`. It concludes `G L=d` for some `L`. In the schedule application\n`B` has position-root columns, `G` is pairing with velocity roots,\nand `d` is the primitive half-relation. The report proves these\nhypotheses from full root-lattice generation and corank one.\n\n`endpoint_of_compact_right_extension` concerns an arbitrary nonempty\ncompact subset `S` of the real line bounded above by one. If every\n`s` in it below one has a strictly larger point still in `S`, it\nproves `1` belongs to `S`. The report constructs this compact\nfeasibility set from finitely many discrete root words and bounded\nintegral extrapolations. Lean checks the conclusion given those\ntopological hypotheses, not the schedule-to-set construction.\n\nAll hypotheses above are explicit in the formal statements. None is\nan assumption that a schedule continues, that a sorted state exists,\nor that the manuscript's main theorem holds. Signed-graph minor bounds,\nrank-two geometric admissibility, and assembly of these core facts\nremain mathematical proof obligations for independent human review.\n"
+  },
+  "subject": {
+    "content_hash": "b0c36f0d7928ae3cb216ebad02bbdf91ab01c1c987c51cb7dfef315e425d032a",
+    "kind": "claim",
+    "subject_id": "C_CONT_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

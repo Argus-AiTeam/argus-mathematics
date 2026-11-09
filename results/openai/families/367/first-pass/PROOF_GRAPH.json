@@ -1,0 +1,149 @@
+{
+  "goal": "C9000367",
+  "routes": {
+    "R_UNIVERSAL_SEMANTICS": {
+      "goal": "C_UNIVERSAL",
+      "obligations": ["C_INTERIOR", "C_BOUNDARY", "C_DECODING"]
+    }
+  },
+  "nodes": {
+    "C9000367": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 367 (The critical dimension for the one-phase Bernoulli problem.; papers: The critical dimension for one-phase Bernoulli minimizers; Lean status: Partially/Comparator formalized (lean/docs/367.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_UNIVERSAL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN": {
+      "statement": "Every nonzero one-homogeneous global Bernoulli minimizer in dimensions at most six is flat, and a nonflat minimizer exists in dimension seven.",
+      "status": "open",
+      "depends_on": ["C_KNOWN_INTERVAL", "C_REDUCTION", "C_GEOMETRY", "C_UNIVERSAL", "C_FLUX", "C_CUTOFF"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-critical-dimension-for-one-phase-Bernoulli-minimizers-September-24-2026/build/paper.tex"]
+    },
+    "C_KNOWN_INTERVAL": {
+      "statement": "The established comparison interval is 5 <= d_* <= 7; smooth-cross-section stable-cone rigidity in dimensions at most four and a minimizing example in dimension seven are external inputs.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/universal_tensor_audit/report.md"]
+    },
+    "C_REDUCTION": {
+      "statement": "A first nonflat minimizer in dimension five or six yields a smooth nonflat spherical component in S^5, with at most two suspension tips.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-critical-dimension-for-one-phase-Bernoulli-minimizers-September-24-2026/build/sections/reductions.tex"]
+    },
+    "C_GEOMETRY": {
+      "statement": "The normalized spherical jets satisfy the symmetry, trace, gradient, and strict boundary-sign hypotheses needed for the algebraic proposition.",
+      "status": "open",
+      "depends_on": ["C_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-critical-dimension-for-one-phase-Bernoulli-minimizers-September-24-2026/build/sections/geometry.tex"]
+    },
+    "C_UNIVERSAL": {
+      "statement": "Proposition cert:universal holds for every literally allowed algebraic datum with the printed Table I coefficients and stated constants.",
+      "status": "open",
+      "depends_on": ["C_INTERIOR", "C_BOUNDARY", "C_DECODING"],
+      "reviewer_confirmed": false,
+      "engineer_verified": true,
+      "evidence": ["research/openai_manuscript/The-critical-dimension-for-one-phase-Bernoulli-minimizers-September-24-2026/build/sections/certificate.tex", "research/universal_tensor_audit/report.md", "research/universal_tensor_audit/exact_certificate.json"]
+    },
+    "C_INTERIOR": {
+      "statement": "The printed interior polynomial I is at least 438907/12000000 times (z^2 + |ell|^2) for every STF unit A, STF cubic X, and g^2+|p|^2 <= 1, with w,z,ell unrestricted.",
+      "status": "open",
+      "depends_on": ["C_DECODING", "C_POSITIVE_PROJECTIONS", "C_NORM_BOUNDS", "C_INTERIOR_IDENTITY", "C_INTERIOR_MARGIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/universal_tensor_audit/report.md", "research/universal_tensor_audit/exact_certificate.json"]
+    },
+    "C_BOUNDARY": {
+      "statement": "The printed boundary polynomial S is at least 6984137359/31250000000 for every STF unit A and unit eigenvector p with eigenvalue lambda<0.",
+      "status": "open",
+      "depends_on": ["C_DECODING", "C_BOUNDARY_IDENTITY", "C_BOUNDARY_MARGIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/universal_tensor_audit/report.md", "research/universal_tensor_audit/exact_certificate.json"]
+    },
+    "C_DECODING": {
+      "statement": "The printed word decoding gives the stated tensor slot semantics, orthogonal equivariance, parity, and vanishing of P at g=0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/universal_tensor_audit/report.md", "research/universal_tensor_audit/tensor_semantics.py"]
+    },
+    "C_FLUX": {
+      "statement": "The universal algebraic inequalities imply the interior divergence and boundary signed-flux comparisons on geometrically admissible normalized jets.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRY", "C_UNIVERSAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-critical-dimension-for-one-phase-Bernoulli-minimizers-September-24-2026/build/sections/flux.tex"]
+    },
+    "C_CUTOFF": {
+      "statement": "Weighted Bochner integrability and suspension estimates justify the stability test across Hessian zeros and tips, forcing the minimizing-cone contradiction.",
+      "status": "open",
+      "depends_on": ["C_FLUX"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-critical-dimension-for-one-phase-Bernoulli-minimizers-September-24-2026/build/sections/cutoffs.tex"]
+    },
+    "C_POSITIVE_PROJECTIONS": {
+      "statement": "Each projection used in Table II has an exactly symmetric integer component matrix P satisfying P^2=cP with c>0, hence is positive semidefinite on its entire real tensor space.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verified": true,
+      "evidence": ["research/universal_tensor_audit/verify.py", "research/universal_tensor_audit/exact_certificate.json"]
+    },
+    "C_CUBIC_CORE": {
+      "statement": "For arbitrary real STF A in dimension five and arbitrary v, the full-component quartic identity |7 SymSum(v tensor A)-2J(Av)|^2=147|A|^2|v|^2+210|Av|^2 holds.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verified": true,
+      "kernel_verified": true,
+      "evidence": ["research/universal_tensor_audit/lean/Main.lean", "research/universal_tensor_audit/lean/statement_fidelity.md", "research/universal_tensor_audit/lean/certificates/C_CUBIC_CORE-7d26cc23babbd429.json", "research/universal_tensor_audit/exact_certificate.json"]
+    },
+    "C_NORM_BOUNDS": {
+      "statement": "On the literal tensor domain, the matrix, cubic trace, 5/7 cubic contraction, mixed g-p, and complete graph magnitude bounds used for every remainder term hold universally.",
+      "status": "open",
+      "depends_on": ["C_CUBIC_CORE"],
+      "reviewer_confirmed": false,
+      "engineer_verified": true,
+      "evidence": ["research/universal_tensor_audit/report.md", "research/universal_tensor_audit/exact_certificate.json"]
+    },
+    "C_INTERIOR_IDENTITY": {
+      "statement": "Literal Einstein-index expansion of I and the nineteen Gram blocks gives exactly the 1714 integer coefficients of Q^2(Gamma+sum d_i y_i^2-I) in exact_certificate.json.",
+      "status": "open",
+      "depends_on": ["C_DECODING"],
+      "reviewer_confirmed": false,
+      "engineer_verified": true,
+      "evidence": ["research/universal_tensor_audit/verify.py", "research/universal_tensor_audit/tensor_semantics.py", "research/universal_tensor_audit/exact_certificate.json", "research/universal_tensor_audit/report.md"]
+    },
+    "C_INTERIOR_MARGIN": {
+      "statement": "Exact graph magnitude sums are dominated by Dbar, and weighted Young inequalities give the four positive slacks 673/18400, 438907/12000000, 2844869/24900000, 3479389/7600000.",
+      "status": "open",
+      "depends_on": ["C_NORM_BOUNDS", "C_INTERIOR_IDENTITY"],
+      "reviewer_confirmed": false,
+      "engineer_verified": true,
+      "evidence": ["research/universal_tensor_audit/exact_certificate.json", "research/universal_tensor_audit/report.md"]
+    },
+    "C_BOUNDARY_IDENTITY": {
+      "statement": "Direct diagonal tensor-component substitution, degree-preserving homogenization on R=1, and permutation averaging give exactly the eleven printed boundary remainder coefficients.",
+      "status": "open",
+      "depends_on": ["C_DECODING"],
+      "reviewer_confirmed": false,
+      "engineer_verified": true,
+      "evidence": ["research/universal_tensor_audit/verify.py", "research/universal_tensor_audit/exact_certificate.json", "research/universal_tensor_audit/report.md"]
+    },
+    "C_BOUNDARY_MARGIN": {
+      "statement": "The absolute sum of the eleven boundary coefficient numerators is 1656725282; nonnegative weighted squares and |x_i|<=1 on R=1 imply S>=6984137359/31250000000 for lambda<=0.",
+      "status": "open",
+      "depends_on": ["C_BOUNDARY_IDENTITY"],
+      "reviewer_confirmed": false,
+      "engineer_verified": true,
+      "evidence": ["research/universal_tensor_audit/exact_certificate.json", "research/universal_tensor_audit/report.md"]
+    }
+  }
+}

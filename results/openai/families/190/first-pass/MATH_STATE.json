@@ -1,0 +1,897 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX9000190",
+      "version": 1,
+      "statement": "OpenAI Math Audit #190: Polynomial removal fails for ordered binary matrices.",
+      "definitions": {
+        "openai_family": "190"
+      },
+      "content_hash": "61d61f7f514a3880e0f66d3f82768b99251b573df3d32f4c86dcc3804684b3e3"
+    },
+    {
+      "context_id": "CTX_LITERAL",
+      "version": 1,
+      "statement": "Literal September 25, 2026 manuscript family 190: ordered copies preserve both axis orders and all binary entries; edits may flip arbitrary cells in either direction.",
+      "definitions": {
+        "h": "integer at least 1",
+        "m": "2^h",
+        "n": "(386h+2)m",
+        "H": "the literal 66 by 66 pattern in sections/02-construction.tex, eq:pattern-definition",
+        "A_h": "the literal host with reversed column recursion, shared singleton leaves, and the four threshold rules in sections/02-construction.tex"
+      },
+      "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C9000190",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000190",
+        "content_hash": "61d61f7f514a3880e0f66d3f82768b99251b573df3d32f4c86dcc3804684b3e3"
+      },
+      "natural_statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 190 (Polynomial removal fails for ordered binary matrices.; papers: Polynomial removal fails for ordered binary matrices; Lean status: Partially/Comparator formalized (lean/docs/190.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "bfdd4ba385f9fafe4a203929472afd0127d05899e06d3340c92f28d4336b7a01"
+    },
+    {
+      "claim_id": "C_SCOPE_SOURCE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Scoped primary-source facts: the literal anchor and body definitions, the host modes and orientations, the stated m^2 lower bound and leaf-diagonal copy bound, and the explicitly failed diagonal-flip repair are recorded in research/AUDIT_REPORT.md; they are source facts rather than an independent verification.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "c54dffcaf7c7f2090a41f6be1f00b6eded40185c4632ccab1bfa6b971371c5a9"
+    },
+    {
+      "claim_id": "C_SCOPE_SOURCE",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Scoped primary-source facts: the literal anchor and body definitions, the host modes and orientations, the stated m^2 lower bound and leaf-diagonal copy bound, and the explicitly failed diagonal-flip repair are recorded in research/AUDIT_REPORT.md; they are source facts rather than an independent verification.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SRC_PATTERN_HOST",
+          "statement": "The manuscript defines S, H, the six modes per level, reversed column recursion, and shared singleton leaves exactly as transcribed in the report.",
+          "source": "Staged OpenAI preprint, September 25, 2026, build/sections/02-construction.tex: eq:pattern-definition, eq:tree-orders, eq:body-modes, eq:variable-entries; source directly read.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "30cfaf395cdd399ff1a7016de901c3d54e47c6277baa72be47087c2bd116f6f2"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "c54dffcaf7c7f2090a41f6be1f00b6eded40185c4632ccab1bfa6b971371c5a9"
+    },
+    {
+      "claim_id": "C_SCOPE_SOURCE",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Scoped primary-source facts: the literal anchor and body definitions, the host modes and orientations, the stated m^2 lower bound and leaf-diagonal copy bound, and the explicitly failed diagonal-flip repair are recorded in research/AUDIT_REPORT.md; they are source facts rather than an independent verification.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SRC_PATTERN_HOST",
+          "statement": "The manuscript defines S, H, the six modes per level, reversed column recursion, and shared singleton leaves exactly as transcribed in the report.",
+          "source": "Staged OpenAI preprint, September 25, 2026, build/sections/02-construction.tex: eq:pattern-definition, eq:tree-orders, eq:body-modes, eq:variable-entries; source directly read.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "30cfaf395cdd399ff1a7016de901c3d54e47c6277baa72be47087c2bd116f6f2"
+        },
+        {
+          "assumption_id": "SRC_PRIOR_ESTIMATES",
+          "statement": "The manuscript asserts minimum binary edit distance at least m^2 and N_H(A_h) at most m*n^130, not an exact-distance formula.",
+          "source": "Staged OpenAI preprint, September 25, 2026, build/sections/04-distance.tex Proposition prop:distance and build/sections/03b-count.tex Proposition prop:copy-count; both directly read.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "40779606e5505d32db52e2d7c0e266da570b22b431b29370cbfe5d295cca48a7"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "c54dffcaf7c7f2090a41f6be1f00b6eded40185c4632ccab1bfa6b971371c5a9"
+    },
+    {
+      "claim_id": "C_SCOPE_SOURCE",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Scoped primary-source facts: the literal anchor and body definitions, the host modes and orientations, the stated m^2 lower bound and leaf-diagonal copy bound, and the explicitly failed diagonal-flip repair are recorded in research/AUDIT_REPORT.md; they are source facts rather than an independent verification.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SRC_PATTERN_HOST",
+          "statement": "The manuscript defines S, H, the six modes per level, reversed column recursion, and shared singleton leaves exactly as transcribed in the report.",
+          "source": "Staged OpenAI preprint, September 25, 2026, build/sections/02-construction.tex: eq:pattern-definition, eq:tree-orders, eq:body-modes, eq:variable-entries; source directly read.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "30cfaf395cdd399ff1a7016de901c3d54e47c6277baa72be47087c2bd116f6f2"
+        },
+        {
+          "assumption_id": "SRC_PRIOR_ESTIMATES",
+          "statement": "The manuscript asserts minimum binary edit distance at least m^2 and N_H(A_h) at most m*n^130, not an exact-distance formula.",
+          "source": "Staged OpenAI preprint, September 25, 2026, build/sections/04-distance.tex Proposition prop:distance and build/sections/03b-count.tex Proposition prop:copy-count; both directly read.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "40779606e5505d32db52e2d7c0e266da570b22b431b29370cbfe5d295cca48a7"
+        },
+        {
+          "assumption_id": "SRC_FAILED_REPAIR",
+          "statement": "Flipping all m diagonal leaf entries from one to zero creates new copies in terminal plus W modes; this is a known failed repair, not a manuscript flaw.",
+          "source": "Staged OpenAI preprint, September 25, 2026, build/sections/03b-count.tex Remark rem:hitting-not-repair; directly read including the displayed witness.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "b23a2f91af7a7915f0deed42651a663f8118bff6d7858116368d594ef6ca9a49"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "c54dffcaf7c7f2090a41f6be1f00b6eded40185c4632ccab1bfa6b971371c5a9"
+    },
+    {
+      "claim_id": "C_EXACT_DISTANCE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "For every integer h>=1, the literal host satisfies min_edits_H(A_h)=m^2=4^h and N_H(A_h)=2*m^130, in particular N_H(A_h)<=m*n^130.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "16c64a649821c9f465756b495702408ee7afaec1dcd0e128b2fa928d299aae76"
+    },
+    {
+      "claim_id": "C_RADIX_SELECTION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "For m=q*k with positive q,k and any fixed shift a in [0,m), b maps bijectively to (floor(((a+b) mod m)/q), b mod q) in [0,k) times [0,q). Consequently the m^2 cyclic-radix path selections partition all protected cells.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "472365effe996ce3d3831c3f3717e0d5db1c7869742de94ac17516dc2ab9a7e7"
+    },
+    {
+      "claim_id": "C_PATH_OBSTRUCTION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Along any common root-to-leaf path with unchanged sampled anchors, dummy incidences, plus root one, and minus root zero, H-freeness forces plus diagonal one and minus diagonal zero at every level, contradicting the shared leaf.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f07795bcaaa9253a5ae6cf21067b564cc38cda32b7ae43dee468ec6ee8adb36f"
+    },
+    {
+      "claim_id": "C_LOWER_BOUND",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Every binary matrix differing from A_h in fewer than m^2 arbitrary cells contains H; the deterministic protected-selection partition and path obstruction prove this for all h>=1.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "025bd79324cf322d48f363e3c8371c7742b73b5adcce528771fc8a8d6e9ee3c0"
+    },
+    {
+      "claim_id": "C_DELETION_RIGIDITY",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Deleting any collection of whole unit-vector incidences between a non-anchor position and an anchor group, while leaving anchor-anchor and nonanchor-nonanchor entries unchanged, preserves anchor rigidity and cannot create any ordered H-copy.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "cb304feb5506db9c7493a312f41b16e0803492981045a5daba559c8232410b80"
+    },
+    {
+      "claim_id": "C_ORIGINAL_COPIES",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Every H-copy in A_h has mode W_{h,d}^-, equal leaf row and column index p of parity d, a dummy row, and a column in C_{h-1}^-(floor(p/2)); hence N_H(A_h)=2*m^130.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a24c7ea8a214e4d8a3452a9413d3b1001eaa2bb8cddba82d72356ff388cf7513"
+    },
+    {
+      "claim_id": "C_EXPLICIT_REPAIR",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Deleting the ones in R_{h,d}^- times the first anchor-column group of W_{h,d}^- for d=0,1 changes exactly m^2 cells and leaves an H-free binary matrix.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "e2469b9b2dea330cd19cd91e21127b03116169dfac57e6a5a273629ec96b89a7"
+    },
+    {
+      "claim_id": "C_DIAGONAL_FAILURE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "The m diagonal leaf flips fail: for every leaf p, the unchanged terminal plus anchor, leaf row, dummy row, parent plus column, and leaf column form a new H-copy.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "64d69ae12f5784f1b01197c57a929d0a7bc89a763a2abe7bdc19ca6c150e2d40"
+    },
+    {
+      "claim_id": "C_DELETION_RIGIDITY",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Deleting any collection of whole unit-vector incidences between a variable position and an anchor group, leaving all dummy incidences, anchor-anchor entries, and nonanchor-nonanchor entries unchanged, preserves anchor rigidity and cannot create any ordered H-copy.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "9cd74c402235cb69e1bd5e82ed43aa580ffcd746dd7f41ebe47288a4f06a85b0"
+    },
+    {
+      "claim_id": "C_ANCHOR_PROPERTIES",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "The literal S has pairwise distinct rows and columns, minimum row weight 58 and column weight 48, at most one zero in each restriction to the first 32 positions, and all 32 five-bit words in its corner.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a3880d42721c04436e1bbc7736c43f4b57860855299a15ef0c674767af9f8a31"
+    },
+    {
+      "claim_id": "C_NONANCHOR_TRACES",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "On any five non-anchor columns, non-anchor rows realize at most 27 traces; the suffix-union bound is 1+sum_{j=0}^3 binom(5,j)=27.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "db4cab78fdacf4bda9cf77b14618ae49b23b0fb56ce9a206ad27a3571ef242c8"
+    },
+    {
+      "claim_id": "C_MODE_INCIDENCE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "Each variable position on either axis participates in at most four modes, with at most one one per participating anchor mode; deleting whole variable-to-anchor unit incidences preserves these bounds.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "8e24b89aa3cf2c7db75d43ceca9cf0ab875237a705665fc3bfa5b55594400015"
+    },
+    {
+      "claim_id": "C_LEAN_CORE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "The unbounded cyclic-radix map is injective; the four raw Boolean P-avoidance constraints propagate opposite roots to a contradictory shared leaf at every depth; common-parity mode arithmetic gives exactly the terminal-minus equality case; unit-signature deletion and the copy/repair power identities hold. Exact quantifiers and remaining host-level prose dependencies are in research/STATEMENT_FIDELITY.md.",
+      "formal_statement": "import Mathlib\n\nnamespace OrderedMatrix190\n\ntheorem radix_unique (m q a b c : Nat) (hq : q ∣ m)\n    (hb : b < m) (hc : c < m)\n    (hquot : (a + b) % m / q = (a + c) % m / q)\n    (hrem : b % q = c % q) : b = c := by\n  have hr : (a + b) % m % q = (a + c) % m % q := by\n    calc\n      (a + b) % m % q = (a + b) % q := Nat.mod_mod_of_dvd _ hq\n      _ = (a % q + b % q) % q := Nat.add_mod _ _ _\n      _ = (a % q + c % q) % q := by rw [hrem]\n      _ = (a + c) % q := (Nat.add_mod _ _ _).symm\n      _ = (a + c) % m % q := (Nat.mod_mod_of_dvd _ hq).symm\n  have hs : (a + b) % m = (a + c) % m := by\n    calc\n      (a + b) % m = (a + b) % m % q + q * ((a + b) % m / q) :=\n        (Nat.mod_add_div _ _).symm\n      _ = (a + c) % m % q + q * ((a + c) % m / q) := by rw [hr, hquot]\n      _ = (a + c) % m := Nat.mod_add_div _ _\n  have hbc : Nat.ModEq m b c :=\n    Nat.ModEq.add_left_cancel' a (show Nat.ModEq m (a + b) (a + c) from hs)\n  simpa only [Nat.ModEq, Nat.mod_eq_of_lt hb, Nat.mod_eq_of_lt hc] using hbc\n\ntheorem cyclic_radix_injective (m q a : Nat) (hq : q ∣ m) :\n    Function.Injective\n      (fun b : Fin m => ((a + b.val) % m / q, b.val % q)) := by\n  intro b c h\n  apply Fin.ext\n  exact radix_unique m q a b.val c.val hq b.isLt c.isLt\n    (congrArg Prod.fst h) (congrArg Prod.snd h)\n\ndef AvoidP (a b c d : Bool) : Prop :=\n  ¬ (a = true ∧ b = false ∧ c = true ∧ d = true)\n\ntheorem avoid_vertical_iff (a b : Bool) :\n    AvoidP true a true b ↔ (b = true → a = true) := by\n  cases a <;> cases b <;> decide\n\ntheorem avoid_horizontal_iff (a b : Bool) :\n    AvoidP a b true true ↔ (a = true → b = true) := by\n  cases a <;> cases b <;> decide\n\ntheorem shared_leaf_obstruction (h : Nat)\n    (plus minus crossPlus crossMinus : Nat → Bool)\n    (hp0 : plus 0 = true) (hm0 : minus 0 = false)\n    (vp : ∀ i, i < h → AvoidP true (crossPlus i) true (plus i))\n    (vm : ∀ i, i < h → AvoidP true (minus i) true (crossMinus i))\n    (wp : ∀ i, i < h → AvoidP (crossPlus i) (plus (i + 1)) true true)\n    (wm : ∀ i, i < h → AvoidP (minus (i + 1)) (crossMinus i) true true)\n    (shared : plus h = minus h) : False := by\n  have propagation : ∀ i, i ≤ h → plus i = true ∧ minus i = false := by\n    intro i\n    induction i with\n    | zero =>\n        intro _\n        exact ⟨hp0, hm0⟩\n    | succ i ih =>\n        intro hi\n        have ilt : i < h := by omega\n        obtain ⟨hpi, hmi⟩ := ih (by omega)\n        have hcp : crossPlus i = true :=\n          (avoid_vertical_iff (crossPlus i) (plus i)).mp (vp i ilt) hpi\n        have hpn : plus (i + 1) = true :=\n          (avoid_horizontal_iff (crossPlus i) (plus (i + 1))).mp (wp i ilt) hcp\n        have hcm : crossMinus i = false := by\n          cases he : crossMinus i with\n          | false => rfl\n          | true =>\n              have bad : minus i = true :=\n                (avoid_vertical_iff (minus i) (crossMinus i)).mp (vm i ilt) he\n              rw [hmi] at bad\n              contradiction\n        have hmn : minus (i + 1) = false := by\n          cases he : minus (i + 1) with\n          | false => rfl\n          | true =>\n              have bad : crossMinus i = true :=\n                (avoid_horizontal_iff (minus (i + 1)) (crossMinus i)).mp (wm i ilt) he\n              rw [hcm] at bad\n              contradiction\n        exact ⟨hpn, hmn⟩\n  obtain ⟨hph, hmh⟩ := propagation h le_rfl\n  rw [shared, hmh] at hph\n  contradiction\n\ntheorem v_plus_exclusion (p a b : Nat)\n    (horder : p / 2 ≤ a) (hone : a ≤ b) : ¬ b < p / 2 := by\n  omega\n\ntheorem v_minus_exclusion (p a b : Nat)\n    (horder : a ≤ p / 2) (hzero : b ≤ a) : ¬ p / 2 < b := by\n  omega\n\ntheorem parity_parent_order (p q : Nat)\n    (hparity : p % 2 = q % 2) (hparent : p / 2 ≤ q / 2) : p ≤ q := by\n  omega\n\ntheorem w_plus_exclusion (p q b : Nat)\n    (hparity : p % 2 = q % 2)\n    (horder : b ≤ q / 2) (hone : p / 2 ≤ b) : ¬ q < p := by\n  have hpq := parity_parent_order p q hparity (by omega)\n  omega\n\ntheorem w_minus_nonleaf_exclusion (p q b : Nat)\n    (hparity : p % 2 = q % 2)\n    (horder : q / 2 ≤ b) (hzero : b ≤ p / 2) : ¬ p < q := by\n  have hqp := parity_parent_order q p hparity.symm (by omega)\n  omega\n\ntheorem w_minus_leaf_classification (p q b : Nat)\n    (hparity : p % 2 = q % 2)\n    (horder : q / 2 ≤ b) (hzero : b ≤ p / 2) (hone : p ≤ q) :\n    p = q ∧ b = p / 2 := by\n  have hqp := parity_parent_order q p hparity.symm (by omega)\n  have heq : p = q := by omega\n  constructor\n  · exact heq\n  · omega\n\ndef unitSignature (j u : Fin 64) : Bool := decide (u = j)\n\ntheorem unit_deletion_no_new_role (j l : Fin 64) (g : Fin 64 → Bool)\n    (hmono : ∀ u, g u = true → unitSignature l u = true)\n    (hrole : g = unitSignature j) : j = l := by\n  have hj : g j = true := by simp [hrole, unitSignature]\n  have hl := hmono j hj\n  simpa [unitSignature] using hl\n\ndef suppressFirst (g : Fin 64 → Bool) (u : Fin 64) : Bool :=\n  if u = 0 then false else g u\n\ntheorem suppress_first_unit :\n    suppressFirst (unitSignature 0) = fun _ => false := by\n  funext u\n  by_cases hu : u = 0 <;> simp [suppressFirst, unitSignature, hu]\n\ntheorem two_rectangles (t : Nat) :\n    t * (2 * t) + t * (2 * t) = (2 * t) ^ 2 := by\n  ring\n\ntheorem repair_power_count (r : Nat) :\n    2 ^ r * 2 ^ (r + 1) + 2 ^ r * 2 ^ (r + 1) = (2 ^ (r + 1)) ^ 2 := by\n  rw [pow_succ]\n  ring\n\ntheorem exact_copy_count_identity (m : Nat) :\n    m * m * 2 * m ^ 128 = 2 * m ^ 130 := by\n  ring\n\ntheorem squared_power (h : Nat) : (2 ^ h) ^ 2 = (4 : Nat) ^ h := by\n  calc\n    (2 ^ h) ^ 2 = 2 ^ h * 2 ^ h := by ring\n    _ = (2 * 2) ^ h := (mul_pow 2 2 h).symm\n    _ = (4 : Nat) ^ h := by norm_num\n\ntheorem retained_copy_bound (m n : Nat) (hm : 2 ≤ m) (hn : m ≤ n) :\n    2 * m ^ 130 ≤ m * n ^ 130 := by\n  calc\n    2 * m ^ 130 ≤ m * m ^ 130 := Nat.mul_le_mul_right _ hm\n    _ ≤ m * n ^ 130 := Nat.mul_le_mul_left _ (Nat.pow_le_pow_left hn)\n\nend OrderedMatrix190\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "89985b7235f23a71dfe3d91fd90c292bd2717ed2b2be99c2b4a1c2ca9233f0ef"
+    },
+    {
+      "claim_id": "C_SIGNATURE_PROFILE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "For every subset T of leaves, suppressing the entire first anchor-column incidence of each leaf in its terminal-minus mode costs m*|T| edits and leaves exactly 2*(m-|T|)*m^129 ordered H-copies.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "413bf4b2bf0d715436ed05f62c2ccfbf4a951da499d68d0c2d73736c8ccdd1b4"
+    },
+    {
+      "claim_id": "C_LEAN_CORE",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_LITERAL",
+        "content_hash": "88155c5c31de27e0e52dfa65074f688f5e187b451240a8dd8bd89adc6b7ea7fe"
+      },
+      "natural_statement": "The unbounded cyclic-radix map is injective; the four raw Boolean P-avoidance constraints propagate opposite roots to a contradictory shared leaf at every depth; common-parity mode arithmetic gives exactly the terminal-minus equality case; unit-signature deletion and the copy/repair power identities hold. Exact quantifiers and remaining host-level prose dependencies are in research/STATEMENT_FIDELITY.md.",
+      "formal_statement": "import Mathlib\n\nnamespace OrderedMatrix190\n\ntheorem radix_unique (m q a b c : Nat) (hq : q ∣ m)\n    (hb : b < m) (hc : c < m)\n    (hquot : (a + b) % m / q = (a + c) % m / q)\n    (hrem : b % q = c % q) : b = c := by\n  have hr : (a + b) % m % q = (a + c) % m % q := by\n    calc\n      (a + b) % m % q = (a + b) % q := Nat.mod_mod_of_dvd _ hq\n      _ = (a % q + b % q) % q := Nat.add_mod _ _ _\n      _ = (a % q + c % q) % q := by rw [hrem]\n      _ = (a + c) % q := (Nat.add_mod _ _ _).symm\n      _ = (a + c) % m % q := (Nat.mod_mod_of_dvd _ hq).symm\n  have hs : (a + b) % m = (a + c) % m := by\n    calc\n      (a + b) % m = (a + b) % m % q + q * ((a + b) % m / q) :=\n        (Nat.mod_add_div _ _).symm\n      _ = (a + c) % m % q + q * ((a + c) % m / q) := by rw [hr, hquot]\n      _ = (a + c) % m := Nat.mod_add_div _ _\n  have hbc : Nat.ModEq m b c :=\n    Nat.ModEq.add_left_cancel' a (show Nat.ModEq m (a + b) (a + c) from hs)\n  simpa only [Nat.ModEq, Nat.mod_eq_of_lt hb, Nat.mod_eq_of_lt hc] using hbc\n\ntheorem cyclic_radix_injective (m q a : Nat) (hq : q ∣ m) :\n    Function.Injective\n      (fun b : Fin m => ((a + b.val) % m / q, b.val % q)) := by\n  intro b c h\n  apply Fin.ext\n  exact radix_unique m q a b.val c.val hq b.isLt c.isLt\n    (congrArg Prod.fst h) (congrArg Prod.snd h)\n\ndef AvoidP (a b c d : Bool) : Prop :=\n  ¬ (a = true ∧ b = false ∧ c = true ∧ d = true)\n\ntheorem avoid_vertical_iff (a b : Bool) :\n    AvoidP true a true b ↔ (b = true → a = true) := by\n  cases a <;> cases b <;> simp [AvoidP]\n\ntheorem avoid_horizontal_iff (a b : Bool) :\n    AvoidP a b true true ↔ (a = true → b = true) := by\n  cases a <;> cases b <;> simp [AvoidP]\n\ntheorem shared_leaf_obstruction (h : Nat)\n    (plus minus crossPlus crossMinus : Nat → Bool)\n    (hp0 : plus 0 = true) (hm0 : minus 0 = false)\n    (vp : ∀ i, i < h → AvoidP true (crossPlus i) true (plus i))\n    (vm : ∀ i, i < h → AvoidP true (minus i) true (crossMinus i))\n    (wp : ∀ i, i < h → AvoidP (crossPlus i) (plus (i + 1)) true true)\n    (wm : ∀ i, i < h → AvoidP (minus (i + 1)) (crossMinus i) true true)\n    (shared : plus h = minus h) : False := by\n  have propagation : ∀ i, i ≤ h → plus i = true ∧ minus i = false := by\n    intro i\n    induction i with\n    | zero =>\n        intro _\n        exact ⟨hp0, hm0⟩\n    | succ i ih =>\n        intro hi\n        have ilt : i < h := by omega\n        obtain ⟨hpi, hmi⟩ := ih (by omega)\n        have hcp : crossPlus i = true :=\n          (avoid_vertical_iff (crossPlus i) (plus i)).mp (vp i ilt) hpi\n        have hpn : plus (i + 1) = true :=\n          (avoid_horizontal_iff (crossPlus i) (plus (i + 1))).mp (wp i ilt) hcp\n        have hcm : crossMinus i = false := by\n          cases he : crossMinus i with\n          | false => rfl\n          | true =>\n              have bad : minus i = true :=\n                (avoid_vertical_iff (minus i) (crossMinus i)).mp (vm i ilt) he\n              rw [hmi] at bad\n              contradiction\n        have hmn : minus (i + 1) = false := by\n          cases he : minus (i + 1) with\n          | false => rfl\n          | true =>\n              have bad : crossMinus i = true :=\n                (avoid_horizontal_iff (minus (i + 1)) (crossMinus i)).mp (wm i ilt) he\n              rw [hcm] at bad\n              contradiction\n        exact ⟨hpn, hmn⟩\n  obtain ⟨hph, hmh⟩ := propagation h le_rfl\n  rw [shared, hmh] at hph\n  contradiction\n\ntheorem v_plus_exclusion (p a b : Nat)\n    (horder : p / 2 ≤ a) (hone : a ≤ b) : ¬ b < p / 2 := by\n  omega\n\ntheorem v_minus_exclusion (p a b : Nat)\n    (horder : a ≤ p / 2) (hzero : b ≤ a) : ¬ p / 2 < b := by\n  omega\n\ntheorem parity_parent_order (p q : Nat)\n    (hparity : p % 2 = q % 2) (hparent : p / 2 ≤ q / 2) : p ≤ q := by\n  omega\n\ntheorem w_plus_exclusion (p q b : Nat)\n    (hparity : p % 2 = q % 2)\n    (horder : b ≤ q / 2) (hone : p / 2 ≤ b) : ¬ q < p := by\n  have hpq := parity_parent_order p q hparity (by omega)\n  omega\n\ntheorem w_minus_nonleaf_exclusion (p q b : Nat)\n    (hparity : p % 2 = q % 2)\n    (horder : q / 2 ≤ b) (hzero : b ≤ p / 2) : ¬ p < q := by\n  have hqp := parity_parent_order q p hparity.symm (by omega)\n  omega\n\ntheorem w_minus_leaf_classification (p q b : Nat)\n    (hparity : p % 2 = q % 2)\n    (horder : q / 2 ≤ b) (hzero : b ≤ p / 2) (hone : p ≤ q) :\n    p = q ∧ b = p / 2 := by\n  have hqp := parity_parent_order q p hparity.symm (by omega)\n  have heq : p = q := by omega\n  constructor\n  · exact heq\n  · omega\n\ndef unitSignature (j u : Fin 64) : Bool := decide (u = j)\n\ntheorem unit_deletion_no_new_role (j l : Fin 64) (g : Fin 64 → Bool)\n    (hmono : ∀ u, g u = true → unitSignature l u = true)\n    (hrole : g = unitSignature j) : j = l := by\n  have hj : g j = true := by simp [hrole, unitSignature]\n  have hl := hmono j hj\n  simpa [unitSignature] using hl\n\ndef suppressFirst (g : Fin 64 → Bool) (u : Fin 64) : Bool :=\n  if u = 0 then false else g u\n\ntheorem suppress_first_unit :\n    suppressFirst (unitSignature 0) = fun _ => false := by\n  funext u\n  by_cases hu : u = 0 <;> simp [suppressFirst, unitSignature, hu]\n\ntheorem two_rectangles (t : Nat) :\n    t * (2 * t) + t * (2 * t) = (2 * t) ^ 2 := by\n  ring\n\ntheorem repair_power_count (r : Nat) :\n    2 ^ r * 2 ^ (r + 1) + 2 ^ r * 2 ^ (r + 1) = (2 ^ (r + 1)) ^ 2 := by\n  rw [pow_succ]\n  ring\n\ntheorem exact_copy_count_identity (m : Nat) :\n    m * m * 2 * m ^ 128 = 2 * m ^ 130 := by\n  ring\n\ntheorem squared_power (h : Nat) : (2 ^ h) ^ 2 = (4 : Nat) ^ h := by\n  calc\n    (2 ^ h) ^ 2 = 2 ^ h * 2 ^ h := by ring\n    _ = (2 * 2) ^ h := (mul_pow 2 2 h).symm\n    _ = (4 : Nat) ^ h := by norm_num\n\ntheorem retained_copy_bound (m n : Nat) (hm : 2 ≤ m) (hn : m ≤ n) :\n    2 * m ^ 130 ≤ m * n ^ 130 := by\n  calc\n    2 * m ^ 130 ≤ m * m ^ 130 := Nat.mul_le_mul_right _ hm\n    _ ≤ m * n ^ 130 := Nat.mul_le_mul_left _ (Nat.pow_le_pow_left hn 130)\n\nend OrderedMatrix190\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "150c6ac24f859af19e700be29fff5a92023c94e8fb4ff770f202fe40e91158c6"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-C_LEAN_CORE-64af86c61752",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LEAN_CORE",
+        "content_hash": "89985b7235f23a71dfe3d91fd90c292bd2717ed2b2be99c2b4a1c2ca9233f0ef"
+      },
+      "tier": "mechanical",
+      "verdict": "inconclusive",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/certification/lean/certificates/C_LEAN_CORE-6a364386d4cc2b8a.json"
+    },
+    {
+      "evidence_id": "lean-C_LEAN_CORE-219616865669",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LEAN_CORE",
+        "content_hash": "150c6ac24f859af19e700be29fff5a92023c94e8fb4ff770f202fe40e91158c6"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/certification/lean/certificates/C_LEAN_CORE-adef5a81661033af.json"
+    },
+    {
+      "evidence_id": "judgement-C_SCOPE_SOURCE-7e2d0899ce41",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SCOPE_SOURCE",
+        "content_hash": "c54dffcaf7c7f2090a41f6be1f00b6eded40185c4632ccab1bfa6b971371c5a9"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_EXACT_DISTANCE-a3d015fb6bbd",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_EXACT_DISTANCE",
+        "content_hash": "16c64a649821c9f465756b495702408ee7afaec1dcd0e128b2fa928d299aae76"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_RADIX_SELECTION-fe8b125db4f8",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RADIX_SELECTION",
+        "content_hash": "472365effe996ce3d3831c3f3717e0d5db1c7869742de94ac17516dc2ab9a7e7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_PATH_OBSTRUCTION-91267a5df8d8",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_PATH_OBSTRUCTION",
+        "content_hash": "f07795bcaaa9253a5ae6cf21067b564cc38cda32b7ae43dee468ec6ee8adb36f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_LOWER_BOUND-723fbf24a391",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LOWER_BOUND",
+        "content_hash": "025bd79324cf322d48f363e3c8371c7742b73b5adcce528771fc8a8d6e9ee3c0"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_DELETION_RIGIDITY-b86ecd87f186",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_DELETION_RIGIDITY",
+        "content_hash": "9cd74c402235cb69e1bd5e82ed43aa580ffcd746dd7f41ebe47288a4f06a85b0"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_ORIGINAL_COPIES-85ad0e61a727",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ORIGINAL_COPIES",
+        "content_hash": "a24c7ea8a214e4d8a3452a9413d3b1001eaa2bb8cddba82d72356ff388cf7513"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_EXPLICIT_REPAIR-61d8b32310a7",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_EXPLICIT_REPAIR",
+        "content_hash": "e2469b9b2dea330cd19cd91e21127b03116169dfac57e6a5a273629ec96b89a7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_DIAGONAL_FAILURE-e41cbb220458",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_DIAGONAL_FAILURE",
+        "content_hash": "64d69ae12f5784f1b01197c57a929d0a7bc89a763a2abe7bdc19ca6c150e2d40"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_ANCHOR_PROPERTIES-0873611af0e5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ANCHOR_PROPERTIES",
+        "content_hash": "a3880d42721c04436e1bbc7736c43f4b57860855299a15ef0c674767af9f8a31"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_NONANCHOR_TRACES-8b0d387991e7",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_NONANCHOR_TRACES",
+        "content_hash": "db4cab78fdacf4bda9cf77b14618ae49b23b0fb56ce9a206ad27a3571ef242c8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_MODE_INCIDENCE-335ae6ed0eee",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_MODE_INCIDENCE",
+        "content_hash": "8e24b89aa3cf2c7db75d43ceca9cf0ab875237a705665fc3bfa5b55594400015"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_SIGNATURE_PROFILE-fdd752b54a37",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SIGNATURE_PROFILE",
+        "content_hash": "413bf4b2bf0d715436ed05f62c2ccfbf4a951da499d68d0c2d73736c8ccdd1b4"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_LEAN_CORE-c8358c07cda9",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LEAN_CORE",
+        "content_hash": "150c6ac24f859af19e700be29fff5a92023c94e8fb4ff770f202fe40e91158c6"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/certification/lean/certificates/C_LEAN_CORE-adef5a81661033af.json"
+    },
+    {
+      "evidence_id": "judgement-SRC_PATTERN_HOST-189dc0e01889",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SRC_PATTERN_HOST",
+        "content_hash": "30cfaf395cdd399ff1a7016de901c3d54e47c6277baa72be47087c2bd116f6f2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/openai_manuscript/Polynomial-removal-fails-for-ordered-binary-matrices-September-25-2026/build/sections/02-construction.tex"
+    },
+    {
+      "evidence_id": "judgement-SRC_PRIOR_ESTIMATES-1809603ad726",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SRC_PRIOR_ESTIMATES",
+        "content_hash": "40779606e5505d32db52e2d7c0e266da570b22b431b29370cbfe5d295cca48a7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-SRC_FAILED_REPAIR-088025055a62",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SRC_FAILED_REPAIR",
+        "content_hash": "b23a2f91af7a7915f0deed42651a663f8118bff6d7858116368d594ef6ca9a49"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/openai_manuscript/Polynomial-removal-fails-for-ordered-binary-matrices-September-25-2026/build/sections/03b-count.tex"
+    },
+    {
+      "evidence_id": "judgement-C_SCOPE_SOURCE-2d075f41fa63",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SCOPE_SOURCE",
+        "content_hash": "c54dffcaf7c7f2090a41f6be1f00b6eded40185c4632ccab1bfa6b971371c5a9"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_ANCHOR_PROPERTIES-ad97e051b591",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ANCHOR_PROPERTIES",
+        "content_hash": "a3880d42721c04436e1bbc7736c43f4b57860855299a15ef0c674767af9f8a31"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "exact_certificate.json"
+    },
+    {
+      "evidence_id": "judgement-C_NONANCHOR_TRACES-1ff2566176ae",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_NONANCHOR_TRACES",
+        "content_hash": "db4cab78fdacf4bda9cf77b14618ae49b23b0fb56ce9a206ad27a3571ef242c8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_MODE_INCIDENCE-912505c683d2",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_MODE_INCIDENCE",
+        "content_hash": "8e24b89aa3cf2c7db75d43ceca9cf0ab875237a705665fc3bfa5b55594400015"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_RADIX_SELECTION-73241773f9c3",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RADIX_SELECTION",
+        "content_hash": "472365effe996ce3d3831c3f3717e0d5db1c7869742de94ac17516dc2ab9a7e7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_PATH_OBSTRUCTION-27dd8d92adbf",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_PATH_OBSTRUCTION",
+        "content_hash": "f07795bcaaa9253a5ae6cf21067b564cc38cda32b7ae43dee468ec6ee8adb36f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_LOWER_BOUND-883699966162",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LOWER_BOUND",
+        "content_hash": "025bd79324cf322d48f363e3c8371c7742b73b5adcce528771fc8a8d6e9ee3c0"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_DELETION_RIGIDITY-3ba92856c2d6",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_DELETION_RIGIDITY",
+        "content_hash": "9cd74c402235cb69e1bd5e82ed43aa580ffcd746dd7f41ebe47288a4f06a85b0"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_ORIGINAL_COPIES-09efb91fe559",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ORIGINAL_COPIES",
+        "content_hash": "a24c7ea8a214e4d8a3452a9413d3b1001eaa2bb8cddba82d72356ff388cf7513"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_EXPLICIT_REPAIR-3e2f4d151460",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_EXPLICIT_REPAIR",
+        "content_hash": "e2469b9b2dea330cd19cd91e21127b03116169dfac57e6a5a273629ec96b89a7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_DIAGONAL_FAILURE-e8c1e5b37392",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_DIAGONAL_FAILURE",
+        "content_hash": "64d69ae12f5784f1b01197c57a929d0a7bc89a763a2abe7bdc19ca6c150e2d40"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/openai_manuscript/Polynomial-removal-fails-for-ordered-binary-matrices-September-25-2026/build/sections/03b-count.tex"
+    },
+    {
+      "evidence_id": "judgement-C_SIGNATURE_PROFILE-88c285e1435b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SIGNATURE_PROFILE",
+        "content_hash": "413bf4b2bf0d715436ed05f62c2ccfbf4a951da499d68d0c2d73736c8ccdd1b4"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-C_LEAN_CORE-94019ee01486",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_LEAN_CORE",
+        "content_hash": "150c6ac24f859af19e700be29fff5a92023c94e8fb4ff770f202fe40e91158c6"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/certification/lean/certificates/C_LEAN_CORE-adef5a81661033af.json"
+    },
+    {
+      "evidence_id": "judgement-C_EXACT_DISTANCE-31c9b8400880",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_EXACT_DISTANCE",
+        "content_hash": "16c64a649821c9f465756b495702408ee7afaec1dcd0e128b2fa928d299aae76"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-6a09562f016c",
+      "artifact": "research/AUDIT_REPORT.md"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_DIAGONAL_FLIPS",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_EXACT_DISTANCE",
+        "content_hash": "16c64a649821c9f465756b495702408ee7afaec1dcd0e128b2fa928d299aae76"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_DIAGONAL_FAILURE",
+          "content_hash": "64d69ae12f5784f1b01197c57a929d0a7bc89a763a2abe7bdc19ca6c150e2d40"
+        }
+      ],
+      "retired_because": "The manuscript itself gives a new terminal-plus copy after the diagonal leaf flips; hitting the original copies is not an H-free repair."
+    },
+    {
+      "route_id": "R_EXACT_SIGNATURE",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_EXACT_DISTANCE",
+        "content_hash": "16c64a649821c9f465756b495702408ee7afaec1dcd0e128b2fa928d299aae76"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_LOWER_BOUND",
+          "content_hash": "025bd79324cf322d48f363e3c8371c7742b73b5adcce528771fc8a8d6e9ee3c0"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_EXPLICIT_REPAIR",
+          "content_hash": "e2469b9b2dea330cd19cd91e21127b03116169dfac57e6a5a273629ec96b89a7"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_ORIGINAL_COPIES",
+          "content_hash": "a24c7ea8a214e4d8a3452a9413d3b1001eaa2bb8cddba82d72356ff388cf7513"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_DETERMINISTIC_LOWER",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_LOWER_BOUND",
+        "content_hash": "025bd79324cf322d48f363e3c8371c7742b73b5adcce528771fc8a8d6e9ee3c0"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_RADIX_SELECTION",
+          "content_hash": "472365effe996ce3d3831c3f3717e0d5db1c7869742de94ac17516dc2ab9a7e7"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_PATH_OBSTRUCTION",
+          "content_hash": "f07795bcaaa9253a5ae6cf21067b564cc38cda32b7ae43dee468ec6ee8adb36f"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_SIGNATURE_REPAIR",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_EXPLICIT_REPAIR",
+        "content_hash": "e2469b9b2dea330cd19cd91e21127b03116169dfac57e6a5a273629ec96b89a7"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_DELETION_RIGIDITY",
+          "content_hash": "cb304feb5506db9c7493a312f41b16e0803492981045a5daba559c8232410b80"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_ORIGINAL_COPIES",
+          "content_hash": "a24c7ea8a214e4d8a3452a9413d3b1001eaa2bb8cddba82d72356ff388cf7513"
+        }
+      ],
+      "retired_because": "The stability statement must explicitly keep dummy incidences unchanged so that dummy positions remain twins; the repair only changes variable-row incidences. Use the narrowed stability claim, not the unrestricted hypothesis."
+    },
+    {
+      "route_id": "R_SIGNATURE_REPAIR_DUMMY_FIXED",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_EXPLICIT_REPAIR",
+        "content_hash": "e2469b9b2dea330cd19cd91e21127b03116169dfac57e6a5a273629ec96b89a7"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_DELETION_RIGIDITY",
+          "content_hash": "9cd74c402235cb69e1bd5e82ed43aa580ffcd746dd7f41ebe47288a4f06a85b0"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_ORIGINAL_COPIES",
+          "content_hash": "a24c7ea8a214e4d8a3452a9413d3b1001eaa2bb8cddba82d72356ff388cf7513"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_STABLE_ANCHOR",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_DELETION_RIGIDITY",
+        "content_hash": "9cd74c402235cb69e1bd5e82ed43aa580ffcd746dd7f41ebe47288a4f06a85b0"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_ANCHOR_PROPERTIES",
+          "content_hash": "a3880d42721c04436e1bbc7736c43f4b57860855299a15ef0c674767af9f8a31"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_NONANCHOR_TRACES",
+          "content_hash": "db4cab78fdacf4bda9cf77b14618ae49b23b0fb56ce9a206ad27a3571ef242c8"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_MODE_INCIDENCE",
+          "content_hash": "8e24b89aa3cf2c7db75d43ceca9cf0ab875237a705665fc3bfa5b55594400015"
+        }
+      ],
+      "retired_because": ""
+    }
+  ]
+}

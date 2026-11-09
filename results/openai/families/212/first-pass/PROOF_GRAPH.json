@@ -1,0 +1,122 @@
+{
+  "goal": "C9000212",
+  "routes": {
+    "R_CT_LAST_CUT": {
+      "goal": "C_CT_TRANSFER",
+      "obligations": [
+        "C_CT_SUBSEQUENCE",
+        "C_CT_BARRIERS",
+        "C_CT_LAST_CUT",
+        "C_CT_LABELS",
+        "C_CT_LOWER"
+      ],
+      "status": "active",
+      "evidence": [
+        "research/half_plane_transfer/report.md"
+      ]
+    }
+  },
+  "nodes": {
+    "C9000212": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 212 (Planar first-passage geometry and the absence of bigeodesics.; papers: No bigeodesics in planar first-passage percolation; Strict convexity and differentiability of the planar exponential first-passage limit shape; Lean status: Partially/Comparator formalized (lean/docs/212.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_CT_TRANSFER",
+        "C_CT_REMAINDER"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_CT_TRANSFER": {
+      "statement": "Lemma lem:cut-transfer with its actual simultaneous quantifiers: one deterministic subsequence preserves every finite upper-ray family, finite Busemann witnesses, eventual target distances and exact labels; every lower ray retains an exact-label tail at every fixed complementary cut.",
+      "status": "open",
+      "depends_on": [
+        "C_CT_SUBSEQUENCE",
+        "C_CT_BARRIERS",
+        "C_CT_LAST_CUT",
+        "C_CT_LABELS",
+        "C_CT_LOWER",
+        "C_CT_INPUTS"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/half_plane_transfer/report.md",
+        "research/half_plane_transfer/verify.py",
+        "research/half_plane_transfer/exact_certificate.json"
+      ]
+    },
+    "C_CT_INPUTS": {
+      "statement": "The staged preliminary structural and uniform metric theorems have their stated minimum-moment scope, including the boundary-comparison dependency. These are explicit inputs, not results certified by the transfer audit.",
+      "status": "open",
+      "depends_on": ["C_CT_BOUNDARY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/No-bigeodesics-in-planar-first-passage-percolation-September-24-2026/build/sections/02-preliminaries.tex"]
+    },
+    "C_CT_BOUNDARY": {
+      "statement": "The minimum-moment boundary comparison prop:boundary-uniqueness and its claimed repair of the Ahlberg--Hoffman expectation step are valid.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/No-bigeodesics-in-planar-first-passage-percolation-September-24-2026/build/sections/09-boundary-comparison.tex"]
+    },
+    "C_CT_SUBSEQUENCE": {
+      "statement": "Endpoint-uniform metric asymptotics and the identical marginal laws imply one deterministic subsequence with vanishing moving-cut normalized metric errors, independently of any selected ray or label.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/half_plane_transfer/report.md"]
+    },
+    "C_CT_BARRIERS": {
+      "statement": "The opposite-semicircle norm gap, endpoint-uniform metric errors and rooted sublinear Busemann errors imply positive barriers on the entire unbounded cut, both for moving cuts with fixed witnesses and fixed cuts with sector-moving basepoints.",
+      "status": "open",
+      "depends_on": ["C_CT_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/half_plane_transfer/report.md"]
+    },
+    "C_CT_LAST_CUT": {
+      "statement": "A finite lattice walk touching a cut has an unchanged suffix after its last cut visit; derived positive barriers exclude all improving cut-touching walks and give exact eventual target distances.",
+      "status": "open",
+      "depends_on": ["C_CT_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/half_plane_transfer/report.md"]
+    },
+    "C_CT_LABELS": {
+      "statement": "At each retained upper cut, fixed-cut sector barriers imply exact Busemann equality along two independent lattice directions, identifying both label coordinates without a uniform label convergence rate.",
+      "status": "open",
+      "depends_on": ["C_CT_BARRIERS", "C_CT_LAST_CUT", "C_CT_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/half_plane_transfer/report.md"]
+    },
+    "C_CT_LOWER": {
+      "statement": "For every fixed complementary cut, the analogous upward-displacement barrier preserves an arbitrary lower-ray tail, its eventual sector target distances, and its exact original label.",
+      "status": "open",
+      "depends_on": ["C_CT_BARRIERS", "C_CT_LAST_CUT", "C_CT_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/half_plane_transfer/report.md"]
+    },
+    "C_CT_CORE": {
+      "statement": "Universal deterministic barrier and finite-walk transfer implications, with explicit metric and rooted-error hypotheses, including last-cut suffix localization and recovery of two linear coordinates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/half_plane_transfer/Main.lean",
+        "research/half_plane_transfer/statement_fidelity.md",
+        "research/half_plane_transfer/report.md",
+        "research/half_plane_transfer/lean_check.json",
+        "research/half_plane_transfer/certificates/C_CT_CORE-69ed72f13c851087.json",
+        "research/half_plane_transfer/exact_certificate.json"
+      ]
+    },
+    "C_CT_REMAINDER": {
+      "statement": "All remaining load-bearing claims of the no-bigeodesics manuscript and its strict-convexity companion are justified. This bounded transfer mission does not establish that assertion.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md"]
+    }
+  }
+}

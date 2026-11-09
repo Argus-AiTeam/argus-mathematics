@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "claim": {
+    "claim_id": "C_FILTER_ALGEBRA",
+    "version": 2,
+    "context": {
+      "kind": "context",
+      "subject_id": "CTX_FILTER_GENERAL",
+      "content_hash": "1199153dd4b4d4942d6ab5c09154bc70091728930344283e354aa15b18541365"
+    },
+    "natural_statement": "The universal monoid conjugation identities, universal ring contraction-defect identity, real quartic factorizations, finite real budget telescoping, and rational threshold hold with precisely the explicit hypotheses encoded in Main.lean. This does not claim a kernel proof of the analytic transported-gain or weighted-increment theorems.",
+    "formal_statement": "import Mathlib\n\nset_option autoImplicit false\n\nnamespace FilterIncrement\n\ntheorem contraction_defect {R : Type*} [Ring R] (c ct z : R) :\n    (1 + c * z * ct) - c * (1 + z) * ct = 1 - c * ct := by\n  noncomm_ring\n\ntheorem unsaturated_conjugation {R : Type*} [Monoid R]\n    (u r : Rˣ) (b : R) (h : Commute (r : R) b) :\n    ((r : R) * (↑(u⁻¹) : R)) *\n        ((u : R) * (b * (r : R)) * (↑(u⁻¹) : R)) *\n        ((u : R) * (r : R)) = b * (r : R) ^ 3 := by\n  calc\n    _ = (r : R) * (b * ((r : R) * (r : R))) := by\n      simp [mul_assoc]\n    _ = b * (r : R) ^ 3 := by\n      simpa [pow_succ, mul_assoc] using\n        congrArg (fun x : R => x * (r : R) * (r : R)) h.eq\n\ntheorem saturated_conjugation {R : Type*} [Monoid R]\n    (u r : Rˣ) (b : R) (h : Commute (r : R) b) :\n    ((r : R) * (↑(u⁻¹) : R)) *\n        (((u : R) * (b * (r : R)) * (↑(u⁻¹) : R)) *\n          (((u : R) * (↑(r⁻¹) : R) * (↑(u⁻¹) : R)) ^ 3)) *\n        ((u : R) * (r : R)) = b := by\n  calc\n    _ = (r : R) * (b * (↑(r⁻¹) : R)) := by\n      simp [pow_succ, mul_assoc]\n    _ = b := by\n      rw [← mul_assoc, h.eq, mul_assoc, Units.mul_inv, mul_one]\n\ntheorem matrix_saturated_conjugation (d : ℕ)\n    (u r : (Matrix (Fin d) (Fin d) ℝ)ˣ)\n    (b : Matrix (Fin d) (Fin d) ℝ)\n    (h : Commute (r : Matrix (Fin d) (Fin d) ℝ) b) :\n    ((r : Matrix (Fin d) (Fin d) ℝ) *\n        (↑(u⁻¹) : Matrix (Fin d) (Fin d) ℝ)) *\n        (((u : Matrix (Fin d) (Fin d) ℝ) *\n            (b * (r : Matrix (Fin d) (Fin d) ℝ)) *\n            (↑(u⁻¹) : Matrix (Fin d) (Fin d) ℝ)) *\n          (((u : Matrix (Fin d) (Fin d) ℝ) *\n            (↑(r⁻¹) : Matrix (Fin d) (Fin d) ℝ) *\n            (↑(u⁻¹) : Matrix (Fin d) (Fin d) ℝ)) ^ 3)) *\n        ((u : Matrix (Fin d) (Fin d) ℝ) *\n          (r : Matrix (Fin d) (Fin d) ℝ)) = b :=\n  saturated_conjugation u r b h\n\ntheorem quartic_forward (u : ℝ) :\n    3 * u ^ 4 - 4 * u ^ 3 + 1 =\n      (u - 1) ^ 2 * (3 * u ^ 2 + 2 * u + 1) := by\n  ring\n\ntheorem quartic_reverse (u : ℝ) :\n    u ^ 4 - 4 * u + 3 =\n      (u - 1) ^ 2 * (u ^ 2 + 2 * u + 3) := by\n  ring\n\ntheorem budget_telescope (potential budget : ℕ → ℝ)\n    (hzero : potential 0 = 0)\n    (hstep : ∀ i, potential (i + 1) ≤ potential i + budget i)\n    (N : ℕ) :\n    potential N ≤ ∑ i ∈ Finset.range N, budget i := by\n  induction N with\n  | zero => simp [hzero]\n  | succ N ih =>\n      rw [Finset.sum_range_succ]\n      linarith [hstep N]\n\ntheorem energy_threshold :\n    (((3 : ℚ) / 2) * (1 / 24)) ^ 2 < (1 / 4) ^ 3 := by\n  norm_num\n\nend FilterIncrement\n",
+    "external_assumptions": [],
+    "retired_assumptions": [],
+    "content_hash": "2b14d52e0c499fdbb4fb4891587c3b92ffa1368789583bc96edff6f4572c1c87"
+  },
+  "note": "this version says something different, so it carries a different digest and the evidence recorded about the previous statement no longer binds to it; `show` reports those records as stale rather than dropping them"
+}

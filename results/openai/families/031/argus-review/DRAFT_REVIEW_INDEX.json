@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "task_kind": "old_draft_review",
+  "family": "031",
+  "research_target_level": "exploratory",
+  "stage": "review",
+  "authority": {
+    "objective": "OBJECTIVE.md",
+    "inventory": "PRIOR_DRAFTS.json",
+    "acceptance": "Native Host-invoked independent Reviewer; this index is not family acceptance.",
+    "old_objectives": "Historical inputs only; no new manuscript-error search is authorized."
+  },
+  "provenance": {
+    "old_workspace": "campaigns/9000031",
+    "snapshot_manifest": "$WORKSPACE/.copilot/session-state/<id>/files/openai-audit-drafts-20261106T1020Z-manifest.json",
+    "snapshot_archive": "$WORKSPACE/.copilot/session-state/<id>/files/openai-audit-drafts-20261106T1020Z.tar.gz",
+    "snapshot_time": "2026-11-06T10:20Z",
+    "snapshot_members_for_this_family": [
+      "9000031/research/MATH_STATE.json",
+      "9000031/research/PROOF_GRAPH.json",
+      "9000031/research/exact_certificate.json",
+      "9000031/research/uniform_kummer_bridge.md",
+      "9000031/research/verify.py"
+    ],
+    "snapshot_comparison": "All five members were read without extraction: archive sizes and existing manifest digests match, and their bytes equal the old workspace files. The other twenty inventory artifacts and the manuscript directory are supplemental old-workspace inputs, not members recorded for 9000031 in this snapshot.",
+    "inventory_size_comparison": "All 25 listed old-workspace artifacts exist and match the byte counts in PRIOR_DRAFTS.json.",
+    "manuscript_manifest": "campaigns/9100031/MANUSCRIPTS.json",
+    "manuscript_id": "Open-Homomorphisms-of-Global-Solvably-Closed-Galois-Groups-October-5-2026",
+    "manuscript_author": "OpenAI",
+    "manuscript_date": "October 5, 2026",
+    "source_revision": "4eaee87548250b2682affda7d05d947c05554bae",
+    "source_status": "active",
+    "local_source_directory": "families/031/first-pass/openai_manuscript/Open-Homomorphisms-of-Global-Solvably-Closed-Galois-Groups-October-5-2026",
+    "canonical_source_directory": "openai-math/preprints/Open-Homomorphisms-of-Global-Solvably-Closed-Galois-Groups-October-5-2026",
+    "local_manuscript_directory_is_symlink": true,
+    "symlink_target": "openai-math/preprints/Open-Homomorphisms-of-Global-Solvably-Closed-Galois-Groups-October-5-2026",
+    "source_comparison": "All eight local TeX sources match the existing MANUSCRIPTS.json digests and the corresponding canonical-source bytes. Neither manifest nor snapshot was rebuilt.",
+    "read_only_inputs": true
+  },
+  "grouping_rule": "Units are mathematical arguments, not files. Sections 1-4 of one bridge contain four distinct lemmas and their assembly. The false shortcut and two proposed extensions are assessed separately. Three context units reconcile the remaining manuscript claims without pretending their proofs were supplied by the bridge. Their grouped dependency labels are scope cross-references, not proof routes: grouping multiple nodes can produce cross-references in both directions. The exact claim-level graph is separately preserved below. Historical objectives and administrative/source copies are explicitly excluded as independent results.",
+  "contexts": [
+    {"context": "CTX9000031@v1", "disposition": "Historical family/audit context only; its mission is not imported.", "mapped_units": ["character-normalization-context", "arithmetic-matching-context", "anabelian-identification-context"]},
+    {"context": "CTX_UNIFORM@v1", "disposition": "Retained as the conditional bridge setting, not a proof of the normalized-map hypotheses.", "hypotheses": ["K is a number field", "B=Q(i)", "beta_B:G_K->P_B is a continuous surjection", "ell is odd", "log(chi_ell composed with beta_B)=log(chi_K,ell)"], "definitions": {"epsilon": "(chi_ell composed with beta_B)/chi_K,ell", "F": "Fixed field of ker(epsilon)", "Delta": "Gal(F/K)", "theta": "epsilon inverse for the natural Tate-twisted cohomology action", "S": "All archimedean places and primes above ell", "missed": "Target primes in no ell-active pair"}, "mapped_units": ["kummer-completion", "inverse-twist", "missed-prime-ramification", "stabilizer-multiplicity", "uniform-missed-primes"]}
+  ],
+  "units": [
+    {
+      "unit_id": "kummer-completion",
+      "kind": "conditional_written_lemma",
+      "claims": ["L_KUMMER_COMPLETE@v1", "L_KUMMER_COMPLETE@v2", "L_KUMMER_COMPLETE@v3", "L_KUMMER_COMPLETE@v4"],
+      "proof": "research/uniform_kummer_bridge.md, Section 1",
+      "dependencies": ["A_FINITE_KUMMER", "A_CLASS_FINITE", "A_SUNIT_FINITE_GENERATION"],
+      "assessment": "research/draft_reviews/kummer-completion/report.md",
+      "verdict": "research/draft_reviews/kummer-completion/verdict.json"
+    },
+    {
+      "unit_id": "inverse-twist",
+      "kind": "conditional_written_lemma",
+      "claims": ["L_TWIST_INJECT@v1"],
+      "proof": "research/uniform_kummer_bridge.md, Section 2",
+      "dependencies": ["finite class number of B", "specified surjection and finite twist extension"],
+      "assessment": "research/draft_reviews/inverse-twist/report.md",
+      "verdict": "research/draft_reviews/inverse-twist/verdict.json"
+    },
+    {
+      "unit_id": "missed-prime-ramification",
+      "kind": "conditional_written_lemma",
+      "claims": ["L_RAMIFICATION@v1", "L_RAMIFICATION@v2"],
+      "proof": "research/uniform_kummer_bridge.md, Section 3",
+      "dependencies": ["inverse-twist", "A_UCHIDA_LOCAL"],
+      "assessment": "research/draft_reviews/missed-prime-ramification/report.md",
+      "verdict": "research/draft_reviews/missed-prime-ramification/verdict.json"
+    },
+    {
+      "unit_id": "stabilizer-multiplicity",
+      "kind": "known_result_application_and_exact_formula",
+      "claims": ["L_MULTIPLICITY@v1", "L_MULTIPLICITY@v2"],
+      "proof": "research/uniform_kummer_bridge.md, Section 4, equations (4)-(6)",
+      "dependencies": ["A_EQUIVARIANT_DIRICHLET"],
+      "assessment": "research/draft_reviews/stabilizer-multiplicity/report.md",
+      "verdict": "research/draft_reviews/stabilizer-multiplicity/verdict.json"
+    },
+    {
+      "unit_id": "uniform-missed-primes",
+      "kind": "conditional_reproduction_with_sharper_explicit_bound",
+      "claims": ["C_UNIFORM@v1"],
+      "proof": "research/uniform_kummer_bridge.md, Result and scope and Section 4, equations (1) and (7)",
+      "dependencies": ["kummer-completion", "inverse-twist", "missed-prime-ramification", "stabilizer-multiplicity"],
+      "assessment": "research/draft_reviews/uniform-missed-primes/report.md",
+      "verdict": "research/draft_reviews/uniform-missed-primes/verdict.json"
+    },
+    {
+      "unit_id": "finite-support-shortcut",
+      "kind": "failed_attack_and_explicit_counterexample_to_shortcut",
+      "claims": ["R_FINITE_VALUATION_SUPPORT"],
+      "proof": "research/uniform_kummer_bridge.md, Section 1, compatible products of rational primes",
+      "dependencies": [],
+      "assessment": "research/draft_reviews/finite-support-shortcut/report.md",
+      "verdict": "research/draft_reviews/finite-support-shortcut/verdict.json"
+    },
+    {
+      "unit_id": "general-target-extension",
+      "kind": "proposed_conditional_scope_extension",
+      "claims": ["EXT_TARGET"],
+      "proof": "research/uniform_kummer_bridge.md, Section 4, closing paragraph",
+      "dependencies": ["uniform-missed-primes", "finite number field N contained in Q^s", "same logarithmic compatibility and local-correspondence hypotheses"],
+      "assessment": "research/draft_reviews/general-target-extension/report.md",
+      "verdict": "research/draft_reviews/general-target-extension/verdict.json"
+    },
+    {
+      "unit_id": "open-map-extension",
+      "kind": "proposed_conditional_scope_extension",
+      "claims": ["EXT_OPEN"],
+      "proof": "research/uniform_kummer_bridge.md, Section 4, closing paragraph",
+      "dependencies": ["uniform-missed-primes", "open image", "same logarithmic compatibility", "finite-index restriction injectivity in characteristic zero"],
+      "assessment": "research/draft_reviews/open-map-extension/report.md",
+      "verdict": "research/draft_reviews/open-map-extension/verdict.json"
+    },
+    {
+      "unit_id": "character-normalization-context",
+      "kind": "unaudited_manuscript_prerequisites_not_bridge_conclusions",
+      "claims": ["C_LOG_RANK@v1", "C_SIGNED_REPRESENTATION@v1", "C_AMPLIFICATION@v1", "C_NORMALIZED@v1"],
+      "proof": "Reference manuscript, build/sections/characters.tex and generation.tex",
+      "dependencies": ["arithmetic-matching-context", "anabelian-identification-context"],
+      "assessment": "research/draft_reviews/character-normalization-context/report.md",
+      "verdict": "research/draft_reviews/character-normalization-context/verdict.json"
+    },
+    {
+      "unit_id": "arithmetic-matching-context",
+      "kind": "unaudited_surrounding_manuscript_obligations",
+      "claims": ["L_NORM_IDENTITY@v1", "C_FINITE_FIBERS@v1", "C_POWER_SEPARATION@v1", "C_SAME_CHARACTERISTIC@v1"],
+      "proof": "Reference manuscript, build/sections/preliminaries.tex and matching.tex",
+      "dependencies": ["character-normalization-context", "uniform-missed-primes", "anabelian-identification-context"],
+      "assessment": "research/draft_reviews/arithmetic-matching-context/report.md",
+      "verdict": "research/draft_reviews/arithmetic-matching-context/verdict.json"
+    },
+    {
+      "unit_id": "anabelian-identification-context",
+      "kind": "unaudited_manuscript_identification_and_main_theorem",
+      "claims": ["C_ANABELIAN_INPUTS@v1", "C_IDENTIFICATION@v1", "C_MAIN@v1"],
+      "proof": "Reference manuscript, build/sections/preliminaries.tex, identification.tex and introduction.tex",
+      "dependencies": ["character-normalization-context", "arithmetic-matching-context"],
+      "assessment": "research/draft_reviews/anabelian-identification-context/report.md",
+      "verdict": "research/draft_reviews/anabelian-identification-context/verdict.json"
+    }
+  ],
+  "claim_versions": [
+    {"claim_id": "C9000031", "versions": [1], "unit_id": null, "disposition": "Excluded historical audit objective, not a mathematical theorem and not the current task. Its graph dependency C_MAIN is covered by anabelian-identification-context."},
+    {"claim_id": "C_UNIFORM", "versions": [1], "unit_id": "uniform-missed-primes", "statement": "For eligible odd ell, missed primes of B=Q(i) away from ell are at most r1_split(F/K)+r2(K)+g_ell_split(F/K)-1_(epsilon=1), hence at most 2[K:Q], and all missed primes at most 2[K:Q]+2."},
+    {"claim_id": "L_KUMMER_COMPLETE", "versions": [1, 2, 3, 4], "unit_id": "kummer-completion", "statement": "Unramified-outside-S continuous H1(G_F,Q_ell(1)) is naturally Aut(F,S)-equivariantly O_(F,S)^times tensor Q_ell, without finite valuation support.", "version_changes": {"1": "Original statement, no recorded external assumptions.", "2": "Adds A_FINITE_KUMMER.", "3": "Adds A_CLASS_FINITE.", "4": "Adds A_SUNIT_FINITE_GENERATION; same natural statement."}, "supported_version": 4},
+    {"claim_id": "L_TWIST_INJECT", "versions": [1], "unit_id": "inverse-twist", "statement": "Independent missed-prime Kummer classes remain independent after pullback and restriction to G_F, and lie in the epsilon-inverse eigenspace."},
+    {"claim_id": "L_RAMIFICATION", "versions": [1, 2], "unit_id": "missed-prime-ramification", "statement": "Every restricted missed-prime Kummer class is unramified at every finite prime of F away from ell, including primes ramified in F/K.", "version_changes": {"1": "Original statement, no recorded external assumptions.", "2": "Adds A_UCHIDA_LOCAL; same natural statement."}, "supported_version": 2},
+    {"claim_id": "L_MULTIPLICITY", "versions": [1, 2], "unit_id": "stabilizer-multiplicity", "statement": "For finite cyclic F/K, stable finite S containing infinity, and a one-dimensional Q_ell-valued character theta, dim(U_S tensor Q_ell)^theta = sum_(v in S/Delta)1_(theta|D_v=1)-1_(theta=1).", "version_changes": {"1": "Original statement, no recorded external assumptions.", "2": "Adds A_EQUIVARIANT_DIRICHLET; same natural statement."}, "supported_version": 2},
+    {"claim_id": "C_LOG_RANK", "versions": [1], "unit_id": "character-normalization-context", "statement": "lem:log-rank and the exact Frobenius-detection consequences prop:character-detection hold with the manuscript hypotheses."},
+    {"claim_id": "C_SIGNED_REPRESENTATION", "versions": [1], "unit_id": "character-normalization-context", "statement": "For finite totally imaginary Galois M/Q, Ind_(complex conjugation)^Gal(M/Q)(sign) embeds in the additive ell-adic character space, which embeds in the regular representation; the action is faithful."},
+    {"claim_id": "C_AMPLIFICATION", "versions": [1], "unit_id": "character-normalization-context", "statement": "The normalizer extension, quotient amplification and Frobenius-generation constructions have their claimed separating-character and generation properties."},
+    {"claim_id": "C_NORMALIZED", "versions": [1], "unit_id": "character-normalization-context", "statement": "The constructed beta:G_k->P is surjective and preserves cyclotomic logarithms for odd primes ell congruent to 1 modulo [k:Q]!."},
+    {"claim_id": "L_NORM_IDENTITY", "versions": [1], "unit_id": "arithmetic-matching-context", "statement": "For an active pair (v,w) at odd ell, (Nv)^b(g)=(Nw)^a(g) in Z_ell^times for all g in D_v."},
+    {"claim_id": "C_FINITE_FIBERS", "versions": [1], "unit_id": "arithmetic-matching-context", "statement": "For all but finitely many split degree-one target primes of Q(i), the union of active source partners over eligible ell is finite."},
+    {"claim_id": "C_POWER_SEPARATION", "versions": [1], "unit_id": "arithmetic-matching-context", "statement": "The simultaneous power-residue separation assertion holds for the displayed prime lists, bounds and congruence condition, including overlapping lists."},
+    {"claim_id": "C_SAME_CHARACTERISTIC", "versions": [1], "unit_id": "arithmetic-matching-context", "statement": "Almost every target prime of Q(i) over a split rational prime has an active source partner with the same rational residue characteristic."},
+    {"claim_id": "C_ANABELIAN_INPUTS", "versions": [1], "unit_id": "anabelian-identification-context", "statement": "The full manuscript's distinct Uchida 1979/1981, Hoshi 2025 Theorem 3.4, centralizer, embedding-uniqueness and solvable-closure inputs apply exactly as used; only the odd-prime local input was inspected by the old bridge."},
+    {"claim_id": "C_IDENTIFICATION", "versions": [1], "unit_id": "anabelian-identification-context", "statement": "The normalized map is conjugate to ordinary restriction, and continuous open G_F->P maps have the asserted rigidity."},
+    {"claim_id": "C_MAIN", "versions": [1], "unit_id": "anabelian-identification-context", "statement": "Every continuous open homomorphism between the specified solvably closed Galois groups is induced by a unique field embedding in the opposite direction."}
+  ],
+  "graph_dependencies": {
+    "C9000031": ["C_MAIN"],
+    "C_MAIN": ["C_IDENTIFICATION", "C_ANABELIAN_INPUTS"],
+    "C_IDENTIFICATION": ["C_SAME_CHARACTERISTIC", "C_LOG_RANK", "C_SIGNED_REPRESENTATION", "C_NORMALIZED", "C_ANABELIAN_INPUTS"],
+    "C_SAME_CHARACTERISTIC": ["C_FINITE_FIBERS", "C_POWER_SEPARATION", "C_UNIFORM", "L_NORM_IDENTITY"],
+    "C_FINITE_FIBERS": ["C_NORMALIZED", "C_LOG_RANK", "C_SIGNED_REPRESENTATION"],
+    "C_NORMALIZED": ["C_AMPLIFICATION", "C_LOG_RANK", "L_NORM_IDENTITY"],
+    "C_AMPLIFICATION": ["C_LOG_RANK", "C_SIGNED_REPRESENTATION", "C_ANABELIAN_INPUTS"],
+    "C_LOG_RANK": [],
+    "C_SIGNED_REPRESENTATION": [],
+    "C_POWER_SEPARATION": [],
+    "L_NORM_IDENTITY": ["C_ANABELIAN_INPUTS"],
+    "C_ANABELIAN_INPUTS": [],
+    "C_UNIFORM": ["L_KUMMER_COMPLETE", "L_TWIST_INJECT", "L_RAMIFICATION", "L_MULTIPLICITY"],
+    "L_KUMMER_COMPLETE": [],
+    "L_TWIST_INJECT": [],
+    "L_RAMIFICATION": ["L_TWIST_INJECT"],
+    "L_MULTIPLICITY": []
+  },
+  "old_routes": [
+    {"route_id": "R_UNIFORM_KUMMER", "goal": "C_UNIFORM@v1", "obligations": ["L_KUMMER_COMPLETE@v4", "L_TWIST_INJECT@v1", "L_RAMIFICATION@v2", "L_MULTIPLICITY@v2"], "disposition": "Assessed as a conditional written-proof route, not a kernel proof."},
+    {"route_id": "R_MAIN_VERIFICATION", "goal": "C9000031@v1", "obligations": ["C_MAIN@v1"], "disposition": "Historical objective route excluded from the current mission."},
+    {"route_id": "R_MAIN_CONSTRUCTION", "goal": "C_MAIN@v1", "obligations": ["C_LOG_RANK@v1", "C_AMPLIFICATION@v1", "C_NORMALIZED@v1", "C_FINITE_FIBERS@v1", "C_UNIFORM@v1", "C_POWER_SEPARATION@v1", "C_SAME_CHARACTERISTIC@v1", "C_IDENTIFICATION@v1"], "disposition": "Context-only unfinished route; the bridge does not discharge its other obligations."},
+    {"route_id": "R_FINITE_VALUATION_SUPPORT", "goal": "L_KUMMER_COMPLETE@v4", "obligations": [], "disposition": "Retired false shortcut; reviewed separately.", "retired_because": "The full pro-ell completion can contain products product_j p_j^(ell^j) with infinitely many nonzero valuation coordinates. A finite-support shortcut is false; the finite-level S-class-group exact sequence and its multiplication-by-ell transition replace it."}
+  ],
+  "support_reconciliation": {
+    "graph": "All 17 old graph nodes remain open and reviewer_confirmed=false; graph routes is empty. Do not equate these stale graph labels with absence of the ledger's later written-proof judgements, or equate judgements with kernel verification.",
+    "latest_claim_judgements": [
+      {"claim": "L_KUMMER_COMPLETE@v4", "engineer": "judgement-L_KUMMER_COMPLETE-51cb318a2872", "reviewer": "judgement-L_KUMMER_COMPLETE-8d6b60228dbb"},
+      {"claim": "L_TWIST_INJECT@v1", "engineer": "judgement-L_TWIST_INJECT-139253e351f3", "reviewer": "judgement-L_TWIST_INJECT-0e5d41c5aac0"},
+      {"claim": "L_RAMIFICATION@v2", "engineer": "judgement-L_RAMIFICATION-40bec02e52c5", "reviewer": "judgement-L_RAMIFICATION-70c2b33c4c97"},
+      {"claim": "L_MULTIPLICITY@v2", "engineer": "judgement-L_MULTIPLICITY-5b4691f59a26", "reviewer": "judgement-L_MULTIPLICITY-634d8adb8448"},
+      {"claim": "C_UNIFORM@v1", "engineer": "judgement-C_UNIFORM-639f0362e706", "reviewer": "judgement-C_UNIFORM-5ddca38cbba5"}
+    ],
+    "judgement_scope": "All ten listed records are supports judgements on the written bridge by engineer:copilot or reviewer:copilot, not mechanical proofs. They bind the stated latest versions, not earlier assumption-incomplete versions or the full manuscript.",
+    "citation_history": "Two DOI resolution records are inconclusive; five later reviewer:copilot literature attributions support the exact external assumptions. Resolution alone is not attribution.",
+    "lean": "No formal statement, Lean proof or Lean certificate is claimed for any of the 22 old claim versions or inventoried artifacts. No Lean compilation or kernel theorem is inferred from typed Jacobian output.",
+    "jacobian": "The saved matrix payload/output/status are archived algebraic evidence. Local replay does not execute a server and does not verify arithmetic premises."
+  },
+  "artifacts": [
+    {"path": "research/MATH_STATE.json", "bytes": 34268, "role": "claim/version/assumption/evidence ledger", "units": ["kummer-completion", "inverse-twist", "missed-prime-ramification", "stabilizer-multiplicity", "uniform-missed-primes", "finite-support-shortcut", "character-normalization-context", "arithmetic-matching-context", "anabelian-identification-context"], "disposition": "All 17 claim IDs, 22 versions, 17 evidence records and four routes reconciled; not copied as the current objective."},
+    {"path": "research/MATH_STATE.json.lock", "bytes": 0, "role": "administrative lock", "units": [], "disposition": "Excluded: no mathematical content; never acquired or modified."},
+    {"path": "research/PROOF_GRAPH.json", "bytes": 9266, "role": "old dependency graph", "units": ["character-normalization-context", "arithmetic-matching-context", "anabelian-identification-context", "uniform-missed-primes"], "disposition": "All nodes/edges reconciled above; old open labels do not erase later ledger judgements."},
+    {"path": "research/exact_certificate.json", "bytes": 3693, "role": "symbolic data and arithmetic fixtures", "units": ["kummer-completion", "inverse-twist", "missed-prime-ramification", "stabilizer-multiplicity", "uniform-missed-primes"], "disposition": "Shared checker input, not a separate theorem."},
+    {"path": "research/jacobian/geometric_output.json", "bytes": 2684, "role": "archived typed matrix output", "units": ["stabilizer-multiplicity", "uniform-missed-primes"], "disposition": "Supplementary algebra; not Lean, geometry certification or a fresh server run."},
+    {"path": "research/jacobian/geometric_payload.json", "bytes": 2046, "role": "archived exact typed matrix request", "units": ["stabilizer-multiplicity", "uniform-missed-primes"], "disposition": "Bound to archived output by existing verifier."},
+    {"path": "research/jacobian/geometric_status.json", "bytes": 246, "role": "archived adapter status", "units": ["stabilizer-multiplicity", "uniform-missed-primes"], "disposition": "Archived exit zero and requested 45-second bound; not a current availability probe."},
+    {"path": "research/literature/27ccd20493b8fe8c80cefed0afe5f3f4.json", "bytes": 962, "role": "reviewer attribution of A_CLASS_FINITE", "units": ["kummer-completion", "inverse-twist"], "disposition": "Supports literature record; same input as Milne/excerpt, not an extra result."},
+    {"path": "research/literature/6379f2ce1806ac3b8b1e44e7d25d67f3.json", "bytes": 1047, "role": "Bass DOI resolution", "units": ["stabilizer-multiplicity"], "disposition": "Inconclusive existence lookup, superseded for attribution by reviewer evidence."},
+    {"path": "research/literature/7076545e94dc543e6ca89d45d260ab2d.json", "bytes": 1552, "role": "reviewer attribution of A_SUNIT_FINITE_GENERATION", "units": ["kummer-completion"], "disposition": "Supports finite generation, not all inverse-limit reasoning."},
+    {"path": "research/literature/bass1966-page402.png", "bytes": 194396, "role": "primary source page image", "units": ["kummer-completion", "stabilizer-multiplicity"], "disposition": "Source copy of Bass lemma; not a separate draft."},
+    {"path": "research/literature/bass1966.txt", "bytes": 19827, "role": "primary source transcription", "units": ["kummer-completion", "stabilizer-multiplicity"], "disposition": "Bass Section 3 read with hypotheses; same source as image/excerpt."},
+    {"path": "research/literature/c0277005786d7c14e39a0bb319be4497.json", "bytes": 1549, "role": "reviewer attribution of A_FINITE_KUMMER", "units": ["kummer-completion"], "disposition": "Supports finite-level Kummer input under invertibility."},
+    {"path": "research/literature/c973a66be116b913f3670513826e22fd.json", "bytes": 1644, "role": "reviewer attribution of A_UCHIDA_LOCAL", "units": ["missed-prime-ramification"], "disposition": "Supports local odd-prime input only, not global cofinite coverage or main theorem."},
+    {"path": "research/literature/ce9696cde7dbbca5099924fcdf7a2169.json", "bytes": 1176, "role": "Uchida DOI resolution", "units": ["missed-prime-ramification"], "disposition": "Inconclusive existence lookup, not theorem attribution."},
+    {"path": "research/literature/e7f1e2ab1777d1012d8420f664fb0c1d.json", "bytes": 1528, "role": "reviewer attribution of A_EQUIVARIANT_DIRICHLET", "units": ["stabilizer-multiplicity"], "disposition": "Supports equivariant S-unit representation with added trivial summand."},
+    {"path": "research/literature/milne-ant.txt", "bytes": 470234, "role": "primary source transcription", "units": ["kummer-completion", "inverse-twist"], "disposition": "Version 3.08, Theorem 4.4, p. 70; S-class finiteness is the quotient consequence."},
+    {"path": "research/literature/reviewer-bass-units.txt", "bytes": 1320, "role": "independent archived source excerpt", "units": ["kummer-completion", "stabilizer-multiplicity"], "disposition": "Reused with attribution to old Reviewer, not relabelled as current native acceptance."},
+    {"path": "research/literature/reviewer-class-finiteness.txt", "bytes": 752, "role": "independent archived source excerpt", "units": ["kummer-completion", "inverse-twist"], "disposition": "Reused old Reviewer evidence for class finiteness."},
+    {"path": "research/literature/reviewer-finite-kummer.txt", "bytes": 1309, "role": "independent archived source excerpt", "units": ["kummer-completion"], "disposition": "Reused old Reviewer evidence, separate from inverse-limit proof."},
+    {"path": "research/literature/reviewer-uchida-local.txt", "bytes": 1402, "role": "independent archived source excerpt", "units": ["missed-prime-ramification"], "disposition": "Reused old Reviewer evidence for local alternatives and odd-prime exclusion."},
+    {"path": "research/literature/stacks-03PK.html", "bytes": 33808, "role": "archived primary Kummer reference", "units": ["kummer-completion"], "disposition": "Tag 03PK, Lemma 59.28.1/03PL and following H1-to-Picard sequence."},
+    {"path": "research/literature/uchida1981.txt", "bytes": 27577, "role": "primary source transcription", "units": ["missed-prime-ramification", "anabelian-identification-context"], "disposition": "Section 1 local input read; global theorem applicability not certified."},
+    {"path": "research/uniform_kummer_bridge.md", "bytes": 15832, "role": "substantive Argus proof draft", "units": ["kummer-completion", "inverse-twist", "missed-prime-ramification", "stabilizer-multiplicity", "uniform-missed-primes", "finite-support-shortcut", "general-target-extension", "open-map-extension"], "disposition": "One connected draft split into distinct mathematical arguments, not eight independent discoveries."},
+    {"path": "research/verify.py", "bytes": 16935, "role": "read-only exact algebra checker and rejection suite", "units": ["kummer-completion", "inverse-twist", "missed-prime-ramification", "stabilizer-multiplicity", "uniform-missed-primes"], "disposition": "Inspect before execution; algebraic checks do not certify its arithmetic premises."}
+  ],
+  "reference_inputs_and_tooling": [
+    {
+      "path": "research/openai_manuscript",
+      "kind": "reference_input_or_tooling",
+      "units": ["character-normalization-context", "arithmetic-matching-context", "anabelian-identification-context", "uniform-missed-primes"],
+      "disposition": "Reference manuscript, not another Argus discovery; exact source revision resolved above.",
+      "visible_file_count_following_manuscript_symlink": 9,
+      "additional_supporting_files": [
+        {"path": "README.md", "role": "Author/date/bibliographic metadata; not another mathematical argument. Its PDF link does not establish that a PDF is present locally."}
+      ],
+      "tex_sources": [
+        {"path": "build/main.tex", "role": "title, author, date and source composition"},
+        {"path": "build/references.tex", "role": "bibliography, not additional proof evidence"},
+        {"path": "build/sections/characters.tex", "role": "log-rank, character-detection and signed-representation statements"},
+        {"path": "build/sections/generation.tex", "role": "normalizer/amplification/generation and thm:normalized-map"},
+        {"path": "build/sections/identification.tex", "role": "identification, rigidity and solvable-closure reduction obligations"},
+        {"path": "build/sections/introduction.tex", "role": "thm:main and its actual quantifiers"},
+        {"path": "build/sections/matching.tex", "role": "finite-fibers, power-separation, uniform-missed-primes and same-characteristic"},
+        {"path": "build/sections/preliminaries.tex", "role": "active pairs, norm identity and external anabelian hypotheses"}
+      ],
+      "pdf_sources_recorded_in_manifest": [],
+      "lean_evidence_disposition": "No Lean source/certificate is inventoried or asserted for this family, and none is present in the nine-file reference tree. Compilation and statement fidelity are not interchangeable with this prose review."
+    }
+  ],
+  "unlisted_evidence_references": [
+    {"path": "OBJECTIVE.md", "exists_in_old_workspace": true, "disposition": "Old graph evidence for C9000031; historical instructions excluded, not adopted or executed."},
+    {"path": "research/literature/bass1966.pdf", "exists_in_old_workspace": false, "disposition": "Stale/unavailable binary pointer, not claimed as freshly read. Bass's archived text, page image and reviewer excerpt supply the proposition evidence used here."},
+    {"path": "research/literature/milne-ant.pdf", "exists_in_old_workspace": false, "disposition": "Stale/unavailable binary pointer. Version-identified archived text and reviewer excerpt supply the class-finiteness passage."},
+    {"path": "research/literature/uchida1981-journal.pdf", "exists_in_old_workspace": false, "disposition": "Stale/unavailable binary pointer. Archived primary-text transcription and reviewer excerpt supply the exact local statement; no binary PDF access is asserted."}
+  ],
+  "coverage_totals": {
+    "listed_artifacts": 25,
+    "mapped_artifacts": 25,
+    "listed_reference_inputs": 1,
+    "mapped_reference_inputs": 1,
+    "old_context_versions": 2,
+    "old_claim_ids": 17,
+    "old_claim_versions": 22,
+    "old_evidence_records": 17,
+    "old_routes": 4,
+    "substantive_review_units": 11,
+    "excluded_claim_versions": ["C9000031@v1"],
+    "unmapped_claim_versions": []
+  },
+  "current_ledger_claims": {
+    "kummer-completion": "D_KUMMER_COMPLETE",
+    "inverse-twist": "D_TWIST_INJECT",
+    "missed-prime-ramification": "D_RAMIFICATION",
+    "stabilizer-multiplicity": "D_MULTIPLICITY",
+    "uniform-missed-primes": "D_UNIFORM",
+    "finite-support-shortcut": "D_FINITE_SUPPORT_COUNTEREXAMPLE",
+    "general-target-extension": "D_GENERAL_TARGET",
+    "open-map-extension": "D_OPEN_MAP",
+    "character-normalization-context": "D_CHARACTER_CONTEXT",
+    "arithmetic-matching-context": "D_MATCHING_CONTEXT",
+    "anabelian-identification-context": "D_IDENTIFICATION_CONTEXT"
+  },
+  "execution_evidence": {
+    "verifier_replay": "research/draft_reviews/uniform-missed-primes/replay.json",
+    "initial_dependency_failure": "research/draft_reviews/uniform-missed-primes/replay_initial_failure.json",
+    "verifier_exit_code": 0,
+    "exact_checks": 33,
+    "arithmetic_boundary_cases": 7,
+    "invalid_certificates_rejected": 16,
+    "toolchain": "Python 3.13.5, SymPy 1.14.0, mpmath 1.3.0; required legacy interpreter with explicit already-installed live-update package path",
+    "fresh_jacobian_status": "research/draft_reviews/stabilizer-multiplicity/jacobian_status.json",
+    "fresh_jacobian_operation": "matrix.symbolic.multiply.compute",
+    "fresh_jacobian_exit_code": 0,
+    "fresh_jacobian_timeout": false,
+    "fresh_jacobian_error": null,
+    "fresh_jacobian_equals_archived_output": true,
+    "lean": "Not applicable: no relevant formal source or compiler evidence is claimed."
+  },
+  "campaign_local_validation": {
+    "project_root": "campaigns/9200031",
+    "receipt": "research/draft_reviews/validation.json",
+    "receipt_scope": "Historical pre-ruling checks; the recorded exit statuses are preserved, not represented as a fresh run or final certification.",
+    "math_state_check_exit_code": 0,
+    "proof_graph_check_exit_code": 2,
+    "both_zero": false,
+    "proof_graph_required": false,
+    "proof_graph_applicability": "The prior native Reviewer ruled that a current proof graph is not required by OBJECTIVE.md and its absence does not block this old-draft review.",
+    "citation_status": "research/draft_reviews/citation_status.json",
+    "citation_status_exit_code": 0
+  },
+  "prior_native_review": {
+    "handoff": "$WORKSPACE/.argus-campaign-9200031/projects/ced420d3eb42/handoffs/630676dd6f4c/round-0001.json",
+    "status": "done",
+    "scope": "Bounded review acceptance, reused as supporting evidence; not explicit final exploratory project certification.",
+    "graph_ruling": "The missing current proof graph is not required by OBJECTIVE.md and does not block acceptance."
+  },
+  "handoff_blocker": null,
+  "final_submission": {
+    "state": "awaiting_native_independent_certification",
+    "scope": "The complete old-draft review under OBJECTIVE.md at the unchanged exploratory research target.",
+    "required_record": "A native final Reviewer done verdict explicitly certifying the final exploratory project submission, durably persisted by the Host.",
+    "engineer_certification": false
+  },
+  "assessment_state": "All eleven units have substantive report.md and verdict.json assessments. Seven conditional arguments/extensions are supported, the finite-support shortcut is refuted, and three manuscript-context groups remain explicitly uncertified. The prior native bounded acceptance resolves the obsolete graph blocker. The complete review is prepared for final exploratory certification; the project remains incomplete until the native independent Reviewer explicitly certifies that submission and the Host persists the certification."
+}

@@ -1,0 +1,118 @@
+{
+  "action": "reversible_quarantine_pending_native_review",
+  "quarantined_by": "engineer:active-review-association",
+  "reason": "The active REVIEW_CUT_CORE@1 claim assesses the scope of an archived proof and has no formal statement or mechanical evidence. This judgement cites a mechanical certificate whose subject is the distinct historical claim C_CUT_CORE. Quarantine removes only that active association, not the historical certificate, the reviewer's recorded opinion, or any mathematical conclusion.",
+  "original_evidence": {
+    "evidence_id": "judgement-REVIEW_CUT_CORE-9a59ce44060d",
+    "subject": {
+      "kind": "claim",
+      "subject_id": "REVIEW_CUT_CORE",
+      "content_hash": "78fa2c44a89f66d31a9f1a70a8f62ecbbf153a87e353e579a0db6c9823241a2a"
+    },
+    "tier": "judgement",
+    "verdict": "supports",
+    "produced_by": "reviewer:native-old-drafts",
+    "artifact": "families/044/first-pass/cut_symbol/lean/certificates/C_CUT_CORE-62172a94b4f90e85.json"
+  },
+  "provenance": {
+    "source_ledger": "research/MATH_STATE.json",
+    "source_collection": "evidence",
+    "restore_before_evidence_id": "judgement-REVIEW_CUT_ABSTRACT-b32697c7e7dc",
+    "source_event": {
+      "path": "$WORKSPACE/.argus-campaign-9200044/projects/b535bf28b8f4/events.jsonl",
+      "line": 546,
+      "type": "life.manager.stage_decision",
+      "diagnostic": "stage_completion_gate_failed",
+      "issue_code": "judgement_certificate_retired"
+    },
+    "historical_certificate_evidence_id": "lean-C_CUT_CORE-dae3b37c5431",
+    "historical_certificate_subject": {
+      "content_hash": "743e2663584f333ed223f646560fb2c8baa3e2e7e14fcf7c4cbda12c4a34c377",
+      "kind": "claim",
+      "subject_id": "C_CUT_CORE"
+    }
+  },
+  "assessment": {
+    "artifact": "research/draft_reviews/cut-symbol/report.md",
+    "locator": "Lean: exact theorem, real toolchain, and reuse",
+    "scope": "Historical compilation covers the arithmetic, signs and finite-support core. It does not formally prove generation, trace cosets, Reynolds averaging or BFN geometry.",
+    "claim_statement_changed": false,
+    "historical_inputs_changed": false,
+    "retained_judgements": [
+      "judgement-REVIEW_CUT_CORE-7efa0723652f",
+      "judgement-REVIEW_CUT_CORE-c9dc5ea8357a"
+    ]
+  },
+  "correction_mechanism": {
+    "cli": "math_state exposes no evidence quarantine, retraction or reassociation command. Its judge command supersedes evidence only for the same subject, tier and producer when the artifact changes.",
+    "sources": [
+      "$WORKSPACE/argus-latest/argus_skill/verticals/math/math_state.py::_agent_evidence",
+      "$WORKSPACE/argus-latest/argus_skill/proof_ledger/store.py::MathState.retire_superseded_evidence",
+      "$WORKSPACE/argus-latest/argus_skill/verticals/math/math_state.py::certificate_issues"
+    ],
+    "constraint": "An Engineer or a different Reviewer cannot use the supported replacement path without attributing a new judgement to the earlier reviewer. No such judgement is issued here.",
+    "validator_trigger": "certificate_issues reports a judgement whose artifact parent is certificates when no non-judgement evidence for the same current claim subject cites that artifact.",
+    "diagnostic_limit": "The diagnostic's fidelity-rewrite explanation is not evidence that the historical source or fidelity document changed: this check does not inspect either file or compare the certificate's subject."
+  },
+  "restoration": "Reinsert original_evidence unchanged into research/MATH_STATE.json evidence immediately before provenance.restore_before_evidence_id. This restores the original active association and its validation failure; no historical file needs editing.",
+  "independent_review": {
+    "required": true,
+    "status": "pending",
+    "path": "native_Host_invoked_Reviewer",
+    "requested_decision": "Approve or reject this specific reversible association correction. Record any replacement judgement under the native Reviewer's authentic identity, using the substantive assessment rather than treating the historical certificate as mechanical evidence for the review claim.",
+    "engineer_self_acceptance": false
+  },
+  "validation": {
+    "project_root": "campaigns/9200044",
+    "interpreter": "$WORKSPACE/argus-latest/.venv/bin/python",
+    "before_quarantine": {
+      "math_state": {
+        "exit_code": 1,
+        "issue_codes": [
+          "judgement_certificate_retired"
+        ],
+        "issue_path": "$.evidence[judgement-REVIEW_CUT_CORE-9a59ce44060d].artifact"
+      }
+    },
+    "after_quarantine": {
+      "math_state": {
+        "command": [
+          "$WORKSPACE/argus-latest/.venv/bin/python",
+          "-m",
+          "argus_skill.verticals.math.math_state",
+          "check",
+          "--project-root",
+          "campaigns/9200044"
+        ],
+        "exit_code": 0,
+        "output": {
+          "ok": true,
+          "issues": []
+        }
+      },
+      "proof_graph": {
+        "command": [
+          "$WORKSPACE/argus-latest/.venv/bin/python",
+          "-m",
+          "argus_skill.verticals.math.proof_graph_check",
+          "check",
+          "--project-root",
+          "campaigns/9200044"
+        ],
+        "exit_code": 2,
+        "output": "no proof graph at families/044/argus-review/PROOF_GRAPH.json"
+      },
+      "archive_integrity": {
+        "exit_code": 0,
+        "original_judgement_preserved_exactly": true,
+        "active_claim_unchanged": true,
+        "retained_judgements": 2,
+        "reversible_at_recorded_anchor": true
+      }
+    }
+  },
+  "remaining_blockers": [
+    "The native Host-invoked independent Reviewer has not yet approved this specific association correction. Engineer completion is not acceptance.",
+    "The campaign-local proof_graph_check exits 2 because research/PROOF_GRAPH.json is missing. That file is outside this mission's writable paths; no project-final acceptance is claimed."
+  ]
+}

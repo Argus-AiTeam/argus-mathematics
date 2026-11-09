@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "result_class": "new_theorem",
+  "result_status": "engineer_proof_and_partial_formal_certification; independent_review_required",
+  "manuscript_refutation_identified": false,
+  "theorems": {
+    "C_CE_VERIFICATION": {
+      "statement": "For every integer d>=3, at theta=(d-1)^(-1/2), the actual compatible innovation-conditioned copies obey the stated Q_r,L_r bounds with the exact length restriction, and V(t)=0 for every t>=0.",
+      "evidence_type": "analytic proof in PROOF.md, with exact algebraic and partial Lean support",
+      "not_kernel_verified": [
+        "infinite sigma-fields",
+        "spectral transfer",
+        "stochastic transport",
+        "concentration",
+        "expectation induction",
+        "absolutely continuous comparison"
+      ]
+    },
+    "C_CE_CLOSURE": {
+      "statement": "The same estimate closure works for any positive local flatness exponent and any marginal log-tail exponent q>1; q>1 is sharp for this abstract system of estimates.",
+      "evidence_type": "general theorem and method-sharpness construction in PROOF.md",
+      "caution": "The q=1 scalar construction is not a counterexample to any manuscript assertion or to the Ising threshold."
+    },
+    "C_CE_ALGEBRA": {
+      "statement": "All declarations described in statement_fidelity.md are proved in Main.lean.",
+      "evidence_type": "real Lean compiler run; probability claims excluded",
+      "proof_holes": []
+    }
+  },
+  "quantifiers": {
+    "degree": "every integer d>=3; constants may depend on d, not uniformly on all degrees",
+    "time": "every finite horizon T>0, 0<t<=T; uniqueness for all t>=0",
+    "length": "weighted Q_r bound for every integer r>=2*ceil(C0/omega(t)); L_r actually needs only ceil(C0/omega(t)); unweighted bounds for all r>=1",
+    "joining": "actual conditional copies given the entire innovation array; weighted bounds also hold for any invariant joining with the same marginals and a deterministic site-discrepancy bound"
+  },
+  "constants_and_bounds": {
+    "omega": "min(sqrt(t),1)",
+    "c_beta": "min(sech(2*beta+1)^4, tanh(1)^2/beta^2)",
+    "c0": "min(1/2, c_beta*(1-theta^2)^2*theta^2/5)",
+    "eta": "min(c0/4,log(b)/8)",
+    "C0": "max(2,4*log(2)/c0)",
+    "ell_star": "ceil(C0/omega)",
+    "C_cut": "exp(4*beta/(1-theta))",
+    "H_T": "2*T+2*d*beta",
+    "D_T": "2*H_T/(1-theta)",
+    "Q_r": "4*C_cut*C_var*exp(-eta*omega*r/3)*r*S + 4*D_T^2*r^2*exp(-b^(r/12)/(2*b))",
+    "L_r": "C_cut*exp(-eta*omega*r)*V + H_T^2*exp(-b^(r/4)/(2*b))",
+    "I": "1+log(K_T/V), K_T>max(1,H_T^2), used only for V>0",
+    "R": "ceil(C1*(omega^(-1)+log(I))) with C1 satisfying the three inequalities in PROOF.md section 8",
+    "actual_integrable_coefficient": "C_T*(1+t^(-3/4)+1/(t*log(1/t)^2)) for sufficiently small t; bounded on later compact intervals",
+    "general_integrable_coefficient": "C_T*(1+t^(-3/4)+t^(delta-1)+1/(t*log(1/t)^q)), delta>0,q>1"
+  },
+  "standard_background": [
+    "conditional-expectation convergence and disintegration",
+    "bounded self-adjoint spectral theorem",
+    "Ito/Levy/Doob/isometry with proved integrability",
+    "chain rule for absolutely continuous real functions on compact ranges"
+  ],
+  "proof": "research/critical_endpoint/PROOF.md",
+  "formal_reading": "research/critical_endpoint/statement_fidelity.md",
+  "jacobian": {
+    "operation_id": "matrix.symbolic.characteristic_polynomial.compute",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "payload_file": "research/critical_endpoint/jacobian_payload.json",
+    "typed_output_file": "research/critical_endpoint/jacobian_output.json",
+    "adapter_status_file": "research/critical_endpoint/jacobian_status.json",
+    "conclusion": "exact characteristic polynomial lambda^2-2*x*lambda+1 only"
+  },
+  "checks": [
+    {
+      "name": "sign-symmetrized binary fusion",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "fusion loss lower-bound numerator",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "normalized cavity transition slope",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "log-factor derivative in tanh coordinates",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "strict vertex spectral gap",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "lower lift-Gram sum of squares",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "upper lift-Gram sum of squares",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "companion Cayley-Hamilton identity",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "companion characteristic polynomial",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "endpoint power base case",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "endpoint power induction for all natural n",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "similarity to normalized transfer fiber",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "partition-square extremizer for two positive parts",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "merging positive exponent parts",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "geometric cut-cost induction",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "conditional Chernoff optimizer",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "summable edge-power generating function",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "geometric first-moment series",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "reverse-prefix component-root index",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "reverse-prefix excluded-neighbor index",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "double-exponential exception absorption identity",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "Osgood transformed derivative",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "actual small-time power antiderivative",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "general logarithmic-tail antiderivative",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "actual logarithmic antiderivative has zero initial limit",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "fixed finite branch cannot supply square-root information",
+      "scope": "exact obstruction to a rejected method, not a manuscript refutation",
+      "result": "passed"
+    },
+    {
+      "name": "moment-growth Legendre exponent",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "actual integer moment tail exponent",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "q=1 abstract scalar counterexample derivative",
+      "scope": "method-sharpness construction only; not an observation joining",
+      "result": "passed"
+    },
+    {
+      "name": "q=1 exact path-noise series",
+      "scope": "universal algebraic identity",
+      "result": "passed"
+    },
+    {
+      "name": "conditioned cut cylinder factorization",
+      "scope": "finite exact diagnostic at d=5, theta=1/2; infinite extension is proved in PROOF.md",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian adapter completed without timeout or transport error",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian exact request binding",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian polynomial shape",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient domain",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient denominator",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient arity",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian rational-function denominator",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient denominator",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient arity",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient domain",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient denominator",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient arity",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian rational-function denominator",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient denominator",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient arity",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient domain",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient denominator",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient arity",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian rational-function denominator",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient denominator",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian coefficient arity",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "Jacobian all-symbolic coefficients",
+      "scope": "typed adapter replay",
+      "result": "passed"
+    },
+    {
+      "name": "literal weighted-path source binding",
+      "scope": "manuscript statement binding, not a proof",
+      "result": "passed"
+    },
+    {
+      "name": "literal critical-closure source binding",
+      "scope": "manuscript statement binding, not a proof",
+      "result": "passed"
+    },
+    {
+      "name": "Lean real compiler success with no proof holes",
+      "scope": "kernel-checked finite-dimensional core only",
+      "result": "passed"
+    },
+    {
+      "name": "required Lean toolchain version",
+      "scope": "compiler environment",
+      "result": "passed"
+    },
+    {
+      "name": "Lean source is the compiled source",
+      "scope": "compiler record freshness",
+      "result": "passed"
+    },
+    {
+      "name": "Lean statement fidelity is the compiled reading",
+      "scope": "compiler record freshness",
+      "result": "passed"
+    },
+    {
+      "name": "post-compiler campaign-local checks",
+      "scope": "structural checks, not mathematical review",
+      "result": "passed"
+    }
+  ],
+  "independent_review": {
+    "status": "pending Host-invoked Reviewer",
+    "required": [
+      "read the analytic proof and statement fidelity",
+      "replay verify.py",
+      "inspect the compiler certificate",
+      "close the prior-scope citation attribution",
+      "record independent judgements on the mathematical claims"
+    ]
+  }
+}

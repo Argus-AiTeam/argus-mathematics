@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C9000177_FORMAL_BRIDGE-74928e788c32",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/177/first-pass/finite_level_homology/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6273,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/177/first-pass/finite_level_homology/Main.lean",
+    "source_sha256": "70837955b0b405d3ea932ebe8ea0033c712ab102612e47e0ccfd82f4f6c084f3",
+    "statement_fidelity": "families/177/first-pass/finite_level_homology/statement_fidelity.md",
+    "statement_fidelity_sha256": "eb1b115214b162f9f717aaf97ab3251c70974fe21e52c84203129245fa3acc2a",
+    "status": "syntax_error",
+    "stderr": "",
+    "stdout": "families/177/first-pass/finite_level_homology/Main.lean:98:22: error: unexpected token 'include'; expected '_' or identifier\nfamilies/177/first-pass/finite_level_homology/Main.lean:98:29: error: unexpected token ':'; expected identifier\nfamilies/177/first-pass/finite_level_homology/Main.lean:99:51: error: invalid 'include', variable `g` has not been declared in the current scope\nfamilies/177/first-pass/finite_level_homology/Main.lean:99:60: error: unexpected token ')'; expected command\nfamilies/177/first-pass/finite_level_homology/Main.lean:100:43: error: invalid 'include', variable `g` has not been declared in the current scope\nfamilies/177/first-pass/finite_level_homology/Main.lean:100:54: error: unexpected token ')'; expected command\nfamilies/177/first-pass/finite_level_homology/Main.lean:100:58: error: invalid 'include', variable `g` has not been declared in the current scope\nfamilies/177/first-pass/finite_level_homology/Main.lean:100:69: error: unexpected token ')'; expected command\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/finite_level_homology/Main.lean",
+    "text": "import Mathlib\n\nnamespace FiniteLevelHomology\n\nuniverse u v\n\nstructure AddTower where\n  Obj : ℕ → Type u\n  [group : ∀ n, AddCommGroup (Obj n)]\n  down : ∀ n m, m ≤ n → (Obj n →+ Obj m)\n  down_self : ∀ n x, down n n (le_refl n) x = x\n  down_comp : ∀ l n m (hmn : m ≤ n) (hnl : n ≤ l) x,\n    down n m hmn (down l n hnl x) = down l m (le_trans hmn hnl) x\n\nattribute [instance] AddTower.group\n\nstructure TowerMap (A B : AddTower.{u}) where\n  atLevel : ∀ n, A.Obj n →+ B.Obj n\n  naturality : ∀ n m (hmn : m ≤ n) x,\n    B.down n m hmn (atLevel n x) = atLevel m (A.down n m hmn x)\n\ndef EventuallyInImage {A B : AddTower.{u}} (f : TowerMap A B) : Prop :=\n  ∀ m, ∃ n, ∃ hmn : m ≤ n, ∀ b : B.Obj n,\n    ∃ a : A.Obj m, f.atLevel m a = B.down n m hmn b\n\ntheorem twoLayerEventuallyInImage\n    {A B C A' B' C' : AddTower.{u}}\n    (i : TowerMap A B) (p : TowerMap B C)\n    (i' : TowerMap A' B') (p' : TowerMap B' C')\n    (f : TowerMap A A') (g : TowerMap B B') (h : TowerMap C C')\n    (left : ∀ n x, g.atLevel n (i.atLevel n x) =\n      i'.atLevel n (f.atLevel n x))\n    (right : ∀ n x, p'.atLevel n (g.atLevel n x) =\n      h.atLevel n (p.atLevel n x))\n    (p_onto : ∀ n, Function.Surjective (p.atLevel n))\n    (target_exact : ∀ n y, p'.atLevel n y = 0 →\n      ∃ z, i'.atLevel n z = y)\n    (hf : EventuallyInImage f) (hh : EventuallyInImage h) :\n    EventuallyInImage g := by\n  intro m\n  obtain ⟨n, hmn, hf_n⟩ := hf m\n  obtain ⟨l, hnl, hh_l⟩ := hh n\n  refine ⟨l, le_trans hmn hnl, ?_⟩\n  intro y\n  let yn := B'.down l n hnl y\n  obtain ⟨c, hc⟩ := hh_l (p'.atLevel l y)\n  obtain ⟨b, hb⟩ := p_onto n c\n  have hpy : p'.atLevel n yn = h.atLevel n c := by\n    calc\n      p'.atLevel n yn =\n          C'.down l n hnl (p'.atLevel l y) :=\n        (p'.naturality l n hnl y).symm\n      _ = h.atLevel n c := hc.symm\n  have hz0 : p'.atLevel n (yn - g.atLevel n b) = 0 := by\n    rw [map_sub, hpy, right, hb, sub_self]\n  obtain ⟨z, hz⟩ := target_exact n (yn - g.atLevel n b) hz0\n  obtain ⟨a, ha⟩ := hf_n z\n  refine ⟨B.down n m hmn b + i.atLevel m a, ?_⟩\n  calc\n    g.atLevel m (B.down n m hmn b + i.atLevel m a) =\n        B'.down n m hmn (g.atLevel n b) +\n          i'.atLevel m (f.atLevel m a) := by\n      rw [map_add, ← g.naturality, left]\n    _ = B'.down n m hmn (g.atLevel n b) +\n          B'.down n m hmn (i'.atLevel n z) := by\n      rw [ha, ← i'.naturality]\n    _ = B'.down n m hmn (g.atLevel n b + i'.atLevel n z) :=\n      (map_add (B'.down n m hmn) _ _).symm\n    _ = B'.down n m hmn yn := by\n      rw [hz]\n      congr 1\n      abel\n    _ = B'.down l m (le_trans hmn hnl) y :=\n      B'.down_comp l n m hmn hnl y\n\ntheorem levelwiseSurjective {A B : AddTower.{u}} (f : TowerMap A B)\n    (onto : ∀ n m (hmn : m ≤ n),\n      Function.Surjective (B.down n m hmn))\n    (eventual : EventuallyInImage f) :\n    ∀ m, Function.Surjective (f.atLevel m) := by\n  intro m b\n  obtain ⟨n, hmn, hn⟩ := eventual m\n  obtain ⟨y, hy⟩ := onto n m hmn b\n  obtain ⟨a, ha⟩ := hn y\n  exact ⟨a, ha.trans hy⟩\n\ntheorem surjectiveOfTransfer {A : Type u} {B : Type v}\n    (inclusion : A → B) (transfer : B → A)\n    (splits : ∀ b, inclusion (transfer b) = b) :\n    Function.Surjective inclusion := by\n  intro b\n  exact ⟨transfer b, splits b⟩\n\ntheorem trivialActionOfSurjectiveFixedImages\n    {G : Type u} [Group G] {H : Type v}\n    (rho : G →* Equiv.Perm H) (generators : Set G)\n    (generates : Subgroup.closure generators = ⊤)\n    (A : G → Type v) (include : ∀ g, A g → H)\n    (onto : ∀ g ∈ generators, Function.Surjective (include g))\n    (fixed : ∀ g ∈ generators, ∀ x, rho g (include g x) = include g x) :\n    ∀ g x, rho g x = x := by\n  have hle : Subgroup.closure generators ≤ rho.ker := by\n    apply Subgroup.closure_le.mpr\n    intro g hg\n    change rho g = 1\n    ext x\n    obtain ⟨y, rfl⟩ := onto g hg x\n    exact fixed g hg y\n  intro g x\n  have hg : g ∈ Subgroup.closure generators := by\n    rw [generates]\n    trivial\n  have hk := hle hg\n  change rho g = 1 at hk\n  rw [hk]\n  rfl\n\ntheorem relativeIdentityReflection\n    {S T U : Type u} [Ring S] [Ring T] [Ring U]\n    (phi : S →+* T) (augmentation : S →+* U)\n    (injective_on_kernel : ∀ x, augmentation x = 0 → phi x = 0 → x = 0)\n    (x : S) (aug_x : augmentation x = 1) (phi_x : phi x = 1) :\n    x = 1 := by\n  apply sub_eq_zero.mp\n  apply injective_on_kernel (x - 1)\n  · simp [aug_x]\n  · simp [phi_x]\n\ntheorem relativeWitnessIdentity {R : Type u} [Ring R]\n    (b s : R) (witness : s = 1) :\n    b + (1 - b) * s = 1 := by\n  rw [witness, mul_one]\n  abel\n\ntheorem complementarySupportsCommute {R : Type u} [Ring R]\n    (x y : R) (xy : x * y = 0) (yx : y * x = 0) :\n    (1 + x) * (1 + y) = (1 + y) * (1 + x) := by\n  simp only [mul_add, add_mul, one_mul, mul_one, xy, yx, add_zero]\n  abel\n\nend FiniteLevelHomology\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/finite_level_homology/statement_fidelity.md",
+    "text": "# Exact scope of the Lean declarations\n\nThis document describes `Main.lean`, namespace `FiniteLevelHomology`.\nThe ledger claim is `C9000177_FORMAL_BRIDGE`, not the complete\nmanuscript, not `C9000177_STABILIZATION`, and not `C9000177_ACTION`.\n\n`AddTower` is an inverse sequence of arbitrary abelian groups indexed by\nnatural numbers. `down n m hmn` is the group homomorphism from index `n`\nto index `m`, where `hmn` proves `m <= n`. Identity and composition are\nrequired. `TowerMap` is a level map commuting with these transitions.\nFor the application, index `r` means congruence level `r+1`; no level\nzero congruence group is introduced.\n\n`EventuallyInImage f` means: for every target index `m`, there is an\nindex `n >= m` such that every element of the target at `n`, after\ntransition to `m`, is in the image of `f` at `m`. For abelian groups\nthis is precisely the pro-zero-cokernel condition. It does NOT assert\nlevelwise surjectivity.\n\n`twoLayerEventuallyInImage` takes two three-term sequences of inverse\nsequences and their vertical maps `f,g,h`. The horizontal maps are\n`i,p` and `i',p'`. Both squares must commute at every index. The map\n`p` must be surjective at every index, and every element in the kernel\nof `p'` must be in the image of `i'`, at every index. The end vertical\nmaps `f,h` have pro-zero cokernels. The conclusion is that the middle\nvertical map `g` has pro-zero cokernel. No splitting of the sequences\nand no levelwise surjectivity of `f,g,h` is assumed. The proof uses\ntwo successively later indices; it does not interchange quantifiers.\nThe application is the natural universal-coefficient diagram, with\nleft terms integral homology tensored with F_2 and right terms integral\nhomology Tor F_2. The construction of group homology, that universal\ncoefficient theorem, and preservation of pro-isomorphisms by these\nfunctors are NOT formalized here.\n\n`levelwiseSurjective` assumes `EventuallyInImage f` and surjectivity\nof all transitions of the TARGET tower only. It concludes surjectivity\nof `f` at every index. It does not assume surjectivity of `f` or\nsurjectivity of the source transitions.\n\n`surjectiveOfTransfer` proves that a function with a right inverse is\nsurjective. In the application, transfer is the right inverse of the\nhomology map induced by inclusion, since the finite index is odd and\nthe coefficient field is F_2. The existence and identity of group\nhomology transfer are mathematical inputs proved/explained in\n`proof.md`; they are not Lean hypotheses disguised as a computation.\n\n`trivialActionOfSurjectiveFixedImages` quantifies over any group `G`,\nany set `H`, and an action encoded as a homomorphism to permutations\nof `H`. A specified set generates `G` as a subgroup. For each of its\nelements there is a possibly different set mapping surjectively to\n`H`, and that group element fixes every point in that image. The\nconclusion is triviality of the entire action on `H`. In the concrete\napplication, the generators are elementary matrices, and the sets\nare the homology groups on their complementary coordinates. The\nsurjectivity of these particular maps and elementary generation\nover k[t] are established in `proof.md`, not assumed as the target\ntrivial-action conclusion.\n\n`relativeIdentityReflection` is an identity-reflection lemma for two\nring maps. An element with both images equal to one is one, provided\nthe intersection of the two kernels is zero. It does NOT assume that\nthe integer unitization maps injectively to k[t]. Its application is\nto products of lifted inverse matrices: augmentation and polynomial\nevaluation together detect equality.\n\n`relativeWitnessIdentity` is the ring identity underlying the\nrelative unimodularity witness correction when the original dot\nproduct is one. `complementarySupportsCommute` proves that\n`1+x` and `1+y` commute in any ring when both cross products vanish.\nThe verification that the relevant matrix supports have those zero\nproducts is given for arbitrary sizes in `proof.md` and checked\nindependently as an integer polynomial identity by `verify.py`.\n\nThus a successful compiler run certifies the universal promotion,\ntwo-layer coefficient diagram chase, and action logic, plus the\nspecified ring identities. It does not certify Morrow's or Iwasa's\ntheorems, the polynomial CRT existence argument, elementary generation,\nor the unexamined geometric input. The mathematical verification of\nthe two manuscript lemmas uses these explicitly separated inputs.\n"
+  },
+  "subject": {
+    "content_hash": "97e70e5ccf8f650541970f16a46657c55b01d10663079cfb4b7e9a9c10543b01",
+    "kind": "claim",
+    "subject_id": "C9000177_FORMAL_BRIDGE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

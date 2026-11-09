@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_AC_NONCOMM-384a28e60628",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/261/first-pass/ac-clearing-drift/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/261/first-pass/ac-clearing-drift/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14494,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/261/first-pass/ac-clearing-drift/Main.lean",
+    "source_sha256": "7bc53b1840819fdb9ffd78d9fd587f9c9d45692b25b471f50c2684d7d7a4972d",
+    "statement_fidelity": "families/261/first-pass/ac-clearing-drift/statement_fidelity.md",
+    "statement_fidelity_sha256": "4afcd583ade00b7393e07547729ff3fbecb5984036f50908842e7d745fdbd45e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/ac-clearing-drift/Main.lean",
+    "text": "import Mathlib\n\nnamespace ClearingDrift\n\nvariable {R : Type*} [Ring R]\n\ntheorem inverse_linear_right (D T : R) (h : T * (1 + D) = 1) :\n    T * D = 1 - T := by\n  calc\n    T * D = T * (1 + D) - T := by noncomm_ring\n    _ = 1 - T := by rw [h]\n\ntheorem inverse_linear_left (D T : R) (h : (1 + D) * T = 1) :\n    D * T = 1 - T := by\n  calc\n    D * T = (1 + D) * T - T := by noncomm_ring\n    _ = 1 - T := by rw [h]\n\ntheorem total_leverage_identity (Q D T : R)\n    (hleft : (1 + D) * T = 1) (hright : T * (1 + D) = 1) :\n    (Q + D) * T - Q = (1 - Q) * T * D := by\n  have hDT := inverse_linear_left D T hleft\n  have hTD := inverse_linear_right D T hright\n  calc\n    (Q + D) * T - Q = Q * T + D * T - Q := by noncomm_ring\n    _ = Q * T + (1 - T) - Q := by rw [hDT]\n    _ = (1 - Q) * (1 - T) := by noncomm_ring\n    _ = (1 - Q) * (T * D) := by rw [hTD]\n    _ = (1 - Q) * T * D := by rw [mul_assoc]\n\ntheorem inverse_quadratic_remainder (D T : R)\n    (hleft : (1 + D) * T = 1) :\n    T - 1 = -D + D * D * T := by\n  have hDT := inverse_linear_left D T hleft\n  calc\n    T - 1 = -D + (D - (1 - T)) := by noncomm_ring\n    _ = -D + (D - D * T) := by rw [hDT]\n    _ = -D + D * (1 - T) := by noncomm_ring\n    _ = -D + D * (D * T) := by rw [hDT]\n    _ = -D + D * D * T := by rw [mul_assoc]\n\ntheorem congruence_inverse (L J K T : R)\n    (hLJ : L * J = 1) (hJL : J * L = 1)\n    (hKT : K * T = 1) (hTK : T * K = 1) :\n    (L * K * L) * (J * T * J) = 1 ∧\n      (J * T * J) * (L * K * L) = 1 := by\n  constructor\n  · calc\n      (L * K * L) * (J * T * J) = L * K * (L * J) * T * J := by\n        noncomm_ring\n      _ = L * K * 1 * T * J := by rw [hLJ]\n      _ = L * (K * T) * J := by noncomm_ring\n      _ = L * J := by rw [hKT]; simp\n      _ = 1 := hLJ\n  · calc\n      (J * T * J) * (L * K * L) = J * T * (J * L) * K * L := by\n        noncomm_ring\n      _ = J * T * 1 * K * L := by rw [hJL]\n      _ = J * (T * K) * L := by noncomm_ring\n      _ = J * L := by rw [hTK]; simp\n      _ = 1 := hJL\n\nend ClearingDrift\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/ac-clearing-drift/statement_fidelity.md",
+    "text": "# Statement fidelity: noncommuting normalization identities\n\nThe declarations in `Main.lean` quantify over every type `R` with a\n`Ring R` instance. In particular they apply to square complex matrices\nof every finite size. Multiplication need not commute. The symbol `1`\ndenotes the ring identity; it is the identity matrix in that application.\n\n`inverse_linear_right` and `inverse_linear_left` assume the indicated\none-sided inverse identity for `T` and `1+D` and prove, respectively,\n`T*D=1-T` and `D*T=1-T`.\n\n`total_leverage_identity` quantifies over `Q,D,T`, assumes both inverse\nidentities, and proves the matrix identity\n\n    (Q+D)*T-Q = (1-Q)*T*D.\n\nIn the report, `Q=U^*U`, `D=W^*W-Q`, and `T=(I+D)^{-1}`.\nTaking traces gives exactly the normalized total-leverage increment.\nNo commutation of `D` with `Q`, the old Gram matrix, or the ridge is assumed.\n\n`inverse_quadratic_remainder` assumes only `(1+D)*T=1` and proves\n\n    T-1 = -D+D*D*T.\n\n`congruence_inverse` assumes `L*J=J*L=1` and `K*T=T*K=1`.\nIt proves both inverse identities between `L*K*L` and `J*T*J`.\nThe matrix application takes `L=G^(1/2)`, `J=G^(-1/2)` and `K=I+D`.\nIt justifies the order of factors when the normalized Gram congruence\nis inverted.\n\nThis formal claim is **C_AC_NONCOMM**, not C_AC_DRIFT. The file does not\nformalize the norm inequalities, conditional expectations, unitarity\ncancellation, balanced-ridge order condition, residual moments, exponent\nconditions, or spectral assertions. Those are addressed by the separate\nanalytic proof and exact computations. A successful compiler run must not\nbe described as a kernel verification of the full drift theorem.\n"
+  },
+  "subject": {
+    "content_hash": "517a968b3fb410a2751b84dab8644991fee7c082461aa7578caa1ca32f616bb4",
+    "kind": "claim",
+    "subject_id": "C_AC_NONCOMM"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

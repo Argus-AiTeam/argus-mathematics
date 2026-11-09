@@ -1,0 +1,67 @@
+Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)
+RankSignatures.boxed_disjoint_grouped_signature.{u_1, u_3, u_4} {E : Type u_1} {I : Type u_3} [Fintype E]
+  [DecidableEq E] [Fintype I] [DecidableEq I] {K : Type u_4} [Fintype K] [DecidableEq K] (f : K → Finset E → ℤ)
+  (hf : ∀ (k : K), RankSignatures.Submodular (f k)) (H : K → ℝ) (hH : ∀ (k : K), 0 ≤ H k) (b : K → E → ℤ) (caps : I → ℤ)
+  (a : I → K) (g : I → E) (orientation : K → Bool) (z : I → ℤ) (direction : Bool) :
+  RankSignatures.Signature
+    (Matrix.toBilin'
+      (RankSignatures.quadraticMatrix
+        (RankSignatures.boxedWeight (RankSignatures.groupedWeight f H b caps a g orientation) caps) z direction))
+RankSignatures.boxed_disjoint_grouped_slice_signature.{u_1, u_3, u_4} {E : Type u_1} {I : Type u_3} [Fintype E]
+  [DecidableEq E] [Fintype I] [DecidableEq I] {K : Type u_4} [Fintype K] [DecidableEq K] (f : K → Finset E → ℤ)
+  (hf : ∀ (k : K), RankSignatures.Submodular (f k)) (H : K → ℝ) (hH : ∀ (k : K), 0 ≤ H k) (b : K → E → ℤ) (caps : I → ℤ)
+  (a : I → K) (g : I → E) (orientation : K → Bool) (n : ℤ) (z : I → ℤ) (direction : Bool) :
+  RankSignatures.Signature
+    (Matrix.toBilin'
+      (RankSignatures.quadraticMatrix
+        (RankSignatures.totalSlice
+          (RankSignatures.boxedWeight (RankSignatures.groupedWeight f H b caps a g orientation) caps) n)
+        z direction))
+RankSignatures.boxed_disjoint_grouped_power_signature.{u_1, u_3, u_4} {E : Type u_1} {I : Type u_3} [Fintype E]
+  [DecidableEq E] [Fintype I] [DecidableEq I] {K : Type u_4} [Fintype K] [DecidableEq K] (f : K → Finset E → ℤ)
+  (hf : ∀ (k : K), RankSignatures.Submodular (f k)) (H : K → ℝ) (hH : ∀ (k : K), 0 ≤ H k) (b : K → E → ℤ) (caps : I → ℤ)
+  (a : I → K) (g : I → E) (orientation : K → Bool) (z : I → ℤ) (direction : Bool) (t : ℝ) (ht : 0 ≤ t) :
+  RankSignatures.Signature
+    (Matrix.toBilin'
+      (RankSignatures.quadraticMatrix
+        (RankSignatures.boxedWeight (fun z => RankSignatures.groupedWeight f H b caps a g orientation z ^ t) caps) z
+        direction))
+RankSignatures.normalized_J_sub_psd.{u_1, u_3} {E : Type u_1} {I : Type u_3} [Fintype E] [DecidableEq E] [Fintype I]
+  [DecidableEq I] (f : Finset E → ℤ) (hf : RankSignatures.Submodular f) (H : ℝ) (hH : 0 ≤ H) (v : E → ℤ) (g : I → E)
+  (s : Bool) (x : I → ℝ) : 0 ≤ ∑ i, ∑ j, x i * (1 - RankSignatures.normalized f H v g s i j) * x j
+RankSignatures.cutMatrix_kernel.{u_3} {I : Type u_3} [Fintype I] [DecidableEq I] (W₀ : ℝ) (hW₀ : 0 < W₀) (W₁ : I → ℝ)
+  (W₂ Q : Matrix I I ℝ) (hpair : ∀ (i j : I), W₂ i j = W₁ i * Q i j * W₁ j / W₀) (hdiag : ∀ (i : I), 0 ≤ Q i i)
+  (hQ : ∀ (x : I → ℝ), 0 ≤ ∑ i, ∑ j, x i * (1 - Q i j) * x j) (active twice : I → Prop) (x : I → ℝ)
+  (hx : (RankSignatures.commonLinear fun i => if active i then W₁ i else 0) x = 0) :
+  ((Matrix.toBilin' (RankSignatures.cutMatrix W₂ active twice)) x) x ≤ 0
+RankSignatures.penalty_zero_iff.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f : Finset E → ℤ) (hf₀ : f ∅ = 0)
+  (v : E → ℤ) : RankSignatures.penalty f v = 0 ↔ RankSignatures.InBase f v
+RankSignatures.boxed_groupedWeight_limit.{u_1, u_3, u_4} {E : Type u_1} {I : Type u_3} [Fintype E] [DecidableEq E]
+  [Fintype I] [DecidableEq I] {K : Type u_4} [Fintype K] [DecidableEq K] (f : K → Finset E → ℤ)
+  (hf₀ : ∀ (k : K), f k ∅ = 0) (b : K → E → ℤ) (caps : I → ℤ) (a : I → K) (g : I → E) (orientation : K → Bool)
+  (z : I → ℤ) :
+  Filter.Tendsto
+    (fun H => RankSignatures.boxedWeight (RankSignatures.groupedWeight f (fun x => H) b caps a g orientation) caps z)
+    Filter.atTop
+    (nhds
+      (if
+          RankSignatures.InBox caps z ∧
+            ∀ (k : K), RankSignatures.InBase (f k) (RankSignatures.groupedVector b caps a g orientation z k) then
+        1
+      else 0))
+RankSignatures.exists_monotone_modular_shift.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f : Finset E → ℤ)
+  (b : E → ℤ) :
+  ∃ c,
+    (∀ (e : E), 0 ≤ b e + c e) ∧
+      ∀ (A B : Finset E), A ⊆ B → RankSignatures.modularShift f c A ≤ RankSignatures.modularShift f c B
+RankSignatures.modularShift_base.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f : Finset E → ℤ) (v c : E → ℤ) :
+  RankSignatures.InBase (RankSignatures.modularShift f c) (v + c) ↔ RankSignatures.InBase f v
+RankSignatures.penalty_modularShift.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f : Finset E → ℤ) (v c : E → ℤ) :
+  RankSignatures.penalty (RankSignatures.modularShift f c) (v + c) = RankSignatures.penalty f v
+'RankSignatures.boxed_disjoint_grouped_signature' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RankSignatures.boxed_disjoint_grouped_slice_signature' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RankSignatures.boxed_disjoint_grouped_power_signature' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RankSignatures.boxed_groupedWeight_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RankSignatures.exists_monotone_modular_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+compiler_exit_status=0

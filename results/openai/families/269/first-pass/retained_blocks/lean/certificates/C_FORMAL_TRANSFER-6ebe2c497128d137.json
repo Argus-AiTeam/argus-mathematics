@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_FORMAL_TRANSFER-ff9fd6b2fe92",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/269/first-pass/retained_blocks/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6300,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/269/first-pass/retained_blocks/lean/Main.lean",
+    "source_sha256": "249fc2d8f492f18c62f6d426f38d2e68f1a65ebc39b293a0fb2833a75c51bab9",
+    "statement_fidelity": "families/269/first-pass/retained_blocks/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "ee1ede850502016c8d3e33f16c7bfb53efcc34fb8b0ce4eaad74960d50b5e293",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/269/first-pass/retained_blocks/lean/Main.lean:44:61: error: Application type mismatch: The argument\n  hDelta\nhas type\n  hDelta✝ ≤ h\nbut is expected to have type\n  ?m.270 ≤ h\nin the application\n  mul_le_mul_of_nonneg_left hDelta\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/retained_blocks/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators InnerProductSpace\n\nnamespace RetainedBlocks\n\ntheorem diagonalEnergyTransfer\n    {ι F : Type*} [Fintype ι] [NormedAddCommGroup F] [NormedSpace ℝ F]\n    (r : ι → ℝ) (a b : ι → F) (D : F →L[ℝ] F)\n    (hr : ∀ i, 1 ≤ r i)\n    (hD : ∀ y, ‖D y‖ ≤ ‖y‖)\n    (hconj : ∀ i, r i • a i = D (b i)) :\n    ∑ i, ‖a i‖ ^ 2 ≤ ∑ i, ‖b i‖ ^ 2 := by\n  apply Finset.sum_le_sum\n  intro i _\n  have hr0 : 0 ≤ r i := le_trans zero_le_one (hr i)\n  have heq : r i * ‖a i‖ = ‖D (b i)‖ := by\n    simpa only [norm_smul, Real.norm_of_nonneg hr0] using congrArg norm (hconj i)\n  have hle : ‖a i‖ ≤ ‖b i‖ := by\n    nlinarith [hr i, norm_nonneg (a i), hD (b i)]\n  nlinarith [norm_nonneg (a i), norm_nonneg (b i)]\n\ntheorem kernelSafeRelativeBound\n    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]\n    (R : E →L[ℝ] E) (x : E) (L h hDelta C ε : ℝ)\n    (hL : 0 ≤ L) (hC : 0 ≤ C) (hε : 0 ≤ ε)\n    (hR : ‖R‖ ≤ ε)\n    (hx : ‖x‖ ^ 2 ≤ C * hDelta) (hDelta : hDelta ≤ h) :\n    -(ε * C * h) ≤ L + ⟪x, R x⟫_ℝ := by\n  have hnorm : ‖R x‖ ≤ ε * ‖x‖ :=\n    (R.le_opNorm x).trans (mul_le_mul_of_nonneg_right hR (norm_nonneg x))\n  have hi : |⟪x, R x⟫_ℝ| ≤ ε * ‖x‖ ^ 2 := by\n    calc\n      |⟪x, R x⟫_ℝ| = ‖⟪x, R x⟫_ℝ‖ := (Real.norm_eq_abs _).symm\n      _ ≤ ‖x‖ * ‖R x‖ := norm_inner_le_norm x (R x)\n      _ ≤ ‖x‖ * (ε * ‖x‖) :=\n        mul_le_mul_of_nonneg_left hnorm (norm_nonneg x)\n      _ = ε * ‖x‖ ^ 2 := by ring\n  have he : ε * ‖x‖ ^ 2 ≤ ε * C * h := by\n    calc\n      ε * ‖x‖ ^ 2 ≤ ε * (C * hDelta) :=\n        mul_le_mul_of_nonneg_left hx hε\n      _ ≤ ε * (C * h) :=\n        mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hDelta hC) hε\n      _ = ε * C * h := by ring\n  have hl := (abs_le.mp hi).1\n  linarith\n\ntheorem selectiveMargin :\n    (1 : ℚ) - 93527408868499 / 10^14 - 61 / 4096\n      - 658 * (3 / 10^6) = 4785933319001 / 10^14 := by\n  norm_num\n\ntheorem strongerThanStagedCoefficient :\n    (4616733319001 : ℚ) / 10^14 < 4785933319001 / 10^14 := by\n  norm_num\n\nend RetainedBlocks\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/retained_blocks/lean/statement_fidelity.md",
+    "text": "# Statement fidelity for `Main.lean`\n\nThe claim is `C_FORMAL_TRANSFER`, not the complete spherical retained-block\ntheorem. The source imports the host's Mathlib for Lean 4.31.0.\n\n`RetainedBlocks.diagonalEnergyTransfer` quantifies over any finite index type\nand real normed output space. Its inputs are vectors `a i`, `b i`, real\nscalars `r i >= 1`, and a continuous linear contraction `D`. The exact\nhypothesis is `r i * a i = D (b i)` (scalar multiplication). The conclusion\nis the inequality between the sums of squared norms. In the mathematical\nproof take `a i = B(v_i^*) Delta_q psi`, `b i = B_i psi`, and let `D` be\nthe output-sector diagonal `Delta_q`. The conjugation identity supplying\nthis hypothesis is established in the prose proof, not in Lean.\n\n`RetainedBlocks.kernelSafeRelativeBound` quantifies over any real\ninner-product space, an arbitrary continuous linear operator `R`, vector\n`x`, and real numbers `L,h,hDelta,C,epsilon`. The assumptions are\n`L >= 0`, `C >= 0`, `epsilon >= 0`, `norm R <= epsilon`,\n`norm x ^ 2 <= C * hDelta`, and `hDelta <= h`. Its conclusion is\n`L + inner x (R x) >= -epsilon*C*h`. In particular it assumes neither\npositive semidefiniteness nor invertibility of `R` or any Gram matrix.\nApply it to the realification of the finite Hilbert direct sum of\nannihilator outputs. Here `L` is the nonnegative limiting lifted form,\n`R` is the coefficient/output-diagonal error, and `hDelta` and `h` are\nthe limiting conjugated and physical pair energies on a fixed vector.\nThe source does not prove that `norm R` tends to zero; that follows from\nthe explicit finite coefficient limits and diagonal formulas in the\nprose theorem.\n\n`RetainedBlocks.selectiveMargin` proves the exact rational coefficient\nidentity with allowance price 658. `strongerThanStagedCoefficient` proves\nits strict comparison with the staged coefficient. Neither declaration\nasserts that this gap coefficient improves the later literature.\n\nNot formalized here: the CAR normal-ordering identity; SU(2) decomposition\nand Haar averaging; reconstruction and PSD of the seven-row matrices;\nsingular compression equivalence; the local/spectator Fock\nfactorization; the infinite three-body tail; and the final eventually-in-q\noperator theorem. Those obligations are separately proved in `theorem.md`\nand, where finite and arithmetic, replayed by `verify.py`. A successful\nLean run certifies only the declarations identified above.\n"
+  },
+  "subject": {
+    "content_hash": "484e390f56d16f5d416374d7bfd94dc53a8806df268442b601376a2a538e0b00",
+    "kind": "claim",
+    "subject_id": "C_FORMAL_TRANSFER"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

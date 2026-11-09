@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_MESH_ALGEBRA-667075b020e4",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/230/first-pass/mesh-tail-audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/230/first-pass/mesh-tail-audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 18669,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/230/first-pass/mesh-tail-audit/Main.lean",
+    "source_sha256": "5e38ebaec6b11e9829492dae02a64fe281364535e67ecd4143f938158b95f25f",
+    "statement_fidelity": "families/230/first-pass/mesh-tail-audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "c219f87c89d5864cbe0ca794a154dca4df0a90fea90d356765696612d91c62d0",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/230/first-pass/mesh-tail-audit/Main.lean:93:55: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/mesh-tail-audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace MeshTail\n\ntheorem envelope_step\n    (S A Snext Anext alpha C Lambda err : ℝ)\n    (hS : 0 ≤ S) (ha : 0 ≤ alpha) (ha' : alpha ≤ 1 / 2)\n    (hC : 0 ≤ C) (hLambda : 1 ≤ Lambda) (hCL : 2 * C ≤ Lambda)\n    (he : 0 ≤ err)\n    (hfirst : Snext ≤ S + alpha * A + err)\n    (hsecond : Anext ≤ C * S + alpha * A + err) :\n    max Snext (Anext / Lambda) ≤\n      (1 + Lambda * alpha) * max S (A / Lambda) + err := by\n  let U := max S (A / Lambda)\n  have hLpos : 0 < Lambda := by linarith\n  have hSU : S ≤ U := le_max_left _ _\n  have hU : 0 ≤ U := le_trans hS hSU\n  have hAU : A ≤ Lambda * U := by\n    have h := (div_le_iff₀ hLpos).mp (show A / Lambda ≤ U from le_max_right _ _)\n    nlinarith\n  have haA : alpha * A ≤ alpha * (Lambda * U) :=\n    mul_le_mul_of_nonneg_left hAU ha\n  have hCS : C * S ≤ C * U := mul_le_mul_of_nonneg_left hSU hC\n  have hcoeff : C + alpha * Lambda ≤ Lambda := by nlinarith\n  have hcoeffU := mul_le_mul_of_nonneg_right hcoeff hU\n  have herr : err ≤ Lambda * err := by nlinarith\n  have hAstep : Anext / Lambda ≤ U + err := by\n    apply (div_le_iff₀ hLpos).mpr\n    nlinarith\n  have hpositive : 0 ≤ Lambda * alpha * U :=\n    mul_nonneg (mul_nonneg (le_of_lt hLpos) ha) hU\n  apply max_le\n  · change Snext ≤ (1 + Lambda * alpha) * U + err\n    nlinarith\n  · change Anext / Lambda ≤ (1 + Lambda * alpha) * U + err\n    nlinarith\n\ntheorem scalar_product_bound\n    (u a e : ℕ → ℝ)\n    (ha : ∀ j, 0 ≤ a j) (he : ∀ j, 0 ≤ e j)\n    (hu : ∀ j, u (j + 1) ≤ (1 + a j) * u j + e j) (n : ℕ) :\n    u n ≤ (u 0 + ∑ j ∈ Finset.range n, e j) *\n      ∏ j ∈ Finset.range n, (1 + a j) := by\n  have aux : ∀ n : ℕ,\n      1 ≤ ∏ j ∈ Finset.range n, (1 + a j) ∧\n      u n ≤ (u 0 + ∑ j ∈ Finset.range n, e j) *\n        ∏ j ∈ Finset.range n, (1 + a j) := by\n    intro n\n    induction n with\n    | zero => simp\n    | succ n ih =>\n      have hP0 : 0 ≤ ∏ j ∈ Finset.range n, (1 + a j) := by linarith [ih.1]\n      have hPa := mul_nonneg hP0 (ha n)\n      have hP : 1 ≤ (∏ j ∈ Finset.range n, (1 + a j)) * (1 + a n) := by\n        nlinarith [ih.1]\n      have hfactor : 0 ≤ 1 + a n := by linarith [ha n]\n      have hmul := mul_le_mul_of_nonneg_left ih.2 hfactor\n      have hcorrection := mul_nonneg (he n) (sub_nonneg.mpr hP)\n      rw [Finset.prod_range_succ, Finset.sum_range_succ]\n      constructor\n      · exact hP\n      · have hstep := hu n\n        nlinarith\n  exact (aux n).2\n\ntheorem uniform_scalar_bound\n    (u a e : ℕ → ℝ) (E B : ℝ)\n    (hu0 : 0 ≤ u 0) (hE : 0 ≤ E)\n    (ha : ∀ j, 0 ≤ a j) (he : ∀ j, 0 ≤ e j)\n    (hu : ∀ j, u (j + 1) ≤ (1 + a j) * u j + e j)\n    (hsum : ∀ n, (∑ j ∈ Finset.range n, e j) ≤ E)\n    (hprod : ∀ n, (∏ j ∈ Finset.range n, (1 + a j)) ≤ B) :\n    ∀ n, u n ≤ (u 0 + E) * B := by\n  intro n\n  have hp0 : 0 ≤ ∏ j ∈ Finset.range n, (1 + a j) := by\n    apply Finset.prod_nonneg\n    intro j hj\n    linarith [ha j]\n  calc\n    u n ≤ (u 0 + ∑ j ∈ Finset.range n, e j) *\n        ∏ j ∈ Finset.range n, (1 + a j) :=\n      scalar_product_bound u a e ha he hu n\n    _ ≤ (u 0 + E) * ∏ j ∈ Finset.range n, (1 + a j) :=\n      mul_le_mul_of_nonneg_right (by linarith [hsum n]) hp0\n    _ ≤ (u 0 + E) * B :=\n      mul_le_mul_of_nonneg_left (hprod n) (by linarith)\n\ntheorem fifth_power_bound (n : ℕ) : (n + 1) ^ 5 ≤ 32 ^ n := by\n  induction n with\n  | zero => norm_num\n  | succ n ih =>\n    calc\n      (n + 1 + 1) ^ 5 ≤ (2 * (n + 1)) ^ 5 := by gcongr <;> omega\n      _ = 32 * (n + 1) ^ 5 := by ring\n      _ ≤ 32 * 32 ^ n := Nat.mul_le_mul_left 32 ih\n      _ = 32 ^ (n + 1) := by rw [pow_succ]; omega\n\ntheorem geometric_over_fourth\n    (B : ℝ) (hB : 32 ≤ B) (n : ℕ) :\n    (n : ℝ) + 1 ≤ B ^ n / ((n : ℝ) + 1) ^ 4 := by\n  have hc : ((n : ℝ) + 1) ^ 5 ≤ (32 : ℝ) ^ n := by\n    exact_mod_cast fifth_power_bound n\n  have hpow : (32 : ℝ) ^ n ≤ B ^ n := by gcongr\n  apply (le_div_iff₀ (by positivity : 0 < ((n : ℝ) + 1) ^ 4)).mpr\n  calc\n    ((n : ℝ) + 1) * ((n : ℝ) + 1) ^ 4 = ((n : ℝ) + 1) ^ 5 := by ring\n    _ ≤ (32 : ℝ) ^ n := hc\n    _ ≤ B ^ n := hpow\n\nend MeshTail\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/mesh-tail-audit/statement_fidelity.md",
+    "text": "# Statement fidelity: deterministic mesh-tail core\n\nThis file describes only the five declarations in namespace `MeshTail` in\n`Main.lean`. All real variables range over the actual real ordered field;\nsequences range over every natural index, not a sampled finite set.\n\n`envelope_step` quantifies over real values\n`S A Snext Anext alpha C Lambda err`. It assumes `S >= 0`,\n`0 <= alpha <= 1/2`, `C >= 0`, `Lambda >= 1`, `2*C <= Lambda`,\n`err >= 0`, and the two displayed affine upper recurrences. Its conclusion\nis exactly the upper recurrence for `max S (A/Lambda)`. No stochastic\nrecurrence, summability, or parameter choice is hidden in this declaration.\nIt does not require `A` to be nonnegative; that harmless strengthening\nincludes the manuscript's nonnegative case.\n\n`scalar_product_bound` quantifies over real sequences `u a e`\nand every natural `n`. Assuming nonnegative perturbations `a` and `e`\nand the scalar one-step recurrence at every index, it bounds `u n` by\nthe initial value plus the partial error sum, times the finite product\nof `1+a`. No boundedness of those products is assumed for this statement.\n\n`uniform_scalar_bound` additionally assumes nonnegative `u 0`\nand `E`, a common upper bound `E` for every partial error sum, and a\ncommon real bound `B` for every finite product. It concludes the same\nconstant `(u 0 + E)*B` bounds `u n` for every natural `n`. The analytic\nproof, not Lean, supplies these hypotheses using summable geometric\ncoefficients and summable inverse-square errors.\n\n`fifth_power_bound` proves `(n+1)^5 <= 32^n` for every natural\n`n`. `geometric_over_fourth` consequently proves\n`n+1 <= B^n/(n+1)^4` for every real `B >= 32` and every natural `n`.\nThis is the universal index bound used to dominate the infinitely many\nfailure probabilities by a geometric series.\n\nThese are not formalizations of Brownian motion, SLE, the Green-kernel\nidentity, a stochastic Fubini theorem, the physical-disk rule, or either\nHausdorff theorem. Compilation certifies the deterministic recurrence\nand infinite-index comparison only. The report proves the stochastic\ninputs analytically and identifies the additional independent review\nthat neither this document nor a Lean compiler performs.\n"
+  },
+  "subject": {
+    "content_hash": "b513faa5561b57c815c7c3525192b2282a31bb85c4e13e84b988e34cb89ac79b",
+    "kind": "claim",
+    "subject_id": "C_MESH_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

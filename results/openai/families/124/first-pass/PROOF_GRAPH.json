@@ -1,0 +1,163 @@
+{
+  "goal": "C9000124",
+  "routes": [
+    {
+      "name": "R_AUDIT_WITNESS",
+      "status": "parked",
+      "evidence": "research/two_frame_compression/README.md",
+      "goal": "C9000124",
+      "obligations": ["C_TFC_COUNTEREXAMPLE"]
+    },
+    {
+      "name": "R_AUDIT_VERIFICATION",
+      "status": "current",
+      "evidence": "research/two_frame_compression/README.md",
+      "goal": "C9000124",
+      "obligations": ["C_TFC_HISTORY"]
+    }
+  ],
+  "nodes": {
+    "C9000124": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 124 (Polynomial-time scheduling on three identical machines.; papers: A Polynomial-Time Algorithm for Three-Machine Unit-Job Scheduling; Lean status: Partially/Comparator formalized (lean/docs/124.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_TFC_HISTORY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ],
+      "scope": "The universal-verification alternative now has complete kernel certificates, but remains open for Host-invoked independent statement-fidelity and significance review. The counterexample alternative is parked, not excluded by bounded experiments."
+    },
+    "C_MAIN_SCHED": {
+      "statement": "The manuscript's main polynomial-time exact scheduling theorem, not automatically refuted by a construction failure.",
+      "status": "open",
+      "depends_on": ["C_HIERARCHY", "C_HIERARCHY_DP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_frame_compression/README.md"]
+    },
+    "C_HIERARCHY": {
+      "statement": "Every feasible full schedule has the asserted bounded-description hierarchy.",
+      "status": "open",
+      "depends_on": ["C_TFC_HISTORY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/two_frame_compression/formal_hierarchy/Main.lean",
+        "research/two_frame_compression/formal_hierarchy/statement_fidelity.md",
+        "research/two_frame_compression/formal_hierarchy/exact_certificate.json"
+      ],
+      "scope": "LiteralHierarchy.thm_structure constructs the finite covering hierarchy without a history, invariant, protocol-success, or compression premise. Independent review remains pending."
+    },
+    "C_TFC_HISTORY": {
+      "statement": "Arbitrary-depth root-reachable construction preserves all global invariants and description bounds in both frames.",
+      "status": "open",
+      "depends_on": ["C_TFC_RAW_CONSTRUCTION_INTEGRATION_LEAN", "C_TFC_PROTOCOL_EXTRACTION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/two_frame_compression/formal_hierarchy/Main.lean",
+        "research/two_frame_compression/formal_hierarchy/statement_fidelity.md",
+        "research/two_frame_compression/formal_hierarchy/exact_certificate.json",
+        "research/two_frame_compression/formal_hierarchy/evidence/certificates/C_TFC_HISTORY-d0ea8abc44310f4b.json"
+      ],
+      "scope": "C_TFC_HISTORY v5 is closed_kernel with no undischarged assumptions. All promotions, gaps, original-time marks, simultaneous I1-I3, historical extension, and arbitrary-depth hierarchy existence are proved. Graph status remains open only for independent review, not for an outstanding mathematical bridge."
+    },
+    "C_SEPARATORS": {
+      "statement": "Exact lexicographic normalization supports shared cutoffs and ideal separators.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_TFC_LISTS": {
+      "statement": "High-job identity, five-entry bound, historical extension, and entry-size bound hold in every root-reachable update.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_TFC_BOUNDARY": {
+      "statement": "Global I2 and future-reordering-quantified I3 propagate through both updates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_TFC_DESCRIPTIONS": {
+      "statement": "Global child formulas and relative split formulas are exact and use fewer than 500 leaves.",
+      "status": "open",
+      "depends_on": ["C_TFC_LISTS", "C_TFC_BOUNDARY"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_HIERARCHY_DP": {
+      "statement": "The finite-description dynamic program is sound and complete given the hierarchy.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_TFC_COUNTEREXAMPLE": {
+      "statement": "An exact root-reachable witness refutes a literal load-bearing boundary or compression assertion.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_TFC_FINITE_3307": {
+      "statement": "Only the recorded 48-job hierarchy is verified, including a surviving complex first entry, its restrictive carry, another switch, all future-reordering I3 checks at its finite nodes, and 27 split formulas. No universal conclusion.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_frame_compression/finite_certificate.json", "research/two_frame_compression/verify.py"],
+      "scope": "finite_verification; checkpoint only; not a prerequisite discharged for the universal goal"
+    },
+    "C_TFC_SAME_FRAME_HISTORY_EXTENSION_LEAN": {
+      "statement": "Arbitrary-run historical flattening and a 21-leaf extension from exact carry/prune histories, with explicit origin-coverage, local-I1 and five-entry premises.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_frame_compression/formal_lists/Main.lean", "research/two_frame_compression/formal_lists/statement_fidelity.md"],
+      "scope": "Kernel-certified component; independent statement-fidelity review is pending."
+    },
+    "C_TFC_TEMPORAL_BOUNDARY_LEAN": {
+      "statement": "Conditional arbitrary-depth temporal preservation from actual lex-minimum schedules and earliest-exception walks, including the first exterior advance and switched G from incoming separators.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_frame_compression/formal_boundary/Main.lean", "research/two_frame_compression/formal_boundary/statement_fidelity.md"],
+      "scope": "Kernel-certified component with explicit list interfaces; the integrated theorem removes these interfaces."
+    },
+    "C_TFC_RAW_CONSTRUCTION_INTEGRATION_LEAN": {
+      "statement": "Every root-connected raw construction history derives I1-I3, chronological G, at most five entries, 21-leaf historical extensions, and exact global and split descriptions below 500 leaves at arbitrary depth.",
+      "status": "open",
+      "depends_on": ["C_TFC_SAME_FRAME_HISTORY_EXTENSION_LEAN", "C_TFC_TEMPORAL_BOUNDARY_LEAN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_frame_compression/formal_construction/Main.lean", "research/two_frame_compression/formal_construction/exact_certificate.json", "research/two_frame_compression/formal_construction/statement_fidelity.md"],
+      "scope": "Earlier kernel-certified simultaneous induction, conditional on its raw-history constructors. The final hierarchy proof extracts those constructors, generalizes the exhausted switched-cutoff guard to include r=|J|, and recompiles the entire proof; the earlier source and certificate remain unchanged."
+    },
+    "C_TFC_PROTOCOL_PREPARATION_LEAN": {
+      "statement": "For every nonempty root-reachable node, compatible priorities, exact lexicographic normalization, one common center, shared-cutoff advances, and individual next promotions exist under the literal protocol.",
+      "status": "open",
+      "depends_on": ["C_TFC_RAW_CONSTRUCTION_INTEGRATION_LEAN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/two_frame_compression/formal_protocol/Main.lean",
+        "research/two_frame_compression/formal_protocol/statement_fidelity.md",
+        "research/two_frame_compression/formal_protocol/exact_certificate.json"
+      ],
+      "scope": "Kernel-certified preparation component. Complete promotion collection and hierarchy assembly are proved by the subsequent full extraction theorem."
+    },
+    "C_TFC_PROTOCOL_EXTRACTION": {
+      "statement": "Construct every required raw scheduling certificate from the literal center/promotion process and assemble a covering terminating bounded-description hierarchy.",
+      "status": "open",
+      "depends_on": ["C_TFC_PROTOCOL_PREPARATION_LEAN", "C_TFC_RAW_CONSTRUCTION_INTEGRATION_LEAN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/two_frame_compression/formal_hierarchy/Main.lean",
+        "research/two_frame_compression/formal_hierarchy/statement_fidelity.md",
+        "research/two_frame_compression/formal_hierarchy/exact_certificate.json",
+        "research/two_frame_compression/formal_hierarchy/evidence/certificates/C_TFC_PROTOCOL_EXTRACTION-830a356b72608103.json"
+      ],
+      "scope": "C_TFC_PROTOCOL_EXTRACTION v2 is closed_kernel. Both sides collect every promotion; every nonempty gap has a smaller root-reachable child; every actual mark has an original-time split description; cardinal induction produces the finite covering tree. Independent review is pending."
+    }
+  }
+}

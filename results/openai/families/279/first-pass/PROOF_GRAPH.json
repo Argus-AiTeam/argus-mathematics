@@ -1,0 +1,141 @@
+{
+  "goal": "C9000279",
+  "routes": [
+    {
+      "name": "Universal certification of the prescribed-probability order trial",
+      "status": "current",
+      "evidence": "research/order_trial/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000279": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 279 (Exact quantum factoring over a fixed finite gate set.; papers: Exact quantum factoring over a fixed finite gate set; Lean status: Partially/Comparator formalized (lean/docs/279.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_ORDER_TRIAL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_ORDER_TRIAL": {
+      "statement": "For every original admissible input, the fixed-gate trial returns only positive order multiples below B and has true-order probability phi(r)*2^(-ceil(log2(r))-10), without order advice or residue enumeration.",
+      "status": "open",
+      "depends_on": ["C_SELECTED_TRANSFORM", "C_BIN_RECOVERY", "C_RESIDUE_MASS", "C_DYADIC_MAJORANT", "C_ORDER_CORRECTION", "C_ORDER_RESOURCES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md", "research/order_trial/exact_certificate.json", "research/order_trial/verify.py", "research/order_trial/verification_result.json"]
+    },
+    "C_SELECTED_TRANSFORM": {
+      "statement": "The forward-shift circuit has unnormalized selected-branch matrix Q^(-1/2)*g(kx/Q), including the ancillary test probability.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md", "research/order_trial/verify.py"]
+    },
+    "C_BIN_RECOVERY": {
+      "statement": "Rounded reduced fraction bins with denominator below B are unique and recoverable in polynomial bit time.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md", "research/order_trial/verify.py"]
+    },
+    "C_DYADIC_MAJORANT": {
+      "statement": "P, the coefficient-rounded majorant U, and its exact nonenumerative sum S are polynomial-bit dyadics satisfying the bounds in lem:majorant.",
+      "status": "open",
+      "depends_on": ["C_POLYGON_CORE", "C_PROGRESSION_ARITHMETIC", "C_ENVELOPE_SUM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md", "research/order_trial/exact_certificate.json", "research/order_trial/verify.py"]
+    },
+    "C_POLYGON_CORE": {
+      "statement": "Every average of the quarter-linear phase interpolant over an interval of length at most one half has modulus at least one half; a three-sector polynomial certificate proves the bound.",
+      "status": "open",
+      "depends_on": ["C_SECTOR_BOUND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md", "research/order_trial/exact_certificate.json"]
+    },
+    "C_SECTOR_BOUND": {
+      "statement": "Over the reals the three exact integrated polygon sectors have squared modulus at least one quarter of their squared interval length, under their respective segment-length constraints.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/Main.lean", "research/order_trial/statement_fidelity.md", "research/order_trial/certificates/C_SECTOR_BOUND-6221f222ac30967c.json"]
+    },
+    "C_POWER_SUMS": {
+      "statement": "For every natural M, the five rational polynomials in exact_certificate.json are exactly the sums of u^q over 0 <= u < M, for q=0,1,2,3,4.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/Main.lean", "research/order_trial/exact_certificate.json", "research/order_trial/report.md"]
+    },
+    "C_PROGRESSION_ARITHMETIC": {
+      "statement": "For every reduced rounded label and residue, P is computed by at most three affine progression sums, is a polynomial-bit dyadic, and differs from the integral squared modulus by at most 32/Q.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/verify.py", "research/order_trial/report.md"]
+    },
+    "C_ENVELOPE_SUM": {
+      "statement": "The upward coefficient-rounded quartic envelope has at most eight pieces; consistent half-open integer ownership and five power sums compute its exact dyadic total without residue enumeration.",
+      "status": "open",
+      "depends_on": ["C_POWER_SUMS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/verify.py", "research/order_trial/report.md", "research/order_trial/exact_certificate.json"]
+    },
+    "C_RESIDUE_MASS": {
+      "statement": "At d equal to the true order, the actual phase-register-success and rounded-bin probability equals the sum of P over residues, with no postselection normalization.",
+      "status": "open",
+      "depends_on": ["C_SELECTED_TRANSFORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md"]
+    },
+    "C_ORDER_RESOURCES": {
+      "statement": "Every arithmetic, modular-power, shift, label-recovery, and dyadic-retention operation has uniform polynomial bit and fixed-finite-gate complexity and polynomial workspace, with no order advice.",
+      "status": "open",
+      "depends_on": ["C_SELECTED_TRANSFORM", "C_BIN_RECOVERY", "C_PROGRESSION_ARITHMETIC", "C_ENVELOPE_SUM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md", "research/order_trial/verify.py"]
+    },
+    "C_ORDER_CORRECTION": {
+      "statement": "The dyadic downward rounding and two correction modes use valid probabilities and produce exactly lambda(d) per reduced true-order numerator.",
+      "status": "open",
+      "depends_on": ["C_DYADIC_MAJORANT", "C_RESIDUE_MASS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md", "research/order_trial/verification_result.json"]
+    },
+    "C_MAIN": {
+      "statement": "The manuscript's full fixed-finite-gate exact factoring theorem thm:main holds.",
+      "status": "open",
+      "depends_on": ["C_ORDER_TRIAL", "C_FACTOR_PROCESS", "C_DEFERRED_FILTERS", "C_PRIMALITY", "C_QUARTER_AMPLIFICATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md"]
+    },
+    "C_FACTOR_PROCESS": {
+      "statement": "Proposition prop:process supplies complete verifiable auxiliary data, computable transition probabilities, and all-good completion within polynomial caps.",
+      "status": "open",
+      "depends_on": ["C_ORDER_TRIAL", "C_PRIMALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md"]
+    },
+    "C_DEFERRED_FILTERS": {
+      "statement": "Proposition prop:known-probability identifies deferred and analytical passing events and gives success mass (1-2^(-n))^(n^10).",
+      "status": "open",
+      "depends_on": ["C_FACTOR_PROCESS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md"]
+    },
+    "C_PRIMALITY": {
+      "statement": "Lemma lem:primality gives an exact polynomial-time primality decision for every 2 <= m < B.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md"]
+    },
+    "C_QUARTER_AMPLIFICATION": {
+      "statement": "Lemma lem:quarter and equation eq:one-reflection produce certain correct output using the stated fixed gates once prop:known-probability holds.",
+      "status": "open",
+      "depends_on": ["C_DEFERRED_FILTERS", "C_PRIMALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/order_trial/report.md"]
+    }
+  }
+}

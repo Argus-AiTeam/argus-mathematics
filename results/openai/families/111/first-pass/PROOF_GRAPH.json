@@ -1,0 +1,125 @@
+{
+  "goal": "C9000111",
+  "routes": {
+    "R_SOURCE_FAITHFUL_VERIFICATION": {
+      "goal": "V_ONE_SAMPLE_ALMIGHTY",
+      "obligations": [
+        "L_FULL_SEED_INTERFACE",
+        "L_FILTER_MASS",
+        "L_DENSITY_PATHS",
+        "L_SAFE_TRANSFER",
+        "L_ORDER_UNIFORM_ACCOUNTING",
+        "L_BRANCH_CONSTANTS",
+        "L_ONE_SAMPLE_GLUE"
+      ],
+      "status": "retired",
+      "retired_because": "Superseded natural-language-only goal version; unchanged obligations are rebound to the checked source in R_KERNEL_SOURCE_FIDELITY."
+    },
+    "R_KERNEL_SOURCE_FIDELITY": {
+      "goal": "V_ONE_SAMPLE_ALMIGHTY",
+      "obligations": [
+        "L_FULL_SEED_INTERFACE",
+        "L_FILTER_MASS",
+        "L_DENSITY_PATHS",
+        "L_SAFE_TRANSFER",
+        "L_ORDER_UNIFORM_ACCOUNTING",
+        "L_BRANCH_CONSTANTS",
+        "L_ONE_SAMPLE_GLUE"
+      ],
+      "status": "active"
+    },
+    "R_FULL_SEED_FIDELITY": {
+      "goal": "L_FULL_SEED_INTERFACE",
+      "obligations": ["L_SCAN_CORRESPONDENCE", "L_ORDER_QUANTIFIER_EQUIVALENCE"],
+      "status": "active"
+    }
+  },
+  "nodes": {
+    "C9000111": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 111 (One-sample matroid prophet inequalities against an almighty adversary.; papers: One Sample Suffices for Matroid Prophet Inequalities against an Almighty Adversary; Lean status: Partially/Comparator formalized (lean/docs/111.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["V_ONE_SAMPLE_ALMIGHTY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "V_ONE_SAMPLE_ALMIGHTY": {
+      "statement": "Source-faithful universal fixed-vector expected-minimum bound 2^-293 and exactly-one-sample full-seed bound 2^-310.",
+      "status": "open",
+      "depends_on": ["L_FULL_SEED_INTERFACE", "L_FILTER_MASS", "L_DENSITY_PATHS", "L_SAFE_TRANSFER", "L_ORDER_UNIFORM_ACCOUNTING", "L_BRANCH_CONSTANTS", "L_ONE_SAMPLE_GLUE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/full_seed/report.md",
+        "research/full_seed/Main.lean",
+        "research/full_seed/statement_fidelity.md",
+        "research/full_seed/exact_certificate.json",
+        "research/full_seed/certificates/V_ONE_SAMPLE_ALMIGHTY-a12b28434690e741.json"
+      ]
+    },
+    "L_FULL_SEED_INTERFACE": {
+      "statement": "Match the staged algorithm, seed law, nonanticipating measurable rule, and every-seed feasibility to the actual formal definitions.",
+      "status": "open",
+      "depends_on": ["L_SCAN_CORRESPONDENCE", "L_ORDER_QUANTIFIER_EQUIVALENCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/full_seed/report.md"]
+    },
+    "L_SCAN_CORRESPONDENCE": {
+      "statement": "For arbitrary finite matroids, contracting prior eligible labels in a layer and contracting prior retained labels have the same closure; the resulting closure test equals the manuscript's rank-one test.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/full_seed/Main.lean", "research/full_seed/statement_fidelity.md"]
+    },
+    "L_ORDER_QUANTIFIER_EQUIVALENCE": {
+      "statement": "A full-seed order function attains every pointwise order minimum, and an expected-minimum bound is equivalent to the corresponding bound for every complete-seed order function.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/full_seed/Main.lean", "research/full_seed/statement_fidelity.md"]
+    },
+    "L_FILTER_MASS": {
+      "statement": "Candidate-filter mass identities and inequalities.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/full_seed/upstream/OAI/Probability/MatroidProphet/CandidateFilter.lean"]
+    },
+    "L_DENSITY_PATHS": {
+      "statement": "Density maximizers, guarded paths, activation schedule, and timeline-uniform generators.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/full_seed/upstream/OAI/Probability/MatroidProphet/Density/Guarded.lean"]
+    },
+    "L_SAFE_TRANSFER": {
+      "statement": "Reverse exposure, safe-label estimate, and mask-dependent residual-to-rank transfer.",
+      "status": "open",
+      "depends_on": ["L_DENSITY_PATHS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/full_seed/safety_transfer_analysis.md", "research/full_seed/upstream/OAI/Probability/MatroidProphet/Residual/Tail.lean"]
+    },
+    "L_ORDER_UNIFORM_ACCOUNTING": {
+      "statement": "Simultaneous all-orders rank bound, common-generator telescoping, and conditional test thinning.",
+      "status": "open",
+      "depends_on": ["L_SAFE_TRANSFER", "L_DENSITY_PATHS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/full_seed/upstream/OAI/Probability/MatroidProphet/Algorithm/Worst.lean"]
+    },
+    "L_BRANCH_CONSTANTS": {
+      "statement": "Rounding and branch mixing give the exact fixed-vector factor 2^-293.",
+      "status": "open",
+      "depends_on": ["L_FILTER_MASS", "L_ORDER_UNIFORM_ACCOUNTING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/full_seed/upstream/OAI/Probability/MatroidProphet/CompletePayoff.lean"]
+    },
+    "L_ONE_SAMPLE_GLUE": {
+      "statement": "Seed-dependent sacrificed-mask gluing preserves laws, executions, and the expected minimum against the full-seed adversary.",
+      "status": "open",
+      "depends_on": ["L_FULL_SEED_INTERFACE", "L_BRANCH_CONSTANTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/full_seed/upstream/OAI/Probability/MatroidProphet/Gluing.lean"]
+    }
+  }
+}

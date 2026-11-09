@@ -1,0 +1,146 @@
+{
+  "goal": "C9000149",
+  "routes": [
+    {
+      "name": "R149_BOUNDED_KINETICS",
+      "status": "current",
+      "evidence": "research/bounded-kinetics/report.md"
+    },
+    {
+      "name": "R149_PINNED_REPLAY",
+      "status": "current",
+      "evidence": "research/affine-audit/exact_certificate.json"
+    }
+  ],
+  "nodes": {
+    "C9000149": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 149 (Classwise permanence for weakly reversible mass-action systems.; papers: Uniform Permanence in Weakly Reversible Mass-Action Systems; Boundedness and persistence of weakly reversible mass-action systems; Lean status: Partially/Comparator formalized (lean/docs/149.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C149_AFFINE", "C149_BOUNDED_KINETICS", "C149_BK_PRIOR"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C149_BOUNDED_KINETICS": {
+      "statement": "Schedule-independent compact convex classwise permanence for all measurable schedules in a positive compact rate box, with global positive Caratheodory solutions and compact-uniform entrance time.",
+      "status": "in_progress",
+      "depends_on": ["C149_BK_GLOBAL", "C149_BK_SCALE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/bounded-kinetics/report.md", "research/bounded-kinetics/exact_certificate.json"]
+    },
+    "C149_BK_GEOMETRY": {
+      "statement": "One rate-independent affine family and plateau geometry, including compact initial-set coverage and exclusion of orthogonal slopes below the plateau.",
+      "status": "in_progress",
+      "depends_on": ["C149_AFFINE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/bounded-kinetics/report.md"]
+    },
+    "C149_BK_FLUX": {
+      "statement": "Uniform strict active increase with explicit bound 2 H rho_h h^N for every rate vector in the box.",
+      "status": "in_progress",
+      "depends_on": ["C149_BK_GEOMETRY", "C149_BK_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/bounded-kinetics/report.md", "research/bounded-kinetics/Main.lean"]
+    },
+    "C149_BK_AC": {
+      "statement": "Finite affine minima of absolutely continuous curves are absolutely continuous; active derivatives agree almost everywhere and integrate correctly.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/bounded-kinetics/report.md"]
+    },
+    "C149_BK_GLOBAL": {
+      "statement": "Unique local Caratheodory solutions, strong plateau invariance, positive compact global continuation, and stoichiometric preservation.",
+      "status": "in_progress",
+      "depends_on": ["C149_BK_GEOMETRY", "C149_BK_FLUX", "C149_BK_AC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/bounded-kinetics/report.md"]
+    },
+    "C149_BK_SCALE": {
+      "statement": "Explicit schedule-uniform delay per box and finite capped scale absorption, uniform over every compact initial set without nested plateaux.",
+      "status": "in_progress",
+      "depends_on": ["C149_BK_GEOMETRY", "C149_BK_GLOBAL", "C149_BK_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/bounded-kinetics/report.md", "research/bounded-kinetics/Main.lean"]
+    },
+    "C149_BK_PRIOR": {
+      "statement": "Exact bounded primary comparison with fixed-rate classwise absorption, strongly endotactic permanence, TDI embedding, and bounded-trajectory variable-rate persistence; not an exhaustive priority claim.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/bounded-kinetics/prior-results.md"]
+    },
+    "C149_BK_CORE": {
+      "statement": "Universal exact parameter-uniform cut, scalar trapping, non-nested finite scale induction, and finite logarithmic cap attainment.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/bounded-kinetics/Main.lean", "research/bounded-kinetics/statement_fidelity.md", "research/bounded-kinetics/lean/certificates/C149_BK_CORE-0648d449d1870d62.json"]
+    },
+    "C149_AFFINE": {
+      "statement": "Complete shared lem:affine with arbitrary positive discontinuous tolerance, finite fixed slopes, o(h^a) offsets, strict approximation, all ties, and outside-cube exponent sequences.",
+      "status": "proved",
+      "depends_on": ["C149_LOCAL", "C149_EXTENSION", "C149_GLUE"],
+      "reviewer_confirmed": true,
+      "evidence": ["research/affine-audit/report.md", "research/affine-audit/exact_certificate.json", "research/affine-audit/certificates/C149_AFFINE-83bb1636a8e68c29.json"]
+    },
+    "C149_LOCAL": {
+      "statement": "Dimension induction constructs and verifies every fixed-minimum family.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/affine-audit/report.md", "research/affine-audit/Main.lean"]
+    },
+    "C149_EXTENSION": {
+      "statement": "Limiting activity is closed; compact bad limits give a neighborhood and an offset power margin.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/affine-audit/report.md", "research/affine-audit/Main.lean"]
+    },
+    "C149_GLUE": {
+      "statement": "Finite interval pruning, cuts, and shifts select the correct local family, including cut equality.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/affine-audit/report.md", "research/affine-audit/Main.lean"]
+    },
+    "C149_UNIFORM": {
+      "statement": "Full sequential affine approximation implies a uniform small-h bound on the cube.",
+      "status": "open",
+      "depends_on": ["C149_AFFINE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/affine-audit/report.md"]
+    },
+    "C149_SEP_TRAP": {
+      "statement": "September sign constraints, cut flux, and plateau invariance.",
+      "status": "open",
+      "depends_on": ["C149_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Boundedness-and-persistence-of-weakly-reversible-mass-action-systems-September-25-2026/build/sections/03-dynamics.tex"]
+    },
+    "C149_SEP_MAIN": {
+      "statement": "September global boundedness and persistence for each positive initial condition.",
+      "status": "open",
+      "depends_on": ["C149_SEP_TRAP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Boundedness-and-persistence-of-weakly-reversible-mass-action-systems-September-25-2026/build/sections/01-introduction.tex"]
+    },
+    "C149_OCT_INCREASE": {
+      "statement": "October strict active increase and finite entry into each fixed-scale plateau.",
+      "status": "open",
+      "depends_on": ["C149_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Uniform-Permanence-in-Weakly-Reversible-Mass-Action-Systems-October-5-2026/build/sections/trapping.tex"]
+    },
+    "C149_OCT_MAIN": {
+      "statement": "October classwise compact convex invariant absorbing set, also for unbounded classes.",
+      "status": "open",
+      "depends_on": ["C149_OCT_INCREASE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Uniform-Permanence-in-Weakly-Reversible-Mass-Action-Systems-October-5-2026/build/sections/permanence.tex"]
+    }
+  }
+}

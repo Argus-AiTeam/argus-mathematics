@@ -1,0 +1,31 @@
+status: success
+source: families/082/first-pass/certificates/shared_trace/Main.lean
+cwd: $WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0
+lean: Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release) [$WORKSPACE/.elan/bin/lake env lean]
+lake: Lake version 5.0.0-src+68218e8 (Lean version 4.31.0) [$WORKSPACE/.elan/bin/lake]
+elan: elan 4.2.3 (b6cec7e10 2026-06-08) [$WORKSPACE/.elan/bin/elan]
+
+$ $WORKSPACE/.elan/bin/lake env lean families/082/first-pass/certificates/shared_trace/Main.lean
+exit_code: 0
+--- stdout ---
+SharedTrace.mixed_trace_estimate.{u_1, u_2, u_3} {n0 : Type u_1} {n1 : Type u_2} {n2 : Type u_3} [Fintype n0]
+  [Fintype n1] [Fintype n2] [DecidableEq n0] [DecidableEq n1] [DecidableEq n2] (W0 : Matrix n0 n1 ℂ)
+  (W1 : Matrix n1 n2 ℂ) (W2 : Matrix n2 n0 ℂ) (D0 : Matrix n0 n0 ℂ) (D1 : Matrix n1 n1 ℂ) (D2 : Matrix n2 n2 ℂ)
+  (h0 : D0.IsHermitian) (h1 : D1.IsHermitian) (h2 : D2.IsHermitian) :
+  have R0 := W0.fromCols W2ᴴ;
+  have R1 := W1.fromCols W0ᴴ;
+  have R2 := W2.fromCols W1ᴴ;
+  ‖(D0 * W0 * D1 * W1 * D2 * W2).trace‖ ≤
+    5 / 3 * max ‖toEuclideanCLM D0‖ (max ‖toEuclideanCLM D1‖ ‖toEuclideanCLM D2‖) *
+      (SharedTraceHessian.b ⋯ (R0ᴴ * D0 * R0) + SharedTraceHessian.b ⋯ (R1ᴴ * D1 * R1) +
+        SharedTraceHessian.b ⋯ (R2ᴴ * D2 * R2))
+'SharedTrace.mixed_trace_estimate' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+--- stderr ---
+
+
+$ $WORKSPACE/.elan/bin/lake env lean --run $WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean families/082/first-pass/certificates/shared_trace/Main.lean
+audit_exit_code: 0
+--- audit stdout ---
+
+--- audit stderr ---

@@ -1,0 +1,111 @@
+{
+  "goal": "C9000026",
+  "routes": [
+    {
+      "name": "R026_DENSITY_FOURIER",
+      "status": "current",
+      "goal": "C026_UNIFORM_MOMENTS",
+      "obligations": ["L026_DENSITY", "L026_FOURIER"],
+      "evidence": "research/audit026/moments/verification.md"
+    },
+    {
+      "name": "R026_WEIGHT_TRANSFER",
+      "status": "current",
+      "goal": "C026_WEIGHT_MOMENTS",
+      "obligations": ["C026_UNIFORM_MOMENTS", "L026_BOX_MEAN"],
+      "evidence": "research/audit026/moments/verification.md"
+    }
+  ],
+  "nodes": {
+    "L026_EULER_CORE": {
+      "statement": "Universal nonempty-subset sign sums, net exponent per nonempty fiber, and zero-safe rational marked local normalization.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit026/moments/Main.lean",
+        "research/audit026/moments/statement_fidelity.md",
+        "research/audit026/moments/certificates/L026_EULER_CORE-b8c9d7f5cbcd586a.json"
+      ],
+      "note": "The ledger carries a successful Lean 4.31.0 mechanical certificate. Independent statement-fidelity review is still pending; this graph does not self-confirm it."
+    },
+    "L026_DENSITY": {
+      "statement": "Uniform compatible-density reduction, including negative polylogarithmic shifts, weighted endpoint BV, scalar cases, and exact vanishing of nonreduced prime classes.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit026/moments/verification.md",
+        "research/audit026/moments/BV_source_excerpt.md"
+      ],
+      "note": "The marked assertion uses the explicitly recorded endpoint BV assumption; independent citation attribution is outstanding."
+    },
+    "L026_FOURIER": {
+      "statement": "Additive uniform Euler-product comparison, pole order per distinct shift, a finite arbitrary-fiber kernel, and the singleton/double-fiber derivative formula.",
+      "status": "in_progress",
+      "depends_on": ["L026_EULER_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit026/moments/verification.md",
+        "research/audit026/moments/exact_certificate.json"
+      ],
+      "note": "Analytic proof in prose; the formal local algebra is not promoted to a formal proof of this node."
+    },
+    "L026_BOX_MEAN": {
+      "statement": "Uniform singular-series mean one for distinct tuples in fixed-dimension boxes of diameter O(h), including zero local factors.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/audit026/moments/verification.md"],
+      "note": "An elementary Chebyshev bound replaces the PNT in the truncation-modulus estimate."
+    },
+    "C026_UNIFORM_MOMENTS": {
+      "statement": "The full fixed-data prop:mixed-moments holds for arbitrary equality fibers and zero singular series, with the claimed shift-uniform additive error.",
+      "status": "in_progress",
+      "depends_on": ["L026_DENSITY", "L026_FOURIER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/audit026/moments/verification.md"]
+    },
+    "C026_WEIGHT_MOMENTS": {
+      "statement": "All of prop:weight-moments holds at tau=1/8, including error summation, prime deletion, the bounded fourth moment, and the family-independent detector constant.",
+      "status": "in_progress",
+      "depends_on": ["C026_UNIFORM_MOMENTS", "L026_BOX_MEAN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit026/moments/verification.md",
+        "research/audit026/moments/exact_certificate.json"
+      ]
+    },
+    "C026_STRONG_ERROR": {
+      "statement": "Under the same fixed-data hypotheses with B>=1, the mixed-moment error improves to O(L^(-t-1)(log L)^A) by integrating the frequency-dependent comparison.",
+      "status": "in_progress",
+      "depends_on": ["L026_DENSITY", "L026_FOURIER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/audit026/moments/verification.md"],
+      "note": "A prose quantitative refinement, not a novelty or publication verdict."
+    },
+    "O026_RELATIVE_EULER_OBSTRUCTION": {
+      "statement": "For unmarked shifts 0 and 1, P_2(0,0)=0 but P_2(1,1)=1/2, so a relative comparison through P_2(0) is undefined.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/audit026/moments/exact_certificate.json"],
+      "note": "This is a failed-method obstruction, not a literal assertion or refutation of the manuscript."
+    },
+    "C9000026": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 026 (Positive lower density of large prime gaps.; papers: Positive lower density of large prime gaps; Lean status: Partially/Comparator formalized (lean/docs/026.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C026_UNIFORM_MOMENTS",
+        "C026_WEIGHT_MOMENTS",
+        "C026_STRONG_ERROR"
+      ],
+      "scope_note": "Only this analytic branch is decomposed here. Its verification does not by itself establish the full prime-gap theorem, novelty, publishability, or campaign acceptance.",
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    }
+  }
+}

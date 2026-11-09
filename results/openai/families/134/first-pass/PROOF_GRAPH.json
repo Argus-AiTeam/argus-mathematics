@@ -1,0 +1,49 @@
+{
+  "goal": "C9000134",
+  "routes": {
+    "R_DECODER_CERTIFICATION_V2": {
+      "goal": "C9000134",
+      "obligations": ["C_DA_CORE", "C_DA_APPLICATION"],
+      "status": "active"
+    }
+  },
+  "nodes": {
+    "C9000134": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 134 (Generalized star height at most three.; papers: Finite Monoid Computations and a Uniform Generalized Star-Height Bound; Generalized Star Height at Most Four; Generalized Star Height at Most Three; Lean status: Partially/Comparator formalized (lean/docs/134.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C3_MAIN": {"statement": "Height-three thm:main: every regular language over its original finite alphabet has generalized star height at most three.", "status": "open", "depends_on": ["C3_ALG", "C3_OUTER", "C3_INNER", "C3_COMPILE"], "reviewer_confirmed": false},
+    "C3_ALG": {"statement": "Height-three alg:split, alg:affine-recovery, alg:homogeneous-lift, and alg:shift-table.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C3_CLOCK": {"statement": "Height-three clock:robust, including the perturbation-stable uniform roster estimate at every translate.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C3_MARKERS": {"statement": "Height-three marker:local and marker:periodic, with finite-window, separation, and overlap hypotheses.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C3_SCHEDULE": {"statement": "Height-three schedule:stencil-properties, schedule:clock-roster, schedule:inner-cuts, and schedule:periodic-cuts.", "status": "open", "depends_on": ["C3_ALG", "C3_CLOCK", "C3_MARKERS"], "reviewer_confirmed": false},
+    "C3_EPISODES": {"statement": "Height-three schedule:margins, episode:prefix-code, and episode:shared-end under the two distinct end searches.", "status": "open", "depends_on": ["C3_SCHEDULE", "C3_MARKERS"], "reviewer_confirmed": false},
+    "C3_OUTER": {"statement": "Height-three outer:split: universal independent-tag soundness and all-input availability outside the intrinsic D.", "status": "open", "depends_on": ["C3_ALG", "C3_CLOCK", "C3_EPISODES"], "reviewer_confirmed": false},
+    "C3_ANCHORS": {"statement": "Height-three decode:anchor-list: at most twenty clock anchors over every ordered stencil pair.", "status": "open", "depends_on": ["C3_SCHEDULE", "C3_MARKERS", "C3_EPISODES"], "reviewer_confirmed": false},
+    "C3_SPARSITY": {"statement": "Height-three decode:sparsity: fewer than mu ordered distinct-slot pairs satisfy Z or A_* at their actual Q_tau.", "status": "open", "depends_on": ["C3_ANCHORS", "C3_CLOCK", "C3_SCHEDULE", "C3_MARKERS"], "reviewer_confirmed": false},
+    "C3_DECODER": {"statement": "Height-three decode:decoder: true-witness survival before uniqueness, actual slot and exact endpoint on success, and fewer than mu failed actual slots.", "status": "open", "depends_on": ["C3_SPARSITY", "C3_EPISODES", "C3_MARKERS"], "reviewer_confirmed": false},
+    "C3_INNER": {"statement": "Height-three inner:total-table, inner:actual-table-entry, and inner:split, including all impossible hypothetical prefix products.", "status": "open", "depends_on": ["C3_ALG", "C3_DECODER", "C3_EPISODES", "C3_OUTER"], "reviewer_confirmed": false},
+    "C3_COMPILE": {"statement": "Height-three compile:templates, compile:components, and compile:remainder for standalone original-alphabet component languages.", "status": "open", "depends_on": ["C3_EPISODES", "C3_OUTER", "C3_INNER"], "reviewer_confirmed": false},
+    "C4_MAIN": {"statement": "Height-four thm:main: every regular language has generalized star height at most four over the original alphabet.", "status": "open", "depends_on": ["C4_ALG", "C4_SPLITS", "C4_COMPILE"], "reviewer_confirmed": false},
+    "C4_ALG": {"statement": "Height-four lem:split, lem:affine-recovery, and lem:affine-line.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C4_CLOCK": {"statement": "Height-four lem:clock: diagonal or unique off-diagonal compatibility.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C4_GEOMETRY": {"statement": "Height-four lem:markers, lem:periodic-extension, lem:boundary-transport, prop:inner-ambiguity, lem:placement, lem:prefix-code, and lem:end-guard.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C4_SPLITS": {"statement": "Height-four prop:main-split, lem:table-lift, lem:sequence-lift, prop:aligned-splits, and prop:recursive-recovery.", "status": "open", "depends_on": ["C4_ALG", "C4_CLOCK", "C4_GEOMETRY"], "reviewer_confirmed": false},
+    "C4_COMPILE": {"statement": "Height-four lem:templates, prop:components, and lem:remainder.", "status": "open", "depends_on": ["C4_GEOMETRY", "C4_SPLITS"], "reviewer_confirmed": false},
+    "C13_MAIN": {"statement": "Height-thirteen thm:main: every regular language has generalized star height at most thirteen.", "status": "open", "depends_on": ["C13_ALG", "C13_PARAMS", "C13_OUTER", "C13_ALIGNED", "C13_COMPILE"], "reviewer_confirmed": false},
+    "C13_ALG": {"statement": "Height-thirteen lem:split, lem:affine-recovery, lem:prediction, and the clock lemma.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C13_GEOMETRY": {"statement": "Height-thirteen lem:markers, lem:periodic-overlap, lem:search-crossings, lem:prefix-code, lem:shared-anchor, and lem:decoded-end.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C13_PARAMS": {"statement": "Height-thirteen prop:parameters supplies simultaneous finite parameter choices.", "status": "open", "depends_on": ["C13_ALG", "C13_GEOMETRY"], "reviewer_confirmed": false},
+    "C13_OUTER": {"statement": "Height-thirteen lem:main-split, lem:periodic-split, and lem:witness-coverage.", "status": "open", "depends_on": ["C13_ALG", "C13_GEOMETRY", "C13_PARAMS"], "reviewer_confirmed": false},
+    "C13_ALIGNED": {"statement": "Height-thirteen lem:total-tables, lem:time-decoder, lem:bad-histories, and lem:aligned-stage.", "status": "open", "depends_on": ["C13_ALG", "C13_GEOMETRY", "C13_PARAMS", "C13_OUTER"], "reviewer_confirmed": false},
+    "C13_COMPILE": {"statement": "Height-thirteen lem:template, prop:component-cost, and lem:final-suffix.", "status": "open", "depends_on": ["C13_GEOMETRY", "C13_OUTER", "C13_ALIGNED"], "reviewer_confirmed": false},
+    "C_DA_CORE": {"statement": "For every finite separated-marker configuration satisfying the actual residue, displacement, width, clock-roster and periodic-seed hypotheses, larger-search returns number at most two and anchors at most three; exceptional distinct ordered pairs number at most 4+3(C+3(g+1)); both endpoint branches preserve the true witness before uniqueness, successful decoding selects the true slot and exact endpoint, and the original multiplicity leaves a unique-witness copy of every kind. The theorem package is conditional on its explicit formal inputs, not a proof of the star-height main theorem.", "status": "open", "depends_on": [], "reviewer_confirmed": false, "evidence": ["research/decoder_audit/Main.lean", "research/decoder_audit/statement_fidelity.md", "research/decoder_audit/exact_certificate.json", "research/decoder_audit/report.md"]},
+    "C_DA_APPLICATION": {"statement": "Conditional on the recorded local-marker, uniform-clock and internal-window inputs and the actual schedule, the verified integer theorem implies decode:anchor-list with the stronger bound three, decode:sparsity with bound 4+3(C+3(g+1))<mu, and both soundness and completeness of decode:decoder; it does not certify the star-height main theorem.", "status": "open", "depends_on": ["C_DA_CORE", "C3_CLOCK", "C3_MARKERS", "C3_SCHEDULE", "C3_EPISODES"], "reviewer_confirmed": false, "evidence": ["research/decoder_audit/report.md", "research/decoder_audit/exact_certificate.json"]}
+  }
+}

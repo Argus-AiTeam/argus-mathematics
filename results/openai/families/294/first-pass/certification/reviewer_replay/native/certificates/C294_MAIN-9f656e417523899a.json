@@ -1,0 +1,67 @@
+{
+  "evidence_id": "lean-C294_MAIN-a5e4ec9bd4d6",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/294/first-pass/certification/reviewer_replay/native/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lean",
+      "families/294/first-pass/certification/reviewer_replay/native/Main.lean"
+    ],
+    "cwd": "families/294/first-pass/certification/reviewer_replay/native",
+    "duration_ms": 8421,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/294/first-pass/certification/reviewer_replay/native/Main.lean",
+    "source_sha256": "6b7d3e5cba24b412ea400c4587c04101bab6811b8af8c3bd3429d389ba296cc2",
+    "statement_fidelity": "families/294/first-pass/certification/reviewer_replay/native/statement_fidelity.md",
+    "statement_fidelity_sha256": "7d9f6019491d8c949928e59c33e9b0625dc503aed55810c9e3e84f10ff74458e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "def OAI.Kaplansky.MainTarget : Prop :=\n∃ A inst,\n  TopologicalSpace.SeparableSpace A ∧\n    (∃ τ, τ.Normalized ∧ τ.IsTwo) ∧\n      ∃ a b,\n        OAI.Kaplansky.PositiveContraction a ∧\n          OAI.Kaplansky.PositiveContraction b ∧\n            ∀ (τ : OAI.Kaplansky.OneQuasitrace A),\n              τ.Normalized → τ.IsTwo → 1 / 144 ≤ (τ.toFun (a + b) - τ.toFun a - τ.toFun b).re\ndef OAI.Kaplansky.OneQuasitrace.IsTwo.{u_1} : {A : Type u_1} →\n  [inst : CStarAlgebra A] → OAI.Kaplansky.OneQuasitrace A → Prop :=\nfun {A} [CStarAlgebra A] τ => ∃ σ, ∀ (a : A), σ.toFun (OAI.Kaplansky.upperLeft a) = τ.toFun a\n'Certification294.main' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lean",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "native/Main.lean",
+    "text": "import OAI.Analysis.Kaplansky.Main\n\nnamespace Certification294\n\ntheorem main : OAI.Kaplansky.MainTarget :=\n  OAI.Kaplansky.kaplansky_quasitrace_counterexample\n\nend Certification294\n\n#print OAI.Kaplansky.MainTarget\n#print OAI.Kaplansky.OneQuasitrace.IsTwo\n#print axioms Certification294.main\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "native/statement_fidelity.md",
+    "text": "# Statement fidelity: Certification294.main\n\n`Certification294.main` has exactly the type `OAI.Kaplansky.MainTarget`\nand applies `OAI.Kaplansky.kaplansky_quasitrace_counterexample`.\nIt is a wrapper around the actual upstream proof, not an independent\nreplacement proof and not the comparator's placeholder.\n\nThe intended reading of `MainTarget` is the following, with no numerical\nor finite-dimensional restriction on the algebra or its quasitraces:\nthere exist a type `A` with its unital complex `CStarAlgebra` structure,\na proof of `TopologicalSpace.SeparableSpace A`, at least one normalized\n`OneQuasitrace A` satisfying `IsTwo`, and a single fixed pair `a b : A`\nof positive contractions, such that every normalized `OneQuasitrace A`\nsatisfying `IsTwo` has real defect at least `(1 : Real) / 144`.\nThe existential pair is chosen before the universal quasitrace.\n\n`OneQuasitrace` must carry positivity on every square, invariance between\n`star x * x` and `x * star x`, compatibility with real and imaginary\nself-adjoint parts, and complex linearity on every closed commutative\nnonunital C*-subalgebra. It does not impose global additivity.\n`Normalized` means value one at the algebra unit. `IsTwo` means that\nthere exists a `OneQuasitrace` on the usual C*-matrix algebra at size\ntwo whose restriction along the upper-left corner is the given map.\nThe extension is not separately normalized to value one; its value on\nthe matrix identity is two.\n\n`PositiveContraction x` must mean that `x` is a positive element\n(equivalently, a square `star y * y` in a C*-algebra) and `norm x <= 1`.\nPositivity of the quasitrace on positive elements makes the defect at\nthe displayed pair real. The real-part inequality therefore expresses\nthe real inequality in the manuscript, not a weakening of it.\nNormalization also excludes a zero algebra.\n\nThe upstream construction chooses the algebra as a 48-by-48 matrix\namplification of its actual 24-generator shift algebra. The internal\nbundle tests must cover all positive matrix sizes and polynomial degree\nbounds, and the proof must separately establish existence of the\ncorner-compatible 2-quasitrace. A proof of the conditional defect\nestimate alone does not establish this statement.\n\nThere are no additional mathematical premises on `Certification294.main`.\nFor certification, its complete dependency closure must compile under\nLean 4.31.0, have no proof holes, and use only `propext`, `Quot.sound`,\nand `Classical.choice` as transitive axioms. The source prints both the\nmain target and matrix-extension definition and prints the main theorem's\ntransitive axioms to expose these obligations.\n\nThis document states the translation that independent Reviewer must\ncheck against the acquired definitions and staged source. Its existence\ndoes not assert successful compilation or Reviewer approval.\n"
+  },
+  "subject": {
+    "content_hash": "a49d2aa5d32ac0975a9c17a4c671ce504bab4856476e18ebc89f7cae8eefd600",
+    "kind": "claim",
+    "subject_id": "C294_MAIN"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

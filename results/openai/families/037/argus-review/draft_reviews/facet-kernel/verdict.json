@@ -1,0 +1,119 @@
+{
+  "unit_id": "facet-kernel",
+  "disposition": "supported",
+  "scope_qualification": "Conditional integer algebra only; archived compilation is reused and is not a new formal verification of geometry.",
+  "novelty_status": "not_claimed",
+  "independent_review_required": true,
+  "review_acceptance_granted": false,
+  "old_claim_versions": [
+    {
+      "claim_id": "C_AJL_FACET_KERNEL",
+      "version": 1,
+      "content_hash": "17bd8d5fb86def1d1208db95ed81108e863b585453aa1f7ef6e24a0df4278597",
+      "natural_statement": "For finitely many integral additive support forms of value one at c, strict shifted lifting and containment imply equality with the closed lattice halfspaces and exact translation of their strict lattice halfspaces.",
+      "formal_statement_present": false,
+      "assessment": "Supported by the elementary argument and version 2 formalization; no separate earlier proof is inferred."
+    },
+    {
+      "claim_id": "C_AJL_FACET_KERNEL",
+      "version": 2,
+      "content_hash": "7cdedc0713c9f33176a8688c4da60422128fab1883aea45d3aa816b37469fedb",
+      "same_natural_statement_as": "C_AJL_FACET_KERNEL@1",
+      "formal_statement_present": true,
+      "formal_source_bytes": 1508,
+      "assessment": "Exact source, interpretation and archived compiler bindings supported; adds formal evidence, not a stronger natural theorem."
+    }
+  ],
+  "exact_statement": {
+    "objects": "A arbitrary additive commutative group; I finite; forms_i additive maps A -> Z; c in A; Gamma arbitrary membership predicate",
+    "hypotheses": [
+      "For every i, forms_i(c)=1.",
+      "For every q, Gamma(q) implies forms_i(q)>=0 for every i.",
+      "For every q, forms_i(q+c)>0 for every i implies Gamma(q)."
+    ],
+    "conclusions": [
+      "For every q, Gamma(q) iff forms_i(q)>=0 for every i.",
+      "For every q, forms_i(q)>0 for every i iff there exists g with Gamma(g) and q=c+g.",
+      "Separately, every additive integer form of value one at c is surjective."
+    ],
+    "declarations": [
+      "AdjointJetLifting.ClosedHalfspaces",
+      "AdjointJetLifting.StrictHalfspaces",
+      "AdjointJetLifting.height_one_surjective",
+      "AdjointJetLifting.exact_saturation"
+    ]
+  },
+  "hypotheses": [
+    "Integer-valued additive forms",
+    "Height one at c",
+    "Containment of Gamma in the closed halfspaces",
+    "Exact shifted lifting for all group elements",
+    "Subtraction is available in A"
+  ],
+  "source_artifacts": [
+    "research/MATH_STATE.json",
+    "research/PROOF_GRAPH.json",
+    "research/adjoint_jet_lifting/Main.lean",
+    "research/adjoint_jet_lifting/statement_fidelity.md",
+    "research/adjoint_jet_lifting/certificates/C_AJL_FACET_KERNEL-1ade0225935d5908.json",
+    "research/adjoint_jet_lifting/lean_check.json",
+    "research/adjoint_jet_lifting/compile.log",
+    "research/adjoint_jet_lifting/lean_submission.json",
+    "research/adjoint_jet_lifting/report.md",
+    "research/adjoint_jet_lifting/exact_certificate.json",
+    "research/adjoint_jet_lifting/verify.py"
+  ],
+  "source_artifact_base": "campaigns/9000037",
+  "decisive_findings": [
+    {
+      "finding": "The two exact equivalences follow from integer additivity and subtraction.",
+      "argument": "Closed q has strictly positive forms at q+c, so lifts. Strict q has all integer values at least one, so q-c is closed and hence belongs to Gamma. The two reverse implications use containment."
+    },
+    {
+      "finding": "Height one proves primitivity of an already supplied form.",
+      "argument": "Every integer z is form(z times c); no existence or integrality of a geometric facet is inferred."
+    },
+    {
+      "finding": "Statement fidelity is correct but separate from compilation.",
+      "argument": "The saved document names the same objects, quantifiers, hypotheses and conclusions, and explicitly excludes global geometry."
+    },
+    {
+      "finding": "All nine receipt consistency tests pass.",
+      "argument": "Source/fidelity hashes, certificate embedded text, receipt-summary equality, version-2 subject/formal-source binding and successful compiler/audit reports agree."
+    }
+  ],
+  "evidence": {
+    "report": "research/draft_reviews/facet-kernel/report.md",
+    "archived_mechanical_evidence_id": "lean-C_AJL_FACET_KERNEL-5b4cd16907bc",
+    "source_sha256": "69a2b845e8195bdc40feae8bd53f0eade466aa589a22d1b166d1c4fc64394be7",
+    "statement_fidelity_sha256": "0828813289361b98348fe6201ea8580c3ccd7c439b95ed7fcaff57ddd520b5e5",
+    "archived_compiler_exit": 0,
+    "archived_axiom_audit_exit": 0,
+    "archived_proof_holes": [],
+    "archived_duration_ms": 14716,
+    "fresh_compile": false,
+    "reuse_reason": "Unchanged hash-bound source/fidelity, consistent version-2 binding, compatible freshly probed toolchain, and no observed dependency conflict; task explicitly requests receipt reuse.",
+    "dependency_limit": "The archived receipt does not hash every imported compiled module; current version agreement is not a new dependency-freshness certificate.",
+    "actual_current_probe": {
+      "workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+      "lean": "4.31.0",
+      "lean_commit": "68218e876d2a38b1985b8590fff244a83c321783",
+      "lake": "5.0.0-src+68218e8",
+      "lean_toolchain_file": "leanprover/lean4:v4.31.0",
+      "dependency_lock_version": "1.2.0"
+    },
+    "new_active_kernel_evidence_recorded": false
+  },
+  "remaining_obligations": [
+    "Native independent review of the interpretation and evidence reuse.",
+    "Geometric use separately requires actual finite nonzero integral facets of height one, ordinary-interior identification, containment and all-point global lifting; these are not compiler conclusions."
+  ],
+  "not_established": [
+    "Existence of a finite facet description",
+    "Rational polyhedrality",
+    "Canonical interiority",
+    "Orbifold or multiplier-ideal geometry",
+    "Global restriction surjectivity or lifting",
+    "Cone rigidity, degenerations or volume-gap theorems"
+  ]
+}

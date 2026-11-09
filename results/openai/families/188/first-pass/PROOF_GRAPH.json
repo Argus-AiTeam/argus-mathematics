@@ -1,0 +1,125 @@
+{
+  "goal": "C9000188",
+  "routes": {
+    "R_COLLISION_VERIFY": {
+      "goal": "C_COLLISION",
+      "obligations": [
+        "C_GEOMETRIC",
+        "C_SUFFIX",
+        "C_VISITATION",
+        "C_SUM"
+      ],
+      "status": "active"
+    },
+    "R_PARAMETERIZED": {
+      "goal": "C_PARAMETERIZED_COLLISION",
+      "obligations": [
+        "C_GEOMETRIC",
+        "C_EMBEDDINGS",
+        "C_VISITATION",
+        "C_SUM"
+      ],
+      "status": "active"
+    }
+  },
+  "nodes": {
+    "C9000188": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 188 (The sharp terminal leave in random triangle removal.; papers: The sharp terminal leave in random triangle removal; Lean status: Partially/Comparator formalized (lean/docs/188.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN": {
+      "statement": "The terminal triangle-removal leave divided by n^(3/2) converges in L2 to 1/(2 sqrt(2)). This campaign does not yet verify the full theorem.",
+      "status": "open",
+      "depends_on": ["C_PREFIX", "C_UNFOLDING", "C_COLLISION", "C_MOMENTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Sharp-Terminal-Leave-in-Random-Triangle-Removal-September-25-2026/build/introduction.tex"]
+    },
+    "C_PREFIX": {
+      "statement": "The actual good-prefix degree, codegree, link-cycle, and rooted-template hypotheses follow from the cited early stopping estimates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Sharp-Terminal-Leave-in-Random-Triangle-Removal-September-25-2026/build/prefix.tex"]
+    },
+    "C_UNFOLDING": {
+      "statement": "Good-prefix link counts and degree estimates imply uniform unfolded survival asymptotics and the off-pattern product upper bound 2/(1+2Dt).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Sharp-Terminal-Leave-in-Random-Triangle-Removal-September-25-2026/build/stability.tex"]
+    },
+    "C_GEOMETRIC": {
+      "statement": "A repeated exposed triangle type, or a first repeated formal vertex label, yields an injectively labelled extra-edge witness on at most two visited ancestral call paths, apart from initial root overlap.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/collision_certificate/README.md"]
+    },
+    "C_SUFFIX": {
+      "statement": "Every proper free subset of the terminal suffix has at most twice its size retained edges, so every completion scaling required by the small-template bound is at most one.",
+      "status": "open",
+      "depends_on": ["C_SUFFIX_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/collision_certificate/report.md", "research/collision_certificate/Main.lean"]
+    },
+    "C_VISITATION": {
+      "statement": "Conditional only on selected occurrence priorities, prospective off-pattern failure events are independent, and their path-ordered integral bounds all-depth visitation.",
+      "status": "open",
+      "depends_on": ["C_UNFOLDING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/collision_certificate/README.md"]
+    },
+    "C_SUM": {
+      "statement": "The nonnegative sum over all path lengths is finite and yields the required o(D^(-1)) collision precision.",
+      "status": "open",
+      "depends_on": ["C_EMBEDDINGS", "C_VISITATION", "C_SUFFIX_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/collision_certificate/report.md", "research/collision_certificate/exact_certificate.json"]
+    },
+    "C_COLLISION": {
+      "statement": "Under the actual deterministic good-prefix hypotheses, one or two independently sampled oriented roots with replacement have exposed-list collision probability O(D^(-35)+n^(-1)), at arbitrary exploration depth.",
+      "status": "open",
+      "depends_on": ["C_PARAMETERIZED_COLLISION", "C_UNFOLDING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/collision_certificate/report.md", "research/collision_certificate/exact_certificate.json", "research/collision_certificate/verification.json"]
+    },
+    "C_MOMENTS": {
+      "statement": "With-replacement root queries identify ordinary first and second terminal moments and the normalization is 1/(2 sqrt(2)).",
+      "status": "open",
+      "depends_on": ["C_COLLISION", "C_UNFOLDING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Sharp-Terminal-Leave-in-Random-Triangle-Removal-September-25-2026/build/moments.tex"]
+    },
+    "C_SUFFIX_CORE": {
+      "statement": "Universal finite suffix edge inequality and all-n two-path interleaving coefficient identity, formalized in Lean 4.31.0. Kernel compilation does not establish statement fidelity or the full probability theorem.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/collision_certificate/Main.lean",
+        "research/collision_certificate/statement_fidelity.md",
+        "research/collision_certificate/certificates/C_SUFFIX_CORE-af21dfb4cfdee9f9.json"
+      ]
+    },
+    "C_EMBEDDINGS": {
+      "statement": "At every path length ell, the extra-edge embedding count is at most (2m)^r (aD)^ell kappa max(p,(aD)^(-L)), under the two actual template hypotheses and D^L p<=1.",
+      "status": "open",
+      "depends_on": ["C_SUFFIX"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/collision_certificate/report.md"]
+    },
+    "C_PARAMETERIZED_COLLISION": {
+      "statement": "For arbitrary k roots with replacement, the explicit all-depth bound is 2k(k-1)rho + 12k^2 kappa max(p,(aD)^(-L))(1+2D)^(2+2aK), with the deterministic scalar product envelope independently derived for the actual good prefix.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC", "C_EMBEDDINGS", "C_VISITATION", "C_SUM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/collision_certificate/report.md", "research/collision_certificate/exact_certificate.json"]
+    }
+  }
+}

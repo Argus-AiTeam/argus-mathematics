@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-L_FLAG_AMORTIZATION-44864e9ea6d1",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/239/first-pass/low_height_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 3339,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/239/first-pass/low_height_audit/Main.lean",
+    "source_sha256": "4e514a3ca1268824486aa7d0d2f688351f47fc088f9fd98db5d85a6ae5f45b34",
+    "statement_fidelity": "families/239/first-pass/low_height_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "b036af9b93cae77ad70b0fd8da94ff54b44bdd5e3b3d827150a935ea4bd5929d",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/239/first-pass/low_height_audit/Main.lean:56:39: error(lean.unknownIdentifier): Unknown constant `Finset.mul_sum`\nfamilies/239/first-pass/low_height_audit/Main.lean:59:2: error: linarith failed to find a contradiction\nι : Type u_1\ns : Finset ι\nu w : ι → ℝ\na q c : ℝ\nha : 0 ≤ a\nhq : 0 < q\nhu : ∀ i ∈ s, 1 ≤ u i\nhtotal : ∑ i ∈ s, u i ≤ c\nhbalance : ∑ i ∈ s, w i ≤ 0\nhshort : ∀ i ∈ s, u i ≤ q → u i / 5 ≤ w i\nhlong : ∀ i ∈ s, q < u i → -(4 * a) * u i ≤ w i\nhqinv : 0 ≤ 1 / q\nhk : 0 ≤ 20 * a + 1 / q\nhpoint : ∀ i ∈ s, 1 ≤ 5 * w i + (20 * a + 1 / q) * u i\nhsum : ↑s.card ≤ ∑ x ∈ s, 5 * w x + ∑ x ∈ s, (20 * a + 1 / q) * u x\nhscaled : (20 * a + 1 / q) * ∑ i ∈ s, u i ≤ (20 * a + 1 / q) * c\na✝ : (20 * a + 1 / q) * c < ↑s.card\n⊢ False\nfailed\nfamilies/239/first-pass/low_height_audit/Main.lean:86:2: error: linarith failed to find a contradiction\nh a z theta s : ℝ\nhz : z ≤ h / a\nhtheta : -(h / a) ≤ theta\nhs : s ≤ 2 * (z - theta)\na✝ : 4 * h / a < s\n⊢ False\nfailed\nfamilies/239/first-pass/low_height_audit/Main.lean:110:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/239/first-pass/low_height_audit/Main.lean:117:6: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/239/first-pass/low_height_audit/Main.lean:117:6: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/low_height_audit/Main.lean",
+    "text": "import Mathlib.Algebra.Order.BigOperators.Group.Finset\nimport Mathlib.Data.Real.Basic\nimport Mathlib.Tactic.FieldSimp\nimport Mathlib.Tactic.Linarith\nimport Mathlib.Tactic.Positivity\nimport Mathlib.Tactic.Ring\n\nopen scoped BigOperators\n\nnamespace LowHeightAudit\n\ntheorem shortBlockBound (a u b w : ℝ)\n    (ha : a ≤ 1 / 40) (hu : 0 ≤ u) (hb : b ≤ 2 / 5)\n    (hw : u * (1 / 2 - 4 * a - b / 2) ≤ w) :\n    u / 5 ≤ w := by\n  have h : 0 ≤ u * (3 / 10 - 4 * a - b / 2) :=\n    mul_nonneg hu (by linarith)\n  nlinarith\n\ntheorem longBlockBound (a u b w : ℝ)\n    (hu : 0 ≤ u) (hb : b ≤ 1)\n    (hw : u * (1 / 2 - 4 * a - b / 2) ≤ w) :\n    -(4 * a) * u ≤ w := by\n  have h : 0 ≤ u * (1 / 2 - b / 2) :=\n    mul_nonneg hu (by linarith)\n  nlinarith\n\ntheorem flagBlockCount {ι : Type*} (s : Finset ι)\n    (u w : ι → ℝ) (a q c : ℝ)\n    (ha : 0 ≤ a) (hq : 0 < q)\n    (hu : ∀ i ∈ s, 1 ≤ u i)\n    (htotal : ∑ i ∈ s, u i ≤ c)\n    (hbalance : ∑ i ∈ s, w i ≤ 0)\n    (hshort : ∀ i ∈ s, u i ≤ q → u i / 5 ≤ w i)\n    (hlong : ∀ i ∈ s, q < u i → -(4 * a) * u i ≤ w i) :\n    (s.card : ℝ) ≤ (20 * a + 1 / q) * c := by\n  classical\n  have hqinv : 0 ≤ 1 / q := le_of_lt (one_div_pos.mpr hq)\n  have hk : 0 ≤ 20 * a + 1 / q := by positivity\n  have hpoint : ∀ i ∈ s, (1 : ℝ) ≤\n      5 * w i + (20 * a + 1 / q) * u i := by\n    intro i hi\n    have hui := hu i hi\n    by_cases h : u i ≤ q\n    · have hwi := hshort i hi h\n      have hnonneg : 0 ≤ (20 * a + 1 / q) * u i :=\n        mul_nonneg hk (by linarith)\n      linarith\n    · have hlt : q < u i := lt_of_not_ge h\n      have hwi := hlong i hi hlt\n      have hratio : 1 ≤ (1 / q) * u i := by\n        have hdiv : 1 ≤ u i / q := (le_div_iff₀ hq).2 (by linarith)\n        simpa [div_eq_mul_inv, mul_comm] using hdiv\n      nlinarith\n  have hsum := Finset.sum_le_sum hpoint\n  simp only [Finset.sum_add_distrib, ← Finset.mul_sum,\n    Finset.sum_const, nsmul_eq_mul, mul_one] at hsum\n  have hscaled := mul_le_mul_of_nonneg_left htotal hk\n  linarith\n\ntheorem flagBlockCount21 {ι : Type*} (s : Finset ι)\n    (u w : ι → ℝ) (a q c : ℝ)\n    (ha : 0 ≤ a) (hq : 0 < q) (hc : 0 ≤ c)\n    (hqa : 1 / q ≤ a)\n    (hu : ∀ i ∈ s, 1 ≤ u i)\n    (htotal : ∑ i ∈ s, u i ≤ c)\n    (hbalance : ∑ i ∈ s, w i ≤ 0)\n    (hshort : ∀ i ∈ s, u i ≤ q → u i / 5 ≤ w i)\n    (hlong : ∀ i ∈ s, q < u i → -(4 * a) * u i ≤ w i) :\n    (s.card : ℝ) ≤ 21 * a * c := by\n  have h := flagBlockCount s u w a q c ha hq hu htotal hbalance hshort hlong\n  have hcoeff : (20 * a + 1 / q) * c ≤ 21 * a * c := by\n    have := mul_le_mul_of_nonneg_right hqa hc\n    nlinarith\n  exact h.trans hcoeff\n\ntheorem singleFlagInexpensive (a y : ℝ)\n    (ha : a ≤ 1 / 40) (hy : y ≤ a) :\n    y ≤ 1 / 2 - 3 * a := by\n  linarith\n\ntheorem multiDropBudget (h a z theta s : ℝ)\n    (hz : z ≤ h / a) (htheta : -(h / a) ≤ theta)\n    (hs : s ≤ 2 * (z - theta)) :\n    s ≤ 4 * h / a := by\n  linarith\n\ntheorem squaresBudget {ι : Type*} (s : Finset ι) (x : ι → ℝ) :\n    (∀ i ∈ s, 0 ≤ x i) →\n    ∑ i ∈ s, (x i) ^ 2 ≤ (∑ i ∈ s, x i) ^ 2 := by\n  classical\n  induction s using Finset.induction_on with\n  | empty => simp\n  | @insert i s hi ih =>\n    intro hx\n    have hxi := hx i (Finset.mem_insert_self i s)\n    have hxs : ∀ j ∈ s, 0 ≤ x j := by\n      intro j hj\n      exact hx j (Finset.mem_insert_of_mem hj)\n    have hsum : 0 ≤ ∑ j ∈ s, x j := Finset.sum_nonneg hxs\n    have hind := ih hxs\n    simp only [Finset.sum_insert hi]\n    nlinarith [mul_nonneg hxi hsum]\n\ntheorem entropySubstitution (n l a h : ℝ) (ha : a ≠ 0) :\n    462 * a ^ 2 * n * l * (4 * h / a) +\n        6 * l / a * (4 * h / a) ^ 2 =\n      1848 * a * n * l * h + 96 * l * h ^ 2 / a ^ 3 := by\n  field_simp [ha]\n  <;> ring\n\ntheorem logHeightSubstitution (n l a b : ℝ) (ha : a ≠ 0) (hl : l ≠ 0) :\n    1848 * a * n * l * (b / l) +\n        96 * l * (b / l) ^ 2 / a ^ 3 =\n      1848 * a * n * b + 96 * b ^ 2 / (a ^ 3 * l) := by\n  field_simp [ha, hl]\n  <;> ring\n\nend LowHeightAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/low_height_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: exact flag amortization\n\nThis file describes only claim `L_FLAG_AMORTIZATION`, not the complete\nlow-height cover or either singularity theorem.\n\nAll real variables range over Mathlib's real numbers. `flagBlockCount`\nquantifies over an arbitrary finite index type and finite set `s`. For every\nindex in `s`, `u i` is a block length (a real number at least one), and\n`w i` is its total logarithmic excess above the baseline `a`.\nThe hypotheses are `a >= 0`, `q > 0`, total length at most `c`, total\nexcess at most zero, excess at least `u i / 5` for blocks with `u i <= q`,\nand excess at least `-4*a*u i` for the other blocks. The conclusion is\n`s.card <= (20*a + 1/q)*c`. No bound on `w i` is omitted.\n`flagBlockCount21` additionally assumes `c >= 0` and `1/q <= a`\nand concludes `s.card <= 21*a*c`.\n\nIn the mathematical proof, the indices are the consecutive ranges starting\nat expensive positions in a shortest projected flag, `q=N^(2/5)`, and\n`c` is the transition's dimension drop. Constructing that partition, proving\nthe suffix inequalities from primitive normal lattices, and deriving the\nnormalized logarithmic interval bounds from Minkowski's theorem are prose\nobligations in `quantitative_cover.md`; they are not Lean hypotheses silently\ndischarged by a compiler.\n\n`shortBlockBound` and `longBlockBound` verify the exact interval arithmetic\nused to obtain those two excess bounds: they assume `u >= 0` and\n`w >= u*(1/2 - 4*a - b/2)`. The short conclusion `u/5 <= w`\nrequires `a <= 1/40` and `b <= 2/5`; the long conclusion\n`-4*a*u <= w` requires `b <= 1`. Here `b` stands for\n`log_N(block length)`, not the height parameter named `b` in the\nquantitative covering theorem.\n\n`singleFlagInexpensive` proves that `y <= a <= 1/40` implies\n`y <= 1/2 - 3*a`. `multiDropBudget` proves the stated real\ninequality `s <= 4*h/a` from `z <= h/a`,\n`theta >= -h/a`, and `s <= 2*(z-theta)`; geometric provenance and\npositivity of `a` belong to its prose application.\n`squaresBudget` proves, for every finite family of nonnegative reals,\n`sum(x_i^2) <= (sum x_i)^2`.\n\n`entropySubstitution` and `logHeightSubstitution` prove the two displayed\nrational-function identities in their declarations, with nonzero\ndenominators explicitly assumed. They certify cancellation of the\nmulti-drop and logarithmic-height substitutions, not an enumeration of\nrational subspaces or a proof of an asymptotic limit.\n\nThe source contains no axioms, placeholder proofs, finite-only replacement\nof these quantifiers, or invocation of the Reverse Minkowski theorem.\nThe compiler verifies these formal declarations. Whether this reading\nfaithfully connects them to the manuscript is an independent review question.\n"
+  },
+  "subject": {
+    "content_hash": "0d3980e20e5f01098a8422aa2d3a8e1f69b461b826677ff9861ea2f55cfcff1b",
+    "kind": "claim",
+    "subject_id": "L_FLAG_AMORTIZATION"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

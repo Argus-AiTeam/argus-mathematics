@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-L_FLOW_ALGEBRA_CORE-aced055fdc70",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/287/first-pass/flow_trace_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/287/first-pass/flow_trace_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14649,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/287/first-pass/flow_trace_audit/Main.lean",
+    "source_sha256": "bd0f88a188a5398afbb68b04fbd4160b306cfdc901399e66fc9f761f247acddd",
+    "statement_fidelity": "families/287/first-pass/flow_trace_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "8988ff277f919d3f9cc87607fd09e335b40157a9b239121c21f8992c8a587c7c",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/flow_trace_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace FlowTraceAudit\n\nvariable {R : Type*} [Ring R]\n\ndef comm (y x : R) : R := y * x - x * y\n\ndef wordValue : List (Bool × R) → R\n  | [] => 1\n  | (_, x) :: w => x * wordValue w\n\ndef variation (selected : Bool) (y : R) : List (Bool × R) → R\n  | [] => 0\n  | (b, x) :: w =>\n      (if b = selected then comm y x else 0) * wordValue w +\n        x * variation selected y w\n\ntheorem variation_split (y : R) (w : List (Bool × R)) :\n    variation true y w + variation false y w = comm y (wordValue w) := by\n  induction w with\n  | nil => simp [variation, wordValue, comm]\n  | cons a w ih =>\n      rcases a with ⟨b, x⟩\n      calc\n        variation true y ((b, x) :: w) + variation false y ((b, x) :: w) =\n            comm y x * wordValue w +\n              x * (variation true y w + variation false y w) := by\n                cases b <;> simp [variation] <;> noncomm_ring\n        _ = comm y x * wordValue w + x * comm y (wordValue w) := by rw [ih]\n        _ = comm y (wordValue ((b, x) :: w)) := by\n              simp only [comm, wordValue]\n              noncomm_ring\n\nvariable {K : Type*} [AddCommGroup K]\n\ntheorem trace_comm_zero (tr : R →+ K)\n    (cyclic : ∀ a b : R, tr (a * b) = tr (b * a)) (y x : R) :\n    tr (comm y x) = 0 := by\n  simp [comm, map_sub, cyclic y x]\n\ntheorem selected_trace_zero (tr : R →+ K)\n    (cyclic : ∀ a b : R, tr (a * b) = tr (b * a))\n    (y : R) (w : List (Bool × R))\n    (complement : tr (variation false y w) = 0) :\n    tr (variation true y w) = 0 := by\n  have h := congrArg tr (variation_split y w)\n  rw [map_add, trace_comm_zero tr cyclic, complement, add_zero] at h\n  exact h\n\ndef iter {P : Type*} (d : P → P) : Nat → P → P\n  | 0, p => p\n  | r + 1, p => d (iter d r p)\n\ntheorem all_positive_iterates {P Q : Type*} [Zero Q]\n    (d : P → P) (tr : P → Q) (first : ∀ p, tr (d p) = 0)\n    (r : Nat) (positive : 0 < r) (p : P) :\n    tr (iter d r p) = 0 := by\n  cases r with\n  | zero => omega\n  | succ r => exact first (iter d r p)\n\ndef growth (l J : Nat) : Nat → Nat\n  | 0 => 1\n  | r + 1 => growth l J r * (l + r * J)\n\ntheorem length_factor_le (l J v : Nat) :\n    l + v * J ≤ (l + J) * (v + 1) := by\n  nlinarith [Nat.zero_le (l * v)]\n\ntheorem growth_bound (l J r : Nat) :\n    growth l J r ≤ (l + J) ^ r * r.factorial := by\n  induction r with\n  | zero => simp [growth]\n  | succ r ih =>\n      calc\n        growth l J (r + 1) ≤\n            ((l + J) ^ r * r.factorial) * ((l + J) * (r + 1)) :=\n          Nat.mul_le_mul ih (length_factor_le l J r)\n        _ = (l + J) ^ (r + 1) * (r + 1).factorial := by\n          rw [pow_succ, Nat.factorial_succ]\n          ring\n\nend FlowTraceAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/flow_trace_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: the algebraic core, not the operator-algebra theorem\n\n`Main.lean` uses Lean 4.31.0 and Mathlib. It contains no claim that the\nwhole flow theorem, freeness, an analytic ODE, or a free-group-factor\nisomorphism has been formalized.\n\n## `FlowTraceAudit.variation_split`\n\n`R` is an arbitrary (possibly noncommutative) unital ring. `y : R`\nand `w : List (Bool x R)` are arbitrary. A Boolean marks whether a\nposition belongs to the selected component. `wordValue w` is the\nordered product of its ring elements, including the empty product.\n`variation true y w` is the sum of products obtained by replacing\none selected entry `x` by `y*x - x*y`, retaining all factor orders.\n`variation false y w` does the same at the complementary positions.\nThe theorem states that their sum is\n`y * wordValue w - wordValue w * y`, for every finite list.\n\nThere is no bound on length, no commutativity assumption on `R`,\nand no test enumeration hidden in the theorem.\n\n## `FlowTraceAudit.selected_trace_zero`\n\n`K` is any additive commutative group. `tr : R ->+ K` is an additive\nhomomorphism satisfying `tr(a*b) = tr(b*a)` for every `a,b : R`.\nFor every `y,w`, **if** the complementary variation has trace zero,\nthe selected variation has trace zero. `trace_comm_zero` proves the\nfull commutator has trace zero and `variation_split` supplies the\ndecomposition.\n\nThe complementary zero-trace hypothesis is explicit. It is not the\ndesired selected zero-trace conclusion. In the mathematical report it\nis discharged on alternating centered words: complementary factors\nlie in `B`, `y` lies in `B`, their commutators remain centered in `B`,\nand freeness kills each resulting alternating centered product.\nThe reduction of arbitrary polynomials to those words and that\nfreeness argument are prose mathematics, not Lean declarations.\n\nFor the manuscript, use `R = M`, `K = C` as an additive group,\n`tr = tau`, and select the factors in a fixed conjugate component.\nThe omitted scalar `i` is restored by complex linearity. Real\ncoefficient sums are handled by finite linearity in the report.\nNo stronger claim of formal coverage is intended.\n\n## Additional checked declarations\n\n`all_positive_iterates` quantifies over arbitrary types, an\nendomorphism `d`, a functional `tr`, every natural number `r > 0`,\nand every input `p`. From `tr(d(q)) = 0` for every `q`, it proves\nzero for the recursively defined `r`-fold iterate. Polynomial\nfiniteness and identification of this iterate with `delta^r` are\nestablished in the report.\n\n`growth_bound` quantifies over all natural numbers `l,J,r`,\nincluding zero, and proves\n`prod_(v=0)^(r-1) (l+v*J) <= (l+J)^r * r!`.\nHere `growth` defines the product recursively. This is the integer\ncoefficient-counting inequality used in the analytic Taylor estimate;\nnorm inequalities, convergence, and real-analytic continuation\nare established in prose, not formalized.\n\nThe compiler certifies exactly these algebraic and arithmetic\ndeclarations. The complete operator-algebra application remains\nsubject to independent human-style mathematical review.\n"
+  },
+  "subject": {
+    "content_hash": "d5b2a0fa51bc5348b396407c360d3f428b5d5ea27cbf994822881b6b529dc4e3",
+    "kind": "claim",
+    "subject_id": "L_FLOW_ALGEBRA_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FORMAL_CORE-7c4d824ee0a7",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/353/first-pass/evidence/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/353/first-pass/evidence/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 17091,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/353/first-pass/evidence/lean/Main.lean",
+    "source_sha256": "f5660dc8bab27b5ed35a496f37014c7c646d6ec039442ba0d6a7f3a3e6af0b11",
+    "statement_fidelity": "families/353/first-pass/evidence/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "a405f751621ec5a73f297a6773ab7e0eb0d4e15f364057f895b2667ce35d29aa",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/353/first-pass/evidence/lean/Main.lean:23:4: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/353/first-pass/evidence/lean/Main.lean:26:4: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/353/first-pass/evidence/lean/Main.lean:57:4: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/353/first-pass/evidence/lean/Main.lean:144:27: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/353/first-pass/evidence/lean/Main.lean:148:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/evidence/lean/Main.lean",
+    "text": "import Mathlib\n\nnoncomputable section\n\nnamespace CapGrowthAudit\n\ndef delta (n : Real) : Real := 1 / (n + 2)\n\ndef theta (n : Real) : Real := (n + 2) / (2 * (n + 1))\n\ntheorem interpolation_exponents (n : Real) (hn : 0 < n) :\n    0 < theta n /\\ theta n < 1 /\\\n      theta n * (1 - delta n) = 1 / 2 /\\\n      delta n * theta n + (1 - theta n) = 1 / 2 := by\n  have h1 : n + 1 > 0 := by linarith\n  have h2 : n + 2 > 0 := by linarith\n  refine ⟨div_pos h2 (by positivity), ?_, ?_, ?_⟩\n  · unfold theta\n    apply (div_lt_one (by positivity : 0 < 2 * (n + 1))).2\n    linarith\n  · unfold theta delta\n    field_simp [ne_of_gt h1, ne_of_gt h2]\n    <;> ring\n  · unfold theta delta\n    field_simp [ne_of_gt h1, ne_of_gt h2]\n    <;> ring\n\ntheorem weighted_interpolation\n    (n D R t : Real) (hn : 0 < n)\n    (hD : 0 < D) (hR : 0 < R) (ht : 0 < t) :\n    Real.sqrt (D * R) * t =\n      (D ^ delta n * R ^ (1 - delta n) * t) ^ theta n *\n        (D * t) ^ (1 - theta n) := by\n  have h1 : Ne (n + 1) 0 := by linarith\n  have h2 : Ne (n + 2) 0 := by linarith\n  have hA : 0 < D ^ delta n * R ^ (1 - delta n) * t := by positivity\n  have hB : 0 < D * t := mul_pos hD ht\n  have hL : 0 < Real.sqrt (D * R) * t := by positivity\n  have hU :\n      0 < (D ^ delta n * R ^ (1 - delta n) * t) ^ theta n *\n        (D * t) ^ (1 - theta n) := by positivity\n  have hlog :\n      Real.log (Real.sqrt (D * R) * t) =\n        Real.log ((D ^ delta n * R ^ (1 - delta n) * t) ^ theta n *\n          (D * t) ^ (1 - theta n)) := by\n    rw [Real.log_mul (by positivity) (ne_of_gt ht),\n      Real.sqrt_eq_rpow, Real.log_rpow (mul_pos hD hR),\n      Real.log_mul (ne_of_gt hD) (ne_of_gt hR)]\n    rw [Real.log_mul (by positivity) (by positivity),\n      Real.log_rpow hA, Real.log_rpow hB]\n    rw [Real.log_mul (by positivity) (ne_of_gt ht),\n      Real.log_mul (by positivity) (by positivity),\n      Real.log_rpow hD, Real.log_rpow hR,\n      Real.log_mul (ne_of_gt hD) (ne_of_gt ht)]\n    unfold delta theta\n    field_simp [h1, h2]\n    <;> ring\n  calc\n    Real.sqrt (D * R) * t =\n        Real.exp (Real.log (Real.sqrt (D * R) * t)) := (Real.exp_log hL).symm\n    _ = Real.exp (Real.log\n        ((D ^ delta n * R ^ (1 - delta n) * t) ^ theta n *\n          (D * t) ^ (1 - theta n))) := congrArg Real.exp hlog\n    _ = _ := Real.exp_log hU\n\ntheorem quadratic_nonnegative\n    (a b c p d : Real) (ha : 0 < a) (hdet : 0 <= a * b - c ^ 2) :\n    0 <= a * p ^ 2 + 2 * c * p * d + b * d ^ 2 := by\n  have hs : 0 <= (a * p + c * d) ^ 2 + (a * b - c ^ 2) * d ^ 2 :=\n    add_nonneg (sq_nonneg _) (mul_nonneg hdet (sq_nonneg _))\n  have hid :\n      (a * p + c * d) ^ 2 + (a * b - c ^ 2) * d ^ 2 =\n        a * (a * p ^ 2 + 2 * c * p * d + b * d ^ 2) := by ring\n  rw [hid] at hs\n  by_contra hneg\n  have hneg' : a * p ^ 2 + 2 * c * p * d + b * d ^ 2 < 0 :=\n    lt_of_not_ge hneg\n  have := mul_neg_of_pos_of_neg ha hneg'\n  linarith\n\ntheorem scalar_coercivity\n    (n p d : Real) (hnlo : 3 <= n) (hnhi : n <= 9) :\n    (1 / 256 : Real) * (p ^ 2 + d ^ 2) <=\n      (n - 7 / 8) * p ^ 2 + (n + 2) / 2 * p * d + 15 / 16 * d ^ 2 := by\n  let a : Real := n - 7 / 8 - 1 / 256\n  let b : Real := 15 / 16 - 1 / 256\n  let c : Real := (n + 2) / 4\n  have ha : 0 < a := by dsimp [a]; linarith\n  have hprod : 0 <= (n - 2) * (9 - n) :=\n    mul_nonneg (by linarith) (by linarith)\n  have hdet : 0 <= a * b - c ^ 2 := by\n    dsimp [a, b, c]\n    nlinarith [hprod]\n  have hq := quadratic_nonnegative a b c p d ha hdet\n  calc\n    (1 / 256 : Real) * (p ^ 2 + d ^ 2) <=\n        (1 / 256 : Real) * (p ^ 2 + d ^ 2) +\n          (a * p ^ 2 + 2 * c * p * d + b * d ^ 2) :=\n      le_add_of_nonneg_right hq\n    _ = _ := by dsimp [a, b, c]; ring\n\ntheorem finite_coercivity\n    (n : Real) (k r : Nat) (hnlo : 3 <= n) (hnhi : n <= 9)\n    (hk : 2 <= k) (p d : Fin k -> Real) (z : Fin r -> Real) :\n    (1 / 256 : Real) *\n        (1 + Finset.univ.sum (fun i => p i ^ 2) +\n          Finset.univ.sum (fun i => d i ^ 2) +\n          Finset.univ.sum (fun i => z i ^ 2)) <=\n      (k : Real) - 15 / 8 +\n        Finset.univ.sum (fun i =>\n          (n - 7 / 8) * p i ^ 2 + (n + 2) / 2 * p i * d i +\n            15 / 16 * d i ^ 2) +\n        15 / 16 * Finset.univ.sum (fun i => z i ^ 2) := by\n  have hpairs := Finset.sum_le_sum\n    (s := Finset.univ) (fun (i : Fin k) _ =>\n      scalar_coercivity n (p i) (d i) hnlo hnhi)\n  have hkR : (2 : Real) <= k := by exact_mod_cast hk\n  have hc : (1 / 256 : Real) <= (k : Real) - 15 / 8 := by linarith\n  have hz0 : 0 <= Finset.univ.sum (fun i => z i ^ 2) :=\n    Finset.sum_nonneg (fun _ _ => sq_nonneg _)\n  have hz :\n      (1 / 256 : Real) * Finset.univ.sum (fun i => z i ^ 2) <=\n        15 / 16 * Finset.univ.sum (fun i => z i ^ 2) := by linarith\n  calc\n    _ = (1 / 256 : Real) +\n        Finset.univ.sum (fun i => (1 / 256 : Real) * (p i ^ 2 + d i ^ 2)) +\n        (1 / 256 : Real) * Finset.univ.sum (fun i => z i ^ 2) := by\n      simp only [mul_add, Finset.sum_add_distrib, <- Finset.mul_sum]\n      ring\n    _ <= _ := add_le_add (add_le_add hc hpairs) hz\n\ntheorem frame_gram (k : Nat) (i j : Fin k) :\n    (Finset.univ.sum (fun r : Fin k =>\n      (1 + if r = i then 1 else 0 : Real) *\n        (1 + if r = j then 1 else 0 : Real))) =\n      (if i = j then 1 else 0 : Real) + (k : Real) + 2 := by\n  classical\n  have hid (r : Fin k) :\n      (1 + if r = i then 1 else 0 : Real) *\n          (1 + if r = j then 1 else 0 : Real) =\n        1 + (if r = i then 1 else 0 : Real) +\n          (if r = j then 1 else 0 : Real) +\n          (if r = i then (if i = j then 1 else 0 : Real) else 0) := by\n    split_ifs <;> simp_all <;> ring\n  simp_rw [hid]\n  simp only [Finset.sum_add_distrib]\n  simp\n  <;> ring\n\ntheorem recurrence_lower\n    (mass : Nat -> Real) (q c : Real) (N : Nat)\n    (hq : 0 <= q) (h0 : c <= mass 0)\n    (hstep : forall l : Nat, l < N -> q * mass l <= mass (l + 1)) :\n    c * q ^ N <= mass N := by\n  have h : forall t : Nat, t <= N -> c * q ^ t <= mass t := by\n    intro t\n    induction t with\n    | zero =>\n        intro _\n        simpa using h0\n    | succ t ih =>\n        intro ht\n        have htN : t < N := by omega\n        have hi := ih (by omega)\n        calc\n          c * q ^ (t + 1) = q * (c * q ^ t) := by rw [pow_succ]; ring\n          _ <= q * mass t := mul_le_mul_of_nonneg_left hi hq\n          _ <= mass (t + 1) := hstep t htN\n  exact h N (Nat.le_refl N)\n\ntheorem finite_box_contradiction\n    (mass : Nat -> Real) (q c upper : Real) (N : Nat)\n    (hq : 0 <= q) (h0 : c <= mass 0)\n    (hstep : forall l : Nat, l < N -> q * mass l <= mass (l + 1))\n    (hupper : mass N <= upper) (hchoice : upper < c * q ^ N) : False := by\n  have hlower := recurrence_lower mass q c N hq h0 hstep\n  linarith\n\nend CapGrowthAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/evidence/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: CapGrowthAudit\n\n`Main.lean` formalizes three specific load-bearing interfaces in the\ncap-growth proof. It does **not** formalize the geometry of convex bodies,\naffine-area stationarity, integration by parts, Holder's inequality, or the\nwhole Bernstein theorem. Its natural-language ledger claim is\n`C_FORMAL_CORE`, not `C_ONE_DIRECTION`.\n\n## Positive-determinant interpolation\n\n`CapGrowthAudit.delta` and `CapGrowthAudit.theta` are respectively\n`1/(n+2)` and `(n+2)/(2(n+1))`, with real-valued `n`.\n`interpolation_exponents` quantifies over every real `n>0` and proves\n`0<theta<1`, `theta*(1-delta)=1/2`, and\n`delta*theta+1-theta=1/2`.\n\n`weighted_interpolation` quantifies over every real `n>0` and **all**\nstrictly positive reals `D,R,t`. Real powers are Mathlib's real `rpow`.\nIt proves exactly\n\n    sqrt(D*R)*t = (D^delta * R^(1-delta) * t)^theta\n                   * (D*t)^(1-theta).\n\nIn the analytic application, `D=det B`, `R=det R_angular`, and\n`t=tr(B^-1)`. Positive-definiteness supplies all three strict positivity\nhypotheses. `R_angular` may be an empty angular block: its determinant\nis then `1`, which is allowed. No bound on a smallest eigenvalue is\nassumed. This is the exact identity used before applying Holder, not a\nnumerical test of it.\n\n## Dimension-uniform coercivity and the cap-testing frame\n\n`quadratic_nonnegative` is the completed-square argument for a two-by-two\nquadratic form: `a>0` and `a*b-c^2>=0` imply\n`a*p^2+2*c*p*d+b*d^2>=0` for all real `p,d`.\n\n`scalar_coercivity` holds for every real `3<=n<=9` and all real `p,d`.\nIt lower-bounds the paired quadratic form at `lambda=15/16` by\n`(p^2+d^2)/256`. This is a uniform coercivity bound, not only a\ncalculation of the determinant's sign.\n\n`finite_coercivity` quantifies independently over every natural `k>=2`,\nevery natural `r`, every real `3<=n<=9`, and arbitrary real vectors\n`p,d` indexed by `Fin k` and `z` indexed by `Fin r`. It proves\n\n    k - 15/8 + sum_i[(n-7/8)*p_i^2 + (n+2)/2*p_i*d_i\n                                      + 15/16*d_i^2]\n      + 15/16*sum_a z_a^2\n    >= (1 + sum_i p_i^2 + sum_i d_i^2 + sum_a z_a^2)/256.\n\nThe analytic application chooses orthonormal frames for the inverse-second-\nform inner products and sets `r=n-k`. The formal statement is stronger in\nallowing unrelated `k,r`; it does not assert such a tube exists.\n\n`frame_gram` quantifies over every natural `k` and `i,j : Fin k`. It proves\nthe entrywise identity for the `k` vectors `1+e_r`:\n\n    sum_r (1+indicator(r=i))*(1+indicator(r=j))\n      = indicator(i=j) + k + 2.\n\nThis is the matrix identity `sum_r a_r*a_r^T = I+(k+2)*11^T`.\nThe analytic proof separately uses positive-definiteness to contract it\nagainst `B^-1` and bound its trace. That last contraction is not encoded.\n\n## One finite box, one approximant\n\n`recurrence_lower` concerns an arbitrary function `mass : Nat -> Real`,\nreal `q,c`, and natural `N`. With `q>=0`, `mass(0)>=c`, and the\n**finite** family of hypotheses `mass(l+1)>=q*mass(l)` for `l<N`,\nit proves `mass(N)>=c*q^N`.\n\n`finite_box_contradiction` adds a real `upper`,\n`mass(N)<=upper`, and `upper<c*q^N`, and concludes `False`.\nIt does not assume recurrence on an infinite sequence or swap the\napproximant limit and box-size limit. In the application,\n`mass(t)=sigma_j(Q_(l0+t))` for a **single fixed** `j`, and\n`upper=C_box*(l0+N+1)^k`. The analytic proof supplies existence of a\nfinite `N` satisfying the strict choice inequality and chooses `j`\nonly afterwards. Those geometric and existence steps remain prose.\n\nAll declarations have ordinary proved bodies. No custom axiom, `sorry`,\n`admit`, or unproved analytic comparator is part of this source.\n"
+  },
+  "subject": {
+    "content_hash": "c8f09ffdb3384b2c9db512d7e3fac07fda833dbe0ab015db693afe7b292a5a6c",
+    "kind": "claim",
+    "subject_id": "C_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

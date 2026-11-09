@@ -1,0 +1,70 @@
+{
+  "claim_id": "V_HYPERGRAPH_CAPTURE",
+  "result_class": "formal_verification",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "scope": "Universal original hypergraph lem:capture; not the full influence theorem",
+  "status": "kernel_verified_review_pending",
+  "theorem": "HypergraphCapture.hypergraph_capture",
+  "empty_range_theorem": "HypergraphCapture.empty_support_range",
+  "source": "Main.lean",
+  "statement_fidelity": "statement_fidelity.md",
+  "lean_version": "4.31.0",
+  "statement": {
+    "integers": "n >= r >= 3; 1 <= m <= n",
+    "real_parameter": "k > 0",
+    "L": "(k/r)^(r/(r-1))",
+    "support": "nonempty finite set of distinct r-element subsets of Fin n",
+    "hypotheses": ["|S| <= L", "r*L*(m-1)/(n-1) <= 1/2"],
+    "sampling": "uniform over all m-element subsets B of Fin n",
+    "event": "1 <= |{e in S : e intersects B}| <= k",
+    "conclusion": "event probability >= m/(2*n)"
+  },
+  "required_cases": ["m=1", "n=r", "noninteger k", "L<1"],
+  "permitted_axioms": ["propext", "Classical.choice", "Quot.sound"],
+  "unproved_external_assumptions": [],
+  "mechanical_result": {
+    "status": "success",
+    "exit_code": 0,
+    "proof_holes": [],
+    "axiom_audit_exit_code": 0,
+    "certificate": "certificates/V_HYPERGRAPH_CAPTURE-7809279e9d93ed0e.json",
+    "runtime_record": "lean_check.json",
+    "full_replay": "verification_result.json"
+  },
+  "campaign_local_validation": {
+    "project_root": "campaigns/9000186",
+    "math_state_exit_code": 0,
+    "proof_graph_check_exit_code": 0
+  },
+  "arithmetic_checks": {
+    "interpretation": "Finite adversarial experiments supplement, but do not replace, the universal Lean proof.",
+    "method": "fractions and integer powers; enumerate every fixed-size block for each admitted instance",
+    "L_comparison": "s <= L iff s^(r-1) <= (k/r)^r",
+    "block_condition": "for m>1, r*L*(m-1)/(n-1)<=1/2 iff (k/r)^r <= ((n-1)/(2*r*(m-1)))^(r-1)",
+    "admitted_instances": 2782,
+    "all_nonempty_supports_n_at_most_5": 1072,
+    "fixed_size_blocks_evaluated": 260433,
+    "counterexamples": 0
+  },
+  "jacobian": {
+    "operation_id": "hypergraph.vertex_degrees.compute",
+    "payload": "jacobian_payload.json",
+    "typed_result": "jacobian_result.json",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "adapter_exit_code": 0,
+    "adapter_error": null,
+    "timeout": false,
+    "scope": "Exact degree calculation of one finite simple 3-uniform support; not universal proof evidence."
+  },
+  "development_compile_receipt": {
+    "state": "submitted",
+    "task_id": "hypergraph-capture-core",
+    "run_id": "hypergraph-capture-core-1793904402788363627",
+    "check_with": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.subagent status --task-id hypergraph-capture-core",
+    "outcome": "Initial elaboration failed; corrected source subsequently compiled. This was not a mathematical refutation."
+  },
+  "independent_review": "required_not_started",
+  "novelty": "Independent formal certification; no claim that the manuscript's combinatorial inequality is a new mathematical discovery."
+}

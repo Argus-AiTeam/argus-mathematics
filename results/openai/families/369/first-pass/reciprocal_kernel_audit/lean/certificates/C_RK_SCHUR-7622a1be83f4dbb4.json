@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_RK_SCHUR-7461f4af550c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/369/first-pass/reciprocal_kernel_audit/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/369/first-pass/reciprocal_kernel_audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 13385,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/369/first-pass/reciprocal_kernel_audit/lean/Main.lean",
+    "source_sha256": "d2255ba81647e91ba139ce54e91f9048e720da47bf934babdc1327f1114e62e8",
+    "statement_fidelity": "families/369/first-pass/reciprocal_kernel_audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "6bf914c7131327db36e8e2936ecb02b0e6dd6cddadee738fdc3ef1ff1117443d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/369/first-pass/reciprocal_kernel_audit/lean/Main.lean:14:0: warning: automatically included section variable(s) unused in theorem `ReciprocalKernel.psd_abs_entry_lt`:\n  [Fintype ι]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [Fintype ι] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/369/first-pass/reciprocal_kernel_audit/lean/Main.lean:23:0: warning: automatically included section variable(s) unused in theorem `ReciprocalKernel.psd_entrywise_power`:\n  [Fintype ι]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [Fintype ι] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/369/first-pass/reciprocal_kernel_audit/lean/Main.lean:28:42: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/369/first-pass/reciprocal_kernel_audit/lean/Main.lean:29:8: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/369/first-pass/reciprocal_kernel_audit/lean/Main.lean:28:42: warning: 'ext i j' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/369/first-pass/reciprocal_kernel_audit/lean/Main.lean:29:8: warning: 'simp [Matrix.hadamard_apply, pow_succ, Nat.add_assoc]' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/369/first-pass/reciprocal_kernel_audit/lean/Main.lean:115:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/reciprocal_kernel_audit/lean/Main.lean",
+    "text": "import Mathlib.Analysis.Matrix.Order\nimport Mathlib.Analysis.SpecificLimits.Normed\nimport Mathlib.Tactic\n\nnoncomputable section\n\nopen scoped BigOperators Topology\nopen Filter Matrix\n\nnamespace ReciprocalKernel\n\nvariable {ι : Type*} [Fintype ι]\n\ntheorem psd_abs_entry_lt {U : Matrix ι ι ℝ} (hU : U.PosSemidef)\n    {a : ℝ} (hd : ∀ i, U i i < a) (i j : ι) : |U i j| < a := by\n  classical\n  have hs : U j i = U i j := by simpa using hU.isHermitian.apply i j\n  have hp := hU.2 (Finsupp.single i 1 + Finsupp.single j 1)\n  have hm := hU.2 (Finsupp.single i 1 + Finsupp.single j (-1))\n  simp [Finsupp.sum_add_index, Finsupp.sum_neg_index, add_mul, mul_add, hs] at hp hm\n  exact abs_lt.mpr ⟨by linarith [hd i, hd j], by linarith [hd i, hd j]⟩\n\ntheorem psd_entrywise_power {U : Matrix ι ι ℝ} (hU : U.PosSemidef)\n    (n : ℕ) : Matrix.PosSemidef (fun i j => U i j ^ (n + 1)) := by\n  induction n with\n  | zero => simpa using hU\n  | succ n ih =>\n      convert! ih.hadamard hU using 1 <;> ext i j <;>\n        simp [Matrix.hadamard_apply, pow_succ, Nat.add_assoc]\n\ntheorem psd_of_entrywise_limit {A : ℕ → Matrix ι ι ℝ} {B : Matrix ι ι ℝ}\n    (hA : ∀ n, (A n).PosSemidef) (hB : B.IsHermitian)\n    (hlim : ∀ i j, Tendsto (fun n => A n i j) atTop (𝓝 (B i j))) :\n    B.PosSemidef := by\n  classical\n  apply Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hB\n  intro x\n  have ht : Tendsto (fun n => star x ⬝ᵥ (A n *ᵥ x)) atTop\n      (𝓝 (star x ⬝ᵥ (B *ᵥ x))) := by\n    change Tendsto (fun n => ∑ i, star (x i) * (∑ j, A n i j * x j)) atTop\n      (𝓝 (∑ i, star (x i) * (∑ j, B i j * x j)))\n    apply tendsto_finsetSum\n    intro i hi\n    apply tendsto_const_nhds.mul\n    apply tendsto_finsetSum\n    intro j hj\n    exact (hlim i j).mul_const (x j)\n  exact le_of_tendsto_of_tendsto tendsto_const_nhds ht (Filter.Eventually.of_forall fun n =>\n    (hA n).dotProduct_mulVec_nonneg x)\n\ntheorem scalar_schur_series {a c u : ℝ} (ha : 0 < a) (hc : 0 ≤ c)\n    (hu : |u| < a) :\n    HasSum (fun n : ℕ => c ^ n / (1 + c * a) ^ (n + 2) * u ^ (n + 1))\n      (u / ((1 + c * a) * (1 + c * a - c * u))) := by\n  let α := 1 + c * a\n  have hα : 0 < α := by dsimp [α]; positivity\n  have hcu : c * u ≤ c * a :=\n    mul_le_mul_of_nonneg_left ((le_abs_self u).trans hu.le) hc\n  have hden : 0 < α - c * u := by dsimp [α]; linarith\n  have hr : |c / α * u| < 1 := by\n    rw [abs_mul, abs_div, abs_of_nonneg hc, abs_of_pos hα, div_mul_eq_mul_div]\n    apply (div_lt_iff₀ hα).2\n    have := mul_le_mul_of_nonneg_left hu.le hc\n    dsimp [α]\n    linarith\n  have hsum := HasSum.mul_left (u / α ^ 2)\n    (hasSum_geometric_of_abs_lt_one hr)\n  have hα0 : α ≠ 0 := ne_of_gt hα\n  have hden0 : α - c * u ≠ 0 := ne_of_gt hden\n  have hr0 : 1 - c / α * u ≠ 0 := by\n    intro he\n    apply hden0\n    field_simp [hα0] at he\n    linarith\n  change HasSum (fun n : ℕ => c ^ n / α ^ (n + 2) * u ^ (n + 1))\n    (u / (α * (α - c * u)))\n  convert! hsum using 1\n  · funext n\n    simp only [mul_pow, div_pow, pow_succ]\n    field_simp [hα0]\n  · field_simp [hα0, hden0, hr0]\n\ntheorem schur_resolvent_psd {U : Matrix ι ι ℝ} (hU : U.PosSemidef)\n    {a c : ℝ} (ha : 0 < a) (hc : 0 ≤ c) (hd : ∀ i, U i i < a) :\n    Matrix.PosSemidef\n      (fun i j => U i j / ((1 + c * a) * (1 + c * a - c * U i j))) := by\n  classical\n  let A : ℕ → Matrix ι ι ℝ :=\n    fun n => (c ^ n / (1 + c * a) ^ (n + 2)) • (fun i j => U i j ^ (n + 1))\n  have hA (n : ℕ) : (A n).PosSemidef := by\n    apply (psd_entrywise_power hU n).smul\n    positivity\n  have hpartial (N : ℕ) : (∑ n ∈ Finset.range N, A n).PosSemidef :=\n    Matrix.posSemidef_sum _ (fun n hn => hA n)\n  apply psd_of_entrywise_limit hpartial\n  · apply Matrix.IsHermitian.ext\n    intro i j\n    have hs : U j i = U i j := by simpa using hU.isHermitian.apply i j\n    simp [hs]\n  · intro i j\n    simpa [A, Matrix.sum_apply, Matrix.smul_apply] using\n      (scalar_schur_series ha hc (psd_abs_entry_lt hU hd i j)).tendsto_sum_nat\n\ntheorem update_defect_identity {a c u : ℝ} (ha : 0 < a) (hc : 0 ≤ c)\n    (hu : |u| < a) :\n    a / (1 + c * a) - (a - u) / (1 + c * (a - u)) =\n      u / ((1 + c * a) * (1 + c * a - c * u)) := by\n  have h1 : 0 < 1 + c * a := by positivity\n  have h2 : 0 < 1 + c * (a - u) := by\n    have : 0 < a - u := by linarith [le_abs_self u]\n    positivity\n  have he : 1 + c * a - c * u = 1 + c * (a - u) := by ring\n  rw [he]\n  field_simp [ne_of_gt h1, ne_of_gt h2]\n  <;> ring\n\ntheorem normalized_column_update_psd {H : Matrix ι ι ℝ} {a c : ℝ}\n    (ha : 0 < a) (hc : 0 ≤ c)\n    (hU : Matrix.PosSemidef (fun i j => a - H i j)) (hd : ∀ i, 0 < H i i) :\n    Matrix.PosSemidef (fun i j => a / (1 + c * a) - H i j / (1 + c * H i j)) := by\n  have hdiag : ∀ i, a - H i i < a := by intro i; linarith [hd i]\n  convert! schur_resolvent_psd hU ha hc hdiag using 1\n  ext i j\n  have hu := psd_abs_entry_lt hU hdiag i j\n  simpa only [sub_sub_cancel] using update_defect_identity ha hc hu\n\nend ReciprocalKernel\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/reciprocal_kernel_audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: universal Schur-resolvent core\n\nThe central declaration is `ReciprocalKernel.schur_resolvent_psd`.\nIts index type is arbitrary with a `Fintype` instance: it covers every finite\nmatrix size, not a list of tested matrices. Entries and scalars are real.\n`U.PosSemidef` means that U is symmetric and its quadratic form is\nnonnegative on every real vector. The hypotheses are exactly `a > 0`,\n`c >= 0`, and `U i i < a` for every index. The conclusion is positive\nsemidefiniteness of the matrix\n\n    V_ij = U_ij / ((1 + c*a) * (1 + c*a - c*U_ij)).\n\n`psd_abs_entry_lt` derives the strict entry bound from the diagonal bounds\nand positive semidefiniteness; it does not assume entrywise nonnegativity.\n`scalar_schur_series` proves the convergent scalar series for V, including\nnegative entries and c = 0. `psd_entrywise_power` uses Schur products, not\nordinary matrix powers. `psd_of_entrywise_limit` proves closure under\nentrywise limits of fixed-size real matrices.\n\n`normalized_column_update_psd` is the directly usable form: for a real\nmatrix H, if `a - H_ij` is positive semidefinite, `a > 0`, `c >= 0`,\nand every `H_ii > 0`, then\n\n    a/(1+c*a) - H_ij/(1+c*H_ij)\n\nis positive semidefinite. `update_defect_identity` connects this expression\nto V. In the analytic proof, H is the positive diagonal normalization of\nan entrywise reciprocal matrix and a is its constant anchored row value.\nThus this verifies the delicate Schur-series implication used in the\nmanuscript's column-update lemma, for all dimensions and parameters.\n\nThis source does NOT encode a disk, a measure, a PDE Green function,\npositive quadrature, the number of positive eigenvalues, boundary\nasymptotics, or the full conditional-negative boundary-kernel theorem.\nThose connections and the singular-measure extension are proved in the\nseparate mathematical report and require independent mathematical review.\nNo compiler result for this source should be described as a formal proof\nof those analytic statements or of the hot-spots conjecture.\n"
+  },
+  "subject": {
+    "content_hash": "3da53a6f2ea6ab72f4e90b6220b8fb1535ddd5cf7418ae32cf1dadcf3fff64c5",
+    "kind": "claim",
+    "subject_id": "C_RK_SCHUR"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

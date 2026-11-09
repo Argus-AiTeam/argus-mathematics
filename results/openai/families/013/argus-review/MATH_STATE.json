@@ -1,0 +1,848 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX_REVIEW_ALG_013",
+      "version": 1,
+      "statement": "Bounded old-draft review family013: replay the unchanged universal-algebra source formerly attached to C_TREE_ALGEBRA version 2. Arbitrary fields, an arbitrary group for cancellation, and natural-number arithmetic for the displayed constant budget. No density, probability, Fourier, majorant, graph-cycle, analytic-tree, arithmetic, novelty, or Reviewer-acceptance claim is included.",
+      "definitions": {},
+      "content_hash": "123282389ace8e5c0b39c5e09e2f8ff02b49ce606c173e6f55104f104d078a65"
+    },
+    {
+      "context_id": "CTX_REVIEW_TREE_013",
+      "version": 1,
+      "statement": "Review the exact local finite-field tree comparison in the supplied September 24, 2026 manuscript and old family013 draft; no arithmetic or novelty conclusion is adopted.",
+      "definitions": {
+        "q": "odd prime",
+        "U": "F_q multiplicative group with uniform probability measure",
+        "g": "g(0)=0 and E_Fq |g|^2<=1, without a pointwise bound",
+        "epsilon": "max mixed multiplicative-character/additive correlation, every character zero at zero",
+        "diagram": "literal consistent ordered full binary unit-parameter diagram of manuscript eq:src36; zero reconstruction kills the whole diagram before division",
+        "r": "2^l leaves; k=r/4 bottom quartets when l>=2",
+        "paired_law": "uniform equality of paired nonempty component products, with independent uniform leaf marginals"
+      },
+      "content_hash": "3fcfb6a64d726b2e694f3bb7670517aa8f26086b7afc1574dbf0fb680408db23"
+    },
+    {
+      "context_id": "CTX_REVIEW_ARITH_013",
+      "version": 1,
+      "statement": "Source-scope review of old family013 arithmetic assertions at supplied manuscript revision 4eaee87548250b2682affda7d05d947c05554bae. Unproved source assertions are not adopted as true; the current objective is the bounded old-draft review, not a new counterexample campaign.",
+      "definitions": {
+        "eventual_decomposition": "A,B subsets of nonnegative integers with (A+B) symmetric-difference the positive primes finite, requiring both eventual coverage and exclusion of composite sums",
+        "formal_count_model": "real functions a(x)=b(x)=sqrt(x/log x) as x tends to infinity, not a construction of summand sets"
+      },
+      "content_hash": "0b733db981286ba2412ab4533ccd777137802ab4c930e707732d6d38cfc1f277"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C_REVIEW_ALG_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_ALG_013",
+        "content_hash": "123282389ace8e5c0b39c5e09e2f8ff02b49ce606c173e6f55104f104d078a65"
+      },
+      "natural_statement": "Under exactly their displayed hypotheses, the eleven declarations TreeComparison.reconstruction_difference, held_ratio_square, reconstructed_square, bad_held_cancellation, square_fiber, affine_composition, affine_fixed_ratio_injective, quadratic_pairs_of_coefficients, off_diagonal_collision_unique, cycle_index_unique, and local_constant_budget in the unchanged archived Main.lean hold. The scalar identities quantify over arbitrary fields; cycle_index_unique quantifies over arbitrary groups; local_constant_budget is a natural-number inequality. This is only the universal-algebra ingredient, not the analytic tree theorem.",
+      "formal_statement": "import Mathlib\n\nset_option autoImplicit false\n\nnamespace TreeComparison\n\nvariable {K : Type*} [Field K]\n\ntheorem reconstruction_difference\n    (D p u Hplus Hminus splus sminus sn : K)\n    (hD : D ≠ 0) (hp : p ≠ 0) (hu : u ≠ 0)\n    (hplus : Hplus ≠ 0) (hminus : Hminus ≠ 0)\n    (hrec : splus * Hminus - sminus * Hplus = sn * p * u) :\n    splus / (D * p * u * Hplus) - sminus / (D * p * u * Hminus) =\n      sn / (D * Hplus * Hminus) := by\n  field_simp [hD, hp, hu, hplus, hminus]\n  linear_combination hrec\n\ntheorem held_ratio_square\n    (D p u Hfree Hheld sfree sheld sn : K)\n    (hD : D ≠ 0) (hp : p ≠ 0) (hu : u ≠ 0)\n    (hfree : Hfree ≠ 0) (hheld : Hheld ≠ 0)\n    (hsheld : sheld ≠ 0) (hsn : sn ≠ 0) :\n    (sfree / (D * p * u * Hfree) / (sheld / (D * p * u * Hheld))) /\n        (sn / (D * Hfree * Hheld)) =\n      (D * sfree / (sheld * sn)) * Hheld ^ 2 := by\n  field_simp [hD, hp, hu, hfree, hheld, hsheld, hsn] <;> ring\n\ntheorem reconstructed_square\n    (D p u Hplus Hminus splus sminus sn : K)\n    (hD : D ≠ 0) (hp : p ≠ 0) (hu : u ≠ 0)\n    (hplus : Hplus ≠ 0) (hminus : Hminus ≠ 0)\n    (hsplus : splus ≠ 0) (hsminus : sminus ≠ 0) (hsn : sn ≠ 0) :\n    p ^ 2 =\n      (splus * sminus / (sn * D * u ^ 2)) *\n        (sn / (D * Hplus * Hminus)) /\n        ((splus / (D * p * u * Hplus)) *\n          (sminus / (D * p * u * Hminus))) := by\n  field_simp [hD, hp, hu, hplus, hminus, hsplus, hsminus, hsn] <;> ring\n\ntheorem bad_held_cancellation\n    (p d e c y : K) (he : e ≠ 0)\n    (h : p ^ 2 * d * e = c * y) :\n    d * p ^ 2 = c * y / e := by\n  field_simp [he]\n  linear_combination h\n\ntheorem square_fiber\n    (z w : K) (h : z ^ 2 = w ^ 2) :\n    z = w ∨ z = -w := by\n  have hf : (z - w) * (z + w) = 0 := by\n    calc\n      (z - w) * (z + w) = z ^ 2 - w ^ 2 := by ring\n      _ = 0 := sub_eq_zero.mpr h\n  rcases mul_eq_zero.mp hf with hleft | hright\n  · exact Or.inl (sub_eq_zero.mp hleft)\n  · exact Or.inr (eq_neg_iff_add_eq_zero.mpr hright)\n\ntheorem affine_composition\n    (r s t : K) (hr : r ≠ 0) :\n    s - s ^ 2 * ((r - t) / r ^ 2) =\n      (s / r) ^ 2 * t + s - s ^ 2 / r := by\n  field_simp [hr] <;> ring\n\ntheorem affine_fixed_ratio_injective\n    (z r r' : K) (hz : z ≠ 0) (hone : z ≠ 1)\n    (h : r * (z - z ^ 2) = r' * (z - z ^ 2)) :\n    r = r' := by\n  have hfactor : z - z ^ 2 ≠ 0 := by\n    rw [show z - z ^ 2 = z * (1 - z) by ring]\n    exact mul_ne_zero hz (sub_ne_zero.mpr (Ne.symm hone))\n  have hmul : (r - r') * (z - z ^ 2) = 0 := by\n    linear_combination h\n  rcases mul_eq_zero.mp hmul with heq | hzero\n  · exact sub_eq_zero.mp heq\n  · exact (hfactor hzero).elim\n\ntheorem quadratic_pairs_of_coefficients\n    (b1 b2 b3 b4 : K)\n    (hsum : b1 + b2 = b3 + b4)\n    (hprod : b1 * b2 = b3 * b4) :\n    (b1 = b3 ∧ b2 = b4) ∨ (b1 = b4 ∧ b2 = b3) := by\n  have hf : (b1 - b3) * (b1 - b4) = 0 := by\n    linear_combination b1 * hsum - hprod\n  rcases mul_eq_zero.mp hf with hleft | hright\n  · have hb : b1 = b3 := sub_eq_zero.mp hleft\n    exact Or.inl ⟨hb, by linear_combination hsum - hb⟩\n  · have hb : b1 = b4 := sub_eq_zero.mp hright\n    exact Or.inr ⟨hb, by linear_combination hsum - hb⟩\n\ntheorem off_diagonal_collision_unique\n    (a a' b1 b2 b3 b4 : K)\n    (hoff : ¬ ((b1 = b3 ∧ b2 = b4) ∨ (b1 = b4 ∧ b2 = b3)))\n    (ha : (a - b1) * (a - b2) = (a - b3) * (a - b4))\n    (ha' : (a' - b1) * (a' - b2) = (a' - b3) * (a' - b4)) :\n    a = a' := by\n  by_contra hne\n  have hf : (a - a') * ((b3 + b4) - (b1 + b2)) = 0 := by\n    linear_combination ha - ha'\n  have hdelta : (b3 + b4) - (b1 + b2) = 0 :=\n    (mul_eq_zero.mp hf).resolve_left (sub_ne_zero.mpr hne)\n  have hsum : b1 + b2 = b3 + b4 := by\n    linear_combination -hdelta\n  have hprod : b1 * b2 = b3 * b4 := by\n    linear_combination ha + a * hsum\n  exact hoff (quadratic_pairs_of_coefficients b1 b2 b3 b4 hsum hprod)\n\ntheorem cycle_index_unique\n    {G : Type*} [Group G] (x y z : G)\n    (hx : x * z = 1) (hy : y * z = 1) :\n    x = y := by\n  exact mul_right_cancel (hx.trans hy.symm)\n\ntheorem local_constant_budget :\n    32 * 256 + 64 * 8192 ≤ (2 : ℕ) ^ 20 := by\n  norm_num\n\nend TreeComparison\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "c84b4526a2ce41e71ace1a4654043d09c7eb90b87ad20058b395de2c91578c11"
+    },
+    {
+      "claim_id": "C_REVIEW_DENSITY_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_TREE_013",
+        "content_hash": "3fcfb6a64d726b2e694f3bb7670517aa8f26086b7afc1574dbf0fb680408db23"
+      },
+      "natural_statement": "At a horizontal level of k nodes the valid argument subprobability law is dominated by 2^(k-1) times independent uniform law on U^k. Consequently E|W|^2<=3^r, including the depth-zero convention.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "89c14a043bc0b411cb154d7bb9ef5d8ecec8ceb7f95769ddee6210c2cf6536df"
+    },
+    {
+      "claim_id": "C_REVIEW_AFFINE_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_TREE_013",
+        "content_hash": "3fcfb6a64d726b2e694f3bb7670517aa8f26086b7afc1574dbf0fb680408db23"
+      },
+      "natural_statement": "For the bottom-pair autocorrelation P_chi and every eta,a, sum_chi |hat(P_chi chi eta)(a)|^2 <= q/(q-1)*(epsilon^4+sqrt(3)*q^(-1/2)); twists zero the origin even if principal.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "2891f9350bb2f35554b7b84099da600212a6776da9a1592e6fa6714fff8fc059"
+    },
+    {
+      "claim_id": "C_REVIEW_FOURTH_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_TREE_013",
+        "content_hash": "3fcfb6a64d726b2e694f3bb7670517aa8f26086b7afc1574dbf0fb680408db23"
+      },
+      "natural_statement": "For either bottom-pair type, the summed nonprincipal Gauss-convolution fourth moment is <=16*(epsilon^2+q^(-1)); handling the principal correction gives the two-bad convolution <=40*(epsilon^2+q^(-1)).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "4f2dcb1a71189c8476e7dd6b89be6762d45b2ed9ed2a66a82c55328ac5eb0083"
+    },
+    {
+      "claim_id": "C_REVIEW_MAJORANTS_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_TREE_013",
+        "content_hash": "3fcfb6a64d726b2e694f3bb7670517aa8f26086b7afc1574dbf0fb680408db23"
+      },
+      "natural_statement": "All permitted quartet coefficients have a common nonnegative ancestor/parameter-free majorant family B_rho(y) with sup_rho E_U B_rho<=2^20*(epsilon^2+q^(-1/2)), sum_rho E_U B_rho<=2^20, and untouched-quartet mean<=2^20.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "47b959b02850bfb63f887cd59f7413c67ed65e775152c0d4fff43757b4ca857a"
+    },
+    {
+      "claim_id": "C_REVIEW_CYCLE_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_TREE_013",
+        "content_hash": "3fcfb6a64d726b2e694f3bb7670517aa8f26086b7afc1574dbf0fb680408db23"
+      },
+      "natural_statement": "For l>=2 and any cycle in the first component-quartet multigraph, including two parallel edges, the component/quartet-product-preserving orthogonal projection P satisfies ||PW_1||_2^2<=2^k*(2^20)^k*(epsilon^2+q^(-1/2)), k=r/4.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "aaf248ce16bdb304adecf610cee56808e82ba4c61540ba024a9e54ee9e4b35d8"
+    },
+    {
+      "claim_id": "C_REVIEW_TREE_STRONG_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_TREE_013",
+        "content_hash": "3fcfb6a64d726b2e694f3bb7670517aa8f26086b7afc1574dbf0fb680408db23"
+      },
+      "natural_statement": "For every q and permitted diagram E|W|^2<=3^r. For paired depth-l diagrams with l>=2 whose first component-quartet multigraph has a cycle, |E W_1 conjugate(W_2)|<=16^r*(epsilon+q^(-1/4)), uniformly in all permitted unit data, partitions and conjugations.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "7fcf55c798be53645475c19976359e8dcb6924b53125ceebd22574997cfe6392"
+    },
+    {
+      "claim_id": "C_REVIEW_TREE_BASE_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_TREE_013",
+        "content_hash": "3fcfb6a64d726b2e694f3bb7670517aa8f26086b7afc1574dbf0fb680408db23"
+      },
+      "natural_statement": "The literal manuscript tree comparison holds: E|W|^2<=3^r; for paired depth-l diagrams l>=2 with b<=3r/4, |E W_1 conjugate(W_2)|<=C_l*(epsilon+q^(-1/4)), with C_l independent of q and all permitted data.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "965a604f40daac7a028008ed1adfda05691e8fc1feb7a7e8a06a8c1af9c00239"
+    },
+    {
+      "claim_id": "C_REVIEW_COUNTS_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_ARITH_013",
+        "content_hash": "0b733db981286ba2412ab4533ccd777137802ab4c930e707732d6d38cfc1f277"
+      },
+      "natural_statement": "The formal model a(x)=b(x)=sqrt(x/log x) simultaneously satisfies ab=x/log x, the bounds sqrt(x)/(log x)^3 << a,b << sqrt(x)*(log x)^2, and for each fixed positive integer j the fixed-shift scale restrictions a,b << x/(log x)^j and a,b >> (log x)^(j-1). These coarse necessary bounds alone have no contradiction and construct no prime decomposition.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "25bfd25d70b07d00124cb0bde5d2083d04dcb2611999409a2b9cf89a60869d50"
+    },
+    {
+      "claim_id": "C_REVIEW_FINITE_FACTOR_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_ARITH_013",
+        "content_hash": "0b733db981286ba2412ab4533ccd777137802ab4c930e707732d6d38cfc1f277"
+      },
+      "natural_statement": "Conditional on the recorded fixed-shift sieve and prime-count lower bound, an eventual decomposition of the positive primes with both summands of cardinality at least two cannot have either summand finite. This is the short source reduction, not a certification of its imported sieve proof.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "e26a6f1ad07d09b9c51607c941f068c9a68a10f6a6b2f2e641ab2ca2cd425d0d"
+    },
+    {
+      "claim_id": "C_REVIEW_FINITE_FACTOR_013",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_ARITH_013",
+        "content_hash": "0b733db981286ba2412ab4533ccd777137802ab4c930e707732d6d38cfc1f277"
+      },
+      "natural_statement": "Conditional on the recorded fixed-shift sieve and prime-count lower bound, an eventual decomposition of the positive primes with both summands of cardinality at least two cannot have either summand finite. This is the short source reduction, not a certification of its imported sieve proof.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_FIXED_SHIFT_SIEVE_013",
+          "statement": "For any two fixed distinct nonnegative shifts a1,a2, a set B for which b+a1 and b+a2 are prime for all sufficiently large b in B satisfies B(X)=O_(a1,a2)(X/(log X)^2).",
+          "source": "OpenAI, The additive indecomposability of the primes, September 24, 2026, supplied revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-preliminaries.tex:38-88, fixed-shift sieve. Read as a source proposition; its additive-large-sieve/Mertens proof and original citations are not independently certified here. No registry identifier is supplied.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot-old-draft-013",
+          "content_hash": "d98fba8adbb4244a950db498a823619edc2921ec0e8ae0c23eae8e67b123d395"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "e26a6f1ad07d09b9c51607c941f068c9a68a10f6a6b2f2e641ab2ca2cd425d0d"
+    },
+    {
+      "claim_id": "C_REVIEW_FINITE_FACTOR_013",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_ARITH_013",
+        "content_hash": "0b733db981286ba2412ab4533ccd777137802ab4c930e707732d6d38cfc1f277"
+      },
+      "natural_statement": "Conditional on the recorded fixed-shift sieve and prime-count lower bound, an eventual decomposition of the positive primes with both summands of cardinality at least two cannot have either summand finite. This is the short source reduction, not a certification of its imported sieve proof.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_FIXED_SHIFT_SIEVE_013",
+          "statement": "For any two fixed distinct nonnegative shifts a1,a2, a set B for which b+a1 and b+a2 are prime for all sufficiently large b in B satisfies B(X)=O_(a1,a2)(X/(log X)^2).",
+          "source": "OpenAI, The additive indecomposability of the primes, September 24, 2026, supplied revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-preliminaries.tex:38-88, fixed-shift sieve. Read as a source proposition; its additive-large-sieve/Mertens proof and original citations are not independently certified here. No registry identifier is supplied.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot-old-draft-013",
+          "content_hash": "d98fba8adbb4244a950db498a823619edc2921ec0e8ae0c23eae8e67b123d395"
+        },
+        {
+          "assumption_id": "A_PRIME_COUNT_LOWER_BOUND_013",
+          "statement": "There is c>0 such that pi(X)>=c*X/log X for all sufficiently large X.",
+          "source": "Classical prime-count lower bound, as used in the supplied OpenAI manuscript revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-preliminaries.tex:90-108. Assumed for the conditional finite-factor reduction; no primary-publication theorem citation is asserted.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot-old-draft-013",
+          "content_hash": "5403674c09e90d3b2127cf3fe202d2bb7c8e7d8a3709afdc507d5c2f1a980ef4"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "e26a6f1ad07d09b9c51607c941f068c9a68a10f6a6b2f2e641ab2ca2cd425d0d"
+    },
+    {
+      "claim_id": "C_REVIEW_TWO_INFINITE_SOURCE_013",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW_ARITH_013",
+        "content_hash": "0b733db981286ba2412ab4533ccd777137802ab4c930e707732d6d38cfc1f277"
+      },
+      "natural_statement": "No two infinite subsets A,B of the nonnegative integers have (A+B) symmetric-difference the positive primes finite. This is the supplied manuscript thm:main, recorded as an unproved source assertion, not a conclusion or new goal of this review.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f74af198c3257d5b1b6c8b80eb1513b13af3b1dbd1a6bccbf0ca5ab07022ef7a"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-C_REVIEW_ALG_013-d0a98d5f2b0c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_ALG_013",
+        "content_hash": "c84b4526a2ce41e71ace1a4654043d09c7eb90b87ad20058b395de2c91578c11"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/draft_reviews/formal_algebra/replay/certificates/C_REVIEW_ALG_013-e94723e45360c6b2.json"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_DENSITY_013-9a2562b2a357",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_DENSITY_013",
+        "content_hash": "89c14a043bc0b411cb154d7bb9ef5d8ecec8ceb7f95769ddee6210c2cf6536df"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_AFFINE_013-92804f8f2d29",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_AFFINE_013",
+        "content_hash": "2891f9350bb2f35554b7b84099da600212a6776da9a1592e6fa6714fff8fc059"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_FOURTH_013-33f8bc1f4552",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_FOURTH_013",
+        "content_hash": "4f2dcb1a71189c8476e7dd6b89be6762d45b2ed9ed2a66a82c55328ac5eb0083"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_MAJORANTS_013-7720a9f7d372",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_MAJORANTS_013",
+        "content_hash": "47b959b02850bfb63f887cd59f7413c67ed65e775152c0d4fff43757b4ca857a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_CYCLE_013-30fcbc6d1643",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_CYCLE_013",
+        "content_hash": "aaf248ce16bdb304adecf610cee56808e82ba4c61540ba024a9e54ee9e4b35d8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TREE_STRONG_013-a092198fe2a5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_STRONG_013",
+        "content_hash": "7fcf55c798be53645475c19976359e8dcb6924b53125ceebd22574997cfe6392"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TREE_BASE_013-d87009a7a69e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_BASE_013",
+        "content_hash": "965a604f40daac7a028008ed1adfda05691e8fc1feb7a7e8a06a8c1af9c00239"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_COUNTS_013-0d74b948157a",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_COUNTS_013",
+        "content_hash": "25bfd25d70b07d00124cb0bde5d2083d04dcb2611999409a2b9cf89a60869d50"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-old-draft-013",
+      "artifact": "research/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_FINITE_FACTOR_013-bc362105acfe",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_FINITE_FACTOR_013",
+        "content_hash": "e26a6f1ad07d09b9c51607c941f068c9a68a10f6a6b2f2e641ab2ca2cd425d0d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-old-draft-013",
+      "artifact": "research/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_ALG_013-6f9c5360a462",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_ALG_013",
+        "content_hash": "c84b4526a2ce41e71ace1a4654043d09c7eb90b87ad20058b395de2c91578c11"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/formal_algebra/replay/certificates/C_REVIEW_ALG_013-e94723e45360c6b2.json"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_DENSITY_013-0bbaf7d86f78",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_DENSITY_013",
+        "content_hash": "89c14a043bc0b411cb154d7bb9ef5d8ecec8ceb7f95769ddee6210c2cf6536df"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_AFFINE_013-a4f4512310e4",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_AFFINE_013",
+        "content_hash": "2891f9350bb2f35554b7b84099da600212a6776da9a1592e6fa6714fff8fc059"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_FOURTH_013-1c06bc171822",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_FOURTH_013",
+        "content_hash": "4f2dcb1a71189c8476e7dd6b89be6762d45b2ed9ed2a66a82c55328ac5eb0083"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_MAJORANTS_013-2526b6aaeab0",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_MAJORANTS_013",
+        "content_hash": "47b959b02850bfb63f887cd59f7413c67ed65e775152c0d4fff43757b4ca857a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_CYCLE_013-f44198ca4acd",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_CYCLE_013",
+        "content_hash": "aaf248ce16bdb304adecf610cee56808e82ba4c61540ba024a9e54ee9e4b35d8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TREE_STRONG_013-f911b6331409",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_STRONG_013",
+        "content_hash": "7fcf55c798be53645475c19976359e8dcb6924b53125ceebd22574997cfe6392"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TREE_BASE_013-df16d828fafd",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_BASE_013",
+        "content_hash": "965a604f40daac7a028008ed1adfda05691e8fc1feb7a7e8a06a8c1af9c00239"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_COUNTS_013-93f0c945f760",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_COUNTS_013",
+        "content_hash": "25bfd25d70b07d00124cb0bde5d2083d04dcb2611999409a2b9cf89a60869d50"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_FINITE_FACTOR_013-814f7123f41c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_FINITE_FACTOR_013",
+        "content_hash": "e26a6f1ad07d09b9c51607c941f068c9a68a10f6a6b2f2e641ab2ca2cd425d0d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TWO_INFINITE_SOURCE_013-835ba3c342e7",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TWO_INFINITE_SOURCE_013",
+        "content_hash": "f74af198c3257d5b1b6c8b80eb1513b13af3b1dbd1a6bccbf0ca5ab07022ef7a"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:native-old-draft-013",
+      "artifact": "research/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_DENSITY_013-32a63f3752ef",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_DENSITY_013",
+        "content_hash": "89c14a043bc0b411cb154d7bb9ef5d8ecec8ceb7f95769ddee6210c2cf6536df"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_AFFINE_013-3f3e07a478c5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_AFFINE_013",
+        "content_hash": "2891f9350bb2f35554b7b84099da600212a6776da9a1592e6fa6714fff8fc059"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_FOURTH_013-060070443701",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_FOURTH_013",
+        "content_hash": "4f2dcb1a71189c8476e7dd6b89be6762d45b2ed9ed2a66a82c55328ac5eb0083"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_MAJORANTS_013-0f26c65fe089",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_MAJORANTS_013",
+        "content_hash": "47b959b02850bfb63f887cd59f7413c67ed65e775152c0d4fff43757b4ca857a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_CYCLE_013-81a77275373f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_CYCLE_013",
+        "content_hash": "aaf248ce16bdb304adecf610cee56808e82ba4c61540ba024a9e54ee9e4b35d8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TREE_STRONG_013-2ab4aaa17b97",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_STRONG_013",
+        "content_hash": "7fcf55c798be53645475c19976359e8dcb6924b53125ceebd22574997cfe6392"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TREE_BASE_013-c0c6dc9c69b4",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_BASE_013",
+        "content_hash": "965a604f40daac7a028008ed1adfda05691e8fc1feb7a7e8a06a8c1af9c00239"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_COUNTS_013-fc461cb889de",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_COUNTS_013",
+        "content_hash": "25bfd25d70b07d00124cb0bde5d2083d04dcb2611999409a2b9cf89a60869d50"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_FINITE_FACTOR_013-fcbf3f482cdf",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_FINITE_FACTOR_013",
+        "content_hash": "e26a6f1ad07d09b9c51607c941f068c9a68a10f6a6b2f2e641ab2ca2cd425d0d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TWO_INFINITE_SOURCE_013-0e020e30c841",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TWO_INFINITE_SOURCE_013",
+        "content_hash": "f74af198c3257d5b1b6c8b80eb1513b13af3b1dbd1a6bccbf0ca5ab07022ef7a"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "families/013/argus-review/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_ALG_013-65634bf2f7f7",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_ALG_013",
+        "content_hash": "c84b4526a2ce41e71ace1a4654043d09c7eb90b87ad20058b395de2c91578c11"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification-013",
+      "artifact": "research/draft_reviews/formal_algebra/replay/certificates/C_REVIEW_ALG_013-e94723e45360c6b2.json"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_DENSITY_013-b2918a20287d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_DENSITY_013",
+        "content_hash": "89c14a043bc0b411cb154d7bb9ef5d8ecec8ceb7f95769ddee6210c2cf6536df"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_AFFINE_013-34eb85dddecc",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_AFFINE_013",
+        "content_hash": "2891f9350bb2f35554b7b84099da600212a6776da9a1592e6fa6714fff8fc059"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_FOURTH_013-d112dd073e18",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_FOURTH_013",
+        "content_hash": "4f2dcb1a71189c8476e7dd6b89be6762d45b2ed9ed2a66a82c55328ac5eb0083"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_MAJORANTS_013-48a36e6a7348",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_MAJORANTS_013",
+        "content_hash": "47b959b02850bfb63f887cd59f7413c67ed65e775152c0d4fff43757b4ca857a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_CYCLE_013-5e0052f645e8",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_CYCLE_013",
+        "content_hash": "aaf248ce16bdb304adecf610cee56808e82ba4c61540ba024a9e54ee9e4b35d8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TREE_STRONG_013-93b1980e020d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_STRONG_013",
+        "content_hash": "7fcf55c798be53645475c19976359e8dcb6924b53125ceebd22574997cfe6392"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TREE_BASE_013-03445d5bbcbd",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_BASE_013",
+        "content_hash": "965a604f40daac7a028008ed1adfda05691e8fc1feb7a7e8a06a8c1af9c00239"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/tree_analytic/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_COUNTS_013-ddcec2e13303",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_COUNTS_013",
+        "content_hash": "25bfd25d70b07d00124cb0bde5d2083d04dcb2611999409a2b9cf89a60869d50"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_FINITE_FACTOR_013-39723dc59567",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_FINITE_FACTOR_013",
+        "content_hash": "e26a6f1ad07d09b9c51607c941f068c9a68a10f6a6b2f2e641ab2ca2cd425d0d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_TWO_INFINITE_SOURCE_013-1ee1a88b197e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TWO_INFINITE_SOURCE_013",
+        "content_hash": "f74af198c3257d5b1b6c8b80eb1513b13af3b1dbd1a6bccbf0ca5ab07022ef7a"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "families/013/argus-review/draft_reviews/arithmetic_scope/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_REVIEW_ALG_013-ec1928e66c74",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_ALG_013",
+        "content_hash": "c84b4526a2ce41e71ace1a4654043d09c7eb90b87ad20058b395de2c91578c11"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:2c1edd27b716",
+      "artifact": "research/draft_reviews/formal_algebra/replay/certificates/C_REVIEW_ALG_013-e94723e45360c6b2.json"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_REVIEW_TREE_ANALYTIC_013",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_STRONG_013",
+        "content_hash": "7fcf55c798be53645475c19976359e8dcb6924b53125ceebd22574997cfe6392"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_REVIEW_DENSITY_013",
+          "content_hash": "89c14a043bc0b411cb154d7bb9ef5d8ecec8ceb7f95769ddee6210c2cf6536df"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_REVIEW_MAJORANTS_013",
+          "content_hash": "47b959b02850bfb63f887cd59f7413c67ed65e775152c0d4fff43757b4ca857a"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_REVIEW_CYCLE_013",
+          "content_hash": "aaf248ce16bdb304adecf610cee56808e82ba4c61540ba024a9e54ee9e4b35d8"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_REVIEW_MAJORANTS_013",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_MAJORANTS_013",
+        "content_hash": "47b959b02850bfb63f887cd59f7413c67ed65e775152c0d4fff43757b4ca857a"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_REVIEW_AFFINE_013",
+          "content_hash": "2891f9350bb2f35554b7b84099da600212a6776da9a1592e6fa6714fff8fc059"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_REVIEW_FOURTH_013",
+          "content_hash": "4f2dcb1a71189c8476e7dd6b89be6762d45b2ed9ed2a66a82c55328ac5eb0083"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_REVIEW_ALG_013",
+          "content_hash": "c84b4526a2ce41e71ace1a4654043d09c7eb90b87ad20058b395de2c91578c11"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_REVIEW_LITERAL_FROM_STRONG_013",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TREE_BASE_013",
+        "content_hash": "965a604f40daac7a028008ed1adfda05691e8fc1feb7a7e8a06a8c1af9c00239"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_REVIEW_TREE_STRONG_013",
+          "content_hash": "7fcf55c798be53645475c19976359e8dcb6924b53125ceebd22574997cfe6392"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_REVIEW_HISTORICAL_COUNTS_ONLY_013",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_REVIEW_TWO_INFINITE_SOURCE_013",
+        "content_hash": "f74af198c3257d5b1b6c8b80eb1513b13af3b1dbd1a6bccbf0ca5ab07022ef7a"
+      },
+      "obligations": [],
+      "retired_because": "Historical R_COUNTS_ONLY is not reopened: the formal model a=b=sqrt(x/log x) satisfies the displayed necessary growth and coverage-product scales simultaneously. It refutes only a contradiction from those coarse inequalities, supplies no residue/representation data, and neither constructs a decomposition nor refutes the manuscript."
+    }
+  ]
+}

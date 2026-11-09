@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "status": "success",
+  "source": "families/114/first-pass/root-direction-counts/Main.lean",
+  "tool": "lake",
+  "tools": {
+    "lean": {
+      "available": true,
+      "path": "$WORKSPACE/.elan/bin/lake env lean",
+      "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+    },
+    "lake": {
+      "available": true,
+      "path": "$WORKSPACE/.elan/bin/lake",
+      "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+    },
+    "elan": {
+      "available": true,
+      "path": "$WORKSPACE/.elan/bin/elan",
+      "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+    }
+  },
+  "command": [
+    "$WORKSPACE/.elan/bin/lake",
+    "env",
+    "lean",
+    "families/114/first-pass/root-direction-counts/Main.lean"
+  ],
+  "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+  "exit_code": 0,
+  "stdout": "families/114/first-pass/root-direction-counts/Main.lean:726:21: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\ndef RootDirectionCounts.BasePairs.{u_1} : {E : Type u_1} →\n  [Fintype E] → [DecidableEq E] → (Finset E → ℤ) → (Finset E → ℤ) → (E → ℤ) → Type (max 0 u_1) :=\nfun {E} [Fintype E] [DecidableEq E] f₁ f₂ δ =>\n  { p // RankSignatures.InBase f₁ p.1 ∧ RankSignatures.InBase f₂ p.2 ∧ ∀ (e : E), p.1 e - p.2 e = δ e }\ndef RootDirectionCounts.pairCount.{u_1} : {E : Type u_1} →\n  [Fintype E] → [DecidableEq E] → (Finset E → ℤ) → (Finset E → ℤ) → (E → ℤ) → E → E → ℤ → ℕ :=\nfun {E} [Fintype E] [DecidableEq E] f₁ f₂ d j k t => Nat.card (BasePairs f₁ f₂ (rootShift d j k t))\nRootDirectionCounts.boxPairEquiv.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (D n : ℕ) (g : Fin n ≃ E)\n  (f₁ f₂ : Finset E → ℤ) (L δ : E → ℤ)\n  (hbox : ∀ (x : E → ℤ), RankSignatures.InBase f₂ x → ∀ (e : E), L e ≤ x e ∧ x e ≤ L e + ↑D) :\n  { v // GoodChoice D n g f₁ f₂ L δ v } ≃ BasePairs f₁ f₂ δ\nRootDirectionCounts.basePairs_finite.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f₁ f₂ : Finset E → ℤ)\n  (δ : E → ℤ) : Finite (BasePairs f₁ f₂ δ)\nRootDirectionCounts.rootShift_eq_root_direction.{u_1} {E : Type u_1} [DecidableEq E] (d : E → ℤ) (j k : E) (t : ℤ) :\n  rootShift d j k t = d + t • (Pi.single j 1 - Pi.single k 1)\nRootDirectionCounts.pairCount_interpolation.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f₁ f₂ : Finset E → ℤ)\n  (hf₁ : RankSignatures.Submodular f₁) (hf₂ : RankSignatures.Submodular f₂) (h₁ : f₁ ∅ = 0) (h₂ : f₂ ∅ = 0) (d : E → ℤ)\n  (j k : E) (a t b : ℤ) (hat : a < t) (htb : t < b) :\n  pairCount f₁ f₂ d j k a ^ (b - t).toNat * pairCount f₁ f₂ d j k b ^ (t - a).toNat ≤\n    pairCount f₁ f₂ d j k t ^ (b - a).toNat\nRootDirectionCounts.root_direction_logconcavity.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f₁ f₂ : Finset E → ℤ)\n  (hf₁ : RankSignatures.Submodular f₁) (hf₂ : RankSignatures.Submodular f₂) (h₁ : f₁ ∅ = 0) (h₂ : f₂ ∅ = 0) (d : E → ℤ)\n  (j k : E) (_hjk : j ≠ k) :\n  {t | 0 < pairCount f₁ f₂ d j k t}.OrdConnected ∧\n    ∀ (a t b : ℤ),\n      a < t →\n        t < b →\n          0 < pairCount f₁ f₂ d j k a →\n            0 < pairCount f₁ f₂ d j k b →\n              pairCount f₁ f₂ d j k a ^ (b - t).toNat * pairCount f₁ f₂ d j k b ^ (t - a).toNat ≤\n                pairCount f₁ f₂ d j k t ^ (b - a).toNat\nRootDirectionCounts.root_direction_real_interpolation.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E]\n  (f₁ f₂ : Finset E → ℤ) (hf₁ : RankSignatures.Submodular f₁) (hf₂ : RankSignatures.Submodular f₂) (h₁ : f₁ ∅ = 0)\n  (h₂ : f₂ ∅ = 0) (d : E → ℤ) (j k : E) (a t b : ℤ) (hat : a < t) (htb : t < b) (ha : 0 < pairCount f₁ f₂ d j k a)\n  (hb : 0 < pairCount f₁ f₂ d j k b) :\n  ↑(pairCount f₁ f₂ d j k a) ^ ((↑b - ↑t) / (↑b - ↑a)) * ↑(pairCount f₁ f₂ d j k b) ^ ((↑t - ↑a) / (↑b - ↑a)) ≤\n    ↑(pairCount f₁ f₂ d j k t)\n'RootDirectionCounts.boxPairEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]\n'RootDirectionCounts.basePairs_finite' depends on axioms: [propext, Classical.choice, Quot.sound]\n'RootDirectionCounts.pairCount_interpolation' depends on axioms: [propext, Classical.choice, Quot.sound]\n'RootDirectionCounts.root_direction_logconcavity' depends on axioms: [propext, Classical.choice, Quot.sound]\n'RootDirectionCounts.root_direction_real_interpolation' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+  "stderr": "",
+  "proof_holes": [],
+  "audit_command": [
+    "$WORKSPACE/.elan/bin/lake",
+    "env",
+    "lean",
+    "--run",
+    "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+    "families/114/first-pass/root-direction-counts/Main.lean"
+  ],
+  "audit_exit_code": 0,
+  "audit_stdout": "",
+  "audit_stderr": "",
+  "duration_ms": 21481,
+  "source_sha256": "c37c71b01413dc55b742c74b13a6da7bad858de7b895a83b103494636a5960a6",
+  "statement_fidelity": "families/114/first-pass/root-direction-counts/statement_fidelity.md",
+  "statement_fidelity_sha256": "32ee10c51c96087bb9124a19130553b3d78e81594ce9c2fb37ddd3b480cf6bea",
+  "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+  "environment_failure": ""
+}

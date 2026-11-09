@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_SHARED_FORMAL_CORE-768bf209f845",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/016/first-pass/shared_interpolation/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/016/first-pass/shared_interpolation/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15019,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/016/first-pass/shared_interpolation/Main.lean",
+    "source_sha256": "194f2a48d18ee9e5cfa3e8cd655d944cefe73a9db65a682cf1a891d0ada2dc1d",
+    "statement_fidelity": "families/016/first-pass/shared_interpolation/statement_fidelity.md",
+    "statement_fidelity_sha256": "5fc233b5cbd5b31715d52e44d5f5a3cdaad8f1d145fbc108b54b684861a92f2c",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/shared_interpolation/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace SharedInterpolation\n\nvariable {K : Type*} [Field K]\n\ntheorem leading_residue\n    {r : ℕ} (A : ℕ → Matrix (Fin r) (Fin r) K)\n    (y : ℕ → Fin r → K) (n : ℕ)\n    (hprev : ∀ j < n, y j = 0)\n    (heq : (n : K) • y n =\n      ∑ j ∈ Finset.range (n + 1), (A (n - j)).mulVec (y j)) :\n    (A 0).mulVec (y n) = (n : K) • y n := by\n  have hsum :\n      (∑ j ∈ Finset.range (n + 1), (A (n - j)).mulVec (y j)) =\n        (A 0).mulVec (y n) := by\n    rw [Finset.sum_eq_single n]\n    · simp\n    · intro j hj hjn\n      have hjlt : j < n := by\n        have := Finset.mem_range.mp hj\n        omega\n      simp [hprev j hjlt]\n    · intro hn\n      simp at hn\n  exact hsum.symm.trans heq.symm\n\ntheorem horizontal_leading_eigenpair\n    {r : ℕ} (A : ℕ → Matrix (Fin r) (Fin r) K)\n    (y : ℕ → Fin r → K)\n    (hsolve : ∀ n : ℕ, (n : K) • y n =\n      ∑ j ∈ Finset.range (n + 1), (A (n - j)).mulVec (y j))\n    (hzero : ∃ n, y n ≠ 0) :\n    ∃ n, y n ≠ 0 ∧ (∀ j < n, y j = 0) ∧\n      (A 0).mulVec (y n) = (n : K) • y n := by\n  classical\n  let n := Nat.find hzero\n  have hn : y n ≠ 0 := Nat.find_spec hzero\n  have hprev : ∀ j < n, y j = 0 := by\n    intro j hj\n    by_contra h\n    have hmin : n ≤ j := Nat.find_min' hzero h\n    omega\n  exact ⟨n, hn, hprev, leading_residue A y n hprev (hsolve n)⟩\n\ntheorem horizontal_order_bound\n    {r : ℕ} (A : ℕ → Matrix (Fin r) (Fin r) K)\n    (y : ℕ → Fin r → K) (bound : ℕ)\n    (hsolve : ∀ n : ℕ, (n : K) • y n =\n      ∑ j ∈ Finset.range (n + 1), (A (n - j)).mulVec (y j))\n    (hzero : ∃ n, y n ≠ 0)\n    (hspectrum : ∀ (n : ℕ) (v : Fin r → K), v ≠ 0 →\n      (A 0).mulVec v = (n : K) • v → n ≤ bound) :\n    ∃ n ≤ bound, y n ≠ 0 ∧ ∀ j < n, y j = 0 := by\n  obtain ⟨n, hn, hprev, heigen⟩ :=\n    horizontal_leading_eigenpair A y hsolve hzero\n  exact ⟨n, hspectrum n (y n) hn heigen, hn, hprev⟩\n\ntheorem layer_count_uniform (k B B' r L : ℕ)\n    (hL : 0 < L)\n    (hthreshold :\n      (k + 2).factorial * B' * r * (2 + B * r + B) ^ k < L) :\n    (k + 2).factorial * B' * (r * L) *\n      (1 + L + B * (r * L) + B) ^ k < L ^ (k + 2) := by\n  have hBL : B ≤ B * L := by nlinarith\n  have hbase :\n      1 + L + B * (r * L) + B ≤ (2 + B * r + B) * L := by\n    nlinarith\n  have hp :\n      (1 + L + B * (r * L) + B) ^ k ≤\n        ((2 + B * r + B) * L) ^ k :=\n    Nat.pow_le_pow_left hbase k\n  calc\n    (k + 2).factorial * B' * (r * L) *\n        (1 + L + B * (r * L) + B) ^ k\n        ≤ (k + 2).factorial * B' * (r * L) *\n          ((2 + B * r + B) * L) ^ k :=\n      Nat.mul_le_mul_left _ hp\n    _ = ((k + 2).factorial * B' * r * (2 + B * r + B) ^ k) *\n          L ^ (k + 1) := by\n      rw [mul_pow, pow_succ]\n      ring\n    _ < L * L ^ (k + 1) :=\n      Nat.mul_lt_mul_of_pos_right hthreshold (pow_pos hL _)\n    _ = L ^ (k + 2) := by\n      rw [show k + 2 = (k + 1) + 1 by omega, pow_succ]\n      ring\n\nend SharedInterpolation\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/shared_interpolation/statement_fidelity.md",
+    "text": "# Statement fidelity\n\n`Main.lean` formalizes two parameter-uniform cores, not the entire arithmetic\nheight theorem or the geometric construction of its inputs.\n\nThe declarations are `leading_residue`, `horizontal_leading_eigenpair`,\n`horizontal_order_bound`, and `layer_count_uniform`, all in namespace\n`SharedInterpolation`.\n\n`SharedInterpolation.leading_residue` works over an arbitrary field and an\narbitrary finite matrix size. `A n` and `y n` denote coefficients of a formal\nmatrix series and vector series. Its convolution equation is exactly the\ncoefficient of degree `n` in `t y' = A(t)y`. If all earlier vector\ncoefficients vanish, the first coefficient is an eigenvector of `A 0` with\neigenvalue the field image of `n`. The theorem does not assume this coefficient\nis nonzero; that hypothesis is supplied explicitly in the next declaration.\n\n`SharedInterpolation.horizontal_leading_eigenpair` assumes all coefficient\nequations and at least one nonzero vector coefficient. It produces the least\nnonzero coefficient, proves every earlier coefficient zero, and proves its\nresidue eigenvector equality. `SharedInterpolation.horizontal_order_bound`\nadditionally assumes a bound on every natural-number eigenvalue having a\nnonzero eigenvector. It bounds that least index. In the complex logarithmic\nconnection application, the coefficient equation, the nonzero quotient\nsection, and the spectral bound must still be established geometrically.\nThe compiler does not establish those application hypotheses.\n\n`SharedInterpolation.layer_count_uniform` quantifies over all natural numbers\n`k,B,B',r,L`. The geometric dimension is `k+2`. If `L>0` and\n`(k+2)! B' r (2+B r+B)^k < L`, it proves\n\n`(k+2)! B' (r L) (1+L+B(r L)+B)^k < L^(k+2)`.\n\nThis is the strict condition-count inequality required for the layered\nconstruction at order `n=rL`, before comparing with the binomial lower\nbound for the source dimension. The existence of the linear remainder map,\nits polynomial degree bound, its rank bound, the binomial source-dimension\nbound, and the construction of an actual-ideal certificate are not encoded.\nThe prose proof establishes these separately. Dimension one uses a unit\nideal and is not included in this numerical declaration.\n\nNo declaration in this source claims that absence of finite counterexamples\nproves the height theorem, that branch nonidentity is a scheme-theoretic\nnon-zero-divisor hypothesis, or that the four manuscript applications are\nverified. The formal certificate attaches only to claim `C_SHARED_FORMAL_CORE`.\n"
+  },
+  "subject": {
+    "content_hash": "c15023d53f7dace582d8250858755953bdf6689afce14b9ee8c148a79ac1da37",
+    "kind": "claim",
+    "subject_id": "C_SHARED_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

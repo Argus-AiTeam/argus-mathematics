@@ -1,0 +1,160 @@
+{
+  "goal": "C9000281",
+  "routes": {},
+  "nodes": {
+    "C9000281": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 281 (QAOA attains the SK optimum in the thermodynamic-first limit.; papers: QAOA attains the SK ground-state energy in the thermodynamic-first limit; Full support of the zero-temperature Sherrington-Kirkpatrick order parameter; Lean status: Partially/Comparator formalized (lean/docs/281.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["SR_WEIGHTED", "SR_ENERGY_TEST", "SR_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "Q_MAIN": {
+      "statement": "QAOA thm:main: lim_{p->infinity} Q_p=P_* with one deterministic finite word chosen before the thermodynamic limit.",
+      "status": "open",
+      "depends_on": ["Q_CLASSICAL", "Q_SYNTHESIS", "Q_SEED", "Q_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/QAOA-attains-the-SK-ground-state-energy-in-the-thermodynamic-first-limit-September-25-2026/build/sections/06-assembly.tex"]
+    },
+    "Q_TRANSFER": {
+      "statement": "prop:tree-transfer and prop:energy identify fixed-word SK energy with Re<v,Lv>, not merely a Gaussian marginal.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "Q_CLASSICAL": {
+      "statement": "prop:classical-near-optimum supplies bounded exclusion formulas of energy approaching P_*.",
+      "status": "open",
+      "depends_on": ["SK_FULL", "SK_SCALAR"],
+      "reviewer_confirmed": false
+    },
+    "Q_CLASSICAL_POSITIVE": {
+      "statement": "The alternative prop:classical-near-optimum-positive-temperature uses positive-temperature support, finite-step, continuum and symmetric-power limits instead of SK_FULL.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "Q_SYNTHESIS": {
+      "statement": "thm:classical-synthesis implements bounded smooth exclusion formulas with seeded cost-mixer circuits and energy error <=2 eta+2 sqrt(p_H).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "Q_SEED": {
+      "statement": "thm:seed-simulation removes the same reused longitudinal Gaussian seed at every requested gate while preserving root-shift energy.",
+      "status": "open",
+      "depends_on": ["Q_PACKET", "Q_SELECTIVE", "Q_ECHO", "Q_GRAM", "Q_VISIBILITY"],
+      "reviewer_confirmed": false
+    },
+    "Q_PACKET": {
+      "statement": "lem:seed-packet-estimates and lem:seed-high-directions: number-smooth packet bounds, separation and weak escape of the two initialized directions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/seed_removal/report.md", "research/seed_removal/verify.py"]
+    },
+    "Q_SELECTIVE": {
+      "statement": "lem:seed-selective-accuracy gives ordinary o(r), normalized-special o(1), uniformly for moving number-smooth input families, using actual changing insertion directions.",
+      "status": "open",
+      "depends_on": ["Q_PACKET", "Q_ENSEMBLE"],
+      "reviewer_confirmed": false
+    },
+    "Q_ENSEMBLE": {
+      "statement": "lem:seed-ensemble-control gives exact finite simultaneous X rotations with both clocks zero for finitely many nonzero projection pairs.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/seed_removal/report.md"]
+    },
+    "Q_ECHO": {
+      "statement": "lem:seed-one-echo gives (t/r)(v'_r-v_r)=-2tw_r+o(1) and transports the same w_r through compensated noncommuting mixers and repeated echoes.",
+      "status": "open",
+      "depends_on": ["Q_SELECTIVE"],
+      "reviewer_confirmed": false
+    },
+    "Q_GRAM": {
+      "statement": "lem:seed-gram-induction identifies the endogenous/external joint Grams and, by a separate one-particle calculation, the root-shift energy.",
+      "status": "open",
+      "depends_on": ["Q_PACKET", "Q_ECHO"],
+      "reviewer_confirmed": false
+    },
+    "Q_VISIBILITY": {
+      "statement": "Formal visibility functions are nonzero analytic functions; one generic perturbation and successive probe selection supply all standard and huge-stage projection conditions.",
+      "status": "open",
+      "depends_on": ["Q_ENSEMBLE"],
+      "reviewer_confirmed": false
+    },
+    "SK_FULL": {
+      "statement": "Companion thm:full-support: every zero-temperature SK minimizer has full relative Stieltjes support [0,1), strict increase and q(t)=t, q'(t)=1.",
+      "status": "open",
+      "depends_on": ["SK_CURVATURE", "SK_CONTACT", "SK_ENDPOINT"],
+      "reviewer_confirmed": false
+    },
+    "SK_SCALAR": {
+      "statement": "Companion Corollary 7.1 and Proposition 7.2 supply the scalar value and shifted finite Gaussian coefficient identity used in QAOA section 3.",
+      "status": "open",
+      "depends_on": ["SK_FULL", "SK_REGULARITY"],
+      "reviewer_confirmed": false
+    },
+    "SK_CURVATURE": {
+      "statement": "prop:gap-curvature: on an open constant interval gamma=c>0, q''' >= E[v^4]/(1000c^2)>0; for c=0, q' strictly increases.",
+      "status": "open",
+      "depends_on": ["SK_SIGNS", "SK_CERTIFICATE", "SK_REGULARITY"],
+      "reviewer_confirmed": false
+    },
+    "SK_SIGNS": {
+      "statement": "tail:class, shape:backward, shape:forward and shape:ibp provide the backward/forward signs and integrated identities under their hypotheses.",
+      "status": "open",
+      "depends_on": ["SK_REGULARITY"],
+      "reviewer_confirmed": false
+    },
+    "SK_CERTIFICATE": {
+      "statement": "cert:identity-lemma and cert:coercivity assert the exact polynomial identity and its integrated lower bound 1661507/1521000000 times E[v^4].",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "SK_REGULARITY": {
+      "statement": "lem:regularity, lem:diffusion and lem:constant-transfer give compact-strip regularity, the gradient martingale and constant-interval differentiation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "SK_CONTACT": {
+      "statement": "lem:contact gives G>=0, G=0 on the support and q(s)=s, q'(s)<=1 at interior support points.",
+      "status": "open",
+      "depends_on": ["SK_REGULARITY"],
+      "reviewer_confirmed": false
+    },
+    "SK_ENDPOINT": {
+      "statement": "lem:no-terminal-plateau excludes a terminal support plateau, using ACZ2017 Remark 7.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "SR_WEIGHTED": {
+      "statement": "For fixed formally visible seed words and finite exact zero-clock control data, the actual compiler has ordinary H<-Dom(1+N) operator defect <=Cr^2, normalized-special defect <=Cr, the same initial w_r transported to Cr through arbitrary finite noncommuting mixers and echoes, residual seed error <=Cr and root-shift energy error <=Cr. Moving tails of graph norm O(r^-a), a<1, retain ordinary o(r).",
+      "status": "open",
+      "depends_on": ["Q_PACKET", "Q_ENSEMBLE", "SR_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/seed_removal/report.md", "research/seed_removal/exact_certificate.json"]
+    },
+    "SR_ENERGY_TEST": {
+      "statement": "After finite symmetric local seed processing U, one cost gamma and mixer eta have energy gamma exp(-2 gamma^2) sin(4 eta) E<X>_U. Two reused seed pulses of angles 1/2 separated by mixer pi/4, read at gamma=1/2, eta=pi/8, exceed their fresh-seed counterpart by exp(-1/2)(1-exp(-1))^2/4>0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/seed_removal/report.md", "research/seed_removal/verify.py", "research/seed_removal/exact_certificate.json"]
+    },
+    "SR_CORE": {
+      "statement": "For arbitrary real normed spaces, isometric prefixes and anticommuting target flips, four forward-action errors bound insertion changes without orthogonality; finite transport errors add and quadratic defects rescale linearly. The reused/fresh energy gap scalar is strictly positive.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/seed_removal/Main.lean", "research/seed_removal/statement_fidelity.md", "research/seed_removal/certificates/SR_CORE-801092a1f1510e4f.json"]
+    }
+  }
+}

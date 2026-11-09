@@ -1,0 +1,167 @@
+{
+  "goal": "C9000137",
+  "routes": {
+    "R137_UNIVERSAL_SCHEDULE": {
+      "goal": "C137_WEIGHTED",
+      "obligations": [
+        "C137_ALGEBRA",
+        "C137_SCHEDULE",
+        "C137_STORAGE",
+        "C137_EPOCH"
+      ]
+    },
+    "R137_CAPPED_REALIZATION": {
+      "goal": "C137_REALIZATION",
+      "obligations": ["C137_VISITS", "C137_REPLAY", "C137_FACTORED"]
+    }
+  },
+  "nodes": {
+    "C9000137": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 137 (One-tape time simulation in two-fifths-power space.; papers: Simulating One-Tape Time in Two-Fifths-Power Space; Lean status: Partially/Comparator formalized (lean/docs/137.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C137_WEIGHTED", "C137_REALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/audit137/REPORT.md",
+        "research/audit137/certificates/C137_WEIGHTED-27839afb29348646.json",
+        "research/audit137_simulation/REPORT.md",
+        "research/audit137_simulation/Main.lean",
+        "research/audit137_simulation/certificates/certificates/C137_REALIZATION-7bf8bb22564d2f07.json"
+      ]
+    },
+    "C137_WEIGHTED": {
+      "statement": "The actual recursive Add schedule translates exactly its target by the fixed semantic augmented word, restores all other registers from arbitrary entry contents, and has the weighted suspended-storage bound, including the epoch specialization. Its bit interpretation retains the original uniform-implementation hypotheses A137_UNIFORM_BITS.",
+      "status": "open",
+      "depends_on": ["C137_ALGEBRA", "C137_SCHEDULE", "C137_STORAGE", "C137_EPOCH"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit137/Main.lean",
+        "research/audit137/STATEMENT_FIDELITY.md",
+        "research/audit137/certificates/C137_WEIGHTED-27839afb29348646.json",
+        "research/audit137/exact_certificate.json",
+        "research/audit137/REPORT.md"
+      ]
+    },
+    "C137_ALGEBRA": {
+      "statement": "The homogeneous Boolean lookup extensions, including augmentation, satisfy the finite-field top-coefficient extraction identities at arbitrary shifted arguments.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit137/Main.lean",
+        "research/audit137/STATEMENT_FIDELITY.md",
+        "research/audit137/certificates/C137_WEIGHTED-27839afb29348646.json",
+        "research/audit137/REPORT.md"
+      ]
+    },
+    "C137_SCHEDULE": {
+      "statement": "The recursively implemented ordinary and history schedules satisfy additive translation and non-target restoration, without an oracle for nonbase outputs or clean-register assumptions.",
+      "status": "open",
+      "depends_on": ["C137_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit137/Main.lean",
+        "research/audit137/STATEMENT_FIDELITY.md",
+        "research/audit137/certificates/C137_WEIGHTED-27839afb29348646.json",
+        "research/audit137/REPORT.md"
+      ]
+    },
+    "C137_STORAGE": {
+      "statement": "The actual schedule retains the guess only on history-to-array calls; one global vector pool and one reusable scratch area suffice, with suspended storage bounded by weighted dependency paths.",
+      "status": "open",
+      "depends_on": ["C137_SCHEDULE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit137/Main.lean",
+        "research/audit137/STATEMENT_FIDELITY.md",
+        "research/audit137/certificates/C137_WEIGHTED-27839afb29348646.json",
+        "research/audit137/REPORT.md"
+      ]
+    },
+    "C137_EPOCH": {
+      "statement": "The epoch dependency graph admits at most one expensive history-to-array edge per epoch and weighted path length O(E(k+kc+1)).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit137/Main.lean",
+        "research/audit137/STATEMENT_FIDELITY.md",
+        "research/audit137/certificates/C137_WEIGHTED-27839afb29348646.json",
+        "research/audit137/REPORT.md"
+      ]
+    },
+    "C137_VISITS": {
+      "statement": "The total raw visit kernels agree with the capped one-tape evolution and some offset has at most ceil(1+T/b) visits.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit137/REPORT.md",
+        "research/audit137_simulation/Main.lean",
+        "research/audit137_simulation/statement_fidelity.md",
+        "research/audit137_simulation/REPORT.md"
+      ]
+    },
+    "C137_REPLAY": {
+      "statement": "All block replay flags hold exactly for the unique raw reference controller transcript, with total local replay kernels.",
+      "status": "open",
+      "depends_on": ["C137_VISITS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit137/REPORT.md",
+        "research/audit137_simulation/Main.lean",
+        "research/audit137_simulation/statement_fidelity.md",
+        "research/audit137_simulation/REPORT.md"
+      ]
+    },
+    "C137_FACTORED": {
+      "statement": "The concrete epoch round history has the semantic factored identity, guess length kc <= d, uniform total local kernels, and polynomially described navigation.",
+      "status": "open",
+      "depends_on": ["C137_REPLAY", "C137_BIT_REALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit137/REPORT.md",
+        "research/audit137_simulation/Main.lean",
+        "research/audit137_simulation/statement_fidelity.md",
+        "research/audit137_simulation/REPORT.md"
+      ]
+    },
+    "C137_REALIZATION": {
+      "statement": "Total capped raw visits and their finite packed representation realize one-tape evolution with radius-T access; arbitrary-raw replay has a unique complete transcript; semantic epoch words satisfy the factored identity and the reviewed evaluator contract; actual averaging and padding recover the capped controller. This is a semantic/resource-model theorem, not a compiled bit-machine theorem.",
+      "status": "open",
+      "depends_on": ["C137_WEIGHTED", "C137_VISITS", "C137_REPLAY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/audit137_simulation/Main.lean",
+        "research/audit137_simulation/statement_fidelity.md",
+        "research/audit137_simulation/REPORT.md",
+        "research/audit137_simulation/diagnostics.json",
+        "research/audit137_simulation/verify.py",
+        "research/audit137_simulation/certificates/certificates/C137_REALIZATION-7bf8bb22564d2f07.json"
+      ]
+    },
+    "C137_BIT_REALIZATION": {
+      "statement": "Uniform bit implementations of finite encodings, radius-T access, binary suffix enumeration, Boolean lookup generation, field arithmetic, and actual graph navigation attain the stated local-space and bookkeeping costs. This remains open; it is not inferred from the semantic theorem.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/audit137_simulation/REPORT.md"]
+    },
+    "C137_MAIN": {
+      "statement": "The full supplied-cap one-tape machine theorem computes the finite-control and halting outcome in soft-O(T^(2/5)) work bits under the manuscript's access condition.",
+      "status": "open",
+      "depends_on": ["C137_WEIGHTED", "C137_VISITS", "C137_REPLAY", "C137_FACTORED", "C137_REALIZATION", "C137_BIT_REALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md"]
+    },
+    "C137_SCALE_BARRIER": {
+      "statement": "Optimizing only the displayed three-scale estimate does not improve its two-fifths exponent and does not resolve the evaluator's correctness or storage invariant.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/audit137/REPORT.md"]
+    }
+  }
+}

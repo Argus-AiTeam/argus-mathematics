@@ -1,0 +1,97 @@
+{
+  "goal": "C9000091",
+  "scope": "The tensor claims have independent supports judgements from reviewer:copilot-L2. The active mission addresses the whole-space moment construction, compact-test range density, and soft-slab variance duality. Geometric reduction, measure consequences, external novelty, and campaign completion remain separate obligations.",
+  "active_mission_goal": "M_VARIANCE",
+  "routes": [
+    {
+      "name": "R_TENSOR_UNIVERSAL",
+      "status": "current",
+      "evidence": "research/tensor_audit/exact_certificate.json"
+    },
+    {
+      "name": "R_MANUSCRIPT_VARIANCE",
+      "status": "current",
+      "evidence": "research/analytic_closure/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000091": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 091 (Logarithmic and <i>L</i><sub><i>p</i></sub> Brunn–Minkowski inequalities and the B-conjecture.; papers: The logarithmic Brunn–Minkowski conjecture; Lean status: Partially/Comparator formalized (lean/docs/091.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["M_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_TENSOR": {
+      "statement": "Literal lem:tensor, both the matrix-square trace estimate and its Bochner energy consequence, for arbitrary real compact smooth tests.",
+      "status": "proved",
+      "depends_on": ["C_TENSOR_CALCULUS", "C_TENSOR_ALGEBRA"],
+      "reviewer_confirmed": true,
+      "evidence": ["research/tensor_audit/report.md", "research/tensor_audit/exact_certificate.json", "research/tensor_audit/verify.py"]
+    },
+    "C_TENSOR_CALCULUS": {
+      "statement": "Original contractions, weighted adjoints, W-gradient, inverse derivatives, moment differentiation, constant-coordinate covariance, and explicit divergence correction in arbitrary dimension.",
+      "status": "proved",
+      "depends_on": [],
+      "reviewer_confirmed": true,
+      "evidence": ["research/tensor_audit/report.md", "research/tensor_audit/verify.py", "research/tensor_audit/exact_certificate.json"]
+    },
+    "C_TENSOR_ALGEBRA": {
+      "statement": "Universal finite-index symmetrization and sum-of-squares identities, including the invariant derivative-energy reformulation.",
+      "status": "proved",
+      "kernel_status": "closed_kernel",
+      "review_note": "reviewer:copilot-L2 independently checked the finite-index algebra, statement fidelity, and analytic interpretation and recorded supports judgements. Existing reviewed artifacts are reused without recertification.",
+      "depends_on": [],
+      "reviewer_confirmed": true,
+      "evidence": ["research/tensor_audit/Main.lean", "research/tensor_audit/statement_fidelity.md", "research/tensor_audit/certificates/C_TENSOR_ALGEBRA-44a88876aacc1067.json"]
+    },
+    "C_TENSOR_DEFECT": {
+      "statement": "Exact invariant integrated defect equals tr(MRMR)+|K|_M^2/2+3|Sym K|_M^2/2; equality is possible only for f=0.",
+      "status": "proved",
+      "depends_on": ["C_TENSOR_CALCULUS", "C_TENSOR_ALGEBRA"],
+      "reviewer_confirmed": true,
+      "evidence": ["research/tensor_audit/report.md", "research/tensor_audit/exact_certificate.json"]
+    },
+    "M_MOMENT": {
+      "statement": "lem:moment: existence, global diffeomorphism, exponential tail, and Hessian upper bound.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "review_note": "Complete analytic proof in report sections 2.1-2.4. Four canonical source propositions were looked up by a source reader; independent citation attribution and mathematical review remain Host-owned. No global lower Hessian bound is assumed.",
+      "evidence": ["research/openai_manuscript/The-logarithmic-Brunn-Minkowski-conjecture-September-23-2026/build/moment.tex", "research/analytic_closure/report.md", "research/analytic_closure/sources/reading.md"]
+    },
+    "M_DENSITY": {
+      "statement": "lem:density: the compact even double-divergence range is dense in the centered even L2 subspace.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "review_note": "Complete analytic proof in report section 4, including local distributional regularity, Ag in L2, splitting, graph-norm cutoff convergence, and the affine-kernel conclusion. The arbitrary-order elliptic input is recorded with its actually retrieved dated source. Independent mathematical review is pending.",
+      "evidence": ["research/openai_manuscript/The-logarithmic-Brunn-Minkowski-conjecture-September-23-2026/build/density.tex", "research/analytic_closure/report.md", "research/analytic_closure/verify.py", "research/analytic_closure/exact_certificate.json"]
+    },
+    "M_VARIANCE": {
+      "statement": "prop:variance: the summandwise soft-slab variance inequality.",
+      "status": "in_progress",
+      "depends_on": ["M_MOMENT", "M_DENSITY", "C_TENSOR"],
+      "reviewer_confirmed": false,
+      "review_note": "Complete analytic proof in report sections 3 and 5, using the existing independently reviewed tensor estimate. All literal slab quantifiers, including nonspanning families and arbitrary real coefficients, are retained. The executable certificate is algebraic evidence, not mechanical certification of the analytic theorem; Host independent review is pending.",
+      "evidence": ["research/openai_manuscript/The-logarithmic-Brunn-Minkowski-conjecture-September-23-2026/build/variance.tex", "research/analytic_closure/report.md", "research/analytic_closure/verify.py", "research/analytic_closure/exact_certificate.json"]
+    },
+    "M_REDUCTION": {
+      "statement": "sec:reduction: partition concavity and slab/direction limits imply thm:main from prop:variance.",
+      "status": "open",
+      "depends_on": ["M_VARIANCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-logarithmic-Brunn-Minkowski-conjecture-September-23-2026/build/reduction.tex"]
+    },
+    "M_MAIN": {
+      "statement": "thm:main: the even logarithmic Brunn-Minkowski inequality in every dimension.",
+      "status": "open",
+      "depends_on": ["M_VARIANCE", "M_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-logarithmic-Brunn-Minkowski-conjecture-September-23-2026/build/introduction.tex"]
+    }
+  }
+}

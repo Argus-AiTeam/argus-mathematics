@@ -1,0 +1,130 @@
+{
+  "goal": "C9000017",
+  "routes": [
+    {
+      "name": "K1 source-faithful geometric verification or exact refutation",
+      "status": "current",
+      "evidence": "research/interpolation-audit/REPORT.md"
+    }
+  ],
+  "nodes": {
+    "C9000017": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 017 (The irrationality exponent of <i>π</i> is 2.; papers: The irrationality exponent of pi is 2; Lean status: Partially/Comparator formalized (lean/docs/017.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_K1_AUDIT"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_K1_AUDIT": {
+      "statement": "Independently verify or exactly refute the complete separated-weight interpolation implication; do not infer the final irrationality theorem from this scoped result alone.",
+      "status": "in_progress",
+      "depends_on": ["C_GEOM_INTERPOLATION", "C_K1_FLAT_DENSITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md", "research/interpolation-audit/REPORT.md", "research/interpolation-audit/exact_certificate.json"]
+    },
+    "C_MAIN_017": {
+      "statement": "For every real nu>2, |pi-p/q| >= q^(-nu) for all integers p and sufficiently large integers q.",
+      "status": "open",
+      "depends_on": ["C_PARAMETERS_017", "C_DET_COMPARISON"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/conclusion.tex"]
+    },
+    "C_GEOM_MULTIPLICITY": {
+      "statement": "Weighted transverse derivative persistence implies the normal-basis product inequality, uniformly in N, the equations, the component, and the commuting analytic frame.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/interpolation.tex", "research/interpolation-audit/REPORT.md"]
+    },
+    "C_GEOM_BASES": {
+      "statement": "Separated products and all normal-basis inequalities force a persistent algebraic obstruction into a constant-Y fiber, and in that fiber into a proper coordinate flat.",
+      "status": "in_progress",
+      "depends_on": ["C_GEOM_MULTIPLICITY", "C_K1_NORMAL_HYPERPLANE_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/interpolation.tex", "research/interpolation-audit/REPORT.md"]
+    },
+    "C_GEOM_CURVE": {
+      "statement": "Under geom:sigma and geom:separation, every irreducible algebraic curve satisfies deg_W C >= (1+sigma) times its total weighted branch contact at the prescribed centers.",
+      "status": "in_progress",
+      "depends_on": ["C_GEOM_MULTIPLICITY", "C_GEOM_BASES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/interpolation.tex", "research/interpolation-audit/REPORT.md", "research/interpolation-audit/verify.py"]
+    },
+    "C_GEOM_JET_BRIDGE": {
+      "statement": "The strict curve inequality implies eventual weighted jet surjectivity using an ordinary blowup, ampleness, eventual ordinary Rees powers, and Serre vanishing, without smoothness or normality at infinity.",
+      "status": "in_progress",
+      "depends_on": ["C_GEOM_CURVE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/interpolation.tex", "research/interpolation-audit/REPORT.md"]
+    },
+    "C_GEOM_INTERPOLATION": {
+      "statement": "For m,K>=1 and positive rational w0,v0,theta with theta<1, K theta^m<1, K(w0/v0)theta^m<1, sufficiently successively separated positive weights chosen before coordinatewise-distinct centers give surjectivity for all sufficiently large divisible H.",
+      "status": "in_progress",
+      "depends_on": ["C_GEOM_CURVE", "C_GEOM_JET_BRIDGE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/interpolation.tex", "research/interpolation-audit/REPORT.md"]
+    },
+    "C_DET_ARITHMETIC": {
+      "statement": "A full-row minor supplied by interpolation satisfies det:lower after Gaussian-integer denominator clearing.",
+      "status": "open",
+      "depends_on": ["C_GEOM_INTERPOLATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/determinant.tex"]
+    },
+    "C_DET_TRANSLATION": {
+      "statement": "The exact row translation identity and its scalar bounds hold for every determinant row.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/determinant.tex"]
+    },
+    "C_DET_COLLISION": {
+      "statement": "The collision estimate supplies the analytic upper bound with the stated simultaneous parameter dependence.",
+      "status": "open",
+      "depends_on": ["C_DET_TRANSLATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/determinant.tex"]
+    },
+    "C_DET_COMPARISON": {
+      "statement": "The arithmetic and analytic determinant bounds are incompatible under det:contradiction-conditions.",
+      "status": "open",
+      "depends_on": ["C_GEOM_INTERPOLATION", "C_DET_ARITHMETIC", "C_DET_TRANSLATION", "C_DET_COLLISION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/determinant.tex"]
+    },
+    "C_PARAMETERS_017": {
+      "statement": "For every nu>2, the successive dimension, approximation, and weight choices satisfy all interpolation and determinant hypotheses with a strict contradiction margin.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/conclusion.tex"]
+    },
+    "C_K1_NORMAL_HYPERPLANE_CORE": {
+      "statement": "The universal hyperplane-tangent implication, invertible logarithmic shear, maximal-positive-index exclusion, and positive-index basis-family uniqueness compile in Lean 4.31.0 with no proof holes; geometric statement fidelity awaits independent review.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/interpolation-audit/lean/Main.lean",
+        "research/interpolation-audit/lean/statement_fidelity.md",
+        "research/interpolation-audit/lean/certificates/C_K1_NORMAL_HYPERPLANE_CORE-771db3cefabd4d28.json"
+      ]
+    },
+    "C_K1_FLAT_DENSITY": {
+      "statement": "With ambient volume slack and strict coordinate-flat densities n_T theta^|T|<1, successively separated weights yield eventual logarithmic jet surjectivity for arbitrary nonzero Y fibers and controlled coordinate collisions. Density greater than one is an eventual obstruction; equality and novelty remain undecided.",
+      "status": "in_progress",
+      "depends_on": ["C_GEOM_MULTIPLICITY", "C_GEOM_BASES", "C_GEOM_JET_BRIDGE", "C_K1_NORMAL_HYPERPLANE_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/interpolation-audit/REPORT.md",
+        "research/interpolation-audit/verify.py",
+        "research/interpolation-audit/exact_certificate.json"
+      ]
+    }
+  }
+}

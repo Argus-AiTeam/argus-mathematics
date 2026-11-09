@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_AT_FINITE_CORE-9ac0e45d4305",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/224/first-pass/annular_transfer/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/224/first-pass/annular_transfer/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15880,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/224/first-pass/annular_transfer/Main.lean",
+    "source_sha256": "876ae5a9fa5b57c88267966d767bb5b4f1e06982187211c2ca9ce0f77ba1f413",
+    "statement_fidelity": "families/224/first-pass/annular_transfer/statement_fidelity.md",
+    "statement_fidelity_sha256": "dbe4c1ef7d07bb38bbc8e36e4401195535e1b330ccb51a51a6bd6b92c97a12cf",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/annular_transfer/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace AnnularTransfer\n\ntheorem colour_flip_identity {ι : Type*} [Fintype ι]\n    (flip : Equiv.Perm ι) (a k : ι → ℝ)\n    (odd : ∀ i, a (flip i) = -a i) :\n    (∑ i, a i * k i) =\n      (1 / 2 : ℝ) * ∑ i, a i * (k i - k (flip i)) := by\n  have h := Equiv.sum_comp flip (fun i => a i * k i)\n  have hcross : -(∑ i, a i * k (flip i)) = ∑ i, a i * k i := by\n    simpa only [odd, neg_mul, Finset.sum_neg_distrib] using h\n  simp_rw [mul_sub]\n  rw [Finset.sum_sub_distrib]\n  linarith\n\ntheorem invariant_reindex {ι : Type*} [Fintype ι]\n    (rot : Equiv.Perm ι) (a k : ι → ℝ)\n    (invariant : ∀ i, a (rot i) = a i) :\n    (∑ i, a i * k (rot i)) = ∑ i, a i * k i := by\n  simpa only [invariant] using\n    (Equiv.sum_comp rot (fun i => a i * k i))\n\ntheorem colour_rotation_identity {ι : Type*} [Fintype ι]\n    (m : ℕ) (flip : Equiv.Perm ι) (rot : Fin m → Equiv.Perm ι)\n    (a k : ι → ℝ)\n    (odd : ∀ i, a (flip i) = -a i)\n    (invariant : ∀ j i, a (rot j i) = a i) :\n    (∑ j : Fin m, ∑ i,\n      a i * (k (rot j i) - k (flip (rot j i)))) =\n      (m : ℝ) * (2 * ∑ i, a i * k i) := by\n  have hbase :\n      (∑ i, a i * (k i - k (flip i))) = 2 * ∑ i, a i * k i := by\n    have h := colour_flip_identity flip a k odd\n    linarith\n  calc\n    _ = ∑ _j : Fin m, ∑ i, a i * (k i - k (flip i)) := by\n      apply Finset.sum_congr rfl\n      intro j _\n      exact invariant_reindex (rot j) a\n        (fun i => k i - k (flip i)) (invariant j)\n    _ = _ := by\n      simp only [hbase, Finset.sum_const, Finset.card_univ,\n        Fintype.card_fin, nsmul_eq_mul]\n\ntheorem geometric_identity (q : ℝ) (n : ℕ) :\n    (1 - q) * (∑ i ∈ Finset.range n, q ^ i) = 1 - q ^ n := by\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      rw [Finset.sum_range_succ, pow_succ]\n      nlinarith\n\ntheorem geometric_bound (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q < 1)\n    (n : ℕ) :\n    (∑ i ∈ Finset.range n, q ^ i) ≤ 1 / (1 - q) := by\n  apply (le_div_iff₀ (sub_pos.mpr hq1)).2\n  nlinarith [geometric_identity q n, pow_nonneg hq0 n]\n\ntheorem double_geometric_bound (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q < 1)\n    (n : ℕ) :\n    (∑ i ∈ Finset.range n, ∑ j ∈ Finset.range n, q ^ (i + j)) ≤\n      (1 / (1 - q)) ^ 2 := by\n  have heq :\n      (∑ i ∈ Finset.range n, ∑ j ∈ Finset.range n, q ^ (i + j)) =\n        (∑ i ∈ Finset.range n, q ^ i) ^ 2 := by\n    rw [pow_two, Finset.sum_mul]\n    apply Finset.sum_congr rfl\n    intro i _\n    rw [Finset.mul_sum]\n    simp_rw [pow_add]\n  rw [heq]\n  have hs : 0 ≤ ∑ i ∈ Finset.range n, q ^ i :=\n    Finset.sum_nonneg fun i _ => pow_nonneg hq0 i\n  have hb := geometric_bound q hq0 hq1 n\n  have hd : 0 ≤ 1 / (1 - q) := by positivity\n  have hdiff := sub_nonneg.mpr hb\n  nlinarith [mul_nonneg hs hdiff, mul_nonneg hd hdiff]\n\ntheorem polynomial_absorption (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q < 1)\n    (n : ℕ) :\n    ((n + 1 : ℕ) : ℝ) ^ 2 * q ^ (2 * n) ≤\n      (1 / (1 - q)) ^ 2 := by\n  have hlower :\n      ((n + 1 : ℕ) : ℝ) * q ^ n ≤\n        ∑ i ∈ Finset.range (n + 1), q ^ i := by\n    calc\n      _ = ∑ _i ∈ Finset.range (n + 1), q ^ n := by simp\n      _ ≤ _ := by\n        apply Finset.sum_le_sum\n        intro i hi\n        exact pow_le_pow_of_le_one hq0 hq1.le\n          (Nat.le_of_lt_succ (Finset.mem_range.mp hi))\n  have hb := hlower.trans (geometric_bound q hq0 hq1 (n + 1))\n  have hs : 0 ≤ ((n + 1 : ℕ) : ℝ) * q ^ n := by positivity\n  have hd : 0 ≤ 1 / (1 - q) := by positivity\n  have hdiff := sub_nonneg.mpr hb\n  have hsq :\n      (((n + 1 : ℕ) : ℝ) * q ^ n) ^ 2 ≤\n        (1 / (1 - q)) ^ 2 := by\n    nlinarith [mul_nonneg hs hdiff, mul_nonneg hd hdiff]\n  simpa only [mul_pow, ← pow_mul, Nat.mul_comm n 2] using hsq\n\nend AnnularTransfer\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/annular_transfer/statement_fidelity.md",
+    "text": "# Statement fidelity: signed averaging and dyadic summation\n\nThis source formalizes the finite algebra used in equations\n`tr:flip-integral` and `tr:signed-sum`, and the absorption of the polynomial\nfactor in `tr:unused`. It does not formalize Proposition `tr:block`.\n\nAll declarations are in namespace `AnnularTransfer`.\n\n`colour_flip_identity` quantifies over every finite type of histories, every\npermutation `flip`, and arbitrary real-valued functions `a` and `k`.\nIts hypothesis is exactly `a (flip i) = -a i`. It proves that the weighted\nkernel sum equals one half of the weighted signed kernel difference.\nProbabilities invariant under the permutation may be absorbed into `a`.\nNo positivity of `a`, kernel bound, independence, or asymptotic estimate\nis assumed or concluded. An involution is a permitted special case.\n\n`invariant_reindex` quantifies over an arbitrary permutation under which `a`\nis invariant. It proves equality of the original weighted sum and the\nsum with the kernel reindexed.\n\n`colour_rotation_identity` combines these facts for every natural number\n`m` and every family of `m` permutations preserving `a`. Its left side\nis the sum, over these permutations, of the signed kernel differences.\nIts right side is `m` times twice the original weighted sum.\nIt is a finite averaging identity, not an assertion that four rotations\nequal Haar averaging over all physical rotations. In the manuscript the\ncorresponding identity uses a measure-preserving circle action; that\nmeasure-theoretic extension is proved in `signed_transfer.md`, not in Lean.\n\n`geometric_identity` proves the finite geometric-sum identity for every\nreal `q` and every natural cutoff `n`.\n\n`geometric_bound` and `double_geometric_bound` quantify over every real\n`q` with `0 <= q < 1` and every natural cutoff `n`. They bound the one-\nand two-index geometric sums by `1/(1-q)` and its square. These are\nuniform-in-cutoff theorems, not tests of a bounded list of scales.\nFor the transfer application `q = 2^{-(a-b)}` with `a > b`.\n\n`polynomial_absorption` quantifies over the same `q` and every natural\n`n`, and bounds `(n+1)^2 q^{2n}` by `1/(1-q)^2`.\nFor the unused-pair remainder one takes\n`q = 2^{-(a-b)/2}`. This controls the polynomial loss without changing\nthe order of the manuscript's scale quantifiers.\n\nNot verified by these statements: the Poisson seam construction,\nadmissibility of random frontiers, the SLE modulus equation, analytic\nsmoothing or spectral gaps, the separated-end kernel estimate, first-\nreduction tail probabilities, the output-seam essential supremum, or\nthe existence of any counterexample. In particular a successful compiler\nrun is not a proof of Cardy's formula, the amplitude theorem, or the\nseparately normalized near-critical theorem. The unverified hypotheses\nof the conditional analytic reduction remain explicit in\n`signed_transfer.md` and the mathematical ledger.\n"
+  },
+  "subject": {
+    "content_hash": "d9bf906b0a24c89364c66f63178a9b1134c432eb55754594aabf3c4388f26863",
+    "kind": "claim",
+    "subject_id": "C_AT_FINITE_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

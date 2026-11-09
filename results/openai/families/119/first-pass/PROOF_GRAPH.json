@@ -1,0 +1,85 @@
+{
+  "goal": "C9000119",
+  "routes": [
+    {
+      "name": "R119_PAIR_CERTIFICATE",
+      "status": "current",
+      "evidence": "research/hellinger_pair_audit/PROOF.md"
+    }
+  ],
+  "nodes": {
+    "C9000119": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 119 (The Courtade–Kumar and Hellinger conjectures.; papers: Sharp binary-information contraction on the discrete cube; Hellinger contraction with arbitrary Boolean output bias; Lean status: Partially/Comparator formalized (lean/docs/119.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C119_PAIR"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C119_PAIR": {
+      "statement": "Lemma scalar (1) holds for all seven rows and all allowed real parameters, with strict inequalities for distinct original endpoints and positive noise.",
+      "status": "open",
+      "depends_on": ["C119_PAIR_NORMALIZED", "C119_PAIR_BRIDGE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/hellinger_pair_audit/PROOF.md", "research/hellinger_pair_audit/verify.py", "research/hellinger_pair_audit/exact_certificate.json"]
+    },
+    "C119_PAIR_NORMALIZED": {
+      "statement": "All 21 closed normalized boxes satisfy the strict Case 1/2 signs or Case 3 disjunction, after the explicit delta exclusion.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/hellinger_pair_audit/interval_verify.cpp", "research/hellinger_pair_audit/exact_certificate.json"]
+    },
+    "C119_PAIR_BRIDGE": {
+      "statement": "The normalized signs imply the original pair inequality, including coverage, repeated-node concavity before Case 3, and probability-boundary limits.",
+      "status": "open",
+      "depends_on": ["C119_PAIR_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/hellinger_pair_audit/PROOF.md", "research/hellinger_pair_audit/verify.py"]
+    },
+    "C119_PAIR_ALGEBRA": {
+      "statement": "The two divided differences give D=4 delta(1-delta) z^2 K and shear=z W; the strict normalized gap implies the strict original quadratic inequality.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/hellinger_pair_audit/Main.lean", "research/hellinger_pair_audit/statement_fidelity.md", "research/hellinger_pair_audit/certificates/C119_PAIR_ALGEBRA-e79ad749afd88d84.json"]
+    },
+    "C119_H_MAIN": {
+      "statement": "The full finite-dimensional arbitrary-bias Hellinger theorem for all correlations.",
+      "status": "open",
+      "depends_on": ["C119_H_INDUCTION", "C119_H_REMAINDER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Hellinger-contraction-with-arbitrary-Boolean-output-bias-September-24-2026/build/main.tex"]
+    },
+    "C119_H_INDUCTION": {
+      "statement": "The asymmetric dimension induction proves the Hellinger bound for 0<s<=0.84.",
+      "status": "open",
+      "depends_on": ["C119_PAIR", "C119_H_OTHER_SCALARS", "C119_H_INDUCTION_STEP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Hellinger-contraction-with-arbitrary-Boolean-output-bias-September-24-2026/build/sections/induction.tex"]
+    },
+    "C119_H_OTHER_SCALARS": {
+      "statement": "Lemma scalar (2)-(4): reflected profiles, small-coordinate closure, and three-coordinate initial cases.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Hellinger-contraction-with-arbitrary-Boolean-output-bias-September-24-2026/build/sections/scalar.tex"]
+    },
+    "C119_H_INDUCTION_STEP": {
+      "statement": "Compression, small-coordinate selection, averaging, and the asymmetric induction step are valid.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Hellinger-contraction-with-arbitrary-Boolean-output-bias-September-24-2026/build/sections/induction.tex"]
+    },
+    "C119_H_REMAINDER": {
+      "statement": "The continuation and three bias regions establish the Hellinger bound beyond s=0.84, including correlation endpoints and reflection.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Hellinger-contraction-with-arbitrary-Boolean-output-bias-September-24-2026/build/main.tex"]
+    }
+  }
+}

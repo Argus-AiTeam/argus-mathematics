@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_DIA_FORMAL_CORE-952bb78ab6d0",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/200/first-pass/division_index_audit/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/200/first-pass/division_index_audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 8512,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/200/first-pass/division_index_audit/lean/Main.lean",
+    "source_sha256": "90da0956d2e634c683a5646a29d96b61f0da52303324ed18fc0e81370ff3f2f8",
+    "statement_fidelity": "families/200/first-pass/division_index_audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "80d86dad9f8467ea6ec5a46923ed79421f22817e1e843d4c559890559857e1a5",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/division_index_audit/lean/Main.lean",
+    "text": "import Mathlib.Algebra.Polynomial.Div\nimport Mathlib.RingTheory.Ideal.Quotient.Defs\nimport Mathlib.RingTheory.Ideal.Span\nimport Mathlib.Tactic.Ring\n\nnamespace DivisionIndexAudit\n\ntheorem power_mul_eq_of_mul_eq {R : Type*} [CommRing R]\n    (s t q : R) (h : s * q = t * q) (n : Nat) :\n    s ^ n * q = t ^ n * q := by\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      calc\n        s ^ (n + 1) * q = s * (s ^ n * q) := by rw [pow_succ]; ring\n        _ = s * (t ^ n * q) := by rw [ih]\n        _ = t ^ n * (s * q) := by ring\n        _ = t ^ n * (t * q) := by rw [h]\n        _ = t ^ (n + 1) * q := by rw [pow_succ]; ring\n\ntheorem nilpotent_lift {R : Type*} [CommRing R]\n    (a d p c x q : R) (nu v : Nat)\n    (ha : a * q = 0) (hx : x ^ nu = a * d + p * c)\n    (hp : p ^ v = 0) :\n    x ^ (nu * v) * q = 0 := by\n  have hstep : x ^ nu * q = (p * c) * q := by\n    calc\n      x ^ nu * q = (a * q) * d + (p * c) * q := by rw [hx]; ring\n      _ = (p * c) * q := by rw [ha]; simp\n  calc\n    x ^ (nu * v) * q = (x ^ nu) ^ v * q := by rw [pow_mul]\n    _ = (p * c) ^ v * q := power_mul_eq_of_mul_eq _ _ _ hstep v\n    _ = 0 := by rw [mul_pow, hp, zero_mul, zero_mul]\n\nopen Polynomial\n\ntheorem constant_zero_of_truncated_bezout {R : Type*} [CommRing R]\n    (p : R) (A D T U Q : Polynomial R) (nu v h : Nat)\n    (hp : p ^ v = 0) (hbound : nu * v <= h)\n    (hAQ : X ^ (h + 1) ∣ A * Q)\n    (hbezout : X ^ nu = A * D + C p * T + X ^ (h + 1) * U) :\n    Q.coeff 0 = 0 := by\n  let I : Ideal (Polynomial R) := Ideal.span {X ^ (h + 1)}\n  let pi := Ideal.Quotient.mk I\n  have hz : pi (X ^ (h + 1)) = 0 := by\n    apply Ideal.Quotient.eq_zero_iff_mem.mpr\n    exact Ideal.subset_span (by simp)\n  have hz' : (pi X) ^ (h + 1) = 0 := by\n    simpa only [map_pow] using hz\n  have ha : pi A * pi Q = 0 := by\n    rw [← map_mul]\n    exact Ideal.Quotient.eq_zero_iff_mem.mpr\n      (Ideal.mem_span_singleton.mpr hAQ)\n  have hp' : (pi (C p)) ^ v = 0 := by\n    simpa only [map_pow, map_zero] using\n      congrArg (fun r : R => pi (C r)) hp\n  have hx : (pi X) ^ nu = pi A * pi D + pi (C p) * pi T := by\n    simpa only [map_pow, map_add, map_mul, hz', zero_mul, add_zero] using\n      congrArg pi hbezout\n  have hnil := nilpotent_lift (pi A) (pi D) (pi (C p)) (pi T)\n    (pi X) (pi Q) nu v ha hx hp'\n  have hmem : X ^ (nu * v) * Q ∈ I := by\n    apply Ideal.Quotient.eq_zero_iff_mem.mp\n    simpa only [map_mul, map_pow] using hnil\n  have hdvd : X ^ (h + 1) ∣ X ^ (nu * v) * Q :=\n    Ideal.mem_span_singleton.mp hmem\n  have hcoeff := (Polynomial.X_pow_dvd_iff.mp hdvd)\n    (nu * v) (Nat.lt_succ_of_le hbound)\n  simpa [Polynomial.coeff_X_pow_mul'] using hcoeff\n\ntheorem determinant_weights (g : Int) :\n    (-(2 - g) + (1 - g), -(2 - g) + (2 - g)) = (-1, 0) := by\n  apply Prod.ext <;> dsimp <;> ring\n\nend DivisionIndexAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/division_index_audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: the nilpotent core of the division-index bridge\n\nThe ledger claim is `C_DIA_FORMAL_CORE`. The principal declaration is\n`constant_zero_of_truncated_bezout` in namespace `DivisionIndexAudit`.\n\nIts coefficient ring `R` is an arbitrary commutative ring, including rings\nwith zero divisors. The scalar `p` is an element of `R`, not a formally\nassumed prime. The five objects `A,D,T,U,Q` are univariate polynomials over\nthat same ring. The parameters `nu,v,h` are arbitrary natural numbers.\n`C p` means the constant polynomial with coefficient `p`, and `X` is the\npolynomial variable.\n\nThe hypotheses are exactly:\n\n1. `p^v = 0` in the coefficient ring.\n2. `nu*v <= h`.\n3. `X^(h+1)` divides `A*Q` as a polynomial.\n4. The polynomial identity\n   `X^nu = A*D + C(p)*T + X^(h+1)*U`.\n\nThe conclusion is that the constant coefficient `Q.coeff 0` is zero in\n`R`. There is no assumption that `A`, `p`, or `X` is a non-zero-divisor.\nThe proof uses the quotient by `(X^(h+1))`, not cancellation by `A` or `p`.\n\nThe subsidiary declaration `nilpotent_lift` in that namespace states,\nover any commutative ring, that `a*q=0`, `x^nu=a*d+p*c`, and `p^v=0`\nimply `x^(nu*v)*q=0`. The declaration\n`power_mul_eq_of_mul_eq` proves the required power\nidentity by induction. `determinant_weights` proves\nthe integer identity for the scalar weights `(-1,0)` for every integer\ngenus parameter `g`.\n\nTo apply the principal declaration to the manuscript, take\n`R = Z/(p^v)`. An integer polynomial `A` of exact order `nu` modulo\nthe prime `p` admits the displayed truncated Bezout identity: invert\nthe unit factor of `A mod p` to the required finite order and lift\ncoefficients to integers. This construction is proved in the mathematical\nreport and implemented in `verify.py`; its existence is NOT a conclusion\nof the Lean declaration. Reduction to `R` makes the scalar nilpotent,\nand zero constant coefficient means `p^v` divides the original integer\nconstant coefficient.\n\nThe source does NOT formalize complex varieties, determinant functors,\nGalois descent, Picard varieties, topological K-theory, Hilbert series,\nor the assertion that the constructed algebra is division. Those parts\nof the report require mathematical reading and independent Reviewer\napproval. In particular, a successful compile of this source alone\nmust not be recorded as a kernel proof of `C_DIA_DIVISION`.\n"
+  },
+  "subject": {
+    "content_hash": "c720084fee8bca64b00ea905d38d588f37eb589ca431c0c884ee34caa681887b",
+    "kind": "claim",
+    "subject_id": "C_DIA_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

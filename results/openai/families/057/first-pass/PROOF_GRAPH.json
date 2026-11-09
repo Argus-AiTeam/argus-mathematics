@@ -1,0 +1,92 @@
+{
+  "goal": "C9000057",
+  "scope_goal": "C_SWI",
+  "scope_limit": "This mission verifies one analytic lemma; accepting it does not close the publishable campaign goal or its downstream theorems.",
+  "routes": {
+    "R_SWI_VERIFICATION": {
+      "goal": "C_SWI",
+      "obligations": [
+        "L_SWI_DOMAINS",
+        "L_SWI_BOCHNER",
+        "L_SWI_LIFTS",
+        "L_SWI_QUADRATIC",
+        "L_SWI_DUALITY"
+      ]
+    }
+  },
+  "nodes": {
+    "C9000057": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 057 (Fundamental groups of special complex varieties and root orbifolds.; papers: The abelianity conjecture for special compact Kähler manifolds; Two-step monodromy of special quasi-projective varieties; A conditional abelianity theorem for special fourfold pairs with a half-weight divisor; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SWI": {
+      "statement": "Under the scalar gaps and the precise geometry of spectral.tex, Lemma sp:weighted-inverse has a constant independent of S,b,t.",
+      "status": "open",
+      "depends_on": ["L_SWI_DOMAINS", "L_SWI_BOCHNER", "L_SWI_LIFTS", "L_SWI_QUADRATIC", "L_SWI_DUALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_weighted_inverse/proof.md"],
+      "engineer_verdict": "supports; independent review pending"
+    },
+    "L_SWI_DOMAINS": {
+      "statement": "The complete Dolbeault differentials retain their domains, exactness and closed ranges under a fixed bounded positive scalar multiplier; the required compact-support form cores remain valid without identifying adjoint domains.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_weighted_inverse/proof.md"],
+      "engineer_verdict": "supports; independent review pending"
+    },
+    "L_SWI_BOCHNER": {
+      "statement": "With m=2n and curvature bounded below by -C0*t*Omega_S, E_h(eta)+m*C0*t*norm_h(eta)^2 >= delta*norm_0(eta)^2 on the (m,q) form domain, uniformly in S.",
+      "status": "open",
+      "depends_on": ["L_SWI_DOMAINS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_weighted_inverse/proof.md"],
+      "engineer_verdict": "supports; independent review pending"
+    },
+    "L_SWI_LIFTS": {
+      "statement": "On each exact-degree spectral band of A=d*d_h^*, comparison of minimal weighted and unweighted lifts gives norm_0(eta)^2 >= delta*exp(-b)*mu^(-1)*norm_h(eta)^2.",
+      "status": "open",
+      "depends_on": ["L_SWI_DOMAINS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_weighted_inverse/proof.md"],
+      "engineer_verdict": "supports; independent review pending"
+    },
+    "L_SWI_QUADRATIC": {
+      "statement": "Every nonzero lower spectral band obeys mu*(mu+m*C0*t) >= delta^2*exp(-b), implying the claimed uniform minimal-solution estimate.",
+      "status": "open",
+      "depends_on": ["L_SWI_BOCHNER", "L_SWI_LIFTS", "C_SWI_ALG"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_weighted_inverse/proof.md"],
+      "engineer_verdict": "supports; independent review pending"
+    },
+    "L_SWI_DUALITY": {
+      "statement": "The conjugate-linear bundle-metric Serre star transfers the complete-domain inverse bound from E^*-valued (m,*) forms with multiplier h to E-valued (0,*) forms with multiplier h^(-1).",
+      "status": "open",
+      "depends_on": ["L_SWI_DOMAINS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_weighted_inverse/proof.md"],
+      "engineer_verdict": "supports; independent review pending"
+    },
+    "C_SWI_ALG": {
+      "statement": "The universal scalar Cauchy-Schwarz/lift/Bochner implication, quadratic monotonicity, inverse squared bound, completed-square identity, and finite-sum curvature bound are exactly the declarations described in statement_fidelity.md.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/spectral_weighted_inverse/Main.lean",
+        "research/spectral_weighted_inverse/statement_fidelity.md",
+        "research/spectral_weighted_inverse/jacobian_result.json",
+        "research/spectral_weighted_inverse/certificates/C_SWI_ALG-c5aac35df9f2e6ee.json",
+        "research/spectral_weighted_inverse/exact_certificate.json"
+      ],
+      "mechanical_evidence": "Lean 4.31.0 exit_code=0, proof_holes=[], axiom audit exit_code=0; the ledger derives closed_kernel for this scalar claim only",
+      "remaining_obligation": "Independent statement-fidelity review"
+    }
+  }
+}

@@ -1,0 +1,251 @@
+namespace GrowingDivisorMoments
+
+open scoped BigOperators
+open Finset Filter OAI.ShortEgyptian
+
+theorem pow_le_ascending (n k : ℕ) : n ^ k ≤ n.ascFactorial k := by
+  induction k with
+  | zero => simp
+  | succ k ih =>
+    simpa [pow_succ, Nat.ascFactorial_succ, mul_comm] using
+      Nat.mul_le_mul (show n ≤ n + k by omega) ih
+
+theorem momentSeriesConst_explicit (k : ℕ) :
+    momentSeriesConst k ≤ 16 * (4 * (k : ℝ)) ^ k := by
+  have hnorm : ‖(3 / 4 : ℝ)‖ < 1 := by norm_num
+  have hs := hasSum_choose_mul_geometric_of_norm_lt_one k hnorm
+  let b : ℕ → ℝ := fun j =>
+    (k.factorial : ℝ) * (((j + k).choose k : ℝ) * (3 / 4 : ℝ) ^ j)
+  have hb : Summable b := hs.summable.mul_left (k.factorial : ℝ)
+  have htotal : (∑' j, b j) = (k.factorial : ℝ) * 4 ^ (k + 1) := by
+    dsimp [b]
+    rw [tsum_mul_left, hs.tsum_eq, ← one_div_pow]
+    norm_num
+  have hcoef (j : ℕ) :
+      ((j + 2 : ℕ) : ℝ) ^ k ≤
+        (k.factorial : ℝ) * ((j + 1 + k).choose k : ℝ) := by
+    have h := pow_le_ascending (j + 2) k
+    rw [show j + 2 = (j + 1) + 1 by omega,
+      Nat.ascFactorial_eq_factorial_mul_choose] at h
+    exact_mod_cast h
+  have hcs : Summable (fun j : ℕ =>
+      ((j + 2 : ℕ) : ℝ) ^ k * (3 / 4 : ℝ) ^ (j + 1)) := by
+    simpa only [pow_succ, mul_assoc] using
+      (summable_shifted_geom k 2 (3 / 4) (by norm_num) (by norm_num)).mul_right
+        (3 / 4 : ℝ)
+  have hmain : (3 / 4 : ℝ) * momentSeriesConst k ≤
+      (k.factorial : ℝ) * 4 ^ (k + 1) := by
+    calc
+      _ = ∑' j : ℕ, ((j + 2 : ℕ) : ℝ) ^ k * (3 / 4 : ℝ) ^ (j + 1) := by
+        unfold momentSeriesConst
+        rw [← tsum_mul_left]
+        congr 1
+        ext j
+        rw [pow_succ]
+        ring
+      _ ≤ ∑' j : ℕ, b (j + 1) := by
+        apply hcs.tsum_le_tsum _ ((summable_nat_add_iff 1).mpr hb)
+        intro j
+        have h := mul_le_mul_of_nonneg_right (hcoef j)
+          (show 0 ≤ (3 / 4 : ℝ) ^ (j + 1) by positivity)
+        simpa only [b, mul_assoc] using h
+      _ ≤ ∑' j : ℕ, b j := by
+        have h := hb.tsum_eq_zero_add
+        have h0 : 0 ≤ b 0 := by dsimp [b]; positivity
+        linarith
+      _ = _ := htotal
+  have hf : (k.factorial : ℝ) ≤ (k : ℝ) ^ k := by
+    exact_mod_cast Nat.factorial_le_pow k
+  have hm := mul_le_mul_of_nonneg_right hf (show 0 ≤ (4 : ℝ) ^ (k + 1) by positivity)
+  rw [pow_succ] at hm hmain
+  rw [mul_pow]
+  nlinarith only [hmain, hm, mul_nonneg (pow_nonneg (by norm_num : (0 : ℝ) ≤ 4) k)
+    (pow_nonneg (Nat.cast_nonneg k) k)]
+
+theorem order_le_log (S : ℝ) (k : ℕ)
+    (hl : 1 ≤ Real.log (Real.log S))
+    (hk : (k : ℝ) ≤ Real.log S / (100000 * Real.log (Real.log S))) :
+    (k : ℝ) ≤ Real.log S := by
+  have hd : 0 < 100000 * Real.log (Real.log S) := by positivity
+  have hm := (le_div_iff₀ hd).mp hk
+  have hden : 1 ≤ 100000 * Real.log (Real.log S) := by linarith
+  have hh := mul_le_mul_of_nonneg_left hden (Nat.cast_nonneg k)
+  nlinarith only [hm, hh]
+
+theorem series_bound_of_order (S : ℝ) (k : ℕ) (hS : 1 < S)
+    (hL : 4000 ≤ Real.log S) (hl : 1 ≤ Real.log (Real.log S))
+    (hkpos : 1 ≤ k)
+    (hk : (k : ℝ) ≤ Real.log S / (100000 * Real.log (Real.log S))) :
+    momentSeriesConst k ≤ S ^ (1 / 100 : ℝ) := by
+  have hk0 : 0 < (k : ℝ) := by exact_mod_cast (show 0 < k by omega)
+  have hL0 : 0 < Real.log S := by linarith
+  have hkL := order_le_log S k hl hk
+  have harg : 4 * (k : ℝ) ≤ (Real.log S) ^ 2 := by
+    nlinarith only [hkL, hL]
+  have hlog : Real.log (4 * (k : ℝ)) ≤ 2 * Real.log (Real.log S) := by
+    calc
+      _ ≤ Real.log ((Real.log S) ^ 2) := Real.log_le_log (by positivity) harg
+      _ = _ := by rw [Real.log_pow]; norm_num
+  have hkmul := (le_div_iff₀
+    (show 0 < 100000 * Real.log (Real.log S) by positivity)).mp hk
+  have hmul := mul_le_mul_of_nonneg_left hlog hk0.le
+  have hlog16 : Real.log 16 ≤ Real.log S / 200 := by
+    have h := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 16)
+    linarith
+  have hexp : Real.log 16 + (k : ℝ) * Real.log (4 * (k : ℝ)) ≤
+      Real.log S * (1 / 100 : ℝ) := by
+    nlinarith only [hkmul, hmul, hlog16, hL0]
+  calc
+    momentSeriesConst k ≤ 16 * (4 * (k : ℝ)) ^ k := momentSeriesConst_explicit k
+    _ = Real.exp (Real.log 16 + (k : ℝ) * Real.log (4 * (k : ℝ))) := by
+      rw [Real.exp_add, Real.exp_nat_mul,
+        Real.exp_log (by norm_num : (0 : ℝ) < 16),
+        Real.exp_log (by positivity : 0 < 4 * (k : ℝ))]
+    _ ≤ Real.exp (Real.log S * (1 / 100 : ℝ)) := Real.exp_le_exp.mpr hexp
+    _ = _ := (Real.rpow_def_of_pos (by linarith : 0 < S) _).symm
+
+theorem growing_divisor_moment_nat (D : ℝ) (hD : 1 ≤ D) :
+    ∀ᶠ S : ℝ in atTop, ∀ (k : ℕ), 1 ≤ k →
+      (k : ℝ) ≤ Real.log S / (100000 * Real.log (Real.log S)) →
+      ∀ (v Y : ℝ) (N : ℕ),
+      S / (2 * Real.log S) ≤ v → v ≤ D * S →
+      Real.exp (v / 2) ≤ Y → Y ≤ Real.exp v →
+      (N : ℝ) ≤ Real.exp (D * S) →
+      ∑ n ∈ Ioc N (N + ⌊Y⌋₊), (truncatedDivisorCount (Real.exp v) n : ℝ) ^ k ≤
+        Y * Real.exp (S ^ (1 / 4 : ℝ)) := by
+  have hll := (Real.tendsto_log_atTop.comp Real.tendsto_log_atTop).eventually_ge_atTop
+    (max 1 (1 + Real.log (2 * (D + 1))))
+  filter_upwards [
+    eventually_gt_atTop (1 : ℝ),
+    Real.tendsto_log_atTop.eventually_ge_atTop 4000,
+    hll, eventually_ge_atTop D,
+    Real.tendsto_log_atTop.eventually_ge_atTop (Real.log (1 + (D + 1) / Real.log 2)),
+    Real.tendsto_log_atTop.eventually_ge_atTop (Real.log (1 + 2 / Real.log 2)),
+    eventually_log_pow_le 40 1 (by norm_num : (0 : ℝ) < 1 / 16),
+    eventually_log_pow_le 1600 3 (by norm_num : (0 : ℝ) < 1 / 2),
+    eventually_log_pow_le (400 * (momentSeriesConst 0 * smallSmoothConst)) 1
+      (by norm_num : (0 : ℝ) < 1 / 2),
+    eventually_log_pow_le 51200 0 (by norm_num : (0 : ℝ) < 1 / 25),
+    eventually_nested_log_le 1 (2 * (D + 1)) (by linarith),
+    eventually_log_pow_le (8 * D) 2 (by norm_num : (0 : ℝ) < 1 / 8),
+    eventually_log_pow_le 128 1 (by norm_num : (0 : ℝ) < 6 / 25),
+    eventually_log_pow_le 4 1 (by norm_num : (0 : ℝ) < 1 / 4)]
+    with S hS hL hll hDS hElog h2log h40 hpoint hsmall hband hB1 hbig hpr hout
+  simp only [pow_zero, pow_one, mul_one, one_mul] at h40 hsmall hband hB1 hpr hout
+  have hl : 1 ≤ Real.log (Real.log S) := (le_max_left _ _).trans hll
+  have hlD : 1 + Real.log (2 * (D + 1)) ≤ Real.log (Real.log S) :=
+    (le_max_right _ _).trans hll
+  have hS0 : 0 < S := by linarith
+  have hL0 : 0 < Real.log S := by linarith
+  intro k hkpos hk v Y N hvlo hvup hYlo hYup hN
+  have hkL := order_le_log S k hl hk
+  have hC := series_bound_of_order S k hS hL hl hkpos hk
+  have hp : 1600 * (k : ℝ) * (1 + Real.log S) ^ 2 ≤ S ^ (1 / 2 : ℝ) := by
+    calc
+      _ ≤ 1600 * (1 + Real.log S) * (1 + Real.log S) ^ 2 := by gcongr; linarith
+      _ = 1600 * (1 + Real.log S) ^ 3 := by ring
+      _ ≤ _ := hpoint
+  have hb : 51200 * momentSeriesConst k ≤ S ^ (1 / 20 : ℝ) := by
+    calc
+      _ ≤ 51200 * S ^ (1 / 100 : ℝ) := by gcongr
+      _ ≤ S ^ (1 / 25 : ℝ) * S ^ (1 / 100 : ℝ) :=
+        mul_le_mul_of_nonneg_right hband (by positivity)
+      _ = _ := by rw [← Real.rpow_add hS0]; norm_num
+  have hF : 1 + Real.log (2 * (D + 1) * Real.log S) ≤
+      2 * Real.log (Real.log S) := by
+    rw [Real.log_mul (show 2 * (D + 1) ≠ 0 by positivity) hL0.ne']
+    linarith only [hlD]
+  have hkmul := (le_div_iff₀
+    (show 0 < 100000 * Real.log (Real.log S) by positivity)).mp hk
+  have hFm := mul_le_mul_of_nonneg_left hF
+    (show 0 ≤ 3200 * (k : ℝ) by positivity)
+  have hB : 3200 * (k : ℝ) * (1 + Real.log (2 * (D + 1) * Real.log S)) ≤
+      Real.log S := by
+    nlinarith only [hkmul, hFm, hL0]
+  have hbig' : 8 * (k : ℝ) * D * (1 + Real.log S) ≤ S ^ (1 / 8 : ℝ) := by
+    calc
+      _ ≤ 8 * (1 + Real.log S) * D * (1 + Real.log S) := by gcongr; linarith
+      _ = (8 * D) * (1 + Real.log S) ^ 2 := by ring
+      _ ≤ _ := hbig
+  have hpr' : 128 * momentSeriesConst k * (1 + Real.log S) ≤
+      S ^ (1 / 4 : ℝ) := by
+    calc
+      _ ≤ 128 * S ^ (1 / 100 : ℝ) * (1 + Real.log S) := by gcongr
+      _ = (128 * (1 + Real.log S)) * S ^ (1 / 100 : ℝ) := by ring
+      _ ≤ S ^ (6 / 25 : ℝ) * S ^ (1 / 100 : ℝ) :=
+        mul_le_mul_of_nonneg_right hpr (by positivity)
+      _ = _ := by rw [← Real.rpow_add hS0]; norm_num
+  exact divisor_moment_numeric k D S v Y N hD hS (by linarith) hDS
+    hElog h2log h40 hp hsmall hb hB hB1 hbig' hpr' hout hvlo hvup hYlo hYup hN
+
+theorem growing_divisor_moment_real (D : ℝ) (hD : 1 ≤ D) :
+    ∃ S0 : ℝ, Real.exp 1 < S0 ∧
+      ∀ S ≥ S0, ∀ r : ℝ, 1 ≤ r →
+      r ≤ Real.log S / (200000 * Real.log (Real.log S)) →
+      ∀ (X Y : ℝ) (N : ℕ),
+      0 < X →
+      S / (2 * Real.log S) ≤ Real.log X → Real.log X ≤ D * S →
+      X ^ (1 / 2 : ℝ) ≤ Y → Y ≤ X → (N : ℝ) ≤ Real.exp (D * S) →
+      ∑ h ∈ Icc 1 ⌊Y⌋₊, (truncatedDivisorCount X (N + h) : ℝ) ^ r ≤
+        Y * Real.exp (S ^ (1 / 4 : ℝ)) := by
+  have hevent : ∀ᶠ S : ℝ in atTop, Real.exp 1 < S ∧
+      ∀ r : ℝ, 1 ≤ r →
+      r ≤ Real.log S / (200000 * Real.log (Real.log S)) →
+      ∀ (X Y : ℝ) (N : ℕ),
+      0 < X →
+      S / (2 * Real.log S) ≤ Real.log X → Real.log X ≤ D * S →
+      X ^ (1 / 2 : ℝ) ≤ Y → Y ≤ X → (N : ℝ) ≤ Real.exp (D * S) →
+      ∑ h ∈ Icc 1 ⌊Y⌋₊, (truncatedDivisorCount X (N + h) : ℝ) ^ r ≤
+        Y * Real.exp (S ^ (1 / 4 : ℝ)) := by
+    filter_upwards [growing_divisor_moment_nat D hD, eventually_gt_atTop (Real.exp 1),
+      (Real.tendsto_log_atTop.comp Real.tendsto_log_atTop).eventually_ge_atTop 1]
+      with S hnat hS hll
+    change 1 ≤ Real.log (Real.log S) at hll
+    refine ⟨hS, ?_⟩
+    intro r hr hrup X Y N hX hvlo hvup hYlo hYup hN
+    have hS1 : 1 < S :=
+      (Real.one_lt_exp_iff.mpr (by norm_num : (0 : ℝ) < 1)).trans hS
+    have hlogS : 0 < Real.log S := Real.log_pos hS1
+    have hll0 : 0 < Real.log (Real.log S) := by linarith
+    have hkr : (⌈r⌉₊ : ℝ) ≤ 2 * r := by
+      have h := Nat.ceil_lt_add_one (by linarith : 0 ≤ r)
+      linarith
+    have hkpos : 1 ≤ ⌈r⌉₊ := by
+      have h : (1 : ℝ) ≤ (⌈r⌉₊ : ℝ) := hr.trans (Nat.le_ceil r)
+      exact_mod_cast h
+    have hk : (⌈r⌉₊ : ℝ) ≤ Real.log S / (100000 * Real.log (Real.log S)) := by
+      calc
+        _ ≤ 2 * r := hkr
+        _ ≤ 2 * (Real.log S / (200000 * Real.log (Real.log S))) := by linarith
+        _ = _ := by field_simp; ring
+    have hlog : 0 < Real.log X :=
+      lt_of_lt_of_le (div_pos (by linarith : 0 < S) (by positivity)) hvlo
+    have hX1 : 1 ≤ X := by
+      calc
+        1 ≤ Real.exp (Real.log X) := Real.one_le_exp hlog.le
+        _ = X := Real.exp_log hX
+    have hYlo' : Real.exp (Real.log X / 2) ≤ Y := by
+      simpa only [Real.rpow_def_of_pos hX, div_eq_mul_inv, one_mul] using hYlo
+    have hbound := hnat ⌈r⌉₊ hkpos hk (Real.log X) Y N hvlo hvup hYlo'
+      (by simpa only [Real.exp_log hX] using hYup) hN
+    rw [Real.exp_log hX] at hbound
+    calc
+      _ ≤ ∑ h ∈ Icc 1 ⌊Y⌋₊, (truncatedDivisorCount X (N + h) : ℝ) ^ ⌈r⌉₊ := by
+        apply sum_le_sum
+        intro h hh
+        have hn : 0 < N + h := by have := (mem_Icc.mp hh).1; omega
+        have hd : (1 : ℝ) ≤ truncatedDivisorCount X (N + h) := by
+          exact_mod_cast DivisorMomentAudit.one_le_count X (N + h) hX1 hn
+        simpa only [Real.rpow_natCast] using
+          Real.rpow_le_rpow_of_exponent_le hd (Nat.le_ceil r)
+      _ = ∑ n ∈ Ioc N (N + ⌊Y⌋₊), (truncatedDivisorCount X n : ℝ) ^ ⌈r⌉₊ :=
+        DivisorMomentAudit.shifted_sum
+          (fun n => (truncatedDivisorCount X n : ℝ) ^ ⌈r⌉₊) N ⌊Y⌋₊
+      _ ≤ _ := hbound
+  obtain ⟨S0, hS0⟩ := Filter.eventually_atTop.mp hevent
+  exact ⟨S0, (hS0 S0 le_rfl).1, fun S hS => (hS0 S hS).2⟩
+
+end GrowingDivisorMoments
+
+#print axioms GrowingDivisorMoments.momentSeriesConst_explicit
+#print axioms GrowingDivisorMoments.growing_divisor_moment_real

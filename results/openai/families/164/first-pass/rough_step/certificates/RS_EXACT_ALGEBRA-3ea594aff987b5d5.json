@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-RS_EXACT_ALGEBRA-86b82e0467d9",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/164/first-pass/rough_step/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/164/first-pass/rough_step/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15450,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/164/first-pass/rough_step/Main.lean",
+    "source_sha256": "cd93853406c00e124505526fd365d9def99c71fd799aeb7f2bf05b45b2139f52",
+    "statement_fidelity": "families/164/first-pass/rough_step/statement_fidelity.md",
+    "statement_fidelity_sha256": "af3e6d1546578a06aa5dff47dbf84edd7fdc1efd41d49f430d556c8a1a4b8a3a",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/rough_step/Main.lean",
+    "text": "import Mathlib\n\nnamespace RoughStep\n\nopen Polynomial\n\ntheorem rational_gap (N k : ℤ) (r : ℚ) (hN : N ≠ 0)\n    (hclear : (N : ℚ) * r = k) (hsmall : |(N : ℚ) * r| < 1) :\n    r = 0 := by\n  rw [hclear] at hsmall\n  have hk : |k| < 1 := by exact_mod_cast hsmall\n  have hk0 : k = 0 := by\n    have := le_abs_self k\n    have := neg_abs_le k\n    omega\n  have hz : (N : ℚ) * r = 0 := by simpa [hk0] using hclear\n  exact (mul_eq_zero.mp hz).resolve_left (by exact_mod_cast hN)\n\ntheorem integral_of_coprime_multiples (d t n k : ℤ) (r : ℚ)\n    (hcop : IsCoprime d t) (hd : (d : ℚ) * r = n)\n    (ht : (t : ℚ) * r = k) :\n    ∃ j : ℤ, r = j := by\n  rcases hcop with ⟨u, v, huv⟩\n  refine ⟨u * n + v * k, ?_⟩\n  have huvq : (u : ℚ) * d + (v : ℚ) * t = 1 := by exact_mod_cast huv\n  calc\n    r = ((u : ℚ) * d + (v : ℚ) * t) * r := by rw [huvq]; ring\n    _ = (u : ℚ) * ((d : ℚ) * r) + (v : ℚ) * ((t : ℚ) * r) := by ring\n    _ = ((u * n + v * k : ℤ) : ℚ) := by rw [hd, ht]; push_cast; ring\n\ntheorem linear_power_dvd_of_hasse_jets (R : ℚ[X]) (a : ℚ) (e : ℕ)\n    (hjets : ∀ j < e, (hasseDeriv j R).eval a = 0) :\n    (X - C a) ^ e ∣ R := by\n  apply X_sub_C_pow_dvd_iff.mpr\n  rw [← taylor_apply]\n  apply X_pow_dvd_iff.mpr\n  intro j hj\n  rw [taylor_coeff]\n  exact hjets j hj\n\ntheorem exact_linear_division (R : ℚ[X]) (t₀ m : ℚ) (e : ℕ)\n    (hm : m ≠ 0)\n    (hjets : ∀ j < e, (hasseDeriv j R).eval (-t₀ / m) = 0) :\n    ∃ M : ℚ[X], R = (C t₀ + C m * X) ^ e * M := by\n  obtain ⟨Q, hQ⟩ := linear_power_dvd_of_hasse_jets R (-t₀ / m) e hjets\n  have hma : m * (-t₀ / m) = -t₀ := by field_simp\n  have hlinear : C t₀ + C m * X = C m * (X - C (-t₀ / m)) := by\n    rw [mul_sub, ← C_mul, hma, C_neg]\n    ring\n  have hunit : C m * C m⁻¹ = (1 : ℚ[X]) := by\n    rw [← C_mul]\n    simp [hm]\n  refine ⟨C m⁻¹ ^ e * Q, ?_⟩\n  calc\n    R = (X - C (-t₀ / m)) ^ e * Q := hQ\n    _ = (C m * C m⁻¹) ^ e * ((X - C (-t₀ / m)) ^ e * Q) := by\n      rw [hunit]\n      simp\n    _ = (C m * (X - C (-t₀ / m))) ^ e * (C m⁻¹ ^ e * Q) := by\n      simp only [mul_pow]\n      ring\n    _ = (C t₀ + C m * X) ^ e * (C m⁻¹ ^ e * Q) := by rw [hlinear]\n\ntheorem residue_class_exists (K t u b : ℤ) (hcop : IsCoprime K t) :\n    ∃ a : ℤ, t ∣ u + K * a - b := by\n  rcases hcop with ⟨p, q, hpq⟩\n  refine ⟨p * (b - u), -q * (b - u), ?_⟩\n  linear_combination (b - u) * hpq\n\ntheorem residue_reparametrization (K t u b a y : ℤ)\n    (hcop : IsCoprime K t) (ha : t ∣ u + K * a - b) :\n    t ∣ u + K * y - b ↔ t ∣ y - a := by\n  rcases hcop with ⟨p, q, hpq⟩\n  rcases ha with ⟨h, hh⟩\n  constructor\n  · rintro ⟨k, hk⟩\n    refine ⟨p * (k - h) + q * (y - a), ?_⟩\n    linear_combination -(y - a) * hpq + p * hk - p * hh\n  · rintro ⟨k, hk⟩\n    refine ⟨h + K * k, ?_⟩\n    linear_combination hh + K * hk\n\ntheorem descent_exponent_invariant (n s D : ℕ) :\n    2 * (s * D) * s ^ n + 2 = 2 * D * s ^ (n + 1) + 2 := by\n  rw [pow_succ]\n  ring\n\nsection Groups\n\nvariable {G A : Type*} [Group G] [Group A]\n\ntheorem kernel_membership (χ : G →* A) (v : A →* G)\n    (hsection : ∀ u, χ (v u) = u) (a m : A) (p : G)\n    (hχ : χ p = a * m) :\n    χ (v a⁻¹ * p * v m⁻¹) = 1 := by\n  simp [hsection, hχ, mul_assoc]\n\ntheorem kernel_factorization (v : A →* G) (a m : A) (p : G) :\n    v a * (v a⁻¹ * p * v m⁻¹) * v m = p := by\n  simp [mul_assoc]\n\ntheorem periodic_right_factor (Γ : Subgroup G) (g : G) (K j k : ℤ)\n    (hK : g ^ K ∈ Γ) :\n    ∃ γ ∈ Γ, g ^ (j + K * k) = g ^ j * γ := by\n  refine ⟨(g ^ K) ^ k, Γ.zpow_mem hK k, ?_⟩\n  rw [zpow_add, zpow_mul]\n\nend Groups\n\nend RoughStep\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/rough_step/statement_fidelity.md",
+    "text": "# Exact algebra for rough-step removal\n\nThis document describes claim `RS_EXACT_ALGEBRA` and the declarations in\n`Main.lean`, all in namespace `RoughStep`. All integer, rational, polynomial, and group variables below are\nuniversally quantified. No finite computation is promoted to a universal\nstatement.\n\n* `rational_gap`: if the nonzero integer `N` clears a rational `r`,\n  so that `N*r` is the integer `k`, and `|N*r|<1`, then `r=0`.\n  This is the exactness implication applied to interpolation jets and to\n  interpolated values after their denominators have been bounded.\n* `integral_of_coprime_multiples`: for integers `d,t,n,k` and\n  rational `r`, if `d*r=n`, `t*r=k`, and `d,t` are coprime in the Bezout\n  sense, then `r` is an integer. In the proof, `d` is a smooth denominator\n  clearing multiplier and `t` is a power of a rough step. Establishing\n  coprimality from their prime factors is ordinary integer arithmetic in\n  the mathematical report, not a hidden hypothesis of this declaration.\n* `linear_power_dvd_of_hasse_jets`: for a rational polynomial `R`,\n  rational `a`, and any natural `e`, vanishing Hasse derivatives of orders\n  `0,...,e-1` at `a` imply divisibility by `(X-a)^e`. Hasse derivatives are\n  divided derivatives, equivalently Taylor coefficients; over the rationals\n  their vanishing is equivalent to ordinary derivative vanishing.\n* `exact_linear_division`: for arbitrary rational `t0,m`, with\n  `m!=0`, the same jets at `-t0/m` imply a rational polynomial factorization\n  `R=(t0+m*X)^e*M`. There is no assumption bounding the coefficients,\n  interpolation length, or rational denominators.\n* `residue_class_exists` and\n  `residue_reparametrization`: for arbitrary integers `K,t,u,b`\n  with Bezout coprimality, the class `u+K*y=b (mod t)` has a representative\n  `a`, and is equivalent to `y=a (mod t)`. These declarations do not\n  incorrectly require the retained modulus and removed step to coincide.\n* `descent_exponent_invariant`: for all natural `n,s,D`,\n  `2*(s*D)*s^n+2=2*D*s^(n+1)+2`. This is the exponent bookkeeping for the\n  finite-power strengthening, not a formalization of the Lie degree bound.\n* `kernel_membership`: for arbitrary groups `G,A`, homomorphisms\n  `chi:G->A` and `v:A->G` with `chi(v(u))=u` for every `u`, and\n  `chi(p)=a*m`, the element `v(a^-1)*p*v(m^-1)` belongs to the kernel.\n  Specialize `A` to the multiplicative encoding of the additive reals and\n  `v(t)=exp(t*V)` to obtain the exact manuscript kernel formula.\n* `kernel_factorization`: in arbitrary groups, with no\n  commutativity assumption on `G`, the ordered product\n  `v(a)*(v(a^-1)*p*v(m^-1))*v(m)` equals `p`. In particular the left and\n  right correction factors have not been interchanged.\n* `periodic_right_factor`: for any subgroup `Gamma` of any group,\n  `g^K in Gamma` implies `g^(j+K*k)=g^j*gamma` for some `gamma in Gamma`,\n  for all integers `j,k,K`. This proves the right-coset periodicity used\n  after splitting the integer spatial polynomial modulo the fixed `K`.\n\nThe compiler checks these algebraic statements, not the whole analytic\nrough-step theorem. It does not check the Lagrange coefficient estimates,\nthe denominator bounds preceding exactness, finite Szemeredi's theorem,\nthe corrected quantitative equidistribution theorem, nilpotent Lie theory,\ncompactness/Lipschitz estimates, counting error bounds, or the final\nasymptotic dimension induction. Those parts are proved or explicitly cited\nin `report.md`. The formal source has no additional analytic assumptions\nand does not encode the desired conclusion as a hypothesis.\n"
+  },
+  "subject": {
+    "content_hash": "a46cf290188594ce49f806929af9aa58ea5184d2f78c539c14a9876effaa82ee",
+    "kind": "claim",
+    "subject_id": "RS_EXACT_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

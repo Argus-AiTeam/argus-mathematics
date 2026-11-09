@@ -1,0 +1,185 @@
+{
+  "goal": "C9000184",
+  "routes": [
+    {
+      "name": "R_WEIGHTED_UNIVERSAL",
+      "status": "current",
+      "evidence": "research/triangle_audit/proof.md",
+      "goal": "C9000184",
+      "obligations": ["C_WEIGHTED_TRIANGLES"]
+    },
+    {
+      "name": "R_POLYLOG_EXTENSION",
+      "status": "current",
+      "evidence": "research/triangle_audit/proof.md",
+      "goal": "C_WEIGHTED_TRIANGLES",
+      "obligations": ["C_POLYLOG_TRIANGLES"]
+    },
+    {
+      "name": "R_WEIGHTED_ADVERSARIAL",
+      "status": "untried",
+      "evidence": "research/triangle_audit/proof.md",
+      "goal": "C9000184",
+      "obligations": ["C_HYPOTHESIS_COMPLETE_REFUTATION"]
+    }
+  ],
+  "nodes": {
+    "C9000184": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 184 (Correspondence coloring with a fixed forbidden subgraph.; papers: Correspondence coloring graphs with a forbidden clique; A logarithmic independence bound for clique-free graphs; Lean status: Partially/Comparator formalized (lean/docs/184.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_WEIGHTED_TRIANGLES"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_WEIGHTED_TRIANGLES": {
+      "statement": "For every C>=1, every finite simple positive-weighted graph satisfying the directed cross-mass inequality for every x>=1 and every eligible overlapping pair A,B has T<=C_triangle(C)M, independently of order and all weights.",
+      "status": "open",
+      "depends_on": ["C_POLYLOG_TRIANGLES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md", "research/triangle_audit/exact_certificate.json"]
+    },
+    "C_EDGE_INJECTIVE": {
+      "statement": "A weight-preserving homomorphism injective on directed edges preserves the cross-mass inequality and does not increase edge mass, triangle mass, or any projected neighborhood weight.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_TRIANGLE_PEELING": {
+      "statement": "Weighted triangle normalizations are 3T=sum_edges w_u w_v c_uv and 6T=sum_u w_u h_u. Peeling edges of current common-neighbor mass below tau loses at most tau M.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_ENTROPY_SMOOTHING": {
+      "statement": "Under cross mass, x>=32, s_u<=exp(x), and c_uv>=1/x on every edge, the triangle-biased local walks have density at most x w_y, average entropy between -log x and (10+42C^2+2C)log x, and one shared index with the stated averaged adjacent-row TV bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_REVERSE_ADMISSIBILITY": {
+      "statement": "Reversibility and averaged entropy bound the triangle-law probability of K_u(y,v)<w_v exp(-sqrt(x)) by (A_C+1)log(x)/(sqrt(x)+log(x)), without a minimum vertex weight.",
+      "status": "open",
+      "depends_on": ["C_ENTROPY_SMOOTHING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_WEIGHTED_SPLITTING": {
+      "statement": "A finite shared-label coupling and reverse qualification yield an edge-injective split graph with neighborhoods at most exp(sqrt(x)) and triangle retention at least 1-a_C log(x)/sqrt(x).",
+      "status": "open",
+      "depends_on": ["C_EDGE_INJECTIVE", "C_ENTROPY_SMOOTHING", "C_REVERSE_ADMISSIBILITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_WEIGHTED_ITERATION": {
+      "statement": "Peeling followed by square-root reduction has uniformly summable multiplicative and additive triangle losses, giving T<=2(1+exp(X(C))/3)M for arbitrary initial neighborhood mass.",
+      "status": "open",
+      "depends_on": ["C_EDGE_INJECTIVE", "C_TRIANGLE_PEELING", "C_WEIGHTED_SPLITTING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_OPTIMIZER_CROSS": {
+      "statement": "A maximizing weight vector for the independence manuscript's variational functional on a finite K_r-free graph satisfies cross mass with C=16r^2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_INDEPENDENCE_APPLICATION": {
+      "statement": "Combining optimizer cross mass and the structural weighted-triangle theorem supplies T<=B_r M in the independence argument; this does not by itself verify the complete independence theorem.",
+      "status": "open",
+      "depends_on": ["C_OPTIMIZER_CROSS", "C_WEIGHTED_TRIANGLES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_COLORING_LOCAL_CROSS": {
+      "statement": "The coloring manuscript's sparse mean-one multipliers and dual inequalities give its priced local cross-mass estimate, including locality, per-part participation and additive error.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_COLORING_LOCAL_TRANSFER": {
+      "statement": "The coloring local cross estimate transfers through directed-edge-injective splitting with the stated locality and per-part hypotheses.",
+      "status": "open",
+      "depends_on": ["C_COLORING_LOCAL_CROSS", "C_EDGE_INJECTIVE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_COLORING_LOCAL_TRIANGLES": {
+      "statement": "The coloring-specific entropy, reverse qualification and iterative splitting estimates control priced triangle mass with the required radius, participation, and additive errors.",
+      "status": "open",
+      "depends_on": ["C_COLORING_LOCAL_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_COLORING_ADJUSTMENT": {
+      "statement": "The priced triangle estimate closes the dual target for the coloring adjustment lemma, including its listed-support participation bound; the correspondence-coloring rounds require this stronger localized assertion.",
+      "status": "open",
+      "depends_on": ["C_COLORING_LOCAL_TRIANGLES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_HYPOTHESIS_COMPLETE_REFUTATION": {
+      "statement": "A refutation must exhibit a literal false intermediate assertion with all its hypotheses, or a fixed-C family satisfying full cross mass and with unbounded T/M.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_POLYLOG_TRIANGLES": {
+      "statement": "For every integer p>=1 and C>=1, full directed cross mass e_w(U,V)<=C*w(U)*(x+log^+(1/w(U)))^p at every x>=p implies T<=2*(1+exp(X)/3)*M for every finite simple positive-weighted graph, with E=C^2*42^p+C*2^p, A=3p+7+E, a=18*(A+1), X=(16*a*(p+6))^4.",
+      "status": "open",
+      "depends_on": ["C_PROFILE_PRESERVATION", "C_TRIANGLE_PEELING", "C_PROFILE_ENTROPY", "C_PROFILE_SPLITTING", "C_PROFILE_ITERATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_PROFILE_PRESERVATION": {
+      "statement": "For x>=p the polynomial profile is nondecreasing; full polynomial-profile cross mass is preserved by weight-preserving homomorphisms injective on directed edges.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_PROFILE_ENTROPY": {
+      "statement": "For every p>=1, C>=1 and x>=max(32,(p+6)^2), the polynomial-profile cross hypothesis and peeled neighborhood hypotheses yield H_R<=(3p+7+C^2*42^p+C*2^p)*log x and one common time with the derived averaged row-distance bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_PROFILE_SPLITTING": {
+      "statement": "For polynomial profiles, reversed-row qualification and simultaneous coupling give an edge-injective square-root neighborhood reduction retaining at least (1-a*log(x)/sqrt(x))*T after peeling loss M/x.",
+      "status": "open",
+      "depends_on": ["C_PROFILE_ENTROPY", "C_PROFILE_PRESERVATION", "C_TRIANGLE_PEELING", "C_TRIANGLE_UNIVERSAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_PROFILE_ITERATION": {
+      "statement": "The explicit X=(16*a*(p+6))^4 makes square-root iteration losses uniformly summable, and its terminal bound yields the stated universal polynomial-profile triangle estimate.",
+      "status": "open",
+      "depends_on": ["C_PROFILE_SPLITTING", "C_TRIANGLE_UNIVERSAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_PROFILE_STRICT_HIERARCHY": {
+      "statement": "For all integers 1<=q<p, the single-edge family with weights 2^(-n), n^p for n>=max(4,p^2) satisfies exponent-p cross mass with C=2^p, while every exponent-q cross constant is at least 2^(-q)*n^(p-q).",
+      "status": "open",
+      "depends_on": ["C_TRIANGLE_UNIVERSAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/proof.md"]
+    },
+    "C_TRIANGLE_UNIVERSAL_CORE": {
+      "statement": "For arbitrary finite index types and real sequences, detailed balance exchanges two-coordinate expectations; a shifted lower and mean bound imply the strict-tail probability bound; halving controls all finite partial sums; the specified nonnegative-loss recurrence and terminal inequality imply the uniform mass bound. For all natural exponents the endpoint and profile-separation power inequalities hold.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/triangle_audit/Main.lean", "research/triangle_audit/statement_fidelity.md"]
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C304_TRANSFER-366bf229357f",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/304/first-pass/generated_excision_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/304/first-pass/generated_excision_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14478,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/304/first-pass/generated_excision_audit/Main.lean",
+    "source_sha256": "62f78b56059f1cc4367e08cc4bd596bfc38c6a51b0f4c921c5aafc40dcc9e346",
+    "statement_fidelity": "families/304/first-pass/generated_excision_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "e36ddefef4bfe0ad25abef8dfb9531010d242c6afb27ccbc2cc494318b6dc70d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/generated_excision_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace GeneratedExcision\n\nuniverse u v w z\n\nstructure BiTransfer {A : Type u} {B : Type v}\n    [AddCommGroup A] [AddCommGroup B] (f : A →+ B) (q : ℕ) where\n  backward : B →+ A\n  forward_backward : ∀ y, f (backward y) = q • y\n  backward_forward : ∀ x, backward (f x) = q • x\n\nvariable {A₀ : Type u} {B₀ : Type v} {A₁ : Type w} {B₁ : Type z}\n  [AddCommGroup A₀] [AddCommGroup B₀] [AddCommGroup A₁] [AddCommGroup B₁]\n\ndef doubleTransfer\n    (f : A₀ →+ B₀) (g : A₁ →+ B₁)\n    (iA : A₀ →+ A₁) (iB : B₀ →+ B₁)\n    (dA : A₁ →+ A₀) (dB : B₁ →+ B₀)\n    (square : ∀ x, g (iA x) = iB (f x))\n    (natural : ∀ x, dB (g x) = f (dA x))\n    (doubleA : ∀ x, iA (dA x) = 2 • x)\n    (doubleB : ∀ y, iB (dB y) = 2 • y)\n    (q : ℕ) (t : BiTransfer f q) : BiTransfer g (2 * q) where\n  backward := iA.comp (t.backward.comp dB)\n  forward_backward := by\n    intro y\n    change g (iA (t.backward (dB y))) = (2 * q) • y\n    rw [square, t.forward_backward, map_nsmul, doubleB]\n    simp [smul_smul, Nat.mul_comm]\n  backward_forward := by\n    intro x\n    change iA (t.backward (dB (g x))) = (2 * q) • x\n    rw [natural, t.backward_forward, map_nsmul, doubleA]\n    simp [smul_smul, Nat.mul_comm]\n\ntheorem transfer_bounds {A : Type u} {B : Type v}\n    [AddCommGroup A] [AddCommGroup B]\n    {f : A →+ B} {q : ℕ} (t : BiTransfer f q) :\n    (∀ x, f x = 0 → q • x = 0) ∧\n      (∀ y, ∃ x, f x = q • y) := by\n  constructor\n  · intro x hx\n    have h := t.backward_forward x\n    rw [hx, map_zero] at h\n    exact h.symm\n  · intro y\n    exact ⟨t.backward y, t.forward_backward y⟩\n\nstructure DoublingTower (A : ℕ → Type u) (B : ℕ → Type v)\n    [∀ j, AddCommGroup (A j)] [∀ j, AddCommGroup (B j)] where\n  comparison : ∀ j, A j →+ B j\n  includeA : ∀ j, A j →+ A (j + 1)\n  includeB : ∀ j, B j →+ B (j + 1)\n  returnA : ∀ j, A (j + 1) →+ A j\n  returnB : ∀ j, B (j + 1) →+ B j\n  square : ∀ j x, comparison (j + 1) (includeA j x) =\n    includeB j (comparison j x)\n  natural : ∀ j x, returnB j (comparison (j + 1) x) =\n    comparison j (returnA j x)\n  doubleA : ∀ j x, includeA j (returnA j x) = 2 • x\n  doubleB : ∀ j y, includeB j (returnB j y) = 2 • y\n  base : BiTransfer (comparison 0) 1\n\nvariable {A : ℕ → Type u} {B : ℕ → Type v}\n  [∀ j, AddCommGroup (A j)] [∀ j, AddCommGroup (B j)]\n\ndef transferAt (T : DoublingTower A B) :\n    (j : ℕ) → BiTransfer (T.comparison j) (2 ^ j)\n  | 0 => by simpa using T.base\n  | j + 1 => by\n    simpa [pow_succ, Nat.mul_comm] using\n      doubleTransfer (T.comparison j) (T.comparison (j + 1))\n        (T.includeA j) (T.includeB j) (T.returnA j) (T.returnB j)\n        (T.square j) (T.natural j) (T.doubleA j) (T.doubleB j)\n        (2 ^ j) (transferAt T j)\n\ntheorem tower_bounds (T : DoublingTower A B) (j : ℕ) :\n    (∀ x, T.comparison j x = 0 → (2 ^ j) • x = 0) ∧\n      (∀ y, ∃ x, T.comparison j x = (2 ^ j) • y) :=\n  transfer_bounds (transferAt T j)\n\nend GeneratedExcision\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/generated_excision_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: the integral transfer core\n\nClaim `C304_TRANSFER` is formalized by the declarations in namespace\n`GeneratedExcision` in `Main.lean`. The objects are arbitrary abelian\ngroups, and all arrows are additive homomorphisms. No group is assumed\nfinite, finitely generated, divisible, or torsion-free. Natural-number\nscalar multiplication is repeated addition, not multiplication in a\nfield. In particular the proof does not invert 2 or the integer `q`.\n\n`BiTransfer f q` means that an additive map `backward` satisfies both\n`f(backward(y)) = q*y` and `backward(f(x)) = q*x`, for every element.\n\n`doubleTransfer` quantifies over four abelian groups, all six arrows\n`f,g,iA,iB,dA,dB`, every natural number `q`, and a `BiTransfer f q`.\nIts hypotheses are exactly\n\n    g iA = iB f,    dB g = f dA,\n    iA dA = 2 id,   iB dB = 2 id.\n\nIts conclusion is a `BiTransfer g (2*q)` whose reverse map is\n`iA backward dB`. The unused reverse identities `dA iA = 2 id`\nand `dB iB = 2 id` are deliberately not hypotheses. They hold in the\nintended dense-doubling application, but are unnecessary for this\nalgebraic implication.\n\n`transfer_bounds` proves, for every `BiTransfer f q`, that `q` annihilates\nthe kernel and that every `q*y` is in the image. The latter is precisely\nannihilation of the cokernel; no quotient object or extra surjectivity\nhypothesis is silently inserted.\n\n`DoublingTower` is an abstract sequence of such squares, with a\ntwo-sided 1-transfer in degree zero. `transferAt` constructs, for every\nnatural number `j`, a two-sided `2^j`-transfer. `tower_bounds` proves the\nkernel and cokernel assertions for all `j`, not just tested dimensions.\n\nThe geometric interpretation is conditional: after the natural relative\nWitt-group identifications proved in `proof.md`, the reduced sphere\ncomparisons, with the Witt degree shifted at each step, form this tower.\nThe compiler does NOT construct these sheaf categories, verify Verdier\nduality, prove cutoff or the germ equivalence, check Witt localization,\nestablish naturality of dense doubling, or prove Hilbert-Smith. Those\nmathematical obligations are separately stated and argued in `proof.md`\nand recorded in the ledger. A kernel certificate for `C304_TRANSFER`\nmust not be attached as a formal proof of `C304_LOCALIZATION` or\n`C9000304`.\n"
+  },
+  "subject": {
+    "content_hash": "8a755b2180c0403ad68bdd95d7771e06de14cdbe67bbf4b15b6e34e7fe128676",
+    "kind": "claim",
+    "subject_id": "C304_TRANSFER"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

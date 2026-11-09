@@ -1,0 +1,359 @@
+{
+  "unit": "char-p-line-recovery",
+  "verdict": "supported",
+  "assessment_role": "Engineer-assisting bounded mathematical assessment; not the native independent Reviewer",
+  "independent_review": "pending_native_host_reviewer",
+  "self_accepted": false,
+  "novelty_claimed": false,
+  "novelty_assessment": "not undertaken",
+  "summary": "The actual Steinberg-compatible quotient theorem proves a unique nonzero scalar sending every actual projective line onto a projective line for arbitrary characteristic-p fields of finite p-degree at least p^2. The function-field specialization has a valid explicit prose bridge, not a Lean specialization theorem. No concrete local mathematical gap was identified.",
+  "current_review": {
+    "project_root": "campaigns/9200009",
+    "contract": "OBJECTIVE.md",
+    "coverage_index": "research/DRAFT_REVIEW_INDEX.json",
+    "report": "research/draft_reviews/char-p-line-recovery/report.md"
+  },
+  "source_bindings": {
+    "historical_root": "campaigns/9000009",
+    "formal_source": {
+      "path": "research/char-p-line-recovery/Main.lean",
+      "sha256": "a19edb08473fb202bebc6f10c102936cc95485b37a3a110a596ecf41feb4341f",
+      "root_declaration": "CharPLineRecovery.prop_lines_source",
+      "root_lines": [1285, 1294]
+    },
+    "statement_fidelity": {
+      "path": "research/char-p-line-recovery/statement-fidelity.md",
+      "sha256": "5c28798bc4cb29adffe70428b09254ff77d44faae4afeb5f4da6c62742d679a2",
+      "duplicate_path": "research/char-p-line-recovery/statement_fidelity.md",
+      "duplicate_has_same_hash": true,
+      "duplicate_is_not_separate_result": true
+    },
+    "other_read_only_inputs": [
+      "research/char-p-line-recovery/report.md",
+      "research/char-p-line-recovery/verify.py"
+    ],
+    "claim": {
+      "id": "V_CHARP_LINE_RECOVERY",
+      "version": 2,
+      "content_hash": "2dec3ca27a700e683844670f57f98b34c7f1b7d0483439ce103208e86f7706e1",
+      "supporting_judgement": "judgement-V_CHARP_LINE_RECOVERY-b3db4b875762",
+      "historical_supporter": "reviewer:copilot",
+      "support_is_bound_to_exact_hash_and_certificate": true
+    },
+    "superseded_claim": {
+      "id": "V_CHARP_LINE_RECOVERY",
+      "version": 1,
+      "content_hash": "b62c040122f29a0777bf8bfd031d1bb823d94210dcdbcc00c9943db3b1dbe0ff",
+      "classification": "earlier prose-only version; not interchangeable with version 2"
+    },
+    "manuscript": {
+      "id": "Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026",
+      "revision": "4eaee87548250b2682affda7d05d947c05554bae",
+      "sections_root": "openai-math/preprints/Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026/build/build/sections",
+      "primary_sections": ["02-symbols.tex", "04-lines.tex"],
+      "section_04_sha256": "6b821a89c702010b7f7a1d089a29c1330ed341386419c1c3711b24c5f1a0d04c",
+      "limited_context_sections": ["01-introduction.tex", "05-fields.tex"],
+      "limited_context_purpose": "function-field hypotheses, specialization, and downstream scope only",
+      "proposition": "prop:lines",
+      "proposition_statement_lines": [32, 38]
+    },
+    "binding_verification": "Parent-verified hashes, source revision, exact certificate and claim-version bindings are reused; not re-hashed by this assessment."
+  },
+  "formal_statement": {
+    "context": [
+      "p : Nat with Fact p.Prime",
+      "K and L are fields with CharP K p and CharP L p",
+      "PthPowers F p = (frobenius F p).fieldRange"
+    ],
+    "hypotheses": [
+      "FiniteDimensional (PthPowers K p) K",
+      "FiniteDimensional (PthPowers L p) L",
+      "p^2 <= Module.finrank (PthPowers K p) K",
+      "p^2 <= Module.finrank (PthPowers L p) L",
+      "e : V K p equiv-linear[ZMod p] V L p",
+      "Compatible e: the tensor square of e maps relations K p exactly onto relations L p"
+    ],
+    "conclusion": "There exists exactly one n : (ZMod p).Units such that SendsLinesOnto K p (scale K p e n).",
+    "not_assumed": [
+      "finite generation over a constant field",
+      "algebraically closed constant fields",
+      "separability",
+      "zero-symbol detection",
+      "existence of derivations",
+      "subfield preservation",
+      "line preservation",
+      "local exponent coherence"
+    ],
+    "actual_objects": {
+      "V": "Additive F.Units modulo the range of multiplication by p, with its constructed ZMod p module structure; literally F*/(F*)^p",
+      "R": "ZMod p span in V tensor V of the actual [f] tensor [1-f] for f != 0,1",
+      "W": "(V tensor[ZMod p] V)/R",
+      "point_equality": "[f]=[g] iff f/g belongs to F^p; ratios of units are nonzero",
+      "projective_line": "[u] in line [s] [t] iff u=A*s+B*t for A,B in F^p",
+      "LineOnto": "For every distinct a,b, the image of line(a,b) equals line(e(a),e(b)).",
+      "SendsLinesOnto": "For every distinct a,b, there exist distinct c,d with image line(a,b)=line(c,d).",
+      "normalization": "lineOnto_iff_sendsLinesOnto proves equivalence using actual two-dimensional spans."
+    },
+    "anchors": {
+      "quotient_and_module": "Main.lean:14-49",
+      "steinberg_quotient": "Main.lean:85-99",
+      "compatibility": "Main.lean:130-154",
+      "pth_powers_and_point_criteria": "Main.lean:436-485",
+      "line_coefficients": "Main.lean:952-1007",
+      "line_span_and_normalization": "Main.lean:1215-1283",
+      "root": "Main.lean:1285-1294"
+    }
+  },
+  "components": [
+    {
+      "id": "actual-quotients-and-compatibility",
+      "mathematical_verdict": "supported",
+      "finding": "The formal root uses the literal multiplicative quotient and Steinberg relation span, not arbitrary modules, supplied dependence relations, or assumed symbol detection.",
+      "anchors": ["Main.lean:14-49", "Main.lean:85-154", "Main.lean:436-485"]
+    },
+    {
+      "id": "zero-symbol",
+      "historical_subclaim": {
+        "id": "V_CHARP_ZERO_SYMBOL",
+        "version": 1,
+        "content_hash": "393a3950be3681637920aa23159dc9beb123987fa150f425b2f7059493cb4a47"
+      },
+      "mathematical_verdict": "supported",
+      "declarations": [
+        "InseparableDerivations.extend_powerBasis",
+        "InseparableDerivations.extend_finite",
+        "InseparableDerivations.euler_pair",
+        "CharPLineRecovery.beta_kills_relations",
+        "CharPLineRecovery.differentialSymbol",
+        "CharPLineRecovery.zero_symbol"
+      ],
+      "finding": "Constructed Euler derivations give a logarithmic determinant on the actual quotient W; it kills actual Steinberg generators and takes a p-independent pair's symbol to 1. Only vanishing implies membership in F^p(s) is required.",
+      "external_injectivity_theorem_used": false,
+      "anchors": ["Main.lean:53-128", "Main.lean:166-360", "Main.lean:460-476", "02-symbols.tex:93-118"]
+    },
+    {
+      "id": "affine-configuration",
+      "historical_subclaim": {
+        "id": "V_CHARP_AFFINE_CONFIGURATION",
+        "version": 1,
+        "content_hash": "46eb6ceb7d0bd8ec35f682c1728ff1ddcb7edb69dbb17353497fe7a2444bf23d"
+      },
+      "mathematical_verdict": "supported",
+      "declarations": [
+        "CharPLineRecovery.affine_symbol",
+        "CharPLineRecovery.shift_not_power",
+        "CharPLineRecovery.transfer_nonmonomial",
+        "CharPLineRecovery.local_exponent"
+      ],
+      "finding": "For a,b in (K^p)*, u=x+a, v=y+b, z=bx-ay=bu-av are units. Distinct image subfields supply pair degree p^2; zero symbols give U in C(X), V in C(Y); injectivity transports nonmonomial conditions. Both Y/X and V/U are proved outside C. The last two symbols yield the same nonzero intersection witness Z with Z/X in C(Y/X) and Z/U in C(V/U), satisfying all reused theorem conditions.",
+      "source_comparison": "Main proves the needed z != 0 directly from quotient-point inequality instead of first proving the manuscript's stronger independence of 1,x,y.",
+      "anchors": ["Main.lean:540-634", "Main.lean:653-765", "04-lines.tex:59-79", "04-lines.tex:111-138"]
+    },
+    {
+      "id": "global-exponent",
+      "historical_subclaim": {
+        "id": "V_CHARP_GLOBAL_EXPONENT",
+        "version": 1,
+        "content_hash": "0b59bfe274cf2d060f2c52fcf4dcb89f8e7d193d41be474e73aa6cbe7c29e72c"
+      },
+      "mathematical_verdict": "supported",
+      "declarations": [
+        "CharPLineRecovery.two_parts",
+        "LineGlue.global_parameter",
+        "LineGlue.global_parameter_local_unique",
+        "CharPLineRecovery.global_affine",
+        "CharPLineRecovery.containment"
+      ],
+      "finding": "The target degree bound and surjectivity give at least two partition parts. Local uniqueness from either single inclusion forces one exponent for every source representative and every nonzero affine parameter. The containment proof also handles both zero-coefficient endpoint cases and then all multiplicative translates.",
+      "anchors": ["Main.lean:767-846", "Main.lean:900-944", "Main.lean:1077-1132", "04-lines.tex:141-163"]
+    },
+    {
+      "id": "onto-ness-and-uniqueness",
+      "historical_subclaim": {
+        "id": "V_CHARP_LINE_ONTO_UNIQUE",
+        "version": 1,
+        "content_hash": "8590dbc1bcfc32fadd73082de94211db520f550e94ae04734b6a00b43848be00"
+      },
+      "mathematical_verdict": "supported",
+      "declarations": [
+        "InseparableDerivations.scalar_affine_rigidity",
+        "CharPLineRecovery.scalar_rigidity",
+        "CharPLineRecovery.compatible_symm",
+        "CharPLineRecovery.lineOnto_of_both",
+        "CharPLineRecovery.prop_lines",
+        "CharPLineRecovery.line_eq_of_two_mem",
+        "CharPLineRecovery.lineOnto_iff_sendsLinesOnto",
+        "CharPLineRecovery.prop_lines_source"
+      ],
+      "finding": "Independent containment corrections n*e and m*e.symm compose to scalar mn; rigidity makes mn=1, proving the inverse containment and exact line images. A competing correction composes with the inverse to scalar k*n^-1, hence k=n. Span-based line normalization covers every competing scalar sending lines onto some lines.",
+      "source_comparison": "The manuscript corrects the already normalized inverse, while Main corrects the original inverse. The source uses coefficient r at degree r-1 for rigidity; Main uses coefficient r at degree 1. Both are valid without circular onto-ness.",
+      "scope_note": "The scalar_rigidity wrapper assumes finite p-degree at least p^2; this suffices for the root but is not the source's standalone all-imperfect-fields lemma in its full generality.",
+      "anchors": ["Main.lean:399-426", "Main.lean:1017-1075", "Main.lean:1134-1205", "Main.lean:1215-1294", "04-lines.tex:14-30", "04-lines.tex:166-187"]
+    },
+    {
+      "id": "characteristic-two",
+      "mathematical_verdict": "supported",
+      "finding": "No odd-prime assumption or division by 2 is present. The only exponent 0<r<p is 1 when p=2; determinant cancellation, nonzero -a, inverse containment, and full uniqueness remain valid.",
+      "anchors": ["Main.lean:101-128", "Main.lean:399-426", "Main.lean:673-765", "Main.lean:1172-1294"]
+    },
+    {
+      "id": "arbitrary-finite-p-rank-generality",
+      "mathematical_verdict": "supported",
+      "finding": "The exact theorem covers every pair of fields with finite degrees over their literal pth-power subfields and both degrees at least p^2. No hidden function-field hypothesis is used.",
+      "terminology_caveat": "The standard equivalence with finite p-rank e>=2 uses the p-basis fact [F:F^p]=p^e. Main proves simple/pair degree facts but does not package a separate theorem computing this global e; the root needs no such computation.",
+      "anchors": ["Main.lean:491-563", "Main.lean:1285-1294"]
+    },
+    {
+      "id": "function-field-specialization",
+      "mathematical_verdict": "supported",
+      "evidence_kind": "reviewed explicit prose proof, not a Lean specialization",
+      "finding": "For finitely generated F over a perfect characteristic-p base, rational-function monomials give [F0:F0^p]=p^d. Frobenius identifies the finite extensions F/F0 and F^p/F0^p; finite tower degrees and cancellation give [F:F^p]=p^d without separability. Algebraically closed bases and d>=2 imply the exact root hypotheses.",
+      "formalized_function_field_hypotheses": false,
+      "anchors": ["02-symbols.tex:17-38", "04-lines.tex:32-38", "report.md:219-234", "statement-fidelity.md:111-119"]
+    }
+  ],
+  "reused_dependency": {
+    "claim_id": "V_CHARP_INTERSECTION",
+    "claim_version": 3,
+    "content_hash": "bc454725f6e3913984e01e96fb83ae34f15ce44a47d81fa073dac264680d9bcb",
+    "declaration": "CharPIntersection.prop_intersection",
+    "local_import": "research/char-p-line-recovery/ReviewedIntersection.lean",
+    "source_sha256": "96ef99bfd773341718ab4e220167f05778a27ab97db1ebb52d6a095faff078b1",
+    "certificate": "research/char-p-intersection/certificates/V_CHARP_INTERSECTION-8ee0aa52ccd7bea2.json",
+    "certificate_sha256": "4a8a534637ab71d6167ee5771b450b5a2fe5827ed34cc0d543be32bda00a7417",
+    "supporting_judgement": "judgement-V_CHARP_INTERSECTION-d2a910e000f2",
+    "historical_supporter": "reviewer:copilot",
+    "interface_used": "Common 0<n<p, nonzero affine coefficients for both powers, and uniqueness from either single unqualified affine-power inclusion.",
+    "proof_reassessed_here": false,
+    "import_source_read_here": false,
+    "new_contribution": false,
+    "import_binding_verification_owner": "parent"
+  },
+  "historical_compiler_evidence": {
+    "certificate": "research/char-p-line-recovery/certificates/V_CHARP_LINE_RECOVERY-9e689e2d9b3aa174.json",
+    "certificate_sha256": "4ac05dc3dc3ecd114f35aa8b71d445d693f8d1ac823d9fb6e0ccd0195923f927",
+    "evidence_origin": "Parent-verified historical source-bound compiler and audit record",
+    "compiler_exit_code": 0,
+    "axiom_audit_exit_code": 0,
+    "proof_holes": [],
+    "lean_version": "4.31.0",
+    "lean_commit": "68218e876d2a38b1985b8590fff244a83c321783",
+    "mathlib_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "axioms": ["propext", "Classical.choice", "Quot.sound"],
+    "source_and_fidelity_hashes_match": true,
+    "fresh_compile_performed": false,
+    "fresh_axiom_audit_performed": false,
+    "verify_py_executed": false
+  },
+  "historical_diagnostics": {
+    "classification": "local algebra/sign diagnostics, not the universal theorem",
+    "facts_reused_from_parent": true,
+    "affine_identity_assignments_by_prime": {"2": 16, "3": 81, "5": 625, "7": 2401},
+    "nonzero_binomial_coefficient_checks": 61,
+    "characteristic_two": "only exponent 1 is admissible",
+    "jacobian_operation": "modular.polynomial_identity.compute",
+    "jacobian_modulus": 2,
+    "jacobian_identity": "B(X+A)-A(Y+B)=BX-AY",
+    "jacobian_result": "FORMAL_COEFFICIENTWISE_IDENTITY; identical=true; complete typed result",
+    "fresh_diagnostic_run": false,
+    "checker_anchors": "verify.py:96-133"
+  },
+  "external_assumptions_and_bridges": [
+    {
+      "id": "reviewed-intersection-interface",
+      "kind": "unchanged supported formal dependency",
+      "role": "local exponent and single-inclusion uniqueness",
+      "binding": "V_CHARP_INTERSECTION@3 as recorded above",
+      "not_a_new_axiom": true
+    },
+    {
+      "id": "function-field-p-degree",
+      "kind": "standard algebraic fact with explicit reviewed prose proof",
+      "statement": "If F/kappa is finitely generated, kappa is perfect of characteristic p, and d=trdeg(F/kappa), then [F:F^p]=p^d.",
+      "formalized_in_this_draft": false,
+      "needed_for": "specializing the degree-based theorem to manuscript function fields",
+      "not_needed_for": "the local formal theorem as stated",
+      "anchors": ["02-symbols.tex:17-38", "report.md:219-234"]
+    },
+    {
+      "id": "finite-p-rank-terminology",
+      "kind": "standard p-basis equivalence",
+      "statement": "Finite degree over F^p equals p^e, where e is the finite p-basis rank; the degree bound p^2 is equivalent to e>=2.",
+      "formalization_note": "Simple and pair degree facts are encoded; a standalone global rank computation is not.",
+      "needed_for": "the phrase finite p-rank at least two, not the degree-based root statement"
+    },
+    {
+      "id": "milnor-tensor-presentation",
+      "kind": "standard presentation identification",
+      "statement": "(V_F tensor V_F)/R_F is K_2^M(F)/p.",
+      "formalized_as_separate_comparison": false,
+      "needed_for": "identifying the named Milnor-K invariant with the explicitly constructed quotient",
+      "not_needed_for": "the theorem on the actual quotient specified by the manuscript",
+      "anchor": "Main.lean:85-99 constructs the quotient; the standard Milnor-K comparison is external."
+    }
+  ],
+  "attribution": {
+    "manuscript_results": [
+      "zero-symbol and affine-symbol lemmas",
+      "scalar-line rigidity",
+      "prop:lines and its local-to-global strategy"
+    ],
+    "argus_work": "Reproduction and alternate formal reconstruction, with a broader finite-p-degree hypothesis envelope; not an original-publication or novelty claim.",
+    "methodological_precedent_acknowledged_in_source": "Cadoret-Pirutka, cited at 04-lines.tex:3-8",
+    "intersection_import": "unchanged reuse, not another contribution",
+    "new_manuscript_error_claimed": false,
+    "new_error_search_performed": false
+  },
+  "gaps_and_scope": {
+    "concrete_local_mathematical_gaps": [],
+    "formal_scope_limitations": [
+      "The function-field p-degree specialization is prose, not a Lean theorem about finite generation and transcendence degree.",
+      "The standard Milnor-K tensor-presentation comparison is not separately formalized.",
+      "The scalar_rigidity wrapper is scoped to the root degree hypotheses, not every imperfect field."
+    ],
+    "limitations_invalidate_local_theorem": false,
+    "full_reconstruction_certified": false,
+    "downstream_proofs_assessed_here": false,
+    "downstream_obligations_not_discharged_by_this_draft": [
+      "L_CHARP_PROJECTIVE_LIFT@1",
+      "L_CHARP_PERFECT_CORE@1",
+      "C_CHARP_RECONSTRUCTION_UNVERIFIED@1",
+      "semilinear-to-multiplicative normalization and the complete reconstruction bijection"
+    ],
+    "downstream_boundary_anchors": ["05-fields.tex:4-23", "05-fields.tex:91-97", "01-introduction.tex:41-54"],
+    "scope_distinction": "Separate whole-reconstruction obligations do not make the supported local theorem unresolved; no new gap in their manuscript proofs is alleged."
+  },
+  "source_premises_for_current_ledger": [
+    {
+      "premise": "function-field-p-degree",
+      "record_as": "Valid explicit unformalized specialization bridge: finite generation over a perfect characteristic-p base gives [F:F^p]=p^trdeg.",
+      "local_root_depends_on_it": false,
+      "function_field_specialization_depends_on_it": true
+    },
+    {
+      "premise": "milnor-tensor-presentation",
+      "record_as": "Standard external identification only when a claim calls W the Milnor K_2/p group; actual quotient, compatibility, and projective-line interpretations are constructed internally."
+    },
+    {
+      "premise": "existing-reviewed-intersection",
+      "record_as": "Retain exact V_CHARP_INTERSECTION@3 source/certificate binding; do not create a duplicate contribution."
+    }
+  ],
+  "bounded_replay": {
+    "necessary": false,
+    "decision_relevant_question": null,
+    "reason": "The exact source and statement, the supported unchanged dependency interface, and the parent-verified successful historical compiler evidence leave no bounded mathematical computation unresolved.",
+    "fresh_run_performed": false,
+    "official_checks_owner": "parent"
+  },
+  "write_scope": {
+    "historical_inputs_modified": false,
+    "ledger_modified": false,
+    "lean_sources_created": false,
+    "ancillary_notes_or_plans_created": false,
+    "files_written": [
+      "research/draft_reviews/char-p-line-recovery/report.md",
+      "research/draft_reviews/char-p-line-recovery/verdict.json"
+    ]
+  }
+}

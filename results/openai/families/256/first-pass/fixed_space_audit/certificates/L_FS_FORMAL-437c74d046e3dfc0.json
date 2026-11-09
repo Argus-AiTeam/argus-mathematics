@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-L_FS_FORMAL-fb1ecb3f1844",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/256/first-pass/fixed_space_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/256/first-pass/fixed_space_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 10780,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/256/first-pass/fixed_space_audit/Main.lean",
+    "source_sha256": "04d210e20d37bd664365d7a8c161190339a8d0cee4ed382b9db6d07d2b9d092a",
+    "statement_fidelity": "families/256/first-pass/fixed_space_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "f1c9f6381ef9bb6227a6f0225c08e1e407bb5f44d965d9a476f565b94cd7d673",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/256/first-pass/fixed_space_audit/Main.lean:104:6: warning: try 'simp' instead of 'simpa'\n\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/fixed_space_audit/Main.lean",
+    "text": "import Mathlib.LinearAlgebra.Matrix.Block\nimport Mathlib.LinearAlgebra.ExteriorAlgebra.Grading\nimport Mathlib.LinearAlgebra.ExteriorPower.Pairing\n\nnoncomputable section\n\nopen scoped DirectSum\nopen Finset\n\nnamespace FixedSpaceAudit\n\nabbrev LayerIndex {m : ℕ} (t : Fin m → ℕ) := Σ a : Fin m, Fin (t a)\n\ndef layerFiberEquiv {m : ℕ} (t : Fin m → ℕ) (a : Fin m) :\n    Fin (t a) ≃ {x : LayerIndex t // x.1 = a} where\n  toFun i := ⟨⟨a, i⟩, rfl⟩\n  invFun x := by\n    rcases x with ⟨⟨b, i⟩, h⟩\n    cases h\n    exact i\n  left_inv _ := rfl\n  right_inv x := by\n    rcases x with ⟨⟨b, i⟩, h⟩\n    cases h\n    rfl\n\ntheorem det_layers {m : ℕ} (t : Fin m → ℕ)\n    (M : ∀ a, Matrix (Fin (t a)) (Fin (t a)) ℚ) :\n    (Matrix.blockDiagonal' M).det = ∏ a, (M a).det := by\n  classical\n  rw [(Matrix.blockTriangular_blockDiagonal' M).det_fintype]\n  apply Finset.prod_congr rfl\n  intro a _\n  let e := layerFiberEquiv t a\n  have h :\n      Matrix.reindex e.symm e.symm\n        ((Matrix.blockDiagonal' M).toSquareBlock Sigma.fst a) = M a := by\n    ext i j\n    change (Matrix.blockDiagonal' M) ⟨a, i⟩ ⟨a, j⟩ = M a i j\n    exact Matrix.blockDiagonal'_apply_eq M a i j\n  rw [← h, Matrix.det_reindex_self]\n\ndef orderedLayers {m : ℕ} (t : Fin m → ℕ)\n    (M : ∀ a, Matrix (Fin (t a)) (Fin (t a)) ℚ) :\n    Matrix (Fin (Fintype.card (LayerIndex t)))\n      (Fin (Fintype.card (LayerIndex t))) ℚ :=\n  Matrix.reindex (Fintype.equivFin (LayerIndex t))\n    (Fintype.equivFin (LayerIndex t)) (Matrix.blockDiagonal' M)\n\ntheorem orderedLayers_det {m : ℕ} (t : Fin m → ℕ)\n    (M : ∀ a, Matrix (Fin (t a)) (Fin (t a)) ℚ) :\n    (orderedLayers t M).det = ∏ a, (M a).det := by\n  rw [orderedLayers, Matrix.det_reindex_self, det_layers]\n\ndef coordinateVolume (N : ℕ) :\n    Module.Dual ℚ (⋀[ℚ]^N (Fin N → ℚ)) :=\n  exteriorPower.pairingDual ℚ (Fin N → ℚ) N\n    (exteriorPower.ιMulti ℚ N (fun j => LinearMap.proj j))\n\ndef topValue (N : ℕ) : ExteriorAlgebra ℚ (Fin N → ℚ) →ₗ[ℚ] ℚ :=\n  (coordinateVolume N).comp\n    ((DirectSum.component ℚ ℕ (fun s : ℕ => ⋀[ℚ]^s (Fin N → ℚ)) N).comp\n      (ExteriorAlgebra.GradedAlgebra.liftι ℚ (Fin N → ℚ)).toLinearMap)\n\ntheorem volume_wedge {N : ℕ} (M : Matrix (Fin N) (Fin N) ℚ) :\n    coordinateVolume N (exteriorPower.ιMulti ℚ N (fun i => M i)) = M.det := by\n  unfold coordinateVolume\n  rw [exteriorPower.pairingDual_ιMulti_ιMulti]\n  rfl\n\ntheorem topValue_wedge {N : ℕ} (M : Matrix (Fin N) (Fin N) ℚ) :\n    topValue N (ExteriorAlgebra.ιMulti ℚ N (fun i => M i)) = M.det := by\n  change topValue N\n    ((exteriorPower.ιMulti ℚ N (fun i => M i) : ⋀[ℚ]^N (Fin N → ℚ)) :\n      ExteriorAlgebra ℚ (Fin N → ℚ)) = M.det\n  dsimp only [topValue, LinearMap.comp_apply, AlgHom.toLinearMap_apply]\n  rw [ExteriorAlgebra.GradedAlgebra.liftι_eq]\n  change coordinateVolume N\n    (DirectSum.component ℚ ℕ (fun s : ℕ => ⋀[ℚ]^s (Fin N → ℚ)) N\n      (DirectSum.lof ℚ ℕ (fun s : ℕ => ⋀[ℚ]^s (Fin N → ℚ)) N\n        (exteriorPower.ιMulti ℚ N (fun i => M i)))) = M.det\n  rw [DirectSum.component.lof_self]\n  exact volume_wedge M\n\ntheorem topValue_homogeneous {N s : ℕ} (h : s < N)\n    (x : ⋀[ℚ]^s (Fin N → ℚ)) :\n    topValue N (x : ExteriorAlgebra ℚ (Fin N → ℚ)) = 0 := by\n  dsimp only [topValue, LinearMap.comp_apply, AlgHom.toLinearMap_apply]\n  rw [ExteriorAlgebra.GradedAlgebra.liftι_eq]\n  change coordinateVolume N\n    (DirectSum.component ℚ ℕ (fun s : ℕ => ⋀[ℚ]^s (Fin N → ℚ)) N\n      (DirectSum.lof ℚ ℕ (fun s : ℕ => ⋀[ℚ]^s (Fin N → ℚ)) s x)) = 0\n  rw [DirectSum.component.of]\n  simp [ne_of_lt h]\n\ntheorem homogeneous_product {N n : ℕ} (s : Fin n → ℕ)\n    (x : ∀ i, ⋀[ℚ]^(s i) (Fin N → ℚ)) :\n    (List.ofFn (fun i => (x i : ExteriorAlgebra ℚ (Fin N → ℚ)))).prod ∈\n      ⋀[ℚ]^(∑ i, s i) (Fin N → ℚ) := by\n  revert s x\n  induction n with\n  | zero =>\n      intro s x\n      simpa using\n        (SetLike.one_mem_graded (fun s : ℕ => ⋀[ℚ]^s (Fin N → ℚ)))\n  | succ n ih =>\n      intro s x\n      rw [List.ofFn_succ, List.prod_cons, Fin.sum_univ_succ]\n      exact SetLike.mul_mem_graded (x 0).property\n        (ih (fun i => s i.succ) (fun i => x i.succ))\n\ntheorem shorter_products_vanish {N n : ℕ} (s : Fin n → ℕ)\n    (x : ∀ i, ⋀[ℚ]^(s i) (Fin N → ℚ)) (h : (∑ i, s i) < N) :\n    topValue N\n      (List.ofFn (fun i => (x i : ExteriorAlgebra ℚ (Fin N → ℚ)))).prod = 0 := by\n  exact topValue_homogeneous h\n    ⟨_, homogeneous_product s x⟩\n\ntheorem filtered_coefficient {m : ℕ} (t : Fin m → ℕ)\n    (M : ∀ a, Matrix (Fin (t a)) (Fin (t a)) ℚ) :\n    topValue (Fintype.card (LayerIndex t))\n      (ExteriorAlgebra.ιMulti ℚ (Fintype.card (LayerIndex t))\n        (fun i => orderedLayers t M i)) = ∏ a, (M a).det := by\n  rw [topValue_wedge, orderedLayers_det]\n\ntheorem filtered_coefficient_nonzero {m : ℕ} (t : Fin m → ℕ)\n    (M : ∀ a, Matrix (Fin (t a)) (Fin (t a)) ℚ)\n    (h : ∀ a, (M a).det ≠ 0) :\n    topValue (Fintype.card (LayerIndex t))\n      (ExteriorAlgebra.ιMulti ℚ (Fintype.card (LayerIndex t))\n        (fun i => orderedLayers t M i)) ≠ 0 := by\n  rw [filtered_coefficient]\n  exact Finset.prod_ne_zero_iff.mpr (fun a _ => h a)\n\ntheorem filtered_wedge_nonzero {m : ℕ} (t : Fin m → ℕ)\n    (M : ∀ a, Matrix (Fin (t a)) (Fin (t a)) ℚ)\n    (h : ∀ a, (M a).det ≠ 0) :\n    ExteriorAlgebra.ιMulti ℚ (Fintype.card (LayerIndex t))\n      (fun i => orderedLayers t M i) ≠ 0 := by\n  intro hz\n  apply filtered_coefficient_nonzero t M h\n  rw [hz, map_zero]\n\ntheorem weighted_filtered_nonzero {m n : ℕ} (t : Fin m → ℕ)\n    (M : ∀ a, Matrix (Fin (t a)) (Fin (t a)) ℚ)\n    (c : Fin n → ℚ) (hc : ∀ j, c j ≠ 0)\n    (h : ∀ a, (M a).det ≠ 0) :\n    (∏ j, c j) *\n      topValue (Fintype.card (LayerIndex t))\n        (ExteriorAlgebra.ιMulti ℚ (Fintype.card (LayerIndex t))\n          (fun i => orderedLayers t M i)) ≠ 0 := by\n  exact mul_ne_zero\n    (Finset.prod_ne_zero_iff.mpr (fun j _ => hc j))\n    (filtered_coefficient_nonzero t M h)\n\ndef prefixMinor {m r : ℕ} (t : Fin m → ℕ) (ht : ∀ a, t a ≤ r)\n    (B : Matrix (Fin r) (Fin r) ℚ) (a : Fin m) :\n    Matrix (Fin (t a)) (Fin (t a)) ℚ :=\n  fun i j => B (Fin.castLE (ht a) i) (Fin.castLE (ht a) j)\n\ntheorem nested_minor_nonzero {m r : ℕ} (t : Fin m → ℕ) (ht : ∀ a, t a ≤ r)\n    (B : Matrix (Fin r) (Fin r) ℚ)\n    (h : ∀ a, (prefixMinor t ht B a).det ≠ 0) :\n    topValue (Fintype.card (LayerIndex t))\n      (ExteriorAlgebra.ιMulti ℚ (Fintype.card (LayerIndex t))\n        (fun i => orderedLayers t (prefixMinor t ht B) i)) ≠ 0 :=\n  filtered_coefficient_nonzero t (prefixMinor t ht B) h\n\nend FixedSpaceAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/fixed_space_audit/statement_fidelity.md",
+    "text": "# Fidelity of the universal algebraic core\n\nThis document describes claim `L_FS_FORMAL`, not a formalization of the\ntopological fixed-space theorem `C_FS`. All formal declarations are in\nnamespace `FixedSpaceAudit` in `Main.lean`. Scalars are exactly the rational\nnumbers. No assertion here is inferred from a finite numerical test.\n\n## Objects and quantifiers\n\n`LayerIndex t` is the disjoint union of `Fin (t a)` over `a : Fin m`, for\narbitrary natural `m` and arbitrary natural layer sizes `t a`. Empty layers\nand an empty set of layers are allowed. Its cardinality is the number `N`\nof exterior generators. There are no positivity, equal-size, genericity,\nor bounded-size assumptions.\n\n`layerFiberEquiv` identifies one layer with the corresponding fiber of the\ndisjoint-union projection. `det_layers` states, for every family `M a` of\nsquare rational matrices of these possibly unequal sizes, that the determinant\nof `Matrix.blockDiagonal' M` is the product of their determinants.\n`orderedLayers` reindexes BOTH axes of this matrix by the SAME equivalence\nwith `Fin N`; `orderedLayers_det` proves that this does not change the\ndeterminant. The equivalence need not be order-preserving.\n\n`coordinateVolume N` is the canonical pairing with the wedge of the `N`\ncoordinate covectors on `Fin N -> Q`. `topValue N` first projects the exterior\nalgebra onto exterior LENGTH `N`, then applies that covector. It is not a\nprojection by the weighted cohomological degrees `2a-1`.\n`volume_wedge` and `topValue_wedge` prove that evaluating this functional on\nthe exterior product of the ROW vectors of any `N` by `N` matrix gives its\nordinary determinant.\n\n## Main conclusions\n\n`filtered_coefficient` identifies the actual exterior top coefficient of\nthe rows of the block-diagonal matrix with the product of all layer\ndeterminants. `filtered_coefficient_nonzero` proves this coefficient is\nnonzero if EVERY layer determinant is nonzero.\n`filtered_wedge_nonzero` also proves that the exterior product itself is\nnonzero. `weighted_filtered_nonzero` allows multiplication by any finite\nfamily `c : Fin n -> Q` of nonzero rational coefficients. This family may\nalso be empty.\n\n`prefixMinor t ht B a` is the initial `t a` by `t a` square submatrix of an\narbitrary rational `r` by `r` matrix `B`; its only size hypothesis is\n`ht : forall a, t a <= r`. `nested_minor_nonzero` instantiates the universal\ncoefficient theorem with these submatrices, assuming their determinants\nare nonzero. In the manuscript application, first restrict the original\nrectangular matrix to the chosen `r` columns IN PIVOT ORDER, then take\n`t a = |{i : k_i >= a+1}|`. The formal theorem assumes the required minors;\nit does not construct the pivot columns or prove row rank.\n\n`topValue_homogeneous` annihilates ANY homogeneous exterior-length `s`\nelement when `s < N`. `homogeneous_product` proves that a finite ordered\nproduct of homogeneous elements has length equal to the sum of their\nlengths. `shorter_products_vanish` combines these facts: every such ordered\nproduct with total length strictly below `N` has top coefficient zero.\nThis is the algebraic reason shorter incidence terms cannot contribute.\nThe theorem does not assume commutativity of the exterior multiplication.\n\n## What remains mathematical rather than formal\n\nThe report proves the identification of the manuscript's exterior factors\nwith the layer matrices. Moving the original column-ordered factors and\nthe source generators into layer order introduces orientation signs;\nthe formal equalities use the SAME reindexing on both matrix axes and\ntherefore do not assert an unsigned equality in arbitrary original\norientations. The report gives the precise sign for its stated convention.\n\nThe formal source does NOT encode unitary groups, rational singular\ncohomology, primitive generators, incidence manifolds, Poincare duality,\ntransversality, arbitrary fixed unitary matrices, or the existence of an\nintersection. It does NOT prove the arbitrary-group nonsingular-system\ntheorem. Those are distinguished explicitly in the report and claim\nledger. A successful Lean run supports `L_FS_FORMAL`, not those topological\nclaims by itself.\n"
+  },
+  "subject": {
+    "content_hash": "43981c0c8ec9c2652f7c9d69e081ed9c838acc93710810b91106d6fc5cb9ffe4",
+    "kind": "claim",
+    "subject_id": "L_FS_FORMAL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

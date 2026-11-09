@@ -1,0 +1,684 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX-DR019",
+      "version": 1,
+      "statement": "Let k be a finite extension of Q_p, Omega the completion of its algebraic closure, and ell an odd prime different from p. Audit the entire-inverse-image collar-root lemma for smooth proper connected curves of genus at least two.",
+      "definitions": {
+        "review_scope": "Retrospective exploratory review of old collar-root work only; not a new manuscript-error search, novelty claim, downstream patching proof, or section-conjecture proof.",
+        "certification_limit": "The universal Lean core is not the analytic geometry. A finite graph or rational example is not universal existence. Skeleton-only control does not by itself control the entire inverse image.",
+        "provenance": "Old workspace 9000019; supplied snapshot dated 2026-11-06T10:20Z; manuscript revision 4eaee87548250b2682affda7d05d947c05554bae; old labels and supports require content/version review."
+      },
+      "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "DR019-COLLAR",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "For every permitted curve and finite family of coordinate disks, there exist a connected finite etale cover and concentric open subcollars with endpoints in abs(Omega*) on whose entire inverse images every coordinate has an analytic ell-th root.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+    },
+    {
+      "claim_id": "DR019-CORE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "For every compact topological space X, open N, and continuous real function v whose values outside N are rational, every irrational a strictly inside a real window has rational lower and upper bounds inside that window with the whole inverse open interval contained in N. The universal circuit Riemann-Hurwitz and stability identities hold, and a positive-size genus-zero stable tree side cannot have total valence 2*N-1.",
+      "formal_statement": "import Mathlib\n\nopen Set\n\nnamespace CollarRootAudit\n\ntheorem rational_collar_capture\n    {X : Type*} [TopologicalSpace X] [CompactSpace X]\n    (N : Set X) (hN : IsOpen N) (v : X → ℝ) (hv : Continuous v)\n    (hbad : ∀ x, x ∉ N → ∃ q : ℚ, v x = (q : ℝ))\n    {a lower upper : ℝ} (ha : Irrational a)\n    (hlower : lower < a) (hupper : a < upper) :\n    ∃ r R : ℚ,\n      lower < (r : ℝ) ∧ (r : ℝ) < a ∧\n      a < (R : ℝ) ∧ (R : ℝ) < upper ∧\n      ∀ x, (r : ℝ) < v x → v x < (R : ℝ) → x ∈ N := by\n  let F : Set ℝ := v '' Nᶜ\n  have hF : IsClosed F := (hN.isClosed_compl.isCompact.image hv).isClosed\n  have haF : a ∉ F := by\n    rintro ⟨x, hx, hxa⟩\n    obtain ⟨q, hq⟩ := hbad x hx\n    exact ha ⟨q, hq.symm.trans hxa⟩\n  have hopen : IsOpen (Fᶜ ∩ Ioo lower upper) :=\n    hF.isOpen_compl.inter isOpen_Ioo\n  have hmem : a ∈ Fᶜ ∩ Ioo lower upper := ⟨haF, hlower, hupper⟩\n  obtain ⟨l, u, hlu, hI⟩ :=\n    mem_nhds_iff_exists_Ioo_subset.mp (hopen.mem_nhds hmem)\n  obtain ⟨r, hlr, hra⟩ := exists_rat_btwn hlu.1\n  obtain ⟨R, haR, hRu⟩ := exists_rat_btwn hlu.2\n  have hrmem : (r : ℝ) ∈ Fᶜ ∩ Ioo lower upper :=\n    hI ⟨hlr, lt_trans hra hlu.2⟩\n  have hRmem : (R : ℝ) ∈ Fᶜ ∩ Ioo lower upper :=\n    hI ⟨lt_trans hlu.1 haR, hRu⟩\n  refine ⟨r, R, hrmem.2.1, hra, haR, hRmem.2.2, ?_⟩\n  intro x hxL hxU\n  by_contra hx\n  have hxF : v x ∈ F := ⟨x, hx, rfl⟩\n  exact (hI ⟨lt_trans hlr hxL, lt_trans hxU hRu⟩).1 hxF\n\ntheorem circuit_genus_balance (n g : ℤ) :\n    2 * (n * g) - 2 = n * (2 * g - 2) + 2 * (n - 1) := by\n  ring\n\ntheorem circuit_stability_balance (n g val : ℤ) :\n    2 * (n * g) - 2 + (2 + n * (val - 2)) =\n      n * (2 * g - 2 + val) := by\n  ring\n\ntheorem unramified_stability_balance (d g gp val valp : ℤ)\n    (hgenus : 2 * gp - 2 = d * (2 * g - 2))\n    (hval : valp = d * val) :\n    2 * gp - 2 + valp = d * (2 * g - 2 + val) := by\n  rw [hgenus, hval]\n  ring\n\ntheorem stable_tree_side_impossible (N total : ℕ)\n    (hpositive : 0 < N) (htree : total + 1 = 2 * N)\n    (hstable : 3 * N ≤ total) : False := by\n  omega\n\nend CollarRootAudit\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "1cf0fc5b7c7f64d6a5107db832ce1b48b8dca04a0040397792f2ce4e2ec242c7"
+    },
+    {
+      "claim_id": "DR019-COLLAR",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "For every permitted curve and finite family of coordinate disks, there exist a connected finite etale cover and concentric open subcollars with endpoints in abs(Omega*) on whose entire inverse images every coordinate has an analytic ell-th root.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "MT-RNS-DOMINATION",
+          "statement": "Every hyperbolic curve over a p-adic local field satisfies Sigma-RNS for Sigma all primes, and after finite ground extension every compactified normal model is dominated by the compactified stable model of a connected geometrically pro-Sigma finite etale Galois cover.",
+          "source": "Mochizuki and Tsujimura, RIMS Preprint 1974, revision March 30, 2024; exact primary PDF stored in research/collar_root_audit/sources/mochizuki_tsujimura.pdf.",
+          "source_id": "url:https://www.kurims.kyoto-u.ac.jp/~stsuji/Resolution%20of%20Nonsingularities%20for%20Arbitrary%20Hyperbolic%20Curves.pdf#2024-03-30",
+          "locator": "Theorem A and Proposition 2.4(iv)",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "58d4ba09ba05a18188e0cc5fc1dc9b10ff2cc38de10dd7b7b126d069777dbc65"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+    },
+    {
+      "claim_id": "DR019-COLLAR",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "For every permitted curve and finite family of coordinate disks, there exist a connected finite etale cover and concentric open subcollars with endpoints in abs(Omega*) on whose entire inverse images every coordinate has an analytic ell-th root.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "MT-RNS-DOMINATION",
+          "statement": "Every hyperbolic curve over a p-adic local field satisfies Sigma-RNS for Sigma all primes, and after finite ground extension every compactified normal model is dominated by the compactified stable model of a connected geometrically pro-Sigma finite etale Galois cover.",
+          "source": "Mochizuki and Tsujimura, RIMS Preprint 1974, revision March 30, 2024; exact primary PDF stored in research/collar_root_audit/sources/mochizuki_tsujimura.pdf.",
+          "source_id": "url:https://www.kurims.kyoto-u.ac.jp/~stsuji/Resolution%20of%20Nonsingularities%20for%20Arbitrary%20Hyperbolic%20Curves.pdf#2024-03-30",
+          "locator": "Theorem A and Proposition 2.4(iv)",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "58d4ba09ba05a18188e0cc5fc1dc9b10ff2cc38de10dd7b7b126d069777dbc65"
+        },
+        {
+          "assumption_id": "ABBR-TUBES-REDUCTION",
+          "statement": "For a semistable model, each component generic point has one type-2 inverse image; its complement is partitioned into open disk tubes over smooth closed points and finitely many open annular tubes over nodes. Reduction is compatible with a morphism of models.",
+          "source": "ABBR primary arXiv v3; exact source and the semistable local equations are discussed in research/collar_root_audit/report.md.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Definition 3.8; Section 3.11; Lemma 5.17 and its proof; functorial reduction preceding Proposition 5.12",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "7b7e0a44786c79dadfa32260e8fafdd8669e12e66e58362f9326b67aec39d1bd"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+    },
+    {
+      "claim_id": "DR019-COLLAR",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "For every permitted curve and finite family of coordinate disks, there exist a connected finite etale cover and concentric open subcollars with endpoints in abs(Omega*) on whose entire inverse images every coordinate has an analytic ell-th root.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "ABBR-TUBES-REDUCTION",
+          "statement": "For a semistable model, each component generic point has one type-2 inverse image; its complement is partitioned into open disk tubes over smooth closed points and finitely many open annular tubes over nodes. Reduction is compatible with a morphism of models.",
+          "source": "ABBR primary arXiv v3; exact source and the semistable local equations are discussed in research/collar_root_audit/report.md.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Definition 3.8; Section 3.11; Lemma 5.17 and its proof; functorial reduction preceding Proposition 5.12",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "7b7e0a44786c79dadfa32260e8fafdd8669e12e66e58362f9326b67aec39d1bd"
+        },
+        {
+          "assumption_id": "MT-RNS-DOMINATION",
+          "statement": "Every hyperbolic curve over a p-adic local field satisfies Sigma-RNS for Sigma all primes, and after finite ground extension every compactified normal model is dominated by the compactified stable model of a connected geometrically pro-Sigma finite etale Galois cover.",
+          "source": "Mochizuki and Tsujimura, RIMS Preprint 1974, revision March 30, 2024; exact primary PDF stored in research/collar_root_audit/sources/mochizuki_tsujimura.pdf.",
+          "source_id": "url:https://www.kurims.kyoto-u.ac.jp/~stsuji/Resolution%20of%20Nonsingularities%20for%20Arbitrary%20Hyperbolic%20Curves.pdf#2024-03-30",
+          "locator": "Theorem A and Proposition 2.4(iv)",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "58d4ba09ba05a18188e0cc5fc1dc9b10ff2cc38de10dd7b7b126d069777dbc65"
+        },
+        {
+          "assumption_id": "TEMKIN-COMPACT-TYPE2",
+          "statement": "Analytification preserves properness and separatedness, proper analytic spaces are compact, separated analytic spaces are Hausdorff, and affinoid spectra are compact. For a curve point of type 2 the value-group rational rank is zero by Abhyankar and the definition of type 2; over a divisible real ground value group this gives equality of the value groups.",
+          "source": "M. Temkin, Introduction to Berkovich analytic spaces, Jussieu Summer School 2010 preliminary lecture notes; exact primary PDF and transcription stored in research/collar_root_audit/sources/temkin_notes.pdf and temkin_notes.txt.",
+          "source_id": "url:https://berkovich-2010.imj-prg.fr/lecture-notes/Temkin-lecture-notes.pdf#jussieu-2010-preliminary",
+          "locator": "Fact 2.2.6(i); Definition 2.3.7, Exercise 2.3.8, Definition/Exercise 2.3.9(2); Definition 4.2.13(ii), Example/Exercise 4.2.14(iv); Fact 5.1.5",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "1df0f4483c89ba1655b2ceb01a720332487d54cc8ef3a9b02ac7e5f3e2bee040"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+    },
+    {
+      "claim_id": "DR019-COLLAR",
+      "version": 5,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "For every permitted curve and finite family of coordinate disks, there exist a connected finite etale cover and concentric open subcollars with endpoints in abs(Omega*) on whose entire inverse images every coordinate has an analytic ell-th root.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "ABBR-TUBES-REDUCTION",
+          "statement": "For a semistable model, each component generic point has one type-2 inverse image; its complement is partitioned into open disk tubes over smooth closed points and finitely many open annular tubes over nodes. Reduction is compatible with a morphism of models.",
+          "source": "ABBR primary arXiv v3; exact source and the semistable local equations are discussed in research/collar_root_audit/report.md.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Definition 3.8; Section 3.11; Lemma 5.17 and its proof; functorial reduction preceding Proposition 5.12",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "7b7e0a44786c79dadfa32260e8fafdd8669e12e66e58362f9326b67aec39d1bd"
+        },
+        {
+          "assumption_id": "MT-RNS-DOMINATION",
+          "statement": "Every hyperbolic curve over a p-adic local field satisfies Sigma-RNS for Sigma all primes, and after finite ground extension every compactified normal model is dominated by the compactified stable model of a connected geometrically pro-Sigma finite etale Galois cover.",
+          "source": "Mochizuki and Tsujimura, RIMS Preprint 1974, revision March 30, 2024; exact primary PDF stored in research/collar_root_audit/sources/mochizuki_tsujimura.pdf.",
+          "source_id": "url:https://www.kurims.kyoto-u.ac.jp/~stsuji/Resolution%20of%20Nonsingularities%20for%20Arbitrary%20Hyperbolic%20Curves.pdf#2024-03-30",
+          "locator": "Theorem A and Proposition 2.4(iv)",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "58d4ba09ba05a18188e0cc5fc1dc9b10ff2cc38de10dd7b7b126d069777dbc65"
+        },
+        {
+          "assumption_id": "TEMKIN-COMPACT-TYPE2",
+          "statement": "Analytification preserves properness and separatedness, proper analytic spaces are compact, separated analytic spaces are Hausdorff, and affinoid spectra are compact. For a curve point of type 2 the value-group rational rank is zero by Abhyankar and the definition of type 2; over a divisible real ground value group this gives equality of the value groups.",
+          "source": "M. Temkin, Introduction to Berkovich analytic spaces, Jussieu Summer School 2010 preliminary lecture notes; exact primary PDF and transcription stored in research/collar_root_audit/sources/temkin_notes.pdf and temkin_notes.txt.",
+          "source_id": "url:https://berkovich-2010.imj-prg.fr/lecture-notes/Temkin-lecture-notes.pdf#jussieu-2010-preliminary",
+          "locator": "Fact 2.2.6(i); Definition 2.3.7, Exercise 2.3.8, Definition/Exercise 2.3.9(2); Definition 4.2.13(ii), Example/Exercise 4.2.14(iv); Fact 5.1.5",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "1df0f4483c89ba1655b2ceb01a720332487d54cc8ef3a9b02ac7e5f3e2bee040"
+        },
+        {
+          "assumption_id": "ABBR-TAME-LIFT",
+          "statement": "A tame covering of metrized complexes over the skeleton of a fixed triangulated punctured curve lifts to a tame covering of triangulated punctured curves, allowing loops. Its skeleton and vertex set are the full inverse images, and all algebraic branch points lie among the prescribed punctures; with no punctures the lift is finite etale.",
+          "source": "Amini, Baker, Brugalle and Rabinoff, Lifting harmonic morphisms I; primary arXiv v3 PDF stored in research/collar_root_audit/sources/abbr_v3.pdf.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Theorem 7.7; Definitions 2.19, 2.21, 4.25 and 4.31; Section 4.27",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "adf276c93ba29cbae34c765d24ac7e29d9fb164984a9d92b1ffea23ec57e6c3a"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+    },
+    {
+      "claim_id": "DR019-COLLAR",
+      "version": 6,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "For every permitted curve and finite family of coordinate disks, there exist a connected finite etale cover and concentric open subcollars with endpoints in abs(Omega*) on whose entire inverse images every coordinate has an analytic ell-th root.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "ABBR-TAME-LIFT",
+          "statement": "A tame covering of metrized complexes over the skeleton of a fixed triangulated punctured curve lifts to a tame covering of triangulated punctured curves, allowing loops. Its skeleton and vertex set are the full inverse images, and all algebraic branch points lie among the prescribed punctures; with no punctures the lift is finite etale.",
+          "source": "Amini, Baker, Brugalle and Rabinoff, Lifting harmonic morphisms I; primary arXiv v3 PDF stored in research/collar_root_audit/sources/abbr_v3.pdf.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Theorem 7.7; Definitions 2.19, 2.21, 4.25 and 4.31; Section 4.27",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "adf276c93ba29cbae34c765d24ac7e29d9fb164984a9d92b1ffea23ec57e6c3a"
+        },
+        {
+          "assumption_id": "ABBR-TUBES-REDUCTION",
+          "statement": "For a semistable model, each component generic point has one type-2 inverse image; its complement is partitioned into open disk tubes over smooth closed points and finitely many open annular tubes over nodes. Reduction is compatible with a morphism of models.",
+          "source": "ABBR primary arXiv v3; exact source and the semistable local equations are discussed in research/collar_root_audit/report.md.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Definition 3.8; Section 3.11; Lemma 5.17 and its proof; functorial reduction preceding Proposition 5.12",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "7b7e0a44786c79dadfa32260e8fafdd8669e12e66e58362f9326b67aec39d1bd"
+        },
+        {
+          "assumption_id": "MT-RNS-DOMINATION",
+          "statement": "Every hyperbolic curve over a p-adic local field satisfies Sigma-RNS for Sigma all primes, and after finite ground extension every compactified normal model is dominated by the compactified stable model of a connected geometrically pro-Sigma finite etale Galois cover.",
+          "source": "Mochizuki and Tsujimura, RIMS Preprint 1974, revision March 30, 2024; exact primary PDF stored in research/collar_root_audit/sources/mochizuki_tsujimura.pdf.",
+          "source_id": "url:https://www.kurims.kyoto-u.ac.jp/~stsuji/Resolution%20of%20Nonsingularities%20for%20Arbitrary%20Hyperbolic%20Curves.pdf#2024-03-30",
+          "locator": "Theorem A and Proposition 2.4(iv)",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "58d4ba09ba05a18188e0cc5fc1dc9b10ff2cc38de10dd7b7b126d069777dbc65"
+        },
+        {
+          "assumption_id": "TEMKIN-COMPACT-TYPE2",
+          "statement": "Analytification preserves properness and separatedness, proper analytic spaces are compact, separated analytic spaces are Hausdorff, and affinoid spectra are compact. For a curve point of type 2 the value-group rational rank is zero by Abhyankar and the definition of type 2; over a divisible real ground value group this gives equality of the value groups.",
+          "source": "M. Temkin, Introduction to Berkovich analytic spaces, Jussieu Summer School 2010 preliminary lecture notes; exact primary PDF and transcription stored in research/collar_root_audit/sources/temkin_notes.pdf and temkin_notes.txt.",
+          "source_id": "url:https://berkovich-2010.imj-prg.fr/lecture-notes/Temkin-lecture-notes.pdf#jussieu-2010-preliminary",
+          "locator": "Fact 2.2.6(i); Definition 2.3.7, Exercise 2.3.8, Definition/Exercise 2.3.9(2); Definition 4.2.13(ii), Example/Exercise 4.2.14(iv); Fact 5.1.5",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "1df0f4483c89ba1655b2ceb01a720332487d54cc8ef3a9b02ac7e5f3e2bee040"
+        },
+        {
+          "assumption_id": "BPR-ANNULAR-FACTORIZATION",
+          "statement": "On a strict closed annulus a unit factors as a nonzero constant times an integral coordinate power times (1+g), with sup abs(g)<1. The proof on nested annuli and the disk-unit norm fact give the open-domain statements; the latter are justified separately in the report rather than attributed to Proposition 2.2 alone.",
+          "source": "Baker, Payne and Rabinoff, On the structure of nonarchimedean analytic curves; primary arXiv v1 PDF stored in research/collar_root_audit/sources/bpr_v1.pdf.",
+          "source_id": "arxiv:1404.0279v1",
+          "locator": "Proposition 2.2(1); Lemmas 2.12 and 2.13",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "5d5ab5d06be328558b0c5238ea3d97303f01a63a118315b1fa1e8cb0c3f5da6c"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+    },
+    {
+      "claim_id": "DR019-COLLAR",
+      "version": 7,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "For every permitted curve and finite family of coordinate disks, there exist a connected finite etale cover and concentric open subcollars with endpoints in abs(Omega*) on whose entire inverse images every coordinate has an analytic ell-th root.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "ABBR-TAME-LIFT",
+          "statement": "A tame covering of metrized complexes over the skeleton of a fixed triangulated punctured curve lifts to a tame covering of triangulated punctured curves, allowing loops. Its skeleton and vertex set are the full inverse images, and all algebraic branch points lie among the prescribed punctures; with no punctures the lift is finite etale.",
+          "source": "Amini, Baker, Brugalle and Rabinoff, Lifting harmonic morphisms I; primary arXiv v3 PDF stored in research/collar_root_audit/sources/abbr_v3.pdf.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Theorem 7.7; Definitions 2.19, 2.21, 4.25 and 4.31; Section 4.27",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "adf276c93ba29cbae34c765d24ac7e29d9fb164984a9d92b1ffea23ec57e6c3a"
+        },
+        {
+          "assumption_id": "ABBR-TUBES-REDUCTION",
+          "statement": "For a semistable model, each component generic point has one type-2 inverse image; its complement is partitioned into open disk tubes over smooth closed points and finitely many open annular tubes over nodes. Reduction is compatible with a morphism of models.",
+          "source": "ABBR primary arXiv v3; exact source and the semistable local equations are discussed in research/collar_root_audit/report.md.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Definition 3.8; Section 3.11; Lemma 5.17 and its proof; functorial reduction preceding Proposition 5.12",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "7b7e0a44786c79dadfa32260e8fafdd8669e12e66e58362f9326b67aec39d1bd"
+        },
+        {
+          "assumption_id": "BPR-ANNULAR-FACTORIZATION",
+          "statement": "On a strict closed annulus a unit factors as a nonzero constant times an integral coordinate power times (1+g), with sup abs(g)<1. The proof on nested annuli and the disk-unit norm fact give the open-domain statements; the latter are justified separately in the report rather than attributed to Proposition 2.2 alone.",
+          "source": "Baker, Payne and Rabinoff, On the structure of nonarchimedean analytic curves; primary arXiv v1 PDF stored in research/collar_root_audit/sources/bpr_v1.pdf.",
+          "source_id": "arxiv:1404.0279v1",
+          "locator": "Proposition 2.2(1); Lemmas 2.12 and 2.13",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "5d5ab5d06be328558b0c5238ea3d97303f01a63a118315b1fa1e8cb0c3f5da6c"
+        },
+        {
+          "assumption_id": "MT-RNS-DOMINATION",
+          "statement": "Every hyperbolic curve over a p-adic local field satisfies Sigma-RNS for Sigma all primes, and after finite ground extension every compactified normal model is dominated by the compactified stable model of a connected geometrically pro-Sigma finite etale Galois cover.",
+          "source": "Mochizuki and Tsujimura, RIMS Preprint 1974, revision March 30, 2024; exact primary PDF stored in research/collar_root_audit/sources/mochizuki_tsujimura.pdf.",
+          "source_id": "url:https://www.kurims.kyoto-u.ac.jp/~stsuji/Resolution%20of%20Nonsingularities%20for%20Arbitrary%20Hyperbolic%20Curves.pdf#2024-03-30",
+          "locator": "Theorem A and Proposition 2.4(iv)",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "58d4ba09ba05a18188e0cc5fc1dc9b10ff2cc38de10dd7b7b126d069777dbc65"
+        },
+        {
+          "assumption_id": "TEMKIN-COMPACT-TYPE2",
+          "statement": "Analytification preserves properness and separatedness, proper analytic spaces are compact, separated analytic spaces are Hausdorff, and affinoid spectra are compact. For a curve point of type 2 the value-group rational rank is zero by Abhyankar and the definition of type 2; over a divisible real ground value group this gives equality of the value groups.",
+          "source": "M. Temkin, Introduction to Berkovich analytic spaces, Jussieu Summer School 2010 preliminary lecture notes; exact primary PDF and transcription stored in research/collar_root_audit/sources/temkin_notes.pdf and temkin_notes.txt.",
+          "source_id": "url:https://berkovich-2010.imj-prg.fr/lecture-notes/Temkin-lecture-notes.pdf#jussieu-2010-preliminary",
+          "locator": "Fact 2.2.6(i); Definition 2.3.7, Exercise 2.3.8, Definition/Exercise 2.3.9(2); Definition 4.2.13(ii), Example/Exercise 4.2.14(iv); Fact 5.1.5",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "1df0f4483c89ba1655b2ceb01a720332487d54cc8ef3a9b02ac7e5f3e2bee040"
+        },
+        {
+          "assumption_id": "MILNE-DIVISIBILITY-TORSION",
+          "statement": "Multiplication by n on an abelian variety of dimension g is a surjective isogeny of degree n^(2g), etale when the characteristic does not divide n; over an algebraically closed field its prime-to-characteristic n-torsion is (Z/nZ)^(2g). Applied to the Jacobian this supplies divisor-class divisibility and nonzero ell-torsion when g is positive.",
+          "source": "J. S. Milne, Abelian Varieties, author version January 2, 2022; exact primary PDF stored in research/collar_root_audit/sources/milne_av.pdf.",
+          "source_id": "url:https://www.jmilne.org/math/xnotes/AVs.pdf#2022-01-02",
+          "locator": "Theorem 8.2 and Remark 8.4, with Proposition 8.1",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "ea6d6954b4629bc33b720b116d05ea57b0f456bf9758c7bedb4ccc51a37dc992"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+    },
+    {
+      "claim_id": "DR019-COLLAR",
+      "version": 8,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "For every permitted curve and finite family of coordinate disks, there exist a connected finite etale cover and concentric open subcollars with endpoints in abs(Omega*) on whose entire inverse images every coordinate has an analytic ell-th root.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "ABBR-TAME-LIFT",
+          "statement": "A tame covering of metrized complexes over the skeleton of a fixed triangulated punctured curve lifts to a tame covering of triangulated punctured curves, allowing loops. Its skeleton and vertex set are the full inverse images, and all algebraic branch points lie among the prescribed punctures; with no punctures the lift is finite etale.",
+          "source": "Amini, Baker, Brugalle and Rabinoff, Lifting harmonic morphisms I; primary arXiv v3 PDF stored in research/collar_root_audit/sources/abbr_v3.pdf.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Theorem 7.7; Definitions 2.19, 2.21, 4.25 and 4.31; Section 4.27",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "adf276c93ba29cbae34c765d24ac7e29d9fb164984a9d92b1ffea23ec57e6c3a"
+        },
+        {
+          "assumption_id": "ABBR-TUBES-REDUCTION",
+          "statement": "For a semistable model, each component generic point has one type-2 inverse image; its complement is partitioned into open disk tubes over smooth closed points and finitely many open annular tubes over nodes. Reduction is compatible with a morphism of models.",
+          "source": "ABBR primary arXiv v3; exact source and the semistable local equations are discussed in research/collar_root_audit/report.md.",
+          "source_id": "arxiv:1303.4812v3",
+          "locator": "Definition 3.8; Section 3.11; Lemma 5.17 and its proof; functorial reduction preceding Proposition 5.12",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "7b7e0a44786c79dadfa32260e8fafdd8669e12e66e58362f9326b67aec39d1bd"
+        },
+        {
+          "assumption_id": "BPR-ANNULAR-FACTORIZATION",
+          "statement": "On a strict closed annulus a unit factors as a nonzero constant times an integral coordinate power times (1+g), with sup abs(g)<1. The proof on nested annuli and the disk-unit norm fact give the open-domain statements; the latter are justified separately in the report rather than attributed to Proposition 2.2 alone.",
+          "source": "Baker, Payne and Rabinoff, On the structure of nonarchimedean analytic curves; primary arXiv v1 PDF stored in research/collar_root_audit/sources/bpr_v1.pdf.",
+          "source_id": "arxiv:1404.0279v1",
+          "locator": "Proposition 2.2(1); Lemmas 2.12 and 2.13",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "5d5ab5d06be328558b0c5238ea3d97303f01a63a118315b1fa1e8cb0c3f5da6c"
+        },
+        {
+          "assumption_id": "MILNE-DIVISIBILITY-TORSION",
+          "statement": "Multiplication by n on an abelian variety of dimension g is a surjective isogeny of degree n^(2g), etale when the characteristic does not divide n; over an algebraically closed field its prime-to-characteristic n-torsion is (Z/nZ)^(2g). Applied to the Jacobian this supplies divisor-class divisibility and nonzero ell-torsion when g is positive.",
+          "source": "J. S. Milne, Abelian Varieties, author version January 2, 2022; exact primary PDF stored in research/collar_root_audit/sources/milne_av.pdf.",
+          "source_id": "url:https://www.jmilne.org/math/xnotes/AVs.pdf#2022-01-02",
+          "locator": "Theorem 8.2 and Remark 8.4, with Proposition 8.1",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "ea6d6954b4629bc33b720b116d05ea57b0f456bf9758c7bedb4ccc51a37dc992"
+        },
+        {
+          "assumption_id": "MT-RNS-DOMINATION",
+          "statement": "Every hyperbolic curve over a p-adic local field satisfies Sigma-RNS for Sigma all primes, and after finite ground extension every compactified normal model is dominated by the compactified stable model of a connected geometrically pro-Sigma finite etale Galois cover.",
+          "source": "Mochizuki and Tsujimura, RIMS Preprint 1974, revision March 30, 2024; exact primary PDF stored in research/collar_root_audit/sources/mochizuki_tsujimura.pdf.",
+          "source_id": "url:https://www.kurims.kyoto-u.ac.jp/~stsuji/Resolution%20of%20Nonsingularities%20for%20Arbitrary%20Hyperbolic%20Curves.pdf#2024-03-30",
+          "locator": "Theorem A and Proposition 2.4(iv)",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "58d4ba09ba05a18188e0cc5fc1dc9b10ff2cc38de10dd7b7b126d069777dbc65"
+        },
+        {
+          "assumption_id": "TEMKIN-COMPACT-TYPE2",
+          "statement": "Analytification preserves properness and separatedness, proper analytic spaces are compact, separated analytic spaces are Hausdorff, and affinoid spectra are compact. For a curve point of type 2 the value-group rational rank is zero by Abhyankar and the definition of type 2; over a divisible real ground value group this gives equality of the value groups.",
+          "source": "M. Temkin, Introduction to Berkovich analytic spaces, Jussieu Summer School 2010 preliminary lecture notes; exact primary PDF and transcription stored in research/collar_root_audit/sources/temkin_notes.pdf and temkin_notes.txt.",
+          "source_id": "url:https://berkovich-2010.imj-prg.fr/lecture-notes/Temkin-lecture-notes.pdf#jussieu-2010-preliminary",
+          "locator": "Fact 2.2.6(i); Definition 2.3.7, Exercise 2.3.8, Definition/Exercise 2.3.9(2); Definition 4.2.13(ii), Example/Exercise 4.2.14(iv); Fact 5.1.5",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "1df0f4483c89ba1655b2ceb01a720332487d54cc8ef3a9b02ac7e5f3e2bee040"
+        },
+        {
+          "assumption_id": "FOUNDATIONAL-BRIDGES",
+          "statement": "The inherited analytic argument also uses finite descent and marked semistable reduction; completion and base change of model morphisms and their local tube equations; Jacobians as Pic^0, Kummer covers and tame Riemann-Hurwitz; Laurent/Tate algebra reductions and locally uniform binomial convergence; and finite-etale fibre products with connected components dominating connected factors. These bridges are mathematical rather than formalized inputs.",
+          "source": "Inherited foundational bridges in old 9000019/research/collar_root_audit/report.md, detailed and assessed in current research/draft_reviews/collar-root/report.md sections 3-4. This expository input has no separate canonical proposition identifier; it is not an additional specialized RNS or lifting theorem.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot-review019",
+          "content_hash": "05360bd68eee3f1c74fe2db79450a3c60b6e5558d8d9ad3b2443232693fc18a4"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+    },
+    {
+      "claim_id": "DR019-FINITE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX-DR019",
+        "content_hash": "d30c4eb20ca9c6469d8760996d08f52b2561cc768cf66766d1dc64982b201dad"
+      },
+      "natural_statement": "The specified two-vertex graph with three distinct parallel edges b0,b1,b2 has the cycles (b0,b1),(b1,b2),(b2,b0) as an exact double edge cover and remains connected after deleting any one edge. The old exact binomial controls for ell=3,5,7, coefficient degrees 0 through 12 modulo z^13, nine tame-prime pairs, thirty signed winding checks, the genus-2/4/10 example, and the radius interval (1/25,1/5) replay exactly. This asserts only those finite examples, not universal analytic cover existence or convergence.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d8f26bb1ae8ae36f6448d52cbfbb2361d2dac745e169badea211ea5ea408f542"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-DR019-CORE-6c5b0928e516",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-CORE",
+        "content_hash": "1cf0fc5b7c7f64d6a5107db832ce1b48b8dca04a0040397792f2ce4e2ec242c7"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/draft_reviews/universal-core/replay/certificates/DR019-CORE-d8ef9e0160e58fa0.json"
+    },
+    {
+      "evidence_id": "judgement-DR019-COLLAR-a2cd7764bdab",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-COLLAR",
+        "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-review019",
+      "artifact": "research/draft_reviews/collar-root/report.md"
+    },
+    {
+      "evidence_id": "judgement-DR019-CORE-ba8d7557a9f4",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-CORE",
+        "content_hash": "1cf0fc5b7c7f64d6a5107db832ce1b48b8dca04a0040397792f2ce4e2ec242c7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-review019",
+      "artifact": "research/draft_reviews/universal-core/replay/certificates/DR019-CORE-d8ef9e0160e58fa0.json"
+    },
+    {
+      "evidence_id": "judgement-DR019-FINITE-364d13543098",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-FINITE",
+        "content_hash": "d8f26bb1ae8ae36f6448d52cbfbb2361d2dac745e169badea211ea5ea408f542"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot-review019",
+      "artifact": "research/draft_reviews/finite-certificate/report.md"
+    },
+    {
+      "evidence_id": "judgement-MT-RNS-DOMINATION-af467b4c3dbd",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "MT-RNS-DOMINATION",
+        "content_hash": "58d4ba09ba05a18188e0cc5fc1dc9b10ff2cc38de10dd7b7b126d069777dbc65"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reader:collar-source-assessment",
+      "artifact": "research/draft_reviews/collar-root/report.md"
+    },
+    {
+      "evidence_id": "judgement-ABBR-TAME-LIFT-8c62b8e0bedb",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "ABBR-TAME-LIFT",
+        "content_hash": "adf276c93ba29cbae34c765d24ac7e29d9fb164984a9d92b1ffea23ec57e6c3a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reader:collar-source-assessment",
+      "artifact": "research/draft_reviews/collar-root/report.md"
+    },
+    {
+      "evidence_id": "judgement-ABBR-TUBES-REDUCTION-81aa829a2776",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "ABBR-TUBES-REDUCTION",
+        "content_hash": "7b7e0a44786c79dadfa32260e8fafdd8669e12e66e58362f9326b67aec39d1bd"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reader:collar-source-assessment",
+      "artifact": "research/draft_reviews/collar-root/report.md"
+    },
+    {
+      "evidence_id": "judgement-TEMKIN-COMPACT-TYPE2-0f3fbfbbfb78",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "TEMKIN-COMPACT-TYPE2",
+        "content_hash": "1df0f4483c89ba1655b2ceb01a720332487d54cc8ef3a9b02ac7e5f3e2bee040"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reader:collar-source-assessment",
+      "artifact": "research/draft_reviews/collar-root/report.md"
+    },
+    {
+      "evidence_id": "judgement-MILNE-DIVISIBILITY-TORSION-ad9803fc308d",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "MILNE-DIVISIBILITY-TORSION",
+        "content_hash": "ea6d6954b4629bc33b720b116d05ea57b0f456bf9758c7bedb4ccc51a37dc992"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reader:collar-source-assessment",
+      "artifact": "research/draft_reviews/collar-root/report.md"
+    },
+    {
+      "evidence_id": "judgement-BPR-ANNULAR-FACTORIZATION-a29eb51b222a",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "BPR-ANNULAR-FACTORIZATION",
+        "content_hash": "5d5ab5d06be328558b0c5238ea3d97303f01a63a118315b1fa1e8cb0c3f5da6c"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reader:collar-source-assessment",
+      "artifact": "research/draft_reviews/collar-root/report.md"
+    },
+    {
+      "evidence_id": "judgement-DR019-COLLAR-52d0026a3f53",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-COLLAR",
+        "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-b382ecb8ab0c",
+      "artifact": "research/draft_reviews/collar-root/report.md"
+    },
+    {
+      "evidence_id": "judgement-DR019-CORE-409cf06dc7ed",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-CORE",
+        "content_hash": "1cf0fc5b7c7f64d6a5107db832ce1b48b8dca04a0040397792f2ce4e2ec242c7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-b382ecb8ab0c",
+      "artifact": "research/draft_reviews/universal-core/replay/certificates/DR019-CORE-d8ef9e0160e58fa0.json"
+    },
+    {
+      "evidence_id": "judgement-DR019-FINITE-f9acec458d02",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-FINITE",
+        "content_hash": "d8f26bb1ae8ae36f6448d52cbfbb2361d2dac745e169badea211ea5ea408f542"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-b382ecb8ab0c",
+      "artifact": "research/draft_reviews/finite-certificate/report.md"
+    },
+    {
+      "evidence_id": "citation-ABBR-TAME-LIFT-89b93e62f55f",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "ABBR-TAME-LIFT",
+        "content_hash": "adf276c93ba29cbae34c765d24ac7e29d9fb164984a9d92b1ffea23ec57e6c3a"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reader:copilot-c66fb8ad",
+      "artifact": "research/literature/65f4365081d1b3af195d400e1c799aa0.json"
+    },
+    {
+      "evidence_id": "citation-ABBR-TUBES-REDUCTION-1169e7d7d9cd",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "ABBR-TUBES-REDUCTION",
+        "content_hash": "7b7e0a44786c79dadfa32260e8fafdd8669e12e66e58362f9326b67aec39d1bd"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reader:copilot-c66fb8ad",
+      "artifact": "research/literature/27b01462c9f9702a48edccd36c96d801.json"
+    },
+    {
+      "evidence_id": "citation-BPR-ANNULAR-FACTORIZATION-4ea6bbde902b",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "BPR-ANNULAR-FACTORIZATION",
+        "content_hash": "5d5ab5d06be328558b0c5238ea3d97303f01a63a118315b1fa1e8cb0c3f5da6c"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reader:copilot-c66fb8ad",
+      "artifact": "research/literature/360a27bfff77a537c0e6cb9b9dbf844d.json"
+    },
+    {
+      "evidence_id": "citation-MILNE-DIVISIBILITY-TORSION-7a6446cd5694",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "MILNE-DIVISIBILITY-TORSION",
+        "content_hash": "ea6d6954b4629bc33b720b116d05ea57b0f456bf9758c7bedb4ccc51a37dc992"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reader:copilot-c66fb8ad",
+      "artifact": "research/literature/ab3e09185e25e7c19ccf66fe4127498a.json"
+    },
+    {
+      "evidence_id": "citation-MT-RNS-DOMINATION-d78a462d9a36",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "MT-RNS-DOMINATION",
+        "content_hash": "58d4ba09ba05a18188e0cc5fc1dc9b10ff2cc38de10dd7b7b126d069777dbc65"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reader:copilot-c66fb8ad",
+      "artifact": "research/literature/8a9fe82961fd5f0693ea45f03cc67d80.json"
+    },
+    {
+      "evidence_id": "citation-TEMKIN-COMPACT-TYPE2-4c41aaf8520e",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "TEMKIN-COMPACT-TYPE2",
+        "content_hash": "1df0f4483c89ba1655b2ceb01a720332487d54cc8ef3a9b02ac7e5f3e2bee040"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reader:copilot-c66fb8ad",
+      "artifact": "research/literature/18cbb2a5c897edbd2786268949e8b121.json"
+    },
+    {
+      "evidence_id": "judgement-DR019-CORE-9e60f914f51c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-CORE",
+        "content_hash": "1cf0fc5b7c7f64d6a5107db832ce1b48b8dca04a0040397792f2ce4e2ec242c7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification",
+      "artifact": "research/draft_reviews/universal-core/replay/certificates/DR019-CORE-d8ef9e0160e58fa0.json"
+    },
+    {
+      "evidence_id": "judgement-DR019-COLLAR-6e06e5452039",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-COLLAR",
+        "content_hash": "a9da41e5fd669e9b52054ce16f4b6f4498fadf2bfc1219d0ccdce43efa36ad2e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification",
+      "artifact": "research/draft_reviews/collar-root/report.md"
+    },
+    {
+      "evidence_id": "judgement-DR019-FINITE-e4401e568476",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "DR019-FINITE",
+        "content_hash": "d8f26bb1ae8ae36f6448d52cbfbb2361d2dac745e169badea211ea5ea408f542"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-final-certification",
+      "artifact": "research/draft_reviews/finite-certificate/report.md"
+    }
+  ],
+  "routes": []
+}

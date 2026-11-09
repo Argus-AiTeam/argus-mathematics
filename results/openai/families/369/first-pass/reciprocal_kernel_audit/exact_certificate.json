@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "claim": "C_RK",
+  "extension_claim": "C_RK_MEASURE",
+  "result_class": "new_theorem",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "certification_kind": "universal analytic proof with a kernel-checked universal algebraic core",
+  "analytic_proof": "REPORT.md",
+  "theorem_A": {
+    "source": "build/sections/05-reciprocal-kernels.tex, thm:negative-kernel; definitions in build/sections/04-boundary-kernels.tex",
+    "hypotheses": [
+      "dq=a dx on the open unit disk",
+      "a is measurable, nonnegative and essentially bounded",
+      "there exists 0<d<1 with integral psi^2 dq <= d integral |grad psi|^2 for all psi in H^1_0",
+      "p is any interior point",
+      "K, R and N are the exact nonnegative chain kernels from Section 4"
+    ],
+    "conclusion": "For every finite boundary family and real coefficients summing to zero, sum a_i a_j D_p(s_i,s_j)<=0, where D_p(s,t)=K(p,s)K(p,t)/N(s,t) off diagonal and zero on diagonal."
+  },
+  "theorem_B": {
+    "hypotheses": [
+      "nu is a finite nonnegative Borel measure with compact support inside the disk",
+      "the unperturbed Green integral operator on L2(nu) has norm strictly less than 1",
+      "G(x,.) belongs to L2(nu) for every interior x"
+    ],
+    "conclusion": "Every finite interior reciprocal resolvent matrix with diagonal zero has at most one positive eigenvalue; the stated K and off-diagonal R,N evaluations are finite and their D_p kernel is conditionally negative semidefinite.",
+    "additional_example": "nu=tau times length on [-1/2,1/2], for tau>=0 and tau*(1+log(4))/(2*pi)<1; in particular tau=1.",
+    "example_norm_bound": "(1+log(4))/(2*pi)<1/2 for tau=1",
+    "example_section_square_bound": "((log(4))^2+2*log(4)+2)/(4*pi^2)"
+  },
+  "formal_core": {
+    "claim": "C_RK_SCHUR",
+    "source": "lean/Main.lean",
+    "statement_fidelity": "lean/statement_fidelity.md",
+    "required_lean_version": "4.31.0",
+    "central_declarations": [
+      "ReciprocalKernel.schur_resolvent_psd",
+      "ReciprocalKernel.normalized_column_update_psd"
+    ],
+    "statement": "For every finite real PSD U, a>0, c>=0 and U_ii<a, U_ij/((1+ca)*(1+ca-cU_ij)) is PSD.",
+    "excluded_scope": "No PDE, measure, boundary-limit or full hot-spots assertion is encoded in the Lean source."
+  },
+  "symbolic_identities": [
+    "lorentz_normalization",
+    "mixture_division",
+    "schur_geometric_ratio",
+    "reciprocal_column_normalization",
+    "update_defect",
+    "schur_series_sum",
+    "elimination_coefficient",
+    "one_sided_radial_factor",
+    "two_sided_radial_factor",
+    "logarithm_chord_majorant"
+  ],
+  "rational_update": {
+    "scope": "Corroboration only, not a proof of the universal theorems.",
+    "points": ["0", "1/2", "-1/2"],
+    "initial_matrix": "M_ij=1/(h(x_i,x_j)+1/2), the 4*pi-scaled epsilon=1 Green regularization",
+    "node_index": 0,
+    "quadrature_weight": "1/12",
+    "column_update_coefficient": "1/10",
+    "reciprocal_matrix": [
+      ["5/12", "25/36", "25/36"],
+      ["25/36", "125/268", "5125/2988"],
+      ["25/36", "5125/2988", "125/268"]
+    ],
+    "inertia": [1, 2, 0],
+    "jacobian_operation": "matrix.inertia.compute",
+    "adapter_payload": "jacobian_payload.json",
+    "adapter_typed_output": "jacobian_output.json",
+    "adapter_status": "jacobian_status.json"
+  },
+  "independence_and_novelty": {
+    "independent_reviewer_acceptance": "not supplied by this Engineer certificate",
+    "novelty": "Extension beyond the staged bounded-density theorem; global novelty remains for independent assessment. Bounded primary-source search did not locate the exact PDE or singular-measure result.",
+    "false_manuscript_assertions_identified": [],
+    "main_hot_spots_theorem": "not certified"
+  }
+}

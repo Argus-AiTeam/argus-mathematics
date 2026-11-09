@@ -1,0 +1,133 @@
+{
+  "goal": "C_CONE_DROP",
+  "routes": [
+    {
+      "name": "R_CONE_UNIVERSAL",
+      "status": "current",
+      "evidence": "research/cone_drop_audit/report.md"
+    },
+    {
+      "name": "R_CONE_SPECIALIZE",
+      "status": "current",
+      "evidence": "research/cone_drop_audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000299": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 299 (The Kirchberg–Rørdam character criterion and infinite tensor-power Jiang–Su stability.; papers: The Kirchberg–Rørdam character criterion; Lean status: Partially/Comparator formalized (lean/docs/299.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": false,
+      "depends_on": ["C_CONE_DROP"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_CONE_DROP": {
+      "statement": "For every nonzero unital complex C*-algebra P and unital eta from the unitized M2 cone with full eta(t e11), a finite maximal tensor power contains the exact equivalent orthogonal pair and fixed-cutoff defect comparison of prop:cone-drop.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_CONE_GENERAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_drop_audit/report.md", "research/cone_drop_audit/exact_certificate.json", "research/cone_drop_audit/verify.py"]
+    },
+    "C_CONE_GENERAL": {
+      "statement": "For every d>=2, full rank-one corner of a unital unitized Md-cone map into any nonzero unital P gives d exact equivalent orthogonal positive contractions in P tensor_max (N^L+L), for every L>=1 with d^L>=N, whose defect is Cuntz below every fixed cutoff (b1-lambda)+, 0<lambda<1.",
+      "status": "open",
+      "depends_on": ["C_CONE_FULLCUT", "C_CONE_SIMPLEX", "C_CONE_CUBE", "C_CONE_SUPPORT", "C_CONE_AMPLIFICATION", "C_CONE_FORMAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_drop_audit/report.md", "research/cone_drop_audit/exact_certificate.json", "research/cone_drop_audit/verify.py", "research/cone_drop_audit/Main.lean", "research/cone_drop_audit/statement_fidelity.md"]
+    },
+    "C_CONE_FULLCUT": {
+      "statement": "Every full positive contraction in a nonzero unital C*-algebra has a cut c=(b-delta)+ and an exact finite-column witness 1=V*diag(c,...,c)V.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_drop_audit/report.md"]
+    },
+    "C_CONE_SIMPLEX": {
+      "statement": "In every finite dimension k the recursive partial-flip construction gives continuous unital matrix embeddings supported on exactly the available simplex faces, including the terminal vertex.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_drop_audit/report.md", "research/cone_drop_audit/Main.lean"]
+    },
+    "C_CONE_CUBE": {
+      "statement": "The maximal tensor power of the unitized matrix cone is the continuous cubical section algebra with scalar zero-coordinate boundary fibers.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_drop_audit/report.md"]
+    },
+    "C_CONE_SUPPORT": {
+      "statement": "For every d>=2,k>=1 and delta in (0,1), the cubical formulas define d exactly equivalent orthogonal positive contractions, continuous at the origin, with defect X and orthogonal Y=sum yj satisfying a1 Y=Y and k[X]<=N[Y].",
+      "status": "open",
+      "depends_on": ["C_CONE_SIMPLEX", "C_CONE_CUBE", "C_CONE_FULLCUT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_drop_audit/report.md", "research/cone_drop_audit/Main.lean"]
+    },
+    "C_CONE_AMPLIFICATION": {
+      "statement": "For every d>=2,N>=1 and every L>=1 with d^L>=N, put e=c tensor L,k=N^L,m=k+L. Then N[e]<=[1]<=k[e] removes the comparison multiplicities by tensoring, without cancellation.",
+      "status": "open",
+      "depends_on": ["C_CONE_FULLCUT", "C_CONE_SUPPORT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_drop_audit/report.md", "research/cone_drop_audit/Main.lean"]
+    },
+    "C_CONE_FORMAL": {
+      "statement": "Universal algebraic, scalar-boundary, and ordered-tensor core identities underlying the cone construction have proof-hole-free machine-checkable supporting proofs.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cone_drop_audit/Main.lean", "research/cone_drop_audit/statement_fidelity.md", "research/cone_drop_audit/lean/certificates/C_CONE_FORMAL-57b853c481c8bb7e.json"]
+    },
+    "C_FULL_CONE": {
+      "statement": "The tensor-label and full square-zero construction in tensor.tex gives a full cone corner in a finite maximal tensor power of any unital characterless algebra.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Kirchberg-Rordam-character-criterion-September-25-2026/build/sections/tensor.tex"]
+    },
+    "C_FINITE": {
+      "statement": "Theorem thm:finite: every nonzero unital complex characterless C*-algebra has a unital I(2,3) map into a finite maximal tensor power.",
+      "status": "open",
+      "depends_on": ["C_FULL_CONE", "C_CONE_DROP", "C_RW"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_RW": {
+      "statement": "Rordam-Winter Proposition 5.1(ii) implies (iv), in the n=2 case, without a stable-rank-one hypothesis.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Kirchberg-Rordam-character-criterion-September-25-2026/build/sections/preliminaries.tex"]
+    },
+    "C_MAIN": {
+      "statement": "Theorem thm:main follows from the finite construction, separable reduction, and the precise Kirchberg-Rordam central-sequence inputs.",
+      "status": "open",
+      "depends_on": ["C_FINITE", "C_KR"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_KR": {
+      "statement": "The same-unit commuting-copies lemma and the subhomogeneous central-sequence absorption criterion apply with the manuscript's stated quantifiers.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_INFINITE": {
+      "statement": "The infinite minimal tensor-power corollary follows from the finite map, the maximal-to-minimal quotient, and Dadarlat-Toms Theorem 1.1.",
+      "status": "open",
+      "depends_on": ["C_FINITE", "C_DT"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_DT": {
+      "statement": "Dadarlat-Toms Theorem 1.1 applies to the same-unit subhomogeneous characterless image in the infinite minimal tensor power.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    }
+  }
+}

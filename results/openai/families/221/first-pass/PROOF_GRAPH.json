@@ -1,0 +1,102 @@
+{
+  "goal": "C9000221",
+  "routes": [
+    {
+      "name": "universal-retained-kernel-and-exact-mass",
+      "status": "current",
+      "goal": "C_SHIFTED_TREE_CORE",
+      "evidence": "research/shifted_tree_core/proof.md"
+    }
+  ],
+  "nodes": {
+    "C9000221": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 221 (The Mézard–Parisi formula for diluted spin glasses.; papers: The Mézard–Parisi formula for diluted spin glasses; Lean status: Partially/Comparator formalized (lean/docs/221.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_MP_FORMULA"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MP_FORMULA": {
+      "statement": "Under model:integrability through model:positivity, lim_N F_N = inf_r Phi_r.",
+      "status": "open",
+      "depends_on": ["C_PERTURBATION_IDENTITIES", "C_DECORRELATION", "C_CAVITY_COMPARISON"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Mezard-Parisi-formula-for-diluted-spin-glasses-September-23-2026/build/sections/model.tex"]
+    },
+    "C_PERTURBATION_IDENTITIES": {
+      "statement": "The manuscript's selected perturbations imply pert:tree-identity for every prescribed finite tree.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_DECORRELATION": {
+      "statement": "The prescribed-tree identities imply decor:overlap-concentration.",
+      "status": "open",
+      "depends_on": ["C_PERTURBATION_IDENTITIES", "C_SHIFTED_TREE_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Mezard-Parisi-formula-for-diluted-spin-glasses-September-23-2026/build/sections/decorrelation.tex"]
+    },
+    "C_CAVITY_COMPARISON": {
+      "statement": "Cavity comparison, interpolation, and first-moment reduction identify both bounds on the variational pressure.",
+      "status": "open",
+      "depends_on": ["C_DECORRELATION"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_SHIFTED_TREE_CORE": {
+      "statement": "For arbitrary admissible old and shifted target trees, the signed retained-prefix coefficients and the depth-uniform normalized absolute bound used in decor:induction-identity hold.",
+      "status": "in_progress",
+      "depends_on": ["C_CORE_SIGNED", "C_CORE_RETAINED", "C_EXACT_SHIFTED_MASS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shifted_tree_core/proof.md"]
+    },
+    "C_CORE_SIGNED": {
+      "statement": "The old-subtree cancellation gives m_d-j m_(d+1), its iterated reference product, and the shifted prefix coefficients -c_l J and m_e J.",
+      "status": "in_progress",
+      "depends_on": ["C_CORE_FORMAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shifted_tree_core/proof.md", "research/shifted_tree_core/jacobian_output.json"]
+    },
+    "C_CORE_RETAINED": {
+      "statement": "Pruning new branches preserves the old-tree and retained-prefix sampling law within every shifted side-II prefix class.",
+      "status": "in_progress",
+      "depends_on": ["C_CORE_FORMAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shifted_tree_core/proof.md"]
+    },
+    "C_CORE_BOUND": {
+      "statement": "The absolute extension mass is bounded by a size-dependent constant times one delta for each target vertex absent at every old branching depth; division by J is depth-uniform in the interior.",
+      "status": "in_progress",
+      "depends_on": ["C_CORE_FORMAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shifted_tree_core/proof.md"]
+    },
+    "C_EXACT_SHIFTED_MASS": {
+      "statement": "For arbitrary admissible s-leaf shifted copies with shifted depths absent from all old branch depths, sum_E |c_E|/J=2*s^2+delta; no interior-depth bound is needed.",
+      "status": "in_progress",
+      "depends_on": ["C_REFERENCE_FREE_EXACT_MASS", "C_CORE_SIGNED"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shifted_tree_core/proof.md", "research/shifted_tree_core/verify.py", "research/shifted_tree_core/exact_certificate.json"]
+    },
+    "C_REFERENCE_FREE_EXACT_MASS": {
+      "statement": "For arbitrary strictly increasing meshes and reference-free old/target trees with q/r leaves and disjoint branch-depth sets, the absolute extension sum is (2*q*r-m_u)*|kappa(U)|, via exactly q*r one-old-leaf histories.",
+      "status": "in_progress",
+      "depends_on": ["C_CORE_FORMAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shifted_tree_core/proof.md", "research/shifted_tree_core/verify.py", "research/shifted_tree_core/exact_certificate.json"]
+    },
+    "C_CORE_FORMAL": {
+      "statement": "The arbitrary-full-tree, finite-history, kernel-pruning, multiway normalization, old-selection commutation, and exact sign/count normal-form algebra in Main.lean hold with their explicitly stated hypotheses. The geometric history translation is supplied in prose, not encoded as a full Lean state-transition system.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "mechanical_verified": true,
+      "independent_review_required": true,
+      "evidence": ["research/shifted_tree_core/Main.lean", "research/shifted_tree_core/statement_fidelity.md", "research/shifted_tree_core/certificates/C_CORE_FORMAL-3acd4c2aa2c719d9.json"]
+    }
+  }
+}

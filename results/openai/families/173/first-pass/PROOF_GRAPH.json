@@ -1,0 +1,104 @@
+{
+  "goal": "C9000173",
+  "routes": [],
+  "nodes": {
+    "C9000173": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 173 (Seymour’s second-neighborhood conjecture.; papers: A proof of Seymour’s second-neighborhood conjecture; Lean status: Partially/Comparator formalized (lean/docs/173.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PRUNING"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PRUNING": {
+      "statement": "For every finite binary relation and separate pair families R,C, there is conflict-free pruning retaining every initially conflict-free member and deleting at most |H| plus the number of subsequently uncovered points of Z.",
+      "status": "open",
+      "depends_on": ["C_COEFFICIENTS", "C_KERNEL_CORE", "C_AUGMENTED_BOUND", "C_COVER_PRUNING"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/A-proof-of-Seymours-second-neighborhood-conjecture-September-23-2026/build/source/02-pruning.tex",
+        "research/pruning-core/pruning_theorem.md",
+        "research/pruning-core/verify.py",
+        "research/pruning-core/exact_certificate.json"
+      ]
+    },
+    "C_COEFFICIENTS": {
+      "statement": "The fixed positive integer entry for arrow e, 2^(2^e), simultaneously realizes every structural submatrix rank needed for L,N and all D^{p,i}; the two arrays may be chosen equal.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/pruning-core/pruning_theorem.md",
+        "research/pruning-core/exact_certificate.json"
+      ]
+    },
+    "C_KERNEL_CORE": {
+      "statement": "Maximum support rank implies the conflict-kernel identity after restriction; this identity makes the matched-endpoint kernel lifts have independent B-images in ker A.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/pruning-core/Main.lean",
+        "research/pruning-core/statement_fidelity.md",
+        "research/pruning-core/certificates/C_KERNEL_CORE-80fa24aa3a013b89.json"
+      ]
+    },
+    "C_AUGMENTED_BOUND": {
+      "statement": "Every augmented matching has size at most |Z|+|H|, using a maximum matching minimizing original-original edges and the certified kernel core.",
+      "status": "open",
+      "depends_on": ["C_COEFFICIENTS", "C_KERNEL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/pruning-core/pruning_theorem.md",
+        "research/pruning-core/Main.lean"
+      ]
+    },
+    "C_COVER_PRUNING": {
+      "statement": "An alternating-path minimum vertex cover omitting isolated vertices gives the full deletion cost and retains initially conflict-free members.",
+      "status": "open",
+      "depends_on": ["C_AUGMENTED_BOUND"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/pruning-core/pruning_theorem.md",
+        "research/pruning-core/verify.py"
+      ]
+    },
+    "M_SUBSET_DEFICIT": {
+      "statement": "An order-minimal then arc-minimal counterexample satisfies |F^2(S)\\F(S)|<|F(S)\\S| for every nonempty proper S.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-proof-of-Seymours-second-neighborhood-conjecture-September-23-2026/build/source/01-reduction.tex"]
+    },
+    "M_BLOWUP": {
+      "statement": "A transitive-tournament blowup with block size m>|V(D)| amplifies subset deficit to strict subset concavity.",
+      "status": "open",
+      "depends_on": ["M_SUBSET_DEFICIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-proof-of-Seymours-second-neighborhood-conjecture-September-23-2026/build/source/01-reduction.tex"]
+    },
+    "M_REDUCTION": {
+      "statement": "A counterexample to Seymour's conjecture yields an oriented graph with positive indegrees and strict subset concavity.",
+      "status": "open",
+      "depends_on": ["M_SUBSET_DEFICIT", "M_BLOWUP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-proof-of-Seymours-second-neighborhood-conjecture-September-23-2026/build/source/01-reduction.tex"]
+    },
+    "M_INCOMPATIBILITY": {
+      "statement": "No nonempty finite oriented graph with positive indegrees has strict subset concavity.",
+      "status": "open",
+      "depends_on": ["C_PRUNING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-proof-of-Seymours-second-neighborhood-conjecture-September-23-2026/build/source/03-incompatibility.tex"]
+    },
+    "M_MAIN": {
+      "statement": "Every nonempty finite oriented graph has a vertex with at least as many exact second out-neighbors as first out-neighbors.",
+      "status": "open",
+      "depends_on": ["M_REDUCTION", "M_INCOMPATIBILITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-proof-of-Seymours-second-neighborhood-conjecture-September-23-2026/build/source/00-introduction.tex"]
+    }
+  }
+}

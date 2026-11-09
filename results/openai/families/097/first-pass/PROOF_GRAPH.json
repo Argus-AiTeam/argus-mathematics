@@ -1,0 +1,161 @@
+{
+  "goal": "C9000097",
+  "routes": {
+    "R_FILTER_PROOF": {
+      "goal": "C_FILTER_INCREMENT",
+      "obligations": [
+        "C_FILTER_SCALAR",
+        "C_FILTER_ENDPOINT",
+        "C_FILTER_TRANSPORT"
+      ],
+      "status": "active"
+    },
+    "R_FILTER_SATURATING": {
+      "goal": "C_FILTER_TRANSPORT",
+      "obligations": ["C_FILTER_SATURATING_GAIN"],
+      "status": "active"
+    },
+    "R_FILTER_GLOBAL_PROOF": {
+      "goal": "C_FILTER_SATURATING_GAIN",
+      "obligations": ["C_FILTER_ALGEBRA", "C_FILTER_ORDER_CALCULUS", "C_FILTER_GAIN_SHARP"],
+      "status": "active"
+    }
+  },
+  "nodes": {
+    "C9000097": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 097 (The Euclidean Steinitz–Bergström bound.; papers: The Euclidean Steinitz–Bergström theorem; Lean status: Partially/Comparator formalized (lean/docs/097.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_SIGNING",
+        "C_STEINITZ_TRANSFER"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SIGNING": {
+      "statement": "Manuscript Theorem thm:signing: one signing controls every prescribed-order prefix by C sqrt(d), uniformly in length.",
+      "status": "open",
+      "depends_on": ["C_FILTERED_BODY", "C_ADAPTIVE", "C_ASSEMBLY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Euclidean-Steinitz-Bergstrom-theorem-September-24-2026/build/introduction.tex"]
+    },
+    "C_STEINITZ_TRANSFER": {
+      "statement": "The prescribed-order signed-prefix theorem implies the zero-sum rearrangement theorem with the same constant.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Euclidean-Steinitz-Bergstrom-theorem-September-24-2026/build/introduction.tex"]
+    },
+    "C_FILTERED_BODY": {
+      "statement": "Proposition prop:filtered: every admissible filtered path body has a diagonal Dirichlet-energy bound independent of length.",
+      "status": "open",
+      "depends_on": ["C_FILTER_INCREMENT", "C_SCALE_BUDGET", "C_SURVIVAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Euclidean-Steinitz-Bergstrom-theorem-September-24-2026/build/assembly.tex"]
+    },
+    "C_ADAPTIVE": {
+      "statement": "Proposition prop:adaptive: a body with uniformly small diagonal energy supports signs with arbitrary bounded adaptive shifts.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Euclidean-Steinitz-Bergstrom-theorem-September-24-2026/build/signing.tex"]
+    },
+    "C_ASSEMBLY": {
+      "statement": "The predictor constraints, slab energy bound, and adaptive shifts exactly cancel the symmetric filter contractions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Euclidean-Steinitz-Bergstrom-theorem-September-24-2026/build/assembly.tex"]
+    },
+    "C_SCALE_BUDGET": {
+      "statement": "Equation eq:scale-energy: the dyadic weighted sum of additive energies is bounded by an absolute multiple of tr(Q).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Euclidean-Steinitz-Bergstrom-theorem-September-24-2026/build/matrix.tex"]
+    },
+    "C_SURVIVAL": {
+      "statement": "The Gaussian chaining, correlation, and stationary-survival argument converts the matrix estimates to Proposition prop:filtered.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Euclidean-Steinitz-Bergstrom-theorem-September-24-2026/build/survival.tex"]
+    },
+    "C_FILTER_INCREMENT": {
+      "statement": "Lemma lem:increment with all manuscript quantifiers: weighted squared Hilbert-Schmidt increment is at most C(1+k_t) E^(2/3) for E at most an absolute e_0.",
+      "status": "open",
+      "depends_on": ["C_FILTER_SCALAR", "C_FILTER_ENDPOINT", "C_FILTER_TRANSPORT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-Euclidean-Steinitz-Bergstrom-theorem-September-24-2026/build/matrix.tex",
+        "research/certificates/filter_increment/report.md",
+        "research/certificates/filter_increment/exact_certificate.json"
+      ]
+    },
+    "C_FILTER_SCALAR": {
+      "statement": "Lemma lem:scalar-comparison: the scalar divergence controls both orientations of the weighted squared cutoff difference.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/certificates/filter_increment/report.md",
+        "research/certificates/filter_increment/verify.py"
+      ]
+    },
+    "C_FILTER_ENDPOINT": {
+      "statement": "Lemma lem:endpoint-comparison including the exact contraction-distance, contraction-deficit, gain-deficit, and new-coordinate identities.",
+      "status": "open",
+      "depends_on": ["C_FILTER_SCALAR"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/certificates/filter_increment/report.md",
+        "research/certificates/filter_increment/verify.py"
+      ]
+    },
+    "C_FILTER_TRANSPORT": {
+      "statement": "Control the accumulated gain after arbitrary noncommuting contractions by the sum of the actual intervening gain energies.",
+      "status": "open",
+      "depends_on": ["C_FILTER_SATURATING_GAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/filter_increment/report.md"]
+    },
+    "C_FILTER_SATURATING_GAIN": {
+      "statement": "For every 1<a<=2 and any finite sequence of possibly singular contractions and arbitrary PSD gains, tr psi_a(A)<=B_a and tr H^a<=a B_a, with the coefficient a optimal.",
+      "status": "open",
+      "depends_on": ["C_FILTER_ALGEBRA", "C_FILTER_ORDER_CALCULUS", "C_FILTER_GAIN_SHARP"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/certificates/filter_increment/report.md",
+        "research/certificates/filter_increment/exact_certificate.json"
+      ]
+    },
+    "C_FILTER_ALGEBRA": {
+      "statement": "Universal noncommutative conjugation cancellation, contraction-defect identity, scalar quartic factorizations, and finite budget telescoping, with exactly the hypotheses in Main.lean.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/certificates/filter_increment/Main.lean",
+        "research/certificates/filter_increment/statement_fidelity.md",
+        "research/certificates/filter_increment/certificates/C_FILTER_ALGEBRA-d87cbec9f4b64750.json"
+      ]
+    },
+    "C_FILTER_ORDER_CALCULUS": {
+      "statement": "The relative-gain proof has valid spectral normalization, contraction eigenvalue comparison, fractional-power order, and trace differentiation, including singular matrices and repeated eigenvalues.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/filter_increment/report.md"]
+    },
+    "C_FILTER_GAIN_SHARP": {
+      "statement": "The coefficient a in the global relative-gain Schatten inequality cannot be reduced, even for one-dimensional admissible invertible filters.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/filter_increment/report.md"]
+    }
+  }
+}

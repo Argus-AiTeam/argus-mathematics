@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-WT-FIXED-COMPLEMENT9000201-2a044ea0a31f",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/201/first-pass/word_transfer/certificates/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/201/first-pass/word_transfer/certificates/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16919,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/201/first-pass/word_transfer/certificates/Main.lean",
+    "source_sha256": "3d33df000934d64129b73fc460daa493aad4575067717e538d44f1c47a74be6d",
+    "statement_fidelity": "families/201/first-pass/word_transfer/certificates/statement_fidelity.md",
+    "statement_fidelity_sha256": "0ad10af42a51a8b86067ce4d12677c786315d6b8c0170b4f755f9c818aab0c96",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/word_transfer/certificates/Main.lean",
+    "text": "import Mathlib\n\nnamespace WordTransfer\n\nvariable {K E F U : Type*} [Field K]\n  [AddCommGroup E] [Module K E]\n  [AddCommGroup F] [Module K F]\n  [AddCommGroup U] [Module K U]\n\ndef block (A : E →ₗ[K] E) (B : F →ₗ[K] E)\n    (C : E →ₗ[K] F) (D : F ≃ₗ[K] F) : (E × F) →ₗ[K] (E × F) where\n  toFun x := (A x.1 + B x.2, C x.1 + D x.2)\n  map_add' x y := by\n    ext <;> simp only [Prod.fst_add, Prod.snd_add, map_add] <;> abel\n  map_smul' a x := by\n    ext <;> simp [smul_add]\n\ntheorem kernel_iff (A : E →ₗ[K] E) (B : F →ₗ[K] E)\n    (C : E →ₗ[K] F) (D : F ≃ₗ[K] F)\n    (hS : A = B.comp (D.symm.toLinearMap.comp C)) (x : E × F) :\n    block A B C D x = 0 ↔ x.2 = -D.symm (C x.1) := by\n  constructor\n  · intro hx\n    have hlow : C x.1 + D x.2 = 0 := congrArg Prod.snd hx\n    have hsum : D.symm (C x.1) + x.2 = 0 := by\n      simpa using congrArg D.symm hlow\n    calc\n      x.2 = (D.symm (C x.1) + x.2) - D.symm (C x.1) := by abel\n      _ = -D.symm (C x.1) := by rw [hsum]; simp\n  · intro hx\n    ext <;> simp [block, hS, hx]\n\ntheorem kernel_graph_unique (A : E →ₗ[K] E) (B : F →ₗ[K] E)\n    (C : E →ₗ[K] F) (D : F ≃ₗ[K] F)\n    (hS : A = B.comp (D.symm.toLinearMap.comp C))\n    (x : E × F) (hx : block A B C D x = 0) :\n    ∃! u : E, x = (u, -D.symm (C u)) := by\n  refine ⟨x.1, ?_, ?_⟩\n  · exact Prod.ext rfl ((kernel_iff A B C D hS x).mp hx)\n  · intro u hu\n    exact (congrArg Prod.fst hu).symm\n\ntheorem fixed_complement_solution (A : E →ₗ[K] E) (B : F →ₗ[K] E)\n    (C : E →ₗ[K] F) (D : F ≃ₗ[K] F)\n    (hS : A = B.comp (D.symm.toLinearMap.comp C))\n    (b : E × F) (hb : ∃ x, block A B C D x = b) :\n    block A B C D (0, D.symm b.2) = b := by\n  obtain ⟨x, rfl⟩ := hb\n  ext <;> simp [block, hS, map_add]\n\ntheorem fixed_complement_sandwich (A : E →ₗ[K] E) (B : F →ₗ[K] E)\n    (C : E →ₗ[K] F) (D : F ≃ₗ[K] F)\n    (hS : A = B.comp (D.symm.toLinearMap.comp C))\n    (L : (E × F) →ₗ[K] U) (J : (E × F) →ₗ[K] (E × F))\n    (hL : ∀ x, block A B C D x = 0 → L x = 0)\n    (b : E × F) (hb : ∃ x, block A B C D x = b)\n    (hJ : block A B C D (J b) = b) :\n    L (J b) = L (0, D.symm b.2) := by\n  have hz : block A B C D (J b - (0, D.symm b.2)) = 0 := by\n    rw [map_sub, hJ, fixed_complement_solution A B C D hS b hb, sub_self]\n  have h := hL _ hz\n  exact sub_eq_zero.mp (by simpa only [map_sub] using h)\n\nend WordTransfer\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/word_transfer/certificates/statement_fidelity.md",
+    "text": "# Statement fidelity: fixed-complement core of word transfer\n\nClaim: `WT-FIXED-COMPLEMENT9000201`. Source: `Main.lean`.\n\nThe four declarations in namespace `WordTransfer` quantify over every field\n`K` and arbitrary `K`-modules `E`, `F` and `U`. There is no dimension bound,\ninner product, choice of orthogonal projection, or simplicity-of-roots\nassumption. The application uses finite-dimensional modules.\n\n`block A B C D` is the operator on `E x F` with block matrix\n`[[A,B],[C,D]]`. The fixed complement is `F`. `D` is a linear equivalence,\nso both sides of its inverse identities are available. The hypothesis\n`hS : A = B.comp (D.symm.toLinearMap.comp C)` says exactly that the Schur\ncomplement on `E` is zero, with the order `B D^{-1} C` and a minus sign\nin the Schur expression.\n\n`kernel_iff` and `kernel_graph_unique` identify the entire kernel as\n`(u,-D^{-1} C u)`, with a unique `u` for every kernel vector.\n`fixed_complement_solution` states that for every `b` in the range of this\nblock operator, `(0,D^{-1} b_F)` is a solution of `M x=b`.\n\n`fixed_complement_sandwich` quantifies over any linear map `L` annihilating\nthe entire kernel, any linear map `J`, and every `b` in the range of `M`.\nIts additional hypothesis is `M(J b)=b`. Its conclusion is\n`L(J b)=L(0,D^{-1} b_F)`. Thus, when `J` is the group inverse and the\ntwo spectral coupling conditions have been established, it proves the\nfixed-complement sandwich identity used in the report. It also works\nfor any other choice of a particular solution, a slightly stronger\nalgebraic statement than the group-inverse instance.\n\nThe compiler does not prove that the manuscript's internal chain has\nzero Schur complement, that its target eigenvalue is semisimple, that\nthe endpoint couplings vanish, or that its regularized inverse has a\nsimple pole. It does not formalize convergence, division evaluations,\nspectral degree bounds, active-space specialization, arbitrary free\nword extraction, or the main division-ring theorem. These have\nseparate universal mathematical proofs in `report.md`; the exact\nscript supplies explicitly bounded diagnostics, not a substitute for\nthose proofs. No assumption about an arbitrary old-coefficient-factor\ninput arrow is present or needed.\n"
+  },
+  "subject": {
+    "content_hash": "e0b1b88b6b2fddfbf6dbf3f38527d25d950876c86f0d637398b5bfcddf124e8b",
+    "kind": "claim",
+    "subject_id": "WT-FIXED-COMPLEMENT9000201"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

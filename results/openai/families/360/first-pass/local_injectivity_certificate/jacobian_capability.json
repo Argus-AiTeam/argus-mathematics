@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "adapter": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.jacobian",
+  "discovery_queries": [
+    "uniform Taylor remainder finite weighted sums sequential limits",
+    "symbolic polynomial identity"
+  ],
+  "inspected_operation_id": "matrix.symbolic.characteristic_polynomial.compute",
+  "inspected_contract_excerpt": {
+    "input_title": "SymbolicCharacteristicPolynomialRequest",
+    "required": ["matrix"],
+    "input_matrix": "A square symbolic matrix over QQ in at most eight algebraically independent variables, with bounded sparse polynomial/rational-function entries.",
+    "output_title": "SymbolicCharacteristicPolynomialResult",
+    "output_required": ["degree", "coefficients_descending"],
+    "convention": "DET_LAMBDA_I_MINUS_A"
+  },
+  "applicability": "MISMATCH",
+  "reason": "The inspected operation computes a finite characteristic polynomial. It cannot certify quantified limits, uniform Taylor remainders, a compact active graph, or local injectivity. Discovery returned no matching sequential-analysis contract among the inspected candidates.",
+  "execution": {
+    "operation_id": null,
+    "payload": null,
+    "typed_output": null,
+    "status": "NOT_RUN_NOT_APPLICABLE",
+    "adapter_error": null,
+    "timeout": false
+  },
+  "evidentiary_scope": "Capability mismatch only; not support or refutation of a mathematical claim."
+}

@@ -1,0 +1,317 @@
+{
+  "goal": "C9000302",
+  "math_objective_mode": "exploratory",
+  "research_target_level": "publishable",
+  "interpretation": "Verification-dependency view of both manuscripts. All nodes await independent review. Settling the coherent lift alone does not close either main theorem or the campaign.",
+  "routes": [
+    {
+      "name": "R_OBJECTWISE_SHORTCUT",
+      "status": "ruled_out",
+      "retired_because": "Objectwise nullity does not determine the coherent cone: the cospan 0 -> Sigma HZ <- 0 has homotopy pullback HZ.",
+      "evidence": "research/coherent-adams-lift/proof.md"
+    }
+  ],
+  "nodes": {
+    "C9000302": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 302 (Radius of comparison equals half the mean dimension.; papers: Filtered products and boundary-preserving compression in complex cobordism; Radius of comparison equals half the mean dimension; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_RADIUS_EQUALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md"]
+    },
+    "C_RADIUS_EQUALITY": {
+      "statement": "For a minimal homeomorphism of an infinite compact metrizable space X, rc(C(X) crossed Z) equals mdim(X,h)/2, including infinity.",
+      "status": "open",
+      "depends_on": ["C_COVER_BOUND", "C_NIU_UPPER_BOUND"],
+      "reviewer_confirmed": false,
+      "source_label": "radius:thm:main",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/01-introduction.tex", "research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/05-lower-bound.tex"]
+    },
+    "C_COHERENT_ADAMS_LIFT": {
+      "statement": "For every pointed CW inclusion G in E, commutative ring spectrum R, stable v: Sigma^infinity E -> Sigma^d S with R-null restriction to G, and 1 <= n <= ell, the restricted smash power on the entire at-least-n-G union lifts through Sigma^(d ell) I_R^smash n. The manuscript assumes finiteness; the proposed proof also covers infinite CW pairs.",
+      "status": "open",
+      "depends_on": ["C_SIMPLEX_SLICING", "C_VERTEX_COHERENCE", "C_UNION_COLLAPSE", "C_UNIT_CUBE_FIBER"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:prop:compatible-adams-lift",
+      "evidence": ["research/coherent-adams-lift/proof.md", "research/coherent-adams-lift/statement_fidelity.md", "research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/02-filtered-products.tex"]
+    },
+    "C_SIMPLEX_SLICING": {
+      "statement": "The interval-overlap maps Delta^j -> (Delta^j)^ell are continuous and natural for every monotone map, with at most j nonvertex outputs.",
+      "status": "open",
+      "depends_on": ["C_SLICE_CORE"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:simplex-slicing",
+      "evidence": ["research/coherent-adams-lift/proof.md", "research/coherent-adams-lift/verify.py", "research/coherent-adams-lift/exact_certificate.json", "research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/02-filtered-products.tex"]
+    },
+    "C_SLICE_CORE": {
+      "statement": "Interval overlap is additive across adjacent intervals; disjoint equal-width open slices that each contain one of j specified breaks number at most j, in arbitrary finite dimensions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/coherent-adams-lift/proof.md", "research/coherent-adams-lift/Main.lean", "research/coherent-adams-lift/statement_fidelity.md", "research/coherent-adams-lift/certificates/C_SLICE_CORE-8a8845f133e69b62.json"]
+    },
+    "C_COMPATIBLE_ADAMS_TOWER": {
+      "statement": "For fixed ell and a single chosen R-nullhomotopy on G, the lifts on U_(ell,n), 0<=n<=ell, can be chosen as one homotopy-coherent morphism from the decreasing constrained-union tower to the shifted I_R-smash-power Adams tower, with n=0 map v^smash ell.",
+      "status": "open",
+      "depends_on": ["C_SIMPLEX_SLICING", "C_VERTEX_COHERENCE", "C_UNION_COLLAPSE", "C_UNIT_CUBE_FIBER"],
+      "reviewer_confirmed": false,
+      "novelty": "Not established; no literature-priority claim.",
+      "evidence": ["research/coherent-adams-lift/proof.md"]
+    },
+    "C_VERTEX_COHERENCE": {
+      "statement": "The representable vertex diagram turns one chosen R-nullhomotopy on G into a nullhomotopy in Fun(Delta,Sp), hence a factorization through the objectwise quotient Q.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "companion:eq:vertices-yoneda",
+      "evidence": ["research/coherent-adams-lift/proof.md", "research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/02-filtered-products.tex"]
+    },
+    "C_UNION_COLLAPSE": {
+      "statement": "The sliced quotient map is the strict zero natural transformation in all simplex degrees j<n on the entire constrained union, giving a coherent null cone after inverting the objectwise equivalence to the constant source.",
+      "status": "open",
+      "depends_on": ["C_SIMPLEX_SLICING", "C_VERTEX_COHERENCE"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:eq:sliced-union-collapse",
+      "evidence": ["research/coherent-adams-lift/proof.md", "research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/02-filtered-products.tex"]
+    },
+    "C_UNIT_CUBE_FIBER": {
+      "statement": "The fiber of S -> holim over nonempty subsets A of [n] of R^smash |A| is I_R^smash n, with the fiber inclusion the smash of the n inclusions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "companion:eq:unit-cube-null-cone and following finite-fiber argument",
+      "evidence": ["research/coherent-adams-lift/proof.md", "research/coherent-adams-lift/mnn-1507.06869v2.txt"]
+    },
+    "C_OBJECTWISE_RESTRICTIONS": {
+      "statement": "Each product stratum with n specified G coordinates separately admits a lift through I_R^smash n by smashing a chosen lift on those coordinates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/coherent-adams-lift/proof.md"]
+    },
+    "C_OBJECTWISE_ROUTE_OBSTRUCTION": {
+      "statement": "Objectwise nullity does not imply a null coherent cone: holim(0 -> Sigma HZ <- 0) is HZ and its identity cone has zero components.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/coherent-adams-lift/proof.md"]
+    },
+    "C_FIXED_PRIME_CUTOFF": {
+      "statement": "At each fixed prime p, the MU_(p) exponent of tau_<k S_(p) is o(k), equivalently giving the uniform Adams-filtration vanishing cutoff for all connective p-local spectra.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "companion:thm:quantitative-nilpotence, MU case",
+      "evidence": ["research/coherent-adams-lift/mathew-1701.01528v1.txt", "research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/02-filtered-products.tex"]
+    },
+    "C_CELL_TRUNCATION": {
+      "statement": "Maps from a finite spectrum with upper cell degree D to a (D+1)-connective spectrum vanish; truncation below k>D detects maps to the p-local sphere.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:cell-truncation",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/02-filtered-products.tex"]
+    },
+    "C_BP_UNIT_CONNECTIVITY": {
+      "statement": "At odd p the unit-preserving MU_(p) to BP map transfers lifts to I_BP, which is (2p-3)-connective.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:bp-unit-connectivity",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/02-filtered-products.tex"]
+    },
+    "C_FILTERED_PRODUCT": {
+      "statement": "For finite pointed CW pairs and a sphere-valued map with MU-null restriction, the smash power is eventually stably null on the union with at least ceil(ell/2) restricted factors.",
+      "status": "open",
+      "depends_on": ["C_COHERENT_ADAMS_LIFT", "C_FIXED_PRIME_CUTOFF", "C_CELL_TRUNCATION", "C_BP_UNIT_CONNECTIVITY"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:thm:filtered-product",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/01-introduction.tex", "research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/02-filtered-products.tex"]
+    },
+    "C_POINT_TEST_PRODUCTS": {
+      "statement": "The relative point tests of Cartesian products, including sparse unions, identify with smash products of the relative point tests.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:point-test-products",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/03-stable-avoidance.tex"]
+    },
+    "C_COORDINATE_THICKENING": {
+      "statement": "Coordinate-complement thickening preserves the required connectivity and cofiber control for the finite coordinate arrangements.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:coordinate-thickening",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/03-stable-avoidance.tex"]
+    },
+    "C_BOX_DUALITY": {
+      "statement": "Local box pairs have the claimed stable duality, including the variance and compatibility needed to identify avoidance obstructions with point tests.",
+      "status": "open",
+      "depends_on": ["C_COORDINATE_THICKENING"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:box-duality",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/03-stable-avoidance.tex"]
+    },
+    "C_STABLE_AVOIDANCE": {
+      "statement": "For a finite polyhedron P, point-test vanishing, dim Z<=M-q and dim P<=2q-5 yield a displacement less than 1/2 avoiding Z, with the prescribed compatibility.",
+      "status": "open",
+      "depends_on": ["C_POINT_TEST_PRODUCTS", "C_COORDINATE_THICKENING", "C_BOX_DUALITY"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:stable-avoidance",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/03-stable-avoidance.tex"]
+    },
+    "C_BOUNDARY_RESTORATION": {
+      "statement": "Radial normalization of a sufficiently small avoidance perturbation creates boundary slots while preserving each entire original boundary-slot vector.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:boundary-restoration",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/03-stable-avoidance.tex"]
+    },
+    "C_BATCH_VANISHING": {
+      "statement": "MU point-test vanishing on Z_an implies sphere point-test vanishing for sufficiently large batches on Z_H with H=floor(an ell/4).",
+      "status": "open",
+      "depends_on": ["C_FILTERED_PRODUCT", "C_POINT_TEST_PRODUCTS"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:batch-vanishing",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/04-boundary-compression.tex"]
+    },
+    "C_BOUNDARY_COMPRESSION": {
+      "statement": "MU-null sparse point tests yield arbitrarily large powers with at least (a/8)un boundary slots, preserving original boundary slots, by padding in the stable avoidance range.",
+      "status": "open",
+      "depends_on": ["C_BATCH_VANISHING", "C_STABLE_AVOIDANCE", "C_BOUNDARY_RESTORATION"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:thm:boundary-compression",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/04-boundary-compression.tex"]
+    },
+    "C_FRAMED_TORUS": {
+      "statement": "Construct the framed embedded product of p two-tori in a small (2p+1)-cube and the rank-p sum of degree-one line bundles with product Chern number one.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:framed-torus",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/05-torus-criterion.tex"]
+    },
+    "C_TORUS_MU": {
+      "statement": "A single slot-bundle embedding over the full sparse torus locus into rank K<2pn forces the supported MU point test to vanish.",
+      "status": "open",
+      "depends_on": ["C_FRAMED_TORUS"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:torus-mu",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/05-torus-criterion.tex"]
+    },
+    "C_FINITE_PARAMETER_REDUCTION": {
+      "statement": "For arbitrary compact metrizable parameters, preserve the cube-valued map exactly on a finite-polyhedral model while retaining the specified bundle embedding.",
+      "status": "open",
+      "depends_on": ["C_FRAMED_TORUS"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:lem:finite-parameter-reduction",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/05-torus-criterion.tex"]
+    },
+    "C_TORUS_COMPRESSION": {
+      "statement": "For 0<a<1/16, any compact metrizable Y, and K<2pn, the full torus-locus embedding implies arbitrarily large product compressions with (a/8)un boundary slots and exact boundary agreement.",
+      "status": "open",
+      "depends_on": ["C_FINITE_PARAMETER_REDUCTION", "C_TORUS_MU", "C_BOUNDARY_COMPRESSION"],
+      "reviewer_confirmed": false,
+      "source_label": "companion:thm:torus-compression; radius:thm:torus-compression",
+      "evidence": ["research/openai_manuscript/Filtered-products-and-boundary-preserving-compression-in-complex-cobordism-September-25-2026/build/sections/01-introduction.tex", "research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/02-compression-interface.tex"]
+    },
+    "C_NIU_OPEN_TOWER": {
+      "statement": "Niu's open tower theorem supplies towers of arbitrary prescribed height with uniformly small orbit-frequency remainder for the minimal infinite system.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "radius:thm:niu-open-tower; Niu2024 Theorem 4.2",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/03-dynamical-comparison.tex"]
+    },
+    "C_UNIFORM_BLOCK_ALLOCATION": {
+      "statement": "Allocate disjoint orbit regions and continuous alignment weights with a uniform bound on bad spaced block starts.",
+      "status": "open",
+      "depends_on": ["C_NIU_OPEN_TOWER"],
+      "reviewer_confirmed": false,
+      "source_label": "radius:lem:uniform-block-allocation",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/03-dynamical-comparison.tex"]
+    },
+    "C_FINITE_COORDINATE_COMPRESSION": {
+      "statement": "One finite-dimensional linear map is injective on every coordinate subspace whose support is at most the prescribed q.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "radius:lem:finite-coordinate-compression",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/03-dynamical-comparison.tex"]
+    },
+    "C_COMPARISON_BUNDLE": {
+      "statement": "Under the proposition's strict rank budgets, a finite comparison bound produces one continuous rank-<2pn embedding over the entire sparse torus parameter locus.",
+      "status": "open",
+      "depends_on": ["C_UNIFORM_BLOCK_ALLOCATION", "C_FINITE_COORDINATE_COMPRESSION"],
+      "reviewer_confirmed": false,
+      "source_label": "radius:prop:comparison-bundle",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/03-dynamical-comparison.tex"]
+    },
+    "C_POLYHEDRAL_REFINEMENT": {
+      "statement": "A subordinate map into a q-dimensional finite polyhedron yields a refinement of cover order at most q.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "radius:lem:polyhedral-refinement",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/04-cover-reconstruction.tex"]
+    },
+    "C_COLORED_NERVE": {
+      "statement": "A finite cover admits a subordinate colored finite nerve of dimension no greater than the cover order.",
+      "status": "open",
+      "depends_on": ["C_POLYHEDRAL_REFINEMENT"],
+      "reviewer_confirmed": false,
+      "source_label": "radius:lem:colored-subordinate-nerve",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/04-cover-reconstruction.tex"]
+    },
+    "C_FINITE_COVER_RATE": {
+      "statement": "The orders of the orbit joins of a fixed finite cover are subadditive and their normalized values have limit equal to the infimum.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "radius:eq:finite-cover-rate",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/04-cover-reconstruction.tex"]
+    },
+    "C_PACKET_RECONSTRUCTION": {
+      "statement": "Boundary successes in color packets remove colors in the stated amount while retaining the original carrier support.",
+      "status": "open",
+      "depends_on": ["C_COLORED_NERVE"],
+      "reviewer_confirmed": false,
+      "source_label": "radius:lem:packet-reconstruction",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/04-cover-reconstruction.tex"]
+    },
+    "C_COVER_BOUND": {
+      "statement": "Every finite comparison bound r forces the orbit-cover rate of every finite open cover to be at most 2r.",
+      "status": "open",
+      "depends_on": ["C_FINITE_COVER_RATE", "C_COLORED_NERVE", "C_PACKET_RECONSTRUCTION", "C_UNIFORM_BLOCK_ALLOCATION", "C_COMPARISON_BUNDLE", "C_TORUS_COMPRESSION", "C_POLYHEDRAL_REFINEMENT"],
+      "reviewer_confirmed": false,
+      "source_label": "radius:thm:cover-bound",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/05-lower-bound.tex"]
+    },
+    "C_NIU_UPPER_BOUND": {
+      "statement": "For the free minimal integer action, rc(C(X) crossed Z) <= mdim(X,h)/2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "radius:eq:final-niu-upper-bound; Niu2024 Theorem 5.6",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/05-lower-bound.tex"]
+    },
+    "C_REGULARITY_INPUTS": {
+      "statement": "The cited small-boundary, Jiang-Su stability, comparison, and nuclear-regularity results apply under the stated minimality, infinitude, metrizability, simplicity, nuclearity, and trace conventions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "radius:06-regularity, external input hypotheses",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/06-regularity.tex"]
+    },
+    "C_REGULARITY": {
+      "statement": "Zero mean dimension, the small boundary property, Jiang-Su stability, finite nuclear dimension, and nuclear dimension at most one are equivalent for the crossed product in the main theorem.",
+      "status": "open",
+      "depends_on": ["C_RADIUS_EQUALITY", "C_REGULARITY_INPUTS"],
+      "reviewer_confirmed": false,
+      "source_label": "radius:cor:regularity",
+      "evidence": ["research/openai_manuscript/Radius-of-comparison-equals-half-the-mean-dimension-September-25-2026/build/sections/06-regularity.tex"]
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_COMPLEX_STABILIZATION-44d15084ec81",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/194/first-pass/complex_estimate/lean/certificates/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/194/first-pass/complex_estimate/lean/certificates/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14775,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/194/first-pass/complex_estimate/lean/certificates/Main.lean",
+    "source_sha256": "522486e25f4fe34eaace4411ebac8053628ec2ef9e2f5181f4f5615e9e6b009a",
+    "statement_fidelity": "families/194/first-pass/complex_estimate/lean/certificates/statement_fidelity.md",
+    "statement_fidelity_sha256": "9a0603de0f7b9fc9e3772e9eac20cb5e19f4fff1514aace81b3f644a0272fbd0",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/complex_estimate/lean/certificates/Main.lean",
+    "text": "import Mathlib\n\nnamespace ComplexEstimate\n\nsection Filtrations\n\nvariable {R : Type*} [CommRing R]\nvariable (M : ℕ → Type*) [∀ i, AddCommGroup (M i)] [∀ i, Module R (M i)]\n\ndef descend (d : ∀ i, M (i + 1) →ₗ[R] M i) (a : ℕ) :\n    (n : ℕ) → M (a + n) →ₗ[R] M a\n  | 0 => LinearMap.id\n  | n + 1 => (descend d a n).comp (d (a + n))\n\ntheorem descend_mem\n    (d : ∀ i, M (i + 1) →ₗ[R] M i)\n    (fil : ∀ i, ℕ → Submodule R (M i))\n    (low : ∀ i k (x : M (i + 1)),\n      x ∈ fil (i + 1) (k + 1) → d i x ∈ fil i k)\n    (a n k : ℕ) (x : M (a + n))\n    (hx : x ∈ fil (a + n) (k + n)) :\n    descend M d a n x ∈ fil a k := by\n  induction n with\n  | zero => simpa [descend] using hx\n  | succ n ih =>\n      have hy : d (a + n) x ∈ fil (a + n) (k + n) :=\n        low (a + n) (k + n) x hx\n      exact ih (d (a + n) x) hy\n\ntheorem descend_eq_zero\n    (d : ∀ i, M (i + 1) →ₗ[R] M i)\n    (fil : ∀ i, ℕ → Submodule R (M i))\n    (low : ∀ i k (x : M (i + 1)),\n      x ∈ fil (i + 1) (k + 1) → d i x ∈ fil i k)\n    (n : ℕ) (bottom : ∀ i, fil i 0 = ⊥) (top : ∀ i, fil i n = ⊤)\n    (a : ℕ) :\n    descend M d a n = 0 := by\n  ext x\n  have hx : x ∈ fil (a + n) (0 + n) := by simp [top]\n  have hy := descend_mem M d fil low a n 0 x hx\n  simpa [bottom] using hy\n\nend Filtrations\n\nsection Images\n\nvariable {R : Type*} [CommRing R]\nvariable {H BN BM T : Type*}\nvariable [AddCommGroup H] [Module R H]\nvariable [AddCommGroup BN] [Module R BN]\nvariable [AddCommGroup BM] [Module R BM]\nvariable [AddCommGroup T] [Module R T]\n\ntheorem stabilized_range\n    (iN : H →ₗ[R] BN) (iM : H →ₗ[R] BM)\n    (t : BN →ₗ[R] BM) (δ : BM →ₗ[R] T)\n    (compatible : t.comp iN = iM)\n    (exactM : LinearMap.range iM = LinearMap.ker δ)\n    (dies : δ.comp t = 0) :\n    LinearMap.range t = LinearMap.range iM := by\n  apply le_antisymm\n  · intro y hy\n    rcases hy with ⟨x, rfl⟩\n    rw [exactM]\n    change δ (t x) = 0\n    simpa using DFunLike.congr_fun dies x\n  · intro y hy\n    rcases hy with ⟨x, rfl⟩\n    refine ⟨iN x, ?_⟩\n    exact DFunLike.congr_fun compatible x\n\ntheorem stabilized_unique\n    (iN : H →ₗ[R] BN) (iM : H →ₗ[R] BM)\n    (t : BN →ₗ[R] BM) (δ : BM →ₗ[R] T)\n    (compatible : t.comp iN = iM)\n    (exactM : LinearMap.range iM = LinearMap.ker δ)\n    (dies : δ.comp t = 0) (injective : Function.Injective iM)\n    (y : BM) (hy : y ∈ LinearMap.range t) :\n    ∃! x : H, iM x = y := by\n  rw [stabilized_range iN iM t δ compatible exactM dies] at hy\n  rcases hy with ⟨x, hx⟩\n  exact ⟨x, hx, fun z hz => injective (hz.trans hx.symm)⟩\n\nend Images\n\ntheorem normalize_error\n    (length mu power lead rank0 error budget : ℝ)\n    (hlead : 0 < lead) (hmu : 0 ≤ mu) (hpower : 0 ≤ power)\n    (positive : 0 ≤ lead * (length - mu * power * rank0) + mu * power * error)\n    (bounded : error ≤ lead * budget) :\n    mu * power * (rank0 - budget) ≤ length := by\n  have h := mul_le_mul_of_nonneg_left bounded (mul_nonneg hmu hpower)\n  have h' := positive.trans\n    (add_le_add (le_refl (lead * (length - mu * power * rank0))) h)\n  apply (mul_le_mul_iff_right₀ hlead).mp\n  nlinarith [h']\n\nend ComplexEstimate\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/complex_estimate/lean/certificates/statement_fidelity.md",
+    "text": "# Statement fidelity: the finite algebraic core of the complex estimate\n\nThe ledger claim is `C_COMPLEX_STABILIZATION`. `Main.lean` uses Lean and\nMathlib, with no user axioms, `sorry`, `admit`, or computational oracles.\nThe official compiler certificate, not this document, determines whether\nthe source actually compiles without proof holes.\n\nThe declarations described are `descend`, `descend_mem`, `descend_eq_zero`,\n`stabilized_range`, `stabilized_unique`, and `normalize_error`, all in the\nnamespace `ComplexEstimate`.\n\n`ComplexEstimate.descend` is the composite of `n` consecutive maps from\n`M (a+n)` to `M a`. The family `M` ranges over arbitrary modules over an\narbitrary commutative ring. The modules at different indices need not be\nthe same, finite, finitely generated, Noetherian, separated, or complete.\n\n`ComplexEstimate.descend_mem` assumes a family `fil i k` of submodules\nand that each transition maps filtration level `k+1` into level `k`.\nIts conclusion is that an `n`-fold composite maps level `k+n` into\nlevel `k`. `ComplexEstimate.descend_eq_zero` adds that every level zero\nis bottom and every level `n` is top; it concludes that each `n`-fold\ncomposite is the zero linear map. Monotonicity of the filtration is not\nneeded for these conclusions, so it is not an implicit hypothesis.\nIn the manuscript application the filtration is the induced finite\nhomology filtration, and zero associated-graded transition maps supply\nthe stated lowering condition. Deriving that condition from the Cech or\nKoszul spectral sequence remains in the prose proof.\n\n`ComplexEstimate.stabilized_range` quantifies over arbitrary modules\n`H`, `BN`, `BM`, `T` and linear maps `iN`, `iM`, `t`, `delta`. It assumes\n`t` composed with `iN` equals `iM`, the image of `iM` is the kernel of\n`delta`, and `delta` composed with `t` is zero. It concludes the exact\nequality of submodules `range t = range iM`. No injectivity of `iN` or\nsurjectivity of `delta` is assumed or required.\n`ComplexEstimate.stabilized_unique` additionally assumes `iM` is\ninjective and concludes that every element of `range t` has a unique\npreimage in `H`. This is the canonical stabilized-image identification,\nnot an inverse-limit assertion.\n\nFor the geometric tower, `H` is one degree of the hyperhomology of\n`F_Y`; `BN` and `BM` are the corresponding thickening groups, and\n`delta` is the connecting map in the thickening exact triangle.\nFor the algebraic Koszul tower, `H=H_k(F)`, `BN=H_k(F tensor K_b)`,\n`BM=H_k(F tensor K_a)`, and `T=H_k(Q_a)`. The zero-transition and\ninjectivity hypotheses are established in Sections 1, 3, and 4 of\n`../proof.md`. These module assertions apply before passing to the\nSerre quotient. Cofinality of the two ideal towers and image comparison\nmodulo length zero are proved in prose, not encoded as a theorem about\nan arbitrary abelian category.\n\n`ComplexEstimate.normalize_error` is an additional universal real\nalgebra identity. If `lead>0`, `mu>=0`, `power>=0`, the positivity\ninequality holds, and `error<=lead*budget`, then\n`mu*power*(rank0-budget)<=length`. In equation (30) of `../proof.md`,\n`lead=(h-1)!`, `power=s^h`, `rank0=b_0`, and `budget` is the sum-of-ranks\nerror after dividing by `(h-1)!`. This verifies the coefficient-one\nnormalization, not the analytic bound on the error.\n\nThe compiler does not verify the scheme construction, the additive\nlength hypotheses, spectral-sequence convergence, the Serre-quotient\nargument, root-bundle flatness, Rolle's theorem application, Riemann-sum\nbound, or the full complex estimate. Those are asserted and proved in\n`../proof.md` and require mathematical review. In particular a kernel\nverdict on this source alone must not be assigned to\n`C_COMPLEX_ESTIMATE` or to the main Lech inequality.\n"
+  },
+  "subject": {
+    "content_hash": "a4d807286e422749186501dd558f0c4a731d36c5fbb69682f75c3b5892b6c257",
+    "kind": "claim",
+    "subject_id": "C_COMPLEX_STABILIZATION"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

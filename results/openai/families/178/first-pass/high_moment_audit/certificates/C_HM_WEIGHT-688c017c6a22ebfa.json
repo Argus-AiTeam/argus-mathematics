@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_HM_WEIGHT-775343adee64",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/178/first-pass/high_moment_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/178/first-pass/high_moment_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 35869,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/178/first-pass/high_moment_audit/Main.lean",
+    "source_sha256": "73e925b4e9c120e0073fc46055e48e833854dc73da747951de30876fda0836ca",
+    "statement_fidelity": "families/178/first-pass/high_moment_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "981ce34287ccec3610e872a5cddceb7d4b0f3b7ef774711a43802a6c539024a7",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/high_moment_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace HighMomentAudit\n\ntheorem weighted_drift\n    (A T F D v l Fnext Dnext : Real)\n    (hA : 0 <= A) (hT : 0 <= T) (hF : 0 <= F)\n    (hD : 0 <= D) (hv : 0 <= v) (hl : 0 < l)\n    (hFnext : Fnext <= (1 + A / l) * F + T * D / l ^ 2 + v * (1 + F + D))\n    (hDnext : Dnext <= (1 + A / l) * D + T * F / l + v * (1 + F + D)) :\n    let k : Real := 1 / (1 + T)\n    let u : Real := T / (k * l ^ 2) + (1 + k) * v / k\n    1 + Fnext + k * Dnext <=\n      (1 + (A + 1) / l + u) * (1 + F + k * D) := by\n  let k : Real := 1 / (1 + T)\n  let u : Real := T / (k * l ^ 2) + (1 + k) * v / k\n  change 1 + Fnext + k * Dnext <=\n    (1 + (A + 1) / l + u) * (1 + F + k * D)\n  have hden : 0 < 1 + T := by linarith\n  have hk : 0 < k := by dsimp [k]; positivity\n  have hraw :\n      1 + Fnext + k * Dnext <=\n        1 + (1 + A / l) * F + T * D / l ^ 2\n          + k * ((1 + A / l) * D + T * F / l)\n          + (1 + k) * v * (1 + F + D) := by\n    have hweighted := mul_le_mul_of_nonneg_left hDnext (le_of_lt hk)\n    nlinarith\n  have hidentity :\n      (1 + (A + 1) / l + u) * (1 + F + k * D) =\n        (1 + (1 + A / l) * F + T * D / l ^ 2\n          + k * ((1 + A / l) * D + T * F / l)\n          + (1 + k) * v * (1 + F + D))\n        + ((A + 1) / l + T / (k * l ^ 2) + (1 + k) * T * v\n          + F * (k / l + T / (k * l ^ 2) + (1 + k) * T * v)\n          + k * D / l) := by\n    dsimp [u, k]\n    field_simp [ne_of_gt hden, ne_of_gt hl]\n    ring\n  have hgap :\n      0 <= (A + 1) / l + T / (k * l ^ 2) + (1 + k) * T * v\n        + F * (k / l + T / (k * l ^ 2) + (1 + k) * T * v)\n        + k * D / l := by\n    positivity\n  rw [hidentity]\n  linarith\n\nend HighMomentAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/high_moment_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: `HighMomentAudit.weighted_drift`\n\nThe declaration `weighted_drift` in namespace `HighMomentAudit` (fully\nqualified name `HighMomentAudit.weighted_drift`) formalizes exactly the\nscalar two-channel absorption claim `C_HM_WEIGHT`, equation (20) and its\napplication to (17) in `proof.md`.\n\nAll eight variables `A T F D v l Fnext Dnext` range over the real numbers.\nThe hypotheses are `A >= 0`, `T >= 0`, `F >= 0`, `D >= 0`, `v >= 0`,\n`l > 0`, and the two upper bounds\n\n    Fnext <= (1 + A/l)*F + T*D/l^2 + v*(1 + F + D)\n    Dnext <= (1 + A/l)*D + T*F/l + v*(1 + F + D).\n\nThere is no sign hypothesis on `Fnext` or `Dnext`. This strengthens,\nrather than weakens, the application to expected nonnegative moments.\nThere is no integrality hypothesis on `l`; the theorem holds for every\npositive real `l`.\n\nThe conclusion uses the fixed weight `k = 1/(1 + T)` and the budget\n`u = T/(k*l^2) + (1+k)*v/k` and states\n\n    1 + Fnext + k*Dnext <=\n        (1 + (A+1)/l + u)*(1 + F + k*D).\n\nIn the analytic application, `Fnext` and `Dnext` are the two expected\nnext-state moments, `A` is the order-independent self-drift bound, and\n`T` is a fixed order-dependent transfer bound. The formal theorem has\nno expectations or probability spaces; it is the deterministic\ninequality applied after the analytic bounds have been obtained.\n\nThe proof uses only ordered-field algebra and positivity, with Mathlib\ntactics. It introduces no additional axioms or unproved hypotheses.\nCompilation does **not** prove the upstream kernel bounds, interpolation,\nthe classification of all analytic update terms, summability of the\nbudgets, `C_HM_UNIFORM`, or the graph-construction theorem. It does not\ncertify that this document faithfully connects those analytic objects\nto the real variables; that reading remains an independent review task.\n"
+  },
+  "subject": {
+    "content_hash": "4d32dd4243a2883d14041b1333f6359d176a6907de8d3e119afeeadf1c12dc29",
+    "kind": "claim",
+    "subject_id": "C_HM_WEIGHT"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

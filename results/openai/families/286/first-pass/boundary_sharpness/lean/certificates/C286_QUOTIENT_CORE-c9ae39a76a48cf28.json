@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C286_QUOTIENT_CORE-16916f79c839",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/286/first-pass/boundary_sharpness/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/286/first-pass/boundary_sharpness/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16721,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/286/first-pass/boundary_sharpness/lean/Main.lean",
+    "source_sha256": "d1c6870cb57d54c85e2e29ef07920dfaf814dc929b7c10ddecd4f578354746ae",
+    "statement_fidelity": "families/286/first-pass/boundary_sharpness/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "3295f06795cfc84d9aeb4c981b26a3d9142fabcf48268d111cbfb511fe273a61",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/boundary_sharpness/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace BoundarySharpness\n\nvariable {E K₁ K₂ : Type*}\nvariable [AddCommGroup E] [Module ℂ E]\nvariable [NormedAddCommGroup K₁] [NormedSpace ℂ K₁]\nvariable [NormedAddCommGroup K₂] [NormedSpace ℂ K₂]\n\ndef closedAntidiagonal (j₁ : E →ₗ[ℂ] K₁) (j₂ : E →ₗ[ℂ] K₂) :\n    Submodule ℂ (K₁ × K₂) :=\n  (LinearMap.range (j₁.prod (-j₂))).topologicalClosure\n\nnoncomputable def sumFunctional (L₁ : K₁ →L[ℂ] ℂ) (L₂ : K₂ →L[ℂ] ℂ) :\n    K₁ × K₂ →L[ℂ] ℂ :=\n  L₁.comp (ContinuousLinearMap.fst ℂ K₁ K₂) +\n    L₂.comp (ContinuousLinearMap.snd ℂ K₁ K₂)\n\ntheorem antidiagonal_mem (j₁ : E →ₗ[ℂ] K₁) (j₂ : E →ₗ[ℂ] K₂) (b : E) :\n    (j₁ b, -j₂ b) ∈ closedAntidiagonal j₁ j₂ :=\n  (LinearMap.range (j₁.prod (-j₂))).le_topologicalClosure ⟨b, rfl⟩\n\ntheorem quotient_inputs_agree (j₁ : E →ₗ[ℂ] K₁) (j₂ : E →ₗ[ℂ] K₂) (b : E) :\n    (closedAntidiagonal j₁ j₂).mkQ (j₁ b, 0) =\n      (closedAntidiagonal j₁ j₂).mkQ (0, j₂ b) := by\n  apply (Submodule.Quotient.eq _).2\n  simpa using antidiagonal_mem j₁ j₂ b\n\ntheorem antidiagonal_le_kernel\n    (j₁ : E →ₗ[ℂ] K₁) (j₂ : E →ₗ[ℂ] K₂)\n    (L₁ : K₁ →L[ℂ] ℂ) (L₂ : K₂ →L[ℂ] ℂ)\n    (h : ∀ b, L₁ (j₁ b) = L₂ (j₂ b)) :\n    closedAntidiagonal j₁ j₂ ≤ (sumFunctional L₁ L₂).ker := by\n  apply (LinearMap.range (j₁.prod (-j₂))).topologicalClosure_minimal\n    ?_ (sumFunctional L₁ L₂).isClosed_ker\n  rintro _ ⟨b, rfl⟩\n  change L₁ (j₁ b) + L₂ (-j₂ b) = 0\n  rw [map_neg, h b]\n  exact add_neg_cancel _\n\ntheorem nonzero_common_functional_survives\n    (j₁ : E →ₗ[ℂ] K₁) (j₂ : E →ₗ[ℂ] K₂)\n    (L₁ : K₁ →L[ℂ] ℂ) (L₂ : K₂ →L[ℂ] ℂ)\n    (h : ∀ b, L₁ (j₁ b) = L₂ (j₂ b))\n    (hne : ∃ b, L₁ (j₁ b) ≠ 0) :\n    ∃ b, (closedAntidiagonal j₁ j₂).mkQ (j₁ b, 0) ≠ 0 := by\n  obtain ⟨b, hb⟩ := hne\n  refine ⟨b, ?_⟩\n  intro hz\n  have hm : (j₁ b, 0) ∈ closedAntidiagonal j₁ j₂ :=\n    (Submodule.Quotient.mk_eq_zero _).mp hz\n  have hk := antidiagonal_le_kernel j₁ j₂ L₁ L₂ h hm\n  change L₁ (j₁ b) + L₂ 0 = 0 at hk\n  exact hb (by simpa using hk)\n\ntheorem closedAntidiagonal_invariant\n    (j₁ : E →ₗ[ℂ] K₁) (j₂ : E →ₗ[ℂ] K₂)\n    (T₁ : K₁ →L[ℂ] K₁) (T₂ : K₂ →L[ℂ] K₂) (m : E →ₗ[ℂ] E)\n    (h₁ : ∀ b, T₁ (j₁ b) = j₁ (m b))\n    (h₂ : ∀ b, T₂ (j₂ b) = j₂ (m b)) :\n    ∀ v ∈ closedAntidiagonal j₁ j₂,\n      (T₁ v.1, T₂ v.2) ∈ closedAntidiagonal j₁ j₂ := by\n  let T : K₁ × K₂ →L[ℂ] K₁ × K₂ :=\n    (T₁.comp (ContinuousLinearMap.fst ℂ K₁ K₂)).prod\n      (T₂.comp (ContinuousLinearMap.snd ℂ K₁ K₂))\n  have hr : LinearMap.range (j₁.prod (-j₂)) ≤\n      (closedAntidiagonal j₁ j₂).comap T.toLinearMap := by\n    rintro _ ⟨b, rfl⟩\n    change (T₁ (j₁ b), T₂ (-j₂ b)) ∈ closedAntidiagonal j₁ j₂\n    simpa [map_neg, h₁, h₂] using antidiagonal_mem j₁ j₂ (m b)\n  have hc : IsClosed\n      (((closedAntidiagonal j₁ j₂).comap T.toLinearMap) : Set (K₁ × K₂)) :=\n    (LinearMap.range (j₁.prod (-j₂))).isClosed_topologicalClosure.preimage T.continuous\n  exact (LinearMap.range (j₁.prod (-j₂))).topologicalClosure_minimal hr hc\n\nend BoundarySharpness\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/boundary_sharpness/lean/statement_fidelity.md",
+    "text": "# Closed anti-diagonal quotient core\n\nClaim: `C286_QUOTIENT_CORE`.\n\nThe declarations in namespace `BoundarySharpness` concern an arbitrary complex\nvector space `E`, arbitrary complex normed spaces `K1`, `K2`, and arbitrary\nlinear maps `j1`, `j2` from `E` into those spaces. Neither an inner product nor\ncompleteness is assumed. The product norm has the same topology as the Hilbert\ndirect-sum norm when the spaces are Hilbert spaces.\n\n`closedAntidiagonal` is the topological closure of the linear range of\n`b |-> (j1 b, -j2 b)`. `quotient_inputs_agree` proves that `(j1 b, 0)` and\n`(0, j2 b)` have identical images in the quotient by that closed subspace.\n\n`sumFunctional` sends `(v1, v2)` to `L1(v1) + L2(v2)`, where the two `Li`\nare arbitrary continuous complex-linear scalar functionals.\n`antidiagonal_le_kernel` assumes, for every `b`, that `L1(j1 b) = L2(j2 b)`\nand proves that the CLOSED anti-diagonal lies in this functional's kernel.\n`nonzero_common_functional_survives` additionally assumes that this common\nscalar functional is nonzero at some `b`. Its conclusion is that some\n`(j1 b, 0)` has nonzero quotient image. Thus closure does not kill a nonzero\nfunctional bounded for both completions.\n\n`closedAntidiagonal_invariant` assumes arbitrary continuous linear operators\n`T1`, `T2` and a linear domain operator `m` satisfying `Ti(ji b) = ji(m b)`\nfor every `b`. It proves invariance of the CLOSED anti-diagonal under\n`(v1, v2) |-> (T1 v1, T2 v2)`. Applying it separately to angular\nmultiplication and its adjoint, or to a covariance and its inverse, is the\nreducing-subspace step in the mathematical proof.\n\nFor the manuscript application, `E` is `C-infinity(Z) tensor H` and `Ki`\nare its two angular-form completions. A common bounded scalar functional\nextends continuously to each completion, giving the `Li` above. A\nconjugate-linear functional is first complex conjugated.\n\nThe formalization DOES NOT assert positivity of the quotient CP map,\nnormality of group representations, frame-functional encoding, measurable\ncentral-component selection, pair ergodicity, candidate existence, or the\nanalytic transfer bounds used for sharpness. Those are separate propositions\nin `../theorem.md`. Compiler success for this core must not be reported as\ncompiler verification of `lem:transfer-disjointness` or either main theorem.\n"
+  },
+  "subject": {
+    "content_hash": "27fcb8ab482a5d3045e0436083f05ca649af515ea93e7527b71a3258ec91baeb",
+    "kind": "claim",
+    "subject_id": "C286_QUOTIENT_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

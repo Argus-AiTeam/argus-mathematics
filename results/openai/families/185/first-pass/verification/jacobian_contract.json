@@ -1,0 +1,39 @@
+{
+  "operation_id": "boolean.multilinear_extension.compute",
+  "server_version": "0.14.0",
+  "protocol_version": "2025-11-25",
+  "inspection": "Inspected with the Argus adapter before execution.",
+  "input_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["truth_table"],
+    "properties": {
+      "truth_table": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 1024,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["num", "den"],
+          "properties": {
+            "num": {"type": "string", "pattern": "^(?:0|-?[1-9][0-9]*)$"},
+            "den": {"type": "string", "pattern": "^(?:0|-?[1-9][0-9]*)$"}
+          }
+        }
+      }
+    }
+  },
+  "output_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["polynomial", "variable_count"],
+    "properties": {
+      "polynomial": {"type": "string", "minLength": 1},
+      "variable_count": {"type": "integer", "minimum": 1, "maximum": 10},
+      "convention": {"const": "SYMPY", "default": "SYMPY"}
+    }
+  },
+  "additional_typed_constraint": "Execution rejected signed truth-table entries: each entry must be 0 or 1. The rejected exact request and structured error are preserved separately.",
+  "scope": "The XOR indicator x+y-2*x*y for symmetric difference, not evidence for the universal interpolation theorem."
+}

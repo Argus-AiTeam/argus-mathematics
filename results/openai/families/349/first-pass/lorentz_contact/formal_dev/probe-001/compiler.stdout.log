@@ -1,0 +1,26 @@
+Real.geom_mean_le_arith_mean.{u_1} {ι : Type u_1} (s : Finset ι) (w z : ι → ℝ) (hw : ∀ i ∈ s, 0 ≤ w i)
+  (hw' : 0 < ∑ i ∈ s, w i) (hz : ∀ i ∈ s, 0 ≤ z i) :
+  (∏ i ∈ s, z i ^ w i) ^ (∑ i ∈ s, w i)⁻¹ ≤ (∑ i ∈ s, w i * z i) / ∑ i ∈ s, w i
+Real.rpow_mul {x : ℝ} (hx : 0 ≤ x) (y z : ℝ) : x ^ (y * z) = (x ^ y) ^ z
+Real.rpow_natCast (x : ℝ) (n : ℕ) : x ^ ↑n = x ^ n
+Real.rpow_le_rpow {x y z : ℝ} (h : 0 ≤ x) (h₁ : x ≤ y) (h₂ : 0 ≤ z) : x ^ z ≤ y ^ z
+Real.sqrt_sq_eq_abs (x : ℝ) : √(x ^ 2) = |x|
+Real.sqrt_sq {x : ℝ} (h : 0 ≤ x) : √(x ^ 2) = x
+Matrix.PosSemidef.eigenvalues_nonneg.{u_2, u_3} {n : Type u_2} {𝕜 : Type u_3} [Fintype n] [RCLike 𝕜] {A : Matrix n n 𝕜}
+  [DecidableEq n] (hA : A.PosSemidef) (i : n) : 0 ≤ ⋯.eigenvalues i
+Matrix.IsHermitian.trace_eq_sum_eigenvalues.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {n : Type u_2} [Fintype n]
+  {A : Matrix n n 𝕜} [DecidableEq n] (hA : A.IsHermitian) : A.trace = ∑ i, ↑(hA.eigenvalues i)
+Matrix.IsHermitian.det_eq_prod_eigenvalues.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {n : Type u_2} [Fintype n]
+  {A : Matrix n n 𝕜} [DecidableEq n] (hA : A.IsHermitian) : A.det = ∏ i, ↑(hA.eigenvalues i)
+Matrix.transpose_mul.{v, u_1, u_2, u_3} {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type v} [AddCommMonoid α]
+  [CommMagma α] [Fintype n] (M : Matrix m n α) (N : Matrix n l α) : (M * N).transpose = N.transpose * M.transpose
+Matrix.det_mul.{v, u_2} {n : Type u_2} [DecidableEq n] [Fintype n] {R : Type v} [CommRing R] (M N : Matrix n n R) :
+  (M * N).det = M.det * N.det
+Matrix.det_transpose.{v, u_2} {n : Type u_2} [DecidableEq n] [Fintype n] {R : Type v} [CommRing R] (M : Matrix n n R) :
+  M.transpose.det = M.det
+Finset.card_eq_zero.{u_1} {α : Type u_1} {s : Finset α} : s.card = 0 ↔ s = ∅
+Finset.sum_mul.{u_1, u_4} {ι : Type u_1} {R : Type u_4} [NonUnitalNonAssocSemiring R] (s : Finset ι) (f : ι → R)
+  (a : R) : (∑ i ∈ s, f i) * a = ∑ i ∈ s, f i * a
+Finset.mul_sum.{u_1, u_4} {ι : Type u_1} {R : Type u_4} [NonUnitalNonAssocSemiring R] (s : Finset ι) (f : ι → R)
+  (a : R) : a * ∑ i ∈ s, f i = ∑ i ∈ s, a * f i
+Fintype.card_eq_zero_iff.{u_1} {α : Type u_1} [Fintype α] : Fintype.card α = 0 ↔ IsEmpty α

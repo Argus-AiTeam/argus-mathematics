@@ -1,0 +1,174 @@
+{
+  "goal": "C9000052",
+  "routes": [
+    {
+      "name": "R_SELECTED_TANGENT_AUDIT",
+      "status": "current",
+      "evidence": "OBJECTIVE.md",
+      "obligations": ["C_BOX", "C_INTEGRABILITY"]
+    },
+    {
+      "name": "R_SINGULAR_INDUCTION",
+      "status": "ruled_out",
+      "evidence": "research/tangent_box_certificate/horing_2026.txt",
+      "retired_because": "Example 4.3 disproves the required singular rationally connected klt analogue; it does not refute the smooth manuscript assertion."
+    },
+    {
+      "name": "R_DEFERRED_KAHLER",
+      "status": "parked",
+      "evidence": "OBJECTIVE.md",
+      "obligations": ["C_K_HARTOGS", "C_K_MIXED", "C_K_GLOBAL"]
+    }
+  ],
+  "nodes": {
+    "C9000052": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 052 (Tangent splittings and product decompositions.; papers: Universal-cover splitting for compact Kähler manifolds; Integrability of split tangent bundles on rationally connected manifolds; Lean status: Partially/Comparator formalized (lean/docs/052.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_BOX", "C_INTEGRABILITY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_BOX": {
+      "statement": "For every holomorphic g:P1 to a smooth projective X with a specified splitting TX=E1 direct-sum E2, a unique holomorphic tangent box exists without assuming integrability.",
+      "status": "in_progress",
+      "depends_on": ["C_FORMAL", "C_RATIONAL", "C_SURFACE", "C_REMOVAL"],
+      "reviewer_confirmed": false,
+      "source_locator": "Rationally connected manuscript, boxes.tex, Proposition prop:box",
+      "engineer_verdict": "supports",
+      "evidence": [
+        "research/tangent_box_certificate/argument.md",
+        "research/tangent_box_certificate/exact_certificate.json",
+        "research/tangent_box_certificate/verification_output.json"
+      ]
+    },
+    "C_FORMAL": {
+      "statement": "The formal Cauchy recursion exists uniquely and glues under source and target changes along the whole diagonal.",
+      "status": "in_progress",
+      "depends_on": ["C_ALG_CORE"],
+      "reviewer_confirmed": false,
+      "source_locator": "boxes.tex, Lemma lem:formal",
+      "engineer_verdict": "supports",
+      "evidence": ["research/tangent_box_certificate/argument.md"]
+    },
+    "C_RATIONAL": {
+      "statement": "Formal coordinate ratios are rational by a separated-section filtration and a pair-kernel argument; cancellation gives convergence near a nonempty diagonal patch.",
+      "status": "in_progress",
+      "depends_on": ["C_ALG_CORE"],
+      "reviewer_confirmed": false,
+      "source_locator": "boxes.tex, Lemma lem:rational",
+      "engineer_verdict": "supports",
+      "evidence": ["research/tangent_box_certificate/argument.md"]
+    },
+    "C_SURFACE": {
+      "statement": "Surface base points resolve in finitely many point blowups by a strictly decreasing finite colength.",
+      "status": "in_progress",
+      "depends_on": ["C_ALG_CORE"],
+      "reviewer_confirmed": false,
+      "source_locator": "surface.tex, Lemma lem:surface",
+      "engineer_verdict": "supports",
+      "evidence": ["research/tangent_box_certificate/argument.md"]
+    },
+    "C_REMOVAL": {
+      "statement": "Complementary tangencies contract every exceptional component for arbitrary positive valuation orders and give holomorphic descent.",
+      "status": "in_progress",
+      "depends_on": ["C_SURFACE", "C_ALG_CORE"],
+      "reviewer_confirmed": false,
+      "source_locator": "boxes.tex, Lemma lem:removal",
+      "engineer_verdict": "supports",
+      "evidence": ["research/tangent_box_certificate/argument.md"]
+    },
+    "C_TRANSPORT": {
+      "statement": "Projected-bracket relative connections trivialize the complementary directions of a box, including at critical points, with identity normalization on the diagonal.",
+      "status": "in_progress",
+      "depends_on": ["C_BOX"],
+      "reviewer_confirmed": false,
+      "source_locator": "transport.tex, Proposition prop:transport",
+      "engineer_verdict": "supports",
+      "evidence": ["research/tangent_box_certificate/argument.md"]
+    },
+    "C_VARIATION": {
+      "statement": "Rational connectedness supplies a two-mark evaluation submersion and projected global sections with the required zero and spanning values.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_locator": "variation.tex and vanishing.tex, Lemma lem:variation",
+      "engineer_verdict": "supports",
+      "evidence": ["research/tangent_box_certificate/argument.md"]
+    },
+    "C_INTEGRABILITY": {
+      "statement": "Both specified summands are integrable on a smooth connected rationally connected projective X, without additional rank or positivity assumptions.",
+      "status": "in_progress",
+      "depends_on": ["C_BOX", "C_TRANSPORT", "C_VARIATION"],
+      "reviewer_confirmed": false,
+      "source_locator": "introduction.tex, Theorem thm:main; vanishing.tex",
+      "engineer_verdict": "supports",
+      "evidence": ["research/tangent_box_certificate/argument.md"]
+    },
+    "C_PRODUCT": {
+      "statement": "A compatible projective product follows from automatic integrability and the independently cited conditional product theorem.",
+      "status": "open",
+      "depends_on": ["C_INTEGRABILITY", "C_SCOPE_KNOWN"],
+      "reviewer_confirmed": false,
+      "source_locator": "introduction.tex, Corollary cor:product; Horing arXiv:math/0505327v3, Theorem 1.4",
+      "evidence": ["research/tangent_box_certificate/horing_2007.txt"]
+    },
+    "C_SCOPE_KNOWN": {
+      "statement": "Fano-type integrability and integrability-conditional products are prior results; the singular rationally connected extension is false.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tangent_box_certificate/horing_2007.txt",
+        "research/tangent_box_certificate/horing_2026.txt"
+      ]
+    },
+    "C_KAHLER": {
+      "statement": "Deferred companion main theorem: compatible ordinary universal-cover product for compact Kahler X with both specified summands integrable.",
+      "status": "open",
+      "depends_on": ["C_K_HARTOGS", "C_K_MIXED", "C_K_GLOBAL"],
+      "reviewer_confirmed": false,
+      "source_locator": "Universal-cover manuscript, intro.tex, Theorem thm:main",
+      "evidence": []
+    },
+    "C_K_HARTOGS": {
+      "statement": "Deferred Hartogs extension and graph-indeterminacy removal for adapted boxes.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_locator": "Universal-cover manuscript, hartogs.tex, Proposition prop:hartogs",
+      "evidence": []
+    },
+    "C_K_MIXED": {
+      "statement": "Deferred mixed-boundary extension using projection speed bounds, Kahler area estimates, and Hartogs filling.",
+      "status": "open",
+      "depends_on": ["C_K_HARTOGS"],
+      "reviewer_confirmed": false,
+      "source_locator": "Universal-cover manuscript, boundary.tex, Proposition prop:mixed",
+      "evidence": []
+    },
+    "C_K_GLOBAL": {
+      "statement": "Deferred parameter-dependent polydisk boxes, continuous path rectangles, inverse-germ transport, and monodromy.",
+      "status": "open",
+      "depends_on": ["C_K_HARTOGS", "C_K_MIXED"],
+      "reviewer_confirmed": false,
+      "source_locator": "Universal-cover manuscript, boxes.tex and global.tex",
+      "evidence": []
+    },
+    "C_ALG_CORE": {
+      "statement": "Universal algebraic certification of all-order causal Cauchy recursion, ring-linear source covariance, all-degree reconstruction inequalities, dimension-forced kernels, arbitrary-multiplicity exceptional cancellation, and blowup descent arithmetic. This is not a formalization of the entire geometric theorem.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "native_kernel_status": "closed_kernel",
+      "statement_fidelity_reviewed": false,
+      "evidence": [
+        "research/tangent_box_certificate/Main.lean",
+        "research/tangent_box_certificate/statement_fidelity.md",
+        "research/tangent_box_certificate/certificates/C_ALG_CORE-4c563dd27284bf8f.json"
+      ]
+    }
+  }
+}

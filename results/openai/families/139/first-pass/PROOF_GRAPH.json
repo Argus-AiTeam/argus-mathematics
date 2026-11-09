@@ -1,0 +1,167 @@
+{
+  "goal": "C9000139",
+  "routes": {
+    "R_DIV_UNIVERSAL": {
+      "goal": "C_DIV_TENSOR",
+      "obligations": [
+        "C_DIV_JETS",
+        "C_DIV_IBP",
+        "C_DIV_NETWORK",
+        "C_DIV_UNIFORM"
+      ]
+    },
+    "R_DIV_GAUSSIAN_SHORTCUT": {
+      "goal": "C_DIV_TENSOR",
+      "obligations": [
+        "C_DIV_SCOPE_GAUSSIAN"
+      ],
+      "status": "retired",
+      "retired_because": "The cited theorem is Gaussian and Hilbert-valued, not non-Gaussian with all split operator norms.",
+      "evidence": [
+        "research/divergence_audit/report.md"
+      ]
+    },
+    "R_DIV_GENERAL": {
+      "goal": "C_DIV_CORE",
+      "obligations": ["C_DIV_IBP", "C_DIV_NETWORK", "C_DIV_UNIFORM", "C_DIV_LEAN_CORE"]
+    },
+    "R_DIV_MATERIAL": {
+      "goal": "C_DIV_MATERIAL",
+      "obligations": ["C_DIV_TENSOR", "C_DIV_IDENTITIES", "C_DIV_FROBENIUS"]
+    }
+  },
+  "nodes": {
+    "C9000139": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 139 (Subpolynomial query complexity for log-concave sampling.; papers: Subpolynomial query complexity for well-conditioned log-concave sampling; Lean status: Partially/Comparator formalized (lean/docs/139.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_DIV_TENSOR",
+        "C_DIV_MATERIAL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SAMPLING_UPPER": {
+      "statement": "For every epsilon > 0, Q(d) <= C_epsilon d^epsilon for all d >= 2 (thm:main, upper assertion); not certified in this mission.",
+      "status": "open",
+      "depends_on": ["C_PRIMITIVE", "C_SAMPLING_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subpolynomial-query-complexity-for-well-conditioned-log-concave-sampling-September-26-2026/build/sections/introduction.tex"]
+    },
+    "C_SAMPLING_LOWER": {
+      "statement": "Q(d) >= c log d for sufficiently large d, for arbitrary randomized adaptive first-order algorithms (thm:main, lower assertion); outside this mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subpolynomial-query-complexity-for-well-conditioned-log-concave-sampling-September-26-2026/build/sections/introduction.tex"]
+    },
+    "C_PRIMITIVE": {
+      "statement": "The noisy near-quadratic primitive has the uniform accuracy and every-execution query cap in thm:primitive.",
+      "status": "open",
+      "depends_on": ["C_DIV_MATERIAL", "C_NUMERICAL_COMPILER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subpolynomial-query-complexity-for-well-conditioned-log-concave-sampling-September-26-2026/build/sections/preliminaries.tex"]
+    },
+    "C_NUMERICAL_COMPILER": {
+      "statement": "The finite numerical circuits and recursive conditional-mean compiler preserve the stated uniform accuracy and every-execution query caps.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subpolynomial-query-complexity-for-well-conditioned-log-concave-sampling-September-26-2026/build/sections/numerics.tex", "research/openai_manuscript/Subpolynomial-query-complexity-for-well-conditioned-log-concave-sampling-September-26-2026/build/sections/implementation.tex"]
+    },
+    "C_SAMPLING_REDUCTION": {
+      "statement": "The conditional-sampling and auxiliary-noise removal reductions yield the original TV sampling guarantee.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subpolynomial-query-complexity-for-well-conditioned-log-concave-sampling-September-26-2026/build/sections/sampling.tex"]
+    },
+    "C_DIV_TENSOR": {
+      "statement": "The all-split bound eq:network holds for every allowed expression, every j >= 0 and p >= 2, uniformly over actual primitive parameters.",
+      "status": "open",
+      "depends_on": ["C_DIV_JETS", "C_DIV_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/report.md", "research/divergence_audit/exact_certificate.json"]
+    },
+    "C_DIV_CORE": {
+      "statement": "For any smooth probability density exp(-H) on R^d with Gaussian tails and a smooth rank-v field V, v>=3, with polynomially growing derivatives, suppose every split satisfies K_(t,q)<=A^(t+1)(q+t+log(d+1))^(A(t+1))*tau^(-(k+t)) and B_h<=B^(h+1)(h+1)^(B(h+1))*tau^(-h), for all t,h>=0 and real q>=2, where K_(t,q)=max_split ||grad^t V||_(split,q), B_h=max_split ||grad^h Hess H||_(split,infinity), A,B>=2, k>=0 integer and 0<tau<=1. Then every split of grad^j delta_H V has L^p norm <=C^(j+1)(p+j+log(d+1))^(C(j+1))*tau^(-(k+j+1)) for all j>=0,p>=2, with C depending only on A,B,v. The stronger finite-moment profile inequality is Theorem A of report.md.",
+      "status": "open",
+      "depends_on": ["C_DIV_IBP", "C_DIV_NETWORK", "C_DIV_UNIFORM", "C_DIV_LEAN_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/report.md", "research/divergence_audit/exact_certificate.json"]
+    },
+    "C_DIV_IBP": {
+      "statement": "For every even n>=2, the labeled expansion of a trace moment of delta_H grad^j V has at most (3n)^n terminal terms. At every stage active+sum(e_i)+sum(h_u)+2w=n. Terminal terms retain the original trace cycle; new edges join distinct primaries or a primary to a Hessian; every Hessian has distinct creating primary neighbors and no Hessian-Hessian edge occurs.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/report.md", "research/divergence_audit/exact_certificate.json"]
+    },
+    "C_DIV_NETWORK": {
+      "statement": "For every finite terminal tensor graph with an original primary trace cycle, no self-loop or Hessian-Hessian edge, and at least two distinct primary neighbors at each Hessian, cutting an original b-slot bundle admits a vertex ordering with nonempty input and output at every factor. The contraction is tr Q and |tr Q|<=d^b*product of the selected nontrivial split operator norms, with no other dimension cost.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/report.md", "research/divergence_audit/exact_certificate.json", "research/divergence_audit/jacobian_output.json"]
+    },
+    "C_DIV_UNIFORM": {
+      "statement": "For every terminal n-primary expansion, sum(e_i)+sum(h_u)+2w=n implies n(k+j)+sum(e_i)+sum(h_u)<=n(k+j+1) and n(j+1)+sum(e_i)+sum(h_u)+w<=2n(j+1). Holder uses exactly n primary factors at exponent n. Choosing n=2*ceil((p+2b*log(d+1))/2), b<=floor((v+j-1)/2), absorbs d^(b/n) and preserves polynomial exponent O(j+1) uniformly in all j,p,d.",
+      "status": "open",
+      "depends_on": ["C_DIV_IBP", "C_DIV_NETWORK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/report.md", "research/divergence_audit/exact_certificate.json"]
+    },
+    "C_DIV_JETS": {
+      "statement": "All-split conditional cumulants give the jet and score estimates in prop:gaussian-jets under only C2 regularity and the declared Lipschitz bound.",
+      "status": "open",
+      "depends_on": ["C_DIV_CUMULANTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subpolynomial-query-complexity-for-well-conditioned-log-concave-sampling-September-26-2026/build/sections/jets.tex", "research/divergence_audit/report.md"]
+    },
+    "C_DIV_IDENTITIES": {
+      "statement": "The mean, normalized jet, and adjoint material identities in lem:material-identities hold, with their displayed signs and factors.",
+      "status": "open",
+      "depends_on": ["C_DIV_JETS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subpolynomial-query-complexity-for-well-conditioned-log-concave-sampling-September-26-2026/build/sections/divergence.tex", "research/divergence_audit/report.md", "research/divergence_audit/exact_certificate.json"]
+    },
+    "C_DIV_MATERIAL": {
+      "statement": "The all-split tensor bound implies eq:path-jet and eq:path-mean with a single final sqrt(d) loss, uniformly in probability time, center, scale, and oracle.",
+      "status": "open",
+      "depends_on": ["C_DIV_TENSOR", "C_DIV_IDENTITIES", "C_DIV_FROBENIUS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/report.md", "research/divergence_audit/exact_certificate.json"]
+    },
+    "C_DIV_LEAN_CORE": {
+      "statement": "A zero-hole Lean formalization verifies the universal combinatorial and high-moment resource invariants used in the analytic proof.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/Main.lean", "research/divergence_audit/statement_fidelity.md", "research/divergence_audit/lean/certificates/C_DIV_LEAN_CORE-ec7f9f0e83297850.json"]
+    },
+    "C_DIV_CUMULANTS": {
+      "statement": "If a random vector S in any finite dimension has a moment-generating function near zero and satisfies Var(P(S))<=beta*E|grad P(S)|^2 for every ambient polynomial P, then for every N>=2 every nontrivial split of its cumulant tensor has norm <=N^(3N)*beta^(N/2), independently of the dimension and mean of S.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/report.md"]
+    },
+    "C_DIV_FROBENIUS": {
+      "statement": "For a C2 density exp(-H) with bounded Hessian and Gaussian tails and any smooth tensor V with V and grad V square-integrable in Frobenius norm, ||delta_H V||_(F,2)^2<=||grad V||_(F,2)^2+||Hess H||_(op,infinity)*||V||_(F,2)^2, independently of dimension and output rank. Combining a one-slot split with Frobenius conversion costs at most sqrt(d).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/report.md"]
+    },
+    "C_DIV_SCOPE_GAUSSIAN": {
+      "statement": "The cited Gaussian Hilbert-valued theorem alone does not provide the requested non-Gaussian all-split estimate.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/divergence_audit/report.md"]
+    }
+  }
+}

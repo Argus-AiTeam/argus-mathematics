@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C9000019-COLLAR-CORE-51343a86c5dd",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/019/first-pass/collar_root_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/019/first-pass/collar_root_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14272,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/019/first-pass/collar_root_audit/Main.lean",
+    "source_sha256": "0f03b807a37d9e107b6c848bfccb1a28ffeda3d510c1086ec84224985f9acfa2",
+    "statement_fidelity": "families/019/first-pass/collar_root_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "dd2b515f04a29cde0ed5c60aa7b4d2d83be7d94da428562a92620ce3fb6555b2",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/019/first-pass/collar_root_audit/Main.lean:57:5: warning: Variable name `hpositive` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/collar_root_audit/Main.lean",
+    "text": "import Mathlib\n\nopen Set\n\nnamespace CollarRootAudit\n\ntheorem rational_collar_capture\n    {X : Type*} [TopologicalSpace X] [CompactSpace X]\n    (N : Set X) (hN : IsOpen N) (v : X → ℝ) (hv : Continuous v)\n    (hbad : ∀ x, x ∉ N → ∃ q : ℚ, v x = (q : ℝ))\n    {a lower upper : ℝ} (ha : Irrational a)\n    (hlower : lower < a) (hupper : a < upper) :\n    ∃ r R : ℚ,\n      lower < (r : ℝ) ∧ (r : ℝ) < a ∧\n      a < (R : ℝ) ∧ (R : ℝ) < upper ∧\n      ∀ x, (r : ℝ) < v x → v x < (R : ℝ) → x ∈ N := by\n  let F : Set ℝ := v '' Nᶜ\n  have hF : IsClosed F := (hN.isClosed_compl.isCompact.image hv).isClosed\n  have haF : a ∉ F := by\n    rintro ⟨x, hx, hxa⟩\n    obtain ⟨q, hq⟩ := hbad x hx\n    exact ha ⟨q, hq.symm.trans hxa⟩\n  have hopen : IsOpen (Fᶜ ∩ Ioo lower upper) :=\n    hF.isOpen_compl.inter isOpen_Ioo\n  have hmem : a ∈ Fᶜ ∩ Ioo lower upper := ⟨haF, hlower, hupper⟩\n  obtain ⟨l, u, hlu, hI⟩ :=\n    mem_nhds_iff_exists_Ioo_subset.mp (hopen.mem_nhds hmem)\n  obtain ⟨r, hlr, hra⟩ := exists_rat_btwn hlu.1\n  obtain ⟨R, haR, hRu⟩ := exists_rat_btwn hlu.2\n  have hrmem : (r : ℝ) ∈ Fᶜ ∩ Ioo lower upper :=\n    hI ⟨hlr, lt_trans hra hlu.2⟩\n  have hRmem : (R : ℝ) ∈ Fᶜ ∩ Ioo lower upper :=\n    hI ⟨lt_trans hlu.1 haR, hRu⟩\n  refine ⟨r, R, hrmem.2.1, hra, haR, hRmem.2.2, ?_⟩\n  intro x hxL hxU\n  by_contra hx\n  have hxF : v x ∈ F := ⟨x, hx, rfl⟩\n  exact (hI ⟨lt_trans hlr hxL, lt_trans hxU hRu⟩).1 hxF\n\ntheorem circuit_genus_balance (n g : ℤ) :\n    2 * (n * g) - 2 = n * (2 * g - 2) + 2 * (n - 1) := by\n  ring\n\ntheorem circuit_stability_balance (n g val : ℤ) :\n    2 * (n * g) - 2 + (2 + n * (val - 2)) =\n      n * (2 * g - 2 + val) := by\n  ring\n\ntheorem unramified_stability_balance (d g gp val valp : ℤ)\n    (hgenus : 2 * gp - 2 = d * (2 * g - 2))\n    (hval : valp = d * val) :\n    2 * gp - 2 + valp = d * (2 * g - 2 + val) := by\n  rw [hgenus, hval]\n  ring\n\ntheorem stable_tree_side_impossible (N total : ℕ)\n    (hpositive : 0 < N) (htree : total + 1 = 2 * N)\n    (hstable : 3 * N ≤ total) : False := by\n  omega\n\nend CollarRootAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/collar_root_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: the universal all-sheet collar core\n\nClaim: `C9000019-COLLAR-CORE`.\nFormal source: `research/collar_root_audit/Main.lean`, Lean 4.31.0.\n\nThe unqualified compiler declarations described here are\n`rational_collar_capture`, `circuit_genus_balance`,\n`circuit_stability_balance`, `unramified_stability_balance`, and\n`stable_tree_side_impossible`, all in namespace `CollarRootAudit`.\n\n## `CollarRootAudit.rational_collar_capture`\n\nThe objects are an arbitrary compact topological space `X`, an open subset\n`N`, a continuous function `v : X -> Real`, and real numbers `lower < a <\nupper`. The hypothesis `Irrational a` means that `a` is not the image of\nany rational number in the reals. The quantified hypothesis `hbad` says\nthat for **every** `x` outside `N`, there exists a rational `q` with\n`v x = q`. There is no assumption that the complement of `N` is finite\nor has only finitely many function values.\n\nThe conclusion produces rationals `r` and `R` with\n`lower < r < a < R < upper`. It asserts that **every** `x` with\n`r < v x < R` belongs to `N`. This is a containment of entire inverse\nimages, not an assertion about selected points or a distinguished\nskeleton.\n\nFor the analytic application, take `X` to be the compact inverse image\nof a closed concentric annular window under the finite cover, `N` the\nintersection with the finite union of source node tubes mapping to the\ntarget node, and `v = -log_p(abs(t))`. The real window endpoints are\nstrictly between those of the target node annulus. The hypotheses on\n`v`, `N`, and the rationality of the bad values must be established by\nthe analytic proof in `report.md`; they are not Lean definitions of\nBerkovich objects. Once the interval lies inside the closed window,\nthis conclusion covers all preimages in the original proper source,\nnot merely points already chosen from the window.\n\n## The algebraic and combinatorial declarations\n\n`CollarRootAudit.circuit_genus_balance` is an identity for all integers\n`n,g`. It checks the Riemann--Hurwitz identity for a degree-`n` residue\ncover with two totally ramified marks, whose source genus is `n*g`.\nIt does not assert that a curve cover realizing those data exists.\n\n`CollarRootAudit.circuit_stability_balance` is an identity for all integers\n`n,g,val`. It checks that replacing the two circuit directions by\nfactor-`n` directions and each other direction by `n` factor-one\ndirections multiplies the stability weight by `n`.\n\n`CollarRootAudit.unramified_stability_balance` quantifies over all integers\n`d,g,gp,val,valp`. Under the unramified Riemann--Hurwitz and valence\nequalities, it proves that the stability weight is multiplied by `d`.\nPositivity in the geometric application follows from positive degree\nand stability of the base vertex.\n\n`CollarRootAudit.stable_tree_side_impossible` quantifies over natural\nnumbers `N,total`. A positive number of vertices, the tree-side equality\n`total + 1 = 2*N`, and the genus-zero stability bound `3*N <= total`\nare inconsistent. The degree-sum formula for a tree with one boundary\nhalf-edge is supplied by the graph proof in `report.md`, not encoded as\na graph datatype.\n\n## Exact certification boundary\n\nThese are universal theorems, not a bounded parameter search. There are\nno custom axioms, placeholders, or assumed conclusions in the source.\nMathlib supplies the topology and arithmetic foundations.\n\nThe compiler does **not** formalize the resolution theorem, existence of\nresidue covers, ABBR lifting, Berkovich reduction and compactness,\nanalytic unit factorization or binomial convergence, finite-etale\nfibre-product domination, or the complete manuscript lemma. Those\nmathematical bridges are stated and proved, or identified as external\ninputs with their precise hypotheses, in `report.md`. Independent\nreview of that bridge and of this translation is still required.\n"
+  },
+  "subject": {
+    "content_hash": "cf05e2e0bad955e3deaf479626e555c7d8c02d694f66cce9e40aef23a9a5ca0e",
+    "kind": "claim",
+    "subject_id": "C9000019-COLLAR-CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

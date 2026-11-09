@@ -1,0 +1,167 @@
+{
+  "goal": "C9000148",
+  "routes": [
+    {
+      "name": "R_DIMENSION_COMPLETE",
+      "status": "current",
+      "evidence": "research/dimension-audit/proof.md"
+    },
+    {
+      "name": "R_PAIR_GRID431",
+      "status": "current",
+      "evidence": "research/pair-bound/Main.lean"
+    }
+  ],
+  "nodes": {
+    "C9000148": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 148 (The entropy-rate dimension formula for self-similar measures.; papers: The entropy-rate dimension formula for self-similar measures on the line; Lean status: Partially/Comparator formalized (lean/docs/148.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_DIMENSION_FORMULA"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/dimension-audit/proof.md"
+      ]
+    },
+    "C_PAIR_BOUND": {
+      "statement": "For every finite real probability law, integer k >= 1, and rho > 0, k(H(nu)-H^0_rho(nu)) <= log_2 |k supp(nu)| + 60000 k^4 sum_{2^(-ell) <= 2 rho} c_ell(nu), with fractional unordered-pair capacity and no minimum-separation hypothesis.",
+      "status": "proved",
+      "depends_on": [],
+      "reviewer_confirmed": true,
+      "dependency_discharge": "The unchanged unconditional compiler certificate contains the four internal pair-bound obligations. Host-invoked reviewer:copilot approved this exact certificate; the theorem is now an atomic reviewed input, not a pending reproof.",
+      "evidence": [
+        "research/pair-bound/Main.lean",
+        "research/pair-bound/statement_fidelity.md",
+        "research/pair-bound/proof.md",
+        "research/pair-bound/exact_certificate.json",
+        "research/pair-bound/certificates/C_PAIR_BOUND-6724e437dd6bbb81.json"
+      ]
+    },
+    "L_PAIR_CHAIN": {
+      "statement": "The finite conditional-entropy chain reduces the exact-minus-grid entropy deficit to at most log_2 |kF| plus refinement costs, using separation only to obtain a finite terminal depth.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair-bound/Main.lean", "research/pair-bound/proof.md"]
+    },
+    "L_PAIR_REFINEMENT": {
+      "statement": "A refinement after observing the sum has a linear mean-deviation cost; coordinate independence is used only before conditioning on the sum.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair-bound/Main.lean", "research/pair-bound/proof.md"]
+    },
+    "L_PAIR_COUPLING": {
+      "statement": "A symmetric same-cell coupling has the original marginals, and its mass in each half-open dyadic distance band gives a feasible fractional unordered-pair mixture.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair-bound/Main.lean", "research/pair-bound/proof.md"]
+    },
+    "L_PAIR_CHARGING": {
+      "statement": "Each dyadic band is charged by a geometric series with uniform bound 8/3, eliminating the separating depth and giving the stated constant.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair-bound/Main.lean", "research/pair-bound/proof.md"]
+    },
+    "C_DIMENSION_FORMULA": {
+      "statement": "The dimension of every finite real self-similar measure with positive weights and 0 < |r_i| < 1 is min(1,h_RW/chi), allowing signed contractions, exact overlaps, and repeated indexed maps.",
+      "status": "open",
+      "depends_on": ["L_DIMENSION_UPPER", "L_EXACT_DIMENSION", "L_NONSATURATION", "L_TYPE_DEFICIT", "L_PAIR_BANDS", "L_CONDITIONAL_GAIN", "L_WINDOW_CONTRADICTION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/dimension-audit/proof.md",
+        "research/dimension-audit/statement_fidelity.md",
+        "research/dimension-audit/verify.py",
+        "research/dimension-audit/exact_certificate.json"
+      ]
+    },
+    "L_EXACT_DIMENSION": {
+      "statement": "Feng-Hu exact dimensionality supplies existence of the dimension of the self-similar measure.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/dimension-audit/proof.md",
+        "research/dimension-audit/feng_hu.pdf",
+        "research/dimension-audit/feng_hu_excerpt.txt"
+      ]
+    },
+    "L_NONSATURATION": {
+      "statement": "For dimension below one, the manuscript's entropy increment is uniformly nonsaturated at all scales.",
+      "status": "open",
+      "depends_on": ["L_EXACT_DIMENSION", "L_ENTROPY_CALCULUS", "L_ENTROPY_DIMENSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension-audit/proof.md"]
+    },
+    "L_TYPE_DEFICIT": {
+      "statement": "Block-type conditioning produces conditional finite laws with a linear exact-minus-grid entropy deficit.",
+      "status": "open",
+      "depends_on": ["L_ENTROPY_DIMENSION", "L_ENTROPY_CALCULUS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension-audit/proof.md"]
+    },
+    "L_PAIR_BANDS": {
+      "statement": "The finite-law pair bound converts type-conditioned entropy deficit to a positive average total pair capacity over finitely many finer bands.",
+      "status": "open",
+      "depends_on": ["C_PAIR_BOUND", "L_TYPE_DEFICIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension-audit/proof.md", "research/dimension-audit/exact_certificate.json"]
+    },
+    "L_CONDITIONAL_GAIN": {
+      "statement": "Fair pairs and nonsaturation yield a definite conditional entropy gain on the associated windows.",
+      "status": "open",
+      "depends_on": ["L_PAIR_BANDS", "L_NONSATURATION", "L_TWO_POINT_GAIN", "L_ENTROPY_CALCULUS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension-audit/proof.md", "research/dimension-audit/jacobian_output.json"]
+    },
+    "L_WINDOW_CONTRADICTION": {
+      "statement": "Disjoint-window entropy gains telescope to exclude dimension below both one and h_RW/chi.",
+      "status": "open",
+      "depends_on": ["L_CONDITIONAL_GAIN", "L_PAIR_BANDS", "L_DIMENSION_WINDOW_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension-audit/proof.md", "research/dimension-audit/exact_certificate.json"]
+    },
+    "L_DIMENSION_UPPER": {
+      "statement": "Merged complete affine-map blocks give dimension at most min(1,h_RW/chi), including zero entropy.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension-audit/proof.md"]
+    },
+    "L_ENTROPY_CALCULUS": {
+      "statement": "Uniform smoothing and nested grids give signed scaling, integer-ratio concavity, convolution monotonicity, grid comparisons, and convexity of the one-bit deficit.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension-audit/proof.md"]
+    },
+    "L_ENTROPY_DIMENSION": {
+      "statement": "The fixed and averaged grid entropy upper rates of a compact exact-dimensional real measure are at most its dimension.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension-audit/proof.md"]
+    },
+    "L_TWO_POINT_GAIN": {
+      "statement": "A fair pair of distance v gains at least Delta_v-s/v-v/t in a window 0<s<v<t, including translated and reflected pairs.",
+      "status": "open",
+      "depends_on": ["L_ENTROPY_CALCULUS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension-audit/proof.md"]
+    },
+    "L_DIMENSION_WINDOW_CORE": {
+      "statement": "Universal ceiling-error, cross-band ordering, ordered-window telescoping, integer target recovery, floor-count, adaptive endpoint, and arbitrary-band contradiction theorems.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/dimension-audit/Main.lean",
+        "research/dimension-audit/statement_fidelity.md",
+        "research/dimension-audit/certificates/certificates/L_DIMENSION_WINDOW_CORE-fbd6db0311f02acd.json"
+      ]
+    }
+  }
+}

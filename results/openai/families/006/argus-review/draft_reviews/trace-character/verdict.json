@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "unit": "trace-character",
+  "author_role": "engineer",
+  "review_kind": "old_draft_review",
+  "result_class": "reproduction_and_formal_verification",
+  "novelty_status": "not_asserted",
+  "native_independent_acceptance": "pending",
+  "self_accepted": false,
+  "scope_verdict": "supported_abstract_theorem_partial_arithmetic_application",
+  "report": "research/draft_reviews/trace-character/report.md",
+  "primary_claim": {
+    "id": "V_TRACE_CHARACTER",
+    "version": 2,
+    "content_hash": "a6feb70abd47185b638ce227c8600086105516b6aa81d97b140f61189fc0b3ac",
+    "theorem": "RootCharacter.root_character_of_class",
+    "quantifiers": "Every group G, commutative ring A with CharP A 2, homomorphism pi:G->DihedralGroup 3, and function t:G->A satisfying the listed universally quantified identities and having r 1 in the residual image.",
+    "hypotheses": [
+      "For all c,x, t(c*x*c^-1)=t(x).",
+      "t(1)=0.",
+      "For all x,y, t(x)*t(y)=t(x*y)+t(x*y^-1).",
+      "For all x, pi(x)=1 implies t(x)=0.",
+      "For all x with pi(x)=r 1 or r 2, t(x)^2=1.",
+      "For all x,y whose residual images are simple, t(x)*t(y)=0.",
+      "There exists g with pi(g)=r 1."
+    ],
+    "conclusion": "There exists a homomorphism alpha:G->A.units with alpha(g)^2=1 for every g and underlying ring value alpha(g)=t(g) for every root g.",
+    "not_asserted": [
+      "Nontriviality or exact order two.",
+      "Agreement with the trace on nonroots.",
+      "Uniqueness or canonicity.",
+      "Continuity, finite image, or arithmetic ramification for arbitrary G and A."
+    ],
+    "ring_scope": "Characteristic exactly two, with nilpotents retained; no field, domain, reducedness, localness, or finiteness assumption. The literal CharP A 2 hypothesis excludes the zero ring."
+  },
+  "attribution": {
+    "manuscript_result": "Density manuscript, build/sections/06-traces.tex, Lemma tc:root-character, lines 652-751; preceding tc:trace-algebra supplies asserted operator identities.",
+    "classification": [
+      "Reproduction and formal verification of an existing manuscript algebra argument.",
+      "Constructive lift formulas and arbitrary-group/ring abstraction: possible strengthening, novelty not asserted.",
+      "Finite adversarial computations: supplementary reproductions, not a universal proof.",
+      "Residue-field reduction: failed shortcut, not a manuscript counterexample."
+    ],
+    "manuscript_reference_revision": "4eaee87548250b2682affda7d05d947c05554bae",
+    "trace_source_sha256": "40d5a0ed9e1873c86a07680021120deb429e19e46c8e24409b269c31489d541f",
+    "trace_source_matches_reference_manifest": true,
+    "old_reference_container_kind": "directory containing manuscript symlinks",
+    "staged_revision_difference": "None encountered for the inspected trace file: its content hash matches the stated reference revision. The symlink is not itself an immutable checkout."
+  },
+  "findings": [
+    {
+      "id": "universal-character",
+      "status": "supported",
+      "scope": "Conditional abstract theorem, including C3 and S3 residual images and arbitrary nonreduced characteristic-two coefficient rings.",
+      "decisive_reason": "The proof constructs beta on the elementary kernel, proves invariance and multiplicativity, kills the section defect, and assembles a genuine square-one unit-valued character."
+    },
+    {
+      "id": "split-squares-and-elementary-kernel",
+      "status": "supported",
+      "scope": "Kernel-square subgroup normality/invariance and an explicitly constructed invisible-kernel quotient with descended trace and exponent-two residual kernel.",
+      "formalization_limit": "square_subgroup_factorization states the subgroup/invariance facts; the explicit quotient and descended trace in root_character use the possibly larger invisible subgroup."
+    },
+    {
+      "id": "lift-existence",
+      "status": "supported",
+      "scope": "rotation_lift and normalizer_lift are proved from the derived elementary-kernel property and residual preimages.",
+      "decisive_reason": "R=g^4; for an arbitrary transposition preimage x, a=x*R*x^-1*R, b=R^-1*a*R, and s=b*x give the normalizing lift. The proof does not assume s^2=1.",
+      "not_assumed_in_final_theorem": [
+        "An elementary or abelian original residual kernel.",
+        "A normalizing transposition lift.",
+        "A character already extending beta."
+      ]
+    },
+    {
+      "id": "formal-statement-fidelity",
+      "status": "supported",
+      "scope": "The conditional algebraic conclusion of the source lemma, not all its arithmetic hypotheses or ramification assertions.",
+      "qualification": "Order two means exponent dividing two; a zero operator algebra is outside literal CharP A 2 and is a separate trivial case."
+    },
+    {
+      "id": "whole-source-lemma",
+      "status": "partial",
+      "scope": "Its algebraic implication is supported, but full-orbit trace identities, parity bounds, and the common finite unramified Galois quotient remain arithmetic inputs."
+    },
+    {
+      "id": "ramification",
+      "status": "partial",
+      "scope": "pullback_unramified preserves the condition rho(u)=1; the quotient-by-character-kernel has exponent two.",
+      "not_formalized": [
+        "Existence and continuity of the starting finite arithmetic quotient.",
+        "Its inertia-killing bound outside S union U.",
+        "Galois correspondence and finite elementary extension interpretation."
+      ]
+    },
+    {
+      "id": "field-reduction-route",
+      "status": "unsupported",
+      "classification": "failed_shortcut",
+      "reason": "The nonidentity square-one unit 1+epsilon in F2[epsilon]/(epsilon^2) reduces to 1. Passing to the residue field loses character data."
+    },
+    {
+      "id": "arithmetic-and-main-theorems",
+      "status": "unsupported",
+      "scope": "Not established by this unit: D_TRACE_INPUTS, D_COEFFICIENTS, the pointwise 2-converse, density, mean-rank, or their other downstream obligations.",
+      "interpretation": "Unsupported here does not mean false or refuted."
+    }
+  ],
+  "historical_formal_evidence": {
+    "fresh_compilation": false,
+    "certificate": "families/006/first-pass/trace-character/certificates/V_TRACE_CHARACTER-890c4fddf20553a9.json",
+    "mechanical_evidence_id": "lean-V_TRACE_CHARACTER-199c5fb5b450",
+    "historical_independent_judgment_id": "judgement-V_TRACE_CHARACTER-016f1d822e6f",
+    "judgment_version_binding_source": "Parent-completed ledger reconciliation; no ledger reread in this unit review.",
+    "source_sha256": "63b99f14eefaf1b0bb01946be0f0d5c6b50760e7058873011c4cc0655d243641",
+    "statement_fidelity_sha256": "b461b2452ceaae12d5278b798d37d8fa21fd3b919eb398c2f7787767e2001fe6",
+    "embedded_source_equals_preserved_file": true,
+    "embedded_fidelity_equals_preserved_file": true,
+    "certificate_lean_check_equals_standalone_record": true,
+    "fidelity_spelling_variants_byte_identical": true,
+    "lean_version": "4.31.0",
+    "lean_commit": "68218e876d2a38b1985b8590fff244a83c321783",
+    "lean_platform": "x86_64-unknown-linux-gnu",
+    "lake_version": "5.0.0-src+68218e8",
+    "elan_version": "4.2.3 (b6cec7e10 2026-06-08)",
+    "mathlib_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "mathlib_commit": null,
+    "compiler_exit_code": 0,
+    "axiom_audit_exit_code": 0,
+    "duration_ms": 22730,
+    "proof_holes": [],
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "printed_axiom_audit_declarations": [
+      "RootCharacter.root_character_of_class",
+      "RootCharacter.square_subgroup_factorization",
+      "RootCharacter.normalizer_lift",
+      "RootCharacter.character_quotient_exponent_two"
+    ],
+    "source_options": {
+      "autoImplicit": false,
+      "maxHeartbeats": 1000000
+    },
+    "historical_submission": {
+      "task_id": "trace-character-lean-9000006",
+      "run_id": "trace-character-lean-9000006-1793884253398867591",
+      "mode": "direct",
+      "timeout_seconds": 600
+    }
+  },
+  "fresh_finite_replay": {
+    "artifact": "research/draft_reviews/trace-character/finite-replay.json",
+    "python": "$WORKSPACE/argus-latest/.venv/bin/python",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 python -; importlib loads unchanged old verify.py, sys.dont_write_bytecode=True, sys.argv=[old verify.py], main() called once, stdout captured inside owned scope. Exact computational invocation is in report.md.",
+    "verifier_copied": false,
+    "exit_status": 0,
+    "elapsed_seconds": 0.047151338309049606,
+    "status": "pass",
+    "models": 6,
+    "candidate_class_functions": 624,
+    "valid_opposite_traces": 13,
+    "valid_matching_traces_subset": 11,
+    "traces_with_nontrivial_root_units": 6,
+    "traces_with_nonzero_simple_values": 2,
+    "exact_certificate_comparison": "Entire computed dictionary equals historical exact_certificate.json.",
+    "formal_record_binding_rechecked": true,
+    "coefficient_ring": "F2[epsilon]/(epsilon^2)",
+    "ring_elements": 4,
+    "ring_law_triples": 64,
+    "limits": [
+      "Only the six named finite groups and this four-element ring are exhaustively tested.",
+      "Not a universal proof or an arithmetic representation experiment.",
+      "No fresh Lean or Jacobian process."
+    ],
+    "deviations": [
+      "Only import/stdout capture and owned result serialization; verifier algorithm and inputs unchanged.",
+      "Historical serialized result_class=new_theorem is not adopted as this review's classification."
+    ]
+  },
+  "jacobian": {
+    "fresh_adapter_invocation": false,
+    "operation_id": "crossed_product.multiply.compute",
+    "historical_server_version": "0.14.0",
+    "historical_protocol_version": "2025-11-25",
+    "historical_payload": "families/006/first-pass/trace-character/jacobian-payload.json",
+    "fixture": "In F2[C2], multiply e+s by e+s using the full two-coset, rank-zero payload reproduced in report.md.",
+    "expected_product_terms": [],
+    "support_pairs": 4,
+    "contract_bounds": {
+      "quotient_order_max": 16,
+      "lattice_rank_max": 8,
+      "support_pairs_max": 1024,
+      "scalar_work_max": 80000
+    },
+    "fresh_check": "Local Python convolution and archived payload/output binding only; no new adapter exit status, timeout observation, or server execution.",
+    "scope": "Nilpotent diagnostic, not proof of the universal theorem."
+  },
+  "remaining_obligations": [
+    {
+      "id": "D_TRACE_INPUTS/A_TRACE_IDENTITIES",
+      "statement": "Establish the characteristic-zero/integral trace construction, class invariance, determinant-eliminated product identity, and repeated-root square identity on the whole operator orbit after every allowed test."
+    },
+    {
+      "id": "D_TRACE_INPUTS/A_PARITY_BOUNDS",
+      "statement": "Prove the normalized coefficient/shell bounds implying matching nonroot vanishing and opposite split/two-simple vanishings, uniformly under further probes and at the required moving precision."
+    },
+    {
+      "id": "D_TRACE_INPUTS/A_UNRAMIFIED_QUOTIENT",
+      "statement": "Supply at the fixed stage/accuracy a common finite continuous quotient for the trace action and residual representation, killing inertia outside S union U."
+    },
+    {
+      "id": "D_COEFFICIENTS",
+      "statement": "Establish the complete normalized coefficient/source construction, valuation estimates, and leading-symbol detection. A weighted genus identity is only an ingredient."
+    },
+    {
+      "id": "downstream-main-theorems",
+      "statement": "No pointwise 2-converse, analytic density theorem, mean analytic rank theorem, or their remaining arithmetic/analytic dependencies is established by this abstract algebra certificate."
+    }
+  ],
+  "manuscript_refuted": false,
+  "old_inputs_modified": false
+}

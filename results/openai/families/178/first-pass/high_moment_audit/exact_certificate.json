@@ -1,0 +1,123 @@
+{
+  "claim_id": "C_HM_UNIFORM",
+  "result_kind": "conditional_verification_theorem",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "independent_review": "pending_host_invocation",
+  "novelty": "not_certified",
+  "statement": "For every fixed integer d >= 3 and a kernel bound H chosen before the order, every fixed even p >= 4 admits a fixed diagonal weight, a fixed near radius, sufficiently small losses, and a size threshold such that the two-channel high-moment drift holds with C_star = 64 + 8192 H independent of p and with a deterministic error budget of total o(1).",
+  "quantifier_order": [
+    "fix d and H independently of p",
+    "fix an even integer p >= 4",
+    "choose T_p, kappa_p, epsilon_p and R",
+    "choose structural and low-square losses",
+    "take n sufficiently large depending on all previous choices",
+    "the bound holds for every admissible current state and every early-phase stub count"
+  ],
+  "constants": {
+    "C_star": "64 + 8192*H",
+    "A_0": "63 + 8192*H",
+    "T_p": "(2^40*d*H*p^8)^(8*p)",
+    "Q_p": "(2^20*p^8*d^2*H^2)^(4*p)",
+    "kappa_p": "1/(1+T_p)",
+    "epsilon_p": "1/(64*T_p)",
+    "radius_condition": "q^R * epsilon_p^2 >= 16",
+    "T_over_Q_exponent_vector_per_p": {
+      "2": 240,
+      "p": 32,
+      "d": 0,
+      "H": 0
+    },
+    "maximum_principal_young_splittings": 6,
+    "maximum_linear_monomials": 32
+  },
+  "source_release": "Deterministic-nonbipartite-Ramanujan-graphs-in-every-fixed-degree-September-23-2026",
+  "source_inputs": [
+    {
+      "file": "foundations.tex",
+      "labels": ["eq:original-4", "eq:original-5", "eq:original-6", "eq:original-7", "lemma:pencil-coefficients"],
+      "mathematical_status_in_this_audit": "source-local upstream assumptions, not independently proved here"
+    },
+    {
+      "file": "foundations.tex",
+      "labels": ["eq:original-10"],
+      "mathematical_status_in_this_audit": "source-local upstream assumption used to obtain small normalized row second moments"
+    },
+    {
+      "file": "early.tex",
+      "labels": ["eq:original-22", "eq:original-23", "eq:original-29", "eq:original-30", "eq:original-31", "eq:original-32"],
+      "mathematical_status_in_this_audit": "source-local upstream assumptions; the eight principal monomials and an index-word invariant are checked exactly"
+    },
+    {
+      "file": "setup.tex",
+      "labels": ["sec:setup", "subsec:hierarchy"],
+      "mathematical_status_in_this_audit": "definitions of scales and quantifier order"
+    }
+  ],
+  "target": {
+    "file": "early.tex",
+    "labels": ["lem:early-high-moments", "eq:original-33"]
+  },
+  "budget_exponents": {
+    "mean_trace": {"eta_coefficient": 0, "constant": "0", "a_coefficient": "-19/25"},
+    "mean_path": {"eta_coefficient": 1, "constant": "0", "a_coefficient": "-3/5"},
+    "mean_forbidden": {"eta_coefficient": 0, "constant": "-1/3", "a_coefficient": "-383/1000"},
+    "mean_l_three_halves": {"eta_coefficient": 1, "constant": "0", "a_coefficient": "-31/100"},
+    "mean_nonlinear": {"eta_coefficient": 0, "constant": "-1/3", "a_coefficient": "11/40"},
+    "residual_second": {"eta_coefficient": 1, "constant": "0", "a_coefficient": "-31/50"},
+    "residual_nonlinear": {"eta_coefficient": 0, "constant": "-2/3", "a_coefficient": "11/20"},
+    "residual_sup_tail": {"eta_coefficient": 0, "constant": "0", "a_coefficient": "-1/100"},
+    "residual_sup_nonlinear": {"eta_coefficient": 0, "constant": "-1/3", "a_coefficient": "11/40"},
+    "residual_sup_centering": {"eta_coefficient": 0, "constant": "-2/3", "a_coefficient": "-13/100"},
+    "reverse_leakage": {"eta_coefficient": 0, "constant": "-2/3", "a_coefficient": "-3/20"}
+  },
+  "exponent_check_domain": {
+    "a": "1/10000",
+    "eta_upper_bound": "a/100",
+    "interpretation": "Fixed powers of log(n) do not change a strictly negative exponent."
+  },
+  "normalization_exponents": {
+    "stub_row": {"eta_coefficient": 0, "constant": "0", "a_coefficient": "-31/50"},
+    "global_resolvent_row": {"eta_coefficient": 0, "constant": "0", "a_coefficient": "-97/100"},
+    "global_path_row": {"eta_coefficient": 0, "constant": "-1/3", "a_coefficient": "-47/100"},
+    "diagonal_and_near": {"eta_coefficient": 1, "constant": "0", "a_coefficient": "-31/50"}
+  },
+  "normalized_second_moment_beta": "a/4",
+  "word_classification": {
+    "method": "complete reachable-state closure followed by induction on word length",
+    "state_coordinates": ["current_endpoint", "local_factor_mask", "error_count", "length_capped_at_two", "single_exception"],
+    "state_space_upper_bound": 96,
+    "restrictions": "Pure swaps, no off-diagonal topology factor, at most one intermediate error.",
+    "universal_invariant": "A same-end word without a local factor at the opposite endpoint has exactly the single opposite diagonal error; a distinct-end word with local factors and no error visits both endpoints.",
+    "not_a_length_cutoff_experiment": true
+  },
+  "jacobian": {
+    "operation_id": "matrix.symbolic.characteristic_polynomial.compute",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "payload": "jacobian_transport_payload.json",
+    "typed_response": "jacobian_transport_result.json",
+    "adapter_status": "jacobian_adapter_status.json",
+    "expected_coefficients_descending": ["1", "0", "-T^2*x"],
+    "interpretation": "Supplementary exact algebra only; no analytic theorem follows from this characteristic polynomial alone."
+  },
+  "evidence": {
+    "proof": "proof.md",
+    "verifier": "verify.py",
+    "compiler_proof": {
+      "claim_id": "C_HM_WEIGHT",
+      "source": "Main.lean",
+      "statement_fidelity": "statement_fidelity.md",
+      "result": "lean_check.json",
+      "recording_result": "lean_command_result.json",
+      "scope": "Only HighMomentAudit.weighted_drift; the full analytic implication C_HM_UNIFORM still requires independent mathematical review."
+    }
+  },
+  "does_not_establish": [
+    "a refutation of any manuscript assertion",
+    "the upstream path, signed-mean, or residual estimates without their stated assumptions",
+    "the full graph construction or its bit complexity",
+    "novelty or publishable significance",
+    "uniformity of the size threshold when p grows with n"
+  ]
+}

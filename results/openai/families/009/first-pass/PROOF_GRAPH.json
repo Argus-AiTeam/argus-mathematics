@@ -1,0 +1,140 @@
+{
+  "goal": "C9000009",
+  "routes": [
+    {
+      "name": "R_CHARP_EULER_FORMAL",
+      "status": "current",
+      "evidence": "research/char-p-intersection/report.md"
+    },
+    {
+      "name": "R_CHARP_LINE_STEINBERG_FORMAL",
+      "status": "current",
+      "evidence": "research/char-p-line-recovery/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000009": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 009 (Function-field reconstruction from Milnor K-theory and Galois data.; papers: Reconstruction of Function Fields from Mod-ℓ Milnor K-Theory; Reconstruction from Milnor K-theory modulo the characteristic; The Bogomolov-Pop reconstruction theorem; Lean status: Partially/Comparator formalized (lean/docs/009.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["V_CHARP_INTERSECTION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "V_CHARP_INTERSECTION": {
+      "statement": "The literal prop:intersection, including a common n, nonzero coefficients, and uniqueness from either inclusion.",
+      "status": "open",
+      "depends_on": ["L_CHARP_EULER_SETUP", "L_CHARP_COMMON_WEIGHT", "L_CHARP_INTEGRATION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/char-p-intersection/report.md",
+        "research/char-p-intersection/Main.lean",
+        "research/char-p-intersection/statement-fidelity.md",
+        "research/char-p-intersection/lean_check.json",
+        "research/char-p-intersection/exact_certificate.json",
+        "research/char-p-intersection/certificates/V_CHARP_INTERSECTION-8ee0aa52ccd7bea2.json"
+      ]
+    },
+    "L_CHARP_EULER_SETUP": {
+      "statement": "The degree-p-squared monomial basis gives commuting Euler derivations, one-variable eigenspaces, and intersection C.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026/build/build/sections/02-symbols.tex",
+        "research/char-p-intersection/Main.lean",
+        "research/char-p-intersection/report.md"
+      ]
+    },
+    "L_CHARP_COMMON_WEIGHT": {
+      "statement": "The nonzero witness forces the same nonzero Euler weight m for A_X and A_Y.",
+      "status": "open",
+      "depends_on": ["L_CHARP_EULER_SETUP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/char-p-intersection/Main.lean", "research/char-p-intersection/report.md"]
+    },
+    "L_CHARP_INTEGRATION": {
+      "statement": "Integrating with n=p-m gives both nonzero coefficients and uniqueness from either inclusion.",
+      "status": "open",
+      "depends_on": ["L_CHARP_COMMON_WEIGHT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/char-p-intersection/Main.lean", "research/char-p-intersection/report.md"]
+    },
+    "C_CHARP_RECONSTRUCTION_UNVERIFIED": {
+      "statement": "For finitely generated extensions K/k and L/l of algebraically closed characteristic-p fields of transcendence degree at least two, the canonical map from base-preserving field isomorphisms to compatible mod-p Milnor K-theory isomorphisms modulo nonzero scalars is bijective. Multiplicative normalization and this conclusion remain unverified.",
+      "status": "open",
+      "depends_on": [
+        "L_CHARP_LINE_RECOVERY",
+        "L_CHARP_PROJECTIVE_LIFT",
+        "L_CHARP_PERFECT_CORE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026/build/build/sections/01-introduction.tex"]
+    },
+    "L_CHARP_ZERO_SYMBOL": {
+      "statement": "For fields of finite degree over F^p, s not in F^p and {s,t}=0 in the actual Steinberg quotient imply t in F^p(s). The universal Lean proof is available; independent review remains outstanding.",
+      "status": "open",
+      "depends_on": ["V_CHARP_ZERO_SYMBOL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026/build/build/sections/02-symbols.tex", "research/char-p-line-recovery/Main.lean", "research/char-p-line-recovery/statement-fidelity.md"]
+    },
+    "L_CHARP_LINE_RECOVERY": {
+      "statement": "Every compatible mod-p Milnor K-theory isomorphism between the function fields in prop:lines admits a unique nonzero scalar correction mapping every projective line onto a projective line.",
+      "status": "open",
+      "depends_on": ["V_CHARP_LINE_RECOVERY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026/build/build/sections/04-lines.tex", "research/char-p-line-recovery/certificates/V_CHARP_LINE_RECOVERY-9e689e2d9b3aa174.json"]
+    },
+    "V_CHARP_LINE_RECOVERY": {
+      "statement": "For characteristic-p fields of finite p-rank at least two, every Fp-linear isomorphism of the actual multiplicative quotients preserving the actual Steinberg relation subspaces admits exactly one nonzero scalar taking every projective line onto a projective line. This specializes to prop:lines.",
+      "status": "open",
+      "depends_on": ["V_CHARP_ZERO_SYMBOL", "V_CHARP_AFFINE_CONFIGURATION", "V_CHARP_GLOBAL_EXPONENT", "V_CHARP_LINE_ONTO_UNIQUE", "V_CHARP_INTERSECTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/char-p-line-recovery/report.md", "research/char-p-line-recovery/Main.lean", "research/char-p-line-recovery/statement-fidelity.md", "research/char-p-line-recovery/verify.py", "research/char-p-line-recovery/exact_certificate.json", "research/char-p-line-recovery/certificates/V_CHARP_LINE_RECOVERY-9e689e2d9b3aa174.json"]
+    },
+    "V_CHARP_ZERO_SYMBOL": {
+      "statement": "For the actual quotient W_F by the Steinberg relation subspace, s outside F^p and {s,t}=0 imply t in F^p(s), proved by a logarithmic determinant descended through the actual relations.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/char-p-line-recovery/report.md", "research/char-p-line-recovery/Main.lean", "research/char-p-line-recovery/statement-fidelity.md"]
+    },
+    "V_CHARP_AFFINE_CONFIGURATION": {
+      "statement": "Steinberg compatibility along each independent image pair constructs a nonzero intersection witness and verifies all hypotheses of the unchanged reviewed intersection theorem.",
+      "status": "open",
+      "depends_on": ["V_CHARP_ZERO_SYMBOL", "V_CHARP_INTERSECTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/char-p-line-recovery/report.md", "research/char-p-line-recovery/Main.lean", "research/char-p-line-recovery/statement-fidelity.md"]
+    },
+    "V_CHARP_GLOBAL_EXPONENT": {
+      "statement": "Single-inclusion uniqueness forces a common scalar across all affine parameters, neighbors, and vertices, yielding line containment for every projective line.",
+      "status": "open",
+      "depends_on": ["V_CHARP_AFFINE_CONFIGURATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/char-p-line-recovery/report.md", "research/char-p-line-recovery/Main.lean", "research/char-p-line-recovery/statement-fidelity.md"]
+    },
+    "V_CHARP_LINE_ONTO_UNIQUE": {
+      "statement": "Scalar rigidity, including p=2, applied after the containment construction to the inverse gives line onto-ness and uniqueness without assuming line equality.",
+      "status": "open",
+      "depends_on": ["V_CHARP_GLOBAL_EXPONENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/char-p-line-recovery/report.md", "research/char-p-line-recovery/Main.lean", "research/char-p-line-recovery/statement-fidelity.md"]
+    },
+    "L_CHARP_PROJECTIVE_LIFT": {
+      "statement": "A line-onto projective bijection between finite-dimensional vector spaces of dimension at least three is induced by a semilinear additive bijection, as stated in prop:projective-lift.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026/build/build/sections/05-fields.tex"]
+    },
+    "L_CHARP_PERFECT_CORE": {
+      "statement": "For a finitely generated extension F/kappa of an algebraically closed characteristic-p field, the intersection of F^(p^m) over m>=1 equals kappa.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Reconstruction-from-Milnor-K-theory-modulo-the-characteristic-October-5-2026/build/build/sections/05-fields.tex"]
+    }
+  }
+}

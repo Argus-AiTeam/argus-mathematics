@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-L_TRANSPORT-a07a553932ab",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/272/first-pass/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/272/first-pass/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15138,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/272/first-pass/lean/Main.lean",
+    "source_sha256": "6e73746cbb6166f246739733c8580923a98f5eeb1e0bb5ef0034238e2c66d4b0",
+    "statement_fidelity": "families/272/first-pass/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "86cb6f2eb7cc3377c4a67a50e4d47f937cb1cf6d73019e12f37c79806cc20420",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators Matrix\nopen Matrix\n\nnamespace DimensionTenCertificate\n\ntheorem full_spark_over_extension\n    {F K N T : Type*} [Field F] [Field K] [Fintype N] [DecidableEq N]\n    (E : Matrix T N F) (base : N → T)\n    (hbase : (E.submatrix base id).det ≠ 0)\n    (hcover : ∀ r : N → T, Function.Injective r →\n      ∃ s : F ≃+* F, ∀ i j, s (E (base i) j) = E (r i) j)\n    (embedding : F →+* K) (r : N → T) (hr : Function.Injective r) :\n    (embedding.mapMatrix (E.submatrix r id)).det ≠ 0 := by\n  obtain ⟨s, hs⟩ := hcover r hr\n  have hm : s.mapMatrix (E.submatrix base id) = E.submatrix r id := by\n    ext i j\n    exact hs i j\n  have htarget : (E.submatrix r id).det ≠ 0 := by\n    intro hz\n    apply hbase\n    apply s.injective\n    simpa only [s.map_det, hm, map_zero] using hz\n  intro hz\n  apply htarget\n  apply embedding.injective\n  simpa only [embedding.map_det, map_zero] using hz\n\ndef tensor {K I : Type*} [Mul K] (u v : I → K) : I × I → K :=\n  fun ij => u ij.1 * v ij.2\n\ntheorem tensor_dot {K I : Type*} [CommSemiring K] [Fintype I]\n    (a b u v : I → K) :\n    tensor a b ⬝ᵥ tensor u v = (a ⬝ᵥ u) * (b ⬝ᵥ v) := by\n  classical\n  simp only [dotProduct, tensor, Fintype.sum_prod_type]\n  rw [Finset.sum_mul]\n  simp_rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro i _\n  apply Finset.sum_congr rfl\n  intro j _\n  ring\n\ntheorem product_free_of_kernel_bound\n    {K I T : Type*} [Field K] [DecidableEq K]\n    [Fintype I] [Fintype T] [DecidableEq T]\n    (E : Matrix T I K) (Z : Matrix (I × I) (I × I) K) (bound : ℕ)\n    (hsize : 2 * bound < Fintype.card T)\n    (hsym : Z.transpose = Z)\n    (hkernel : ∀ t, Z *ᵥ tensor (E t) (E t) = 0)\n    (hbound : ∀ u : I → K, u ≠ 0 →\n      (Finset.univ.filter fun t => E t ⬝ᵥ u = 0).card ≤ bound)\n    (u v : I → K) (w : I × I → K)\n    (hw : Z *ᵥ w = tensor u v) : u = 0 ∨ v = 0 := by\n  classical\n  by_contra hnonzero\n  push Not at hnonzero\n  let zerosU := Finset.univ.filter fun t => E t ⬝ᵥ u = 0\n  let zerosV := Finset.univ.filter fun t => E t ⬝ᵥ v = 0\n  have hu : zerosU.card ≤ bound := hbound u hnonzero.1\n  have hv : zerosV.card ≤ bound := hbound v hnonzero.2\n  have hcover : (Finset.univ : Finset T) ⊆ zerosU ∪ zerosV := by\n    intro t _\n    have hpair : tensor (E t) (E t) ⬝ᵥ (Z *ᵥ w) = 0 := by\n      have h := Matrix.dotProduct_transpose_mulVec Z (tensor (E t) (E t)) w\n      rw [hsym, hkernel t] at h\n      simpa only [dotProduct_zero] using h\n    rw [hw, tensor_dot] at hpair\n    rcases mul_eq_zero.mp hpair with hleft | hright\n    · exact Finset.mem_union.mpr (Or.inl (by simp [zerosU, hleft]))\n    · exact Finset.mem_union.mpr (Or.inr (by simp [zerosV, hright]))\n  have hcard : Fintype.card T ≤ zerosU.card + zerosV.card := by\n    calc\n      Fintype.card T = (Finset.univ : Finset T).card := by simp\n      _ ≤ (zerosU ∪ zerosV).card := Finset.card_le_card hcover\n      _ ≤ zerosU.card + zerosV.card := Finset.card_union_le _ _\n  omega\n\ntheorem zero_bound_of_full_spark\n    {K : Type*} [Field K] [DecidableEq K] (E : Matrix (Fin 20) (Fin 10) K)\n    (hfull : ∀ r : Fin 10 → Fin 20, Function.Injective r →\n      (E.submatrix r id).det ≠ 0)\n    (u : Fin 10 → K) (hu : u ≠ 0) :\n    (Finset.univ.filter fun t => E t ⬝ᵥ u = 0).card ≤ 9 := by\n  classical\n  by_contra hcard\n  have hten : Fintype.card (Fin 10) ≤\n      (Finset.univ.filter fun t => E t ⬝ᵥ u = 0).card := by\n    simpa only [Fintype.card_fin] using (show 10 ≤\n      (Finset.univ.filter fun t => E t ⬝ᵥ u = 0).card by omega)\n  obtain ⟨r, hrange⟩ := Function.Embedding.exists_of_card_le_finset hten\n  have hzero : (E.submatrix r id) *ᵥ u = 0 := by\n    ext i\n    have hmem := hrange (show r i ∈ Set.range r from ⟨i, rfl⟩)\n    exact (Finset.mem_filter.mp hmem).2\n  exact hu (Matrix.eq_zero_of_mulVec_eq_zero (hfull r r.injective) hzero)\n\ntheorem dimensionTen_from_galois_equivariance\n    {F K : Type*} [Field F] [Field K]\n    (E : Matrix (Fin 20) (Fin 10) F) (base : Fin 10 → Fin 20)\n    (hbase : (E.submatrix base id).det ≠ 0)\n    (hcover : ∀ r : Fin 10 → Fin 20, Function.Injective r →\n      ∃ s : F ≃+* F, ∀ i j, s (E (base i) j) = E (r i) j)\n    (embedding : F →+* K)\n    (Z : Matrix (Fin 10 × Fin 10) (Fin 10 × Fin 10) K)\n    (hsym : Z.transpose = Z)\n    (hkernel : ∀ t, Z *ᵥ tensor (E.map embedding t)\n      (E.map embedding t) = 0)\n    (u v : Fin 10 → K) (w : Fin 10 × Fin 10 → K)\n    (hw : Z *ᵥ w = tensor u v) : u = 0 ∨ v = 0 := by\n  classical\n  have hfull : ∀ r : Fin 10 → Fin 20, Function.Injective r →\n      ((E.map embedding).submatrix r id).det ≠ 0 := by\n    intro r hr\n    exact full_spark_over_extension E base hbase hcover embedding r hr\n  exact product_free_of_kernel_bound (E.map embedding) Z 9 (by decide)\n    hsym hkernel (zero_bound_of_full_spark _ hfull) u v w hw\n\nend DimensionTenCertificate\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/lean/statement_fidelity.md",
+    "text": "# Fidelity of `Main.lean`\n\nClaim: `L_TRANSPORT`. The source imports Mathlib, not the upstream OpenAI\nComparator files. It proves conditional algebraic theorems, not a formal\nverification of all entries of the pencil or of the secret-key theorem.\n\n`full_spark_over_extension` quantifies over fields F and K, a finite\ncolumn type N, any row type T, an evaluation matrix over F, a base ordered\nsquare submatrix with nonzero determinant, and a field embedding F -> K.\nIts essential hypothesis is that, for every injective ordered selection of\nrows, an automorphism of F sends each entry of the base submatrix to the\ncorresponding selected entry. Its conclusion is nonzero determinant for\nevery selected submatrix after applying the embedding into K. In the\napplication, F is the splitting field, K is C, N has ten elements, T has\ntwenty, and the S20 Galois action supplies the stated automorphisms.\nThis explicitly separates algebraic equivariance from arbitrary complex\ncoefficients.\n\n`zero_bound_of_full_spark` assumes that every ten-row submatrix of a\n20-by-10 matrix over an arbitrary field is nonsingular. It proves that a\nnonzero coefficient vector has zero dot product with at most nine rows.\nThere is no restriction to rational or algebraic coefficient vectors.\n\n`product_free_of_kernel_bound` works over an arbitrary field, finite\ncoordinate type I and finite direction type T. It assumes a symmetric\nmatrix Z indexed by I x I, that every vector E(t) tensor E(t) is in its\nkernel, that each nonzero coefficient vector has at most `bound` zero\nevaluations, and that card(T) > 2*bound. It proves that if Z*w equals\nu tensor v, then u=0 or v=0, for every u, v, w. Tensor coordinates are\nu(i)*v(j). The pairing is bilinear, not Hermitian. This is intentional:\nthe certificate constructs a real symmetric integer Z0, so its transpose\nkernel identity is valid after scalar extension to C. No false\nidentification of complex transpose with adjoint is used.\n\n`dimensionTen_from_galois_equivariance` combines all these steps for\ntwenty rows, ten columns and bound nine, over every field extension. It\nhas the same automorphism, base-determinant, symmetric-matrix and\nkernel-product hypotheses, and proves product exclusion for all\ncoefficient vectors in K. Instantiating K=C gives exactly the universal\ncomplex-linear bridge needed by the written certificate.\n\nThe compiler checks these deductions. It does not check the supplied\ninteger matrices, the rational multiplication representation, the\nFrobenius theorem, the S20 calculation, the existence of the initial\nnonzero minor, the PPT/Kraus identities, or the instantiation of the\nhypotheses with the twenty algebraic points. Those are proved in\n`research/dimension_ten.md` using `verify.py` and the explicit certificate.\nNeither significance nor novelty nor independent review is compiler\nverified.\n"
+  },
+  "subject": {
+    "content_hash": "b76888d58acadccaacd5a5b8a08f6efc87f9b16445a385cf41ace2b6dce00f36",
+    "kind": "claim",
+    "subject_id": "L_TRANSPORT"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

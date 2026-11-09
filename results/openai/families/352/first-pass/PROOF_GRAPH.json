@@ -1,0 +1,155 @@
+{
+  "goal": "C9000352",
+  "routes": [
+    {
+      "name": "Independent profile verification and contraction matching",
+      "status": "current",
+      "evidence": "research/profile-audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000352": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 352 (A finite-time singularity of Calabi flow.; papers: A finite-time singularity of Calabi flow on projective space; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PROFILE_UNIQUE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PROFILE_UNIQUE": {
+      "statement": "The stated square has exactly one shooting parameter whose origin solution matches the small tail constructed at s=56; the resulting positive global profile satisfies prof:profile with all differentiated asymptotics.",
+      "status": "open",
+      "depends_on": ["C_PROFILE", "L_SHOT_LIPSCHITZ", "L_MATCH_CONTRACTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/verify.py", "research/profile-audit/exact_certificate.json"]
+    },
+    "C_PROFILE": {
+      "statement": "Theorem prof:profile, including the positive global solution, its matching and differentiated all-order asymptotics, but not the compact Calabi-flow theorem.",
+      "status": "open",
+      "depends_on": ["L_ORIGIN", "L_FINITE_UNIFORM", "L_TAIL", "L_MATCH", "L_ASYMPTOTIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_ORIGIN": {
+      "statement": "The holomorphic origin family, its s=1 jet, tangent tail, and nonlinear parameter remainder have the asserted uniform bounds.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/verify.py", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_FINITE_UNIFORM": {
+      "statement": "Every parameter in the full square R=5e-10 continues positively through s=56 and satisfies |q|<=0.25R and ||(Re xi,Im xi)-z||_infinity<=0.13R.",
+      "status": "open",
+      "depends_on": ["L_NONLINEAR_BOOTSTRAP", "L_PROJECTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/verify.py", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_TAIL": {
+      "statement": "The half-line Green operator and nonlinear contraction construct positive small tails, with the claimed residual, coordinates, decay, and continuous dependence.",
+      "status": "open",
+      "depends_on": ["L_TAIL_DATA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_MATCH": {
+      "statement": "A finite shot in the full parameter square matches a constructed small tail in all three physical jet coordinates.",
+      "status": "open",
+      "depends_on": ["L_FINITE_UNIFORM", "L_TAIL", "L_MATCH_CONTRACTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md"]
+    },
+    "L_ASYMPTOTIC": {
+      "statement": "The bounded matched jet equals each polynomially weighted remainder solution and has differentiated inverse-power asymptotics of every finite order.",
+      "status": "open",
+      "depends_on": ["L_MATCH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md"]
+    },
+    "L_SHOT_LIPSCHITZ": {
+      "statement": "On the full square, the finite shot has real-coordinate Lipschitz constant below 0.31 and nonreal-coordinate-minus-identity Lipschitz constant below 0.15.",
+      "status": "open",
+      "depends_on": ["L_FINITE_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_MATCH_CONTRACTION": {
+      "statement": "The finite-shot-to-tail matching self-map has maximum-norm Lipschitz constant below 0.37 on the square.",
+      "status": "open",
+      "depends_on": ["L_SHOT_LIPSCHITZ", "L_TAIL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_COMPLEX_DISKS": {
+      "statement": "Every reference substep continues holomorphically past the closed theta-disk of radius 1/2, with bounded propagated first variations and degree-44 component tails below 48*4^(-45).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/verify.py", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_REFERENCE_CERTIFICATE": {
+      "statement": "The independently derived outward-rounded recurrences enclose all reference states and actual block variations, with the required physical midpoint widths at every block.",
+      "status": "open",
+      "depends_on": ["L_ORIGIN", "L_COMPLEX_DISKS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/verify.py", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_TRANSFER_PRODUCTS": {
+      "statement": "After correct physical scaling, all exact complete transfers, leading-block sums, weighted sums, and the required within-block first row and third column satisfy the certified bounds.",
+      "status": "open",
+      "depends_on": ["L_REFERENCE_CERTIFICATE", "L_COMPLEX_DISKS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/verify.py", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_NONLINEAR_BOOTSTRAP": {
+      "statement": "Uniformly on the entire parameter square, the nonlinear perturbation is below 14R in p, the endpoint error is below 0.11R, and positivity and continuation hold through s=56.",
+      "status": "open",
+      "depends_on": ["L_ORIGIN", "L_TRANSFER_PRODUCTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_PROJECTION": {
+      "statement": "The exact spectral projection of the uniform physical endpoint jet gives |q|<=0.25R and nonreal-coordinate error<=0.13R with all polynomial-parameter and transfer errors included.",
+      "status": "open",
+      "depends_on": ["L_NONLINEAR_BOOTSTRAP", "L_REFERENCE_CERTIFICATE", "L_TAIL_DATA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/exact_certificate.json"]
+    },
+    "L_TAIL_DATA": {
+      "statement": "The constant comparison cubic, projection and convolution bounds, four-term tail residual, and its parameter derivative satisfy the exact inequalities on the full allowed d interval.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profile-audit/report.md", "research/profile-audit/verify.py", "research/profile-audit/exact_certificate.json"]
+    },
+    "C_CALABI_MAIN": {
+      "statement": "The manuscript's compact Calabi-flow finite-time singularity theorem, which is not established by profile verification alone.",
+      "status": "open",
+      "depends_on": ["C_PROFILE", "C_ANCIENT_INVERSE", "C_COMPACT_FLOW", "C_GEOMETRIC_OBSTRUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md"]
+    },
+    "C_ANCIENT_INVERSE": {
+      "statement": "Theorem flat:inverse with its full weighted parabolic estimates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finite-time-singularity-of-Calabi-flow-on-projective-space-September-24-2026/build/sections/flat.tex"]
+    },
+    "C_COMPACT_FLOW": {
+      "statement": "Theorem glue:solution: localization and nonlinear correction yield a positive compact solution with the required correction estimates.",
+      "status": "open",
+      "depends_on": ["C_PROFILE", "C_ANCIENT_INVERSE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finite-time-singularity-of-Calabi-flow-on-projective-space-September-24-2026/build/sections/compact.tex"]
+    },
+    "C_GEOMETRIC_OBSTRUCTION": {
+      "statement": "Lemma geo:obstruction converts the corrected solution into the asserted curvature asymptotic and finite-time obstruction.",
+      "status": "open",
+      "depends_on": ["C_COMPACT_FLOW"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finite-time-singularity-of-Calabi-flow-on-projective-space-September-24-2026/build/sections/geometry.tex"]
+    }
+  }
+}

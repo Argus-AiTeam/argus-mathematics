@@ -1,0 +1,28 @@
+{
+  "operation_id": "polynomial.ideal.normal_form.compute",
+  "inspection": "Exact input and output schemas inspected through the authorized Argus adapter before execution.",
+  "server_name": "jacobian",
+  "server_version": "0.14.0",
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "input_contract": {
+    "ring": "QQ with 1 to 8 explicitly ordered variables",
+    "polynomial": "sparse nonzero canonical-rational terms in descending lexicographic exponent order",
+    "ideal": "1 to 64 generators in the same explicitly ordered ring",
+    "term_limit_per_polynomial": 4096,
+    "monomial_order": "lex"
+  },
+  "output_contract": {
+    "outcome": ["COMPUTED", "ERROR", "LIMIT_EXCEEDED", "TIMEOUT"],
+    "remainder": "typed rational polynomial or null",
+    "in_ideal": "boolean or null",
+    "request": "the exact input request"
+  },
+  "scope": "A universal polynomial identity for the high-coefficient Hessian regime. This operation does not prove analytic existence, metric estimates, packing, or the envelope theorem.",
+  "other_candidate": {
+    "operation_id": "quadratic_form.evaluate.compute",
+    "inspected": true,
+    "mismatch": "Evaluation at one rational vector cannot settle a universal Hessian inequality, so it was not run."
+  },
+  "interpretation_rule": "Only COMPUTED with an exact zero remainder and in_ideal=true supports this identity. Incomplete, error, timeout, or UNKNOWN outcomes are not mathematical conclusions."
+}

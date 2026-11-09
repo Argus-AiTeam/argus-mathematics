@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_TWO_ENDS_FORMAL-b76990e28821",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/297/first-pass/selective_bridge/lean_evidence/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/297/first-pass/selective_bridge/lean_evidence/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15368,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/297/first-pass/selective_bridge/lean_evidence/Main.lean",
+    "source_sha256": "572c62646ec1c414f613158ca66bd6dc9a39e55edd55f396199acc58ce6a94b7",
+    "statement_fidelity": "families/297/first-pass/selective_bridge/lean_evidence/statement_fidelity.md",
+    "statement_fidelity_sha256": "6f75571832707ad2c260a2098454fa9ed24b6983274f9b7fd350c0ef67a7df9a",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/297/first-pass/selective_bridge/lean_evidence/Main.lean:46:5: warning: Variable name `hM` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\nfamilies/297/first-pass/selective_bridge/lean_evidence/Main.lean:46:18: warning: Variable name `hN` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/selective_bridge/lean_evidence/Main.lean",
+    "text": "import Mathlib\n\nopen Filter\n\nnamespace SelectiveBridge\n\ntheorem twoEndedIdentity {R : Type*} [Ring R] (p w d e : R)\n    (hw : (1 - p) * w * (1 - p) = 0) :\n    d * w * e = d * p * w * e + d * (1 - p) * w * p * e := by\n  calc\n    d * w * e =\n        d * p * w * e + d * (1 - p) * w * p * e +\n          d * ((1 - p) * w * (1 - p)) * e := by noncomm_ring\n    _ = d * p * w * e + d * (1 - p) * w * p * e := by rw [hw]; simp\n\ntheorem twoEndedBound {R : Type*} [NormedRing R] (p w d e : R)\n    (hp : ‖1 - p‖ ≤ 1) (hw : (1 - p) * w * (1 - p) = 0) :\n    ‖d * w * e‖ ≤\n      ‖d * p‖ * ‖w‖ * ‖e‖ + ‖d‖ * ‖w‖ * ‖p * e‖ := by\n  have hd : ‖d * (1 - p)‖ ≤ ‖d‖ := by\n    calc\n      ‖d * (1 - p)‖ ≤ ‖d‖ * ‖1 - p‖ := norm_mul_le _ _\n      _ ≤ ‖d‖ * 1 := mul_le_mul_of_nonneg_left hp (norm_nonneg _)\n      _ = ‖d‖ := mul_one _\n  have hleft : ‖d * p * w * e‖ ≤ ‖d * p‖ * ‖w‖ * ‖e‖ := by\n    calc\n      ‖d * p * w * e‖ ≤ ‖d * p * w‖ * ‖e‖ := norm_mul_le _ _\n      _ ≤ (‖d * p‖ * ‖w‖) * ‖e‖ := by\n        gcongr\n        exact norm_mul_le _ _\n  have hright : ‖d * (1 - p) * w * p * e‖ ≤ ‖d‖ * ‖w‖ * ‖p * e‖ := by\n    calc\n      ‖d * (1 - p) * w * p * e‖ =\n          ‖(d * (1 - p) * w) * (p * e)‖ := by simp only [mul_assoc]\n      _ ≤ ‖d * (1 - p) * w‖ * ‖p * e‖ := norm_mul_le _ _\n      _ ≤ (‖d * (1 - p)‖ * ‖w‖) * ‖p * e‖ := by\n        gcongr\n        exact norm_mul_le _ _\n      _ ≤ (‖d‖ * ‖w‖) * ‖p * e‖ := by gcongr\n  rw [twoEndedIdentity p w d e hw]\n  exact (norm_add_le _ _).trans (add_le_add hleft hright)\n\ntheorem productDecay {R X Y : Type*} [NormedRing R]\n    (left : Filter X) (right : Filter Y) (p w : R)\n    (d : X → R) (e : Y → R) (M N : ℝ)\n    (hM : 0 ≤ M) (hN : 0 ≤ N)\n    (hdBound : ∀ i, ‖d i‖ ≤ M) (heBound : ∀ j, ‖e j‖ ≤ N)\n    (hp : ‖1 - p‖ ≤ 1) (hw : (1 - p) * w * (1 - p) = 0)\n    (hd : Tendsto (fun i => ‖d i * p‖) left (nhds 0))\n    (he : Tendsto (fun j => ‖p * e j‖) right (nhds 0)) :\n    Tendsto (fun q : X × Y => ‖d q.1 * w * e q.2‖)\n      (left ×ˢ right) (nhds 0) := by\n  have hdl : Tendsto (fun q : X × Y => ‖d q.1 * p‖)\n      (left ×ˢ right) (nhds 0) := hd.comp tendsto_fst\n  have her : Tendsto (fun q : X × Y => ‖p * e q.2‖)\n      (left ×ˢ right) (nhds 0) := he.comp tendsto_snd\n  have hbound : ∀ q : X × Y, ‖d q.1 * w * e q.2‖ ≤\n      ‖d q.1 * p‖ * ‖w‖ * N + M * ‖w‖ * ‖p * e q.2‖ := by\n    intro q\n    calc\n      ‖d q.1 * w * e q.2‖ ≤\n          ‖d q.1 * p‖ * ‖w‖ * ‖e q.2‖ +\n            ‖d q.1‖ * ‖w‖ * ‖p * e q.2‖ :=\n        twoEndedBound p w (d q.1) (e q.2) hp hw\n      _ ≤ ‖d q.1 * p‖ * ‖w‖ * N + M * ‖w‖ * ‖p * e q.2‖ := by\n        gcongr\n        · exact heBound q.2\n        · exact hdBound q.1\n  have hzero : Tendsto\n      (fun q : X × Y =>\n        ‖d q.1 * p‖ * ‖w‖ * N + M * ‖w‖ * ‖p * e q.2‖)\n      (left ×ˢ right) (nhds 0) := by\n    simpa using ((hdl.mul_const ‖w‖).mul_const N).add\n      (her.const_mul (M * ‖w‖))\n  exact squeeze_zero (fun _ => norm_nonneg _) hbound hzero\n\ntheorem minProductTendsto :\n    Tendsto (fun q : ℕ × ℕ => min q.1 q.2)\n      ((atTop : Filter ℕ) ×ˢ atTop) atTop := by\n  refine tendsto_atTop.2 ?_\n  intro n\n  have hl : ∀ᶠ q : ℕ × ℕ in (atTop : Filter ℕ) ×ˢ atTop, n ≤ q.1 :=\n    tendsto_fst.eventually (eventually_ge_atTop n)\n  have hr : ∀ᶠ q : ℕ × ℕ in (atTop : Filter ℕ) ×ˢ atTop, n ≤ q.2 :=\n    tendsto_snd.eventually (eventually_ge_atTop n)\n  filter_upwards [hl, hr] with q hq hq'\n  exact le_min hq hq'\n\ntheorem rectangularMinDecay (g : ℕ → ℝ)\n    (hg : Tendsto g atTop (nhds 0)) :\n    Tendsto (fun q : ℕ × ℕ => g (min q.1 q.2))\n      ((atTop : Filter ℕ) ×ˢ atTop) (nhds 0) :=\n  hg.comp minProductTendsto\n\ntheorem transferCases (m transfers : ℕ) (hm : 1 ≤ m) (ht : transfers ≤ 2) :\n    transfers < m ∨\n      (m = 1 ∧ transfers = 1) ∨\n      (m = 1 ∧ transfers = 2) ∨\n      (m = 2 ∧ transfers = 2) := by\n  omega\n\ntheorem longCoreRemains (m transfers : ℕ) (hm : 3 ≤ m) (ht : transfers ≤ 2) :\n    1 ≤ m - transfers := by\n  omega\n\nend SelectiveBridge\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/selective_bridge/lean_evidence/statement_fidelity.md",
+    "text": "# Formal statement fidelity\n\nThe claim recorded for this source is **C_TWO_ENDS_FORMAL**, not the complete\noperator-algebra bridge or the manuscript's final ZFC theorem.\n\nDeclarations: `twoEndedIdentity`, `twoEndedBound`, `productDecay`,\n`minProductTendsto`, `rectangularMinDecay`, `transferCases`,\n`longCoreRemains`.\n\n`SelectiveBridge.twoEndedIdentity` quantifies over every (possibly\nnoncommutative) ring and arbitrary elements `p,w,d,e`. Its sole hypothesis is\n`(1-p)*w*(1-p)=0`. It proves exactly the algebraic decomposition used at the\ntwo ends of a centered free-product word. In the application, `p` is the\northogonal projection onto module words starting with the second factor.\n\n`SelectiveBridge.twoEndedBound` quantifies over every normed ring and the same\nfour elements. In addition it assumes `norm(1-p)<=1`; it does not assume the\ndesired norm estimate. It proves\n\n    norm(d*w*e) <= norm(d*p)*norm(w)*norm(e)\n                    + norm(d)*norm(w)*norm(p*e).\n\n`SelectiveBridge.productDecay` quantifies over arbitrary index types, arbitrary\nfilters on them, and endpoint families bounded in norm by fixed nonnegative\nreal numbers. It assumes the two one-variable endpoint norms tend to zero and\nthe preceding complementary-corner hypotheses. Its conclusion is norm decay\non the **product filter**, not a diagonal sequence or iterated limit.\n\n`SelectiveBridge.minProductTendsto` proves that `(n,t) -> min(n,t)` tends to\ninfinity on the product of the two natural-number tail filters.\n`SelectiveBridge.rectangularMinDecay` composes any scalar null sequence with\nthat map. These justify the rectangular projection-excision tails.\n\n`SelectiveBridge.transferCases` and `SelectiveBridge.longCoreRemains`\nquantify over all natural word lengths, not a bounded enumeration. They\npartition the possible empty-core cases when at most two outer letters are\ntransferred. They do not model operators or prove that a transfer is valid.\n\nThe source does **not** formalize amalgamated free products, pure states,\nexcision, the endpoint expectation estimate, or the boundary-symbol theorem.\nThose analytic hypotheses and their application are proved in `report.md`\nand require independent mathematical review. In particular the compiler\ncertificate for this source must never be reported as a kernel proof of\n`C_BRIDGE_DECAY` or `C_BOUNDARY_SYMBOL`.\n"
+  },
+  "subject": {
+    "content_hash": "c16e38187dd537199ddb874d69bdbdf2879a747dcb40d29251b452180a30966d",
+    "kind": "claim",
+    "subject_id": "C_TWO_ENDS_FORMAL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

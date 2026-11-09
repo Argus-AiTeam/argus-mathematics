@@ -1,0 +1,106 @@
+{
+  "operation_id": "polynomial.roots.isolate",
+  "description": "Isolate all real roots of a univariate polynomial over QQ using SymPy exact root isolation.",
+  "inspected_server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "input_schema": {
+    "$defs": {
+      "CanonicalRational": {
+        "additionalProperties": false,
+        "description": "A reduced rational whose denominator is positive and whose zero is 0/1.",
+        "examples": [{"den": "2", "num": "1"}],
+        "properties": {
+          "den": {
+            "description": "Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.",
+            "examples": ["2"],
+            "pattern": "^(?:0|-?[1-9][0-9]*)$",
+            "title": "Den",
+            "type": "string"
+          },
+          "num": {
+            "description": "Canonical decimal numerator of the reduced rational.",
+            "examples": ["1"],
+            "pattern": "^(?:0|-?[1-9][0-9]*)$",
+            "title": "Num",
+            "type": "string"
+          }
+        },
+        "required": ["num", "den"],
+        "title": "CanonicalRational",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "coefficients_descending": {
+        "items": {"$ref": "#/$defs/CanonicalRational"},
+        "maxItems": 64,
+        "minItems": 2,
+        "title": "Coefficients Descending",
+        "type": "array"
+      }
+    },
+    "required": ["coefficients_descending"],
+    "title": "UnivariatePolynomialRequest",
+    "type": "object"
+  },
+  "output_schema": {
+    "$defs": {
+      "CanonicalRational": {
+        "additionalProperties": false,
+        "description": "A reduced rational whose denominator is positive and whose zero is 0/1.",
+        "examples": [{"den": "2", "num": "1"}],
+        "properties": {
+          "den": {
+            "description": "Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.",
+            "examples": ["2"],
+            "pattern": "^(?:0|-?[1-9][0-9]*)$",
+            "title": "Den",
+            "type": "string"
+          },
+          "num": {
+            "description": "Canonical decimal numerator of the reduced rational.",
+            "examples": ["1"],
+            "pattern": "^(?:0|-?[1-9][0-9]*)$",
+            "title": "Num",
+            "type": "string"
+          }
+        },
+        "required": ["num", "den"],
+        "title": "CanonicalRational",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Real roots with rational intervals; rational roots use a singleton.",
+    "properties": {
+      "convention": {
+        "const": "SYMPY_REAL_ROOTS",
+        "default": "SYMPY_REAL_ROOTS",
+        "title": "Convention",
+        "type": "string"
+      },
+      "multiplicities": {
+        "items": {"type": "integer"},
+        "title": "Multiplicities",
+        "type": "array"
+      },
+      "roots": {
+        "items": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {"$ref": "#/$defs/CanonicalRational"},
+            {"$ref": "#/$defs/CanonicalRational"}
+          ],
+          "type": "array"
+        },
+        "title": "Roots",
+        "type": "array"
+      }
+    },
+    "required": ["roots", "multiplicities"],
+    "title": "RootIsolationResult",
+    "type": "object"
+  }
+}

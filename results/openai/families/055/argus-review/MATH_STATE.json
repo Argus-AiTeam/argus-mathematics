@@ -1,0 +1,494 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX55_OLD_DRAFT_REVIEW",
+      "version": 1,
+      "statement": "Bounded exploratory assessment of the existing family 055 Argus Gepner draft. Recorded claims are targets under review, not accepted theorems.",
+      "definitions": {
+        "X": "smooth complex quintic threefold with hyperplane polarization",
+        "v": "normalized real Chern coordinates (r,c,d,e)",
+        "Phi": "T_OX composed with tensor OX(1), tensor acts first",
+        "uG": "(5-sqrt(5))/10",
+        "aisle": "nonpositive part of a bounded t-structure, closed under [1]",
+        "review_boundary": "Only the 26 listed old artifacts and their dependent mathematical arguments; no new manuscript-error search; no large-volume conclusion",
+        "prior_literature_limit": "Old bounded search found no matching abstract periodic-perturbed-aisle theorem; not a novelty proof and not an additional theorem being assumed",
+        "formal_limit": "Main.lean quantifies over real quadruples, not actual objects, torsion pairs, hearts, HN filtrations or slicings",
+        "acceptance": "Native independent Host Reviewer is still required; Engineer assessments are opinions"
+      },
+      "content_hash": "ab00b7fdad6765e47784b88f2cbf5d5f7ea5098dd072544383cf2f47b35c1c3e"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C55_CORE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_OLD_DRAFT_REVIEW",
+        "content_hash": "ab00b7fdad6765e47784b88f2cbf5d5f7ea5098dd072544383cf2f47b35c1c3e"
+      },
+      "natural_statement": "The current version-3 Main.lean universal real-algebra declarations hold under exactly their displayed hypotheses, including the combined endpoint bound on n0+n3; this does not assert categorical realizability.",
+      "formal_statement": "import Mathlib\n\nnamespace GepnerAisle\n\nnoncomputable section\n\n@[ext]\nstructure V where\n  r : ℝ\n  c : ℝ\n  d : ℝ\n  e : ℝ\n\ndef phi (v : V) : V :=\n  ⟨-4 * v.r - (20 / 3) * v.c - 5 * v.d - 5 * v.e,\n    v.r + v.c, v.r / 2 + v.c + v.d,\n    v.r / 6 + v.c / 2 + v.d + v.e⟩\n\ndef phiInv (v : V) : V :=\n  ⟨v.r + (25 / 6) * v.c + 5 * v.e,\n    -v.r - (19 / 6) * v.c - 5 * v.e,\n    v.r / 2 + (13 / 12) * v.c + v.d + (5 / 2) * v.e,\n    -v.r / 6 - (7 / 36) * v.c - v.d + v.e / 6⟩\n\ndef cut (u : ℝ) (v : V) : ℝ := v.d + v.c / 2 + u * v.r\n\ndef uG : ℝ := (5 - Real.sqrt 5) / 10\n\ntheorem phi_inverse (v : V) : phiInv (phi v) = v := by\n  ext <;> dsimp [phiInv, phi] <;> ring\n\ntheorem inverse_phi (v : V) : phi (phiInv v) = v := by\n  ext <;> dsimp [phiInv, phi] <;> ring\n\ntheorem phi_period_five (v : V) :\n    phi (phi (phi (phi (phi v)))) = v := by\n  ext <;> dsimp [phi] <;> ring\n\ntheorem gepner_polynomial : 5 * uG ^ 2 - 5 * uG + 1 = 0 := by\n  have hs := Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num)\n  dsimp [uG]\n  nlinarith\n\ntheorem gepner_bounds :\n    (27 / 100 : ℝ) ≤ uG ∧ uG < (138197 / 500000 : ℝ) := by\n  have hs := Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num)\n  have hp := Real.sqrt_nonneg (5 : ℝ)\n  dsimp [uG]\n  constructor <;> nlinarith\n\ntheorem slope_criterion_threshold (u s : ℝ)\n    (hstrip : 20 * u + 13 * s ≤ 13) (hcompare : 2 * u ≤ s) :\n    u ≤ 13 / 46 := by\n  linarith\n\ntheorem slope_criterion_attained :\n    20 * (13 / 46 : ℝ) + 13 * (13 / 23 : ℝ) = 13 ∧\n      2 * (13 / 46 : ℝ) = 13 / 23 := by\n  norm_num\n\ntheorem parameter_margins (u δ : ℝ)\n    (hu : 0 < u) (hub : u < 13 / 46)\n    (hδ : 0 < δ) (hsmall : δ ≤ u / 4)\n    (hgap : δ ≤ (13 / 46 - u) / 10) :\n    0 < u - δ ∧\n      0 < 3 / 10 - u - (3 / 2) * δ ∧\n      0 < 13 / 46 - u - (36 / 23) * δ ∧\n      0 < 1 / 2 - (23 / 13) * u - 3 * δ := by\n  constructor\n  · linarith\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem concrete_margins (u : ℝ)\n    (hl : (27 / 100 : ℝ) ≤ u)\n    (hu : u ≤ (138197 / 500000 : ℝ)) :\n    0 < u - 1 / 2000 ∧\n      0 < 3 / 10 - u - (3 / 2) * (1 / 2000) ∧\n      0 < 13 / 46 - u - (36 / 23) * (1 / 2000) ∧\n      0 < 1 / 2 - (23 / 13) * u - 3 * (1 / 2000) := by\n  constructor\n  · linarith\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem comparison_separation (s u δ C R D err : ℝ)\n    (hs : 0 < s) (hu : 0 ≤ u) (hC : 0 < C)\n    (hR : s * R ≤ C) (hD : D ≤ 0)\n    (herr : -3 * δ * C ≤ err)\n    (hmargin : 0 < s / 2 - u - 3 * δ * s) :\n    0 < C / 2 - u * R - D + err := by\n  have h1 := mul_nonneg hu (sub_nonneg.mpr hR)\n  have h2 := mul_pos hmargin hC\n  have h3 := mul_nonneg (le_of_lt hs) (show 0 ≤ err + 3 * δ * C by linarith)\n  have h4 := mul_nonpos_of_nonneg_of_nonpos (le_of_lt hs) hD\n  by_contra h\n  have h5 := mul_nonpos_of_nonneg_of_nonpos\n    (le_of_lt hs) (le_of_not_gt h)\n  nlinarith\n\ntheorem four_corner_control (ε N r c : ℝ)\n    (hpp : 0 ≤ N + ε * r + ε * c)\n    (hpm : 0 ≤ N + ε * r - ε * c)\n    (hmp : 0 ≤ N - ε * r + ε * c)\n    (hmm : 0 ≤ N - ε * r - ε * c) :\n    ε * (|r| + |c|) ≤ N := by\n  rcases le_total 0 r with hr | hr\n  · rcases le_total 0 c with hc | hc\n    · rw [abs_of_nonneg hr, abs_of_nonneg hc]\n      linarith\n    · rw [abs_of_nonneg hr, abs_of_nonpos hc]\n      linarith\n  · rcases le_total 0 c with hc | hc\n    · rw [abs_of_nonpos hr, abs_of_nonneg hc]\n      linarith\n    · rw [abs_of_nonpos hr, abs_of_nonpos hc]\n      linarith\n\ntheorem four_cut_circuit (u : ℝ) (v : V)\n    (hu : 5 * u ^ 2 - 5 * u + 1 = 0) :\n    cut u v + (5 * u - 1) * cut u (phiInv v) +\n      (5 * u - 1) * cut u (phiInv (phiInv v)) +\n      cut u (phiInv (phiInv (phiInv v))) = 0 := by\n  calc\n    _ = -(3 * v.r + (35 / 6) * v.c + 5 * v.d + 10 * v.e) *\n        (5 * u ^ 2 - 5 * u + 1) := by\n      dsimp [cut, phiInv]\n      ring\n    _ = 0 := by rw [hu]; ring\n\ntheorem endpoint_r0 (u : ℝ) (w : V) :\n    u * (phi w).r =\n      u * (5 * u - 4) * w.r - w.c +\n        (1 - 5 * u) * cut u w - cut u (phiInv w) := by\n  dsimp [phi, phiInv, cut]\n  ring\n\ntheorem endpoint_r3 (u : ℝ) (w : V) :\n    u * (phiInv (phiInv w)).r =\n      u * (5 * u - 4) * w.r + (5 * u - 3) * w.c +\n        (3 - 5 * u) * cut u w - 3 * cut u (phiInv w) := by\n  dsimp [phiInv, cut]\n  ring\n\ntheorem endpoint_c3 (u : ℝ) (w : V) :\n    u * (phiInv (phiInv w)).c =\n      u * (3 - 5 * u) * w.r + (2 - 4 * u) * w.c +\n        (5 * u - 2) * cut u w + 2 * cut u (phiInv w) := by\n  dsimp [phiInv, cut]\n  ring\n\ntheorem numerical_kernel_separation (u : ℝ) (w : V)\n    (hu : u ≠ 0) (hr : w.r = 0) (hc : w.c = 0)\n    (h1 : cut u w = 0) (h2 : cut u (phiInv w) = 0) :\n    w.d = 0 ∧ w.e = 0 := by\n  have hd : w.d = 0 := by simpa [cut, hr, hc] using h1\n  have he : u * w.e = 0 := by\n    dsimp [cut, phiInv] at h2\n    rw [hr, hc, hd] at h2\n    nlinarith [h2]\n  exact ⟨hd, (mul_eq_zero.mp he).resolve_left hu⟩\n\ntheorem explicit_refinement_separation (a n0 n1 n2 n3 X T : ℝ)\n    (ha : (7 / 20 : ℝ) ≤ a) (h1 : 0 ≤ n1) (h2 : 0 ≤ n2)\n    (hX : 0 ≤ X) (hmid : X / 8000 ≤ n1)\n    (hend : T ≤ 16 * X + 24 * (n1 + n2))\n    (hends : -T / 500000 ≤ n0 + n3)\n    (hcircuit : n0 + a * n1 + a * n2 + n3 = 0) :\n    n1 = 0 ∧ n2 = 0 ∧ X = 0 := by\n  have hX' : X ≤ 8000 * n1 := by linarith\n  have hend' : T ≤ 128024 * (n1 + n2) := by linarith\n  have hweight : (7 / 20 : ℝ) * (n1 + n2) ≤ a * n1 + a * n2 := by\n    nlinarith [mul_nonneg (sub_nonneg.mpr ha) (add_nonneg h1 h2)]\n  have hsum : n1 + n2 = 0 := by linarith\n  have hn1 : n1 = 0 := by linarith\n  have hn2 : n2 = 0 := by linarith\n  exact ⟨hn1, hn2, by linarith⟩\n\ntheorem explicit_support_arithmetic (Q N X D E : ℝ)\n    (hQ : 0 ≤ Q) (hN : N ≤ (2 / 5) * Q)\n    (hX : X ≤ 1000000 * N)\n    (hD : D ≤ N + X / 2)\n    (hE : E ≤ Q / 5 + X / 2 + D / 2) :\n    X + D + E ≤ 1000000 * Q := by\n  linarith\n\ntheorem explicit_support_transport (Q W P : ℝ)\n    (hQ : 0 ≤ Q) (hW : W ≤ 1000000 * Q)\n    (hP : P ≤ (82 / 3) * W) :\n    P ≤ 30000000 * Q := by\n  linarith\n\n#print axioms phi_period_five\n#print axioms gepner_bounds\n#print axioms comparison_separation\n#print axioms four_corner_control\n#print axioms four_cut_circuit\n#print axioms explicit_refinement_separation\n#print axioms explicit_support_transport\n\nend\n\nend GepnerAisle\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "1313796f9ce72a34cad10025ed42b3807afd22e671bf6da2d42e4b74b64956f9"
+    },
+    {
+      "claim_id": "C55_AISLE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_OLD_DRAFT_REVIEW",
+        "content_hash": "ab00b7fdad6765e47784b88f2cbf5d5f7ea5098dd072544383cf2f47b35c1c3e"
+      },
+      "natural_statement": "Under the inherited geometric inputs, the actual double-tilt definitions with N_b=d-bc+ur+eta1*c+eta0*r give independent-endpoint Phi U_eta subset U_theta on a sufficiently small square for every 0<u<13/46, and on |eta_j|<1/4000 at u=uG.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "XU_1_3",
+          "statement": "For a positive-rank torsion-free H-slope-semistable sheaf F on a smooth complex quintic, mu_H(F) in [-1,1] implies xi_H(F)<=g(|mu_H(F)|), with the six affine formulas on seven intervals transcribed in the old draft.",
+          "source": "Inherited geometric input, not a result of the Argus draft. Version-specific primary-source rereading is required.",
+          "source_id": "arxiv:2511.21288v2",
+          "locator": "Theorem 1.3 and the preceding definitions of mu_H and xi_H",
+          "filed_by": "engineer:old-draft-assessment",
+          "content_hash": "e4e6e8c62542c08a0de016ff19b44102de7f947bd5a1bc315c7707787002863f"
+        },
+        {
+          "assumption_id": "STANDARD_GEOMETRY",
+          "statement": "Assume noetherianity of Coh(X), finite slope HN filtrations and slope Hom vanishing, positivity and integrality of Chern data of actual sheaves, reflexive-hull behavior, bounded ordinary derived truncations and octahedra, Serre duality with Serre functor [3], support-dimension cohomology vanishing, weak Lefschetz and HRR. These are external hypotheses, not certified conclusions.",
+          "source": "Explicit source-only package in old report.md section 2; no canonical proposition was supplied.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-assessment",
+          "content_hash": "3e0964262d6ec9ed122831acd1247fa5840fe04484c9673562ff1bfc36d4f273"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "3feb32e6673c1b145a16970c66b2461c8204b5925f2125d4a3bb64d6de71abef"
+    },
+    {
+      "claim_id": "C55_REFINEMENT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_OLD_DRAFT_REVIEW",
+        "content_hash": "ab00b7fdad6765e47784b88f2cbf5d5f7ea5098dd072544383cf2f47b35c1c3e"
+      },
+      "natural_statement": "Conditional on actual aisle comparison and categorical Phi^5=[2], at uG the actual aisles satisfy Phi^3 U_alpha subset U_beta[1] for independent endpoints |alpha_j|,|beta_j|<1/500000; numerical separation alone is insufficient.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "PHI_PERIOD",
+          "statement": "On the smooth quintic, Phi=T_OX composed with tensor OX(1) is an exact autoequivalence and Phi^5 is naturally isomorphic to [2]; numerical matrix periodicity is not this assertion.",
+          "source": "Inherited categorical input, not a consequence of Main.lean.",
+          "source_id": "arxiv:1305.0345v3",
+          "locator": "Section 3.3, paragraph following equation (13)",
+          "filed_by": "engineer:old-draft-assessment",
+          "content_hash": "8e8d00ad0d755c373f6557f52eb0ede70739f98077646647f807d52ca09c9354"
+        },
+        {
+          "assumption_id": "STANDARD_GEOMETRY",
+          "statement": "Assume noetherianity of Coh(X), finite slope HN filtrations and slope Hom vanishing, positivity and integrality of Chern data of actual sheaves, reflexive-hull behavior, bounded ordinary derived truncations and octahedra, Serre duality with Serre functor [3], support-dimension cohomology vanishing, weak Lefschetz and HRR. These are external hypotheses, not certified conclusions.",
+          "source": "Explicit source-only package in old report.md section 2; no canonical proposition was supplied.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-assessment",
+          "content_hash": "3e0964262d6ec9ed122831acd1247fa5840fe04484c9673562ff1bfc36d4f273"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "8c0388d254f76921f709d0f78875f13f6ba6b1e00f7bb92891b0e403df14fef0"
+    },
+    {
+      "claim_id": "C55_BLOCKS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_OLD_DRAFT_REVIEW",
+        "content_hash": "ab00b7fdad6765e47784b88f2cbf5d5f7ea5098dd072544383cf2f47b35c1c3e"
+      },
+      "natural_statement": "Conditional on the actual aisle/refinement construction, unperturbed fifth-step blocks have nonzero charge in the closed pi/5 sector and full numerical l1 and Euclidean support constant 30000000; finite refinements, a Gepner-equivariant slicing, both endpoint conventions, and finite-length quasi-abelian intervals of width less than one are claimed.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "PHI_PERIOD",
+          "statement": "On the smooth quintic, Phi=T_OX composed with tensor OX(1) is an exact autoequivalence and Phi^5 is naturally isomorphic to [2]; numerical matrix periodicity is not this assertion.",
+          "source": "Inherited categorical input, not a consequence of Main.lean.",
+          "source_id": "arxiv:1305.0345v3",
+          "locator": "Section 3.3, paragraph following equation (13)",
+          "filed_by": "engineer:old-draft-assessment",
+          "content_hash": "8e8d00ad0d755c373f6557f52eb0ede70739f98077646647f807d52ca09c9354"
+        },
+        {
+          "assumption_id": "STANDARD_GEOMETRY",
+          "statement": "Assume noetherianity of Coh(X), finite slope HN filtrations and slope Hom vanishing, positivity and integrality of Chern data of actual sheaves, reflexive-hull behavior, bounded ordinary derived truncations and octahedra, Serre duality with Serre functor [3], support-dimension cohomology vanishing, weak Lefschetz and HRR. These are external hypotheses, not certified conclusions.",
+          "source": "Explicit source-only package in old report.md section 2; no canonical proposition was supplied.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-assessment",
+          "content_hash": "3e0964262d6ec9ed122831acd1247fa5840fe04484c9673562ff1bfc36d4f273"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "dad7213a98b3f3d927da4792fe67adeee9287200c7db585eb5eef23a74bf00af"
+    },
+    {
+      "claim_id": "C55_GEPNER_VERIFY",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_OLD_DRAFT_REVIEW",
+        "content_hash": "ab00b7fdad6765e47784b88f2cbf5d5f7ea5098dd072544383cf2f47b35c1c3e"
+      },
+      "natural_statement": "Relative to Xu, categorical periodicity and standard geometry, the dependent construction is claimed to give the normalized numerical Bridgeland Gepner stability condition on every smooth complex quintic, with comparison radius 1/4000, refinement radius 1/500000 and support constant 30000000. No manuscript refutation, large-volume theorem, novelty or independent acceptance is asserted.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "XU_1_3",
+          "statement": "For a positive-rank torsion-free H-slope-semistable sheaf F on a smooth complex quintic, mu_H(F) in [-1,1] implies xi_H(F)<=g(|mu_H(F)|), with the six affine formulas on seven intervals transcribed in the old draft.",
+          "source": "Inherited geometric input, not a result of the Argus draft. Version-specific primary-source rereading is required.",
+          "source_id": "arxiv:2511.21288v2",
+          "locator": "Theorem 1.3 and the preceding definitions of mu_H and xi_H",
+          "filed_by": "engineer:old-draft-assessment",
+          "content_hash": "e4e6e8c62542c08a0de016ff19b44102de7f947bd5a1bc315c7707787002863f"
+        },
+        {
+          "assumption_id": "PHI_PERIOD",
+          "statement": "On the smooth quintic, Phi=T_OX composed with tensor OX(1) is an exact autoequivalence and Phi^5 is naturally isomorphic to [2]; numerical matrix periodicity is not this assertion.",
+          "source": "Inherited categorical input, not a consequence of Main.lean.",
+          "source_id": "arxiv:1305.0345v3",
+          "locator": "Section 3.3, paragraph following equation (13)",
+          "filed_by": "engineer:old-draft-assessment",
+          "content_hash": "8e8d00ad0d755c373f6557f52eb0ede70739f98077646647f807d52ca09c9354"
+        },
+        {
+          "assumption_id": "STANDARD_GEOMETRY",
+          "statement": "Assume noetherianity of Coh(X), finite slope HN filtrations and slope Hom vanishing, positivity and integrality of Chern data of actual sheaves, reflexive-hull behavior, bounded ordinary derived truncations and octahedra, Serre duality with Serre functor [3], support-dimension cohomology vanishing, weak Lefschetz and HRR. These are external hypotheses, not certified conclusions.",
+          "source": "Explicit source-only package in old report.md section 2; no canonical proposition was supplied.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-assessment",
+          "content_hash": "3e0964262d6ec9ed122831acd1247fa5840fe04484c9673562ff1bfc36d4f273"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "820203b48d4b3b667b727aca3aa654e751df68d570f9b5b5ed6573fbf3ab9fbc"
+    },
+    {
+      "claim_id": "C55_CORE_V1_FAILURE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX55_OLD_DRAFT_REVIEW",
+        "content_hash": "ab00b7fdad6765e47784b88f2cbf5d5f7ea5098dd072544383cf2f47b35c1c3e"
+      },
+      "natural_statement": "The historical C55_CORE v1 explicit_refinement_separation statement is false under its own displayed real hypotheses: a=7/20, n0=n3=-7/40, n1=1, n2=0, X=8000, T=128024 satisfy all its premises and violate its conclusion. This assignment violates the repaired combined endpoint bound and is not a categorical or manuscript counterexample.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "149c0cdab56621074f35ae2ec0147ce94002fd7c4e9663f4c5efb34dbb760415"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "judgement-C55_CORE-0bf79b7ed2e5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_CORE",
+        "content_hash": "1313796f9ce72a34cad10025ed42b3807afd22e671bf6da2d42e4b74b64956f9"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-assessment",
+      "artifact": "research/draft_reviews/core/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_AISLE-d91757c0f49b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_AISLE",
+        "content_hash": "3feb32e6673c1b145a16970c66b2461c8204b5925f2125d4a3bb64d6de71abef"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-assessment",
+      "artifact": "research/draft_reviews/aisles/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_REFINEMENT-d7a0ecb0a782",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_REFINEMENT",
+        "content_hash": "8c0388d254f76921f709d0f78875f13f6ba6b1e00f7bb92891b0e403df14fef0"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-assessment",
+      "artifact": "research/draft_reviews/refinement/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_BLOCKS-b573ec383656",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_BLOCKS",
+        "content_hash": "dad7213a98b3f3d927da4792fe67adeee9287200c7db585eb5eef23a74bf00af"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-assessment",
+      "artifact": "research/draft_reviews/blocks/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_GEPNER_VERIFY-41e32983d078",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_GEPNER_VERIFY",
+        "content_hash": "820203b48d4b3b667b727aca3aa654e751df68d570f9b5b5ed6573fbf3ab9fbc"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-assessment",
+      "artifact": "research/draft_reviews/gepner/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_CORE_V1_FAILURE-8c6509e51f2f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_CORE_V1_FAILURE",
+        "content_hash": "149c0cdab56621074f35ae2ec0147ce94002fd7c4e9663f4c5efb34dbb760415"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-assessment",
+      "artifact": "research/draft_reviews/core/report.md"
+    },
+    {
+      "evidence_id": "judgement-XU_1_3-7be573d5b608",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "XU_1_3",
+        "content_hash": "e4e6e8c62542c08a0de016ff19b44102de7f947bd5a1bc315c7707787002863f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "primary-source-reader",
+      "artifact": "research/draft_reviews/sources/sources.json"
+    },
+    {
+      "evidence_id": "judgement-PHI_PERIOD-1f1aafb9aaad",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "PHI_PERIOD",
+        "content_hash": "8e8d00ad0d755c373f6557f52eb0ede70739f98077646647f807d52ca09c9354"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "primary-source-reader",
+      "artifact": "research/draft_reviews/sources/sources.json"
+    },
+    {
+      "evidence_id": "citation-XU_1_3-bc56c77cd0b7",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "XU_1_3",
+        "content_hash": "e4e6e8c62542c08a0de016ff19b44102de7f947bd5a1bc315c7707787002863f"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-review",
+      "artifact": "research/literature/5e0252b8de42c298704699ed4409c342.json"
+    },
+    {
+      "evidence_id": "citation-PHI_PERIOD-ec19af986798",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "PHI_PERIOD",
+        "content_hash": "8e8d00ad0d755c373f6557f52eb0ede70739f98077646647f807d52ca09c9354"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-review",
+      "artifact": "research/literature/600e9b49b1168a99f7ebc6c2ae560536.json"
+    },
+    {
+      "evidence_id": "judgement-C55_CORE_V1_FAILURE-3a888fe401dc",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_CORE_V1_FAILURE",
+        "content_hash": "149c0cdab56621074f35ae2ec0147ce94002fd7c4e9663f4c5efb34dbb760415"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-review",
+      "artifact": "research/draft_reviews/core/historical_versions.json"
+    },
+    {
+      "evidence_id": "judgement-C55_AISLE-682146f7e0af",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_AISLE",
+        "content_hash": "3feb32e6673c1b145a16970c66b2461c8204b5925f2125d4a3bb64d6de71abef"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-review",
+      "artifact": "research/draft_reviews/aisles/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_REFINEMENT-141c01c15398",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_REFINEMENT",
+        "content_hash": "8c0388d254f76921f709d0f78875f13f6ba6b1e00f7bb92891b0e403df14fef0"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-review",
+      "artifact": "research/draft_reviews/refinement/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_BLOCKS-b3919b2de4d1",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_BLOCKS",
+        "content_hash": "dad7213a98b3f3d927da4792fe67adeee9287200c7db585eb5eef23a74bf00af"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-review",
+      "artifact": "research/draft_reviews/blocks/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_GEPNER_VERIFY-e7c61ec872c1",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_GEPNER_VERIFY",
+        "content_hash": "820203b48d4b3b667b727aca3aa654e751df68d570f9b5b5ed6573fbf3ab9fbc"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-review",
+      "artifact": "research/draft_reviews/gepner/report.md"
+    },
+    {
+      "evidence_id": "judgement-C55_CORE-6d3ba6424f83",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C55_CORE",
+        "content_hash": "1313796f9ce72a34cad10025ed42b3807afd22e671bf6da2d42e4b74b64956f9"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-old-draft-review",
+      "artifact": "research/draft_reviews/core/report.md"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R55_REVIEW_AISLE",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C55_AISLE",
+        "content_hash": "3feb32e6673c1b145a16970c66b2461c8204b5925f2125d4a3bb64d6de71abef"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C55_CORE",
+          "content_hash": "1313796f9ce72a34cad10025ed42b3807afd22e671bf6da2d42e4b74b64956f9"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R55_REVIEW_REFINEMENT",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C55_REFINEMENT",
+        "content_hash": "8c0388d254f76921f709d0f78875f13f6ba6b1e00f7bb92891b0e403df14fef0"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C55_AISLE",
+          "content_hash": "3feb32e6673c1b145a16970c66b2461c8204b5925f2125d4a3bb64d6de71abef"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C55_CORE",
+          "content_hash": "1313796f9ce72a34cad10025ed42b3807afd22e671bf6da2d42e4b74b64956f9"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R55_REVIEW_BLOCKS",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C55_BLOCKS",
+        "content_hash": "dad7213a98b3f3d927da4792fe67adeee9287200c7db585eb5eef23a74bf00af"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C55_REFINEMENT",
+          "content_hash": "8c0388d254f76921f709d0f78875f13f6ba6b1e00f7bb92891b0e403df14fef0"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C55_CORE",
+          "content_hash": "1313796f9ce72a34cad10025ed42b3807afd22e671bf6da2d42e4b74b64956f9"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R55_REVIEW_ASSEMBLY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C55_GEPNER_VERIFY",
+        "content_hash": "820203b48d4b3b667b727aca3aa654e751df68d570f9b5b5ed6573fbf3ab9fbc"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C55_AISLE",
+          "content_hash": "3feb32e6673c1b145a16970c66b2461c8204b5925f2125d4a3bb64d6de71abef"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C55_REFINEMENT",
+          "content_hash": "8c0388d254f76921f709d0f78875f13f6ba6b1e00f7bb92891b0e403df14fef0"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C55_BLOCKS",
+          "content_hash": "dad7213a98b3f3d927da4792fe67adeee9287200c7db585eb5eef23a74bf00af"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C55_CORE",
+          "content_hash": "1313796f9ce72a34cad10025ed42b3807afd22e671bf6da2d42e4b74b64956f9"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R55_NUMERICAL_ONLY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C55_GEPNER_VERIFY",
+        "content_hash": "820203b48d4b3b667b727aca3aa654e751df68d570f9b5b5ed6573fbf3ab9fbc"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C55_CORE",
+          "content_hash": "1313796f9ce72a34cad10025ed42b3807afd22e671bf6da2d42e4b74b64956f9"
+        }
+      ],
+      "retired_because": "Even exact numerical identities do not establish actual-object torsion decompositions, truncations, or common-heart membership. This logically insufficient certification route is inherited as retired and is not reopened."
+    }
+  ]
+}

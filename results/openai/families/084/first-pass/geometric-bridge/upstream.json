@@ -1,0 +1,28 @@
+{
+  "repository": "https://github.com/openai/math",
+  "commit": "4eaee87548250b2682affda7d05d947c05554bae",
+  "license": "Apache-2.0; the upstream license is retained in vendor/LICENSE",
+  "modified_source_notices": "Each of the nine API-ported source files carries a prominent local-modification notice. The pinned upstream repository has no root NOTICE file.",
+  "source_root": "lean",
+  "local_root": "vendor",
+  "entry_modules": [
+    "OAI.MeasureTheory.DyadicAvoidance.FixedScaleProbability",
+    "OAI.MeasureTheory.DyadicAvoidance.ExposureUnionBound",
+    "OAI.MeasureTheory.DyadicAvoidance.GridSeparation",
+    "OAI.MeasureTheory.DyadicAvoidance.GridGeometry",
+    "OAI.MeasureTheory.DyadicAvoidance.MonotoneRepresentatives",
+    "OAI.MeasureTheory.DyadicAvoidance.FiniteLocalPredicate",
+    "OAI.MeasureTheory.DyadicAvoidance.FiniteLocalHit",
+    "OAI.MeasureTheory.DyadicAvoidance.CenterRouteExposure",
+    "OAI.MeasureTheory.DyadicAvoidance.RoutedAddressInjectivity",
+    "OAI.MeasureTheory.DyadicAvoidance.ConcreteLabelMeasures"
+  ],
+  "scope": "Primary-source probability, grid, locality and routing helpers and their dependency closure, with explicitly listed Lean 4.31 API ports only. Dyadic-displacement-only wrappers are not used to infer the geometric conclusion.",
+  "api_ports": [
+    "Set.mem_ofPred_eq -> Set.mem_setOf_eq in imported modules. The host compiler does not provide the newer name; the replacement is the definitional set-membership simplifier.",
+    "Measurable.of_eval -> measurable_pi_iff.mpr in imported modules. The host compiler provides coordinatewise measurability under the older equivalent interface.",
+    "dite_eq_left -> dif_pos and dite_eq_right -> dif_neg in imported modules. These are the corresponding dependent-conditional reduction lemmas in Lean 4.31."
+  ],
+  "source_inspection": "The pinned primary sources were inspected, and the retained dependency closure compiled on the host. The imported probability and union-bound assumptions were retired after their proofs compiled; the target's remaining assumption is the separately recorded original-window realization. Host Reviewer assessment remains outstanding.",
+  "build": "Run verify.py --build-upstream before importing these local OAI modules. This does not fetch or build a second Mathlib workspace."
+}

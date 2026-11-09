@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-IAC_FORMAL_CORE-9a82e2efb447",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/136/first-pass/inner-average-correction/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 7634,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/136/first-pass/inner-average-correction/lean/Main.lean",
+    "source_sha256": "2cd68aabb61b956ff56f117bd254b543c92492f9b5f8e02c101c0a4cf11d2170",
+    "statement_fidelity": "families/136/first-pass/inner-average-correction/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "62959137c6f170dd42cb8dccb012e26621f2256adc6f9993f31d5ad50334e955",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/136/first-pass/inner-average-correction/lean/Main.lean:39:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/136/first-pass/inner-average-correction/lean/Main.lean:64:10: error: linarith failed to find a contradiction\nX : Type u_1\ninst✝¹ : Fintype X\ninst✝ : Nonempty X\nq R : X → ℝ\nC T delta : ℝ\nhC : 0 ≤ C\nhR : ∀ (x : X), 0 ≤ R x\nhq : ∀ (x : X), q x ≤ C / ↑(Fintype.card X)\nhsum : ∑ x, R x ≤ ↑(Fintype.card X) * T * delta\nhN : 0 < ↑(Fintype.card X)\nhcoefficient : 0 ≤ 8 * C / ↑(Fintype.card X)\nx : X\nhbad : 1 / 8 < R x\nhscaled : 1 ≤ 8 * R x\nhnonnegative : 0 ≤ C / ↑(Fintype.card X)\nhmul : C / ↑(Fintype.card X) * 1 ≤ C / ↑(Fintype.card X) * (8 * R x)\na✝ : 8 * C / ↑(Fintype.card X) * R x < C / ↑(Fintype.card X)\n⊢ False\nfailed\nfamilies/136/first-pass/inner-average-correction/lean/Main.lean:86:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  Decidable (x ∈ E)\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.\nfamilies/136/first-pass/inner-average-correction/lean/Main.lean:114:10: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/136/first-pass/inner-average-correction/lean/Main.lean:116:6: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/136/first-pass/inner-average-correction/lean/Main.lean:114:10: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/inner-average-correction/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace InnerAverageCorrection\n\ntheorem mixing_contraction\n    (theta x y lambda : ℝ)\n    (hx : 0 ≤ x) (hy : 0 ≤ y)\n    (htheta : (1 : ℝ) / 8 ≤ theta)\n    (hsmall : x ≤ theta / 2)\n    (hlambda : lambda ≤ (1 : ℝ) / 64)\n    (hmix : theta * y ≤ x * y + lambda * Real.sqrt (x * y)) :\n    y ≤ x / 16 := by\n  have hs : 0 ≤ Real.sqrt (x * y) := Real.sqrt_nonneg _\n  have hsq : (Real.sqrt (x * y)) ^ 2 = x * y :=\n    Real.sq_sqrt (mul_nonneg hx hy)\n  have hgap : (1 : ℝ) / 16 ≤ theta - x := by linarith\n  have hproduct : 0 ≤ (theta - x - 1 / 16) * y :=\n    mul_nonneg (by linarith) hy\n  have hl := mul_le_mul_of_nonneg_right hlambda hs\n  have hroot : 4 * y ≤ Real.sqrt (x * y) := by\n    nlinarith\n  have hsquares : 0 ≤ (Real.sqrt (x * y) - 4 * y) *\n      (Real.sqrt (x * y) + 4 * y) :=\n    mul_nonneg (sub_nonneg.mpr hroot) (by nlinarith)\n  by_cases hyzero : y = 0\n  · subst y\n    linarith\n  · have hypos : 0 < y := lt_of_le_of_ne hy (Ne.symm hyzero)\n    by_contra hgoal\n    have hnegative : x - 16 * y < 0 := by linarith\n    have hnegative_product := mul_neg_of_neg_of_pos hnegative hypos\n    nlinarith\n\ntheorem product_support_accounting (s delta : ℝ) (hs : 0 < s) :\n    2 * (s * delta / 4) / s + delta / 2 = delta := by\n  field_simp [ne_of_gt hs]\n  <;> ring\n\ntheorem weighted_exceptional_mass\n    {X : Type*} [Fintype X] [Nonempty X]\n    (q R : X → ℝ) (C T delta : ℝ)\n    (hC : 0 ≤ C)\n    (hR : ∀ x, 0 ≤ R x)\n    (hq : ∀ x, q x ≤ C / (Fintype.card X : ℝ))\n    (hsum : (∑ x, R x) ≤ (Fintype.card X : ℝ) * T * delta) :\n    (∑ x, if (1 : ℝ) / 8 < R x then q x else 0) ≤ 8 * C * T * delta := by\n  classical\n  have hN : 0 < (Fintype.card X : ℝ) := by\n    exact_mod_cast Fintype.card_pos\n  have hcoefficient : 0 ≤ 8 * C / (Fintype.card X : ℝ) := by positivity\n  have hpoint : ∀ x,\n      (if (1 : ℝ) / 8 < R x then q x else 0) ≤\n        (8 * C / (Fintype.card X : ℝ)) * R x := by\n    intro x\n    split_ifs with hbad\n    · calc\n        q x ≤ C / (Fintype.card X : ℝ) := hq x\n        _ ≤ (8 * C / (Fintype.card X : ℝ)) * R x := by\n          have hscaled : 1 ≤ 8 * R x := by linarith\n          have hnonnegative : 0 ≤ C / (Fintype.card X : ℝ) := by positivity\n          have hmul := mul_le_mul_of_nonneg_left hscaled hnonnegative\n          nlinarith\n    · exact mul_nonneg hcoefficient (hR x)\n  have hfirst := Finset.sum_le_sum (fun x (_ : x ∈ Finset.univ) => hpoint x)\n  rw [← Finset.mul_sum] at hfirst\n  have hsecond := mul_le_mul_of_nonneg_left hsum hcoefficient\n  have hcancel :\n      (8 * C / (Fintype.card X : ℝ)) *\n        ((Fintype.card X : ℝ) * T * delta) = 8 * C * T * delta := by\n    field_simp [ne_of_gt hN]\n  exact hfirst.trans (hsecond.trans_eq hcancel)\n\ntheorem common_exceptional_set\n    {X Forms : Type*} [Fintype X] [Nonempty X]\n    (q R : X → ℝ) (p : X → Forms → ℝ) (C T delta : ℝ)\n    (hC : 0 ≤ C)\n    (hR : ∀ x, 0 ≤ R x)\n    (hq : ∀ x, q x ≤ C / (Fintype.card X : ℝ))\n    (hsum : (∑ x, R x) ≤ (Fintype.card X : ℝ) * T * delta)\n    (hp : ∀ x f, p x f ≤ (1 : ℝ) / 32 + R x) :\n    ∃ E : Set X,\n      (∀ x, x ∈ E ↔ (1 : ℝ) / 8 < R x) ∧\n      (∀ x, x ∉ E → ∀ f, p x f ≤ (5 : ℝ) / 32) ∧\n      (∑ x, if x ∈ E then q x else 0) ≤ 8 * C * T * delta := by\n  classical\n  refine ⟨{x | (1 : ℝ) / 8 < R x}, ?_, ?_, ?_⟩\n  · intro x\n    rfl\n  · intro x hx f\n    change ¬ (1 : ℝ) / 8 < R x at hx\n    have hsmall : R x ≤ (1 : ℝ) / 8 := le_of_not_gt hx\n    linarith [hp x f]\n  · exact weighted_exceptional_mass q R C T delta hC hR hq hsum\n\ntheorem fixed_radius_before_accuracy\n    (B T nu zeta : ℝ)\n    (hB : 0 < B) (hT : 0 < T) (hnu : 0 < nu) (hzeta : 0 < zeta) :\n    ∃ rho : ℝ, 0 < rho ∧ rho = nu * zeta / (64 * B * T) ∧\n      ∀ C eta : ℝ, 1 ≤ C → 0 < eta →\n        ∃ delta : ℝ, 0 < delta ∧\n          T * B * rho / (nu * zeta) = (1 : ℝ) / 64 ∧\n          8 * C * T * delta = eta / 2 := by\n  let rho := nu * zeta / (64 * B * T)\n  refine ⟨rho, ?_, rfl, ?_⟩\n  · dsimp [rho]\n    positivity\n  · intro C eta hC heta\n    have hCpos : 0 < C := by linarith\n    refine ⟨eta / (16 * T * C), by positivity, ?_, ?_⟩\n    · dsimp [rho]\n      field_simp [ne_of_gt hB, ne_of_gt hT, ne_of_gt hnu, ne_of_gt hzeta]\n      <;> ring\n    · field_simp [ne_of_gt hT, ne_of_gt hCpos]\n      <;> ring\n\nend InnerAverageCorrection\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/inner-average-correction/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: IAC_FORMAL_CORE\n\nThis note describes the declarations in `Main.lean`, namespace\n`InnerAverageCorrection`. It certifies only the universal analytical and\nfinite-index core used in Sections 1, 2, and 5 of `../proof.md`.\n\n## `mixing_contraction`\n\nThe objects `theta, x, y, lambda` are arbitrary real numbers. Hypotheses are\n`x >= 0`, `y >= 0`, `theta >= 1/8`, `x <= theta/2`,\n`lambda <= 1/64`, and\n`theta*y <= x*y + lambda*sqrt(x*y)`. The conclusion is `y <= x/16`.\nUnlike the manuscript application, the formal statement does not need\n`lambda >= 0` or fractions bounded above by one. This is a stronger\nreal-variable implication. The source application supplies these additional\nconditions anyway. The proof explicitly handles y=0 and does not square\nan inequality without checking its sign.\n\n## `product_support_accounting`\n\nFor arbitrary real delta and strictly positive real s, this declaration\nproves the exact identity\n`2*(s*delta/4)/s + delta/2 = delta`. In the support proof, s is 1/256\nand delta is positive. The formal identity needs only s>0.\n\n## `weighted_exceptional_mass`\n\nX is an arbitrary finite nonempty type. It represents the COMPLETE outer\nindex, including both coordinates of a product request; no theorem\nreplaces it by separate marginal indices. The real functions q and R\nare weights and residual scores. C is nonnegative, every R(x) is\nnonnegative, `q(x) <= C/card(X)`, and\n`sum_x R(x) <= card(X)*T*delta`. T and delta are real parameters.\nThe conclusion bounds the unnormalized weighted mass of\n`{x : R(x)>1/8}` by `8*C*T*delta`.\n\nNeither nonnegative q nor normalization of q is needed for this upper\nbound. In the application q is a probability law or a subdistribution\nand has those additional properties. No conditioning or renormalization\nis present in the declaration.\n\n## `common_exceptional_set`\n\nThe preceding objects and hypotheses are retained. Forms is an arbitrary\ntype, not necessarily finite, and p(x,f) is a real score satisfying\n`p(x,f) <= 1/32 + R(x)` for EVERY x and EVERY requested form f.\nThere exists a set E with the explicit membership equivalence\n`x in E <-> R(x)>1/8`. For all x outside E and all f, the conclusion\nis `p(x,f) <= 5/32`. The same E has q-mass at most `8*C*T*delta`.\n\nThe membership equivalence makes E independent of f, p, q, and C once\nR is fixed. It is the same complete-index exceptional set for arbitrary\nform choices, not a separate set chosen after each form. The source's\nbad-column and cone-simulation budgets supply the term 1/32. The\nconstruction of R from group shifts and support envelopes is NOT\nformalized here.\n\n## `fixed_radius_before_accuracy`\n\nB, T, nu, and zeta are arbitrary strictly positive real numbers. The\nconclusion chooses a strictly positive rho equal to\n`nu*zeta/(64*B*T)` BEFORE universally quantifying over the later\nreal density C>=1 and real accuracy eta>0. For every such C and eta\nit then chooses a strictly positive delta and proves\n`T*B*rho/(nu*zeta)=1/64` and `8*C*T*delta=eta/2`.\nThe proof uses `delta=eta/(16*T*C)`. Row rounds and amplification\ncounts do not appear in rho or in its quantifier scope.\n\n## Limits of this formalization\n\nThese are universal real and finite-sum theorems, not finite experiments.\nThey do not construct the affine expander, parity matrices, canonical\npolynomial arrays, tensor row decoder, flags, bit simulator, or independent\nmajority trials. Those constructions and the support-to-score reduction\nare proved or explicitly hypothesized in `../proof.md`, not by Lean.\nNo assertion of `thm:port-gadget`, `thm:main`, novelty, publication-level\nsignificance, or independent Reviewer approval is encoded.\n\nReading this note against the actual source is an independent human\nobligation. Compilation checks the declarations, not the truth of this\ndescription.\n"
+  },
+  "subject": {
+    "content_hash": "883c2d9358805bc87bccbb5e8d42a085360b527088dac04928fcc3a8153dcee7",
+    "kind": "claim",
+    "subject_id": "IAC_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

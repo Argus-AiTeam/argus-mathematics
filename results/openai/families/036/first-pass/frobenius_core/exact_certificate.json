@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "target": "thm:finite-data",
+  "claim": "C9000036-FROB",
+  "classification": "universal_algebraic_verification_with_geometric_proof",
+  "geometry_formalized": false,
+  "independent_review": "pending",
+  "identities": [
+    {
+      "name": "product_chord_induction",
+      "variables": ["a", "b", "A", "B", "t", "Y"],
+      "left": "a*A+t*((a+b)*B-a*A)-(a+b*t)*Y",
+      "right": "(a+b*t)*(A+t*(B-A)-Y)+b*(B-A)*t*(1-t)"
+    },
+    {
+      "name": "determinant_class_error",
+      "variables": ["p", "D", "T", "a", "K", "lam", "S"],
+      "left": "2*(p*D+T-a*D)+(p-1)*K+2*p*lam*S",
+      "right": "2*p*(D+K/2+lam*S)+2*(T-a*D-K/2)"
+    },
+    {
+      "name": "jet_order_difference",
+      "variables": ["n", "p", "a"],
+      "left": "(2*n+2)*(p-a)-(2*n+1)*(p-1)",
+      "right": "p-(2*n+2)*a+(2*n+1)"
+    },
+    {
+      "name": "complement_exponent",
+      "variables": ["x", "p"],
+      "left": "x+(p-1-x)",
+      "right": "p-1"
+    },
+    {
+      "name": "multiplicity_gap",
+      "variables": ["R", "B", "U"],
+      "left": "(R-R*B)-R*U",
+      "right": "R*(1-B-U)"
+    }
+  ],
+  "scalar_fixtures": [
+    {
+      "n": 2,
+      "k0": 3,
+      "epsilon": "1/200",
+      "h": "1/10000",
+      "l": [100],
+      "c0": "7",
+      "curve_error": "5/2",
+      "p": 269,
+      "expected": {
+        "leading": "49/10000",
+        "rank_error": "1628/25",
+        "rank_threshold": 266,
+        "order_threshold": 15,
+        "jet_threshold": 12,
+        "threshold": 266
+      }
+    },
+    {
+      "n": 3,
+      "k0": 2,
+      "epsilon": "1/200",
+      "h": "1/1000000",
+      "l": [100, 100],
+      "c0": "0",
+      "curve_error": "0",
+      "p": 11,
+      "expected": {
+        "leading": "343/1000000",
+        "rank_error": "12247/10000",
+        "rank_threshold": 5,
+        "order_threshold": 1,
+        "jet_threshold": 8,
+        "threshold": 8
+      }
+    }
+  ],
+  "truncated_cases": [
+    {"n": 2, "p": 2},
+    {"n": 2, "p": 3},
+    {"n": 2, "p": 5},
+    {"n": 3, "p": 2},
+    {"n": 3, "p": 3}
+  ],
+  "determinant_case": {
+    "variables": ["x", "y"],
+    "entry_alphabet": ["0", "1", "x", "y", "1+x"],
+    "matrix_size": 2,
+    "matrices": 625
+  },
+  "tensor_case": {
+    "prime": 3,
+    "first_basis": ["1+x", "1+2*x"],
+    "second_basis": ["1+y", "1+2*y"],
+    "nonzero_factor_vectors": 8,
+    "nonzero_tensors": 80,
+    "maximum_factor_orders": [1, 1],
+    "maximum_tensor_order": 2
+  },
+  "jacobian": {
+    "operation_id": "prime_field.matrix.rank.compute",
+    "payload": "jacobian_rank_payload.json",
+    "output": "jacobian_rank_result.json",
+    "expected_prime": 3,
+    "expected_rank": 3,
+    "scope": "bounded_torus_quotient_only"
+  }
+}

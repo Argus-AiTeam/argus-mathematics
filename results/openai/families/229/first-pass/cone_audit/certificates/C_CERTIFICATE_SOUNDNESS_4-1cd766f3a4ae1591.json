@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CERTIFICATE_SOUNDNESS_4-4876524c609c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/229/first-pass/cone_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/229/first-pass/cone_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14533,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/229/first-pass/cone_audit/Main.lean",
+    "source_sha256": "139b6a910e1807bb0a0c39f33466f624288ecdb2811d201db48806f7209b6907",
+    "statement_fidelity": "families/229/first-pass/cone_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "c2dba40140ac9d20a0b5f4e8f14cdc35c87927c30b433057ce37065cc08c39b7",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/cone_audit/Main.lean",
+    "text": "import Mathlib\n\nset_option autoImplicit false\n\nnamespace FourStateConeAudit\n\ndef taylor1 (z : ℝ) : ℝ :=\n  6 - 15 * z + 20 * z ^ 2 - 15 * z ^ 3 + 6 * z ^ 4 - z ^ 5\n\ndef taylor5 (z : ℝ) : ℝ :=\n  252 - 1050 * z + 1800 * z ^ 2 - 1575 * z ^ 3 + 700 * z ^ 4 - 126 * z ^ 5\n\ndef quotient5 (z : ℝ) : ℝ :=\n  1 + 6 * z + 21 * z ^ 2 + 56 * z ^ 3 + 126 * z ^ 4\n\ntheorem remainder1 (z : ℝ) :\n    1 - z * taylor1 z = (z - 1) ^ 6 := by\n  dsimp [taylor1]\n  ring\n\ntheorem remainder5 (z : ℝ) :\n    1 - z ^ 5 * taylor5 z = (z - 1) ^ 6 * quotient5 z := by\n  dsimp [taylor5, quotient5]\n  ring\n\ntheorem reciprocal1_lower (z : ℝ) (hz : 0 < z) :\n    taylor1 z ≤ 1 / z := by\n  have h : 0 ≤ 1 - z * taylor1 z := by\n    rw [remainder1]\n    positivity\n  apply (le_div_iff₀ hz).2\n  nlinarith only [h]\n\ntheorem reciprocal5_lower (z : ℝ) (hz : 0 < z) :\n    taylor5 z ≤ 1 / z ^ 5 := by\n  have hq : 0 ≤ quotient5 z := by\n    dsimp [quotient5]\n    positivity\n  have h : 0 ≤ 1 - z ^ 5 * taylor5 z := by\n    rw [remainder5]\n    exact mul_nonneg (by positivity) hq\n  apply (le_div_iff₀ (pow_pos hz 5)).2\n  nlinarith only [h]\n\ntheorem shifted_reciprocal_lower (N z m t : ℝ) (k : ℕ)\n    (hz : 0 < z) (hfactor : 0 ≤ N + m * z ^ (k + 1))\n    (ht : t ≤ 1 / z ^ k) :\n    (N + m * z ^ (k + 1)) * t - m * z ≤ N / z ^ k := by\n  have h := mul_le_mul_of_nonneg_left ht hfactor\n  have hid :\n      (N + m * z ^ (k + 1)) * (1 / z ^ k) - m * z = N / z ^ k := by\n    rw [pow_succ]\n    field_simp [ne_of_gt hz]\n    ring\n  calc\n    _ ≤ (N + m * z ^ (k + 1)) * (1 / z ^ k) - m * z :=\n      sub_le_sub_right h _\n    _ = _ := hid\n\ntheorem corrected_remainder_lower (N z J c : ℝ) (k : ℕ)\n    (hz : 0 < z) (hrem : 0 ≤ N - z ^ k * J + c * z ^ k) :\n    J - c ≤ N / z ^ k := by\n  apply (le_div_iff₀ (pow_pos hz k)).2\n  nlinarith only [hrem]\n\ntheorem coefficient_nonnegative {ι : Type*} (s : Finset ι)\n    (coefficient monomial : ι → ℝ)\n    (hc : ∀ i ∈ s, 0 ≤ coefficient i)\n    (hm : ∀ i ∈ s, 0 ≤ monomial i) :\n    0 ≤ ∑ i ∈ s, coefficient i * monomial i := by\n  exact Finset.sum_nonneg fun i hi => mul_nonneg (hc i hi) (hm i hi)\n\ntheorem finite_certificate {ι : Type*} (s : Finset ι) (K : ℝ)\n    (f lower : ι → ℝ)\n    (hterms : ∀ i ∈ s, lower i ≤ f i)\n    (hbase : 0 ≤ K + ∑ i ∈ s, lower i) :\n    0 ≤ K + ∑ i ∈ s, f i := by\n  have hsum : (∑ i ∈ s, lower i) ≤ ∑ i ∈ s, f i := Finset.sum_le_sum hterms\n  linarith only [hbase, hsum]\n\ntheorem typeT_sound {ι : Type*} (s : Finset ι) (k : ℕ) (K m : ℝ)\n    (N z t : ι → ℝ)\n    (hz : ∀ i ∈ s, 0 < z i)\n    (hfactor : ∀ i ∈ s, 0 ≤ N i + m * z i ^ (k + 1))\n    (ht : ∀ i ∈ s, t i ≤ 1 / z i ^ k)\n    (hbase : 0 ≤ K +\n      ∑ i ∈ s, ((N i + m * z i ^ (k + 1)) * t i - m * z i)) :\n    0 ≤ K + ∑ i ∈ s, N i / z i ^ k := by\n  apply finite_certificate s K (fun i => N i / z i ^ k)\n    (fun i => (N i + m * z i ^ (k + 1)) * t i - m * z i)\n  · intro i hi\n    exact shifted_reciprocal_lower (N i) (z i) m (t i) k\n      (hz i hi) (hfactor i hi) (ht i hi)\n  · exact hbase\n\ntheorem typeP_sound {ι : Type*} (s : Finset ι) (k : ℕ) (K : ℝ)\n    (N z J c : ι → ℝ)\n    (hz : ∀ i ∈ s, 0 < z i)\n    (hrem : ∀ i ∈ s, 0 ≤ N i - z i ^ k * J i + c i * z i ^ k)\n    (hbase : 0 ≤ K + ∑ i ∈ s, (J i - c i)) :\n    0 ≤ K + ∑ i ∈ s, N i / z i ^ k := by\n  apply finite_certificate s K (fun i => N i / z i ^ k) (fun i => J i - c i)\n  · intro i hi\n    exact corrected_remainder_lower (N i) (z i) (J i) (c i) k (hz i hi) (hrem i hi)\n  · exact hbase\n\ntheorem average_normalization (slack : ℝ) (h : 0 ≤ 24 * slack) :\n    0 ≤ slack := by\n  nlinarith only [h]\n\nend FourStateConeAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/cone_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: rational sign-certificate soundness\n\nThis file describes only the declarations in `Main.lean`, namespace\n`FourStateConeAudit`. It does not claim that Lean executes the C++ traversal\nor proves the full four-state product inequalities.\n\nAll scalar variables are arbitrary real numbers. `remainder1` and\n`remainder5` are polynomial identities without hypotheses. `taylor1` and\n`taylor5` are precisely the degree-five Taylor polynomials at z=1 of\nz^(-1) and z^(-5), respectively; their expanded coefficients are checked\nseparately against the binomial formula in `verify.py`. The remainder\nidentities give `reciprocal1_lower` and `reciprocal5_lower` for every z>0,\nnot merely for |z-1|<1. `quotient5` has coefficients [1,6,21,56,126].\n\n`shifted_reciprocal_lower` quantifies over arbitrary N,z,m,t and natural k.\nIts hypotheses are z>0, N+m*z^(k+1)>=0, and t<=1/z^k. Its conclusion is\nthe exact summand inequality used by Type T. It does not assume m>=0:\nthe stated nonnegative-factor hypothesis is what the proof needs.\n\n`corrected_remainder_lower` quantifies over arbitrary N,z,J,c and natural k.\nIf z>0 and N-z^k*J+c*z^k>=0, it proves J-c<=N/z^k. No bound on J, and no\ninterpolation or truncation accuracy hypothesis, is needed. This is the\nlogical core of Type P; the executable separately checks the actual\ncoefficient remainder for its chosen interpolants.\n\n`coefficient_nonnegative` concerns an arbitrary finite sum of real\ncoefficient-times-monomial values. Both families must be nonnegative\non the indexing finset. Its conclusion is nonnegativity of that sum.\nIts application to homogeneous polynomial coefficients requires the\nexternal identification of the stored arrays with monomials in\nnonnegative barycentric coordinates.\n\n`finite_certificate` sums arbitrary pointwise lower bounds over an\narbitrary finset. `typeT_sound` and `typeP_sound` combine the corresponding\nsummand lemmas with this finite-sum principle. Their index type is arbitrary,\nso they apply in particular to the 24 permutations of four states.\nThe exact number and weight of the permutations are checked by the\nexecutable and described in the mathematical report, not enumerated in Lean.\n`average_normalization` removes the positive factor 24 from a real slack.\n\nFor the manuscript, row a uses k=1, m=3 and N=-|LU|^2; row b uses k=5,\nm=1/2 and N=z^6*H(U/z). The Type T nonnegative-factor hypotheses follow\nfrom A<=3 and H>=-1/2. For Type P, coefficientwise nonnegativity of\nO+cQ supplies `hrem`, and the final coefficient test supplies `hbase`.\nThese identifications, scalar coefficient computations, midpoint coverage,\nand zero-denominator continuous extension remain mathematical/executable\nobligations outside this Lean source. The compiler result must not be\nrepresented as a formalization of those unencoded obligations.\n"
+  },
+  "subject": {
+    "content_hash": "107efcd71c9ec61c4eb9bd90434cfc0a63af73008626109aac334873007590a5",
+    "kind": "claim",
+    "subject_id": "C_CERTIFICATE_SOUNDNESS_4"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

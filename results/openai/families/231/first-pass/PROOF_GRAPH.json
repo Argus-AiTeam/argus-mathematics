@@ -1,0 +1,184 @@
+{
+  "goal": "C9000231",
+  "routes": {},
+  "nodes": {
+    "C9000231": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 231 (The free uniform spanning forest is a factor of IID.; papers: The free uniform spanning forest is a factor of IID; Lean status: Partially/Comparator formalized (lean/docs/231.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C231_FULL_SYMMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C231_FULL_SYMMETRY": {
+      "statement": "Every countable strongly Rayleigh law admits an IID sampler Borel and equivariant on every input for its full coordinate-permutation stabilizer.",
+      "status": "open",
+      "depends_on": ["C231_SR_INPUTS", "M231_SR_RESPONSE", "C231_BROWNIAN_EXTENSION", "C231_POINTWISE_EQUIVARIANCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/theorem.md", "research/covariance_symmetry/exact_certificate.json"]
+    },
+    "C231_SR_INPUTS": {
+      "statement": "Version-specific external inputs: strongly Rayleigh negative association, symmetric homogenization, and known covariance-row bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/literature/primary_excerpts.md"]
+    },
+    "C231_KNOWN_BLOCK_BOUND": {
+      "statement": "Known ABZ Proposition 2.2 bounds arbitrary finite block-event covariance by covariance of block coordinate sums.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/literature/primary_excerpts.md"]
+    },
+    "C231_COVARIANCE_LOCALITY": {
+      "statement": "For arbitrary finite Boolean blocks, cross-block negative association and zero cross-coordinate covariances imply full joint mass factorization.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/Main.lean", "research/covariance_symmetry/statement_fidelity.md", "research/covariance_symmetry/certificates/C231_COVARIANCE_LOCALITY-798e7de33bc91c03.json", "research/covariance_symmetry/exact_certificate.json"]
+    },
+    "C231_COMPONENT_INDEPENDENCE": {
+      "statement": "Covariance components of a countable negatively associated binary law generate mutually independent sigma-fields.",
+      "status": "open",
+      "depends_on": ["C231_COVARIANCE_LOCALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/theorem.md"]
+    },
+    "C231_INTRINSIC_BALLS": {
+      "statement": "Summable covariance rows make threshold-graph radius-n balls finite, nested, symmetry-intrinsic, and exhaustive exactly within the covariance component.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/theorem.md"]
+    },
+    "C231_POSTERIOR_LOCALITY": {
+      "statement": "Component history suffices for the posterior given the full observation filtration; intrinsic finite-ball posteriors converge to it at each fixed time.",
+      "status": "open",
+      "depends_on": ["C231_COMPONENT_INDEPENDENCE", "C231_INTRINSIC_BALLS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/theorem.md"]
+    },
+    "C231_JOINT_INNOVATION": {
+      "statement": "Subtracting the component-local full posterior gives a countable IID Brownian innovation family, with finite-coordinate future increments independent of the full observation past.",
+      "status": "open",
+      "depends_on": ["C231_POSTERIOR_LOCALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/theorem.md"]
+    },
+    "C231_BROWNIAN_EXTENSION": {
+      "statement": "The intrinsic component-local drift, deterministic countable inverse, and integer-time readout sample a countable negatively associated uniformly responsive binary law from IID Brownian paths.",
+      "status": "open",
+      "depends_on": ["C231_COMPONENT_INDEPENDENCE", "C231_INTRINSIC_BALLS", "C231_POSTERIOR_LOCALITY", "C231_JOINT_INNOVATION", "M231_INVERSE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/theorem.md"]
+    },
+    "C231_POINTWISE_EQUIVARIANCE": {
+      "statement": "Intrinsic finite ratios, limsup drift, all Picard iterates, slope readout, and coordinatewise Wiener coding commute with every law-preserving permutation on every input.",
+      "status": "open",
+      "depends_on": ["C231_INTRINSIC_BALLS", "C231_BROWNIAN_EXTENSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/covariance_symmetry/theorem.md"]
+    },
+    "M231_TREE_RESPONSE": {
+      "statement": "Weighted finite trees have covariance gradient and exact absolute response row 2p(1-p)<=1/2, including bridges.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/response.tex"]
+    },
+    "M231_FREE_LIMIT": {
+      "statement": "Free finite-tree exhaustions converge to the invariant forest law with cycle-space kernel I-P_C.",
+      "status": "open",
+      "depends_on": ["M231_TREE_RESPONSE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/response.tex"]
+    },
+    "M231_FINITE_TILT": {
+      "statement": "Finite observed-field FUSF tilts have a uniform 1/2 supremum response bound.",
+      "status": "open",
+      "depends_on": ["M231_TREE_RESPONSE", "M231_FREE_LIMIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/response.tex"]
+    },
+    "M231_CANONICAL_DRIFT": {
+      "statement": "Intrinsic edge-ball finite-tilt limsups give a Borel graph-equivariant drift Lipschitz for bounded differences of unbounded fields.",
+      "status": "open",
+      "depends_on": ["M231_FINITE_TILT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/response.tex"]
+    },
+    "M231_POSTERIOR": {
+      "statement": "Whole-index finite observation exhaustions recover the posterior given the raw full observation history at each fixed time.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/observation.tex"]
+    },
+    "M231_INNOVATION": {
+      "statement": "The full posterior innovations have joint product Wiener law in the countable observation model.",
+      "status": "open",
+      "depends_on": ["M231_POSTERIOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/observation.tex"]
+    },
+    "M231_INVERSE": {
+      "statement": "Bounded Borel drifts with bounded-difference Lipschitz control admit an everywhere-defined unique Borel causal countable-path inverse.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/decoder.tex", "research/covariance_symmetry/theorem.md"]
+    },
+    "M231_BROWNIAN_SAMPLER": {
+      "statement": "Uniformly responsive whole-index finite tilts, joint innovations, inversion, and integer slopes yield a Brownian-input sampler.",
+      "status": "open",
+      "depends_on": ["M231_POSTERIOR", "M231_INNOVATION", "M231_INVERSE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/decoder.tex"]
+    },
+    "M231_EDGE_NOISE": {
+      "statement": "Vertex IID supplies independent Brownian edge noise by equivariant key/private-coordinate allocation on simple locally finite graphs.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/implementation.tex"]
+    },
+    "M231_GRAPH_FACTOR": {
+      "statement": "One Borel root-independent graph factor samples FUSF on every graph in the stated class.",
+      "status": "open",
+      "depends_on": ["M231_CANONICAL_DRIFT", "M231_BROWNIAN_SAMPLER", "M231_EDGE_NOISE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/implementation.tex"]
+    },
+    "M231_SR_RESPONSE": {
+      "statement": "All positive finite strongly Rayleigh tilts have absolute covariance rows at most 2p(1-p)<=1/2 and uniform finite-observation response.",
+      "status": "open",
+      "depends_on": ["C231_SR_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/strongly-rayleigh.tex", "research/covariance_symmetry/theorem.md"]
+    },
+    "M231_SR_GROUP": {
+      "statement": "Translated finite exhaustions give an all-input equivariant IID sampler for invariant strongly Rayleigh laws on regular countable-group actions.",
+      "status": "open",
+      "depends_on": ["M231_SR_RESPONSE", "M231_BROWNIAN_SAMPLER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/strongly-rayleigh.tex"]
+    },
+    "M231_DPP_SR": {
+      "statement": "Finite determinantal laws of Hermitian positive contractions are strongly Rayleigh, as invoked from BBL Proposition 3.5 in the staged manuscript.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/strongly-rayleigh.tex"]
+    },
+    "M231_DPP": {
+      "statement": "Invariant determinantal laws on regular countable-group actions are factors of IID.",
+      "status": "open",
+      "depends_on": ["M231_DPP_SR", "M231_SR_GROUP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-free-uniform-spanning-forest-is-a-factor-of-IID-September-25-2026/build/sections/strongly-rayleigh.tex"]
+    }
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "goal": "C9000307",
+  "scope": "The current verification route targets the October main theorem. The bounded C_CP mission only supplies its topological branch; September is separately inventoried, not an additional necessary truth condition for the October claim. An exact literal refutation would be an alternative campaign route.",
+  "routes": [
+    {
+      "name": "R_CP",
+      "status": "current",
+      "evidence": "research/certificates/congruence-persistence/proof.md"
+    },
+    {
+      "name": "R_CP_CENTRAL_SHORTCUT",
+      "status": "ruled_out",
+      "evidence": "research/certificates/congruence-persistence/proof.md",
+      "retired_because": "The kernel is not central in the full group for any j>=1; only its commutation with horizontal transports is valid."
+    }
+  ],
+  "nodes": {
+    "C9000307": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 307 (Failure of rational injectivity for maximal coarse assembly.; papers: Failure of rational injectivity for maximal coarse assembly; A counterexample to the coarse Novikov conjecture; Lean status: Partially/Comparator formalized (lean/docs/307.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "OCT_MAIN"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "OCT_MAIN": {
+      "statement": "October thm:main: an infinite-order maximal coarse assembly kernel class exists.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["OCT_INFINITE", "OCT_TRANSFER_MAX", "OCT_ENDPOINTS_MAX", "OCT_NATURALITY_MAX"],
+      "evidence": ["research/openai_manuscript/Failure-of-rational-injectivity-for-maximal-coarse-assembly-October-5-2026/build/sections/01-introduction.tex"]
+    },
+    "OCT_GEOMETRY": {
+      "statement": "Uniform bounded geometry, eventual word-ball injectivity, and torus interpolation.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Failure-of-rational-injectivity-for-maximal-coarse-assembly-October-5-2026/build/sections/02-geometry.tex", "research/certificates/congruence-persistence/proof.md"]
+    },
+    "OCT_CHERN": {
+      "statement": "For fixed r and all sufficiently large j, the integral pulled-back first Chern class is divisible by 2^j.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["OCT_GEOMETRY", "C_CP_ALG"],
+      "evidence": ["research/certificates/congruence-persistence/proof.md", "research/certificates/congruence-persistence/exact_certificate.json"]
+    },
+    "OCT_K": {
+      "statement": "For a fixed uniform dimension bound D_r, the odd K-class is integrally divisible by 2^(j-floor(log2 D_r)) eventually in j.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["OCT_CHERN", "C_CP_ALG"],
+      "evidence": ["research/certificates/congruence-persistence/proof.md", "research/certificates/congruence-persistence/exact_certificate.json"]
+    },
+    "OCT_COMPONENT": {
+      "statement": "For every fixed r>=3 and fixed n!=0, the n-fold endpoint difference is nonzero for all sufficiently large j.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["OCT_K", "OCT_GEOMETRY", "C_CP_ALG"],
+      "evidence": ["research/certificates/congruence-persistence/proof.md", "research/certificates/congruence-persistence/exact_certificate.json"]
+    },
+    "OCT_INFINITE": {
+      "statement": "The topological endpoint class has infinite order in the Rips colimit.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["OCT_COMPONENT"],
+      "evidence": ["research/openai_manuscript/Failure-of-rational-injectivity-for-maximal-coarse-assembly-October-5-2026/build/sections/03-persistence.tex"]
+    },
+    "OCT_TRANSFER_MAX": {
+      "statement": "October ana:transfer: the maximal Roe projection has a K-theory splitting.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["OCT_NATURALITY_MAX"],
+      "evidence": ["research/openai_manuscript/Failure-of-rational-injectivity-for-maximal-coarse-assembly-October-5-2026/build/sections/05-transfer.tex"]
+    },
+    "OCT_ENDPOINTS_MAX": {
+      "statement": "October ana:endpoints: the two maximal analytic endpoint composites agree.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["OCT_NATURALITY_MAX"],
+      "evidence": ["research/openai_manuscript/Failure-of-rational-injectivity-for-maximal-coarse-assembly-October-5-2026/build/sections/06-sliding.tex"]
+    },
+    "OCT_NATURALITY_MAX": {
+      "statement": "Fixed-propagation maximal norm control, the compact ideal, multipliers, and maximal assembly naturality.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Failure-of-rational-injectivity-for-maximal-coarse-assembly-October-5-2026/build/sections/04-maximal-index.tex"]
+    },
+    "C_CP": {
+      "statement": "Parameter-uniform verification of the congruence-to-integral-persistence implication, with explicit thresholds and no maximal-index conclusion.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["OCT_CHERN", "OCT_K", "OCT_COMPONENT"],
+      "evidence": ["research/certificates/congruence-persistence/proof.md", "research/certificates/congruence-persistence/verify.py", "research/certificates/congruence-persistence/exact_certificate.json"],
+      "independent_review": "required_pending"
+    },
+    "C_CP_ALG": {
+      "statement": "Universal noncentral cancellation, integral cochain lift, dyadic binomial and nilpotent-ring divisibility, and endpoint pairing obstruction.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/certificates/congruence-persistence/Main.lean", "research/certificates/congruence-persistence/statement_fidelity.md", "research/certificates/congruence-persistence/certificates/C_CP_ALG-6efa67cb832cf216.json"],
+      "mechanical_verification": {
+        "compiler": "Lean 4.31.0",
+        "exit_code": 0,
+        "proof_holes": [],
+        "scope": "universal algebraic core only"
+      }
+    },
+    "C_CP_NONCENTRAL": {
+      "statement": "For every j>=1 the congruence kernel is not central in arbitrary fiber lifts; this excludes an unused shortcut, not a manuscript assertion.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/certificates/congruence-persistence/proof.md", "research/certificates/congruence-persistence/exact_certificate.json"]
+    },
+    "SEP_MAIN": {
+      "statement": "September thm:main concerns an infinite-order REDUCED coarse assembly kernel class, using a separate disc construction.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["SEP_SMALLLOOPS", "SEP_PERSISTENCE", "SEP_TRANSFER", "SEP_VANISH"],
+      "evidence": ["research/openai_manuscript/A-counterexample-to-the-coarse-Novikov-conjecture-September-23-2026/build/sections/01-introduction.tex"]
+    },
+    "SEP_SMALLLOOPS": {
+      "statement": "September lem:trace and lem:smallloops separate every fixed bound in sufficiently late components.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/A-counterexample-to-the-coarse-Novikov-conjecture-September-23-2026/build/sections/03-geometry.tex"]
+    },
+    "SEP_PERSISTENCE": {
+      "statement": "September prop:persistence constructs an integer detector at each fixed Rips scale.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["SEP_SMALLLOOPS"],
+      "evidence": ["research/openai_manuscript/A-counterexample-to-the-coarse-Novikov-conjecture-September-23-2026/build/sections/04-persistence.tex"]
+    },
+    "SEP_TRANSFER": {
+      "statement": "September prop:transfer gives a reduced locally compact Roe homomorphism under uniform fiber averaging and controlled transport.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/A-counterexample-to-the-coarse-Novikov-conjecture-September-23-2026/build/sections/05-transfer.tex"]
+    },
+    "SEP_VANISH": {
+      "statement": "September filled-disc vanishing and the operator factorization imply zero reduced coarse index.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["SEP_TRANSFER"],
+      "evidence": ["research/openai_manuscript/A-counterexample-to-the-coarse-Novikov-conjecture-September-23-2026/build/sections/06-vanishing.tex"]
+    }
+  }
+}

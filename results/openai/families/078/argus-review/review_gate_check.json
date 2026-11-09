@@ -1,0 +1,73 @@
+{
+  "project_root": "campaigns/9200078",
+  "checks": [
+    {
+      "module": "argus_skill.verticals.math.math_state",
+      "command": [
+        "$WORKSPACE/argus-latest/.venv/bin/python",
+        "-m",
+        "argus_skill.verticals.math.math_state",
+        "check",
+        "--project-root",
+        "campaigns/9200078"
+      ],
+      "project_root": "campaigns/9200078",
+      "exit_status": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"issues\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "module": "argus_skill.verticals.math.proof_graph_check",
+      "command": [
+        "$WORKSPACE/argus-latest/.venv/bin/python",
+        "-m",
+        "argus_skill.verticals.math.proof_graph_check",
+        "check",
+        "--project-root",
+        "campaigns/9200078"
+      ],
+      "project_root": "campaigns/9200078",
+      "exit_status": 0,
+      "stdout": "proof graph valid: 9 node(s)\n",
+      "stderr": ""
+    }
+  ],
+  "final_submission_policy": {
+    "posture": "balanced",
+    "profile": "certify",
+    "configured_profile": "adaptive",
+    "source": "final_scope",
+    "stage": "review",
+    "vertical": "math",
+    "target_level": "exploratory",
+    "resolved": true,
+    "note": ""
+  },
+  "delivery_cli": {
+    "command": [
+      "$WORKSPACE/argus-latest/.venv/bin/python",
+      "-m",
+      "argus_skill.verticals.math.check",
+      "--project-root",
+      "campaigns/9200078"
+    ],
+    "project_root": "campaigns/9200078",
+    "exit_status": 1,
+    "stdout": "",
+    "stderr": "$WORKSPACE/argus-latest/.venv/bin/python: No module named argus_skill.verticals.math.check\n",
+    "disposition": "The prescribed interpreter lacks this CLI. Its installed native stage_completion_issues delivery hook was inspected and executed directly; no runtime modification or mathematical failure is inferred."
+  },
+  "delivery_gate": {
+    "entrypoint": "argus_skill.verticals.math.stages.stage_completion_issues",
+    "command": [
+      "$WORKSPACE/argus-latest/.venv/bin/python",
+      "-c",
+      "import json, sys; from pathlib import Path; from argus_skill.verticals.math.stages import stage_completion_issues; root = Path.cwd().resolve(); issues = list(stage_completion_issues(\"review\", root)); print(json.dumps({\"project_root\": str(root), \"entrypoint\": \"argus_skill.verticals.math.stages.stage_completion_issues\", \"stage\": \"review\", \"ok\": not issues, \"issues\": issues}, indent=2)); sys.exit(1 if issues else 0)"
+    ],
+    "project_root": "campaigns/9200078",
+    "exit_status": 0,
+    "stdout": "{\n  \"project_root\": \"campaigns/9200078\",\n  \"entrypoint\": \"argus_skill.verticals.math.stages.stage_completion_issues\",\n  \"stage\": \"review\",\n  \"ok\": true,\n  \"issues\": []\n}\n",
+    "stderr": ""
+  },
+  "meaning": "Before final-submission handoff at the current review stage, both required campaign-local checks and the installed native delivery gate exited 0. These structural and evidence checks do not assert native independent final certification. The index, eight report/verdict pairs, ledger, proof graph, preserved inputs and mathematical replay results were not changed or rerun."
+}

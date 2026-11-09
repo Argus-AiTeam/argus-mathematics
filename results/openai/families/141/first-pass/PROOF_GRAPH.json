@@ -1,0 +1,155 @@
+{
+  "goal": "C9000141",
+  "routes": [
+    {
+      "name": "determinant-core-universal-verification",
+      "status": "current",
+      "evidence": "research/determinant_core/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000141": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 141 (Existential–universal real sentences in the counting hierarchy.; papers: Existential–universal real sentences in the counting hierarchy; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_DET_CORE", "C_PUBLISHABLE_BREAKTHROUGH"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_DET_CORE": {
+      "statement": "Verify the complete indexed characteristic-coefficient contract and its specialization-safe multiplication-determinant use, or certify a hypothesis-valid counterexample; this is a shared dependency, not the main complexity theorem.",
+      "status": "open",
+      "depends_on": ["C_CHAR_COEFF", "C_MULT_DET"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md", "research/determinant_core/verify.py", "research/determinant_core/exact_certificate.json"]
+    },
+    "C_BASIS": {
+      "statement": "For every commutative coefficient ring, the pure-power quotient has the stated monomial basis and the Laurent functional descends and has the stated finite truncation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Existential-universal-real-sentences-in-the-counting-hierarchy-October-4-2026/build/sections/03-algebra.tex"]
+    },
+    "C_TRACE": {
+      "statement": "The actual Laurent functional satisfies tr(M_v)=L(vJ) over arbitrary commutative rings, without reducedness, and commutes with change of coefficient ring.",
+      "status": "open",
+      "depends_on": ["C_BASIS", "C_RESIDUE_MATCH", "C_UNIVERSAL_BRIDGE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md"]
+    },
+    "C_GRID": {
+      "statement": "The multiplicative-grid extraction is exact at all retained trace targets and all requested exponential coefficient indices under the manuscript prime bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md"]
+    },
+    "C_RECONSTRUCT": {
+      "statement": "For arbitrary dimension and prime p>D, the truncated exponential of actual traces agrees with det(I-zM) through degree D, including nonsemisimple matrices.",
+      "status": "open",
+      "depends_on": ["C_UNIVERSAL_BRIDGE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md"]
+    },
+    "C_UNIFORM": {
+      "statement": "All indices, sums, products, arithmetic and oracle queries have polynomial bit length and fixed hierarchy depth uniformly in n, ell, Omega, p, k and d.",
+      "status": "open",
+      "depends_on": ["C_GRID"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md"]
+    },
+    "C_CHAR_COEFF": {
+      "statement": "Proposition prop:char-coeff holds with exactly its stated prime range and F_(a+8) bound, for all coefficient indices and nonreduced specializations.",
+      "status": "open",
+      "depends_on": ["C_TRACE", "C_GRID", "C_RECONSTRUCT", "C_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md"]
+    },
+    "C_MULT_DET": {
+      "statement": "Proposition prop:multiplication-determinant has valid prespecialization degree/norm bounds and a family-only prime cutoff and commutes with every parameter specialization.",
+      "status": "open",
+      "depends_on": ["C_CHAR_COEFF", "C_BASIS", "C_SIZE_SPECIALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md"]
+    },
+    "C_MAIN": {
+      "statement": "Theorem thm:main: the existential-universal real-sentence language belongs to an absolute fixed level of the counting hierarchy.",
+      "status": "open",
+      "depends_on": ["C_MULT_DET", "C_ROOT_LABELS", "C_CONTROLLED_EXISTS", "C_TWO_BLOCK_WITNESS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Existential-universal-real-sentences-in-the-counting-hierarchy-October-4-2026/build/sections/01-introduction.tex"]
+    },
+    "C_ROOT_LABELS": {
+      "statement": "Every chosen real root, including multiple roots, admits the bounded short labels required by the controlled-family procedure; outside this mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Existential-universal-real-sentences-in-the-counting-hierarchy-October-4-2026/build/sections/01-introduction.tex"]
+    },
+    "C_CONTROLLED_EXISTS": {
+      "statement": "The controlled existential feasibility procedure is valid; outside this mission.",
+      "status": "open",
+      "depends_on": ["C_MULT_DET", "C_ROOT_LABELS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Existential-universal-real-sentences-in-the-counting-hierarchy-October-4-2026/build/sections/01-introduction.tex"]
+    },
+    "C_TWO_BLOCK_WITNESS": {
+      "statement": "Degree stratification, the closed lift and penalized minimization produce coordinates of an actual good parameter whenever one exists; outside this mission.",
+      "status": "open",
+      "depends_on": ["C_MULT_DET"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Existential-universal-real-sentences-in-the-counting-hierarchy-October-4-2026/build/sections/01-introduction.tex"]
+    },
+    "C_UNIVERSAL_BRIDGE": {
+      "statement": "For every finite free commutative S-algebra with basis b, S-linear L, algebra-generating g and coefficients w satisfying sum_i L(w_i)b_i=1 and g_j w_i=sum_k repr(g_j b_k)_i w_k, every multiplication power trace is L(v^k sum_i b_i w_i). For every finite square matrix over a field with 1,...,D nonzero, its truncated trace exponential equals det(I-zA) through degree D. Combining these gives every characteristic coefficient from these actual residue values, including all fields of characteristic p>D, without spectral hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/Main.lean", "research/determinant_core/statement_fidelity.md", "research/determinant_core/certificates/C_UNIVERSAL_BRIDGE-ff7177aa59b9a59a.json"]
+    },
+    "C_RESIDUE_MATCH": {
+      "statement": "For the actual pure-power quotient and Laurent functional over every commutative ring, the polynomial divided-difference Bezoutian obeys the generation, normalization and diagonal-annihilation hypotheses of C_UNIVERSAL_BRIDGE, and its diagonal element equals the actual Jacobian J.",
+      "status": "open",
+      "depends_on": ["C_BASIS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md"]
+    },
+    "C_SIZE_SPECIALIZATION": {
+      "statement": "Before specialization the multiplication characteristic polynomial has the manuscript degree and log-norm bounds D*(1+d*(1+T)) and D^2+D*(1+b*(1+T)); quotient reduction, residue, multiplication matrices and characteristic polynomials commute with every coefficient-ring specialization.",
+      "status": "open",
+      "depends_on": ["C_BASIS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md"]
+    },
+    "C_SHARP_CHAR": {
+      "statement": "Under exactly the full hypotheses and prime range of prop:char-coeff, every indexed characteristic coefficient is uniformly in F_max(a+2,5), by flattening the inner (k,j,u) and outer (z,h) modular sums; no squarefreeness or stronger cutoff is required.",
+      "status": "open",
+      "depends_on": ["C_TRACE", "C_GRID", "C_RECONSTRUCT", "C_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md", "research/determinant_core/verify.py"]
+    },
+    "C_FIRST_DERIVATIVE": {
+      "statement": "For input evaluators in F_a and degree bound d, first partial derivatives have F_(a+1) evaluators above max(input cutoff,d+1) using one flattened interpolation-derivative sum, including at zero evaluation coordinates.",
+      "status": "open",
+      "depends_on": ["C_GRID", "C_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md", "research/determinant_core/verify.py"]
+    },
+    "C_SHARP_DET": {
+      "statement": "Controlled pure-power multiplication characteristic polynomials with common input evaluators in F_a have F_max(a+3,5) evaluators and the original size bounds, with primary-family-only cutoffs, uniformly at all parameter and y evaluation points.",
+      "status": "open",
+      "depends_on": ["C_SHARP_CHAR", "C_FIRST_DERIVATIVE", "C_SIZE_SPECIALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/determinant_core/report.md", "research/determinant_core/verify.py"]
+    },
+    "C_PUBLISHABLE_BREAKTHROUGH": {
+      "statement": "An independent Reviewer certifies a genuinely new publishable breakthrough at the operator's novelty and significance boundary; a local verification or known-result reconstruction alone does not discharge campaign completion.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md", "research/determinant_core/report.md"]
+    }
+  }
+}

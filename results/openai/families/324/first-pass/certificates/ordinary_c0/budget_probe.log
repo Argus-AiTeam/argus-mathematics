@@ -1,0 +1,43 @@
+structure OAI.C0Absorption.CylinderBases.{u_1} (Γ : Type u_1) : Type u_1
+number of parameters: 1
+fields:
+  OAI.C0Absorption.CylinderBases.coordinates : Γ → Finset ℕ
+  OAI.C0Absorption.CylinderBases.coordinates_nonempty : ∀ (γ : Γ), (self.coordinates γ).Nonempty
+  OAI.C0Absorption.CylinderBases.band : Γ → ℕ
+  OAI.C0Absorption.CylinderBases.ell : ℕ → ℝ
+  OAI.C0Absorption.CylinderBases.ell_pos : ∀ (j : ℕ), 0 < self.ell j
+  OAI.C0Absorption.CylinderBases.base : (γ : Γ) → Cube (self.coordinates γ) → ℝ
+  OAI.C0Absorption.CylinderBases.A : NNReal
+  OAI.C0Absorption.CylinderBases.L0 : NNReal
+  OAI.C0Absorption.CylinderBases.base_sup : ∀ (γ : Γ) (x : Cube (self.coordinates γ)), |self.base γ x| ≤ ↑self.A
+  OAI.C0Absorption.CylinderBases.base_lipschitz : ∀ (γ : Γ), LipschitzWith self.L0 (self.base γ)
+constructor:
+  OAI.C0Absorption.CylinderBases.mk.{u_1} {Γ : Type u_1} (coordinates : Γ → Finset ℕ)
+    (coordinates_nonempty : ∀ (γ : Γ), (coordinates γ).Nonempty) (band : Γ → ℕ) (ell : ℕ → ℝ)
+    (ell_pos : ∀ (j : ℕ), 0 < ell j) (base : (γ : Γ) → Cube (coordinates γ) → ℝ) (A L0 : NNReal)
+    (base_sup : ∀ (γ : Γ) (x : Cube (coordinates γ)), |base γ x| ≤ ↑A)
+    (base_lipschitz : ∀ (γ : Γ), LipschitzWith L0 (base γ)) : CylinderBases Γ
+def OAI.C0Absorption.concreteBases : CylinderBases Label :=
+{ coordinates := fun γ => correctionCoordinates γ.level, coordinates_nonempty := concreteBases._proof_1,
+  band := fun γ => ↑γ.band, ell := ell, ell_pos := ell_pos, base := correctionBase, A := 4, L0 := correctionL,
+  base_sup := correctionBase_bound, base_lipschitz := correctionBase_lipschitz }
+def OAI.C0Absorption.TClass.{u_1} : {Γ : Type u_1} → CylinderBases Γ → ℕ → Set (↑C0Ball → ℝ) :=
+fun {Γ} B h => {f | ∃ γ r, r.operations.length ≤ h ∧ f = r.value}
+def OAI.C0Absorption.VClass.{u_1} : {Γ : Type u_1} → CylinderBases Γ → ℕ → Set (↑C0Ball → ℝ) :=
+fun {Γ} B h =>
+  {f |
+    ∃ γ r ts,
+      r.operations.length ≤ h ∧
+        B.band γ ≤ h ∧ ts.length ≤ h ∧ (∀ t ∈ ts, t.scaleIndex ≤ h) ∧ f = fun s => r.value s * tailProduct ts s}
+structure OAI.C0Absorption.GeneratedRepresentation.{u_1} {Γ : Type u_1} (B : CylinderBases Γ) (γ : Γ) : Type
+number of parameters: 3
+fields:
+  OAI.C0Absorption.GeneratedRepresentation.operations : List (CylinderOperation (B.coordinates γ))
+  OAI.C0Absorption.GeneratedRepresentation.ordered : List.Pairwise (fun p q => q.scale ≤ p.scale) self.operations
+  OAI.C0Absorption.GeneratedRepresentation.budget : (List.map CylinderOperation.scale self.operations).sum <
+      B.ell (B.band γ) / 2
+constructor:
+  OAI.C0Absorption.GeneratedRepresentation.mk.{u_1} {Γ : Type u_1} {B : CylinderBases Γ} {γ : Γ}
+    (operations : List (CylinderOperation (B.coordinates γ)))
+    (ordered : List.Pairwise (fun p q => q.scale ≤ p.scale) operations)
+    (budget : (List.map CylinderOperation.scale operations).sum < B.ell (B.band γ) / 2) : GeneratedRepresentation B γ

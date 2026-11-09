@@ -1,0 +1,96 @@
+{
+  "goal": "C9000003",
+  "routes": {},
+  "nodes": {
+    "C9000003": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 003 (The quasi-Riemann hypothesis.; papers: The Quasi-Riemann Hypothesis: A Zero-Free Half-Plane $`\\Re s\\gt 7/8`$ ; The Quasi-Riemann Hypothesis (alternate 11/12 proof); Uniform exclusion of Landau–Siegel zeros; Lean status: Partially/Comparator formalized (lean/docs/003.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_LS_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_LS_CORE": {
+      "statement": "Universal kernel verification from the literal projected-box hypotheses to the bounded actual greedy determinant, derived replacements, concentration, biquadratic Frobenius, and simultaneous integer-norm divisibility. The rank-four order presentation is explicit input; analytic reduction and independent review remain outside this result.",
+      "status": "open",
+      "depends_on": ["C_LS_INTERPOLATION", "C_LS_RECTANGLE", "C_LS_GREEDY", "C_LS_EXPONENTS", "C_LS_DIVISIBILITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/proof.md", "research/ls-uniform-determinant-core/Main.lean", "research/ls-uniform-determinant-core/statement_fidelity.md", "research/ls-uniform-determinant-core/lean_verification_result.json", "research/ls-uniform-determinant-core/certificates/C_LS_CORE-56d88bd24c1b3ecc.json", "research/ls-uniform-determinant-core/exact_certificate.json"]
+    },
+    "C_LS_INTERPOLATION": {
+      "statement": "The literal separate-degree interpolation lemma holds for every permitted map, coordinate system, integer budget, and prescribed function. The lattice selector and all polynomial steps are kernel proofs.",
+      "status": "open",
+      "depends_on": ["C_LS_LATTICE_FACE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/RectInterpolation.lean", "research/ls-uniform-determinant-core/Construction.lean", "research/ls-uniform-determinant-core/FinalChain.lean", "research/ls-uniform-determinant-core/statement_fidelity.md"]
+    },
+    "C_LS_BOX_GENERALIZATION": {
+      "statement": "For arbitrary d>=2 and unequal positive integer input side lengths, the rationally independent kernel projection has surjective rectangular evaluation whenever t_j>=D=sum_i(N_i-1)-min_i(N_i-1) and product_j(t_j-D+1)>product_i(d*(N_i-1)+1). Proved in prose, not kernel-certified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/proof.md"]
+    },
+    "C_LS_RECTANGLE": {
+      "statement": "The coordinate-uniform constant-32 rectangular monomial family spans.",
+      "status": "open",
+      "depends_on": ["C_LS_INTERPOLATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/Parameters.lean", "research/ls-uniform-determinant-core/FinalChain.lean", "research/ls-uniform-determinant-core/verify.py"]
+    },
+    "C_LS_GREEDY": {
+      "statement": "For every weight-compatible tie order, interpolation constructs exactly N^4 retained rows, their nonzero determinant, and all earlier-span data; field extension leaves greedy selection unchanged.",
+      "status": "open",
+      "depends_on": ["C_LS_RECTANGLE", "C_LS_SCALAR_DESCENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/Greedy.lean", "research/ls-uniform-determinant-core/Construction.lean", "research/ls-uniform-determinant-core/FinalChain.lean"]
+    },
+    "C_LS_EXPONENTS": {
+      "statement": "The retained exponents have the literal uniform concentration bounds and explicit threshold.",
+      "status": "open",
+      "depends_on": ["C_LS_GREEDY", "C_LS_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/Parameters.lean", "research/ls-uniform-determinant-core/FinalChain.lean", "research/ls-uniform-determinant-core/Main.lean"]
+    },
+    "C_LS_DIVISIBILITY": {
+      "statement": "Quadratic equations and Legendre values imply the required Frobenius congruence; the constructed greedy matrix has the derived triangular replacements. Rational-prime powers combine in the order by integer Bezout and in its nonzero rank-four integer norm.",
+      "status": "open",
+      "depends_on": ["C_LS_GREEDY", "C_LS_FORMAL_CORE", "C_LS_BIQUADRATIC_FROBENIUS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/Biquadratic.lean", "research/ls-uniform-determinant-core/Construction.lean", "research/ls-uniform-determinant-core/FinalChain.lean", "research/ls-uniform-determinant-core/Main.lean"]
+    },
+    "C_LS_FORMAL_CORE": {
+      "statement": "Universal exact capacity bounds and integral determinant divisibility under explicit strictly lower-triangular overring replacement; this is not a kernel proof of projected-box interpolation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/ls-uniform-determinant-core/DeterminantCore.lean",
+        "research/ls-uniform-determinant-core/certificates/C_LS_FORMAL_CORE-09475f747034f86f.json"
+      ]
+    },
+    "C_LS_LATTICE_FACE": {
+      "statement": "For every nonempty support in the four-dimensional integer box and every lattice function nonzero somewhere but zero on the enlarged box, a nearest-pair construction supplies the nonzero shifted point and integral face hyperplane required by interpolation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/LatticeGeometry.lean", "research/ls-uniform-determinant-core/lattice_geometry_fidelity.md"]
+    },
+    "C_LS_BIQUADRATIC_FROBENIUS": {
+      "statement": "In every commutative ring with a^2=d and b^2=2, all integer coefficient tuples satisfy theta^p congruent to sigma(theta) or sigma-tau(theta) modulo p for every odd prime with (d/p)=-1, according to the actual Legendre value (2/p).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/Biquadratic.lean", "research/ls-uniform-determinant-core/biquadratic_fidelity.md"]
+    },
+    "C_LS_SCALAR_DESCENT": {
+      "statement": "For every field extension and every finite-coordinate row family, span membership of base-field rows is unchanged by scalar extension, hence the greedy retained set is exactly unchanged.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/ls-uniform-determinant-core/ScalarDescent.lean", "research/ls-uniform-determinant-core/FinalChain.lean"]
+    }
+  }
+}

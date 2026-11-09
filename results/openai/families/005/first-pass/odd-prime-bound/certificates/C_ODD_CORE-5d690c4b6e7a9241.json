@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_ODD_CORE-2ceda61c21c4",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/005/first-pass/odd-prime-bound/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15988,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/005/first-pass/odd-prime-bound/Main.lean",
+    "source_sha256": "250a334aa02f6f9450a4bb7fc117912516d26c2d8855b8cbe2c2b42253b2b881",
+    "statement_fidelity": "families/005/first-pass/odd-prime-bound/statement_fidelity.md",
+    "statement_fidelity_sha256": "6524d004cdf8bc56ae519236a44e14810e5dd583dbcd5113bc00094de78ba2df",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/005/first-pass/odd-prime-bound/Main.lean:19:5: warning: Variable name `hb` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\nfamilies/005/first-pass/odd-prime-bound/Main.lean:28:0: warning: automatically included section variable(s) unused in theorem `OddPrimeBound.central_residue`:\n  [DecidableEq ι]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq ι] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/005/first-pass/odd-prime-bound/Main.lean:45:0: warning: automatically included section variable(s) unused in theorem `OddPrimeBound.scaled_shear`:\n  [DecidableEq ι]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq ι] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/005/first-pass/odd-prime-bound/Main.lean:63:6: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/005/first-pass/odd-prime-bound/Main.lean:63:6: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/005/first-pass/odd-prime-bound/Main.lean:69:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/005/first-pass/odd-prime-bound/Main.lean:87:4: error: Type mismatch: After simplification, term\n  RingHom.map_det S.subtype B\n has type\n  @Eq k (↑(Matrix.det fun i j => ⟨M i j, ⋯⟩)) (Matrix.map (fun i j => ⟨M i j, ⋯⟩) Subtype.val).det\nbut is expected to have type\n  @Eq k (↑(Matrix.det fun i j => ⟨M i j, ⋯⟩)) M.det\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/odd-prime-bound/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace OddPrimeBound\n\ntheorem loss_cap (n R S r s : ℕ)\n    (hn : r + s ≤ n) (hr : r ≤ R) (hs : s ≤ S) :\n    2 * r + s ≤ min (2 * n) (min (n + R) (2 * R + S)) := by\n  apply le_min\n  · omega\n  · apply le_min <;> omega\n\ntheorem pair_loss (n d q k : ℕ) (hk : d - q ≤ k) :\n    2 * n - k ≤ 2 * n - (d - q) := by\n  omega\n\ntheorem retained_count (A b J K : ℤ)\n    (hb : 0 ≤ b) (hA : b ≤ A) (hK : K ≤ J) :\n    max K 0 + max (J - b) 0 - max (min A K - b) 0 =\n      max K 0 + max (K - A) 0 + max (J - max b K) 0 := by\n  omega\n\nsection Ring\n\nvariable {k ι : Type*} [CommRing k] [DecidableEq ι]\n\ntheorem central_residue (s t : Finset ι) (V Y a sign : ι → k) (x : k)\n    (hx : x = -((∑ l ∈ s, a l * V l) + ∑ l ∈ t, a l * V l))\n    (hY : ∀ l ∈ s, Y l = sign l * V l)\n    (hSign : ∀ l ∈ s, sign l * sign l = 1) :\n    x + (∑ l ∈ s, (sign l * a l) * Y l) = -∑ l ∈ t, a l * V l := by\n  have hsum : (∑ l ∈ s, (sign l * a l) * Y l) =\n      ∑ l ∈ s, a l * V l := by\n    apply Finset.sum_congr rfl\n    intro l hl\n    rw [hY l hl]\n    calc\n      (sign l * a l) * (sign l * V l) =\n          (sign l * sign l) * (a l * V l) := by ring\n      _ = a l * V l := by rw [hSign l hl, one_mul]\n  rw [hx, hsum]\n  ring\n\ntheorem scaled_shear (s : Finset ι) (p x : k) (a Y : ι → k) :\n    p * (x + p * ∑ l ∈ s, a l * Y l) =\n      p * x + ∑ l ∈ s, a l * (p ^ 2 * Y l) := by\n  simp only [mul_add, Finset.mul_sum]\n  congr 1\n  apply Finset.sum_congr rfl\n  intro l hl\n  ring\n\nend Ring\n\nsection Field\n\nvariable {k : Type*} [Field k]\n\ntheorem secondary_terms (p y0 y1 y2 : k) (hp : p ≠ 0) :\n    p * (y0 / p ^ 2 + y1 / p + y2) = y0 / p + y1 + p * y2 := by\n  field_simp [hp]\n  <;> ring\n\ntheorem paired_terms (p a b c d e : k) (hp : p ≠ 0) :\n    p * ((a / p ^ 2 + b / p + c) + (-a / p ^ 2 + d / p + e)) =\n      b + d + p * (c + e) := by\n  field_simp [hp]\n  <;> ring\n\nend Field\n\nsection Determinant\n\nvariable {k ι : Type*} [CommRing k] [Fintype ι] [DecidableEq ι]\n\ntheorem weighted_det (p : k) (w : ι → ℕ) (M : Matrix ι ι k) :\n    Matrix.det (fun i j => p ^ w j * M i j) =\n      p ^ (∑ j, w j) * M.det := by\n  rw [← Finset.prod_pow_eq_pow_sum]\n  exact Matrix.det_mul_row (fun j => p ^ w j) M\n\ntheorem det_mem (S : Subring k) (M : Matrix ι ι k)\n    (hM : ∀ i j, M i j ∈ S) : M.det ∈ S := by\n  let B : Matrix ι ι S := fun i j => ⟨M i j, hM i j⟩\n  have hdet : (B.det : k) = M.det := by\n    simpa [B] using (S.subtype.map_det B)\n  rw [← hdet]\n  exact (B.det).property\n\ntheorem scaled_det_mem (S : Subring k) (p : k) (w : ι → ℕ)\n    (M : Matrix ι ι k) (hM : ∀ i j, p ^ w j * M i j ∈ S) :\n    p ^ (∑ j, w j) * M.det ∈ S := by\n  have h := det_mem S (fun i j => p ^ w j * M i j) hM\n  rwa [weighted_det] at h\n\ntheorem bounded_denominator (S : Subring k) (p : k) (hp : p ∈ S)\n    (w : ι → ℕ) (M : Matrix ι ι k) (D : ℕ)\n    (hD : (∑ j, w j) ≤ D) (hM : ∀ i j, p ^ w j * M i j ∈ S) :\n    p ^ D * M.det ∈ S := by\n  have h := S.mul_mem (S.pow_mem hp (D - ∑ j, w j))\n    (scaled_det_mem S p w M hM)\n  rw [← mul_assoc, ← pow_add, Nat.sub_add_cancel hD] at h\n  exact h\n\nend Determinant\n\nend OddPrimeBound\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/odd-prime-bound/statement_fidelity.md",
+    "text": "# Statement fidelity: support-only odd-prime denominator filtration\n\nThe declarations in namespace `OddPrimeBound` certify the algebraic core of\nthe universal theorem in `report.md`, not Catalan's irrationality and not the\narithmetic digit congruences by themselves.\n\n`weighted_det` quantifies over every commutative ring, every finite decidable\nsquare index type, every ring element p, every natural column-weight function,\nand every square matrix. It proves exactly that scaling column j by p^(w j)\nscales the determinant by p raised to the sum of the weights. Mathlib's\n`det_mul_row` has precisely this column-indexed formula despite its name.\n`det_mem`, `scaled_det_mem`, and `bounded_denominator` quantify additionally\nover an arbitrary subring S. The last theorem requires p in S, the entrywise\nweighted-integrality hypotheses, and the sum of weights at most D; it concludes\np^D det(M) in S. Taking S to be the subring of p-integral rationals translates\nthis conclusion to v_p(det(M)) >= -D, including a zero determinant.\n\n`loss_cap` quantifies over natural n,R,S,r,s with r+s <= n, r <= R,\ns <= S. Its conclusion is the simultaneous bound 2r+s <= 2n,n+R,2R+S.\n`pair_loss` quantifies over natural n,d,q,k and proves the lower-range loss\nbound when k >= d-q, with natural subtraction. `retained_count` quantifies\nover arbitrary integer endpoints A,b,J,K, assuming 0 <= b <= A and K <= J.\nIt proves the positive-part identity equating the retained-column count to\nthe manuscript R, including K <= 0 and J <= b. Positive parts are max(x,0).\n\n`central_residue` works over every commutative ring, with arbitrary finite\nsets s,t and coefficient functions V,Y,a,sign. Its hypotheses state that the\ncentral residue is minus the sum of the represented and exceptional parts,\nthat Y_l = sign_l V_l on s, and that sign_l squared is one there. It proves\nthat adding sum(sign_l a_l Y_l) cancels exactly the represented part.\nThe application partitions the residue indices into s,t and sets\na_l = 1/(j-l); the prime and range conditions making these inverses legal,\nand the formulas for V and Y, are proved separately in `report.md`.\nNo disjointness of s,t is required for the purely algebraic identity.\n\n`scaled_shear` quantifies over every commutative ring and proves the exact\nentrywise equation p(x+p sum(a_l Y_l)) = px+sum(a_l p^2 Y_l).\n`secondary_terms` and `paired_terms` quantify over every field and all\ndisplayed coefficients, with p nonzero. They prove the exact rational\ndecomposition and pair cancellation formulas; the arbitrary y1 coefficient\nis retained and becomes integral, not discarded.\n\nWhat the compiler does not verify: the binomial and carry arguments, the\ndigit and central congruences, the existence of the integral column\noperations used in the theorem, the specialization to the manuscript rows,\nthe equivalence of local subring membership and rational valuation, or the\nanalytic identity of the algebraic raw entries with the original integrals.\nThe first five arithmetic/linear-algebra matters have explicit proofs in\n`report.md`; the analytic identification remains outside this mission.\nThe full universal arithmetic theorem therefore has a prose proof and a\nkernel-checked decisive algebraic core, not a fully formalized proof.\n"
+  },
+  "subject": {
+    "content_hash": "60f391e4b1841bcd9909d1bdb8e8baf5c33851383340ec6562bd7d1c4c934fc8",
+    "kind": "claim",
+    "subject_id": "C_ODD_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

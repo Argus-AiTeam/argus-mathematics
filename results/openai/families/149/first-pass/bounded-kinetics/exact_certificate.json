@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "claim_id": "C149_BOUNDED_KINETICS",
+  "result_class": "new_theorem",
+  "mathematical_statement": "Schedule-independent compact convex classwise permanence for all measurable reaction-rate schedules in a fixed positive compact box, with unique global positive Caratheodory solutions and entrance time uniform on each compact initial set.",
+  "proof": "research/bounded-kinetics/report.md",
+  "independent_review": "pending",
+  "novelty": {
+    "status": "pending_independent_assessment",
+    "comparison": "research/bounded-kinetics/prior-results.md",
+    "scope": "A structural extension beyond the strongest inspected primary statements, not an exhaustive priority certificate."
+  },
+  "reviewed_input": {
+    "claim_id": "C149_AFFINE",
+    "certificate": "research/affine-audit/certificates/C149_AFFINE-83bb1636a8e68c29.json",
+    "source": "research/affine-audit/Main.lean",
+    "fidelity": "research/affine-audit/statement_fidelity.md",
+    "policy": "Check the existing source-bound certificate; do not rebuild this input."
+  },
+  "formal_core": {
+    "claim_id": "C149_BK_CORE",
+    "source": "research/bounded-kinetics/Main.lean",
+    "fidelity": "research/bounded-kinetics/statement_fidelity.md",
+    "certificate": "research/bounded-kinetics/lean/certificates/C149_BK_CORE-0648d449d1870d62.json",
+    "compiler": "Lean 4.31.0",
+    "declarations": [
+      "uniform_cut_margin",
+      "strict_cut_margin",
+      "positive_gap_sum",
+      "ceiling_invariance",
+      "integrated_trapping",
+      "ScaleData.uniform_absorption",
+      "logScale_succ",
+      "logScale_reaches_cap"
+    ],
+    "boundary": "The formal theorem is the universal algebraic and integrated-barrier/scale core. It does not formalize Caratheodory analysis, the affine construction, or finite-dimensional plateau geometry."
+  },
+  "uniform_constants": {
+    "rate_margin": "rho_h = min_e l_e - h^H sum_e u_e >= (min_e l_e)/2 > 0",
+    "strict_active_increase": "delta_h = 2 H rho_h h^N > 0",
+    "single_scale_delay": "tau_h = (M_h - min_{x in B_h} F_h(x) + 1)/delta_h",
+    "scale_recurrence": "h_(j+1) = min(sqrt(h_j),h_P)",
+    "logarithmic_scales": "q_j = max(q_P,q_0/2^j), q_P > 0",
+    "compact_uniform_entry": "T(Q) = sum_{j=1}^n tau_(h_j), where Q subset K_(h_0) and h_n=h_P",
+    "degenerate_case": "S={0}: K={c}, constant solutions, T(Q)=0"
+  },
+  "normalized_rate_margin": {
+    "operation_id": "polynomial.box.enclosure.compute",
+    "payload": "research/bounded-kinetics/jacobian-margin-payload.json",
+    "typed_output": "research/bounded-kinetics/jacobian-margin-output.json",
+    "adapter_exit_code": 0,
+    "adapter_error": null,
+    "timeout": false,
+    "meaning": "The entire normalized margin 1-eta on 0<=eta<=1/2 is in [1/2,1]. This universal auxiliary bound is not a finite network experiment or a substitute for the theorem."
+  },
+  "analytic_inputs": [
+    "A149_FTC on C149_BK_AC: Tao 2010 Notes 5, Theorem 89, Exercise 87, Theorem 15",
+    "A149_BANACH on C149_BK_GLOBAL: Teschl, Theorem 2.1",
+    "A149_HEINE_BOREL_R on C149_BK_GEOMETRY: Axler Theorem 2.12; finite-dimensional and extrema consequences derived in report"
+  ],
+  "analytic_source_passages": "research/bounded-kinetics/analytic-excerpts.txt",
+  "manuscript_refutations": [],
+  "interpretation": "The full theorem has a complete prose proof and a kernel-checked core; independent proof, fidelity, citation, and novelty review is still required. No equilibrium-convergence or uniform-initial-time assertion is made."
+}

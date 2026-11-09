@@ -1,0 +1,85 @@
+{
+  "goal": "C9000096",
+  "routes": [
+    {
+      "name": "R_GEOMETRIC_KERNEL",
+      "status": "current",
+      "evidence": "research/geometric_verification.md"
+    }
+  ],
+  "nodes": {
+    "C9000096": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 096 (The Gaussian propeller conjecture in every dimension.; papers: The Gaussian propeller bound in every dimension; Lean status: Partially/Comparator formalized (lean/docs/096.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN": {
+      "statement": "All finite Gaussian partitions satisfy the 9/(8 pi) first-moment bound.",
+      "status": "open",
+      "depends_on": ["C_EXT", "C_SCALAR", "C_DET", "C_OBSTRUCTION", "A_HJN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric_verification.md"]
+    },
+    "C_EXT": {
+      "statement": "Extremal duality, attainment, score cones, strict Gram signs, and effective dimension.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric_verification.md", "research/openai_manuscript/The-Gaussian-Propeller-Bound-in-Every-Dimension-September-24-2026/build/sections/extremizers.tex"]
+    },
+    "C_SCALAR": {
+      "statement": "The three one-cell scalar estimates hold for every hypothetical extremizer.",
+      "status": "open",
+      "depends_on": ["C_EXT", "A_EHRHARD", "C_ARITHMETIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric_verification.md", "verify.py", "research/openai_manuscript/The-Gaussian-Propeller-Bound-in-Every-Dimension-September-24-2026/build/sections/scalars.tex"]
+    },
+    "C_PAIR": {
+      "statement": "The residual-score density argument bounds every pair determinant.",
+      "status": "open",
+      "depends_on": ["C_EXT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric_verification.md", "research/jacobian/residual_pair_result.json", "research/openai_manuscript/The-Gaussian-Propeller-Bound-in-Every-Dimension-September-24-2026/build/sections/geometry.tex"]
+    },
+    "C_DET": {
+      "statement": "The two aggregate residual determinant inequalities hold.",
+      "status": "open",
+      "depends_on": ["C_PAIR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric_verification.md", "verify.py", "research/openai_manuscript/The-Gaussian-Propeller-Bound-in-Every-Dimension-September-24-2026/build/sections/geometry.tex"]
+    },
+    "C_OBSTRUCTION": {
+      "statement": "The scalar and determinant constraints are inconsistent for every integer m>=5.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["Main.lean", "research/statement_fidelity.md", "research/lean/certificates/C_OBSTRUCTION-c85a5dd2f266a26e.json", "exact_certificate.json", "research/geometric_verification.md"]
+    },
+    "C_ARITHMETIC": {
+      "statement": "Exact rational interval enclosures validate every finite analytic comparison used by the scalar estimates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["verify.py", "exact_certificate.json", "research/openai_manuscript/The-Gaussian-Propeller-Bound-in-Every-Dimension-September-24-2026/build/sections/certificates.tex"]
+    },
+    "A_HJN": {
+      "statement": "External input: Heilman-Jagannath-Naor's three-dimensional propeller theorem.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/literature/heilman_jagannath_naor_theorem_1_1.txt"]
+    },
+    "A_EHRHARD": {
+      "statement": "External input: Borell's Theorem 1.1 implies concavity for convex translations.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/literature/borell_theorem_1_1.txt"]
+    }
+  }
+}

@@ -1,0 +1,241 @@
+COUNIVERSALITY PUBLIC LEAN REUSE — ENGINEER SOURCE-LEVEL ASSESSMENT
+
+Later parent-engineer measurement
+--------------------------------
+A bounded Lean 4.31 source build was subsequently attempted through the
+durable runner. It stopped in Definitions after 55.453 seconds with actual
+unknown-identifier and proof errors; see lean431_build_result.json and
+build431/OAI_CategoryTheory_Thomason_Definitions.log. No public theorem was
+certified. The upstream source bytes are now archived with .lean.txt
+extensions, and the manifest and snapshot verifier refer to those archive
+paths. They are primary-source evidence, not unchecked formal deliverables.
+The inventory below describes the earlier source-assessment subtask and
+therefore its statement that no long build was started is historical.
+
+Result
+------
+The pinned public development contains a source-level faithful route to the
+operator's precise finite-and-omega couniversality theorem, without free,
+cofibrant, or injective attaching-map restrictions. It is not merely an
+interface parameterized by an arbitrary weak-equivalence predicate.
+
+No couniversality theorem has been compiled or Lean-certified in this task.
+The available built Mathlib is incompatible with the upstream compiler.
+CouniversalityWrapper.lean.txt is a deliberately UNCHECKED export draft,
+not a completed formalization, and must not be presented as one.
+
+Pinned sources
+--------------
+OpenAI repository: https://github.com/openai/math
+Revision: 4eaee87548250b2682affda7d05d947c05554bae
+Required compiler: leanprover/lean4:v4.34.1 (vendor/lean/lean-toolchain).
+Required Mathlib revision: d13f23b723b8a846827a245b89c10fc7d3f11612
+(vendor/lean/lakefile.lean and lake-manifest.json).
+
+All downloaded OpenAI files retain the upstream Apache 2.0 LICENSE at
+vendor/lean/LICENSE. Supplementary pinned Mathlib semantic sources and
+metadata retain their source copyright notices and Apache 2.0 LICENSE at
+vendor/mathlib_metadata/LICENSE. Downloaded .lean files are upstream vendor
+sources, NOT certified local deliverables.
+
+Explicit quantifier and semantic mapping
+---------------------------------------
+All OpenAI anchors below are relative to vendor/lean/OAI/CategoryTheory/Thomason/.
+
+1. Small poset:
+   {E : Type u} [PartialOrder E], with arbitrary universe u. The final
+   couniversality theorems do NOT assume [Finite E].
+
+2. Sieve:
+   A : Set E and hA : IsLowerSet A. A itself is the subtype with its induced
+   partial order; inc is the categorification of its actual subtype inclusion.
+
+3. Right-adjoint retraction:
+   r : E →o A and
+     hadj : ∀ (a : A) (e : E), a.val ≤ e ↔ a ≤ r e.
+   This is exactly inclusion ⊣ r, not the opposite adjunction. Retraction is
+   automatic: for a : A, taking a and r a.val in hadj and applying
+   antisymmetry yields r a.val = a. No additional unproved retraction
+   hypothesis is needed. This calculation appears in
+   AttachmentComparison.lean:286-289.
+
+4. Strict categories and arbitrary strict functors:
+   Definitions.lean:12-51 defines OmegaCategory by a Cell : Type u, source and
+   target at every natural-number dimension, partial compositions, globular
+   identities, units, associativity, interchange, and finite dimension for
+   each individual cell. There is NO uniform bound on omega categories.
+   Definitions.lean:62-70 defines strict functors by preservation of source,
+   target, and every composition; :107-110 makes these the categorical Homs.
+   There is no freeness, skeletal, cofibrancy, object-injectivity, or finite-
+   carrier condition in these types.
+
+   This is the single-sorted identity-collapsed encoding of strict higher
+   categories, not a toy ordinary category. Its k-cells are the fixed points
+   of source k; identities are their inclusions into higher fixed-point
+   sets. Conversely a usual globular strict category gives this encoding by
+   taking the union along identity inclusions. This representation comparison
+   is explained here semantically, not supplied as an additional compiled
+   equivalence to an external strict-category library.
+
+5. Finite versus omega dimension:
+   Definitions.lean:112:
+     C.IsTruncated n := ∀ x : C.Cell, C.source n x = x.
+   Definitions.lean:114:
+     NCategory n := {C : OmegaCategory // C.IsTruncated n}.
+   Its Homs remain ALL strict functors (:116-119).
+   Thus finite n is literally n, with 1 ≤ n; it is NOT n+1.
+   Omega is the separate OmegaCategory type, not a finite approximation and
+   not an unspecified top element in NCategory.
+
+6. Ordinary nerve N(E):
+   CategoryTheory.nerve, imported from pinned Mathlib, has m-simplices
+   ComposableArrows E m, i.e. functors Fin(m+1) → E. For the poset category,
+   these are exactly weakly increasing strings. See
+   vendor/mathlib_metadata/Mathlib/AlgebraicTopology/SimplicialSet/Nerve.lean:
+   13-18 and 35-40.
+
+7. Actual c_n N(E), not E regarded as a 1-category:
+   Definitions.lean:1880-1881 defines categorification as the left Kan
+   extension of the raised oriental diagram along Yoneda.
+   Definitions.lean:1962-1965 proves its Street-nerve adjunction.
+   Definitions.lean:2143-2144 defines categorificationFinite n as
+   categorification followed by the strict n-truncation reflector.
+   Its adjunction is :2305-2307, not an assumed interface.
+   CoherentGluing.lean:715-726 abbreviates
+     posetObj n P = (categorificationFinite n).obj (nerve P)
+   and inc n A = its map on the subtype-inclusion nerve.
+   The omega theorem uses categorification.obj (nerve P) directly.
+   These functors are NOT thomasonLeft or c_n Sd^2 N: the latter functors
+   are separately defined in Definitions.lean:1891-1892,2154-2155.
+
+8. Street nerve:
+   Definitions.lean:1261-1262 defines orientals using the positive-table
+   omega category of normalized augmented simplex chains. The simplex
+   complex on m is built from Fin(m+1), not a truncated toy simplex.
+   Definitions.lean:1902-1927 defines
+     streetNerve C [m] = strict functors (orientals.obj [m]) C,
+   with simplicial operators by precomposition and maps by postcomposition.
+   streetNerveFinite n simply applies this nerve to C.val (:2165-2167).
+
+9. Genuine weak equivalence, not an assumed WeakEquiv parameter:
+   Definitions.lean:2326-2349 explicitly builds the induced maps on
+   pi_0 and all positive homotopy groups of a continuous map:
+     componentsMap bijective, and
+     ∀ n : ℕ, ∀ x, groupMap (Fin(n+1)) f x bijective.
+   Definitions.lean:2359-2360 defines simplicialWeakEquivalences by this
+   condition on Mathlib's geometric realization SSet.toTop.map f.
+   Therefore the couniversality conclusion is exactly weak homotopy
+   equivalence of the geometric realization of the Street nerve of j.
+   Mathlib's pinned TopAdj.lean describes and exhibits the geometric
+   realization and its standard topological-simplex homeomorphisms.
+   No predicate called WeakEquiv is a free parameter in the reused theorem.
+
+10. Genuine pushout:
+    The unqualified IsPushout resolves to CategoryTheory.IsPushout, not to
+    a custom attachment relation. Its pinned Mathlib definition extends
+    CommSq and requires Nonempty (IsColimit (PushoutCocone.mk ...)).
+    See vendor/mathlib_metadata/Mathlib/CategoryTheory/Limits/Shapes/
+    Pullback/IsPullback/Defs.lean:78-82.
+    OmegaCategory has actual colimits (Definitions.lean:1865-1866);
+    NCategory n has actual colimits by reflection
+    (Presentations.lean:469-470).
+    Instantiating sq with IsPushout.of_hasPushout gives the literal
+    j = pushout.inl a (inc n A), and likewise in omega dimension.
+    The draft includes these explicit pushout.inl corollaries.
+
+Precise reusable theorem route
+-----------------------------
+RankedFaithfulness.lean:665-672:
+  GrayRecursive.IntervalHom.standardSimplexComparison_isIso :
+    ∀ m : ℕ, IsIso (chainComparison
+      (NormalizedChains.complex (ULift.{u} (Fin(m+3)))))
+
+StandardComparison.lean:728-738:
+  simplexComparison_isIso_of_standard
+extends this to EVERY finite linear order P, including 0,1,2 elements.
+The m+3 indexing therefore does not restrict the final dimensions or omit
+empty/small simplices.
+
+StandardComparison.lean:310-328:
+  intervalExtensionOfSimplexIsIso
+constructs the concrete RightIntervalExtension, filling tensor,
+right-adjoint existence, endpoints, projections, simplex isomorphisms,
+and globe isomorphisms from proved constructions.
+
+Let T be this constructed extension. Choose R := T.tensor.rightAdjoint
+using T.rightAdjoint and adj := Adjunction.ofIsLeftAdjoint T.tensor.
+Then apply:
+
+  Couniversality.poset_couniversal T R adj n hn A hA r hadj sq
+    (AttachmentComparison.lean:329-342)
+
+  Couniversality.omega_poset_couniversal T A hA r hadj sq
+    (AttachmentComparison.lean:344-356).
+
+Their types quantify over arbitrary E, arbitrary X,Y, and arbitrary a,j,v
+with the actual pushout square. The two exact types, and their literal
+pushout.inl specializations, are written in CouniversalityWrapper.lean.txt.
+
+This route does not merely leave SimplexDescent n as a new hypothesis.
+CoreCouniversality.lean:657-670 alone would do that and covers finite n
+only; the stronger all-simplex isomorphism fills the full extension and
+also enables the public omega theorem. Neither Thomason.main nor the
+parallel Transfer/Main endpoint is needed. The parallel construction is
+therefore not part of this dependency closure or the proposed export.
+
+Exact dependency scope and stopping reason
+-----------------------------------------
+dependency_manifest.json records the COMPLETE OAI import closure:
+  85 OAI modules, 100 OAI import edges, 65,284 lines, 2,875,278 bytes.
+  RankedFaithfulness closure: 85 modules; longest module path: 76.
+  CoreCouniversality alone: 80 modules; longest module path: 72.
+  Every one of the 85 files directly imports the Mathlib umbrella.
+
+The pinned Mathlib.lean has 8,531 distinct direct public imports:
+  8,529 Mathlib.* modules, plus Std and Batteries.
+Including Mathlib.lean itself is 8,530 Mathlib modules directly required
+by the umbrella. Its package manifest has eight external packages.
+External packages' internal module closures have NOT been downloaded,
+counted, or compiled. This is an exact count of the umbrella's direct
+requirements, not a claimed count of all external-package modules.
+The upstream OAI lakefile also declares 30 package requirements, most
+irrelevant here; it was inspected but never executed or copied into a
+campaign-root build. No git operation, dependency clone, or Lake resolution
+was run.
+
+Both Lean 4.31.0 and 4.34.1 are installed. The sole probed built Mathlib
+resource is $WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0.
+Its manifest pins fabf563a7c95a166b8d7b6efca11c8b4dc9d911f, NOT the required
+d13f23b723b8a846827a245b89c10fc7d3f11612.
+An actual read-only 4.34.1 compiler invocation of "import Mathlib" against
+that resource failed with exit code 1 and "incompatible header".
+See toolchain_compatibility_probe.json.
+
+Accordingly there is no usable built Mathlib for the unmodified public
+toolchain in the known resource. Reusing the 4.31 artifacts is demonstrably
+not possible under 4.34.1. Moving the 85-module source development onto
+4.31.0 would instead be a backport to another Mathlib revision, not a
+verified wrapper; that backport was not attempted or claimed impossible.
+Acquiring/building the pinned 8,530-module Mathlib under 4.34.1 would not
+satisfy the operator's Lean 4.31.0 certification requirement anyway.
+
+No long build was started; there is no submitted build receipt.
+No new .lean wrapper, acceptance claim, ledger judgement, role status,
+proof graph, or campaign-root configuration was created.
+
+Validation and next decision
+----------------------------
+Run:
+  python research/couniversality_audit/lean_reuse/verify_source_snapshot.py
+This checks local file integrity, the closed OAI import graph, source
+anchors, counts, licenses, and the recorded toolchain failure. It does NOT
+check mathematical truth, Lean elaboration, or proof axioms.
+The first host semantics probe contains two honest unknown-namespace
+errors from querying Limits.IsPushout; the primary pinned source above
+settles its actual namespace, CategoryTheory.IsPushout. This probe is not
+Lean acceptance evidence.
+
+A parent can elect a separate, explicitly budgeted 4.31 backport or supply
+an appropriate compiled 4.34.1 dependency (which is not 4.31 certification).
+Only after all vendor imports and the draft elaborate successfully should
+the draft become a .lean export and receive an acceptance claim/evidence.

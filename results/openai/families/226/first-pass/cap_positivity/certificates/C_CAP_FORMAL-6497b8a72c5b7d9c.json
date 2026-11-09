@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CAP_FORMAL-9935973a35fc",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/226/first-pass/cap_positivity/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/226/first-pass/cap_positivity/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 17680,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/226/first-pass/cap_positivity/Main.lean",
+    "source_sha256": "710c55651a59580f009a6fc3fccde215ea64c9b911d2d2c96e1635d234d61d22",
+    "statement_fidelity": "families/226/first-pass/cap_positivity/statement_fidelity.md",
+    "statement_fidelity_sha256": "81bcb5d9c8e599096b65527f55621687e758aa17e16f3e6730eaf31628f390e8",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/226/first-pass/cap_positivity/Main.lean:19:36: warning: Variable name `hr0` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/cap_positivity/Main.lean",
+    "text": "import Mathlib\n\nnamespace CapPositivity\n\nnoncomputable section\n\ndef head0 : List ℝ → ℝ\n  | [] => 0\n  | x :: _ => x\n\ndef alternating : List ℝ → ℝ\n  | [] => 0\n  | x :: xs => x - alternating xs\n\ndef Decays (r : ℝ) : List ℝ → Prop\n  | [] => True\n  | x :: xs => 0 ≤ x ∧ Decays r xs ∧ head0 xs ≤ r * x\n\ntheorem alternating_bounds {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r ≤ 1)\n    (xs : List ℝ) (h : Decays r xs) :\n    0 ≤ alternating xs ∧\n      (1 - r) * head0 xs ≤ alternating xs ∧ alternating xs ≤ head0 xs := by\n  induction xs with\n  | nil => simp [alternating, head0]\n  | cons x xs ih =>\n    rcases h with ⟨hx, ht, hstep⟩\n    rcases ih ht with ⟨ha0, _, ha1⟩\n    change 0 ≤ x - alternating xs ∧\n      (1 - r) * x ≤ x - alternating xs ∧ x - alternating xs ≤ x\n    have hrx : r * x ≤ x := by nlinarith\n    constructor\n    · linarith\n    constructor <;> nlinarith\n\ndef us (xs : List (ℝ × ℝ)) : List ℝ := xs.map Prod.fst\ndef vs (xs : List (ℝ × ℝ)) : List ℝ := xs.map Prod.snd\ndef Good (r : ℝ) (xs : List (ℝ × ℝ)) : Prop :=\n  Decays r (us xs) ∧ Decays r (vs xs)\n\ndef within : List (ℝ × ℝ) → ℝ\n  | [] => 0\n  | x :: xs =>\n      (x.1 * alternating (vs xs) + x.2 * alternating (us xs)) / 4 + within xs\n\ndef twoChains (xs ys : List (ℝ × ℝ)) : ℝ :=\n  within xs + within ys +\n    (alternating (us xs) * alternating (vs ys) +\n      alternating (us ys) * alternating (vs xs)) / 4\n\ntheorem good_tail {r : ℝ} {x : ℝ × ℝ} {xs : List (ℝ × ℝ)}\n    (h : Good r (x :: xs)) : Good r xs := by\n  exact ⟨h.1.2.1, h.2.2.1⟩\n\ntheorem within_nonneg {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r ≤ 1)\n    (xs : List (ℝ × ℝ)) (h : Good r xs) : 0 ≤ within xs := by\n  induction xs with\n  | nil => simp [within]\n  | cons x xs ih =>\n    have ht := good_tail h\n    have hu := (alternating_bounds hr0 hr1 (us xs) ht.1).1\n    have hv := (alternating_bounds hr0 hr1 (vs xs) ht.2).1\n    have hx : 0 ≤ x.1 := h.1.1\n    have hy : 0 ≤ x.2 := h.2.1\n    have hw := ih ht\n    dsimp [within]\n    positivity\n\ntheorem twoChains_nonneg {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r ≤ 1)\n    (xs ys : List (ℝ × ℝ)) (hx : Good r xs) (hy : Good r ys) :\n    0 ≤ twoChains xs ys := by\n  have hxu := (alternating_bounds hr0 hr1 (us xs) hx.1).1\n  have hxv := (alternating_bounds hr0 hr1 (vs xs) hx.2).1\n  have hyu := (alternating_bounds hr0 hr1 (us ys) hy.1).1\n  have hyv := (alternating_bounds hr0 hr1 (vs ys) hy.2).1\n  have hxw := within_nonneg hr0 hr1 xs hx\n  have hyw := within_nonneg hr0 hr1 ys hy\n  dsimp [twoChains]\n  positivity\n\ntheorem alternating_threshold {r q : ℝ} (hr0 : 0 ≤ r) (hr1 : r ≤ 1)\n    (xs : List ℝ) (h : Decays r xs) (hq : q ≤ head0 xs) :\n    (1 - r) * q ≤ alternating xs := by\n  have hb := (alternating_bounds hr0 hr1 xs h).2.1\n  have hm := mul_le_mul_of_nonneg_left hq (sub_nonneg.mpr hr1)\n  exact hm.trans hb\n\ntheorem twoChains_cross_detection {r q : ℝ}\n    (hr0 : 0 ≤ r) (hr1 : r ≤ 1) (hq0 : 0 ≤ q)\n    (xs ys : List (ℝ × ℝ)) (hx : Good r xs) (hy : Good r ys)\n    (hxu : q ≤ head0 (us xs)) (hxv : q ≤ head0 (vs xs))\n    (hyu : q ≤ head0 (us ys)) (hyv : q ≤ head0 (vs ys)) :\n    (1 - r)^2 * q^2 / 2 ≤ twoChains xs ys := by\n  let k := (1 - r) * q\n  have hk : 0 ≤ k := mul_nonneg (sub_nonneg.mpr hr1) hq0\n  have au : k ≤ alternating (us xs) := alternating_threshold hr0 hr1 _ hx.1 hxu\n  have av : k ≤ alternating (vs xs) := alternating_threshold hr0 hr1 _ hx.2 hxv\n  have bu : k ≤ alternating (us ys) := alternating_threshold hr0 hr1 _ hy.1 hyu\n  have bv : k ≤ alternating (vs ys) := alternating_threshold hr0 hr1 _ hy.2 hyv\n  have hab : k * k ≤ alternating (us xs) * alternating (vs ys) :=\n    mul_le_mul au bv hk (hk.trans au)\n  have hba : k * k ≤ alternating (us ys) * alternating (vs xs) :=\n    mul_le_mul bu av hk (hk.trans bu)\n  have hxw := within_nonneg hr0 hr1 xs hx\n  have hyw := within_nonneg hr0 hr1 ys hy\n  dsimp [twoChains]\n  have hk2 : k * k = (1 - r)^2 * q^2 := by dsimp [k]; ring\n  nlinarith\n\ntheorem within_head_detection {r q : ℝ}\n    (hr0 : 0 ≤ r) (hr1 : r ≤ 1) (hq0 : 0 ≤ q)\n    (x y : ℝ × ℝ) (xs : List (ℝ × ℝ))\n    (h : Good r (x :: y :: xs))\n    (hxu : q ≤ x.1) (hxv : q ≤ x.2)\n    (hyu : q ≤ y.1) (hyv : q ≤ y.2) :\n    (1 - r) * q^2 / 2 ≤ within (x :: y :: xs) := by\n  have ht := good_tail h\n  have au : (1 - r) * q ≤ alternating (us (y :: xs)) :=\n    alternating_threshold hr0 hr1 _ ht.1 hyu\n  have av : (1 - r) * q ≤ alternating (vs (y :: xs)) :=\n    alternating_threshold hr0 hr1 _ ht.2 hyv\n  have hk : 0 ≤ (1 - r) * q := mul_nonneg (sub_nonneg.mpr hr1) hq0\n  have huv : q * ((1 - r) * q) ≤ x.1 * alternating (vs (y :: xs)) :=\n    mul_le_mul hxu av hk (hq0.trans hxu)\n  have hvu : q * ((1 - r) * q) ≤ x.2 * alternating (us (y :: xs)) :=\n    mul_le_mul hxv au hk (hq0.trans hxv)\n  have hw := within_nonneg hr0 hr1 (y :: xs) ht\n  change _ ≤\n    (x.1 * alternating (vs (y :: xs)) +\n      x.2 * alternating (us (y :: xs))) / 4 + within (y :: xs)\n  nlinarith\n\ntheorem same_loop_nonneg (u v : ℤ)\n    (hlo : -1 ≤ u - v) (hhi : u - v ≤ 1) : 0 ≤ u * v := by\n  by_cases hu : 0 ≤ u\n  · by_cases hz : u = 0\n    · simp [hz]\n    · have hv : 0 ≤ v := by omega\n      exact mul_nonneg hu hv\n  · have hv : v ≤ 0 := by omega\n    exact mul_nonneg_of_nonpos_of_nonpos (by omega) hv\n\ntheorem same_loop_detection (u v : ℤ)\n    (hlo : -1 ≤ u - v) (hhi : u - v ≤ 1)\n    (hu : u ≠ 0) (hv : v ≠ 0) : 1 ≤ u * v := by\n  by_cases hp : 0 ≤ u\n  · have hu1 : 1 ≤ u := by omega\n    have hv1 : 1 ≤ v := by omega\n    nlinarith\n  · have hu1 : u ≤ -1 := by omega\n    have hv1 : v ≤ -1 := by omega\n    nlinarith\n\ntheorem same_sink_sign (e a b : ℝ) (he : e^2 = 1) :\n    -(e * a) * (-e * b) = a * b := by\n  calc\n    -(e * a) * (-e * b) = e^2 * (a * b) := by ring\n    _ = a * b := by rw [he]; ring\n\ntheorem same_color_sum {α β : Type*} (s : Finset α) (t : Finset β)\n    (a : α → ℝ) (b : β → ℝ) :\n    (∑ i ∈ s, ∑ j ∈ t, a i * b j / 2) =\n      (∑ i ∈ s, a i) * (∑ j ∈ t, b j) / 2 := by\n  simp_rw [← Finset.sum_div]\n  rw [Finset.sum_mul]\n  congr 1\n  apply Finset.sum_congr rfl\n  intro i hi\n  rw [Finset.mul_sum]\n\ntheorem distinct_color_sum {α β : Type*} (s : Finset α) (t : Finset β)\n    (a : α → ℝ) (b : β → ℝ) :\n    (∑ i ∈ s, ∑ j ∈ t, -(a i * b j) / 4) =\n      -((∑ i ∈ s, a i) * (∑ j ∈ t, b j)) / 4 := by\n  simp_rw [← Finset.sum_div, Finset.sum_neg_distrib]\n  rw [Finset.sum_mul]\n  congr 2\n  apply Finset.sum_congr rfl\n  intro i hi\n  rw [Finset.mul_sum]\n\ndef source : Matrix (Fin 2) (Fin 2) ℚ := !![0, 0; 1, 0]\ndef sink : Matrix (Fin 2) (Fin 2) ℚ := !![0, 1; 0, 0]\n\ntheorem one_source_one_sink : Matrix.trace (source * sink) = 1 := by\n  norm_num [source, sink, Matrix.trace, Matrix.mul_apply, Fin.sum_univ_two]\n\ntheorem alternating_sources_sinks :\n    Matrix.trace (source * sink * source * sink) = 1 := by\n  norm_num [source, sink, Matrix.trace, Matrix.mul_apply, Fin.sum_univ_two]\n\ntheorem adjacent_sources :\n    Matrix.trace (source * source * sink * sink) = 0 := by\n  norm_num [source, sink, Matrix.trace, Matrix.mul_apply, Fin.sum_univ_two]\n\ntheorem adjacent_sinks :\n    Matrix.trace (source * sink * sink * source) = 0 := by\n  norm_num [source, sink, Matrix.trace, Matrix.mul_apply, Fin.sum_univ_two]\n\nend\n\nend CapPositivity\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/cap_positivity/statement_fidelity.md",
+    "text": "# Reading of Main.lean\n\nThe namespace is `CapPositivity`. Scalars in the chain and bilinear\ntheorems are arbitrary real numbers; the local orientation-count matrices\nhave rational entries. Lists and finite sets have arbitrary finite size.\nThere is no bound on a rectangle, number of loops, or number of seam hits\nin these formal statements.\n\n`Decays r xs` says that every list entry is nonnegative, the tail has the\nsame property, and the next entry (zero at the end) is at most r times\nthe current entry. `alternating` is x1-x2+x3-..., and `head0` is the\noutermost weight or zero for an empty list. `alternating_bounds` proves\nits bounds between (1-r) times the head and the head, for 0 <= r <= 1.\n\nA chain is a list of pairs (U,V). `Good` imposes the decay separately on\nthe two projections. `within` is the outer-member decomposition of the\ndistinct-loop expression inside one alternating-sign chain, including\nthe manuscript factor 1/4. `twoChains` adds both within-chain\ncontributions and the cross term for chains with opposite initial signs.\n`within_nonneg` and `twoChains_nonneg` assume no positivity of the target\nexpression. They prove it from the decay hypotheses.\n`twoChains_cross_detection` proves the lower bound\n(1-r)^2 q^2/2 when each of the four outermost U,V weights is at least\nq >= 0. `within_head_detection` proves (1-r) q^2/2 when the first two\nmembers of one chain each have U,V at least q. These are precisely the\nthresholds extracted in the report from two loops with eligible arches\nin both caps. Empty chains are included in the nonnegativity theorem.\n\n`same_loop_nonneg` and `same_loop_detection` quantify over integers u,v\nwith -1 <= u-v <= 1. They prove uv >= 0, and uv >= 1 if neither\ninteger is zero. `same_sink_sign` cancels the common rank/orientation\nsign e under the explicit hypothesis e^2=1.\n`same_color_sum` and `distinct_color_sum` prove the finite bilinear\nsummations, with the respective ordinary-color divisors 2 and 4.\n\n`source` is the transition from incoming traversal orientation - to\noutgoing orientation +. `sink` is its reverse. `one_source_one_sink`,\n`alternating_sources_sinks`, `adjacent_sources`, and `adjacent_sinks`\nverify the local trace counts 1,1,0,0. Identity transitions on ordinary\nstrands and cyclic placement are justified in the report, not encoded as\na theorem about embedded lattice graphs.\n\n**Formal boundary.** Lean does not encode square-lattice perfect\nmatchings, cap diagrams, polygonal containment, the marked-vector norm,\nthe equality of `twoChains` with the original ordered double sum, or\nextraction of head thresholds from remote eligible arches. Those\nunbounded reductions are proved in the mathematical report and\nindependently exercised by the exact Python verifier. The Lean claim is\nthe algebraic/color core under the hypotheses just stated, not the\ncomplete geometric detector or the CLE4 convergence theorem. Compilation\ndoes not validate the prose reductions or any novelty claim.\n"
+  },
+  "subject": {
+    "content_hash": "354da230fb2d9d746e706bbc1735e7d8ffb0b754c62dbeab9097974bef20d451",
+    "kind": "claim",
+    "subject_id": "C_CAP_FORMAL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

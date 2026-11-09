@@ -1,0 +1,85 @@
+{
+  "certificate_kind": "exact_graph_neck_route_exclusion",
+  "result_class": "partial_result",
+  "significance_status": "checkpoint_only",
+  "novelty_status": "not_claimed",
+  "main_goal_met": false,
+  "manuscript_refuted": false,
+  "full_statement_verified": false,
+  "independent_review": "pending_host_invocation",
+  "family": {
+    "domain": "-2<r<2 and abs(y-x*r)<t+r^2",
+    "parameter_box": "abs(x)<1/4 and 0<t<1",
+    "fixed_seed": ["-1", "0"],
+    "accessible_endpoint": ["1", "0"],
+    "open_kernel": "-2<r<2 and abs(y-x*r)<r^2",
+    "marked_component": "-2<r<0 and abs(y-x*r)<r^2",
+    "distance_endpoint_to_marked_closure": "1"
+  },
+  "parameters": {
+    "real_center_radius": "1/4",
+    "complex_center_radius": "1/2",
+    "scale_upper": "1",
+    "spatial_cutoff": "2",
+    "seed_ball_radius": "1/8",
+    "probe_imaginary_part": "1/8",
+    "ratio_error": "1/16",
+    "small_scale": "1/64"
+  },
+  "path_segments": [
+    {
+      "duration": "1/4",
+      "r_coefficients_in_local_parameter": ["-1", "0"],
+      "y_over_x_coefficients_in_local_parameter": ["0", "-1"]
+    },
+    {
+      "duration": "1/2",
+      "r_coefficients_in_local_parameter": ["-1", "2"],
+      "y_over_x_coefficients_in_local_parameter": ["-1", "2"]
+    },
+    {
+      "duration": "1/4",
+      "r_coefficients_in_local_parameter": ["1", "0"],
+      "y_over_x_coefficients_in_local_parameter": ["1", "-1"]
+    }
+  ],
+  "expected": {
+    "family_vertical_bound": "11/2",
+    "side_path_slack_lower_bound": "3/4",
+    "seed_ball_slack_lower_bound": "23/64",
+    "complex_path_norm_squared_bound": "5/4",
+    "complex_path_speed_squared_bound": "20",
+    "complex_norm_plus_speed_squared_bound": "125/4",
+    "strict_norm_plus_speed_bound": "6",
+    "real_path_norm_squared_bound": "17/16",
+    "probe_fiber_residual_upper_bound": "3/8",
+    "recentered_probe_residual_lower_bound": "13/128",
+    "recentered_probe_width_upper_bound": "5/256",
+    "recentered_probe_violation_margin": "21/256",
+    "slack_polynomial_descending": ["1", "-1/8", "-3/32"],
+    "slack_polynomial_exact_roots": ["-1/4", "3/8"],
+    "maximum_membership_slack": "-21/256"
+  },
+  "adapter": {
+    "operation_id": "polynomial.roots.isolate",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "exit_code": 0,
+    "error": null,
+    "timeout": false,
+    "completion": "typed_root_isolation_result",
+    "payload_file": "jacobian_payload.json",
+    "output_file": "jacobian_output.json",
+    "contract_file": "jacobian_contract.json",
+    "returned_intervals": [["-1", "0"], ["0", "1"]],
+    "limitation": "The returned intervals alone do not prove negativity on the target interval. Exact factorization and rational bounds in verify.py supply that proof."
+  },
+  "mathematical_proof": "report.md",
+  "noncomputational_steps": [
+    "The open kernel is the interior of the limiting closed inequalities; boundary equality cannot contain a uniform ball.",
+    "Each sign component is parametrized by r and s with y=x*r+s*r^2 and abs(s)<1.",
+    "The endpoint distance is one because the marked closure has r<=0 and contains (0,0).",
+    "Piecewise affine holomorphic paths inherit the computed uniform Lipschitz bound by concatenation.",
+    "A hypothetical fixed original domain obeys the exact recentering identity, contradicting the certified membership slack."
+  ]
+}

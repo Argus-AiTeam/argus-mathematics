@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_TRANSFER_CORE-7f4fa2496353",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/268/first-pass/transfer_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/268/first-pass/transfer_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 7563,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/268/first-pass/transfer_audit/Main.lean",
+    "source_sha256": "d43b0ec1052da1b21e5eb18ab311163c723dc2710d27f95094b2d5c65c466903",
+    "statement_fidelity": "families/268/first-pass/transfer_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "f9e01dd0704f50f5595eb7b5d8b32d46125190214b349337b7bcfda1af8a648e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/268/first-pass/transfer_audit/Main.lean:16:0: warning: automatically included section variable(s) unused in theorem `TransferAudit.tensorMatrix_mul`:\n  [DecidableEq Local]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq Local] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/268/first-pass/transfer_audit/Main.lean:23:0: warning: automatically included section variable(s) unused in theorem `TransferAudit.tensorMatrix_one`:\n  [DecidableEq Site]\n  [Fintype Local]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq Site] [Fintype Local] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/268/first-pass/transfer_audit/Main.lean:38:0: warning: automatically included section variable(s) unused in theorem `TransferAudit.trace_tensorMatrix`:\n  [DecidableEq Local]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq Local] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/transfer_audit/Main.lean",
+    "text": "import Mathlib.Algebra.BigOperators.Ring.Finset\nimport Mathlib.LinearAlgebra.Matrix.Trace\n\nnamespace TransferAudit\n\nuniverse u v w z\n\nvariable {Site : Type u} [Fintype Site] [DecidableEq Site]\nvariable {Local : Type v} [Fintype Local] [DecidableEq Local]\nvariable {R : Type w} [CommSemiring R]\n\ndef tensorMatrix (A : Site -> Matrix Local Local R) :\n    Matrix (Site -> Local) (Site -> Local) R :=\n  fun x y => Finset.univ.prod (fun i => A i (x i) (y i))\n\ntheorem tensorMatrix_mul (A B : Site -> Matrix Local Local R) :\n    tensorMatrix (fun i => A i * B i) = tensorMatrix A * tensorMatrix B := by\n  ext x y\n  simp only [tensorMatrix, Matrix.mul_apply]\n  rw [Fintype.prod_sum]\n  simp only [Finset.prod_mul_distrib]\n\ntheorem tensorMatrix_one :\n    tensorMatrix (fun _ : Site => (1 : Matrix Local Local R)) = 1 := by\n  ext x y\n  by_cases h : x = y\n  · subst y\n    simp [tensorMatrix]\n  · have witness : Exists (fun i => Not (x i = y i)) := by\n      by_contra hn\n      push Not at hn\n      exact h (funext hn)\n    obtain ⟨i, hi⟩ := witness\n    simp only [tensorMatrix, Matrix.one_apply, if_neg h]\n    apply Finset.prod_eq_zero (Finset.mem_univ i)\n    exact if_neg hi\n\ntheorem trace_tensorMatrix (A : Site -> Matrix Local Local R) :\n    Matrix.trace (tensorMatrix A) =\n      Finset.univ.prod (fun i => Matrix.trace (A i)) := by\n  simp only [Matrix.trace, Matrix.diag_apply, tensorMatrix]\n  exact (Fintype.prod_sum (fun i j => A i j j)).symm\n\ntheorem tensorMatrix_word {Event : Type z} (events : List Event)\n    (A : Event -> Site -> Matrix Local Local R) :\n    (events.map (fun e => tensorMatrix (A e))).prod =\n      tensorMatrix (fun i => (events.map (fun e => A e i)).prod) := by\n  induction events with\n  | nil => exact tensorMatrix_one.symm\n  | cons e events ih =>\n      simp only [List.map_cons, List.prod_cons]\n      rw [ih, <- tensorMatrix_mul]\n\ntheorem trace_tensorMatrix_word {Event : Type z} (events : List Event)\n    (A : Event -> Site -> Matrix Local Local R) :\n    Matrix.trace ((events.map (fun e => tensorMatrix (A e))).prod) =\n      Finset.univ.prod\n        (fun i => Matrix.trace ((events.map (fun e => A e i)).prod)) := by\n  rw [tensorMatrix_word, trace_tensorMatrix]\n\ntheorem prod_filter_identity {Event : Type z} (events : List Event)\n    (active : Event -> Bool) (A : Event -> Matrix Local Local R) :\n    (events.map (fun e => if active e then A e else 1)).prod =\n      ((events.filter active).map A).prod := by\n  induction events with\n  | nil => rfl\n  | cons e events ih =>\n      cases h : active e <;> simp [h, ih]\n\ntheorem trace_supported_word {Event : Type z} (events : List Event)\n    (active : Event -> Site -> Bool)\n    (A : Event -> Site -> Matrix Local Local R) :\n    Matrix.trace\n        ((events.map\n          (fun e => tensorMatrix (fun i => if active e i then A e i else 1))).prod) =\n      Finset.univ.prod\n        (fun i => Matrix.trace\n          (((events.filter (fun e => active e i)).map (fun e => A e i)).prod)) := by\n  rw [trace_tensorMatrix_word]\n  apply Finset.prod_congr rfl\n  intro i _\n  rw [prod_filter_identity]\n\nend TransferAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/transfer_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: arbitrary chronological tensor words\n\nThe claim is `C_TRANSFER_CORE`, not either physical spectral-gap theorem.\nAll declarations are in namespace `TransferAudit` in `Main.lean`.\n\n`Site` is any finite site type, `Local` any finite local basis type, and\n`R` any commutative semiring. Both finite types have decidable equality.\nEmpty site and local types are allowed. There is no bound on their\ncardinalities. In the application they are the physical sites,\n`{x,y,z}`, and the complex numbers, respectively.\n\n`tensorMatrix A` has row and column indices that are functions\n`Site -> Local`. Its `(x,y)` entry is the product over sites `i` of\n`A i (x i) (y i)`. Thus it is the ordinary sitewise tensor/Kronecker\nmatrix in the product basis, not an entrywise product of local matrices.\nThe finite product is of scalars; local matrix multiplication remains\nnoncommutative.\n\n`tensorMatrix_mul`, `tensorMatrix_one`, and `trace_tensorMatrix` establish\nthe multiplication, identity, and trace laws for this actual matrix.\n`tensorMatrix_word` applies them to any `List Event`, including the empty\nlist, for any event type and any assignment of a local square matrix to\neach event and site. `List.prod` multiplies from the head on the left.\nNo commutation or reversal of local event matrices is assumed.\n\n`trace_tensorMatrix_word` proves that the global ordered word trace is\nthe product of the local ordered word traces, for every word length.\n`prod_filter_identity` removes identity insertions while retaining list\norder. `trace_supported_word` combines these results: at each site only\nthe events selected by the arbitrary Boolean incidence function remain,\nin their original order. In the manuscript application a bond event is\nincident on two sites and a field event on one; the theorem does not\nneed this restriction. Scalar event coefficients are multiplied outside\nthe trace by ordinary multilinearity.\n\nIn the application a list is the globally time-sorted event list, and\nfiltering on site incidence gives the merged histories at that site.\nThe formalization does not sort real timestamps, construct the history\nmeasure, prove convergence of any exponential expansion, formalize\ninfinite-dimensional operator theory, prove rotation covariance of the\nspecific spin matrices, or state a Hamiltonian/partition-function\nidentity. Those steps are separate arguments in `report.md`; the finite\nspin and orientation calculations are replayed by `verify.py`.\n\nConsequently a successful compiler run certifies the unrestricted\nalgebraic factorization used in both transfer proofs, not a complete Lean\nproof of `C_TRANSFER`, either uniform gap, or novelty/publication status.\n"
+  },
+  "subject": {
+    "content_hash": "c027a43bd5820bff16a6909684151561a4456a9375edbc05fe94c745a9557871",
+    "kind": "claim",
+    "subject_id": "C_TRANSFER_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

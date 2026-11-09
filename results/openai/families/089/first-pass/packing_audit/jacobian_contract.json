@@ -1,0 +1,42 @@
+{
+  "server_name": "jacobian",
+  "server_version": "0.14.0",
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "adapter": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.jacobian",
+  "discovery": {
+    "query": "finite planar graph shortest path distance counterexample localization",
+    "exit_code": 0,
+    "candidates": [
+      "graph.distance_matrix.compute",
+      "geometry.points.distance_graph.compute",
+      "graph.hamiltonian_path.decide",
+      "graph.multigraph.flow.finite_abelian.check",
+      "graph.multigraph.flow.finite_abelian.find"
+    ]
+  },
+  "inspection": {
+    "operation_id": "graph.distance_matrix.compute",
+    "exit_code": 0,
+    "description": "Compute every exact unweighted shortest-path distance in a finite simple graph of at most 64 vertices, using JSON null for unreachable vertex pairs.",
+    "input": {
+      "required": ["graph"],
+      "additionalProperties": false,
+      "graph_required": ["vertices", "edges"],
+      "vertices": "array of strings; maxItems 256; each string length 1..256",
+      "edges": "array of two-string arrays; maxItems 32640"
+    },
+    "output_required": [
+      "vertex_ordering", "pair_coverage", "unreachable_representation",
+      "vertices", "rows", "connected"
+    ],
+    "output_constants": {
+      "vertex_ordering": "LEXICOGRAPHIC_ASCENDING",
+      "pair_coverage": "ALL_ORDERED_VERTEX_PAIRS",
+      "unreachable_representation": "JSON_NULL"
+    },
+    "row_contract": "Each row contains source:string and distances:array[integer in 0..255 or null], bound to the returned canonical vertex axis.",
+    "read_only": true
+  },
+  "scope": "The six-vertex unweighted graph is within both the advertised and schema bounds. This operation does not accept weighted column geometry and is not used as a proof of localization."
+}

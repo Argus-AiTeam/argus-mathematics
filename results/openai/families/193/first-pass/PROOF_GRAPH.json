@@ -1,0 +1,194 @@
+{
+  "goal": "C9000193",
+  "routes": [
+    {
+      "name": "supported-euler-spectral-data",
+      "status": "current",
+      "goal": "C193_BASE",
+      "evidence": "research/supported-euler-audit/report.md"
+    },
+    {
+      "name": "raw-homology-on-arbitrary-lifts",
+      "status": "ruled_out",
+      "goal": "C193_BASE",
+      "reason": "The manuscript's as:nonuniform-warning already shows that raw homology on unsupported lifts does not descend; this strategy cannot define the stated evaluations.",
+      "evidence": "research/supported-euler-audit/report.md"
+    },
+    {
+      "name": "ordinary-positive-Tor-is-negligible",
+      "status": "ruled_out",
+      "goal": "C193_BASE",
+      "reason": "For the admissible rank-two domain T=A direct_sum (a,b)u inside F_p[[u,b]], the normalized positive ordinary Tor length is one on n copies of A/(a^m,b^q), not zero. Only its Euler correction cancels.",
+      "evidence": "research/supported-euler-audit/exact_certificate.json"
+    }
+  ],
+  "nodes": {
+    "C9000193": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 193 (Serre’s intersection-multiplicity conjecture.; papers: Positivity of Serre's Intersection Multiplicity; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C193_SERRE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C193_SERRE": {
+      "statement": "thm:main: strict positivity of Serre intersection multiplicity for nonzero finite modules of complementary dimensions and finite-length tensor product over a Noetherian regular local ring.",
+      "status": "open",
+      "depends_on": ["C193_REDUCTION", "C193_FIRST", "C193_SECOND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Positivity-of-Serres-Intersection-Multiplicity-September-23-2026/build/sections/introduction.tex"]
+    },
+    "C193_REDUCTION": {
+      "statement": "pos:reduction and pos:vanishing: reduce to complete prime quotients over an algebraically closed characteristic-p residue field, with positive complementary dimensions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C193_LENGTH_INPUT": {
+      "statement": "len:normalization and len:input: construct the finite regular bases, algebras and lengths with all asserted parameter properties.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/supported-euler-audit/report.md"]
+    },
+    "C193_DESCENT": {
+      "statement": "ds:descent: invariant supported rational K-theory classes descend under the manuscript's finite-surjection and orbit hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/supported-euler-audit/report.md"]
+    },
+    "C193_ORD_NORM": {
+      "statement": "ds:ordinary-norm: ordinary and normalized evaluations agree on the ordinary Galois norm sums.",
+      "status": "open",
+      "depends_on": ["C193_DESCENT", "C193_TOR", "C193_LENGTH_INPUT"],
+      "reviewer_confirmed": false
+    },
+    "C193_FIRST": {
+      "statement": "pos:first-average: the first Galois norm expresses a positive scalar multiple of the intersection multiplicity as the sum of c_sigma.",
+      "status": "open",
+      "depends_on": ["C193_ORD_NORM", "C193_REDUCTION"],
+      "reviewer_confirmed": false
+    },
+    "C193_SUPPORT": {
+      "statement": "as:supported-quotient: supported roofs compute the full supported subquotient, and every supported quotient object is a retract of a uniformly supported bounded free lift.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/supported-euler-audit/report.md"]
+    },
+    "C193_EVAL": {
+      "statement": "as:evaluations and its A version: homology lengths descend to supported quotients, extend to idempotent images, are finite and nonnegative, and have additive Euler sums.",
+      "status": "open",
+      "depends_on": ["C193_SUPPORT", "C193_IMAGES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/supported-euler-audit/report.md"]
+    },
+    "C193_TOR": {
+      "statement": "as:finite-tor and ds:finite-length-basechange: the stated parameter-length hypotheses imply zero positive Tor length and multiplication of finite-length zero Tor by r.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/supported-euler-audit/report.md"]
+    },
+    "C193_LOCALIZE": {
+      "statement": "Both finite comparison spectral sequences, together with their finite filtered abutments and natural scalar-extension identifications, invert supported-small-cone maps in the length quotients.",
+      "status": "open",
+      "depends_on": ["C193_EVAL", "C193_TOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/supported-euler-audit/report.md"]
+    },
+    "C193_IMAGES": {
+      "statement": "Compatible idempotent images preserve exact sequences and homology; on an invariant filtration the image intersects each step in its projected step, and the associated graded image is the image of the graded projector.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/supported-euler-audit/report.md"]
+    },
+    "C193_IMAGE_CORE": {
+      "statement": "Module core only: commuting idempotents preserve exactness at the middle and surjectivity after restriction to their ranges, and range(p) intersect an invariant submodule F equals p(F).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/supported-euler-audit/report.md",
+        "research/supported-euler-audit/Main.lean",
+        "research/supported-euler-audit/statement_fidelity.md",
+        "research/supported-euler-audit/certificates/C193_IMAGE_CORE-2c78a4abb06dac43.json"
+      ]
+    },
+    "C193_EULER": {
+      "statement": "Finite spectral-page Euler cancellation and finite-filtration additivity apply to the localized idempotent images; the first-page ordinary weight is the alternating rank of a resolution of T.",
+      "status": "open",
+      "depends_on": ["C193_LOCALIZE", "C193_IMAGES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/supported-euler-audit/report.md"]
+    },
+    "C193_BASE": {
+      "statement": "as:base-equality under its full hypotheses: chi_ord(X tensor_A^L T) = rank_A(T) chi_A(X) = chi_C(X tensor_A^L T) for every supported X in P_A, including quotient-only support and nonlifting idempotents.",
+      "status": "open",
+      "depends_on": ["C193_SUPPORT", "C193_EVAL", "C193_TOR", "C193_LOCALIZE", "C193_IMAGES", "C193_EULER"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/supported-euler-audit/report.md",
+        "research/supported-euler-audit/verify.py",
+        "research/supported-euler-audit/exact_certificate.json"
+      ]
+    },
+    "C193_C_FUNCTOR": {
+      "statement": "For every supported quotient object X, H_i^C(X tensor_A^L T) is naturally isomorphic to the exact length-scaling tensor functor applied to H_i^A(X), including arbitrary quotient idempotent summands.",
+      "status": "open",
+      "depends_on": ["C193_SUPPORT", "C193_EVAL", "C193_TOR", "C193_LOCALIZE", "C193_IMAGES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/supported-euler-audit/report.md"]
+    },
+    "C193_NONFLAT": {
+      "statement": "For A=F_p[[a,b]], T=A direct_sum (a,b)u inside C=F_p[[u,b]], a=u^2, all stated length hypotheses hold with rank two, while Tor(A/(a^m,b^q),T) has lengths 2mq+1 and 1 in degrees zero and one and Euler sum 2mq. The positive ordinary Tor term need not be negligible.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/supported-euler-audit/report.md",
+        "research/supported-euler-audit/exact_certificate.json"
+      ]
+    },
+    "C193_CONNECTIVE": {
+      "statement": "as:connective and the support identification supply a connective coefficient algebra compatible with scalar extension and central localization.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C193_NORM": {
+      "statement": "as:norm: the ordinary and normalized evaluations agree on supported Galois norm sums in the asymptotic category.",
+      "status": "open",
+      "depends_on": ["C193_BASE", "C193_CONNECTIVE", "C193_DESCENT"],
+      "reviewer_confirmed": false
+    },
+    "C193_APPROX": {
+      "statement": "pos:parameters, pos:tor-bound and pos:approximation: obtain the parameter quotient, finite Tor range, action-preserving finite-length approximations and positive generator density.",
+      "status": "open",
+      "depends_on": ["C193_LENGTH_INPUT"],
+      "reviewer_confirmed": false
+    },
+    "C193_TRUNC": {
+      "statement": "pos:supported-truncation: truncated minimal resolutions yield supported quotient objects with the required ordinary evaluation.",
+      "status": "open",
+      "depends_on": ["C193_APPROX", "C193_EVAL"],
+      "reviewer_confirmed": false
+    },
+    "C193_POS": {
+      "statement": "pos:positive-evaluation: the normalized asymptotic evaluation is strictly positive.",
+      "status": "open",
+      "depends_on": ["C193_LENGTH_INPUT", "C193_APPROX", "C193_EVAL"],
+      "reviewer_confirmed": false
+    },
+    "C193_SECOND": {
+      "statement": "pos:second-average: the second Galois average makes every c_sigma strictly positive.",
+      "status": "open",
+      "depends_on": ["C193_NORM", "C193_TRUNC", "C193_POS"],
+      "reviewer_confirmed": false
+    }
+  }
+}

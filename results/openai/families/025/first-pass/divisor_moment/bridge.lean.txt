@@ -1,0 +1,78 @@
+namespace DivisorMomentAudit
+
+open scoped BigOperators
+open Finset Filter OAI.ShortEgyptian
+
+theorem shifted_sum (f : ℕ → ℝ) (N H : ℕ) :
+    ∑ h ∈ Icc 1 H, f (N + h) = ∑ n ∈ Ioc N (N + H), f n := by
+  refine Finset.sum_bij (fun h _ => N + h) ?_ ?_ ?_ ?_
+  · intro h hh
+    obtain ⟨hlo, hup⟩ := mem_Icc.mp hh
+    exact mem_Ioc.mpr ⟨by omega, by omega⟩
+  · intro h hh h' hh' heq
+    omega
+  · intro n hn
+    obtain ⟨hlo, hup⟩ := mem_Ioc.mp hn
+    refine ⟨n - N, mem_Icc.mpr ⟨by omega, by omega⟩, ?_⟩
+    omega
+  · intro h hh
+    rfl
+
+theorem one_le_count (X : ℝ) (n : ℕ) (hX : 1 ≤ X) (hn : 0 < n) :
+    1 ≤ truncatedDivisorCount X n := by
+  change 0 < (truncatedDivisors X n).card
+  apply Finset.card_pos.mpr
+  refine ⟨1, ?_⟩
+  simp [truncatedDivisors, Nat.mem_divisors, hn.ne', hX]
+
+theorem uniform_divisor_moment_real (D r : ℝ) (hD : 1 ≤ D) (hr : 1 ≤ r) :
+    ∀ᶠ S : ℝ in atTop, ∀ (X Y : ℝ) (N : ℕ),
+      0 < X →
+      S / (2 * Real.log S) ≤ Real.log X → Real.log X ≤ D * S →
+      X ^ (1 / 2 : ℝ) ≤ Y → Y ≤ X → (N : ℝ) ≤ Real.exp (D * S) →
+      ∑ h ∈ Icc 1 ⌊Y⌋₊, (truncatedDivisorCount X (N + h) : ℝ) ^ r ≤
+        Y * Real.exp (S ^ (1 / 4 : ℝ)) := by
+  filter_upwards [uniform_divisor_moment D hD ⌈r⌉₊, eventually_gt_atTop (1 : ℝ)]
+    with S hnat hS
+  intro X Y N hX hvlo hvup hYlo hYup hN
+  have hlogS : 0 < Real.log S := Real.log_pos hS
+  have hlog : 0 < Real.log X :=
+    lt_of_lt_of_le
+      (div_pos (by linarith : 0 < S) (by positivity : 0 < 2 * Real.log S)) hvlo
+  have hX1 : 1 ≤ X := by
+    calc
+      1 ≤ Real.exp (Real.log X) := Real.one_le_exp hlog.le
+      _ = X := Real.exp_log hX
+  have hYlo' : Real.exp (Real.log X / 2) ≤ Y := by
+    simpa only [Real.rpow_def_of_pos hX, div_eq_mul_inv, one_mul] using hYlo
+  have hbound := hnat (Real.log X) Y N hvlo hvup hYlo'
+    (by simpa only [Real.exp_log hX] using hYup) hN
+  rw [Real.exp_log hX] at hbound
+  calc
+    _ ≤ ∑ h ∈ Icc 1 ⌊Y⌋₊, (truncatedDivisorCount X (N + h) : ℝ) ^ ⌈r⌉₊ := by
+      apply sum_le_sum
+      intro h hh
+      have hn : 0 < N + h := by
+        have := (mem_Icc.mp hh).1
+        omega
+      have hd : (1 : ℝ) ≤ truncatedDivisorCount X (N + h) := by
+        exact_mod_cast one_le_count X (N + h) hX1 hn
+      simpa only [Real.rpow_natCast] using
+        Real.rpow_le_rpow_of_exponent_le hd (Nat.le_ceil r)
+    _ = ∑ n ∈ Ioc N (N + ⌊Y⌋₊), (truncatedDivisorCount X n : ℝ) ^ ⌈r⌉₊ :=
+      shifted_sum (fun n => (truncatedDivisorCount X n : ℝ) ^ ⌈r⌉₊) N ⌊Y⌋₊
+    _ ≤ _ := hbound
+
+theorem manuscript_divisor_moment (D r : ℝ) (hD : 1 ≤ D) (hr : 1 ≤ r) :
+    ∃ S0 : ℝ, ∀ S ≥ S0, ∀ (X Y : ℝ) (N : ℕ),
+      0 < X →
+      S / (2 * Real.log S) ≤ Real.log X → Real.log X ≤ D * S →
+      X ^ (1 / 2 : ℝ) ≤ Y → Y ≤ X → (N : ℝ) ≤ Real.exp (D * S) →
+      ∑ h ∈ Icc 1 ⌊Y⌋₊, (truncatedDivisorCount X (N + h) : ℝ) ^ r ≤
+        Y * Real.exp (S ^ (1 / 4 : ℝ)) := by
+  exact Filter.eventually_atTop.mp (uniform_divisor_moment_real D r hD hr)
+
+end DivisorMomentAudit
+
+#print axioms OAI.ShortEgyptian.uniform_divisor_moment
+#print axioms DivisorMomentAudit.manuscript_divisor_moment

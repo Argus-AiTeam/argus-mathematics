@@ -1,0 +1,95 @@
+{
+  "goal": "C9000107",
+  "routes": {
+    "AF_ROUTE": {
+      "name": "All-field descent and characteristic-safe polynomial profile",
+      "status": "in_progress",
+      "evidence": "research/all_fields_nine_fourths/report.md",
+      "engineer_stage": "ready_for_independent_review"
+    }
+  },
+  "nodes": {
+    "C9000107": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 107 (Matrix multiplication with exponent at most 9/4.; papers: An Upper Bound of 9/4 for the Matrix Multiplication Exponent; Complex Matrix Multiplication Below 2.258 and Rectangular Bounds; Staggered extraction for exact matrix multiplication over every field; Lean status: Partially/Comparator formalized (lean/docs/107.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "AF_MAIN"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "AF_MAIN": {
+      "statement": "For every fixed field F and epsilon > 0, square matrix multiplication has exact scalar-arithmetic complexity O(n^(9/4+epsilon)).",
+      "status": "open",
+      "depends_on": ["AF_DESCENT", "AF_INTERPOLATION", "AF_SEPARATION", "AF_FILTRATION", "AF_TRIPLING", "AF_GROWTH", "AF_SPECTRAL", "AF_ARITHMETIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/report.md", "research/all_fields_nine_fourths/exact_certificate.json"]
+    },
+    "AF_DESCENT": {
+      "statement": "An E-linear restriction between F-tensors descends using at most [E:F]^2 full source copies, with the same cost for each tensor power.",
+      "status": "open",
+      "depends_on": ["AF_DESCENT_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/report.md", "research/all_fields_nine_fourths/Main.lean"]
+    },
+    "AF_DESCENT_CORE": {
+      "statement": "For arbitrary fields F and E with a finite F-basis of E, extension-linear substitutions with F-valued target coefficients have the explicit sum-of-e-squared-F-restrictions formula, using a normalized F-linear functional.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/Main.lean", "research/all_fields_nine_fourths/statement_fidelity.md", "research/all_fields_nine_fourths/lean_certificates/certificates/AF_DESCENT_CORE-681fd523f1b8f7c1.json"]
+    },
+    "AF_INTERPOLATION": {
+      "statement": "Finite-extension polynomial degenerations are monotone for every F-tensor character; finite-field interpolation has subexponential overhead.",
+      "status": "open",
+      "depends_on": ["AF_DESCENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/report.md", "research/all_fields_nine_fourths/exact_certificate.json"]
+    },
+    "AF_SEPARATION": {
+      "statement": "Choosing L > 3(M-1), coprime to the characteristic, with L <= 5M+1 preserves the shared-leg entropy inequality after the fixed-type interpolation limit.",
+      "status": "open",
+      "depends_on": ["AF_INTERPOLATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/report.md", "research/all_fields_nine_fourths/exact_certificate.json", "research/all_fields_nine_fourths/jacobian_output.json"]
+    },
+    "AF_FILTRATION": {
+      "statement": "The determinant exact sequence and a single simultaneous slice filtration give profile concavity over every field.",
+      "status": "open",
+      "depends_on": ["AF_SEPARATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/report.md", "research/all_fields_nine_fourths/verify.py"]
+    },
+    "AF_TRIPLING": {
+      "statement": "The three-sector degeneration, including the middle branch's leg permutation, gives shifted tripling over every field.",
+      "status": "open",
+      "depends_on": ["AF_SEPARATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/report.md", "research/all_fields_nine_fourths/verify.py"]
+    },
+    "AF_GROWTH": {
+      "statement": "The convolution asymptotic-rank bound, profile concavity, and shifted tripling imply every F-tensor character has lambda(T_d) <= d^(9/4).",
+      "status": "open",
+      "depends_on": ["AF_DESCENT", "AF_FILTRATION", "AF_TRIPLING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/report.md", "research/all_fields_nine_fourths/exact_certificate.json"]
+    },
+    "AF_SPECTRAL": {
+      "statement": "The detecting-character argument applies to the restriction semiring of tensors over an arbitrary field F.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/report.md", "research/all_fields_nine_fourths/spectral_excerpt.md"]
+    },
+    "AF_ARITHMETIC": {
+      "statement": "The character bound implies the exact-rank exponent and then the arithmetic exponent bound over the original field F, not just an extension.",
+      "status": "open",
+      "depends_on": ["AF_GROWTH", "AF_SPECTRAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/all_fields_nine_fourths/report.md"]
+    }
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "goal": "C9000297",
+  "routes": [
+    {
+      "name": "R_SELECTIVE_BOUNDARY",
+      "status": "current",
+      "evidence": "research/selective_bridge/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000297": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 297 (A ZFC counterexample to Naimark's problem.; papers: A counterexample to Naimark's problem in ZFC; Lean status: Partially/Comparator formalized (lean/docs/297.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_BRIDGE_DECAY", "C_BRIDGE_UEP", "C_BRIDGE_SELECTIVITY", "C_BOUNDARY_SYMBOL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "L_EXCISION": {
+      "statement": "Every pure state admits decreasing positive contractive excision; peaking projections excise their pure state, including rectangular two-index compressions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/states.tex"]
+    },
+    "L_CROSS": {
+      "statement": "Inequivalent pure-state excision nets satisfy norm cross-excision on the product directed set.",
+      "status": "open",
+      "depends_on": ["L_EXCISION"],
+      "reviewer_confirmed": false
+    },
+    "L_TRACE_NULL": {
+      "statement": "In the absence of finite-dimensional irreducible representations, a tracial state vanishes on every pure-state support projection.",
+      "status": "open",
+      "depends_on": ["L_EXCISION"],
+      "reviewer_confirmed": false
+    },
+    "L_PEAK_EXPECTATION": {
+      "statement": "Strictly trace-decreasing peaking projections give the stated trace-preserving expectation onto a convergent-sequence algebra.",
+      "status": "open",
+      "depends_on": ["L_EXCISION"],
+      "reviewer_confirmed": false
+    },
+    "L_FREE_MODULE": {
+      "statement": "The reduced amalgamated free-product module realizes faithful factor embeddings, expectations, and the centered-word dense span.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/hnn.tex"]
+    },
+    "C_TWO_ENDS_FORMAL": {
+      "statement": "The complementary-corner identity implies the two-ended norm bound and product-filter convergence for bounded endpoint families.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["Main.lean", "research/selective_bridge/statement_fidelity.md", "research/selective_bridge/lean_evidence/certificates/C_TWO_ENDS_FORMAL-4cd675d39cc6b08a.json"]
+    },
+    "L_ENDPOINT": {
+      "statement": "The endpoint expectation norms decay for arbitrary old pure states outside the matching class, and for matching states with zero scalar coefficient.",
+      "status": "open",
+      "depends_on": ["L_EXCISION", "L_TRACE_NULL", "L_PEAK_EXPECTATION", "L_DINI_NET"],
+      "reviewer_confirmed": false
+    },
+    "L_TRANSFER": {
+      "statement": "Exact matrix-unit peak transfers remove at most two outer letters; a remaining core has centered exposed endpoints, while empty cores reduce to cross-excision or centered projection excision.",
+      "status": "open",
+      "depends_on": ["L_ENDPOINT", "L_CROSS", "L_EXCISION"],
+      "reviewer_confirmed": false
+    },
+    "C_BRIDGE_DECAY": {
+      "statement": "Equation bridge-word-decay holds for every finite nonempty reduced word and every state pair allowed by bridge-tests, on the full product of the excision index sets.",
+      "status": "open",
+      "depends_on": ["L_FREE_MODULE", "C_TWO_ENDS_FORMAL", "L_ENDPOINT", "L_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selective_bridge/report.md", "verify.py", "exact_certificate.json"]
+    },
+    "C_BRIDGE_UEP": {
+      "statement": "Every old pure state has exactly one state extension to the bridge, and this extension is pure.",
+      "status": "open",
+      "depends_on": ["C_BRIDGE_DECAY", "L_FREE_MODULE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selective_bridge/report.md"]
+    },
+    "C_BRIDGE_SELECTIVITY": {
+      "statement": "Unique old pure-state extensions are equivalent exactly for previously equivalent states or the designated pair of old classes.",
+      "status": "open",
+      "depends_on": ["C_BRIDGE_DECAY", "C_BRIDGE_UEP", "L_CROSS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selective_bridge/report.md"]
+    },
+    "C_BOUNDARY_SYMBOL": {
+      "statement": "For a finite block of pairwise inequivalent equal-trace peaking states, the matrix free-product bridge has a completely positive finite-matrix boundary symbol; all compressed elements approach its peak-supported realization in norm on the product net. Only zero- and one-G-letter normal forms contribute.",
+      "status": "open",
+      "depends_on": ["L_FREE_MODULE", "C_TWO_ENDS_FORMAL", "L_ENDPOINT", "L_TRANSFER", "L_CROSS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selective_bridge/report.md", "verify.py", "exact_certificate.json"]
+    },
+    "C_REORDER": {
+      "statement": "Two reduced HNN adjunctions with data in the same faithfully tracial base commute when the other expectations are extended by composition.",
+      "status": "open",
+      "depends_on": ["L_FREE_MODULE", "L_HNN_RESTRICTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/hnn.tex"]
+    },
+    "C_CLOSED_EXTENSION": {
+      "statement": "Every dependency-closed subiteration A[S] has unique state extension for every pure state into the whole iteration.",
+      "status": "open",
+      "depends_on": ["C_BRIDGE_UEP", "C_BRIDGE_SELECTIVITY", "C_REORDER", "L_HNN_RESTRICTION", "L_HNN_LIMIT", "L_PEAKING_RESTRICTION", "L_UNIQUE_CHAIN", "L_INEQUIVALENT_LIMIT", "L_BASE_CAR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/iteration.tex"]
+    },
+    "C_COUNTABLE_DETERMINATION": {
+      "statement": "Every pure state is uniquely determined by its pure restriction to a countable dependency-closed subiteration.",
+      "status": "open",
+      "depends_on": ["C_CLOSED_EXTENSION", "L_EXCISION"],
+      "reviewer_confirmed": false
+    },
+    "C_STATE_COUNT": {
+      "statement": "An iteration indexed by an ordinal of cardinality at most the continuum has at most continuum many pure states.",
+      "status": "open",
+      "depends_on": ["C_COUNTABLE_DETERMINATION"],
+      "reviewer_confirmed": false
+    },
+    "C_HOMOGENEITY": {
+      "statement": "Two pure states of a separable C*-algebra with equal GNS kernels are related by an asymptotically inner automorphism.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_ZFC_MAIN": {
+      "statement": "The staged manuscript claims a unital infinite-dimensional simple faithfully tracial C*-algebra with exactly one nonzero irreducible representation up to equivalence.",
+      "status": "open",
+      "depends_on": ["C_BRIDGE_UEP", "C_BRIDGE_SELECTIVITY", "C_CLOSED_EXTENSION", "C_COUNTABLE_DETERMINATION", "C_STATE_COUNT", "C_HOMOGENEITY", "L_BASE_CAR", "L_STAGE_PEAKS", "L_SCHEDULE", "L_UNIQUE_CHAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/construction.tex"]
+    },
+    "L_DINI_NET": {
+      "statement": "A decreasing net of nonnegative continuous functions on a compact space with pointwise limit zero converges uniformly to zero.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/selective_bridge/report.md"]
+    },
+    "L_PEAKING_RESTRICTION": {
+      "statement": "A projection sequence peaking in a larger algebra also peaks on a smaller algebra containing it, and its state has a unique extension to the larger algebra.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/states.tex"]
+    },
+    "L_UNIQUE_CHAIN": {
+      "statement": "Property (U) and equivalence of uniquely lifted pure states pass through continuous chains of unital inclusions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/iteration.tex"]
+    },
+    "L_INEQUIVALENT_LIMIT": {
+      "statement": "Pure states whose pure restrictions are inequivalent on a tail of a continuous chain remain inequivalent at its limit.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/iteration.tex"]
+    },
+    "L_HNN_RESTRICTION": {
+      "statement": "A reduced HNN adjunction restricts to any unital base subalgebra containing both data algebras, with the restricted expectations and the same stable unitary.",
+      "status": "open",
+      "depends_on": ["L_FREE_MODULE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/hnn.tex"]
+    },
+    "L_HNN_LIMIT": {
+      "statement": "For fixed compatible data and faithful traces, the closure of an increasing union of reduced HNN adjunctions is the adjunction of the closure of the bases, without a cofinality restriction.",
+      "status": "open",
+      "depends_on": ["L_HNN_RESTRICTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/hnn.tex"]
+    },
+    "L_BASE_CAR": {
+      "statement": "The CAR base is separable, simple and faithfully tracial; its standard peaks have trace 2^(-n), and every containing unital algebra has no finite-dimensional irreducibles.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/iteration.tex"]
+    },
+    "L_STAGE_PEAKS": {
+      "statement": "Countable determination and separable pure-state homogeneity supply a new peaking sequence with trace 2^(-n), peaking to the selected old state on the entire current algebra.",
+      "status": "open",
+      "depends_on": ["C_COUNTABLE_DETERMINATION", "C_CLOSED_EXTENSION", "C_HOMOGENEITY", "L_BASE_CAR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/construction.tex"]
+    },
+    "L_SCHEDULE": {
+      "statement": "For kappa=continuum-successor there is an injective schedule sigma:kappa x kappa->kappa with sigma(beta,eta)>=beta; every countable support below kappa is bounded.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-counterexample-to-Naimarks-problem-in-ZFC-September-24-2026/build/sections/construction.tex"]
+    }
+  }
+}

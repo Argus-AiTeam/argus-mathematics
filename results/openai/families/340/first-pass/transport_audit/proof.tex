@@ -1,0 +1,597 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\R}{\mathbb R}
+\newcommand{\T}{\mathcal T}
+\newcommand{\Crit}{\operatorname{Crit}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\title{Hamiltonian transport with a varying tube class at infinity\\
+\large Closing the implication in manuscript 340}
+\author{Campaign 9000340: Engineer proof for independent review}
+\date{5 November 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove the missing transport implication by the direct small-step
+construction. All four differentiated cutoff equations are retained.
+A block right inverse proves full Morse-family regularity without
+inverting a fiber Hessian. Explicit uniform value and full-vertical
+derivative bounds permit application of the already reviewed smoothing
+lemma. The time subdivision depends only on the Hamiltonian and a
+spatial buffer, not on the families subsequently constructed. Consequently
+the fixed \(S^9\) slice retains its actual, possibly nonconstant, stable
+tube class. The accepted realization and one-critical obstruction then
+give the claimed non-Hamiltonian-isotopy conclusion.
+This is a prose verification using accepted campaign theorems, supported
+by exact algebraic replay. It is not a formal verification of topology
+or a certification of novelty.
+\end{abstract}
+
+\section{Precise inputs and conclusion}
+
+Our conventions are
+\[
+ \lambda=p\,dq,\qquad \omega=d\lambda,\qquad
+ \iota_{X_H}\omega=-dH.
+ \tag{1}
+\]
+Thus \(\dot q=H_p\) and \(\dot p=-H_q\).
+A Morse family \(F(x,w)\) means that its \emph{full} equation
+\(F_w:U\times\R^r\to\R^r\) is transverse to zero.
+This does not require the Hessian \(F_{ww}\) to be invertible.
+Its generating map is \(\Gamma_F(x,w)=(x,F_x(x,w))\) on
+\(\Crit(F)=F_w^{-1}(0)\).
+
+Write \(q_{k,l}(u,v)=-|u|^2+|v|^2\).
+The tube model is the \(C^1\) component of its angular restriction
+among functions with zero a regular value, stabilized by \(q_{1,1}\).
+Homogeneous data extend by \(g(ru)=r^2h(u)\), including their
+\(C^1\) extension at zero. The spherical class is that of the
+negative domains, exactly as in the two accepted proofs.
+
+We use the following existing mathematical inputs, without rerunning
+their unchanged calculation certificates.
+\begin{enumerate}
+\item \textbf{Accepted realization (TR-existence).}
+Theorem 1 of the accepted realization proof%
+\footnote{\path{research/tube_realization_audit/proof.tex}}
+supplies some \(N=2m\), \(m\geq20\), and a smooth Morse family
+\(F:Q\times\R^{2m}\to\R\), \(Q=S^9\times S^{N-1}\).
+Its compact critical locus is diffeomorphic to \(Q\), and
+\(\Gamma_F\) is a diffeomorphism onto a closed exact embedded
+Lagrangian \(L\). Outside a common ball, \(F(b,v,w)=g_b(w)\).
+On each fixed \(S^9\times\{v_0\}\), these data represent the same
+nonzero stable tube class \(a\), with spherical class zero.
+The independent review is
+\path{handoffs/eabe9d4c259e/round-0001.json} of the assigned project.
+\item \textbf{Accepted obstruction (MS-one-critical).}
+Theorem 1 of \path{research/one_critical_audit/proof.tex}
+says that a smooth family on \(S^9\times\R^{2p}\), \(p\geq20\),
+with uniform smooth homogeneous \(T_{p,p}\) infinity data, one
+smooth nondegenerate critical section, and trivial stable spherical
+class has trivial stable tube class.
+Its independent review is
+\path{handoffs/c4428bac0f24/round-0001.json}.
+\item \textbf{Accepted quantitative smoothing.}
+The lemma labelled \texttt{lem:smoothing} in that same proof applies
+to \(G_0(x,w,y)=g_x(w)+q'(y)\), with \(q'\) fixed nondegenerate,
+\(|d_wg_x|\geq c|w|\), and a smooth \(\widehat F\) satisfying
+\[
+ |\widehat F-G_0|\leq M_0,\qquad
+ |d_{w,y}(\widehat F-G_0)|\leq M_1
+ \tag{2}
+ \]
+uniformly. It changes \(\widehat F\) only outside an arbitrarily
+large common ball, introduces no critical points, and produces
+exact smooth homogeneous data at infinity regularly \(C^1\)-homotopic
+to \(G_0\). Its proof explicitly permits any parameter set on which
+the bounds are uniform; it is not restricted to sphere parameters.
+\end{enumerate}
+These are internal, independently reviewed inputs already present in
+the ledger. Their external topological assumptions remain those of
+the accepted proofs. No new literature theorem is assumed here.
+In particular, we do not invoke AIS Lemma 3.23, Sikorav, or a general
+isotopy-invariance theorem. There is no unexamined Legendrian-lift
+convention hidden in the argument.
+
+\begin{theorem}\label{thm:transport}
+Suppose the \(L\) and \(F\) of the accepted realization admit a
+compactly supported Hamiltonian isotopy taking \(L\) to \(Q_0\).
+For any fixed \(v_0\in S^{N-1}\) there then exist a finite
+\(p\geq20\) and a smooth family \(f:S^9\times\R^{2p}\to\R\)
+with one smoothly varying nondegenerate critical point in each
+fiber, uniform smooth homogeneous \(T_{p,p}\) infinity data,
+and the same free stable tube and spherical classes as \(g_b\).
+In particular its tube class is nonzero and its spherical class is zero.
+\end{theorem}
+
+\begin{corollary}\label{cor:main}
+Composing Theorem~\ref{thm:transport} with the accepted obstruction,
+the closed exact embedded \(L\) of TR-existence is not compactly
+supported Hamiltonian isotopic to the zero section.
+Thus, subject to the explicitly accepted construction and obstruction,
+the main mathematical conclusion of manuscript 340 follows.
+\end{corollary}
+
+\section{A reverse isotopy on a Euclidean cylinder}
+
+Put \(d=10+N\). For \(0<\nu<1\), identify a bounded neighborhood
+\(U\subset\R^{10}\times\R^N\) with \(Q\times(-\nu,\nu)^2\) by
+\[
+ ((b,v),\alpha)\longmapsto ((1+\alpha_1)b,(1+\alpha_2)v).
+\]
+This chart, its radial coordinates, and its projection \(r_Q\)
+are smooth on a neighborhood of the compact closure.
+The cotangent coordinates satisfy
+\(\lambda_U=\lambda_Q+p_\alpha\,d\alpha\).
+The family \(F^{(0)}(x,w)=F(r_Q(x),w)\) generates precisely
+\[
+ \mathcal L_0=\{(q,\alpha;p_q,0):(q,p_q)\in L\}.
+ \tag{3}
+\]
+It is a Morse family, and its generating parametrization is a
+diffeomorphism. Indeed the old full-gradient surjectivity persists
+under pullback by the submersion \(r_Q\); the additional critical-locus
+coordinates are exactly \(\alpha\).
+All estimates are uniform up to \(\overline U\).
+
+For completeness, if the hypothesized flow \(\varphi_t\), generated
+by \(H_t\), is given from \(Q_0\) to \(L\), the reverse path is
+\[
+ \psi_t=\varphi_{1-t}\varphi_1^{-1},\qquad H_t^Q=-H_{1-t}.
+ \tag{4}
+\]
+Differentiation gives
+\(\dot\psi_t=-X_{H_{1-t}}\circ\psi_t\).
+There is no conjugating factor: \(\varphi_1^{-1}\) is fixed on the
+\emph{right}. This differs from differentiating \(\varphi_t^{-1}\).
+
+Choose a smooth \(0\leq\zeta\leq1\), compactly supported in the
+radial square and equal to one on a smaller square.
+Set
+\[
+ M=\sup|H_t^Q|\,\sup|d\zeta|.
+\]
+Take a smooth compactly supported \(0\leq\xi\leq1\) on the radial
+momentum space, equal to one for \(|p_\alpha|\leq M+1\), and extend
+\[
+ \widetilde H_t=H_t^Q(q,p_q)\zeta(\alpha)\xi(p_\alpha)
+ \tag{5}
+\]
+by zero from \(T^*U\) to \(T^*\R^d\).
+It has one compact support for all times. Its radial equations are
+\[
+ \dot\alpha=H_t^Q\zeta\,d\xi,\qquad
+ \dot p_\alpha=-H_t^Q\xi\,d\zeta.
+ \tag{6}
+\]
+For every initial point of (3), \(|p_\alpha(t)|\leq Mt\);
+this estimate uses only \(0\leq\xi\leq1\), so is not a circular
+plateau argument. Thus \(d\xi=0\) all along the trajectory and
+\(\alpha\) stays fixed. On the central radial square,
+\(d\zeta=0\), \(p_\alpha=0\), and the \(Q\) motion is the reverse
+isotopy. No other radial slice can enter it. Consequently, for
+a smaller cylinder \(U_c\),
+\[
+ \widetilde\varphi_1(\mathcal L_0)\cap T^*U_c=(U_c)_0.
+ \tag{7}
+\]
+
+\section{Fixing the subdivision before constructing any new family}
+
+Choose a compact \(K\Subset T^*U\) containing all supports of
+\(\widetilde H_t\) in its interior. Every partial time flow fixes
+the complement of \(K\); uniqueness, also backwards in time,
+prevents a point of \(K\) from flowing to a stationary point outside
+\(K\). All partial flows therefore preserve \(K\) and \(T^*U\).
+
+For a sufficiently short interval let
+\(\psi(x,p)=(X,P)\) be its time increment.
+Require \(\|D_xX-I\|<1/2\). For fixed \(p\), integration along a
+line segment gives
+\[
+ |X(x_1,p)-X(x_2,p)|\geq\tfrac12|x_1-x_2|.
+ \tag{8}
+\]
+The map \(x\mapsto X(x,p)\) is a proper local diffeomorphism,
+equal to the identity outside a compact set. Its image is open and
+closed in \(\R^d\); it is therefore a global diffeomorphism.
+The resulting \(x=x(X,p)\) is smooth jointly in the two variables.
+
+Cartan's formula with (1) gives
+\(\mathcal L_{X_{\widetilde H}}\lambda
+=d(\lambda(X_{\widetilde H})-\widetilde H)\).
+For the partial flow \(\varphi_{s,a}\) from \(a\) to \(s\), put
+\[
+ A(x,p)=\int_a^b
+       (\lambda(X_{\widetilde H_s})-\widetilde H_s)
+                    (\varphi_{s,a}(x,p))\,ds.
+ \tag{9}
+\]
+Then \(dA=P\,dX-p\,dx\) on the graph. Hence
+\[
+ \sigma(X,p)=A(x(X,p),p)+(x(X,p)-X)\cdot p
+ \tag{10}
+\]
+satisfies
+\[
+ x=X+\sigma_p,\qquad P=p+\sigma_X,\qquad
+ J:=I+\sigma_{pX}=D_Xx\ \hbox{invertible}.
+ \tag{11}
+\]
+The function \(A\) vanishes outside \(K\), so \(\sigma\) is
+compactly supported in the mixed-coordinate image of \(K\).
+Choose a compact \(D\Subset U\) containing the spatial projection
+of \(K\) in its interior. This one \(D\) works for \emph{every}
+short interval, not just for a previously selected subdivision.
+On \(U\setminus D\), \(\sigma\) and every derivative vanish for
+all \(p\).
+
+Choose \(\zeta_1\in C^\infty_c(U,[0,1])\), equal to one on an
+open \(V\supset D\), and fix \(\delta>0\) so that
+\[
+ 2\delta<\operatorname{dist}(\supp\zeta_1,\partial U).
+ \tag{12}
+\]
+These choices depend only on the Hamiltonian support and \(U\).
+Let \(L_1=\sup\|DX_{\widetilde H_t}\|\) and
+\(V_1=\sup|X_{\widetilde H_t}|\), both finite.
+Every increment of length at most
+\[
+ h=\min\{1,\ \log(3/2)/(1+L_1),\ \delta/(1+V_1)\}>0
+ \tag{13}
+\]
+has \(\|D\psi-I\|<1/2\) and \(\|\sigma_p\|_\infty<\delta\).
+The first assertion follows from
+\(\|D\psi-I\|\leq e^{L_1h}-1\), and the second from displacement
+bounded by \(V_1h\). Fix \(s<\infty\) with \(1/s\leq h\).
+No later choice of generating-family constants changes this subdivision.
+
+\section{One step, including every spatial-boundary term}
+
+Assume the old smooth Morse family \(F_o:U\times\R^r\to\R\)
+has a diffeomorphic generating parametrization, extends smoothly
+past \(\overline U\), and equals \(g_o(X,w)\) for \(|w|\geq R_o>0\).
+Assume, uniformly up to the boundary,
+\[
+ |(g_o)_w(X,w)|\geq c|w|,\qquad
+ |(g_o)_X(X,w)|\leq C|w|^2,\qquad c>0,\quad C\geq0.
+ \tag{14}
+\]
+The initial family has these properties by compactness, regular
+homogeneous angular data, and the accepted realization.
+
+Let \(\beta(z)\) be one on \(|z|\leq\delta\) and zero on
+\(|z|\geq2\delta\). Choose \(R_1>R_o\), and a smooth radial
+\(\chi(w)\), one on a neighborhood of \(|w|\leq R_1\),
+zero outside a finite ball, with
+\[
+ |d\chi(w)|\leq\delta_1/|w|,\qquad
+ \delta_1=\frac{c}{4\delta(1+C)}.
+ \tag{15}
+\]
+Such a cutoff exists: apply a fixed smooth plateau function
+\(\theta\) to \(\log(|w|/R_1)/T\). Choose
+\[
+ T\geq\max(1,\|\theta'\|_\infty/\delta_1),
+\]
+and extend by one on the inner ball.
+Its support radius can be enormous, but is finite.
+
+For \(z,p\in\R^d\), set
+\[
+ k=\zeta_1(X)\beta(z)\chi(w),\qquad x=X+kz,\qquad
+ \widehat F(X,w,z,p)=F_o(x,w)+\sigma(X,p)-z\cdot p.
+ \tag{16}
+\]
+When the shift is nonzero, \(X\in\supp\zeta_1\) and its length
+is at most \(2\delta\). The entire segment from \(X\) to \(x\)
+is inside \(U\), by (12). When the shift is zero there is no
+boundary issue. This also proves smooth extension up to
+\(\overline U\); all base cutoffs vanish near its boundary.
+
+Put \(a=(F_o)_x(x,w)\). The full derivatives are
+\begin{align}
+ \widehat F_p&=\sigma_p-z, \tag{17}\\
+ \widehat F_z&=ka+(a\cdot z)k_z-p, \tag{18}\\
+ \widehat F_w&=(F_o)_w(x,w)+(a\cdot z)k_w, \tag{19}\\
+ \widehat F_X&=a+(a\cdot z)k_X+\sigma_X. \tag{20}
+\end{align}
+In particular
+\(k_z=\zeta_1\chi\,d\beta\),
+\(k_w=\zeta_1\beta\,d\chi\), and
+\(k_X=\beta\chi\,d\zeta_1\).
+These identities hold before imposing any critical equation.
+
+At a vertical critical point, (17) implies
+\(z=\sigma_p(X,p)\), so \(|z|<\delta\) and \(\beta=1\)
+on a neighborhood. If \(|w|\geq R_o\), (14)--(15) give
+\[
+ |\widehat F_w|
+ \geq(c-C\delta\delta_1)|w|
+ =c\left(\frac34+\frac1{4(1+C)}\right)|w|>0.
+ \tag{21}
+\]
+Thus every critical point has \(|w|<R_o\), and \(\chi=1\)
+on a neighborhood as well. There are exactly two local cases,
+covering \(U\):
+\begin{itemize}
+\item On \(V\), all cutoffs equal one near a solution. The
+equations are
+\((F_o)_w=0\), \(p=(F_o)_x\), \(x=X+z=X+\sigma_p\).
+Equation (20) gives the correct transported momentum
+\(P=p+\sigma_X\).
+\item On \(U\setminus D\), \(\sigma=0\) for all momenta, and the
+equations are
+\[
+ z=0,\quad x=X,\quad (F_o)_w(X,w)=0,\quad
+ p=\zeta_1(X)(F_o)_x(X,w).
+ \tag{22}
+\]
+The generated covector is nevertheless \((F_o)_x(X,w)\), not
+the possibly rescaled auxiliary variable \(p\). The spatial
+cutoff term in (20) vanishes because \(z=0\).
+This is exactly the identity symplectomorphism on this region.
+\end{itemize}
+On the overlap \(\zeta_1=1\), so the descriptions agree.
+
+\subsection{Full regularity without a fiberwise Morse assumption}
+
+In the first case use the total coordinates \((x,w,p,X)\).
+The equations, up to their ordering, are
+\[
+ E_1=(F_o)_w,\qquad E_2=(F_o)_x-p,\qquad
+ E_3=X+\sigma_p(X,p)-x.
+ \tag{23}
+\]
+At a solution their differential is the block matrix
+\[
+ D E=
+ \begin{pmatrix}
+ A&C&0&0\\ B&A^{\mathsf T}&-I&0\\-I&0&S&J
+ \end{pmatrix},
+ \quad
+ A=(F_o)_{wx},\ C=(F_o)_{ww},\
+ B=(F_o)_{xx},\ S=\sigma_{pp}.
+ \tag{24}
+\]
+Old full regularity provides \(U_0,V_0\) with
+\(AU_0+CV_0=I_r\). Set \(K_0=BU_0+A^{\mathsf T}V_0\).
+An explicit right inverse for (24) is
+\[
+ \begin{pmatrix}
+ U_0&0&0\\ V_0&0&0\\ K_0&-I&0\\
+ J^{-1}(U_0-SK_0)&J^{-1}S&J^{-1}
+ \end{pmatrix}.
+ \tag{25}
+\]
+Multiplication gives diagonal blocks \(I_r,I_d,I_d\) and zero
+off-diagonal blocks. Neither the construction nor the identity
+uses \(C^{-1}\).
+
+In the second case, the equation \(-z=0\) first eliminates \(z\);
+then (18), with coefficient \(-I\) in \(p\), eliminates \(p\).
+The remaining equation is precisely the old full-gradient equation
+on \((X,w)\), so is regular. This argument includes the entire
+transition of \(\zeta_1\), with no assumption that its derivative
+vanishes there.
+
+\subsection{The global critical-locus correspondence}
+
+For an old critical point \((x,w)\), let
+\(p_o=(F_o)_x(x,w)\) and \((X,P)=\psi(x,p_o)\).
+The correspondence and its inverse are
+\[
+ (x,w)\longmapsto(X,w,x-X,\zeta_1(X)p_o),\qquad
+ (X,w,z,p)\longmapsto(X+kz,w).
+ \tag{26}
+\]
+The two cases above verify that these smooth maps are inverse and
+that the generating maps intertwine with \(\psi\).
+Since \(\psi\) preserves \(T^*U\), there is no missing branch
+entering or leaving through a spatial boundary.
+All critical points obey the uniform bounds
+\[
+ |w|<R_o,\quad |z|<\delta,\quad
+ |p|\leq\sup_{\overline U,\ |w|\leq R_o}|(F_o)_x|.
+ \tag{27}
+\]
+Thus \(\widehat F\) is a Morse family with a diffeomorphic
+parametrization of precisely \(\psi(\mathcal L_o)\).
+
+\section{Full-vertical bounded error and the actual infinity class}
+
+Set \(W=(w,z,p)\) and
+\[
+ G_0(X,W)=g_o(X,w)-z\cdot p.
+ \tag{28}
+\]
+This is \(C^1\), homogeneous of degree two, and
+\[
+ |(G_0)_W|^2=|(g_o)_w|^2+|z|^2+|p|^2
+ \geq\min(c^2,1)|W|^2.
+ \tag{29}
+\]
+It need not be smooth on the \(w=0\) axis; this is exactly the
+situation covered by the accepted smoothing lemma.
+
+We check (2) for the \emph{full} vertical differential, not merely
+the old \(w\) variables. The cancellation is exact:
+\[
+ E:=\widehat F-G_0
+   =\underbrace{F_o(X+kz,w)-F_o(X,w)}_{\Delta}
+       +\underbrace{F_o(X,w)-g_o(X,w)}_{R}
+       +\sigma(X,p).
+ \tag{30}
+\]
+Let \(\supp\chi\subset\{|w|\leq R_\chi\}\).
+On \(\overline U\times\{|w|\leq R_\chi\}\), choose bounds
+\(B_x\geq|(F_o)_x|\) and \(B_w\geq|(F_o)_w|\).
+Let \(K_\chi=\|d\chi\|_\infty\), \(K_\beta=\|d\beta\|_\infty\);
+let \(|R|\leq C_0\), \(|R_w|\leq C_1\); and let
+\(|\sigma|\leq S_0\), \(|\sigma_p|\leq S_1\).
+All are finite. The bounds for \(R\) hold because it vanishes
+outside \(|w|\leq R_o\) and is \(C^1\), including at zero.
+
+The function \(\Delta\) and each of its vertical derivatives vanish
+unless both \(w\) and \(z\) are in their fixed support balls.
+Using the segment inside \(U\) and differentiating (30) gives
+\begin{align}
+ |\Delta|&\leq2\delta B_x, \tag{31}\\
+ |\Delta_w|&\leq2B_w+2\delta B_xK_\chi, \tag{32}\\
+ |\Delta_z|&\leq B_x(1+2\delta K_\beta),\qquad
+ \Delta_p=0. \tag{33}
+\end{align}
+The second terms in (32) and (33) are the differentiated cutoffs;
+they cannot be omitted. By the triangle inequality for the
+vertical blocks, valid explicit constants in (2) are
+\begin{align}
+ M_0&=2\delta B_x+C_0+S_0, \tag{34}\\
+ M_1&=2B_w+2\delta B_xK_\chi+
+         B_x+2\delta B_xK_\beta+C_1+S_1. \tag{35}
+\end{align}
+These constants are independent of \(p,z,w,X\).
+We do not claim that \(E\) has compact support in \emph{all}
+vertical variables: \(\Delta\) is independent of \(p\).
+Bounded value and bounded full vertical derivative are what is needed.
+
+Apply the accepted smoothing lemma, uniformly over \(\overline U\),
+with \(q'(z,p)=-z\cdot p\) and with its untouched ball larger
+than (27). Its endpoint \(F_n\) is smooth, exactly smooth
+homogeneous at infinity, and identical to \(\widehat F\) on a
+neighborhood of the entire critical locus. Thus all critical points,
+the full-gradient regularity, and the generated base covectors are
+unchanged. This is not just preservation of the number of zeros.
+The lemma supplies the regular homogeneous homotopy from (28)
+to the new infinity data. Its four-error cutoff estimate has already
+been reviewed; the new assertion here is precisely that (34)--(35)
+meet its hypotheses.
+
+Here is an explicit fixed path identifying the added form with
+standard split stabilization:
+\[
+ q_t(z,p)=-t|z|^2+t|p|^2-(1-t)z\cdot p,\qquad 0\leq t\leq1.
+ \tag{36}
+\]
+For each coordinate pair the gradient matrix \(H_t\) satisfies
+\[
+ H_t=\begin{pmatrix}-2t&t-1\\t-1&2t\end{pmatrix},\qquad
+ H_t^2=(5t^2-2t+1)I
+   =\left(5(t-\tfrac15)^2+\tfrac45\right)I.
+ \tag{37}
+\]
+It has one positive and one negative eigenvalue, since its trace
+is zero and its determinant is strictly negative. Thus \(q_t\)
+has signature \((d,d)\) and a uniform gradient margin at all times.
+Block orthogonality shows that \(g_o(X,w)+q_t(z,p)\) has no
+nonzero critical point. The path is independent of \(X\).
+Together with smoothing, it preserves the actual free stable tube
+class on every fixed parameter slice, not just a numerical index
+or a spherical image of that class.
+
+The endpoint homogeneous function is smooth off the total origin
+and over \(\overline U\). Compactness of the angular sphere and
+homogeneity give new constants \(c_n>0,C_n<\infty\) as in (14),
+and smooth extension provides uniform bounds on compact vertical
+sets. This proves the analytic induction.
+At the next step only (15), the smoothing parameter, and the
+smoothing radius change. All are available for any finite
+\(c_n,C_n\); they impose no smallness condition on the time increment.
+The fixed finite number \(s\) from (13) therefore really suffices.
+
+\section{The endpoint Hessian and composition of the accepted theorems}
+
+After these \(s\) steps, the vertical dimension is
+\[
+ 2m+2ds=2p,\qquad p=m+ds\geq20.
+ \tag{38}
+\]
+The regular critical locus of \(F^{(s)}\) is diffeomorphically
+parametrized onto \(\widetilde\varphi_1(\mathcal L_0)\).
+By (7), over \(U_c\) its projection to the base is a diffeomorphism.
+It follows that there is exactly one critical point over each
+\(X\in U_c\), and that these points form a smooth section.
+
+Let \(H=(F^{(s)})_{WW}\) at such a point. If \(Hv=0\), then
+\[
+ D(F^{(s)}_W)(0,v)=Hv=0.
+ \tag{39}
+\]
+Full regularity identifies this kernel with the tangent space to
+the critical locus. Therefore \((0,v)\) is in the kernel of the
+differential of its base projection. That projection is a
+diffeomorphism, so \(v=0\). Since \(H\) is square it is invertible.
+Both hypotheses matter: \(F(X,w)=w^4\) has the zero graph and a
+unique critical section, but has neither full regularity nor
+nondegenerate vertical Hessians. This is not a counterexample to
+the assertion with its actual hypotheses.
+
+Restrict now to the fixed, unchanged embedding
+\[
+ S^9\longrightarrow U_c,\qquad b\longmapsto((b,v_0),0).
+ \tag{40}
+\]
+The resulting \(f_b\) is smooth, has its one nondegenerate critical
+section, and agrees with smooth homogeneous data outside one
+uniform ball. By (36)--(38) the data have balanced type \(T_{p,p}\).
+At each step their free stable class on (40) was preserved.
+Initially it was \(a\), and the stable spherical class was zero;
+the same is true at the endpoint.
+
+A nonzero based sphere class cannot become freely null.
+Indeed a path moving the basepoint identifies the two based classes
+up to the fundamental-group action, which is an automorphism and
+fixes zero. This applies also to the basepoint motion during the
+regular homogeneous homotopies above. Consequently the endpoint
+class is still freely non-null. The accepted one-critical theorem,
+with exactly the hypotheses just verified, says it is freely null.
+This contradiction proves Corollary~\ref{cor:main}.
+
+\section{Audit and evidence boundary}
+
+The reverse sign, Cartan action sign, mixed-generator signs, and
+all four displayed cutoff identities of the manuscript's
+\texttt{transport.tex} are consistent with (1).
+The potential ambiguity in auxiliary momentum outside the spatial
+support is resolved by (22), not by asserting \(p=p_o\) there.
+Equations (24)--(25), (34)--(35), (13)--(15), and (36)--(37)
+make the regularity, full-vertical error, finite-subdivision, and
+fixed-stabilization arguments explicit. This is a verification of
+the direct transport route, not a replacement invoking AIS.
+No bypassed AIS lemma or unexamined Legendrian statement is certified.
+
+The preceding accepted result established existence of \(L\),
+but did not establish its non-isotopy. The present implication
+is the missing link from that existence result to the already
+accepted obstruction. It does not reconstruct either accepted proof.
+The end-to-end conclusion retains their imported topological
+assumptions and the separate pending formal citation-archive boundary.
+
+The standalone \texttt{verify.py} and \texttt{exact\_certificate.json}
+check the new signs and derivative identities, the full-regularity
+block identity, the logarithmic-cutoff and error-budget algebra,
+the fixed split path, and exact adversarial local examples.
+The successful retained Jacobian call checks a symbolic scalar-jet instance of
+the block product, with arbitrary old fiber Hessian, independently
+of the SymPy replay. The general block argument is also stated
+dimension-independently in (24)--(25).
+Neither computation proves smooth ODE existence, the global
+critical-locus correspondence, or the topology of the accepted
+inputs. Those are supported by the mathematical proof, not
+mislabelled as finite experiments or kernel formalization.
+An earlier, equivalent input with denominator \(1+t\) was rejected
+by the adapter's admission bound. That exact payload and structured
+error are retained as a non-conclusion. The successful input names
+the actual invertible block \(j=1+\sigma_{pX}\), as in (24).
+There is no new external literature dependency and no novelty claim.
+Independent Host-invoked review of this transport proof is still required.
+\end{document}

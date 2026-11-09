@@ -1,0 +1,122 @@
+{
+  "goal": "C9000328",
+  "routes": {},
+  "nodes": {
+    "C9000328": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 328 (Nonexpansive fixed points in reflexive Banach spaces.; papers: Fixed Points of Nonexpansive Maps in Reflexive Banach Spaces; Lean status: Partially/Comparator formalized (lean/docs/328.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_MAIN_FIXED_POINT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN_FIXED_POINT": {
+      "statement": "The staged original-norm fixed-point theorem requires reduction from arbitrary counterexamples to normalized minimal invariant data and the normalized contradiction.",
+      "status": "open",
+      "depends_on": ["C_NORMALIZED_REDUCTION", "C_NORMALIZED_CONTRADICTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_construction/Main.lean", "research/tree_construction/STATEMENT_FIDELITY.md", "research/tree_construction/producer/build/result.json", "research/tree_construction/difference/build/result.json"]
+    },
+    "C_NORMALIZED_REDUCTION": {
+      "statement": "Every counterexample to the original-norm fixed-point theorem yields the precise normalized minimal invariant data of manuscript Lemma reduction. This arbitrary-domain reduction is not certified by the tree-construction mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Fixed-Points-of-Nonexpansive-Maps-in-Reflexive-Banach-Spaces-September-24-2026/build/sections/01-preliminaries.tex"]
+    },
+    "C_NORMALIZED_CONTRADICTION": {
+      "statement": "Compose an actual producer from normalized minimal invariant data with the independently reviewed switching_bridge_from_manuscript theorem, using the original-norm difference subspace, to derive False.",
+      "status": "open",
+      "depends_on": ["C_TREE_CONSTRUCTION", "C_SWITCHING_BRIDGE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_construction/Main.lean", "research/tree_construction/STATEMENT_FIDELITY.md", "research/tree_construction/exact_certificate.json", "research/tree_construction/certificates/C_NORMALIZED_CONTRADICTION-b2f07ddb2ed07b88.json"]
+    },
+    "C_TREE_CONSTRUCTION": {
+      "statement": "From precisely normalized minimal invariant data, derive the anchor, adaptive selections, compact detectors, evaluated prediction limits and ordered infinite tree, and transport them into the original-norm difference subspace to instantiate every switching input. Do not assume the construction's existence or invoke the final contradiction to produce it.",
+      "status": "open",
+      "depends_on": ["C_RESOLVENT_ANCHOR", "C_ADAPTIVE_PREDICTIONS", "C_ORDERED_TREE", "C_DIFFERENCE_RESTRICTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_construction/Main.lean", "research/tree_construction/STATEMENT_FIDELITY.md", "research/tree_construction/exact_certificate.json", "research/tree_construction/certificates/C_TREE_CONSTRUCTION-93b66d3a7afc6d89.json", "research/tree_construction/producer/build/result.json", "research/tree_construction/difference/build/result.json"]
+    },
+    "C_RESOLVENT_ANCHOR": {
+      "statement": "Construct the resolvents, generated nonexpansive maps with displacement bounds, pointwise-weak compact tail semigroup and idempotent anchor from normalized minimal invariant data.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_construction/producer/build/result.json", "research/tree_construction/STATEMENT_FIDELITY.md"]
+    },
+    "C_ADAPTIVE_PREDICTIONS": {
+      "statement": "Derive terminating adaptive finite selections with history-dependent thresholds, norm-compact families of weak limits of evaluated predictions, and simultaneous compact detectors without anticipating sibling weights.",
+      "status": "open",
+      "depends_on": ["C_RESOLVENT_ANCHOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_construction/producer/build/result.json", "research/tree_construction/STATEMENT_FIDELITY.md"]
+    },
+    "C_ORDERED_TREE": {
+      "statement": "Assemble one infinite ordered tree with positive weights, injectively numbered summable budgets, the exact cumulative-minimum tolerance schedule, ancestor displacement, common terminal displacement, evaluated prediction limits and dense-point detectors.",
+      "status": "open",
+      "depends_on": ["C_RESOLVENT_ANCHOR", "C_ADAPTIVE_PREDICTIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_construction/producer/build/result.json", "research/tree_construction/Main.lean"]
+    },
+    "C_DIFFERENCE_RESTRICTION": {
+      "statement": "Translate K affinely into Y = closure(span(K-K)), preserving its original norm, evaluations, weak limits and detector differences; prove dense difference span and weak compactness of the intrinsic unit ball required by the reviewed bridge.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_construction/difference/build/result.json", "research/tree_construction/Main.lean", "research/tree_construction/STATEMENT_FIDELITY.md"]
+    },
+    "C_SWITCHING_BRIDGE": {
+      "statement": "From precisely the stated tree, evaluated prediction, terminal-sequence, dense-test and weak-compactness inputs, derive finite witnesses and the final contradiction, without assuming block detection or a finite witness.",
+      "status": "proved",
+      "depends_on": ["C_FINITE_WITNESS", "C_BRANCH_VECTOR", "C_POINTWISE_NULL"],
+      "reviewer_confirmed": true,
+      "review_receipt": "$WORKSPACE/.argus-campaign-9000328/projects/cc0d0b95067e/handoffs/e29718d7e892/round-0001.json",
+      "evidence": ["research/switching_bridge/PROOF.md", "research/switching_bridge/Main.lean", "research/switching_bridge/STATEMENT_FIDELITY.md", "research/switching_bridge/exact_certificate.json"]
+    },
+    "C_NONLINEAR_EVAL": {
+      "statement": "Actual right-to-left nonlinear evaluation yields weighted cutoff sensitivity, untouched-subtree error controlled by the prescribed tolerance schedule, and transmitted-subtree error controlled by common terminal displacement.",
+      "status": "proved",
+      "depends_on": [],
+      "reviewer_confirmed": true,
+      "evidence": ["research/switching_bridge/PROOF.md", "research/switching_bridge/Main.lean"]
+    },
+    "C_BLOCK_DETECTION": {
+      "statement": "Choose one common terminal using weak limits of already evaluated predictions, then derive f_v(U_v-V_v) >= W_v-5e_v from the actual before- and after-block states.",
+      "status": "proved",
+      "depends_on": ["C_NONLINEAR_EVAL"],
+      "reviewer_confirmed": true,
+      "evidence": ["research/switching_bridge/PROOF.md", "research/switching_bridge/Main.lean"]
+    },
+    "C_WEIGHTED_DEFICIT": {
+      "statement": "Normalize actual root increments, telescope consecutive descendant blocks, prove every weighted detector deficit nonnegative, and bound total weighted path deficit by 5/128.",
+      "status": "proved",
+      "depends_on": ["C_NONLINEAR_EVAL", "C_BLOCK_DETECTION"],
+      "reviewer_confirmed": true,
+      "evidence": ["research/switching_bridge/PROOF.md", "research/switching_bridge/Main.lean"]
+    },
+    "C_FINITE_WITNESS": {
+      "statement": "For every truncation, obtain one leaf increment detected above 1/2 by every nonroot detector on its path; arbitrary positive branch weights are preserved.",
+      "status": "proved",
+      "depends_on": ["C_WEIGHTED_DEFICIT"],
+      "reviewer_confirmed": true,
+      "evidence": ["research/switching_bridge/PROOF.md", "research/switching_bridge/Main.lean"]
+    },
+    "C_BRANCH_VECTOR": {
+      "statement": "Use joint compactness of the finite-level branch space and the original-norm weakly compact unit ball of Y to obtain one compatible infinite branch and one vector detected at least 1/2 at every positive depth.",
+      "status": "proved",
+      "depends_on": ["C_FINITE_WITNESS"],
+      "reviewer_confirmed": true,
+      "evidence": ["research/switching_bridge/PROOF.md", "research/switching_bridge/Main.lean"]
+    },
+    "C_POINTWISE_NULL": {
+      "statement": "Derive pointwise-null branch detectors from summable budgets and detection of each sufficiently early dense test-point difference, extending by linearity and the uniform operator-norm bound.",
+      "status": "proved",
+      "depends_on": [],
+      "reviewer_confirmed": true,
+      "evidence": ["research/switching_bridge/PROOF.md", "research/switching_bridge/Main.lean"]
+    }
+  }
+}

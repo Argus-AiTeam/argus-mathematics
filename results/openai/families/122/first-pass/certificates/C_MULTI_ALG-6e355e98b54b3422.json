@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_MULTI_ALG-c762bc9be9a5",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/122/first-pass/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6593,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/122/first-pass/Main.lean",
+    "source_sha256": "32ce20f590851e6f0f612aadc8c3e58ff04f59d7ad322ad6fe4f9c735534e901",
+    "statement_fidelity": "families/122/first-pass/statement_fidelity.md",
+    "statement_fidelity_sha256": "a3d461311605a96eb82ca7a55157b04e8355f74405545a4c68083fff6540fc9d",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/122/first-pass/Main.lean:5:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/122/first-pass/Main.lean:6:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'rho', which is 'noncomputable'\nfamilies/122/first-pass/Main.lean:7:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/122/first-pass/Main.lean:8:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'rho', which is 'noncomputable'\nfamilies/122/first-pass/Main.lean:9:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/122/first-pass/Main.lean:36:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/122/first-pass/Main.lean:47:50: warning: Variable name `hx` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/Main.lean",
+    "text": "import Mathlib\n\nnamespace PositiveMomentMultiscale\n\ndef rho : ℝ := 500 / 1001\ndef delta : ℝ := 1 - 4 * rho ^ 2\ndef cOne : ℝ := delta / 2\ndef cFour : ℝ := 3 + (4 + rho) ^ 2 * (1 + 8 * rho ^ 2 / delta)\ndef beta : ℝ := 1 / 2 ^ 48\n\ntheorem four_sum_sq (a b c d : ℝ) :\n    (a + b + c + d) ^ 2 ≤ 4 * (a ^ 2 + b ^ 2 + c ^ 2 + d ^ 2) := by\n  nlinarith [sq_nonneg (a - b), sq_nonneg (a - c), sq_nonneg (a - d),\n    sq_nonneg (b - c), sq_nonneg (b - d), sq_nonneg (c - d)]\n\ntheorem four_factor_coercivity (r a b c d : ℝ) :\n    (1 - 4 * r ^ 2) * (a ^ 2 + b ^ 2 + c ^ 2 + d ^ 2) ≤\n      a ^ 2 + b ^ 2 + c ^ 2 + d ^ 2 - r ^ 2 * (a + b + c + d) ^ 2 := by\n  have h := mul_le_mul_of_nonneg_left (four_sum_sq a b c d) (sq_nonneg r)\n  nlinarith\n\ntheorem rho_range : 0 < rho ∧ rho < 1 / 2 := by\n  norm_num [rho]\n\ntheorem delta_positive : 0 < delta := by\n  norm_num [delta, rho]\n\ntheorem cOne_lower : 1 / 1024 < cOne := by\n  norm_num [cOne, delta, rho]\n\ntheorem weighted_young_identity (x b : ℝ) :\n    (1 - cOne) * x ^ 2 + (cFour - 3) * b ^ 2 -\n        (2 * rho * x + (4 + rho) * b) ^ 2 =\n      (delta / 2) * (x - (4 * rho * (4 + rho) / delta) * b) ^ 2 := by\n  norm_num [cOne, cFour, delta, rho]\n  <;> ring\n\ntheorem contour_young (x b : ℝ) :\n    3 * b ^ 2 + (2 * rho * x + (4 + rho) * b) ^ 2 ≤\n      (1 - cOne) * x ^ 2 + cFour * b ^ 2 := by\n  have hpos : 0 ≤ delta / 2 :=\n    le_of_lt (div_pos delta_positive (by norm_num))\n  have h := mul_nonneg hpos\n    (sq_nonneg (x - (4 * rho * (4 + rho) / delta) * b))\n  nlinarith [weighted_young_identity x b]\n\ntheorem bent_energy (b x omega : ℝ) (hb : 0 ≤ b) (hx : 0 ≤ x)\n    (homega : |omega| ≤ 2 * x + b) :\n    3 * b ^ 2 + (4 * b + rho * |omega|) ^ 2 ≤\n      (1 - cOne) * x ^ 2 + cFour * b ^ 2 := by\n  have hr : 0 ≤ rho := le_of_lt rho_range.1\n  have hlo : 0 ≤ 4 * b + rho * |omega| := by positivity\n  have hbound :\n      4 * b + rho * |omega| ≤ 2 * rho * x + (4 + rho) * b := by\n    nlinarith [mul_le_mul_of_nonneg_left homega hr]\n  have hhi : 0 ≤ 2 * rho * x + (4 + rho) * b := le_trans hlo hbound\n  have hprod := mul_nonneg (sub_nonneg.mpr hbound) (add_nonneg hhi hlo)\n  nlinarith [contour_young x b]\n\ntheorem explicit_contour_constants :\n    cFour * (2 ^ 16 : ℝ) ^ 2 * beta ^ 2 / 2 < 1 / 1000000 ∧\n      30 < cOne * (2 ^ 16 : ℝ) ^ 2 / 1024 ∧\n      beta + rho * (beta + 1 / 4) < 1 := by\n  norm_num [cFour, cOne, delta, rho, beta]\n\ntheorem sector_bound (b omega : ℝ) (hb : 0 ≤ b) :\n    |omega| ≤ (1001 / 500 : ℝ) * (b + rho * |omega|) := by\n  norm_num [rho]\n  nlinarith\n\ntheorem endpoint_two (c₁ c₂ j₁ j₂ d : ℂ) :\n    c₁ * (j₁ - d) + c₂ * (j₂ - d) =\n      (c₁ + c₂) * (j₂ - d) - c₁ * (j₂ - j₁) := by\n  ring\n\ntheorem endpoint_three (c₁ c₂ c₃ j₁ j₂ j₃ d : ℂ) :\n    c₁ * (j₁ - d) + c₂ * (j₂ - d) + c₃ * (j₃ - d) =\n      (c₁ + c₂ + c₃) * (j₃ - d) -\n        (c₁ * (j₂ - j₁) + (c₁ + c₂) * (j₃ - j₂)) := by\n  ring\n\ntheorem endpoint_four (c₁ c₂ c₃ c₄ j₁ j₂ j₃ j₄ d : ℂ) :\n    c₁ * (j₁ - d) + c₂ * (j₂ - d) + c₃ * (j₃ - d) + c₄ * (j₄ - d) =\n      (c₁ + c₂ + c₃ + c₄) * (j₄ - d) -\n        (c₁ * (j₂ - j₁) + (c₁ + c₂) * (j₃ - j₂) +\n          (c₁ + c₂ + c₃) * (j₄ - j₃)) := by\n  ring\n\nend PositiveMomentMultiscale\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/statement_fidelity.md",
+    "text": "# Statement fidelity: the universal contour algebra\n\n`research/Main.lean` uses Lean 4.31.0 and Mathlib. Its namespace is\n`PositiveMomentMultiscale`. Claim `C_MULTI_ALG` is the universal real\ncoercivity and weighted-Young part of the multiscale proof, not the\nentire multiscale proposition.\n\nThe definitions are exact real rational expressions:\n`rho=500/1001`, `delta=1-4*rho^2`, `cOne=delta/2`,\n`cFour=3+(4+rho)^2*(1+8*rho^2/delta)`, and `beta=2^-48`.\n\n* `four_sum_sq` quantifies over four arbitrary real numbers and proves\n  the four-term squared-sum inequality. There is no bounded search.\n* `four_factor_coercivity` quantifies over five arbitrary reals, including\n  an arbitrary real slope `r`. It proves\n  `(1-4*r^2) sum(a_i^2) <= sum(a_i^2)-r^2(sum a_i)^2`.\n  The separately proved `delta_positive` makes this a genuinely\n  coercive bound at the specified slope. `rho_range` and `cOne_lower`\n  prove the stated exact numerical margins.\n* `weighted_young_identity` is an identity for every real `x,b`. Its\n  right side is a nonnegative square with positive rational coefficient.\n  `contour_young` proves the resulting upper bound for every real `x,b`;\n  it does not assume either is positive.\n* `bent_energy` quantifies over real `b,x,omega`, assumes `b>=0`, `x>=0`\n  and `abs(omega)<=2*x+b`, and proves the precise worst-four-factor\n  contour quadratic estimate. In the analytic proof, `x` is the\n  Euclidean norm of the imaginary coordinates, padded to four entries;\n  that application of the hypothesis is proved in prose.\n* `explicit_contour_constants` certifies the mass, tail, and retained-box\n  outer-decay numerical margins for `K=2^16` and `beta=2^-48`.\n  `sector_bound` quantifies over real `b,omega` with `b>=0` and proves\n  `abs(omega)<=2.002*(b+rho*abs(omega))`.\n* `endpoint_two`, `endpoint_three`, and `endpoint_four` quantify over\n  arbitrary complex coefficients, positions, and center. They prove the\n  endpoint/gap telescoping identities with the minus signs used by the\n  contour. Positions need not be real or ordered for these identities.\n  Ordering, positive dampings, and the one-factor case are handled in\n  the mathematical report.\n\nThe compiler checks these algebraic statements and their proofs only.\nIt does not check the translation from a truncated Boolean functional,\nCauchy matching, Gaussian integration/deformation, the existence of an\ninterleaving witness, graph-to-gap matching, or the complete `7.84`\ntheorem. Those universal arguments are in `research/audit_report.md`\nand require independent mathematical review. No compilation of this\nfile is represented as kernel closure of `C_MULTI_STRONG` or\n`C_MULTI_LITERAL`.\n"
+  },
+  "subject": {
+    "content_hash": "1a186c559525082f33d9d458823fbfa5716b0d6702f70180297f3a37cd511418",
+    "kind": "claim",
+    "subject_id": "C_MULTI_ALG"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

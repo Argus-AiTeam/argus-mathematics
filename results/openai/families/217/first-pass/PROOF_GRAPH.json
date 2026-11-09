@@ -1,0 +1,183 @@
+{
+  "goal": "C9000217",
+  "routes": [
+    {
+      "name": "R_PAIR_RESPONSE",
+      "status": "current",
+      "evidence": "research/pair_response/report.md",
+      "goal": "C_PAIR_RESPONSE_AUDIT",
+      "obligations": [
+        "C_RESPONSE_ROW_ZERO",
+        "C_RESPONSE_ADDITIVE",
+        "C_RESPONSE_BOUNDS",
+        "C_RESPONSE_OLD_LABELS"
+      ]
+    },
+    {
+      "name": "R_ENERGY_STRENGTHENING",
+      "status": "current",
+      "goal": "C_RESPONSE_ENERGY",
+      "obligations": ["C_PREFIX_HESSIAN_IDENTIFICATION", "C_PAIR_ALGEBRA"],
+      "evidence": "research/pair_response/report.md"
+    },
+    {
+      "name": "R_ABSTRACT_MOMENTS",
+      "status": "ruled_out",
+      "retired_because": "An arbitrary pair/four-spin moment assignment need not arise from the normalized scalar recursion and cannot refute this lemma.",
+      "evidence": "research/pair_response/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000217": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 217 (The low-temperature Sherrington–Kirkpatrick fluctuation law.; papers: The low-temperature Sherrington–Kirkpatrick free-energy limiting law; The low-temperature Sherrington–Kirkpatrick fluctuation scale; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PAIR_RESPONSE_AUDIT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PAIR_RESPONSE_AUDIT": {
+      "statement": "Certify an admissible exact refutation or the full scalar response lemma, including real masses, old labels, and weighted bounds.",
+      "status": "open",
+      "depends_on": [
+        "C_RESPONSE_ROW_ZERO",
+        "C_RESPONSE_ADDITIVE",
+        "C_RESPONSE_BOUNDS",
+        "C_RESPONSE_OLD_LABELS"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_SCALAR_INPUTS": {
+      "statement": "Normalized scalar recursion, source differentiation, A8, and the signed real-power attachment rules with coincidences and old-fork atoms.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_RESPONSE_ROW_ZERO": {
+      "statement": "The row-zero sector is sheet-diagonal with the stated conditional susceptibility product multipliers.",
+      "status": "open",
+      "depends_on": ["C_SCALAR_INPUTS", "C_PAIR_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_RESPONSE_ADDITIVE": {
+      "statement": "The additive sector action is H2 with the specified joint field/profile Hessian.",
+      "status": "open",
+      "depends_on": ["C_SCALAR_INPUTS", "C_PAIR_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_RESPONSE_BOUNDS": {
+      "statement": "The response Hessian is positive semidefinite and all evaluation and resolution differences have the stated mass factors.",
+      "status": "open",
+      "depends_on": ["C_RESPONSE_ROW_ZERO", "C_RESPONSE_ADDITIVE", "C_RESPONSE_ENERGY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_RESPONSE_OLD_LABELS": {
+      "statement": "The coefficient identities hold for increasing real masses and arbitrary fixed old-label topologies, including coincidences and existing forks.",
+      "status": "open",
+      "depends_on": ["C_SCALAR_INPUTS", "C_PAIR_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_PAIR_ALGEBRA": {
+      "statement": "Universal colored-prefix cancellation, all-natural-slot real-power coefficient identity, and arbitrary-dimensional positive-functional Gram-square algebra.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/pair_response/Main.lean",
+        "research/pair_response/statement_fidelity.md",
+        "research/pair_response/lean/certificates/C_PAIR_ALGEBRA-5a197b92455d34f9.json"
+      ]
+    },
+    "C_RESPONSE_ENERGY": {
+      "statement": "The switching field/profile Hessian has an exact terminal Gram representation and positive-semidefinite prefix decrements for nonnegative profiles, without requiring profile monotonicity.",
+      "status": "open",
+      "depends_on": ["C_PREFIX_HESSIAN_IDENTIFICATION", "C_PAIR_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/pair_response/report.md",
+        "research/pair_response/exact_certificate.json"
+      ]
+    },
+    "C_CONDITIONAL_HESSIAN_ENERGY": {
+      "statement": "The full switching field/profile Hessian, including a unit field direction, is a conditional terminal Gram energy and a positive-semidefinite matrix supermartingale; bounded stopping-prefix decrements have the conditional Gram compensator under uniform integrability.",
+      "status": "open",
+      "depends_on": ["C_PREFIX_HESSIAN_IDENTIFICATION", "C_PAIR_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/pair_response/report.md",
+        "research/pair_response/exact_certificate.json"
+      ]
+    },
+    "C_PREFIX_HESSIAN_IDENTIFICATION": {
+      "statement": "The actual normalized scalar joint field/profile Hessian has the three continuous marker-position kernels in report equation (5); its prefix derivative is minus alpha times the switching-response Gram matrix, with no marker-crossing atom.",
+      "status": "open",
+      "depends_on": ["C_SCALAR_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_PAIR_INVERSE": {
+      "statement": "Proposition inv:pair-inverse has a resolution-independent inverse dominated by ordinary absolute attachment of at most two labels.",
+      "status": "open",
+      "depends_on": ["C_PAIR_RESPONSE_AUDIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_SCALE_CALCULUS": {
+      "statement": "The scale manuscript's fixed-degree finite-tree calculus and optimized covariance comparisons hold with their stated conditioning hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-low-temperature-Sherrington-Kirkpatrick-fluctuation-scale-September-24-2026/build/sections/foundations.tex"]
+    },
+    "C_SCALE_CAVITY_PROFILE": {
+      "statement": "Cubic cavity closure, small-mass profile identification, and finite propagation remove assumed local regularity.",
+      "status": "open",
+      "depends_on": ["C_SCALE_CALCULUS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_SCALE_LAPLACE": {
+      "statement": "The positive Laplace window and its conversion to variance and typical fluctuation bounds hold.",
+      "status": "open",
+      "depends_on": ["C_SCALE_CAVITY_PROFILE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_SCALE_MAIN": {
+      "statement": "For each fixed beta>1, Var(F_n)=n^(1/3+o(1)) and |F_n-E F_n|=n^(1/6+o(1)) with high probability.",
+      "status": "open",
+      "depends_on": ["C_SCALE_LAPLACE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_LIMIT_SIZE_COMPARISON": {
+      "statement": "The limiting-law manuscript's size and clock comparison has summable errors and the required quantitative moment control.",
+      "status": "open",
+      "depends_on": ["C_PAIR_INVERSE", "C_SCALE_CAVITY_PROFILE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_LIMIT_MOMENTS": {
+      "statement": "Theorem thm:moments: completed free-energy moments converge at polynomial rates, with a positive finite limiting variance and uniform local exponential moments.",
+      "status": "open",
+      "depends_on": ["C_LIMIT_SIZE_COMPARISON", "C_SCALE_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    },
+    "C_LIMIT_MAIN": {
+      "statement": "For every fixed beta>1, variance-normalized free energy converges through all integers to the unique nondegenerate mean-zero variance-one law specified in def:law.",
+      "status": "open",
+      "depends_on": ["C_LIMIT_MOMENTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pair_response/report.md"]
+    }
+  }
+}

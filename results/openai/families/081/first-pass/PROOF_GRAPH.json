@@ -1,0 +1,173 @@
+{
+  "goal": "C9000081",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "scoped_goal": "NHB_GOAL",
+  "campaign_completion": false,
+  "independent_review": "required_pending_host_reviewer",
+  "routes": [
+    {"name": "R_NHB_FULL", "status": "current", "evidence": "research/normalized_height_bridge/bridge.md"},
+    {"name": "R_NHB_IMPORT_DSV", "status": "ruled_out", "evidence": "research/normalized_height_bridge/bridge.md", "reason": "Theorem 1.6 concerns continuous functions on a fixed Euclidean domain with locally uniform convergence and a viscosity equation. Those are not supplied for the moving normalized heights. The manuscript does not invoke that theorem."}
+  ],
+  "nodes": {
+    "C9000081": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 081 (Riesz transforms and rectifiability in higher codimension.; papers: Riesz transforms and uniform rectifiability in higher codimension; Lean status: Partially/Comparator formalized (lean/docs/081.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["NHB_GOAL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "NHB_GOAL": {
+      "statement": "Proposition prop:height-equation follows from its stated hypotheses, with the same height and subsequence, without graph, density-regularity, or convergence-rate assumptions.",
+      "status": "in_progress", "reviewer_confirmed": false,
+      "depends_on": ["NHB_ENERGY", "NHB_COMPACT", "NHB_DIAGONAL", "NHB_TAIL", "NHB_MEAN", "NHB_FRACTIONAL"],
+      "evidence": ["research/normalized_height_bridge/bridge.md", "research/normalized_height_bridge/exact_certificate.json"],
+      "scope_note": "Complete analytic proof available; independent review pending. Only NHB_FORMAL has kernel evidence."
+    },
+    "NHB_PAIRINGS": {
+      "statement": "Upper n-growth gives absolutely convergent Lipschitz-cancelled mean-zero Riesz pairings and an exterior error O(T^-1), as in lem:pairings.",
+      "status": "in_progress", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/normalized_height_bridge/bridge.md"]
+    },
+    "NHB_WEAK": {
+      "statement": "The uniform support-centered lower bound and weak plane limit imply qualitative local support tubes and convergence on bounded continuity regions.",
+      "status": "in_progress", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/normalized_height_bridge/bridge.md"]
+    },
+    "NHB_ALGEBRA": {
+      "statement": "The cutoff square identity and the finite weighted pairwise-variance identity hold with the stated signs and factors.",
+      "status": "in_progress", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/normalized_height_bridge/Main.lean", "research/normalized_height_bridge/jacobian_output.json", "research/normalized_height_bridge/exact_certificate.json"]
+    },
+    "NHB_HORIZON": {
+      "statement": "For delta_j=2^-j and K_j=2j+3, delta_j^-1 2^-K_j=2^(-j-3); delta_j 2^(gamma K_j) tends to zero for 0<gamma<1/2.",
+      "status": "in_progress", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/normalized_height_bridge/bridge.md", "research/normalized_height_bridge/exact_certificate.json"]
+    },
+    "NHB_ENERGY": {
+      "statement": "Lemma lem:height-energy: the centered unnormalized-height test gives uniform local L2 and fractional energy for u_j/delta_j.",
+      "status": "in_progress", "reviewer_confirmed": false,
+      "depends_on": ["NHB_PAIRINGS", "NHB_ALGEBRA"],
+      "evidence": ["research/normalized_height_bridge/bridge.md"]
+    },
+    "NHB_COMPACT": {
+      "statement": "Lemma lem:moving-compactness: finite projection partitions give convergence of ordinary, signed, and squared measures on one subsequence.",
+      "status": "in_progress", "reviewer_confirmed": false,
+      "depends_on": ["NHB_WEAK", "NHB_ALGEBRA"],
+      "evidence": ["research/normalized_height_bridge/bridge.md"]
+    },
+    "NHB_DIAGONAL": {
+      "statement": "Capped product kernels pass to the same height, and the uncapping error is uniformly O(h^(1/2)) by bounded energy.",
+      "status": "in_progress", "reviewer_confirmed": false,
+      "depends_on": ["NHB_ENERGY", "NHB_COMPACT"],
+      "evidence": ["research/normalized_height_bridge/bridge.md"]
+    },
+    "NHB_TAIL": {
+      "statement": "The normalized exterior is bounded by C(T^-1+T^(gamma-1)+delta_j^-1 2^-K_j), and the limiting weighted tail is integrable.",
+      "status": "in_progress", "reviewer_confirmed": false,
+      "depends_on": ["NHB_COMPACT"],
+      "evidence": ["research/normalized_height_bridge/bridge.md"]
+    },
+    "NHB_MEAN": {
+      "statement": "With one localization and one subtraction point, the nonzero-mean bump pairing converges and c_j tending to zero suffices; no rate or bound on w_j(0) is used.",
+      "status": "in_progress", "reviewer_confirmed": false,
+      "depends_on": ["NHB_DIAGONAL", "NHB_TAIL"],
+      "evidence": ["research/normalized_height_bridge/bridge.md"]
+    },
+    "NHB_FRACTIONAL": {
+      "statement": "The limiting renormalized pairing is the absolutely convergent integral of v times Lg for every compact smooth mean-zero intrinsic test.",
+      "status": "in_progress", "reviewer_confirmed": false,
+      "depends_on": ["NHB_DIAGONAL", "NHB_TAIL", "NHB_MEAN"],
+      "evidence": ["research/normalized_height_bridge/bridge.md"]
+    },
+    "NHB_FORMAL": {
+      "statement": "Universal cutoff and finite-variance algebra, rate-free normalized mean correction, and two-stage vanishing-error convergence; not a formalization of the measure-theoretic bridge.",
+      "status": "in_progress", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/normalized_height_bridge/certificates/NHB_FORMAL-a113f3927ca2ba7e.json", "research/normalized_height_bridge/statement_fidelity.md"],
+      "scope_note": "Lean 4.31.0 compiler and axiom audit passed; natural-language fidelity still needs independent review."
+    },
+    "NHB_LIT_DSV": {
+      "statement": "Primary-source comparison only: arXiv:1610.04663v1 Definition 1.1 and Theorem 1.6 use a weighted tail and a cutoff equation modulo polynomials; their stability hypotheses are not the moving-measure hypotheses.",
+      "status": "in_progress", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/normalized_height_bridge/bridge.md"],
+      "source_id": "arxiv:1610.04663v1", "locator": "Definition 1.1 and Theorem 1.6",
+      "dependency_note": "A checked scope comparison, not an external assumption used by NHB_GOAL."
+    },
+    "NHB_LIT_REL": {
+      "statement": "Primary-source comparison only: arXiv:1104.4345v3 Section 7 proves fixed-domain fractional compactness, not by itself the moving-measure squared-moment conclusion.",
+      "status": "in_progress", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/normalized_height_bridge/bridge.md"],
+      "source_id": "arxiv:1104.4345v3", "locator": "Section 7, first theorem",
+      "dependency_note": "Prior art only; the moving-measure theorem is independently proved."
+    },
+    "NHB_QUADRATIC": {
+      "statement": "With all other bridge hypotheses unchanged, the bound D delta_j^2 (Lip xi+1) for the same mean-zero tests already gives uniform normalized energy, moving squared-moment compactness, and the same limiting fractional equation.",
+      "status": "in_progress", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/normalized_height_bridge/bridge.md"],
+      "scope_note": "Stronger oscillation-exponent theorem proved directly in Sections 1-6; not a novelty or main-theorem claim."
+    },
+    "NHB_LOWER_NECESSARY": {
+      "statement": "Without a common support-centered lower n-growth bound, plane-volume plus t_j^2 times a parallel sheet and height t_j^-1 on that sheet has bounded local energy and norms but an off-plane squared-moment defect, despite weak convergence to plane volume.",
+      "status": "in_progress", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/normalized_height_bridge/bridge.md", "research/normalized_height_bridge/exact_certificate.json"],
+      "scope_note": "A counterexample only to a weakened statement. It violates an explicit manuscript hypothesis and does not refute lem:moving-compactness."
+    },
+    "NHB_PLANE_MOMENTS": {
+      "statement": "Lemmas lem:plane-comparison and lem:fixed-plane-moments give a single affine reference plane over the finite horizon.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": []
+    },
+    "NHB_WEIGHTED_RIGIDITY": {
+      "statement": "Lemma lem:fractional-rigidity: the measurable mean-zero fractional weak equation and weight (1+|x|)^(-n-2) force an affine function.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": []
+    },
+    "NHB_PLANAR_RIGIDITY": {
+      "statement": "Lemma lem:planar-rigidity identifies full support and constant positive planar density.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["NHB_PAIRINGS", "NHB_WEIGHTED_RIGIDITY"]
+    },
+    "NHB_FLAT": {
+      "statement": "Proposition prop:flat-limit supplies the constant-density full-plane limit and compatible affine normal coordinates.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["NHB_PLANE_MOMENTS", "NHB_PLANAR_RIGIDITY", "NHB_WEAK", "NHB_PAIRINGS"]
+    },
+    "NHB_POLARIZATION": {
+      "statement": "Lemmas lem:affine-polarization and lem:normal-affine-planes turn the same limiting affine heights into genuine approximating planes.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": []
+    },
+    "NHB_NORMALIZED_EXCESS": {
+      "statement": "Proposition prop:normalized-excess-limit gives vanishing relative excess and bilateral flatness on the common subsequence.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["NHB_FLAT", "NHB_GOAL", "NHB_WEIGHTED_RIGIDITY", "NHB_POLARIZATION"]
+    },
+    "NHB_PROPAGATION": {
+      "statement": "Theorem thm:excess-propagation is the uniform relative-excess implication used by the packing proof.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["NHB_NORMALIZED_EXCESS", "NHB_HORIZON"]
+    },
+    "NHB_OSC_PACKING": {
+      "statement": "Proposition prop:oscillation-packing supplies Carleson control of oscillation-bad cells; not audited in this mission.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": []
+    },
+    "NHB_FLAT_SEEDS": {
+      "statement": "Proposition prop:flat-seeds supplies flat descendants outside a Carleson family; not audited in this mission.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": []
+    },
+    "NHB_BETA_PACKING": {
+      "statement": "Lemma lem:seed-charging and Proposition prop:beta-packing convert propagation and flat seeds to bilateral geometric packing; not audited in this mission.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["NHB_PROPAGATION", "NHB_OSC_PACKING", "NHB_FLAT_SEEDS"]
+    },
+    "NHB_BWGL": {
+      "statement": "The stated David-Semmes BWGL endpoint converts bilateral geometric packing to the specified ball-map uniform rectifiability; not audited or imported here.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": []
+    },
+    "NHB_MAIN": {
+      "statement": "Theorem thm:main: uniform hard Riesz-truncation L2 boundedness implies quantitative uniform n-rectifiability for integers 2<=n<=d-2.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["NHB_BETA_PACKING", "NHB_BWGL"]
+    }
+  }
+}

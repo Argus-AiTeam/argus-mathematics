@@ -1,0 +1,245 @@
+{
+  "goal": "C9000203",
+  "routes": [
+    {
+      "name": "R_SINGLE_CYCLE_UNIFORM_ONLY",
+      "status": "ruled_out",
+      "evidence": "research/single_cycle_transport/report.md"
+    },
+    {
+      "name": "R_SINGLE_CYCLE_MACKKEY_NORM",
+      "status": "current",
+      "evidence": "research/single_cycle_transport/report.md"
+    },
+    {
+      "name": "R_SINGLE_CYCLE_PRIOR_ART",
+      "status": "current",
+      "evidence": "research/single_cycle_transport/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000203": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 203 (Donovan's conjecture over fields and complete mixed-characteristic DVRs.; papers: Donovan's Conjecture over Algebraically Closed Fields; Integral Donovan Finiteness over Witt Vectors; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_SINGLE_CYCLE_TRANSPORT",
+        "C_PUBLISHABLE_AUDIT_ADVANCE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PUBLISHABLE_AUDIT_ADVANCE": {
+      "statement": "A substantive new exact refutation, repaired theorem or structural verification theorem for the manuscript family is independently justified; known-result reconstruction and finite route diagnostics alone do not satisfy this campaign goal.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md", "research/single_cycle_transport/report.md"]
+    },
+    "C_FIELD_DONOVAN": {
+      "statement": "Field manuscript thm:donovan: bounded-defect Morita finiteness over every fixed algebraically closed characteristic-p field.",
+      "status": "open",
+      "depends_on": ["L_QUASISIMPLE_CARTAN", "L_FIELD_EXTENSIONS", "L_FIELD_SCALAR_EXTENSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/00_introduction.tex"]
+    },
+    "C_INTEGRAL_DONOVAN": {
+      "statement": "Integral manuscript thm:main: bounded-defect Morita finiteness over W(Fpbar).",
+      "status": "open",
+      "depends_on": ["C_FIELD_DONOVAN", "L_INTEGRAL_EXACT_COMPARISON", "L_INTEGRAL_BASED_FINITE", "L_INTEGRAL_KERNEL_REMOVAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-Donovan-Finiteness-over-Witt-Vectors-September-25-2026/build/sections/01_introduction.tex"]
+    },
+    "C_INTEGRAL_DVR": {
+      "statement": "Integral manuscript cor:complete-dvr: bounded-defect Morita finiteness over each fixed complete mixed-characteristic DVR with algebraically closed residue field.",
+      "status": "open",
+      "depends_on": ["C_INTEGRAL_DONOVAN", "L_INTEGRAL_SCALAR_EXTENSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-Donovan-Finiteness-over-Witt-Vectors-September-25-2026/build/sections/01_introduction.tex"]
+    },
+    "C_SINGLE_CYCLE_TRANSPORT": {
+      "statement": "Field prop:single-cycle: A = epsilon B for the fixed rational parameter and all individual Jordan labels.",
+      "status": "open",
+      "depends_on": ["L_SINGLE_CYCLE_MINIMUM", "L_SINGLE_CYCLE_NORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/report.md", "research/single_cycle_transport/exact_certificate.json"]
+    },
+    "C_KNOWN_CLASSICAL_TRANSPORT": {
+      "statement": "Enguehard Proposition 5.3 gives the prior classical connected-center transport theorem, assuming Mackey.",
+      "status": "open",
+      "depends_on": ["L_CLASSICAL_MACKEY", "L_JORDAN_MARKED_EQUIVARIANCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/sources/enguehard-1312.0106v1.pdf", "research/single_cycle_transport/report.md"]
+    },
+    "C_UNIVERSAL_DESCENT_ALGEBRA": {
+      "statement": "The nineteen recorded descent, inverse-transpose, and parameter-quotient word identities hold in arbitrary groups and for invertible matrices of every size.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/verify.py", "research/single_cycle_transport/exact_certificate.json"]
+    },
+    "C_D4_RATIONAL_DIAGNOSTIC": {
+      "statement": "The specified graph-twisted D4 Weyl datum has a stable double position of size 144 with no F-fixed representative; its specified centralizer subsystem has no stable disjoint double position.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/verify.py", "research/single_cycle_transport/exact_certificate.json"]
+    },
+    "L_SINGLE_CYCLE_MINIMUM": {
+      "statement": "Field lab:sparse: each predicted family row is the unique integral minimum-norm row with its uniform pairings, including individual split D boundary labels.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/04_labels.tex"]
+    },
+    "L_SINGLE_CYCLE_RATIONAL_MATCH": {
+      "statement": "The dual rational Mackey matching is choice-independent and preserves both embeddings, Frobenius maps and rational semisimple refinements.",
+      "status": "open",
+      "depends_on": ["C_UNIVERSAL_DESCENT_ALGEBRA", "L_CONNECTED_LANG_DESCENT", "L_RATIONAL_PARAMETER_QUOTIENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/report.md"]
+    },
+    "L_SINGLE_CYCLE_TERM_COMPARE": {
+      "statement": "All matched trace contributions agree by equal/disjoint support induction with individual split labels.",
+      "status": "open",
+      "depends_on": ["L_SINGLE_CYCLE_RATIONAL_MATCH", "L_CYCLE_SUPPORT_GEOMETRY", "L_JORDAN_MARKED_EQUIVARIANCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/04_labels.tex"]
+    },
+    "L_SINGLE_CYCLE_NORM": {
+      "statement": "The projected ambient and unipotent centralizer self-Mackey traces, hence squared Hilbert-Schmidt norms, agree.",
+      "status": "open",
+      "depends_on": ["L_CLASSICAL_MACKEY", "L_SINGLE_CYCLE_RATIONAL_MATCH", "L_SINGLE_CYCLE_TERM_COMPARE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/report.md"]
+    },
+    "L_CLASSICAL_MACKEY": {
+      "statement": "Bonnafe--Michel Theorem 3.8(4) supplies Mackey for all classical components, including q=2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/sources/bonnafe-michel-1003.4922v1.pdf"]
+    },
+    "L_JORDAN_MARKED_EQUIVARIANCE": {
+      "statement": "The ordinary Jordan torus rule and marked isomorphism equivariance distinguish individual classical labels.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/sources/digne-michel-1990.pdf"]
+    },
+    "L_CONNECTED_LANG_DESCENT": {
+      "statement": "Connected algebraic intersection stabilizers give the claimed rational double-orbit descent; local dual lattice constructions globalize independently of auxiliary tori.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/report.md"]
+    },
+    "L_RATIONAL_PARAMETER_QUOTIENT": {
+      "statement": "The two-endpoint parameter-refined quotient identifies with the centralizer double quotient with both embeddings retained.",
+      "status": "open",
+      "depends_on": ["C_UNIVERSAL_DESCENT_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/single_cycle_transport/report.md"]
+    },
+    "L_CYCLE_SUPPORT_GEOMETRY": {
+      "statement": "Admissible rational common-torus supports are equal or disjoint, with unique primitive subtorus on equal support, in all allowed packets.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/04_labels.tex"]
+    },
+    "L_QUASISIMPLE_CARTAN": {
+      "statement": "Field thm:quasisimple-cartan: bounded-defect Cartan entries are uniformly bounded in all quasisimple groups.",
+      "status": "open",
+      "depends_on": ["L_FIXED_ROOT_CARTAN", "L_RUNNER_REDUCTION", "L_CUSPIDAL_ENDPOINT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/03_families.tex"]
+    },
+    "L_FIXED_ROOT_CARTAN": {
+      "statement": "Field fixed-root-data geometric Cartan estimate.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/00_introduction.tex"]
+    },
+    "L_RUNNER_REDUCTION": {
+      "statement": "Field runner reduction controls projective cones along the prescribed moves.",
+      "status": "open",
+      "depends_on": ["C_SINGLE_CYCLE_TRANSPORT", "L_BLOCK_CORE_PROJECTIONS", "L_RUNNER_CONE_ESTIMATES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/00_introduction.tex"]
+    },
+    "L_BLOCK_CORE_PROJECTIONS": {
+      "statement": "Field prop:core-blocks identifies the required packed-core collections with block-idempotent projections.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/04_labels.tex"]
+    },
+    "L_RUNNER_CONE_ESTIMATES": {
+      "statement": "The runner permutation/error, determinant and volume estimates give the claimed uniform cone bounds.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/00_introduction.tex"]
+    },
+    "L_CUSPIDAL_ENDPOINT": {
+      "statement": "Field prop:triangle-cartan controls cuspidal triangles uniformly in their rank.",
+      "status": "open",
+      "depends_on": ["C_SINGLE_CYCLE_TRANSPORT", "L_ENDPOINT_HEAD_COVER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/00_introduction.tex"]
+    },
+    "L_ENDPOINT_HEAD_COVER": {
+      "statement": "The modular endpoint intertwiners, obstruction removal and head coverage hold as stated.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/00_introduction.tex"]
+    },
+    "L_FIELD_EXTENSIONS": {
+      "statement": "The field crossed-extension comparison and descent retain Sylow actions and actual inner factors and imply finiteness.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/00_introduction.tex"]
+    },
+    "L_FIELD_SCALAR_EXTENSION": {
+      "statement": "The finite list over Fpbar extends to each fixed algebraically closed characteristic-p field without changing defect.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Donovans-Conjecture-over-Algebraic-Closures-of-Prime-Fields-September-24-2026/build/sections/00_introduction.tex"]
+    },
+    "L_INTEGRAL_EXACT_COMPARISON": {
+      "statement": "The integral comparison removes the actual Teichmuller-valued scalar errors while retaining the specified multiplication factors.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-Donovan-Finiteness-over-Witt-Vectors-September-25-2026/build/sections/01_introduction.tex"]
+    },
+    "L_INTEGRAL_BASED_FINITE": {
+      "statement": "Integral rigidity and actual Sylow extension blocks yield finite based lists of restrictions.",
+      "status": "open",
+      "depends_on": ["C_FIELD_DONOVAN", "L_INTEGRAL_EXACT_COMPARISON"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-Donovan-Finiteness-over-Witt-Vectors-September-25-2026/build/sections/01_introduction.tex"]
+    },
+    "L_INTEGRAL_KERNEL_REMOVAL": {
+      "statement": "Removal of the large normal prime-to-p kernel preserves based control and gives finite integral central factor systems.",
+      "status": "open",
+      "depends_on": ["L_INTEGRAL_BASED_FINITE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-Donovan-Finiteness-over-Witt-Vectors-September-25-2026/build/sections/01_introduction.tex"]
+    },
+    "L_INTEGRAL_SCALAR_EXTENSION": {
+      "statement": "The finite Witt-ring Morita list extends to each fixed complete coefficient DVR in the stated corollary.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integral-Donovan-Finiteness-over-Witt-Vectors-September-25-2026/build/sections/01_introduction.tex"]
+    }
+  }
+}

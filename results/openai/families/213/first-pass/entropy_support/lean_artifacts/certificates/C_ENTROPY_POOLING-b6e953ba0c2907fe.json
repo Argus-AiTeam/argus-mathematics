@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_ENTROPY_POOLING-3c2e89740211",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/213/first-pass/entropy_support/lean_artifacts/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/213/first-pass/entropy_support/lean_artifacts/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15018,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/213/first-pass/entropy_support/lean_artifacts/Main.lean",
+    "source_sha256": "dd5232dfd97a4c01705e32bdd5b0b02d8e25df2bb4842ada250ceacf4b326290",
+    "statement_fidelity": "families/213/first-pass/entropy_support/lean_artifacts/statement_fidelity.md",
+    "statement_fidelity_sha256": "e7533f2519cb7633de7bda6ba501b5f9754581f589c53a5bd8ef591d209217ba",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/entropy_support/lean_artifacts/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace EntropySupport\n\ntheorem weighted_cauchy {G : Type*} [Fintype G]\n    (w u v : G → ℝ) (hw : ∀ g, 0 ≤ w g) :\n    (∑ g, w g * u g * v g) ^ 2 ≤\n      (∑ g, w g * u g ^ 2) * (∑ g, w g * v g ^ 2) := by\n  exact Finset.sum_sq_le_sum_mul_sum_of_sq_le_mul\n    (r := fun g => w g * u g * v g)\n    (f := fun g => w g * u g ^ 2)\n    (g := fun g => w g * v g ^ 2)\n    Finset.univ\n    (fun g _ => mul_nonneg (hw g) (sq_nonneg _))\n    (fun g _ => mul_nonneg (hw g) (sq_nonneg _))\n    (fun g _ => le_of_eq (by ring))\n\ntheorem node_budget {G : Type*} [Fintype G]\n    (w u v : G → ℝ) (q b C : ℝ)\n    (hw : ∀ g, 0 ≤ w g) (hq : 0 ≤ q) (hC : 0 < C)\n    (hreconstruct : ∑ g, w g * u g * v g = q * b)\n    (hnorm : ∑ g, w g * u g ^ 2 ≤ C * q) :\n    q * b ^ 2 / C ≤ ∑ g, w g * v g ^ 2 := by\n  have henergy : 0 ≤ ∑ g, w g * v g ^ 2 :=\n    Finset.sum_nonneg (fun g _ => mul_nonneg (hw g) (sq_nonneg _))\n  have hcs := weighted_cauchy w u v hw\n  rw [hreconstruct] at hcs\n  have hmul : (q * b) ^ 2 ≤ (C * q) * (∑ g, w g * v g ^ 2) :=\n    hcs.trans (mul_le_mul_of_nonneg_right hnorm henergy)\n  by_cases hzero : q = 0\n  · simpa [hzero] using henergy\n  · have hpositive : 0 < q := lt_of_le_of_ne hq (Ne.symm hzero)\n    have hscaled :\n        q * (q * b ^ 2) ≤ q * (C * (∑ g, w g * v g ^ 2)) := by\n      nlinarith only [hmul]\n    have hcancel := le_of_mul_le_mul_left hscaled hpositive\n    apply (div_le_iff₀ hC).2\n    simpa [mul_comm] using hcancel\n\ntheorem budget_transfer {H G : Type*} [Fintype H] [Fintype G]\n    (w u v : H → G → ℝ) (q b C : H → ℝ)\n    (hw : ∀ h g, 0 ≤ w h g) (hq : ∀ h, 0 ≤ q h)\n    (hC : ∀ h, 0 < C h)\n    (hreconstruct : ∀ h, ∑ g, w h g * u h g * v h g = q h * b h)\n    (hnorm : ∀ h, ∑ g, w h g * u h g ^ 2 ≤ C h * q h) :\n    (∑ h, q h * b h ^ 2 / C h) ≤\n      ∑ h, ∑ g, w h g * v h g ^ 2 := by\n  exact Finset.sum_le_sum (fun h _ =>\n    node_budget (w h) (u h) (v h) (q h) (b h) (C h)\n      (hw h) (hq h) (hC h) (hreconstruct h) (hnorm h))\n\ntheorem entropy_budget_transfer {H G : Type*} [Fintype H] [Fintype G]\n    (w u v : H → G → ℝ) (q b C cost : H → ℝ) (p D : ℝ)\n    (hw : ∀ h g, 0 ≤ w h g) (hq : ∀ h, 0 ≤ q h)\n    (hC : ∀ h, 0 < C h) (hp : 0 < p) (hpone : p < 1)\n    (hreconstruct : ∀ h, ∑ g, w h g * u h g * v h g = q h * b h)\n    (hnorm : ∀ h, ∑ g, w h g * u h g ^ 2 ≤ C h * q h)\n    (hcost : ∀ h, (p * (1 - p)) * cost h ≤ q h * b h ^ 2)\n    (hbudget : (∑ h, ∑ g, w h g * v h g ^ 2) ≤ D / 2) :\n    (∑ h, cost h / C h) ≤ D / (2 * (p * (1 - p))) := by\n  have hpq : 0 < p * (1 - p) := mul_pos hp (sub_pos.mpr hpone)\n  have hlocal :\n      (∑ h, (p * (1 - p)) * (cost h / C h)) ≤\n        ∑ h, q h * b h ^ 2 / C h := by\n    apply Finset.sum_le_sum\n    intro h _\n    calc\n      (p * (1 - p)) * (cost h / C h) =\n          ((p * (1 - p)) * cost h) / C h := by ring\n      _ ≤ q h * b h ^ 2 / C h :=\n        div_le_div_of_nonneg_right (hcost h) (hC h).le\n  have hscaled : (p * (1 - p)) * (∑ h, cost h / C h) ≤ D / 2 := by\n    calc\n      (p * (1 - p)) * (∑ h, cost h / C h) =\n          ∑ h, (p * (1 - p)) * (cost h / C h) := by rw [Finset.mul_sum]\n      _ ≤ ∑ h, q h * b h ^ 2 / C h := hlocal\n      _ ≤ ∑ h, ∑ g, w h g * v h g ^ 2 :=\n        budget_transfer w u v q b C hw hq hC hreconstruct hnorm\n      _ ≤ D / 2 := hbudget\n  apply (le_div_iff₀ (mul_pos (by norm_num : (0 : ℝ) < 2) hpq)).2\n  nlinarith only [hscaled]\n\nend EntropySupport\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/entropy_support/lean_artifacts/statement_fidelity.md",
+    "text": "# Statement fidelity: universal weighted pooling core\n\nThe source `Main.lean` formalizes the finite weighted reconstruction and\nbudget-transport core used in Sections 1.3--1.5 of `report.md`. Its ledger\nclaim is `C_ENTROPY_POOLING`, not the original `C_ENTROPY` claim.\nThe declarations described here are `weighted_cauchy`, `node_budget`,\n`budget_transfer`, and `entropy_budget_transfer`, all in namespace\n`EntropySupport`.\n\n`EntropySupport.weighted_cauchy` quantifies over any finite type G and\narbitrary real functions w,u,v on G, assuming only w is nonnegative.\nIt proves the weighted squared Cauchy--Schwarz inequality. In particular\nthere is no independence hypothesis relating the weights and biases.\n\n`EntropySupport.node_budget` additionally quantifies over real q,b,C.\nThe hypotheses are q>=0, C>0, the exact reconstruction identity\n\n    sum_g w_g u_g v_g = q b,\n\nand the reconstruction-norm bound\n\n    sum_g w_g u_g^2 <= C q.\n\nIt proves `q b^2/C <= sum_g w_g v_g^2`, including q=0.\n\n`EntropySupport.budget_transfer` has arbitrary finite types H and G,\nwith w,u,v indexed by H and G and q,b,C indexed by H. It assumes\nthe preceding hypotheses separately for every h and sums the node\nconclusions. There is no bound on either finite cardinality and no\npositivity assumption on u,v,b.\n\nFor the concrete application, H is the finite set of positive-Q local\nnodes, G can be the finite set of all permutation/global fresh nodes,\nand w(h,g) is rho_g if node g is owned by h and zero otherwise.\nThe function v(h,g) is the bias conditioned on the full global prefix.\nThe function u(h,g) is the degree-(a_h-1) discrete reproducing kernel\nevaluated at the current algorithm's rank. The rank-pooling identity\nand polynomial reproducing identity give the exact reconstruction.\nThe freshness probability is at most one, so the kernel's squared\nnorm gives the norm bound with C=C(a_h,m). These identifications are\nproved in the mathematical report, not encoded as decision trees\nor assumed as independence in the formal source.\n\n`EntropySupport.entropy_budget_transfer` additionally quantifies over\nreal p,D and real costs indexed by H. It assumes 0<p<1,\n`p(1-p) cost(h) <= q(h)b(h)^2`, and a total global energy at most D/2.\nIt proves `sum_h cost(h)/C(h) <= D/(2p(1-p))`.\nFor the report, cost(h)=Q(h)d(r_h||p) and D=D(Q||mu).\n\nThe source does not define Bernoulli laws, relative entropy, query trees,\npermutations, conditional expectations, polynomial degrees, or the\nconstant C(a,m). It does not formally prove that legal algorithms\nsupply its reconstruction and norm hypotheses, nor prove either\npercolation theorem. Those are not conclusions of this Lean claim.\nThe universal mathematical entropy proof and interpolation application\nremain the explicit proofs in the report, requiring independent review.\n"
+  },
+  "subject": {
+    "content_hash": "4e36b66b75a816db19971d4a8c71b5b47c4b675bc1cc097ea3b5197ccd6e3954",
+    "kind": "claim",
+    "subject_id": "C_ENTROPY_POOLING"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

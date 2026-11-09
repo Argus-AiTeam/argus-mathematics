@@ -1,0 +1,15 @@
+'balanced_manuscript_statement' depends on axioms: [propext, Classical.choice, Quot.sound]
+def OAI.Balanced.MainResult : Prop :=
+∃ q₀, ∀ (q : ℕ), q₀ ≤ q → Nat.Prime q → OAI.Balanced.BalancedCounterexample q
+def OAI.Balanced.BalancedCounterexample : ℕ → Prop :=
+fun q => ∃ H, H.Intersecting ∧ H.Nonisolated ∧ H.HasCoverNumber (q + 1)
+def OAI.Balanced.PartiteHypergraph.Covers : {r n : ℕ} →
+  OAI.Balanced.PartiteHypergraph r n → Finset (OAI.Balanced.PartiteHypergraph.Vertex r n) → Prop :=
+fun {r n} H C => ∀ e ∈ H.edges, ∃ i, (i, e i) ∈ C
+def OAI.Balanced.PartiteHypergraph.Intersecting : {r n : ℕ} → OAI.Balanced.PartiteHypergraph r n → Prop :=
+fun {r n} H => H.edges.Nonempty ∧ ∀ e ∈ H.edges, ∀ f ∈ H.edges, ∃ i, e i = f i
+def OAI.Balanced.PartiteHypergraph.Nonisolated : {r n : ℕ} → OAI.Balanced.PartiteHypergraph r n → Prop :=
+fun {r n} H => ∀ (i : Fin r) (v : Fin n), ∃ e ∈ H.edges, e i = v
+def OAI.Balanced.PartiteHypergraph.HasCoverNumber : {r n : ℕ} → OAI.Balanced.PartiteHypergraph r n → ℕ → Prop :=
+fun {r n} H k =>
+  (∃ C, H.Covers C ∧ C.card = k) ∧ ∀ (C : Finset (OAI.Balanced.PartiteHypergraph.Vertex r n)), H.Covers C → k ≤ C.card

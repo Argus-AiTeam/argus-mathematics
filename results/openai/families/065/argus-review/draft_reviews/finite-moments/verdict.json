@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "unit_id": "finite-moments",
+  "task_kind": "old_draft_review",
+  "family": "065",
+  "research_target_level": "exploratory",
+  "review_result_novelty_status": "not_applicable",
+  "novelty_status": "not_applicable",
+  "final_acceptance": "pending_native_independent_review",
+  "assessment_role": "Engineer evidence worker, not independent Reviewer",
+  "assessment_state": "unit_evidence_and_assessment_complete_pending_independent_review",
+  "acceptance_authority": "Host-invoked native independent Reviewer",
+  "project_root": "campaigns/9200065",
+  "old_workspace": "campaigns/9000065",
+  "old_inputs_read_only": true,
+  "report": "research/draft_reviews/finite-moments/report.md",
+  "provenance": {
+    "source_revision": "4eaee87548250b2682affda7d05d947c05554bae",
+    "record": "replay/provenance_before.json",
+    "preservation_record": "replay/preservation_check.json",
+    "all_26_inventory_byte_hashes_unchanged": true,
+    "all_26_mathematically_reviewed_by_this_unit": false,
+    "source_sha256": "b4cb6a378265f41042862a298836d0e5639b7a8e8bc5d192b0d4b6f57a3bdd1f",
+    "fidelity_sha256": "1c5dd38b2fce621ff14a5f8b0ac5f9a834eec1c57076b78e6b3224fba622819a",
+    "old_source_copies_byte_equal": true,
+    "old_fidelity_copies_byte_equal": true,
+    "copied_source_and_note_equal_successful_archive": true,
+    "manuscript_localization_sha256": "43700b503d66994d32306311f50f9f78ea32b51c580d6824d15f9675691dbd52",
+    "manuscript_reference_manifest_match": true
+  },
+  "historical_claim": {
+    "claim_id": "C_LOC_JET",
+    "versions_reviewed": [1, 2, 3],
+    "natural_statement_unchanged": true,
+    "natural_statement": "For every commutative ring, every finite nilpotence order N, t,u,nu with t*u=1 and nu^N=0, u times the finite geometric series in -nu*u inverts t+nu. Over every commutative scalar ring, finite joint linear moments commute with every subsequent linear map, and arbitrary finite multilinear contraction distributes over all finite scalar-weighted input sums, with no bound on the number of flags or truncation orders. This is the even-class algebraic core, not a formalization of virtual localization.",
+    "attribution": "Existing Argus Family 065 formal source using standard commutative algebra and Mathlib finite-sum/multilinear identities.",
+    "old_claim_novelty_status": "known_algebra_no_verified_novelty",
+    "classification": "formal_reproduction_of_standard_algebra",
+    "history": [
+      {
+        "version": 1,
+        "formal_source_present": false,
+        "compiler_outcome": "none_for_this_version",
+        "mathematical_support": "natural_statement_only"
+      },
+      {
+        "version": 2,
+        "certificate": "lean_evidence/certificates/C_LOC_JET-434d7c41b97fb184.json",
+        "claim_content_hash": "d739b8a9f550ef8e9f7bfcad36ed9e93e6423b8eb32d6665512349312d7d0586",
+        "source_sha256": "46f0d2dde16c980ddf1ef8626aa1d3a36c32df43a27108d17a57592d84d6231a",
+        "compile_exit_code": 1,
+        "status": "type_error",
+        "duration_ms": 6349,
+        "proof_holes": [],
+        "audit_exit_code": null,
+        "decisive_gap": "simp [mul_pow, hν] leaves the unsolved goal (-(ν * u)) ^ N = 0.",
+        "disposition": "failed_proof_script_not_a_refutation_of_the_statement"
+      },
+      {
+        "version": 3,
+        "certificate": "lean_evidence/certificates/C_LOC_JET-eb1805af26b62351.json",
+        "claim_content_hash": "5f2031c7e3cbecbcb58a483d3d0920d92de2da6128f971963293805357d0765d",
+        "source_sha256": "b4cb6a378265f41042862a298836d0e5639b7a8e8bc5d192b0d4b6f57a3bdd1f",
+        "proof_change_only": "simp only [mul_pow, hν, mul_zero, zero_mul]",
+        "compile_exit_code": 0,
+        "status": "success",
+        "duration_ms": 15798,
+        "proof_holes": [],
+        "audit_exit_code": 0,
+        "disposition": "successful_restricted_algebra_proof_not_geometric_acceptance"
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "id": "finite_geometric_remainder",
+      "statement": "(1-x) * sum_{0<=j<N} x^j = 1-x^N.",
+      "hypotheses": "Every commutative ring A, every x in A, every natural N including zero.",
+      "argument": "Induction on N, sum_range_succ and a ring identity.",
+      "mathematical_support": "supported_in_exact_formal_scope_by_inspected_proof_and_fresh_compilation",
+      "open_status": "no_specific_algebraic_gap_found_independent_statement_fidelity_review_pending",
+      "old_claim_novelty_status": "known_algebra_no_verified_novelty"
+    },
+    {
+      "id": "nilpotent_resolvent_inverse",
+      "statement": "For G=u*sum_{0<=j<N}(-nu*u)^j, (t+nu)*G=1.",
+      "hypotheses": "Every commutative ring A; t,u,nu in A; N in Nat; t*u=1; nu^N=0.",
+      "argument": "Commutativity gives (-nu*u)^N=0; apply the finite remainder identity after (t+nu)*u=1-(-nu*u).",
+      "edge_case": "N=0 forces 1=0 through nu^0=0; impossible in a nontrivial ring and valid in the trivial ring. No Nontrivial hypothesis is present.",
+      "mathematical_support": "supported_in_exact_formal_scope_by_inspected_proof_and_fresh_compilation",
+      "open_status": "geometric_nilpotence_and_invertibility_are_external_inputs_not_proved_here",
+      "old_claim_novelty_status": "known_algebra_no_verified_novelty"
+    },
+    {
+      "id": "nilpotent_resolvent_unique",
+      "statement": "With G as above, every v satisfying (t+nu)*v=1 equals G.",
+      "hypotheses": "The inverse theorem's hypotheses plus v in A and (t+nu)*v=1.",
+      "argument": "Multiply by the verified inverse and rearrange in a commutative ring.",
+      "mathematical_support": "supported_in_exact_formal_scope_by_inspected_proof_and_fresh_compilation",
+      "open_status": "no_specific_algebraic_gap_found_not_a_noncommutative_one_sided_inverse_theorem",
+      "old_claim_novelty_status": "known_algebra_no_verified_novelty"
+    },
+    {
+      "id": "joint_moment_naturality",
+      "statement": "L(sum_j c_j smul P(h_j)) = sum_j c_j smul (L compose P)(h_j).",
+      "hypotheses": "Every commutative K; additive commutative groups V,W,U with K-module structures; finite J; linear P:V->W and L:W->U; c:J->K; h:J->V.",
+      "argument": "Preservation of finite sums and scalar multiplication.",
+      "edge_case": "Empty J is allowed and gives L(0)=0. J may encode an entire tuple of flag orders.",
+      "mathematical_support": "supported_in_exact_formal_scope_by_inspected_proof_and_fresh_compilation",
+      "open_status": "does_not_construct_a_geometric_pushforward_or_prove_projection_formula_or_virtual_gluing",
+      "old_claim_novelty_status": "known_algebra_no_verified_novelty"
+    },
+    {
+      "id": "joint_dressing_naturality",
+      "statement": "L(sum_j D_j(h_j)) = sum_j (L compose D_j)(h_j).",
+      "hypotheses": "Same commutative ring/module/finite-J setting; linear L:W->U, family D_j:V->W of linear maps, h:J->V.",
+      "argument": "Preservation of finite sums; h_j can already be joint data.",
+      "mathematical_support": "supported_in_exact_formal_scope_by_inspected_proof_and_fresh_compilation",
+      "open_status": "joint_data_are_preserved_not_replaced_by_marginal_products_geometric_identification_remains_external",
+      "old_claim_novelty_status": "known_algebra_no_verified_novelty"
+    },
+    {
+      "id": "all_flag_contraction",
+      "statement": "F(i |-> sum_j c_ij smul h_ij) = sum_{q:product_i J_i} (product_i c_iq_i) smul F(i |-> h_iq_i).",
+      "hypotheses": "Every commutative K; finite I with decidable equality; additive commutative groups V_i,W with K-module structures; finite J_i; multilinear F; arbitrary scalar and vector families.",
+      "argument": "MultilinearMap.map_sum and map_smul_univ.",
+      "edge_case": "Empty I and empty J_i are included. There is no fixed bound on finite flags or orders and no infinite-sum assertion.",
+      "mathematical_support": "supported_in_exact_formal_scope_by_inspected_proof_and_fresh_compilation",
+      "open_status": "categorical_super_signs_and_actual_geometric_contraction_maps_not_encoded",
+      "old_claim_novelty_status": "known_algebra_no_verified_novelty"
+    },
+    {
+      "id": "three_dimensional_nilpotent_matrix",
+      "statement": "[[t,1,0],[0,t,1],[0,0,t]] times [[1/t,-1/t^2,1/t^3],[0,1/t,-1/t^2],[0,0,1/t]] is identity_3.",
+      "hypotheses": "Exact historical payload over QQ(t), with t invertible.",
+      "mathematical_support": "sole_live_typed_jacobian_run_passed_and_independent_exact_product_and_archive_comparisons_passed",
+      "open_status": "bounded_example_only_not_a_universal_proof_and_not_a_direct_CommRing_instance_of_the_full_matrix_ring",
+      "classification": "reproduction_of_old_bounded_example",
+      "attribution": "Old Argus Jacobian payload; fresh execution and independent decoding by this evidence worker.",
+      "old_claim_novelty_status": "known_nilpotent_resolvent_example_no_verified_novelty"
+    },
+    {
+      "id": "shared_P2_joint_moment_identity",
+      "statement": "For C=c0+c1*h+c2*h^2, a10=-lambda/2, a20=-lambda/3, nu1=-h/2, nu2=-h/3, the h^2 coefficient of the product of flag denominators equals its full joint Taylor/moment reconstruction.",
+      "hypotheses": "X=P2 over a point; h^3=0; exact rational-function coefficients in lambda,s,t,c0,c1,c2; each Taylor order 0,1,2.",
+      "mathematical_support": "old_default_checker_recomputed_zero_symbolic_remainder_and_matched_expected_certificate",
+      "open_status": "supported_for_this_exact_finite_example_not_a_proof_of_geometric_gluing",
+      "classification": "bounded_symbolic_reproduction",
+      "old_claim_novelty_status": "known_joint_moment_algebra_no_verified_novelty"
+    },
+    {
+      "id": "joint_18_versus_marginal_6",
+      "statement": "At C=1, lambda=1, s=t=0, the shared-P2 joint push is 18 while the product of separate pushes is 6.",
+      "hypotheses": "Same shared P2 example, multiplicities 2 and 3, coefficient push integral h^2=1.",
+      "mathematical_support": "exact_replay_and_inspected_coefficient_argument_support_the_numeric_values",
+      "open_status": "not_a_manuscript_counterexample_the_manuscript_explicitly_retains_joint_moments",
+      "classification": "diagnostic_against_a_hypothetical_marginal_replacement_not_a_literal_manuscript_attack",
+      "old_claim_novelty_status": "no_verified_novelty"
+    },
+    {
+      "id": "ambient_degree_one_geometric_inputs",
+      "statement": "The P2 degree-one two-point evaluation is Bl_Delta(P2 x P2), with psi_2=p1-p2 and fundamental-class birational pushforward.",
+      "hypotheses": "W=P2, degree one, two markings, the stated equivariant line convention.",
+      "mathematical_support": "coherent_old_report_prose_inspected_including_universal_line_cotangent_plus_collision_divisor_formula_not_derived_by_code",
+      "open_status": "geometric_interpretation_requires_independent_review_not_kernel_or_computationally_certified",
+      "classification": "input_to_the_bounded_coefficient_calculation",
+      "old_claim_novelty_status": "standard_geometry_no_verified_novelty"
+    },
+    {
+      "id": "fixed_degree_one_geometric_inputs",
+      "statement": "M_0,2(P1,1)=P1 x P1, psi_2=h1-h2 and inverse Euler twist lambda^-2.",
+      "hypotheses": "B=point, E=C2, X=P1, normal O(1) with scalar weight lambda, degree one.",
+      "mathematical_support": "matches_old_report_and_checker_formulas_twist_consistent_with_two_sections_and_zero_H1_not_moduli_derived_by_code",
+      "open_status": "geometric_input_assessment_pending_independent_review_not_formalized",
+      "classification": "input_to_the_bounded_coefficient_calculation",
+      "old_claim_novelty_status": "standard_geometry_no_verified_novelty"
+    },
+    {
+      "id": "degree_one_leg_euler_input",
+      "statement": "The twice-pointed m=1 moving Euler factor is lambda^2*(lambda+h), with a_X=lambda+h, a_B=-lambda-h, e_B=lambda^2, e_X=lambda+h.",
+      "hypotheses": "B=point, E=C2, W=P2, X=P1, h^2=0, lambda inverted.",
+      "mathematical_support": "consistent_specialization_of_old_report_equation_1a_used_as_input_to_independent_end_and_bridge_assembly",
+      "open_status": "no_all_multiplicity_derivation_is_provided_by_this_test_general_Euler_assessment_is_another_unit",
+      "classification": "bounded_geometric_input_and_formula_specialization",
+      "old_claim_novelty_status": "no_verified_novelty"
+    },
+    {
+      "id": "degree_one_common_R_translation_bridge",
+      "statement": "For label (0,1), u=(lambda^-2,-lambda^-2,0), r is regular at z=0, r(-z)^*+r(z)=0, x=z*r*1, and its regular two-variable bridge agrees with direct leg-Euler gluing; end residuals also vanish.",
+      "hypotheses": "Exactly W=P2, B=point, E=C2, X=P1, fixed basis (1_B,1_X,h_X), the old ambient/fixed moduli, psi and Euler inputs, lambda invertible; first Novikov coefficient only.",
+      "mathematical_support": "conditional_exact_symbolic_replay_passed_with_zero_matrix_residuals_and_expected_certificate_equality",
+      "open_status": "does_not_derive_its_geometric_inputs_or_establish_all_degree_nonlinear_symplecticity_common_R_or_all_genus_ancestor_factorization",
+      "classification": "reproduction_of_one_admissible_coefficient",
+      "attribution": "Existing Argus verify.py formulas and old report's geometric input explanation.",
+      "old_claim_novelty_status": "no_verified_novelty"
+    },
+    {
+      "id": "manuscript_joint_moment_scope",
+      "statement": "The 18-versus-6 example does not refute 04-localization.tex because that text explicitly uses joint moments and independent dummy scalars.",
+      "hypotheses": "The exact manifest-matching manuscript revision and lines 218-241, especially 236-237.",
+      "mathematical_support": "direct_primary_text_comparison_and_inspected_old_report_disclaimer",
+      "open_status": "no_manuscript_error_established_no_general_manuscript_acceptance_implied",
+      "classification": "scope_assessment_not_new_mathematics",
+      "old_claim_novelty_status": "not_applicable"
+    }
+  ],
+  "formal_scope_exclusions": [
+    "No grading, super permutation or Koszul signs.",
+    "No actual geometric nilpotence theorem or inverse-existence theorem for a cohomology class.",
+    "No factorial or dummy-derivative definitions for general rational operator kernels.",
+    "No Gromov-Witten moduli, obstruction theory, virtual classes, pullbacks, projection formula or compatible gluing.",
+    "No S, common symplectic R, ancestors, quantization, completions or integral-label theorem.",
+    "No all-degree/all-genus geometry, Virasoro transfer or complete-intersection sewing.",
+    "Finite types are unbounded in size but infinite sums and convergence are not asserted."
+  ],
+  "replays": {
+    "finite_default": {
+      "interpreter": "$WORKSPACE/argus-latest/.venv/bin/python",
+      "python_version": "3.13.5",
+      "python_build": "Anaconda, Jun 12 2025 16:09:02, GCC 11.2.0",
+      "sympy_version": "1.14.0",
+      "mpmath_version_pin": "1.3.0",
+      "dependency_location": "replay/dependencies",
+      "missing_dependency_preflight_exit_code": 1,
+      "dependency_install_exit_code": 0,
+      "default_checker_invocations": 1,
+      "write_certificate_used": false,
+      "exit_code": 0,
+      "duration_ms": 2096,
+      "timed_out": false,
+      "stderr_bytes": 0,
+      "status": "replay/finite/default.status.json",
+      "stdout": "replay/finite/default.stdout.log",
+      "stderr": "replay/finite/default.stderr.log",
+      "toolchain": "replay/finite/toolchain.json",
+      "expected_result_copy": "replay/finite/archived_exact_certificate.json",
+      "expected_result_copy_is_fresh_stdout": false
+    },
+    "lean": {
+      "interpreter": "$WORKSPACE/argus-latest/.venv/bin/python",
+      "workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+      "lean_version": "4.31.0",
+      "lean_commit": "68218e876d2a38b1985b8590fff244a83c321783",
+      "lake_version": "5.0.0-src+68218e8",
+      "elan_version": "4.2.3 (b6cec7e10 2026-06-08)",
+      "compile_exit_code": 0,
+      "proof_holes": [],
+      "audit_exit_code": 0,
+      "audit_stdout": "",
+      "audit_stderr": "",
+      "compiler_and_audit_duration_ms": 15642,
+      "native_command_duration_ms": 15780,
+      "per_phase_timeout_seconds": 45,
+      "warning": "Only unnecessarySeqFocus at line 23:58.",
+      "source": "replay/lean_evidence/Main.lean",
+      "fidelity": "replay/lean_evidence/statement_fidelity.md",
+      "historical_submitted_source": "replay/Main.lean",
+      "historical_submitted_fidelity": "replay/statement_fidelity.md",
+      "redundant_submitted_source_removed": true,
+      "recorded_evidence_gate_correction": "The native result names only the canonical compiled source. The redundant outer working copy triggered lean_result_missing and was removed without modifying or rerunning the successful proof.",
+      "status": "replay/lean_verification.status.json",
+      "native_result": "replay/lean_verification.stdout.json",
+      "compile_log": "replay/lean_evidence/compile.log",
+      "binding_record": "replay/lean_binding.json",
+      "immutable_certificate": "research/draft_reviews/finite-moments/replay/lean_evidence/certificates/C_REPLAY_ALG-7e08dff9817827b1.json",
+      "evidence_id": "lean-C_REPLAY_ALG-5ab078207bd5",
+      "claim_id": "C_REPLAY_ALG",
+      "claim_content_hash": "da696744b3693cb44465be8b4e90af4f4d4297d816d7b234ecbab2631c8c94e6",
+      "native_statement_fidelity_verified_by": null,
+      "human_fidelity_assessment": "supported_only_for_exact_even_algebra_independent_review_pending",
+      "axiom_audit_scope": "No axioms introduced by the source; not an enumeration of every imported theorem's foundational dependencies."
+    },
+    "jacobian": {
+      "adapter_interpreter": "$WORKSPACE/argus-live-update/.venv/bin/python",
+      "operation_id": "matrix.symbolic.multiply.compute",
+      "operation_contract_inspections": 1,
+      "live_operation_runs": 1,
+      "server_version": "0.14.0",
+      "protocol_version": "2025-11-25",
+      "payload": "replay/jacobian/payload.json",
+      "payload_sha256": "1fd00d3b63f48e67ac76ba1715cf623947118ed284af37376ba15a8bdd0703c4",
+      "payload_byte_identical_to_old": true,
+      "raw_typed_output": "replay/jacobian/run.stdout.json",
+      "status": "replay/jacobian/adapter_status.json",
+      "contract": "replay/jacobian/contract.stdout.json",
+      "independent_comparison": "replay/jacobian/independent_comparison.json",
+      "adapter_exit_code": 0,
+      "adapter_timeout_seconds": 75,
+      "outer_timeout_seconds": 110,
+      "timed_out": false,
+      "structured_error": null,
+      "stderr_bytes": 0,
+      "adapter_duration_ms": 3250,
+      "server_runtime_ms": 22,
+      "typed_product": "identity_3",
+      "independent_product_comparison": "all_entries_zero_residual",
+      "identity_comparison": "all_entries_zero_residual",
+      "archived_mathematical_output_comparison": "all_entries_zero_residual_and_typed_output_equal",
+      "retry_performed": false
+    }
+  },
+  "ledger_changes": {
+    "native_registration_only": true,
+    "added_claim": "C_REPLAY_ALG",
+    "added_claim_version": 1,
+    "context": "CTX_REVIEW",
+    "natural_statement_record": "replay/auxiliary_claim.json",
+    "formal_file_registered": "research/draft_reviews/finite-moments/replay/Main.lean",
+    "formal_file_registered_is_historical_working_copy": true,
+    "retained_certified_source": "research/draft_reviews/finite-moments/replay/lean_evidence/Main.lean",
+    "added_mechanical_evidence": "lean-C_REPLAY_ALG-5ab078207bd5",
+    "mechanical_evidence_subject": "C_REPLAY_ALG",
+    "judgements_added_by_this_worker": 0,
+    "C_REVIEW_unchanged_in_before_after_comparison": true,
+    "old_certificate_attached_mechanically_to_C_REVIEW": false,
+    "fresh_certificate_attached_mechanically_to_C_REVIEW": false,
+    "self_acceptance_performed": false,
+    "index_or_graph_modified": false
+  },
+  "official_checks": {
+    "interpreter": "$WORKSPACE/argus-latest/.venv/bin/python",
+    "project_root": "campaigns/9200065",
+    "math_state_module": "argus_skill.verticals.math.math_state",
+    "proof_graph_module": "argus_skill.verticals.math.proof_graph_check",
+    "subcommand": "check",
+    "after_registration": {
+      "math_state_exit_code": 0,
+      "proof_graph_check_exit_code": 0,
+      "evidence_directory": "replay/checks/post_registration"
+    },
+    "after_compiler_evidence": {
+      "math_state_exit_code": 0,
+      "proof_graph_check_exit_code": 0,
+      "evidence_directory": "replay/checks/post_lean"
+    },
+    "final": {
+      "math_state_exit_code": 0,
+      "proof_graph_check_exit_code": 0,
+      "math_state_ok": true,
+      "math_state_issues": [],
+      "graph_node_count": 7,
+      "all_graph_assessment_nodes_still_open_and_unconfirmed": true,
+      "evidence_directory": "replay/checks/final"
+    },
+    "meaning": "Structural and evidence-binding checks, not independent mathematical acceptance."
+  },
+  "coverage": {
+    "supporting_artifacts_content_inspected": [
+      "Main.lean",
+      "lean_evidence/Main.lean",
+      "statement_fidelity.md",
+      "lean_evidence/statement_fidelity.md",
+      "lean_evidence/certificates/C_LOC_JET-434d7c41b97fb184.json",
+      "lean_evidence/certificates/C_LOC_JET-eb1805af26b62351.json",
+      "lean_evidence/lean_check.json",
+      "lean_evidence/compile.log",
+      "lean_submission.json",
+      "lean_verification.json",
+      "exact_certificate.json",
+      "jacobian_payload.json",
+      "jacobian_output.json",
+      "jacobian_status.json"
+    ],
+    "additional_content_inspected": [
+      "old family_orbit_localization/verify.py before execution",
+      "old family_orbit_localization/report.md",
+      "old MATH_STATE.json C_LOC_JET versions, evidence and R_LOC_MOMENT_CORE",
+      "manifest-matching manuscript 04-localization.tex finite-moment definitions"
+    ],
+    "duplicate_receipts_counted_as_separate_results": false,
+    "historical_failed_certificate_treated_as_success": false,
+    "historical_reviewer_judgement_promoted_to_current_acceptance": false,
+    "family_review_completed_by_this_unit": false
+  },
+  "remaining_obligations": [
+    {
+      "id": "independent_fidelity_and_unit_review",
+      "status": "pending",
+      "obligation": "Native Host-invoked independent Reviewer must assess the unit's statement fidelity, coverage and bounded conclusions; Engineer cannot self-accept."
+    },
+    {
+      "id": "geometric_moment_realization",
+      "status": "not_discharged_by_this_algebra_certificate",
+      "obligation": "Identify actual joint pushed correspondences, geometric nilpotence and compatible projection/virtual-gluing maps before applying the finite algebra to geometry."
+    },
+    {
+      "id": "super_sign_realization",
+      "status": "outside_formal_source",
+      "obligation": "Supply categorical contraction and Koszul-sign compatibility in full cohomology; ordinary commutative module algebra does not encode it."
+    },
+    {
+      "id": "degree_one_geometric_interpretation",
+      "status": "prose_basis_assessed_pending_independent_review",
+      "obligation": "Distinguish the old report's blowup, cotangent, twist and moving-Euler inputs from the exact symbolic identities that assume them."
+    },
+    {
+      "id": "all_degree_and_all_genus_conclusions",
+      "status": "other_indexed_units_not_certified_here",
+      "obligation": "The general common-R theorem, arbitrary-E/completion extension and downstream Virasoro/sewing conclusions require their separate existing-draft assessments, not extrapolation from this coefficient."
+    }
+  ]
+}

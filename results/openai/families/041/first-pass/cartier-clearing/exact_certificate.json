@@ -1,0 +1,88 @@
+{
+  "claim": "C_ADJOINT",
+  "manuscript_claim": "bc:clearing-test",
+  "result_class": "verification_theorem",
+  "proof_kind": "parameter_uniform_formal_proof",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "theorem": {
+    "quantifiers": "Every prime p, every finite p-basis field K of characteristic p, every derivative-stable coefficient subring A contained in an arbitrary subring R of K, every finite family of ordinary derivative words, and every rational scalar s in K.",
+    "hypotheses": [
+      "The p-basis monomials span K over p-th powers, the coordinate derivations have their prescribed coordinate values, and the additive Cartier map extracts the top p-basis coefficient.",
+      "A is closed under the coordinate derivatives; c_j belongs to A; g and t_j belong to R.",
+      "psi is an additive map R to R and its inclusion into K equals Cartier(s*r) for every r in R.",
+      "s=sum_j c_j partial_word_j(g*t_j*s) in K."
+    ],
+    "explicit_witness": "T=sum_j t_j adjoint_word_j(c_j), with each derivative transferred onto the coefficient with a minus sign and reversed order.",
+    "conclusion": "T belongs to R and psi(g*T)=psi(1). For every ideal I not containing psi(1), psi(gR) is not contained in I.",
+    "not_assumed": [
+      "s is regular",
+      "R is normal, regular, complete, or unramified",
+      "the normalization or branch degree is less than p",
+      "the desired unit test",
+      "Cartier annihilates derivatives"
+    ],
+    "proved_not_assumed": [
+      "Cartier annihilates every coordinate derivative on the entire p-basis field.",
+      "Integration by parts for every finite derivative word.",
+      "The adjoint coefficient remains in A.",
+      "The explicit witness gives exactly psi(1), not just an unspecified nonzero image."
+    ]
+  },
+  "formal_source": "Main.lean",
+  "statement_fidelity": "statement_fidelity.md",
+  "formal_certificate": "certificates/C_ADJOINT-f51e1ae321822ae4.json",
+  "formal_declarations": [
+    "CartierClearing.cartier_clearing",
+    "CartierClearing.cartier_clearing_noncontainment"
+  ],
+  "lean_version": "4.31.0",
+  "official_compiler": {
+    "exit_code": 0,
+    "proof_holes": [],
+    "audit_exit_code": 0
+  },
+  "jacobian": {
+    "operation_id": "polynomial_field.scalar.directional_derivative.compute",
+    "contract": "jacobian_contract.json",
+    "payload": "jacobian_payload.json",
+    "typed_output": "jacobian_result.json",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "adapter_exit_code": 0,
+    "structured_error": null,
+    "timed_out": false,
+    "mathematical_scope": "A single QQ coefficient derivative, not a Cartier-field or completion solver and not proof of the theorem."
+  },
+  "supplemental_experiments": {
+    "description": "Deterministic exact Laurent-polynomial checks, complementary Cartier extraction, and tame ramified trace checks. These are diagnostics, not the parameter-uniform proof.",
+    "primes": [2, 3, 5, 7, 11],
+    "word_length_max": 3,
+    "tame_trace_exponent_range": "For each tested p and 2 <= e < p, all integer exponents from -2*p*e through 2*p*e.",
+    "hypothesis_controls": [
+      "For every prime p, s=u^(p-1), g=u^p and psi(r)=Cartier(s*r) give psi(1)=1 and psi(gR) contained in (u).",
+      "The nonregular order-zero coefficient u^(-p) produces a scalar identity but violates coefficient regularity.",
+      "The p-th Hasse derivative produces a scalar identity because binomial(2*p-1,p)=1 modulo p, but it is not an allowed ordinary derivative of retained order below p."
+    ],
+    "controls_refute_manuscript": false
+  },
+  "application": {
+    "witness": "T=sum_(j,alpha) t_j*(-1)^|alpha|*partial^alpha(c_(j,alpha))",
+    "unit_value": "psi_h(g*T)=delta in k^*",
+    "regular_at": "Every closed point b of each specified retained chart",
+    "geometric_inputs_not_formalized": [
+      "The characteristic-zero differential identity and its retained reduction",
+      "Relative geometric duality, the horizontal de Rham lift, and the rational Cartier formula",
+      "Availability of the retained charts and arithmetic reductions"
+    ],
+    "other_manuscript_claims_certified": []
+  },
+  "review": {
+    "independent_review": "required_pending",
+    "statement_fidelity_human_approval": "pending",
+    "novelty_status": "unestablished",
+    "significance_status": "not_yet_independently_assessed",
+    "campaign_completion_claimed": false,
+    "false_manuscript_assertions_identified": []
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "unit": "finite-adaptive-transfer",
+  "review_role": "Engineer",
+  "engineer_verdict": "partial_support_with_explicit_report_ledger_mismatch",
+  "acceptance_status": "pending_host_invoked_independent_reviewer",
+  "family_completion_claimed": false,
+  "novelty_status": "not_established",
+  "source": {
+    "old_root": "campaigns/9000012",
+    "report": "research/adaptive-cut-transfer/report.md, Theorem 1, equations (2)-(12)",
+    "ledger": "research/MATH_STATE.json, C_ADAPTIVE_TRANSFER v1 and five L_CUT_* v1",
+    "snapshot_version": "2026-11-06T10:20Z",
+    "existing_manifest_digest_match": true,
+    "attribution": "Old Argus proposed quantitative refinement of the unpublished manuscript sampling argument; the mismatched equation (3) belongs to Argus, not the manuscript."
+  },
+  "hypotheses": [
+    "M>=2 independent finite-valued sites, not necessarily identically distributed",
+    "Real symmetric endpoint E and nonnegative symmetric H>=abs(E), deterministically zero diagonal",
+    "Every-type conditional first-row bound C0",
+    "Integrated both-endpoint squared-row bound q, not a uniform conditional second moment",
+    "Integral error <=beta for all separate real single-site tests in [-1,1], including zero tests",
+    "1<=m<M integer, d>C0, 0<delta<1, p=Mq/(d-C0)^2<1; a,L,b,N as old definitions (2)"
+  ],
+  "statement_assessments": [
+    {
+      "claim": "C_ADAPTIVE_TRANSFER",
+      "version": 1,
+      "variant": "ledger_expectation",
+      "statement": "E[C]<=b+a+2sqrt(Mq/m)+2md/M+sqrt((C0^2+q)(p+delta))",
+      "assessment": "supported_by_prose_derivation",
+      "mechanically_formalized": false
+    },
+    {
+      "claim": "C_ADAPTIVE_TRANSFER",
+      "version": 1,
+      "variant": "report_equation_3",
+      "statement": "E[C]<=b+a+2sqrt(Mq/m)+(2md/M)*sqrt((C0^2+q)(p+delta))",
+      "assessment": "not_established_by_given_argument_not_refuted_here",
+      "invalid_step": "The good-event deletion contribution and bad-event absolute-mass contribution add; the proof supplies no multiplication.",
+      "concrete_obligation": "Give an independent valid derivation of the literal product formula under the same hypotheses, or an exact violating model; alternatively correct the source to its existing additive ledger formula.",
+      "counterexample_claimed": false,
+      "globally_ordered_against_additive_variant": false
+    },
+    {
+      "claim": "C_ADAPTIVE_TRANSFER",
+      "version": 1,
+      "variant": "report_equation_4",
+      "statement": "For every t>0, P(C>b+a+2sqrt(Mt/m)+2md/M)<=p+q/t+delta",
+      "assessment": "supported_by_prose_derivation",
+      "mechanically_formalized": false
+    }
+  ],
+  "proof_obligations": [
+    {"claim": "L_CUT_DEGREE", "version": 1, "assessment": "supported", "reason": "Condition row variance, average before using integrated q, one row union, and Jensen; no row independence or conditional square upgrade."},
+    {"claim": "L_CUT_SKELETON", "version": 1, "assessment": "supported", "reason": "Exact without-replacement variance, deterministic optimizer, sign loss and endpoint deletion give 2sqrt(MQ/m)+2md/M."},
+    {"claim": "L_CUT_FIXED_MEAN", "version": 1, "assessment": "supported", "reason": "Freeze a deterministic subset/sign/type assignment; H3 with zero tests and integrated column variance gives beta+sqrt(q)."},
+    {"claim": "L_CUT_EXTENSION", "version": 1, "assessment": "supported", "reason": "Arbitrary good endpoints, capped infimum extension, b+a=L-1, and direct bounded-differences mgf proof."},
+    {"claim": "L_CUT_UNION", "version": 1, "assessment": "supported_with_additive_expectation", "reason": "Union only N extension tails after integrating types; count full-degree failure once, retain expected square mass."}
+  ],
+  "reused_replays": [
+    "research/draft_reviews/finite-cut-core/replay/lean_check.json",
+    "research/draft_reviews/finite-models-shortcuts/finite_replay/comparison.json"
+  ],
+  "evidence_boundary": {
+    "proof_kind": "Engineer reading of universal prose argument",
+    "fresh_probability_formalization": false,
+    "finite_replays_prove_universal_probability": false,
+    "domain_external_theorems_relied_on": [],
+    "arithmetic_inputs_established": false,
+    "joint_dickman_established": false
+  }
+}

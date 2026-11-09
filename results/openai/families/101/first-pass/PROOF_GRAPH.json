@@ -1,0 +1,157 @@
+{
+  "goal": "C9000101",
+  "routes": [
+    {
+      "name": "Full manuscript verification (all non-selected analytic obligations remain open)",
+      "status": "parked",
+      "evidence": "OBJECTIVE.md"
+    },
+    {
+      "name": "Commutator: arbitrary-dimensional square completion and orthogonal reduction",
+      "status": "current",
+      "evidence": "research/openai_manuscript/A-sharp-entropy-bound-and-the-simplex-inequality-for-isotropic-constants-October-5-2026/build/manuscript/matrix.tex"
+    }
+  ],
+  "nodes": {
+    "C9000101": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 101 (The sharp simplex conjecture for isotropic constants.; papers: A sharp entropy bound and the simplex inequality for isotropic constants; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C9000101_ENTROPY",
+        "C9000101_GEOMETRY"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C9000101_ENTROPY": {
+      "statement": "intro:entropy: entropy inequality and exponential-product equality classification for all full-dimensional log-concave densities.",
+      "status": "open",
+      "depends_on": ["C9000101_SMOOTH", "C9000101_APPROX", "C9000101_RIGIDITY"],
+      "reviewer_confirmed": false,
+      "source": "introduction.tex, intro:entropy"
+    },
+    "C9000101_GEOMETRY": {
+      "statement": "intro:simplex: cone reduction gives the sharp body covariance/volume inequality and simplex equality classification.",
+      "status": "open",
+      "depends_on": ["C9000101_ENTROPY"],
+      "reviewer_confirmed": false,
+      "source": "geometry.tex, eq:body-cone-bound"
+    },
+    "C9000101_SMOOTH": {
+      "statement": "mat:entropy-smooth: the smooth entropy inequality with both strict remainders.",
+      "status": "open",
+      "depends_on": ["C9000101_NORMALIZATION", "C9000101_SURPLUS", "C9000101_COVARIANCE", "C9000101_EXPANSION", "C9000101_NC", "C9000101_WEIGHTED", "C9000101_ABSORPTION", "C9000101_PAIR"],
+      "reviewer_confirmed": false,
+      "source": "matrix.tex, mat:strict-remainder and mat:pre-pair"
+    },
+    "C9000101_NORMALIZATION": {
+      "statement": "tr:normalization: the required centered affine normalization of q^(-1)(J) exists.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source": "transport.tex, tr:normalization"
+    },
+    "C9000101_SURPLUS": {
+      "statement": "tr:energy and tr:surplus: finite transport Sobolev energy and the retained eigenvalue-separation surplus.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source": "transport.tex, tr:energy and tr:surplus"
+    },
+    "C9000101_COVARIANCE": {
+      "statement": "mat:covariance: covariance completion and the weighted H^(-1) dual bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source": "matrix.tex, mat:covariance-completion and mat:dual-bound"
+    },
+    "C9000101_EXPANSION": {
+      "statement": "mat:expansion: the noncommuting expansion mat:expanded-bound has exactly the stated factor orders and derivative residuals.",
+      "status": "open",
+      "depends_on": ["C9000101_COVARIANCE", "C9000101_SURPLUS"],
+      "reviewer_confirmed": false,
+      "source": "matrix.tex, mat:expanded-bound"
+    },
+    "C9000101_WEIGHTED": {
+      "statement": "mat:block-bound and mat:weighted-completion: the block and weighted square bounds are valid without extra commutation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source": "matrix.tex, mat:block-bound and mat:weighted-completion"
+    },
+    "C9000101_ABSORPTION": {
+      "statement": "mat:scalar-absorption: the global scalar first-chaos absorption inequality with strict omega remainder.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source": "matrix.tex, mat:absorption-inequality; scalar.tex, sc:absorption-proof"
+    },
+    "C9000101_PAIR": {
+      "statement": "mat:scalar-pair: the global two-eigenvalue endpoint inequality, including diagonal limits.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source": "matrix.tex, mat:pair-inequality; scalar.tex, sc:pair-proof"
+    },
+    "C9000101_APPROX": {
+      "statement": "geo:approximation: smooth uniformly convex approximants preserve entropy and covariance in the limit.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source": "approximation.tex, geo:coercivity and geo:approximation"
+    },
+    "C9000101_RIGIDITY": {
+      "statement": "lem:linear-jacobian and the limiting rigidity argument give precisely affine products of exponentials.",
+      "status": "open",
+      "depends_on": ["C9000101_SMOOTH", "C9000101_APPROX"],
+      "reviewer_confirmed": false,
+      "source": "rigidity.tex, lem:linear-jacobian"
+    },
+    "C9000101_NC": {
+      "statement": "mat:commutator: the full pointwise matrix inequality holds universally with constant 42/37.",
+      "status": "in_progress",
+      "depends_on": ["C9000101_NC_SOS", "C9000101_NC_DIAGONAL", "C9000101_NC_SPECTRAL"],
+      "reviewer_confirmed": false,
+      "source": "matrix.tex, mat:commutator-bound",
+      "engineering_result": "Full matrix theorem compiled in Lean 4.31.0, exit_code=0, proof_holes=[]; independent review pending.",
+      "evidence": [
+        "research/noncommutative-core/report.md",
+        "research/noncommutative-core/verify.py",
+        "research/noncommutative-core/exact_certificate.json",
+        "research/noncommutative-core/formal/certificates/C9000101_NC-708ad59885bf1d98.json"
+      ]
+    },
+    "C9000101_NC_SOS": {
+      "statement": "The scalar residual G(u,v)=uv(u+v-3/4)+1/64 has an exact weighted-square decomposition for u,v>=0.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/noncommutative-core/report.md", "research/noncommutative-core/verify.py"]
+    },
+    "C9000101_NC_DIAGONAL": {
+      "statement": "The arbitrary-dimensional diagonal-basis trace deficit equals weighted w-squares plus G-weighted commutator squares.",
+      "status": "in_progress",
+      "depends_on": ["C9000101_NC_SOS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/noncommutative-core/formal/Main.lean", "research/noncommutative-core/report.md"]
+    },
+    "C9000101_NC_SPECTRAL": {
+      "statement": "The spectral theorem and orthogonal trace invariance reduce every admissible symmetric input to the diagonal-basis certificate.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/noncommutative-core/formal/Main.lean", "research/noncommutative-core/formal/statement_fidelity.md"]
+    },
+    "C9000101_NC_SHARP": {
+      "statement": "The coefficient 42/37 cannot be decreased: an exact two-dimensional noncommuting family approaches it.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "scope": "Supplementary exact family and prose continuity proof; no Lean-certified limit or novelty claim.",
+      "evidence": ["research/noncommutative-core/report.md", "research/noncommutative-core/verify.py"]
+    }
+  }
+}

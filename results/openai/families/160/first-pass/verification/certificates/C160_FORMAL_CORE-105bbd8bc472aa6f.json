@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C160_FORMAL_CORE-b9fe328af982",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/160/first-pass/verification/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/160/first-pass/verification/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 18053,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/160/first-pass/verification/Main.lean",
+    "source_sha256": "adfe740be861e098f7e3d2ea4ff09dc5a79e73fd3861947f7af21a115e6ea7c8",
+    "statement_fidelity": "families/160/first-pass/verification/statement_fidelity.md",
+    "statement_fidelity_sha256": "544939aa4eb344579a7d3cdc42a6d60e93a34b2bb27d43fc1e4f0f611c3701c4",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'ReturnPatternCore.stationary_metric_transfer' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ReturnPatternCore.closed_grid_cardinality' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ReturnPatternCore.anchored_entropy_absorption' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/verification/Main.lean",
+    "text": "import Mathlib\n\nset_option maxHeartbeats 600000\n\nnamespace ReturnPatternCore\n\ntheorem anchor_range\n    (left width radius a b c shift : Real)\n    (ha0 : left <= a) (ha1 : a <= left + width)\n    (hb : |b| <= radius) (hc : |c| <= 1) :\n    left + shift - radius <= a + shift + c * b /\\\n      a + shift + c * b <= left + shift + width + radius := by\n  have hcb : |c * b| <= radius := by\n    rw [abs_mul]\n    calc\n      |c| * |b| <= 1 * radius :=\n        mul_le_mul hc hb (abs_nonneg b) (by norm_num)\n      _ = radius := one_mul radius\n  have hbounds := abs_le.mp hcb\n  constructor <;> linarith [hbounds.1, hbounds.2]\n\ntheorem integer_zero_of_abs_lt_one\n    (z : Int) (hz : |(z : Real)| < 1) : z = 0 := by\n  have hb := abs_lt.mp hz\n  have hlo : (-1 : Int) < z := by exact_mod_cast hb.1\n  have hhi : z < (1 : Int) := by exact_mod_cast hb.2\n  omega\n\ntheorem unique_integer_lift\n    (endpoint left right : Real) (m n : Int)\n    (hwidth : right - left < 1)\n    (hm0 : left <= endpoint + (m : Real))\n    (hm1 : endpoint + (m : Real) <= right)\n    (hn0 : left <= endpoint + (n : Real))\n    (hn1 : endpoint + (n : Real) <= right) : m = n := by\n  have hz : |((m - n : Int) : Real)| < 1 := by\n    rw [abs_lt]\n    push_cast\n    constructor <;> linarith\n  have heq := integer_zero_of_abs_lt_one (m - n) hz\n  omega\n\ntheorem unwrap_integer_difference\n    (a b : Real) (z : Int)\n    (hcong : a - b = (z : Real)) (hsmall : |a - b| < 1) : a = b := by\n  have hz : z = 0 := integer_zero_of_abs_lt_one z (by rwa [<- hcong])\n  rw [hz] at hcong\n  norm_num at hcong\n  linarith\n\ntheorem radius_width_transfer\n    (H r0 r1 w0 w1 distance : Real)\n    (hH : 0 <= H)\n    (hupper : w0 <= 2 * H * r0)\n    (hlower : H * r1 / 4 <= w1)\n    (hlip : r0 - r1 <= distance) :\n    w0 / 8 - H * distance / 4 <= w1 := by\n  have hscaled := mul_le_mul_of_nonneg_left hlip hH\n  nlinarith\n\ntheorem neighborhood_width\n    (H r0 r1 w0 w1 distance : Real)\n    (hH : 0 <= H) (hHmax : H <= 1 / 8)\n    (hw0 : 0 <= w0)\n    (hupper : w0 <= 2 * H * r0)\n    (hlower : H * r1 / 4 <= w1)\n    (hlip : r0 - r1 <= distance)\n    (hdistance : distance <= 2 * w0) :\n    w0 / 16 <= w1 := by\n  have hbase := radius_width_transfer H r0 r1 w0 w1 distance hH\n    hupper hlower hlip\n  have hscaled := mul_le_mul_of_nonneg_left hdistance hH\n  have hproduct := mul_nonneg (show 0 <= (1 / 8 : Real) - H by linarith) hw0\n  nlinarith\n\ntheorem stationary_transfer\n    (H r0 r1 w0 w1 distance drift : Real)\n    (hH : 0 <= H)\n    (hupper : w0 <= 2 * H * r0)\n    (hlower : H * r1 / 4 <= w1)\n    (hlip : r0 - r1 <= distance)\n    (hmotion : distance <= drift)\n    (hbudget : (8 + 2 * H) * drift <= w0) :\n    drift <= w1 := by\n  have hbase := radius_width_transfer H r0 r1 w0 w1 distance hH\n    hupper hlower hlip\n  have hscaled := mul_le_mul_of_nonneg_left hmotion hH\n  nlinarith\n\ntheorem stationary_relative_transfer\n    (H r0 r1 w0 w1 distance drift mu : Real)\n    (hH : 0 <= H) (hw0 : 0 <= w0)\n    (hupper : w0 <= 2 * H * r0)\n    (hlower : H * r1 / 4 <= w1)\n    (hlip : r0 - r1 <= distance)\n    (hmotion : distance <= drift)\n    (hrelative : drift <= mu * w0)\n    (hmu : mu * (8 + 2 * H) <= 1) :\n    drift <= w1 := by\n  have hbudget : (8 + 2 * H) * drift <= w0 := by\n    calc\n      (8 + 2 * H) * drift <= (8 + 2 * H) * (mu * w0) :=\n        mul_le_mul_of_nonneg_left hrelative (by linarith)\n      _ = (mu * (8 + 2 * H)) * w0 := by ring\n      _ <= 1 * w0 := mul_le_mul_of_nonneg_right hmu hw0\n      _ = w0 := one_mul w0\n  exact stationary_transfer H r0 r1 w0 w1 distance drift hH\n    hupper hlower hlip hmotion hbudget\n\ntheorem uniform_stationary_budget\n    (H mu : Real) (hH : H <= 1 / 8)\n    (hmu0 : 0 <= mu) (hmu1 : mu <= 4 / 33) :\n    mu * (8 + 2 * H) <= 1 := by\n  have hproduct := mul_nonneg hmu0\n    (show 0 <= (1 / 8 : Real) - H by linarith)\n  nlinarith\n\ntheorem stationary_metric_transfer\n    {X : Type*} [PseudoMetricSpace X]\n    (radius width : X -> Real) (H drift : Real) (x y : X)\n    (hH : 0 <= H)\n    (hlip : |radius x - radius y| <= dist x y)\n    (hupper : width x <= 2 * H * radius x)\n    (hlower : H * radius y / 4 <= width y)\n    (hmotion : dist x y <= drift)\n    (hbudget : (8 + 2 * H) * drift <= width x) :\n    drift <= width y := by\n  exact stationary_transfer H (radius x) (radius y) (width x) (width y)\n    (dist x y) drift hH hupper hlower\n    (le_trans (le_abs_self _) hlip) hmotion hbudget\n\ntheorem spacing_span\n    (f : Nat -> Real) (step : Real) (n : Nat) :\n    (forall i, i < n -> step <= f (i + 1) - f i) ->\n      (n : Real) * step <= f n - f 0 := by\n  induction n with\n  | zero =>\n      intro hgap\n      simp\n  | succ n ih =>\n      intro hgap\n      have hprefix := ih (fun i hi =>\n        hgap i (Nat.lt_trans hi (Nat.lt_succ_self n)))\n      have hlast := hgap n (Nat.lt_succ_self n)\n      push_cast\n      nlinarith\n\ntheorem closed_grid_cardinality\n    (f : Nat -> Real) (n : Nat) (left length period : Real)\n    (hperiod : 0 < period)\n    (hfirst : left <= f 0) (hlast : f n <= left + length)\n    (hgap : forall i, i < n -> 1 / period <= f (i + 1) - f i) :\n    ((n + 1 : Nat) : Real) <= length * period + 1 := by\n  have hspan := spacing_span f (1 / period) n hgap\n  have hscaled := mul_le_mul_of_nonneg_right hspan (le_of_lt hperiod)\n  have hcancel : ((n : Real) * (1 / period)) * period = (n : Real) := by\n    field_simp\n  push_cast\n  nlinarith\n\ntheorem regular_fraction\n    (D : Nat) (hD : 3 <= D) :\n    (1 / 250 : Real) + 1 / (D : Real) < 1 / 2 := by\n  have hDreal : (3 : Real) <= (D : Real) := by exact_mod_cast hD\n  have hinv : 1 / (D : Real) <= (1 / 3 : Real) :=\n    one_div_le_one_div_of_le (by norm_num) hDreal\n  linarith\n\ntheorem truncation_budget\n    (D : Nat) (hD : 1 <= D) : 16000 * D + 4 <= 16004 * D := by\n  omega\n\ntheorem planar_face_recurrence\n    (F : Nat -> Nat) (hzero : F 0 <= 1)\n    (hstep : forall s, F (s + 1) <= F s + 4 * s + 2) :\n    forall s, F s <= 2 * s ^ 2 + 1 := by\n  intro s\n  induction s with\n  | zero => simpa using hzero\n  | succ s ih =>\n      have hnext := hstep s\n      nlinarith\n\ntheorem scalar_entropy_constant\n    (D h : Nat) (hD : 1 <= D) (hh : 1 <= h) :\n    2 * (16004 * D * h) ^ 2 + 1 <= 801 ^ 3 * (D * h) ^ 2 := by\n  have hprod : 1 <= D * h := by nlinarith\n  have hsquare : 1 <= (D * h) ^ 2 := by nlinarith\n  nlinarith\n\ntheorem anchored_entropy_absorption\n    (D h : Nat) (hD : 1 <= D) (hh : 1 <= h) :\n    h ^ (D + 1) * (2 * (16004 * D * h) ^ 2 + 1) ^ (2 * D) <=\n      (801 * D * h) ^ (6 * D) := by\n  have hprod : 1 <= D * h := by nlinarith\n  have hbase : h <= D * h := by nlinarith\n  have hanchor : h ^ (D + 1) <= (D * h) ^ (2 * D) :=\n    le_trans (pow_le_pow_left' hbase (D + 1))\n      (pow_le_pow_right' hprod (by omega))\n  have hscalar := scalar_entropy_constant D h hD hh\n  calc\n    h ^ (D + 1) * (2 * (16004 * D * h) ^ 2 + 1) ^ (2 * D) <=\n        (D * h) ^ (2 * D) * (801 ^ 3 * (D * h) ^ 2) ^ (2 * D) :=\n      Nat.mul_le_mul hanchor (pow_le_pow_left' hscalar (2 * D))\n    _ = ((D * h) * (801 ^ 3 * (D * h) ^ 2)) ^ (2 * D) :=\n      (mul_pow _ _ _).symm\n    _ = ((801 * D * h) ^ 3) ^ (2 * D) := by\n      congr 1\n      ring\n    _ = (801 * D * h) ^ (6 * D) := by\n      rw [<- pow_mul]\n      congr 1\n      omega\n\nend ReturnPatternCore\n\n#print axioms ReturnPatternCore.stationary_metric_transfer\n#print axioms ReturnPatternCore.closed_grid_cardinality\n#print axioms ReturnPatternCore.anchored_entropy_absorption\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/verification/statement_fidelity.md",
+    "text": "# Statement fidelity: ReturnPatternCore\n\nThe claim `C160_FORMAL_CORE` is about the declarations in `Main.lean`,\nnot about a formalization of the full manuscript or of all circle-partition\ngeometry in the accompanying proof. All variables below are universally\nquantified, with no bound on a dilation, translation, mesh width, or period.\n\n`anchor_range` proves the closed enclosing range for\n`a + shift + c*b` when `a` belongs to an interval of width `width`,\n`|b| <= radius`, and `|c| <= 1`. Its conclusion includes both\nendpoints. `shift` is an arbitrary real number: this is the step removing\ndependence on the size of the rational translation and hence on lambda.\nReplacing a half-open anchor by its closure only enlarges the range.\n\n`integer_zero_of_abs_lt_one`, `unique_integer_lift`, and\n`unwrap_integer_difference` prove, respectively, integer discreteness,\nuniqueness of a lift of one circle endpoint in a closed interval of length\nless than one, and exact unwrapping of two congruent reals whose difference\nhas absolute value less than one. The congruence in the last theorem is\nthe explicit integer equation `a-b=z`, not an assumed equality.\n\n`radius_width_transfer` proves\n`w1 >= w0/8 - H*distance/4` from `H >= 0`,\n`w0 <= 2H*r0`, `w1 >= H*r1/4`, and `r0-r1 <= distance`.\nNo positive lower bound on `w0` is assumed.\n`neighborhood_width` adds `H <= 1/8`, `w0 >= 0`, and\n`distance <= 2w0` to prove `w1 >= w0/16`.\nThese are actual implications from mesh inequalities, not assumed\nneighbor-comparability or eligibility statements.\n\n`stationary_transfer` proves `drift <= w1` if\n`distance <= drift` and `(8+2H)*drift <= w0`, with the same radius\nand width hypotheses. `stationary_relative_transfer` derives that budget\nfrom `drift <= mu*w0`, `w0 >= 0`, and `mu*(8+2H) <= 1`.\n`uniform_stationary_budget` proves the last inequality for\n`0 <= mu <= 4/33` and `H <= 1/8`.\n`stationary_metric_transfer` expresses the first implication in an arbitrary\npseudometric space, using the explicit Lipschitz comparison\n`|radius x-radius y| <= dist x y`. For the application, the space is the\ncircle, `radius = rho+alpha`, `width` is the width of the containing mesh\ninterval, and `drift = |v_i|`. The formal theorem does not require the\nanchor to be regular, to avoid a representative cut, or to be an interior\npoint of its interval. The accompanying proof, not Lean, identifies the\nmanuscript's objects with these data.\n\n`spacing_span` telescopes adjacent lower spacing bounds along an arbitrary\nfinite real sequence. `closed_grid_cardinality` proves that `n+1` such\npoints in a closed interval of length `length`, separated by at least\n`1/period` for a positive real `period`, satisfy\n`n+1 <= length*period+1`. The circle-to-line lift of points of a short\nclosed arc is justified in the report, not encoded in this declaration.\n`regular_fraction` proves the strict numerical union-bound estimate\n`1/250+1/D < 1/2` for every integer `D >= 3`.\n`truncation_budget` proves the stated breakpoint-budget absorption.\n\n`planar_face_recurrence` solves the recurrence\n`F(0) <= 1`, `F(s+1) <= F(s)+4s+2` for an arbitrary natural-valued\nfunction. The geometrical assertion that planar sign faces satisfy this\nrecurrence is proved in the report; it is not an implicit Lean hypothesis\nclaiming the desired number of sign vectors.\n`scalar_entropy_constant` and `anchored_entropy_absorption` prove the exact\npolynomial and power inequalities giving the absolute counting constant\n801 for every pair of positive integers `D,h`.\n\nThe compiler certifies these real/integer/natural-number and metric\nimplications. It does not certify the exponential mesh construction,\nthe planar face interpretation, the pattern decoder, the closest-return\ntorus argument, or the choice of a prime and q. Those are supplied as\nself-contained mathematical proofs for independent review. There is no\nclaim that a numerical sample or these implications alone is a formal\nverification of `count:local`, `dichotomy:main`, or the final main theorem.\n"
+  },
+  "subject": {
+    "content_hash": "94abaf5c0bae74ff4e73171613ed474fa5c097ed12b8a5bbe8be38bf89db12fd",
+    "kind": "claim",
+    "subject_id": "C160_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

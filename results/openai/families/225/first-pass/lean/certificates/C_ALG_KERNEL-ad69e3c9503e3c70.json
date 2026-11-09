@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_ALG_KERNEL-4235fa802136",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/225/first-pass/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 2853,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/225/first-pass/lean/Main.lean",
+    "source_sha256": "c3d5378f49975df62a1f3501a81015e5015377979e14c31c616713333b73290a",
+    "statement_fidelity": "families/225/first-pass/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "3f1e595b37112b706f34b6fb997631154f2e6f25ec9a7ae5a00e49d148f7c4d3",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/225/first-pass/lean/Main.lean:21:2: error: No goals to be solved\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/lean/Main.lean",
+    "text": "import Mathlib.Data.Complex.Basic\nimport Mathlib.Tactic.FieldSimp\nimport Mathlib.Tactic.Ring\n\nnamespace StaggeredFidelity\n\ntheorem corrected_symbol (a b E : ℂ) (hab : 1 - a * b ≠ 0) :\n    ((1 - E) * (1 + a * b) / 2 - b + E * a) / (1 - a * b)\n        + (1 + E) / 2\n      = (1 - b) * (1 + E * a) / (1 - a * b) := by\n  field_simp [hab]\n  ring\n\ntheorem relative_symbol (a b E : ℂ)\n    (hab : 1 - a * b ≠ 0) (hb : 1 - b ≠ 0) (ha : 1 + a ≠ 0) :\n    ((1 - b) * (1 + E * a) / (1 - a * b)) /\n        ((1 - b) * (1 + a) / (1 - a * b))\n      = (1 + E * a) / (1 + a) := by\n  field_simp [hab, hb, ha]\n  field_simp [hab]\n  ring\n\ntheorem pair_accelerations_cancel (vi vj wi wj fp fpp : ℝ) :\n    (fpp * (vj ^ 2 + vi ^ 2 - (vi - vj) ^ 2)\n        + fp * (-wj + wi - (wi - wj))) / 2\n      = vi * vj * fpp := by\n  ring\n\ntheorem density_coefficient (p lam : ℝ)\n    (hlam : lam ≠ 0) (hgap : p - lam ≠ 0) :\n    2 * (1 / (2 * (p - lam))) ^ 2\n        - 2 * p / lam * (1 / (2 * (p - lam))) ^ 2\n      = -(1 / (2 * lam * (p - lam))) := by\n  field_simp [hlam, hgap]\n  ring\n\nend StaggeredFidelity\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: algebraic core only\n\n`Main.lean` formalizes exact algebra used in the staggered-fidelity calculation.\nIt does not formalize root existence, the Slavnov theorem, Hilbert duality,\nFourier transforms, alias estimates, trace localization, or any limit.\n\nThe declaration names are `corrected_symbol`, `relative_symbol`,\n`pair_accelerations_cancel`, and `density_coefficient`, all in namespace\n`StaggeredFidelity`.\n\n`StaggeredFidelity.corrected_symbol` quantifies over arbitrary complex\nnumbers `a,b,E`, with `1-a*b` nonzero. It equates the continuous coth-transform\nexpression plus the sampled-pole correction `(1+E)/2` to the factored symbol.\nIn the application `a=exp(-lambda*p)`, `b=exp(-(pi-lambda)*p)`,\n`E=exp(2*pi*i*z)`, and `p` is nonzero. Both positive and negative frequencies\nsatisfy the nonzero-denominator hypothesis.\n\n`StaggeredFidelity.relative_symbol` has the same complex variables and also\nrequires `1-b` and `1+a` nonzero. It divides the factored symbol by its value at\nzero twist. These additional hypotheses hold for real nonzero frequencies\nand `0<lambda<pi`.\n\n`StaggeredFidelity.pair_accelerations_cancel` quantifies over six arbitrary\nreal numbers. They represent two velocities, two accelerations, and the first\ntwo derivatives of a pair potential. Its conclusion is the quadratic\ncoefficient of the cross-pair product divided by its two within-set products.\nThe same polynomial identity also holds for a complex potential derivative;\nthis declaration proves its real version, which suffices after pairing\nopposite root differences in the application.\n\n`StaggeredFidelity.density_coefficient` quantifies over real `p,lam` with\n`lam` and `p-lam` nonzero. Here `p` represents the constant pi, not a Fourier\nfrequency. It proves that the pair coefficient plus the determinant\ncoefficient is `-1/(2*lam*(p-lam))`. The minus sign is the logarithmic overlap\ncoefficient; its negative is the fidelity cost.\n\nThese are only the algebraic identities in claim `C_ALG_KERNEL`.\nThe hypotheses and the analytical argument relating them to `C_FIDELITY`\nare human-readable mathematics in `research/AUDIT_REPORT.md`; a compiler\nverdict on this source cannot close that separate claim.\n"
+  },
+  "subject": {
+    "content_hash": "b87596758fb181dd964af79cab895caf7c1281a3ecc045e2fef8b103e015cdde",
+    "kind": "claim",
+    "subject_id": "C_ALG_KERNEL"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

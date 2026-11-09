@@ -1,0 +1,18 @@
+{
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "discovery_query": "symbolic matrix inverse Schur complement positive definite Gaussian precision",
+  "inspected_operations": ["matrix.inverse.compute", "matrix.symbolic.determinant.compute"],
+  "selected_operation": "matrix.symbolic.determinant.compute",
+  "reason": "The oriented edge precision, multiplied by b*v, is a 2-by-2 polynomial matrix over QQ(b,c,u,v). Its determinant identity is quantified, not a sampled numerical calculation.",
+  "contract": {
+    "input": "A square SymbolicMatrix with canonical sparse rational-function entries and at most eight algebraically independent variables.",
+    "restriction_for_dimension_above_one": "Polynomial entries; derived determinant expansion at most 256 terms, exponent at most 64, and coefficient components at most 128 decimal digits.",
+    "output": "SymbolicDeterminantResult with determinant a canonical RationalFunction and method SYMPY_BAREISS.",
+    "read_only": true
+  },
+  "payload_file": "edge_precision_payload.json",
+  "output_file": "edge_precision_output.json",
+  "conclusion_boundary": "Only a completed exact determinant output can support the polynomial identity. Adapter error, timeout, incomplete output, and UNKNOWN are non-conclusions."
+}

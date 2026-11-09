@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CE_ALGEBRA-622337ad4999",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/236/first-pass/critical_endpoint/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/236/first-pass/critical_endpoint/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16555,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/236/first-pass/critical_endpoint/Main.lean",
+    "source_sha256": "4b83e84335a1a91ba3a18ebd810b9b54989de08fca2bec090cd5e34686bdabe9",
+    "statement_fidelity": "families/236/first-pass/critical_endpoint/statement_fidelity.md",
+    "statement_fidelity_sha256": "d5798ebc62627a0816b26ee8c2c81e92d53620c6f21604726e6a4f3c3d62378e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/236/first-pass/critical_endpoint/Main.lean:11:36: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/236/first-pass/critical_endpoint/Main.lean:14:5: warning: Variable name `hq0` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\nfamilies/236/first-pass/critical_endpoint/Main.lean:80:21: warning: This simp argument is unused:\n  Matrix.mul_apply\n\nHint: Omit it from the simp argument list.\n  simp [companion, M̵a̵t̵r̵i̵x̵.̵m̵u̵l̵_̵a̵p̵p̵l̵y̵,̵ ̵Fin.sum_univ_two]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nfamilies/236/first-pass/critical_endpoint/Main.lean:80:39: warning: This simp argument is unused:\n  Fin.sum_univ_two\n\nHint: Omit it from the simp argument list.\n  simp [companion, Matrix.mul_apply,̵ ̵F̵i̵n̵.̵s̵u̵m̵_̵u̵n̵i̵v̵_̵t̵w̵o̵]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nfamilies/236/first-pass/critical_endpoint/Main.lean:80:61: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/236/first-pass/critical_endpoint/Main.lean:80:61: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/critical_endpoint/Main.lean",
+    "text": "import Mathlib\n\nnamespace CriticalEndpoint\n\ntheorem fusion_identity (u v : Real)\n    (hplus : 1 + u * v ≠ 0) (hminus : 1 - u * v ≠ 0)\n    (hprod : 1 - u ^ 2 * v ^ 2 ≠ 0) :\n    ((u + v) ^ 2 / (1 + u * v) + (u - v) ^ 2 / (1 - u * v)) / 2 =\n      u ^ 2 + v ^ 2 -\n        u ^ 2 * v ^ 2 * (2 - u ^ 2 - v ^ 2) / (1 - u ^ 2 * v ^ 2) := by\n  field_simp [hplus, hminus, hprod] <;> ring\n\ntheorem fusion_loss_lower (u v q : Real)\n    (hq0 : 0 <= q) (hq1 : q < 1)\n    (hu0 : 0 <= u) (huq : u <= q)\n    (hv0 : 0 <= v) (hvq : v <= q) :\n    2 * (1 - q) * u * v <= u * v * (2 - u - v) / (1 - u * v) := by\n  have hu1 : u < 1 := lt_of_le_of_lt huq hq1\n  have hv1 : v < 1 := lt_of_le_of_lt hvq hq1\n  have huv0 : 0 <= u * v := mul_nonneg hu0 hv0\n  have hden : 0 < 1 - u * v := by\n    nlinarith [mul_nonneg hu0 (sub_nonneg.mpr (le_of_lt hv1))]\n  apply (le_div_iff₀ hden).2\n  have hbase : 0 <= 2 * (1 - q) * u * v := by positivity\n  have hnum : 2 * (1 - q) * u * v <= u * v * (2 - u - v) := by\n    nlinarith [mul_nonneg huv0 (show 0 <= 2 * q - u - v by linarith)]\n  have hmult :\n      (2 * (1 - q) * u * v) * (1 - u * v) <= 2 * (1 - q) * u * v := by\n    nlinarith [mul_nonneg hbase huv0]\n  exact le_trans hmult hnum\n\ntheorem cavity_inverse_bound (x y H K theta : Real)\n    (ht0 : 0 <= theta) (ht1 : theta < 1)\n    (hx : x <= H + theta * y) (hy : y <= K + theta * x) :\n    x <= (H + theta * K) / (1 - theta ^ 2) := by\n  have hden : 0 < 1 - theta ^ 2 := by\n    nlinarith [mul_pos (sub_pos.mpr ht1) (show 0 < 1 + theta by linarith)]\n  apply (le_div_iff₀ hden).2\n  have hm : theta * y <= theta * (K + theta * x) :=\n    mul_le_mul_of_nonneg_left hy ht0\n  nlinarith\n\ntheorem critical_theta_lt_one (b theta : Real)\n    (hb : 2 <= b) (ht0 : 0 <= theta) (hcrit : b * theta ^ 2 = 1) :\n    theta < 1 := by\n  have hnonneg : 0 <= (b - 2) * theta ^ 2 :=\n    mul_nonneg (by linarith) (sq_nonneg theta)\n  nlinarith\n\ntheorem critical_moment_gap (b theta : Real)\n    (hb : 2 <= b) (ht0 : 0 <= theta) (hcrit : b * theta ^ 2 = 1)\n    (n : Nat) :\n    1 - theta <= 1 - b * theta ^ (n + 3) := by\n  have ht1 : theta < 1 := critical_theta_lt_one b theta hb ht0 hcrit\n  have hpow : forall k : Nat, theta ^ (k + 1) <= theta := by\n    intro k\n    induction k with\n    | zero => simp\n    | succ k ih =>\n      calc\n        theta ^ (k + 1 + 1) = theta ^ (k + 1) * theta := by rw [pow_succ]\n        _ <= theta * theta := mul_le_mul_of_nonneg_right ih ht0\n        _ <= theta := by nlinarith\n  have heq : b * theta ^ (n + 3) = theta ^ (n + 1) := by\n    rw [show n + 3 = 2 + (n + 1) by omega, pow_add]\n    calc\n      b * (theta ^ 2 * theta ^ (n + 1)) =\n          (b * theta ^ 2) * theta ^ (n + 1) := by ring\n      _ = theta ^ (n + 1) := by rw [hcrit]; ring\n  rw [heq]\n  linarith [hpow n]\n\ndef companion (x : Real) : Matrix (Fin 2) (Fin 2) Real :=\n  !![0, -1; 1, 2 * x]\n\ntheorem companion_quadratic (x : Real) :\n    companion x * companion x - (2 * x) • companion x + 1 = 0 := by\n  ext i j\n  fin_cases i <;> fin_cases j <;>\n    simp [companion, Matrix.mul_apply, Fin.sum_univ_two] <;> ring\n\ntheorem companion_endpoint_power (n : Nat) :\n    companion 1 ^ n =\n      !![(1 : Real) - (n : Real), -(n : Real);\n         (n : Real), 1 + (n : Real)] := by\n  induction n with\n  | zero =>\n    ext i j\n    fin_cases i <;> fin_cases j <;> norm_num [companion]\n  | succ n ih =>\n    rw [pow_succ, ih]\n    ext i j\n    fin_cases i <;> fin_cases j <;>\n      simp [companion, Matrix.mul_apply, Fin.sum_univ_two, Nat.cast_succ] <;> ring\n\nend CriticalEndpoint\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/critical_endpoint/statement_fidelity.md",
+    "text": "# Statement fidelity: algebraic core of the critical comparison\n\nClaim: `C_CE_ALGEBRA`. Source: `Main.lean`. Every declaration is in\nnamespace `CriticalEndpoint`; all scalar variables are real and all natural\nindices include zero. There are no probabilistic objects in this formalization.\n\n- `fusion_identity` proves the sign-symmetrized binary-signal fusion identity\n  for arbitrary real posterior means `u,v`, assuming all three displayed\n  denominators are nonzero. Application to posterior means strictly between\n  -1 and 1 satisfies those hypotheses.\n- `fusion_loss_lower` uses `u,v` for **squared** posterior means and `q` for\n  their common upper bound. Its hypotheses are\n  `0 <= u,v <= q < 1`, including `0 <= q`. It proves that the fusion loss is\n  at least `2(1-q)uv`; the denominator is proved positive, not assumed away.\n  At application, `q=theta^2`.\n- `cavity_inverse_bound` proves the inverse two-message inequality from\n  `x <= H+theta*y`, `y <= K+theta*x` and `0 <= theta < 1`.\n  It does not assert that arbitrary numbers are posterior fields. The\n  application takes `x,y,H,K` to be absolute differences on an edge.\n- `critical_theta_lt_one` proves `theta < 1` from `b >= 2`, `theta >= 0`,\n  and `b*theta^2=1`.\n- `critical_moment_gap` proves, for **every** natural `n`,\n  `1-theta <= 1-b*theta^(n+3)` under the same critical hypotheses.\n  Thus the contraction gap is uniformly positive at every integer\n  moment order `p=n+3 >= 3`. It makes no claim at order two, where the\n  critical gap is zero.\n- `companion_quadratic` proves the normalized edge-transfer matrix identity\n  `M(x)^2-2x M(x)+I=0` for every real `x`, with\n  `M(x)=[[0,-1],[1,2x]]`.\n- `companion_endpoint_power` proves, for **every** natural `n`,\n  `M(1)^n=[[1-n,-n],[n,1+n]]`. This checks the linear endpoint growth,\n  which must not be discarded by treating the nonnormal edge operator\n  as self-adjoint. The matrix is the scalar fiber of the manuscript's\n  normalized transfer matrix after conjugation by `diag(1,sqrt(b))`.\n\nThe compiler certifies exactly these finite-dimensional identities and\ninequalities, including the universal natural-number quantifiers. It does\n**not** certify conditional independence of infinite component histories,\nspectral-measure transfer, stochastic integral transport, concentration,\nthe field moment induction as an expectation inequality, or the absolutely\ncontinuous Osgood argument. Those are proved separately in `PROOF.md` and\nrequire independent mathematical review. In particular this source is not\na Lean formalization of the entire FIID threshold theorem.\n"
+  },
+  "subject": {
+    "content_hash": "b166c35c939cc89504299578def95496ba48e7d3a8cdaa02ee219e6618cdb34e",
+    "kind": "claim",
+    "subject_id": "C_CE_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

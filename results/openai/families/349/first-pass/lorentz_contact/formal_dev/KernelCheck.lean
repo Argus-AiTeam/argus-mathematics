@@ -1,0 +1,19 @@
+import Main
+
+#print axioms LorentzContact.lorentz_contact_core
+#print axioms LorentzContact.lorentz_norm_identity
+#print axioms LorentzContact.lorentz_spatial_inverse
+#print axioms LorentzContact.lorentz_height_inverse
+#print axioms LorentzContact.target_point_unit
+#print axioms LorentzContact.normal_jet_eq
+#print axioms LorentzContact.target_jet_eq
+#print axioms LorentzContact.target_jet_shape
+#print axioms LorentzContact.target_jet_inner
+#print axioms LorentzContact.transported_orthonormal_frame
+#print axioms LorentzContact.contact_eigenvalue_bounds
+#print axioms LorentzContact.psd_determinant_bounds
+#print axioms LorentzContact.contact_matrix_determinant_bounds
+#print axioms LorentzContact.rectangular_gram_determinant
+#print axioms LorentzContact.rectangular_gram_jacobian
+#print axioms LorentzContact.contact_metric_jacobian_bounds
+#print axioms LorentzContact.contact_matrix_metric_jacobian_bounds

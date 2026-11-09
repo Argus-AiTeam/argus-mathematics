@@ -1,0 +1,169 @@
+{
+  "goal": "C9000160",
+  "routes": [
+    {
+      "name": "uniform-return-pattern-core",
+      "status": "current",
+      "evidence": "research/verification/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000160": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 160 (Superexponential van der Waerden numbers.; papers: Quantitative Superexponential Bounds for van der Waerden Numbers; Lean status: Partially/Comparator formalized (lean/docs/160.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C160_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C160_MAIN": {
+      "statement": "The manuscript's uniform superexponential lower bound for all r >= 2.",
+      "status": "open",
+      "depends_on": ["C160_OUTER", "C160_DICHOTOMY", "C160_PERTURBATION", "C160_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/01-introduction.tex"]
+    },
+    "C160_CORE": {
+      "statement": "Theorems A-C of research/verification/report.md hold: the anchored-word count is at most (801 D h)^(6D), every full longer-period block meeting a heavy label is eligible for staged k >= 2^20, and stationary width admissibility follows from (8+2H)|v_i| <= anchor_width. This does not verify the full main theorem.",
+      "status": "open",
+      "depends_on": ["C160_LOCAL", "C160_ELIGIBILITY", "C160_STATIONARY_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/verification/report.md", "research/verification/exact_certificate.json"]
+    },
+    "C160_LOCAL": {
+      "statement": "For every D,h >= 1, any uniform first mesh Hx <= H <= 1/8, any finite second mesh satisfying closure-wise width law (W), any integer lambda and literal full label beta, the larger anchored-word family in report.md Theorem A has size at most h^(D+1)[2(16004Dh)^2+1]^(2D) <= (801Dh)^(6D). In particular count:local holds with C=801, independently of q, lambda, anchor identity and interval width.",
+      "status": "open",
+      "depends_on": ["C160_PLANAR", "C160_MESH_NEIGHBORS", "C160_TRUNCATION", "C160_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/verification/report.md", "research/verification/exact_certificate.json", "research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/03-counting.tex"]
+    },
+    "C160_ELIGIBILITY": {
+      "statement": "For every integer k >= 2^20 in the staged setup, the closest return to any chosen heavy label, if D^2 < h <= 2M, makes every full length-h block meeting any heavy label satisfy all three count:eligible conditions, including a nonregular heavy index, stationary nonzero drifts, closed cut hits and either crossing orientation.",
+      "status": "open",
+      "depends_on": ["C160_DILATION", "C160_RETURNS", "C160_HEAVY_WIDTH", "C160_MESH_NEIGHBORS", "C160_GRID", "C160_PARAMETERS", "C160_STATIONARY_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/verification/report.md", "research/verification/exact_certificate.json", "research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/05-dichotomy.tex"]
+    },
+    "C160_PLANAR": {
+      "statement": "s affine comparisons in two real parameters have at most 2s^2+1 joint sign vectors, including zero signs.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/verification/report.md", "research/verification/exact_certificate.json"]
+    },
+    "C160_MESH_WIDTH": {
+      "statement": "For every mesh interval I and every point Y in its closure, H(rho(Y)+alpha)/4 <= |I| <= 2H(rho(Y)+alpha).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/02-setup.tex"]
+    },
+    "C160_MESH_NEIGHBORS": {
+      "statement": "Intervals whose closures meet the |I|-neighborhood of I have width at least |I|/16; that neighborhood contains at most 49 endpoints.",
+      "status": "open",
+      "depends_on": ["C160_MESH_WIDTH", "C160_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/02-setup.tex"]
+    },
+    "C160_TRUNCATION": {
+      "statement": "On an arc of length at most 4H, the cut-truncated mesh has at most 16004D breakpoints, with exact threshold values retained.",
+      "status": "open",
+      "depends_on": ["C160_MESH_WIDTH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/02-setup.tex"]
+    },
+    "C160_DILATION": {
+      "statement": "For h <= 2M, h/gcd(h,lambda*t_i) is either 1 or exceeds D^2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/02-setup.tex"]
+    },
+    "C160_RETURNS": {
+      "statement": "A closest return to a heavy label gives a primitive rational path, small real drifts v=lambda*u, and distinct labels on different residues modulo h.",
+      "status": "open",
+      "depends_on": ["C160_MESH_WIDTH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/05-dichotomy.tex"]
+    },
+    "C160_HEAVY_WIDTH": {
+      "statement": "The same return drift satisfies |v_i| <= (2M/k)|V(y_i(n_j))| at every heavy index j, including labels not used to select the return.",
+      "status": "open",
+      "depends_on": ["C160_RETURNS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/05-dichotomy.tex"]
+    },
+    "C160_GRID": {
+      "statement": "A closed circle arc of length L < 1 contains at most Ls+1 points of an s-point grid; the excluded-position union bound is below 1/2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/verification/report.md"]
+    },
+    "C160_OUTER": {
+      "statement": "The finite asymmetric local lemma supplies the balanced outer coloring.",
+      "status": "open",
+      "depends_on": ["C160_GLOBAL_WORDS", "C160_LOCAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/04-outer.tex"]
+    },
+    "C160_GLOBAL_WORDS": {
+      "statement": "The global full-label word count has logarithm o(M).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/03-counting.tex"]
+    },
+    "C160_DICHOTOMY": {
+      "statement": "Every progression is balanced in outer colors or has one global affine centered lift.",
+      "status": "open",
+      "depends_on": ["C160_OUTER", "C160_ELIGIBILITY", "C160_SHORT_PERIOD"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/05-dichotomy.tex"]
+    },
+    "C160_SHORT_PERIOD": {
+      "statement": "The short-period branch produces a global affine centered lift using the discrete step lattice.",
+      "status": "open",
+      "depends_on": ["C160_DILATION", "C160_RETURNS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quantitative-Superexponential-Bounds-for-van-der-Waerden-Numbers-September-23-2026/build/sections/05-dichotomy.tex"]
+    },
+    "C160_PARAMETERS": {
+      "statement": "For every integer k >= 2^20, D=ceil(k^(1/10)), M=ceil(sqrt(k)) and H=k^(-2) satisfy D >= 4, k >= 64M, 4000DM < k^3, D^2 < 2M < k and H <= 1/8; these discharge all numerical hypotheses in report.md Sections 4-5.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/verification/report.md"]
+    },
+    "C160_STATIONARY_TRANSFER": {
+      "statement": "In any pseudometric space with a 1-Lipschitz real radius r and nonnegative anchor width w0, if H >= 0, w0 <= 2H*r(x), w1 >= H*r(y)/4, dist(x,y) <= delta <= mu*w0 and mu*(8+2H) <= 1, then delta <= w1. For H <= 1/8, every 0 <= mu <= 4/33 suffices; no regularity or representative-cut hypothesis is needed.",
+      "status": "open",
+      "depends_on": ["C160_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/verification/report.md", "research/verification/certificates/C160_FORMAL_CORE-105bbd8bc472aa6f.json"]
+    },
+    "C160_FORMAL_CORE": {
+      "statement": "The universal range, integer-lift, metric width-transfer, stationary-budget, closed-spacing and entropy-arithmetic declarations in Main.lean compile in Lean 4.31.0 with no proof holes. Independent statement-fidelity review remains required.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/verification/Main.lean", "research/verification/statement_fidelity.md", "research/verification/certificates/C160_FORMAL_CORE-105bbd8bc472aa6f.json"]
+    },
+    "C160_PERTURBATION": {
+      "statement": "The independent key perturbations eliminate every monochromatic cyclic progression.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C160_TRANSFER": {
+      "statement": "The cyclic two-color construction transfers to all integer color counts by the digit product.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    }
+  }
+}

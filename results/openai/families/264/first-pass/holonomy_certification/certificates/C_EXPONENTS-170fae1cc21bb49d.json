@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_EXPONENTS-51422585e02f",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/264/first-pass/holonomy_certification/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 8821,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/264/first-pass/holonomy_certification/Main.lean",
+    "source_sha256": "73efc56e83e4e44bd111ae0d7b4c9a4694a7e673a459169e716f4ac2e5798d73",
+    "statement_fidelity": "families/264/first-pass/holonomy_certification/statement_fidelity.md",
+    "statement_fidelity_sha256": "78a0984f2866cfd5b311ecad05c6224e0e0aec564f8c471cbf7acb564803470b",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/264/first-pass/holonomy_certification/Main.lean:50:11: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  MulLeftStrictMono ℝ\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.\nfamilies/264/first-pass/holonomy_certification/Main.lean:51:8: error: No goals to be solved\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/holonomy_certification/Main.lean",
+    "text": "import Mathlib\n\nnamespace AveragedHolonomy\n\ndef Feasible (p q sigma : ℝ) : Prop :=\n  ∃ a b : ℝ, 0 < a ∧ 1 < p * b ∧ sigma < 1 - b - a ∧ sigma < q * a\n\ntheorem feasible_iff {p q sigma : ℝ}\n    (hp : 0 < p) (hq : 0 < q) (hs : 0 < sigma) :\n    Feasible p q sigma ↔ 1 / p + sigma / q < 1 - sigma := by\n  constructor\n  · rintro ⟨a, b, _, hpb, hcoefficient, hremainder⟩\n    have hb : 1 / p < b := (div_lt_iff₀ hp).2 (by nlinarith)\n    have ha : sigma / q < a := (div_lt_iff₀ hq).2 (by nlinarith)\n    linarith\n  · intro h\n    let d : ℝ := (1 - sigma - 1 / p - sigma / q) / 3\n    have hd : 0 < d := by\n      dsimp [d]\n      linarith\n    have hsdiv : 0 < sigma / q := div_pos hs hq\n    have hpinv : p * (1 / p) = 1 := by\n      field_simp [ne_of_gt hp]\n    have hqcancel : q * (sigma / q) = sigma := by\n      field_simp [ne_of_gt hq]\n    refine ⟨sigma / q + d, 1 / p + d, by positivity, ?_, ?_, ?_⟩\n    · have hpd : 0 < p * d := mul_pos hp hd\n      nlinarith\n    · dsimp [d]\n      linarith\n    · have hqd : 0 < q * d := mul_pos hq hd\n      nlinarith\n\ntheorem quarter_polynomial_iff {p q : ℝ} (hp : 0 < p) (hq : 0 < q) :\n    Feasible p q (1 / 4) ↔ 4 * q < p * (3 * q - 1) := by\n  rw [feasible_iff hp hq (by norm_num)]\n  have hden : 0 < 4 * p * q := by positivity\n  have hleft :\n      (1 / p + (1 / 4 : ℝ) / q) * (4 * p * q) = 4 * q + p := by\n    field_simp [ne_of_gt hp, ne_of_gt hq]\n    <;> ring\n  have hright :\n      (1 - (1 / 4 : ℝ)) * (4 * p * q) = 3 * p * q := by ring\n  constructor\n  · intro h\n    have hmul := mul_lt_mul_of_pos_right h hden\n    rw [hleft, hright] at hmul\n    nlinarith\n  · intro h\n    apply (mul_lt_mul_right hden).1\n    rw [hleft, hright]\n    nlinarith\n\ntheorem fixed_order_iff {p : ℝ} {N : ℕ} (hp : 0 < p) (hN : 3 ≤ N) :\n    Feasible p ((N : ℝ) - 2) (1 / 4) ↔\n      4 * ((N : ℝ) - 2) / (3 * (N : ℝ) - 7) < p := by\n  have hNr : (3 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN\n  have hq : 0 < (N : ℝ) - 2 := by linarith\n  have hden : 0 < 3 * (N : ℝ) - 7 := by linarith\n  rw [quarter_polynomial_iff hp hq]\n  constructor\n  · intro h\n    apply (div_lt_iff₀ hden).2\n    nlinarith\n  · intro h\n    have hh := (div_lt_iff₀ hden).1 h\n    nlinarith\n\ntheorem finite_order_iff {p : ℝ} (hp : 0 < p) :\n    (∃ N : ℕ, 3 ≤ N ∧ Feasible p ((N : ℝ) - 2) (1 / 4)) ↔\n      (4 / 3 : ℝ) < p := by\n  constructor\n  · rintro ⟨N, hN, hf⟩\n    have hNr : (3 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN\n    have hq : 0 < (N : ℝ) - 2 := by linarith\n    have hpoly := (quarter_polynomial_iff hp hq).1 hf\n    by_contra hn\n    have hle : p ≤ (4 / 3 : ℝ) := le_of_not_gt hn\n    have hnonpos : 3 * p - 4 ≤ 0 := by linarith\n    have hprod : (3 * p - 4) * ((N : ℝ) - 2) ≤ 0 :=\n      mul_nonpos_of_nonpos_of_nonneg hnonpos (le_of_lt hq)\n    nlinarith\n  · intro h\n    have hd : 0 < 3 * p - 4 := by linarith\n    obtain ⟨N, hNreal⟩ := exists_nat_gt (p / (3 * p - 4) + 2)\n    have hdiv : 0 < p / (3 * p - 4) := div_pos hp hd\n    have htwo : (2 : ℝ) < (N : ℝ) := by linarith\n    have hNnat : 2 < N := by exact_mod_cast htwo\n    have hN : 3 ≤ N := by omega\n    have hq : 0 < (N : ℝ) - 2 := by linarith\n    refine ⟨N, hN, (quarter_polynomial_iff hp hq).2 ?_⟩\n    have hfrac : p / (3 * p - 4) < (N : ℝ) - 2 := by linarith\n    have hmul := (div_lt_iff₀ hd).1 hfrac\n    nlinarith\n\ntheorem original_constants :\n    (2 : ℝ) * (17 / 32) - 1 = 1 / 16 ∧\n      1 - (17 / 32 : ℝ) - 1 / 16 = 13 / 32 ∧\n      ((18 : ℝ) - 2) * (1 / 16) = 1 ∧\n      1 + (1 / 16 : ℝ) - 17 / 32 = 17 / 32 := by\n  norm_num\n\ntheorem original_feasible : Feasible 2 (18 - 2) (1 / 4) := by\n  refine ⟨1 / 16, 17 / 32, ?_, ?_, ?_, ?_⟩ <;> norm_num\n\nend AveragedHolonomy\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/holonomy_certification/statement_fidelity.md",
+    "text": "# Statement fidelity: universal exponent feasibility\n\nThe declarations below are in namespace `AveragedHolonomy` in `Main.lean`.\nThe source is intended for Lean 4.31.0 with the host Mathlib workspace.\n\n`Feasible p q sigma` means that there exist **real** numbers a and b\nsuch that a>0, p*b>1, 1-b-a>sigma, and q*a>sigma. It is precisely\nthe strict power-law system for vanishing exceptional measure and\ncurvature smaller than the signal r^sigma in report.md. Here q is\nthe remainder exponent N-2, not a momentum variable.\n\n`feasible_iff` universally quantifies real p,q,sigma and assumes each\nis strictly positive. Its conclusion is the equivalence between\n`Feasible p q sigma` and 1/p+sigma/q<1-sigma. Both directions are\nproved, including explicit real witnesses in the sufficient direction.\nThere is no unstated upper bound on sigma and no discretization of p.\n\n`quarter_polynomial_iff` specializes sigma=1/4 for arbitrary positive\nreal p,q and gives the equivalent polynomial inequality\n4*q<p*(3*q-1). This theorem does not require q to be integral.\n\n`fixed_order_iff` quantifies a positive real p and a natural number\nN>=3. It substitutes the **real subtraction** (N:Real)-2 for q\nand proves that feasibility is equivalent to\np>4*((N:Real)-2)/(3*(N:Real)-7). These denominators are positive\nunder its hypotheses.\n\n`finite_order_iff` quantifies every positive real p. It proves that\nthere exists a natural N>=3 for which the strict exponent system\nis feasible if and only if p>4/3. The existential order is unbounded;\nthis is not a finite list of tested orders. The proof uses the\nArchimedean property to choose a natural N after p is fixed.\n\n`original_constants` is the conjunction of the four exact rational\nexponent identities for p=2, N=18, a=1/16, b=17/32.\n`original_feasible` proves that these particular values satisfy\nall four strict feasibility conditions with sigma=1/4.\n\nThese are the formalized assertions of ledger claim `C_EXPONENTS`.\nThe compiler checks their encoded real arithmetic and quantifiers.\nIt does NOT check that the geometric hypotheses of Theorem 1 hold\nin a spacetime, or formalize Fubini, weak representatives,\nstopped frame transport, interpolation of matrix-valued holonomy,\nweak exits, packet construction, canonical measure matching,\ncategory transfer, or the companion Kerr PDE theorems.\n\nIn particular, infeasibility for p<=4/3 is only infeasibility of\nthis specified strict exponent system. It is not a counterexample\nto extendibility/inextendibility at those exponents. The formalized\nfinite-order theorem requires whatever higher finite jet budget\nits selected N needs; it does not assert that 30 fixed derivatives\nsuffice for all p>4/3. Mathematical statement fidelity and the\nanalytic proof remain independent Reviewer obligations.\n"
+  },
+  "subject": {
+    "content_hash": "b78d5a9083b3091e4791e99c2d3b26311c4c39fd44d24af788e429c744e6f832",
+    "kind": "claim",
+    "subject_id": "C_EXPONENTS"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

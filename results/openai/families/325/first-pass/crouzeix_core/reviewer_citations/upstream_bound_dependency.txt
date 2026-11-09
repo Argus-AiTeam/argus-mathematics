@@ -1,0 +1,20 @@
+Source: https://github.com/openai/math/blob/main/lean/OAI/Analysis/DirectCrouzeix/CompleteBound.lean
+Retrieved independently using the GitHub contents API.
+Locator: import and complete_crouzeix.
+Noncontiguous verbatim code passages; omission markers added by reviewer.
+This confirms the implementation dependency only.
+
+import OAI.Analysis.DirectCrouzeix.DomainBound
+
+[Intervening text omitted.]
+
+theorem complete_crouzeix : UniversalBound 2 := by
+  intro n m d hn hm A B
+
+[Intervening proof steps omitted.]
+
+  have hh := expLevel_domain_bound_scaled hn hm A v b hc hW (coefficientPolynomial B) hρ hbound
+  rw [tensorPolynomial_coefficientPolynomial] at hh
+  calc
+    ‖tensorEvaluation A B‖ ≤ 2*ρ := hh
+    _ = 2*rangeMaximum A B+ε := by dsimp [ρ,M]; ring

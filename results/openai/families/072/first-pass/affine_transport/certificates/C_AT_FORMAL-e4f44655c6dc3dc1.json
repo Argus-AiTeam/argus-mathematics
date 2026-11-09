@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_AT_FORMAL-fa7eeb82b601",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/072/first-pass/affine_transport/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6533,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/072/first-pass/affine_transport/Main.lean",
+    "source_sha256": "bffeb33fe0b376117646eef238c155864f57a78ce31c8129391561a4888551f2",
+    "statement_fidelity": "families/072/first-pass/affine_transport/statement_fidelity.md",
+    "statement_fidelity_sha256": "ee5e63353681d919ba7df0db083cbf1f147def3a59c3dce10702d62f2f8802cd",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/072/first-pass/affine_transport/Main.lean:24:5: warning: Variable name `hh` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\nfamilies/072/first-pass/affine_transport/Main.lean:84:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Complex.instDivInvMonoid', which is 'noncomputable'\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/affine_transport/Main.lean",
+    "text": "import Mathlib\n\nopen MeasureTheory\n\nnamespace AffineTransport\n\ntheorem le_of_small_error (a d : ℝ)\n    (h : ∀ ε : ℝ, 0 < ε → a ≤ d + ε) : a ≤ d := by\n  by_contra hn\n  have hg : 0 < (a - d) / 2 := by linarith\n  have hh := h ((a - d) / 2) hg\n  linarith\n\ntheorem exhausted_comparison (a : ℕ → ℝ) (b d : ℝ)\n    (hfinite : ∀ n ε, 0 < ε → a n ≤ d + ε)\n    (hexhaust : ∀ ε, 0 < ε → ∃ n, b ≤ a n + ε) : b ≤ d := by\n  apply le_of_small_error\n  intro ε hε\n  obtain ⟨n, hn⟩ := hexhaust (ε / 2) (by linarith)\n  have hf := hfinite n (ε / 2) (by linarith)\n  linarith\n\ntheorem box_factor_bound (h v ε : ℝ)\n    (hh : 0 ≤ h) (hv : 0 ≤ v) (hε : 0 < ε) (hε1 : ε ≤ 1)\n    (hhε : h ≤ ε / 4) (hvε : v ≤ ε / 4) :\n    (1 + h) * (1 + v) ≤ 1 + ε := by\n  have hm := mul_le_mul hhε hvε hv (by linarith : 0 ≤ ε / 4)\n  nlinarith [mul_nonneg hε.le (sub_nonneg.mpr hε1)]\n\ntheorem strict_gain_forces_zero\n    {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω)\n    (pos neg gain : Ω → ℝ)\n    (ipos : Integrable pos μ) (ineg : Integrable neg μ)\n    (igain : Integrable gain μ)\n    (hpos : ∀ᵐ ω ∂μ, 0 ≤ pos ω)\n    (hneg : ∀ᵐ ω ∂μ, 0 ≤ neg ω)\n    (hle : ∀ᵐ ω ∂μ, pos ω ≤ gain ω)\n    (hstrict : ∀ᵐ ω ∂μ, 0 < pos ω → pos ω < gain ω)\n    (htransport : (∫ ω, gain ω ∂μ) ≤ ∫ ω, neg ω ∂μ)\n    (hbalance : (∫ ω, pos ω ∂μ) = ∫ ω, neg ω ∂μ) :\n    (pos =ᵐ[μ] 0) ∧ (neg =ᵐ[μ] 0) := by\n  have hmono := integral_mono_ae ipos igain hle\n  have heq : (∫ ω, pos ω ∂μ) = ∫ ω, gain ω ∂μ := by linarith\n  have hpg : pos =ᵐ[μ] gain :=\n    (integral_eq_iff_of_ae_le ipos igain hle).mp heq\n  have hz : pos =ᵐ[μ] 0 := by\n    filter_upwards [hpos, hstrict, hpg] with ω hp hs he\n    change pos ω = 0\n    by_contra hn\n    have hp0 : 0 < pos ω := lt_of_le_of_ne hp (Ne.symm hn)\n    have hh := hs hp0\n    linarith\n  have hpint : (∫ ω, pos ω ∂μ) = 0 := by\n    calc\n      (∫ ω, pos ω ∂μ) = ∫ ω, (0 : Ω → ℝ) ω ∂μ := integral_congr_ae hz\n      _ = 0 := by simp\n  have hnint : (∫ ω, neg ω ∂μ) = 0 := by linarith\n  exact ⟨hz, (integral_eq_zero_iff_of_nonneg_ae hneg ineg).mp hnint⟩\n\ntheorem inverse_square_endpoint (β j : ℝ)\n    (hβ : 1 ≤ β) (hj : j ≤ 0)\n    (hmoment : ((β + 3) / 4) ^ 2 * j = (β + 3) * (β - 1) / 16) :\n    β = 1 := by\n  have hleft : ((β + 3) / 4) ^ 2 * j ≤ 0 :=\n    mul_nonpos_of_nonneg_of_nonpos (sq_nonneg _) hj\n  by_contra hn\n  have hβ1 : 1 < β := lt_of_le_of_ne hβ (Ne.symm hn)\n  have hright : 0 < (β + 3) * (β - 1) / 16 :=\n    div_pos (mul_pos (by linarith) (by linarith)) (by norm_num)\n  linarith\n\ntheorem inverse_first_endpoint (β j : ℝ)\n    (hβ : (1 : ℝ) / 4 ≤ β) (hj : j ≤ 0)\n    (hmoment : ((β + 2) / 3) ^ 2 * j = (4 * β - 1) * (β + 2) / 9) :\n    β = (1 : ℝ) / 4 := by\n  have hleft : ((β + 2) / 3) ^ 2 * j ≤ 0 :=\n    mul_nonpos_of_nonneg_of_nonpos (sq_nonneg _) hj\n  by_contra hn\n  have hβ1 : (1 : ℝ) / 4 < β := lt_of_le_of_ne hβ (Ne.symm hn)\n  have hright : 0 < (4 * β - 1) * (β + 2) / 9 :=\n    div_pos (mul_pos (by linarith) (by linarith)) (by norm_num)\n  linarith\n\ndef quadratic (t : ℝ) (z : ℂ) : ℂ :=\n  ((z - (t : ℂ)) ^ 2 - (Complex.I - (t : ℂ)) ^ 2) /\n    (2 * (Complex.I - (t : ℂ)))\n\ntheorem quadratic_denominator_ne_zero (t : ℝ) :\n    2 * (Complex.I - (t : ℂ)) ≠ 0 := by\n  apply mul_ne_zero (by norm_num)\n  intro h\n  have him := congrArg Complex.im h\n  norm_num at him\n\ntheorem quadratic_at_i (t : ℝ) : quadratic t Complex.I = 0 := by\n  simp [quadratic]\n\ntheorem quadratic_injective_on_upper_half_plane (t : ℝ) :\n    Set.InjOn (quadratic t) {z : ℂ | 0 < z.im} := by\n  intro z hz w hw heq\n  have hd := quadratic_denominator_ne_zero t\n  have hnum :\n      (z - (t : ℂ)) ^ 2 - (Complex.I - (t : ℂ)) ^ 2 =\n      (w - (t : ℂ)) ^ 2 - (Complex.I - (t : ℂ)) ^ 2 := by\n    have hh := congrArg (fun v : ℂ => v * (2 * (Complex.I - (t : ℂ)))) heq\n    simpa [quadratic, hd] using hh\n  have hprod : (z - w) * (z + w - 2 * (t : ℂ)) = 0 := by\n    calc\n      (z - w) * (z + w - 2 * (t : ℂ)) =\n          ((z - (t : ℂ)) ^ 2 - (Complex.I - (t : ℂ)) ^ 2) -\n          ((w - (t : ℂ)) ^ 2 - (Complex.I - (t : ℂ)) ^ 2) := by ring\n      _ = 0 := sub_eq_zero.mpr hnum\n  rcases mul_eq_zero.mp hprod with hzw | hsum\n  · exact sub_eq_zero.mp hzw\n  · have him := congrArg Complex.im hsum\n    have hsumim : z.im + w.im = 0 := by simpa using him\n    change 0 < z.im at hz\n    change 0 < w.im at hw\n    linarith\n\nend AffineTransport\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/affine_transport/statement_fidelity.md",
+    "text": "# Statement fidelity: the formal transport core\n\n`Main.lean` uses Lean 4.31.0 and Mathlib. It proves the declarations below\nwithout additional axioms or proof holes.\n\n- `le_of_small_error` and `exhausted_comparison` quantify over real numbers\n  and a sequence indexed by natural numbers. The former passes from every\n  positive additive error to an exact inequality. The latter combines\n  finite-cutoff upper bounds with an explicitly assumed exhaustion from\n  below. It does not silently assume monotonicity, convergence, a probability\n  law, or a spatial area formula.\n- `box_factor_bound` bounds the actual product of the horizontal and\n  logarithmic-height enlargement factors once both errors are between zero\n  and epsilon/4 and 0 < epsilon <= 1. The proof in `report.md` establishes\n  that the manuscript boxes meet these hypotheses at fixed cutoff.\n- `strict_gain_forces_zero` quantifies over any measurable space, any measure,\n  and three real-valued integrable functions `pos`, `neg`, and `gain`.\n  The hypotheses require almost-everywhere nonnegativity of `pos` and `neg`,\n  `pos <= gain`, strict inequality wherever `pos > 0`, a transport bound\n  `integral gain <= integral neg`, and balanced positive/negative integrals.\n  The conclusion is that both functions vanish almost everywhere. No\n  uniformly positive gain, bounded multiplier, or finite total measure is\n  assumed. In the application the exceptional-root lemma removes the bad\n  fibers; the weighted area comparison supplies gain integrability and\n  its transport bound. Those analytic premises are proved in `report.md`,\n  not assumed to be formal consequences of the manuscript's notation.\n- `inverse_square_endpoint` and `inverse_first_endpoint` quantify over real\n  beta and real expected Jacobian `j`. Nonpositivity of `j`, the respective\n  moment identity, and the contrary lower bound on beta force beta = 1 and\n  beta = 1/4, respectively. They do not prove existence of a law or the\n  exclusion of the latter equality case.\n- `quadratic` is exactly\n  `((z-t)^2-(i-t)^2)/(2*(i-t))`, for real `t` and complex `z`.\n  `quadratic_denominator_ne_zero` proves the denominator nonzero for every\n  real vertex. `quadratic_at_i` proves its zero normalization.\n  `quadratic_injective_on_upper_half_plane` proves injectivity restricted\n  to the set of complex numbers with strictly positive imaginary part,\n  without a boundedness or boundary-extension assumption.\n\nThe source does **not** formalize the construction of the weighted law,\ncompact-superlevel proof, Morse/index count, Borel rank pairing, or the\nanalytic classification of all zero-Jacobian maps. It does not encode the\nfull claim `C_AT_ENDPOINT`. Those parts have a complete mathematical proof\nin `report.md` and require independent human/Reviewer scrutiny. The separate\nclaim `C_AT_FORMAL` names exactly the formal results above.\n"
+  },
+  "subject": {
+    "content_hash": "7cfa7d00cdd9c25165e3741ef08baa30213cf872c8f993c74f9489d42168ddd9",
+    "kind": "claim",
+    "subject_id": "C_AT_FORMAL"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

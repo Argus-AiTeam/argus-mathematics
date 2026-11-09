@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C344_ALGEBRA-8e5e230e3253",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/344/first-pass/no_splitting_audit/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/344/first-pass/no_splitting_audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14833,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/344/first-pass/no_splitting_audit/lean/Main.lean",
+    "source_sha256": "956956db4a3ac70f14b9c6fb01683ccef483267b75411f0d7ae12517063f40bf",
+    "statement_fidelity": "families/344/first-pass/no_splitting_audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "312c62f7577a12fb79f8617b57b3d78c0e0787ad01cce6f13c4b2a73ca85e9b0",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/no_splitting_audit/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace NoSplittingAudit\n\ntheorem schur_completion {k m : ℕ}\n    (V : Matrix (Fin k) (Fin k) ℝ)\n    (H : Matrix (Fin m) (Fin m) ℝ)\n    (U R : Matrix (Fin k) (Fin m) ℝ) :\n    V - (U * H) * R.transpose - R * (H * U.transpose)\n        + (R * H) * R.transpose =\n      (V - (U * H) * U.transpose)\n        + ((R - U) * H) * (R - U).transpose := by\n  simp only [Matrix.transpose_sub, Matrix.sub_mul, Matrix.mul_sub, Matrix.mul_assoc]\n  abel\n\ntheorem schur_reversal {k m : ℕ}\n    (V : Matrix (Fin k) (Fin k) ℝ)\n    (C : Matrix (Fin k) (Fin m) ℝ)\n    (Hinv : Matrix (Fin m) (Fin m) ℝ) :\n    -V - ((-C) * (-Hinv)) * (-C).transpose =\n      -(V - (C * Hinv) * C.transpose) := by\n  simp only [Matrix.transpose_neg, Matrix.neg_mul, Matrix.mul_neg, neg_neg]\n  abel\n\nend NoSplittingAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/no_splitting_audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: rectangular Schur algebra only\n\nIn namespace `NoSplittingAudit`, `schur_completion` quantifies over all natural numbers\n`k,m` and real matrices `V : k x k`, `H : m x m`, and `U,R : k x m`.\nIt proves exactly the displayed rectangular polynomial identity.\nNo commutation of matrices is asserted. For the analytic application in\nequation (6) of `../proof.md`, set `H=H'(a)` and\n`U=C'(a) H'(a)^{-1}`. Symmetry and invertibility of the positive\nmatrix `H'(a)` imply `U H=C'(a)` and\n`H U.transpose=C'(a).transpose`. With those substitutions the\nidentity is the completion of the square in the endpoint derivative\nof the Schur complement. Those substitutions, differentiation, and\npositive semidefiniteness are justified in prose, not in this Lean theorem.\n\nIn the same namespace, `schur_reversal` quantifies over all natural numbers\n`k,m`, a real `k x k` matrix `V`, a `k x m` matrix `C`, and an\n`m x m` matrix named `Hinv`. The name is a variable name, not a\nformal inverse assumption. The declaration proves the algebraic sign\nidentity when `V,C,Hinv` are all negated. In the endpoint application,\nreversing endpoints negates all three differences and replaces the\ninverse of the invertible regular block by its negative, giving\n`Q(y,x)=-Q(x,y)`. The real-matrix inverse sign rule is not encoded here.\n\nBoth statements also allow zero ranks; their application uses positive\n`k,m`. Neither declaration proves the determinant-root inequality,\nthe scalar integral identity, the pole expansions, positivity of the\nderivative remainder, the folded integral comparison, equality\npropagation, or a theorem about Riemannian manifolds. A successful\ncompiler run certifies these two algebraic declarations only.\n"
+  },
+  "subject": {
+    "content_hash": "74808c9b1259f7f85112e039b356bb71c324cd5f3476954a4ee5e4581acbe434",
+    "kind": "claim",
+    "subject_id": "C344_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

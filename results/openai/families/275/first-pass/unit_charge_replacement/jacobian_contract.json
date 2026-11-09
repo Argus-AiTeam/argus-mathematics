@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "discovery_query": "Coulomb potential quadrature error equal point charges transport density singular kernel",
+  "candidate_operation_ids": [
+    "finite_geometry.projective_point.equal.decide",
+    "geometry.polygon.visibility_kernel.compute",
+    "finite_geometry.projective_point.canonicalize",
+    "matrix.real_quadratic.singular_spectrum.compute",
+    "moment_functional.gaussian_quadrature.compute"
+  ],
+  "operation_id": "moment_functional.gaussian_quadrature.compute",
+  "description": "Compute an exact Gaussian quadrature rule from a bounded moment prefix whose degree-n orthogonal polynomial splits over QQ: 2n moments, n distinct rational nodes, positive weights, exactness through degree 2n-1.",
+  "input_schema": {
+    "$defs": {
+      "CanonicalRational": {
+        "additionalProperties": false,
+        "description": "A reduced rational whose denominator is positive and whose zero is 0/1.",
+        "properties": {
+          "den": {"pattern": "^(?:0|-?[1-9][0-9]*)$", "type": "string"},
+          "num": {"pattern": "^(?:0|-?[1-9][0-9]*)$", "type": "string"}
+        },
+        "required": ["num", "den"],
+        "type": "object"
+      },
+      "MomentFunctionalPrefix": {
+        "additionalProperties": false,
+        "description": "A bounded prefix of a linear functional L(x^k) = mu_k over QQ.",
+        "properties": {
+          "moments": {
+            "items": {"$ref": "#/$defs/CanonicalRational"},
+            "maxItems": 65,
+            "minItems": 1,
+            "type": "array"
+          },
+          "variable": {"maxLength": 64, "minLength": 1, "type": "string"}
+        },
+        "required": ["moments", "variable"],
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "order": {"maximum": 16, "minimum": 1, "type": "integer"},
+      "prefix": {"$ref": "#/$defs/MomentFunctionalPrefix"}
+    },
+    "required": ["prefix", "order"],
+    "type": "object"
+  },
+  "output_contract": {
+    "type": "GaussianQuadratureRule",
+    "required": ["order", "nodes", "variable", "exactness_degree", "prefix"],
+    "node_and_weight_type": "CanonicalRational",
+    "exactness_degree_minimum": 0
+  },
+  "applicability_limit": "The manuscript's order-two uniform-interval rule has irrational nodes. This operation only covers rational splitting. No Coulomb singular-kernel estimate was present among the returned candidates.",
+  "execution_result": "The exact interval payload was attempted once; the sidecar transport failed before producing a mathematical typed output. See jacobian_output.json and jacobian_adapter_status.json. This is a non-conclusion."
+}

@@ -1,0 +1,127 @@
+{
+  "goal": "C9000180",
+  "routes": [
+    {
+      "name": "Integral verification of the full paired-state forest core",
+      "status": "current",
+      "evidence": "research/paired_state_audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000180": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 180 (Barnette’s Hamiltonian-cycle conjecture.; papers: Paired states and Hamiltonian cycles in cubic bipartite planar graphs; Lean status: Partially/Comparator formalized (lean/docs/180.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C180_INTEGRAL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C180_MAIN": {
+      "statement": "Staged thm:main: Barnette Hamiltonicity; outside the conclusion of this core audit.",
+      "status": "open",
+      "depends_on": ["C180_DUAL_SETUP", "C180_PARTITION", "C180_DUALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Paired-states-and-Hamiltonian-cycles-in-cubic-bipartite-planar-graphs-September-24-2026/build/paper.tex"]
+    },
+    "C180_DUAL_SETUP": {
+      "statement": "The original graph's dual is a simple face-bicolored sphere triangulation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C180_PARTITION": {
+      "statement": "Staged thm:partition, including the prescribed facial edge.",
+      "status": "open",
+      "depends_on": ["C180_PAIRS", "C180_FOREST", "C180_RECOVERY", "C180_GLUE"],
+      "reviewer_confirmed": false
+    },
+    "C180_PAIRS": {
+      "statement": "Staged prop:pairs: no separating triangle implies two disjoint states via density and integral flow.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C180_FOREST": {
+      "statement": "Existence of a pair implies existence of a pair with Q_s a forest.",
+      "status": "open",
+      "depends_on": ["C180_DISK", "C180_INVOLUTION", "C180_SPOKES", "C180_DETOUR", "C180_GROUPING", "C180_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/paired_state_audit/report.md", "research/paired_state_audit/exact_certificate.json"]
+    },
+    "C180_DISK": {
+      "statement": "The original bijection and disk counts give delta sum -3 counterclockwise and +3 clockwise.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/paired_state_audit/report.md"]
+    },
+    "C180_INVOLUTION": {
+      "statement": "The fixed-s partner involution is well-defined and reverses the Gaussian phase.",
+      "status": "open",
+      "depends_on": ["C180_DISK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/paired_state_audit/report.md"]
+    },
+    "C180_SPOKES": {
+      "statement": "Integral dual-path spoke weights realize unit bounded-face circulations in each component.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/paired_state_audit/report.md"]
+    },
+    "C180_DETOUR": {
+      "statement": "Distinct-center detours preserve simplicity and orientation, even if a third corner lies elsewhere on the cycle.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/paired_state_audit/report.md"]
+    },
+    "C180_GROUPING": {
+      "statement": "An undirected pair edge set gives exactly the independent orientations of its simple cycles.",
+      "status": "open",
+      "depends_on": ["C180_DISK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/paired_state_audit/report.md"]
+    },
+    "C180_ALGEBRA": {
+      "statement": "The minimum-cycle-order coefficient is the common phase times a positive integer sum of products.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/paired_state_audit/report.md", "research/paired_state_audit/Main.lean", "research/paired_state_audit/statement_fidelity.md", "research/paired_state_audit/certificates/C180_ALGEBRA-07940da35750e42c.json"]
+    },
+    "C180_INTEGRAL": {
+      "statement": "The complete integral area-polynomial forest-extraction theorem, with exact order at z=1 and degree bound.",
+      "status": "open",
+      "depends_on": ["C180_FOREST", "C180_SPOKES", "C180_GROUPING", "C180_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/paired_state_audit/report.md", "research/paired_state_audit/exact_certificate.json"]
+    },
+    "C180_DUALITY": {
+      "statement": "Staged lem:duality: complementary dual tree/forest connectivity.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C180_RECOVERY": {
+      "statement": "Recover the white-face tree, selected edges, and induced-tree partition with prescribed outer edge.",
+      "status": "open",
+      "depends_on": ["C180_DUALITY", "C180_PFOREST"],
+      "reviewer_confirmed": false
+    },
+    "C180_PFOREST": {
+      "statement": "Staged lem:P-forest, using the additional selected-edge disk count.",
+      "status": "open",
+      "depends_on": ["C180_DISK"],
+      "reviewer_confirmed": false
+    },
+    "C180_GLUE": {
+      "statement": "Partitions glue across a separating triangle along a vertex or edge in each class.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    }
+  }
+}

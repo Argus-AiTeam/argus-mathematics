@@ -1,0 +1,100 @@
+{
+  "goal": "C9000153",
+  "routes": [
+    {
+      "name": "R_SAL_VERIFY",
+      "status": "current",
+      "evidence": "research/salem_audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000153": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 153 (Arithmetic classification and non-Pisot singularity for Bernoulli convolutions.; papers: Arithmetic classification and non-Pisot singularity for Bernoulli convolutions; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_SAL_MAIN",
+        "C_SAL_NONSTATIONARY",
+        "C_SAL_KERNEL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/salem_audit/report.md",
+        "research/salem_audit/exact_certificate.json"
+      ],
+      "note": "All mathematical obligations have Engineer proofs; independent Reviewer acceptance and novelty/significance assessment remain open. No classification or degree-31 conclusion is certified."
+    },
+    "C_SAL_MAIN": {
+      "statement": "For every quartic Salem beta in (1,2), the unbiased Bernoulli convolution at 1/beta is singular (the literal sal:main conclusion).",
+      "status": "open",
+      "depends_on": ["C_SAL_CONSTRUCTION", "C_SAL_LOSS", "C_SAL_WINDOWS", "C_SAL_SEPARATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/report.md", "research/salem_audit/exact_certificate.json"]
+    },
+    "C_SAL_TRACE": {
+      "statement": "All u_(m,j) are algebraic integers, are not half-integers, and have the manuscript's integer trace and reciprocal-shift identities.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/report.md"]
+    },
+    "C_SAL_CONSTRUCTION": {
+      "statement": "One infinite multiplier sequence simultaneously satisfies the index-uniform cosine floor, log K_m <= .75 L_m, L_(m+1) >= 2.1 L_m from m=3, and all small-error bounds.",
+      "status": "open",
+      "depends_on": ["C_SAL_TRACE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/report.md", "research/salem_audit/Main.lean"]
+    },
+    "C_SAL_LOSS": {
+      "statement": "The negative-index loss has recurrence S_(m+1) <= 2.0301 S_m + C and satisfies S_m/L_m -> 0; the total loss up to n is at most 2.01 S_m + C n delta_m^2.",
+      "status": "open",
+      "depends_on": ["C_SAL_CONSTRUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/report.md", "research/salem_audit/certificates/C_SAL_KERNEL-b41973e0c9277864.json"]
+    },
+    "C_SAL_WINDOWS": {
+      "statement": "There are at least exp(.7 L_m) disjoint phase windows, expectations at least exp(-L_m/20), and squared L2 window errors at most C exp(-L_m/2).",
+      "status": "open",
+      "depends_on": ["C_SAL_LOSS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/report.md"]
+    },
+    "C_SAL_SEPARATION": {
+      "statement": "The Fourier averages concentrate under the sign law and vanish in Lebesgue mean square sufficiently rapidly to produce a full-law-mass Lebesgue-null Borel set.",
+      "status": "open",
+      "depends_on": ["C_SAL_WINDOWS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/report.md"]
+    },
+    "C_SAL_NONSTATIONARY": {
+      "statement": "For every quartic Salem beta in (1,2) and every deterministic sequence p_l in [0,1], the law of the independent-sign series with P(epsilon_l=1)=p_l is singular; its null set may depend on the probability sequence.",
+      "status": "open",
+      "depends_on": ["C_SAL_CONSTRUCTION", "C_SAL_LOSS", "C_SAL_CENTERED_WINDOWS", "C_SAL_SEPARATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/report.md", "research/salem_audit/exact_certificate.json"]
+    },
+    "C_SAL_CENTERED_WINDOWS": {
+      "statement": "For arbitrary nonstationary independent sign probabilities, deterministic compensation by the means of discarded trace errors yields independent modulus-one window variables with the same squared L2 error C_beta exp(-L_m/2).",
+      "status": "open",
+      "depends_on": ["C_SAL_CONSTRUCTION", "C_SAL_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/report.md"]
+    },
+    "C_SAL_KERNEL": {
+      "statement": "Universal exact algebraic identities and sequence inequalities for the bias-characteristic-function bound, cosine-floor loss budget, and the 2.0301-versus-2.1 normalized-loss contraction.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/Main.lean", "research/salem_audit/statement_fidelity.md", "research/salem_audit/certificates/C_SAL_KERNEL-b41973e0c9277864.json"],
+      "note": "Ledger closed_kernel for this universal core only; graph stays open until independent statement-fidelity review."
+    },
+    "C_SAL_SCOPE": {
+      "statement": "A retrieved later primary source states equal-weight quartic-Salem singularity via a stronger dimension-drop theorem; this is comparison evidence, not a proof dependency of the independent audit.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/salem_audit/literature_scope.md"]
+    }
+  }
+}

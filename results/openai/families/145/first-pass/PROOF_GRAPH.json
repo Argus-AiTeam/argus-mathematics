@@ -1,0 +1,177 @@
+{
+  "goal": "C9000145",
+  "routes": [
+    {
+      "name": "R_OP_VERIFICATION",
+      "status": "current",
+      "evidence": "research/operator_square/theorem.md",
+      "goal": "C_OP_CORE",
+      "obligations": ["C_OP_ACTIVE", "C_OP_POLAR", "C_OP_COMPLETE", "C_OP_UNGROUP"]
+    },
+    {
+      "name": "R_OP_SOFT_PARITY",
+      "status": "ruled_out",
+      "evidence": "exact_certificate.json",
+      "goal": "C9000145",
+      "obligations": ["C_OP_SOFT_ADMISSIBLE"],
+      "reason": "The full-support softened-parity model violates proper-column independence: E[C0 C1]=0 but E[C0]E[C1]=1/64. It is not a manuscript counterexample."
+    },
+    {
+      "name": "Manuscript main-theorem dependency map",
+      "status": "untried",
+      "evidence": "research/openai_manuscript/Rokhlins-multiple-mixing-problem-for-one-transformation-September-23-2026/build/sections/07-main-proof.tex",
+      "note": "Mapping only. This mission does not certify the main mixing theorem."
+    }
+  ],
+  "nodes": {
+    "C9000145": {
+      "statement": "Obtain an independently accepted publishable refutation or verification of a substantive manuscript core.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_OP_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md", "research/operator_square/theorem.md", "exact_certificate.json"],
+      "remaining": "Host-invoked independent mathematical review, statement-fidelity review, and novelty/significance assessment. No campaign-completion claim."
+    },
+    "C_OP_CORE": {
+      "statement": "For every k>=3 standard-Borel square with all inherited locality kernels, active projections commute and their intersection has a simultaneous full-coordinate exact-line basis, a compact abelian Haar factor, and unitary edge transport.",
+      "status": "open",
+      "depends_on": ["C_OP_ACTIVE", "C_OP_POLAR", "C_OP_COMPLETE", "C_OP_UNGROUP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/operator_square/theorem.md", "exact_certificate.json"],
+      "remaining": "The complete analytic proof is supplied, but is not compiler-checked or independently accepted.",
+      "scope": "A conditional implication from the square-locality hypotheses; proving the array construction has those hypotheses is a separate node."
+    },
+    "C_OP_ACTIVE": {
+      "statement": "Conditional square kernels imply typed rectangle identities, reducing active projections, commutation, and total restricted edge families.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/operator_square/theorem.md"],
+      "locator": "Section 1; manuscript lem:rectangle and lem:active-reduction",
+      "remaining": "Independent review of the conditional kernels and essential-range arguments."
+    },
+    "C_OP_ALGEBRA": {
+      "statement": "Arbitrary Hilbert-space rectangle square identities, total-family fixed-square constancy and injectivity, and cancellation on dense ranges without bounded inverses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "Main.lean",
+        "STATEMENT_FIDELITY.md",
+        "research/operator_square/formal/certificates/C_OP_ALGEBRA-350fefb43940e6ea.json"
+      ],
+      "mechanical_result": "Lean 4.31.0 exit_code=0, axiom_audit_exit_code=0, proof_holes=[]; mechanical evidence recorded on the scoped claim.",
+      "remaining": "Independent statement-fidelity approval, not another unchanged compiler run."
+    },
+    "C_OP_POLAR": {
+      "statement": "Fixed injective positive parts and polar unitaries normalize into a compact abelian group with Haar law and a measurable corner ratio.",
+      "status": "open",
+      "depends_on": ["C_OP_ACTIVE", "C_OP_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/operator_square/theorem.md"],
+      "locator": "Sections 2-3; manuscript lem:fixed-squares and lem:polar-group",
+      "remaining": "Independent review of Fubini, support normalization, compactness and measurability."
+    },
+    "C_OP_COMPLETE": {
+      "statement": "All-L2 contraction projection identities and restricted totality imply D_corner=L2(sigma(h)), with no assumed algebra structure on D.",
+      "status": "open",
+      "depends_on": ["C_OP_ACTIVE", "C_OP_POLAR", "C_OP_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/operator_square/theorem.md", "verify.py"],
+      "locator": "Section 4; manuscript lem:contraction-completeness",
+      "remaining": "Independent review of unbounded-input approximation and the reverse inclusion."
+    },
+    "C_OP_UNGROUP": {
+      "statement": "Orthogonal exact-line families coincide across all splits; tensor factorization gives full k-coordinate exactness, and partner transport gives unitary edge restrictions.",
+      "status": "open",
+      "depends_on": ["C_OP_COMPLETE", "C_OP_ACTIVE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/operator_square/theorem.md"],
+      "locator": "Sections 5-6; manuscript prop:common-exact-lines",
+      "remaining": "Independent review of the all-k tensor argument and the unitary strengthening."
+    },
+    "C_OP_FINITE": {
+      "statement": "An exact five-component parity/noise square satisfies all three-cell kernels and has active dimensions 8,4,2; softened parity is rejected for violating proper-plane independence.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["verify.py", "exact_certificate.json"],
+      "remaining": "Independent replay.",
+      "scope": "Finite adversarial experiment only; deliberately not an antecedent of C_OP_CORE."
+    },
+    "C_OP_SOFT_ADMISSIBLE": {
+      "statement": "Candidate, not a manuscript assertion: the softened parity law with density 1+(sum row parities+sum column parities)/8 has all the inherited square-locality hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["verify.py", "exact_certificate.json"],
+      "engineer_verdict": "refutes",
+      "obstruction": "Two column parities have joint expectation 0 and individual expectations 1/8, contradicting proper-column independence.",
+      "remaining": "Independent replay of this exact route exclusion; the general verification route remains current."
+    },
+    "C_MAIN_MIXING": {
+      "statement": "Every invertible mixing probability-preserving transformation is mixing of every finite order, without standardness assumptions.",
+      "status": "open",
+      "depends_on": ["C_ZERO_ENTROPY", "C_SQUARE_LOCALITY", "C_OP_CORE", "C_LABEL_BLOCKS", "C_ORBIT_CANCELLATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rokhlins-multiple-mixing-problem-for-one-transformation-September-23-2026/build/sections/07-main-proof.tex"],
+      "locator": "thm:main; 01-introduction.tex:21-34; 07-main-proof.tex:7-38",
+      "remaining": "All non-operator dependencies and the final implication are unverified here."
+    },
+    "C_ZERO_ENTROPY": {
+      "statement": "A least failing order supplies a lower-order-mixing zero-entropy finite-alphabet process and positive centered witness.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rokhlins-multiple-mixing-problem-for-one-transformation-September-23-2026/build/sections/02-reduction.tex"],
+      "locator": "prop:zero-entropy-witness; lines 8-144",
+      "remaining": "Outside this mission."
+    },
+    "C_SATURATION": {
+      "statement": "Every array object has an extension sated for parameter, outside-plane and combined conditional-expectation energies.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rokhlins-multiple-mixing-problem-for-one-transformation-September-23-2026/build/sections/03-arrays.tex"],
+      "locator": "prop:saturation",
+      "remaining": "Outside this mission."
+    },
+    "C_ROLLED": {
+      "statement": "Rolling the first axis with at most k-2 parent entries gives an admissible extension of a saturated array object.",
+      "status": "open",
+      "depends_on": ["C_SATURATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rokhlins-multiple-mixing-problem-for-one-transformation-September-23-2026/build/sections/03-arrays.tex"],
+      "locator": "lem:rolled-extension",
+      "remaining": "Outside this mission."
+    },
+    "C_SQUARE_LOCALITY": {
+      "statement": "The saturated array construction supplies the complete parent-screening and ordered grouped square kernels.",
+      "status": "open",
+      "depends_on": ["C_SATURATION", "C_ROLLED"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rokhlins-multiple-mixing-problem-for-one-transformation-September-23-2026/build/sections/03-arrays.tex"],
+      "locator": "prop:square-locality",
+      "remaining": "Outside this mission; these kernels are explicit hypotheses of C_OP_CORE."
+    },
+    "C_LABEL_BLOCKS": {
+      "statement": "Active exactness, measurable label groups, finite moving blocks and the block witness preserve a nonzero correlation.",
+      "status": "open",
+      "depends_on": ["C_OP_CORE", "C_SQUARE_LOCALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rokhlins-multiple-mixing-problem-for-one-transformation-September-23-2026/build/sections/05-labels-blocks.tex"],
+      "locator": "lem:active-exact (40-112), prop:measurable-labels (125 onward), lem:finite-blocks (485-639), prop:block-witness (653-750)",
+      "remaining": "Outside this mission, including the separately required parameter geometry."
+    },
+    "C_ORBIT_CANCELLATION": {
+      "statement": "Entropy cancellation, orbit alternatives and polynomial cancellation annihilate the projective-character orbit correlations.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rokhlins-multiple-mixing-problem-for-one-transformation-September-23-2026/build/sections/06-cancellation.tex"],
+      "locator": "prop:orbit-cancellation; lem:entropy-cancellation; lem:orbit-alternatives; lem:polynomial-cancellation",
+      "remaining": "Outside this mission. Its hypotheses, not this cancellation proposition itself, are supplied by the label-block argument."
+    }
+  }
+}

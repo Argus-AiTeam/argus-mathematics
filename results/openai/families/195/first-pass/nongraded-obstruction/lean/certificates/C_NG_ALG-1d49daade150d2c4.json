@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_NG_ALG-d3c7d4189b38",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/195/first-pass/nongraded-obstruction/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/195/first-pass/nongraded-obstruction/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 17863,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/195/first-pass/nongraded-obstruction/lean/Main.lean",
+    "source_sha256": "b68bdbb0058afc132937e48439e0e43b351b72ee51b3d7dc37254cb025608899",
+    "statement_fidelity": "families/195/first-pass/nongraded-obstruction/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "f79358055dc71c618d98066b93fe859d54e2911690e631c2240674c0fb87321f",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/nongraded-obstruction/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace NongradedObstruction\n\ntheorem layer_quadratic_nonneg (N : ℝ) (n : ℕ → ℝ)\n    (lo : ∀ j, 0 ≤ n j) (hi : ∀ j, n j ≤ N) (k : ℕ) :\n    0 ≤ N * (∑ j ∈ Finset.range k, (2 * (j : ℝ) + 1) * n j) -\n      (∑ j ∈ Finset.range k, n j) ^ 2 := by\n  induction k with\n  | zero => simp\n  | succ k ih =>\n    have hs : (∑ j ∈ Finset.range k, n j) ≤ (k : ℝ) * N := by\n      calc\n        (∑ j ∈ Finset.range k, n j) ≤ ∑ _j ∈ Finset.range k, N :=\n          Finset.sum_le_sum (fun j _ => hi j)\n        _ = (k : ℝ) * N := by simp\n    have hp : 0 ≤ n k *\n        ((2 * (k : ℝ) + 1) * N - 2 * (∑ j ∈ Finset.range k, n j) - n k) :=\n      mul_nonneg (lo k) (by nlinarith [hi k])\n    simp only [Finset.sum_range_succ]\n    nlinarith\n\ntheorem layer_chern_nonneg (N : ℝ) (n : ℕ → ℝ)\n    (lo : ∀ j, 0 ≤ n j) (hi : ∀ j, n j ≤ N) (k : ℕ)\n    (d : ℝ) (hd : (∑ j ∈ Finset.range k, (2 * (j : ℝ) + 1) * n j) ≤ d)\n    (hN : 0 ≤ N) :\n    0 ≤ N * d - (∑ j ∈ Finset.range k, n j) ^ 2 := by\n  have h := layer_quadratic_nonneg N n lo hi k\n  have hmul := mul_le_mul_of_nonneg_left hd hN\n  linarith\n\ntheorem centered_sum {ι : Type*} [Fintype ι] (w x : ι → ℝ) (a : ℝ) :\n    (∑ i, w i * (x i - a) ^ 2) =\n      (∑ i, w i * x i ^ 2) - 2 * a * (∑ i, w i * x i) +\n        a ^ 2 * (∑ i, w i) := by\n  calc\n    (∑ i, w i * (x i - a) ^ 2) =\n        ∑ i, (w i * x i ^ 2 - (2 * a) * (w i * x i) + a ^ 2 * w i) := by\n      apply Finset.sum_congr rfl\n      intro i _\n      ring\n    _ = _ := by\n      simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib,\n        ← Finset.mul_sum]\n\ntheorem variance_identity {ι : Type*} [Fintype ι] (w x : ι → ℝ)\n    (hw : (∑ i, w i) = 1) :\n    (∑ i, w i * (x i - ∑ j, w j * x j) ^ 2) =\n      (∑ i, w i * x i ^ 2) - (∑ i, w i * x i) ^ 2 := by\n  rw [centered_sum, hw]\n  ring\n\ntheorem weighted_variance_bound {ι : Type*} [Fintype ι] (w x : ι → ℝ)\n    (hw0 : ∀ i, 0 ≤ w i) (hw : (∑ i, w i) = 1) (a b : ℝ)\n    (hlo : ∀ i, a ≤ x i) (hhi : ∀ i, x i ≤ b) :\n    (∑ i, w i * (x i - ∑ j, w j * x j) ^ 2) ≤ (b - a) ^ 2 / 4 := by\n  have hp : ∀ i, (x i - (a + b) / 2) ^ 2 ≤ (b - a) ^ 2 / 4 := by\n    intro i\n    have h := mul_nonneg (sub_nonneg.mpr (hlo i)) (sub_nonneg.mpr (hhi i))\n    nlinarith\n  have hs : (∑ i, w i * (x i - (a + b) / 2) ^ 2) ≤ (b - a) ^ 2 / 4 := by\n    calc\n      (∑ i, w i * (x i - (a + b) / 2) ^ 2) ≤\n          ∑ i, w i * ((b - a) ^ 2 / 4) :=\n        Finset.sum_le_sum (fun i _ => mul_le_mul_of_nonneg_left (hp i) (hw0 i))\n      _ = (b - a) ^ 2 / 4 := by rw [← Finset.sum_mul, hw]; ring\n  have hc := centered_sum w x ((a + b) / 2)\n  have hv := variance_identity w x hw\n  rw [hw] at hc\n  nlinarith [sq_nonneg ((∑ i, w i * x i) - (a + b) / 2)]\n\ntheorem weighted_variance_strict {ι : Type*} [Fintype ι] (w x : ι → ℝ)\n    (hw0 : ∀ i, 0 ≤ w i) (hw : (∑ i, w i) = 1) (a b : ℝ)\n    (hlo : ∀ i, a ≤ x i) (hhi : ∀ i, x i ≤ b)\n    (hab : a ≤ b) (hwidth : b - a < 1) :\n    (∑ i, w i * (x i - ∑ j, w j * x j) ^ 2) < 1 / 4 := by\n  have h := weighted_variance_bound w x hw0 hw a b hlo hhi\n  have hp : 0 < (1 - (b - a)) * (1 + (b - a)) :=\n    mul_pos (by linarith) (by linarith)\n  nlinarith\n\ntheorem mixture_identity {ι : Type*} [Fintype ι] (w m q : ι → ℝ)\n    (hw : (∑ i, w i) = 1) :\n    2 * (∑ i, w i * q i) - (∑ i, w i * m i) ^ 2 =\n      (∑ i, w i * (2 * q i - m i ^ 2)) +\n        ∑ i, w i * (m i - ∑ j, w j * m j) ^ 2 := by\n  have hv := variance_identity w m hw\n  have ht : (∑ i, w i * (2 * q i - m i ^ 2)) =\n      2 * (∑ i, w i * q i) - (∑ i, w i * m i ^ 2) := by\n    calc\n      (∑ i, w i * (2 * q i - m i ^ 2)) =\n          ∑ i, (2 * (w i * q i) - w i * m i ^ 2) := by\n        apply Finset.sum_congr rfl\n        intro i _\n        ring\n      _ = _ := by simp only [Finset.sum_sub_distrib, ← Finset.mul_sum]\n  rw [ht, hv]\n  ring\n\ntheorem potential_increment (r : ℝ) (p : ℕ → ℝ)\n    (hstep : ∀ j, p j + 1 / r ≤ p (j + 1)) (k : ℕ) :\n    p 0 + (k : ℝ) / r ≤ p k := by\n  induction k with\n  | zero => simp\n  | succ k ih =>\n    have hc : p 0 + ((k + 1 : ℕ) : ℝ) / r =\n        (p 0 + (k : ℝ) / r) + 1 / r := by push_cast; ring\n    rw [hc]\n    linarith [hstep k]\n\ntheorem no_infinite_modifications (r U : ℝ) (hr : 0 < r) :\n    ¬ ∃ p : ℕ → ℝ, (∀ j, p j + 1 / r ≤ p (j + 1)) ∧ (∀ j, p j ≤ U) := by\n  rintro ⟨p, hstep, hbound⟩\n  obtain ⟨k, hk⟩ := exists_nat_gt (r * (U - p 0))\n  have h := potential_increment r p hstep k\n  have hd : (k : ℝ) / r ≤ U - p 0 := by linarith [hbound k]\n  have hm := (div_le_iff₀ hr).mp hd\n  nlinarith\n\ntheorem rr_variance_identity (chi h u mu k ch gk : ℝ) (hh : h ≠ 0) (hu : u ≠ 0) :\n    let m := mu - k / (2 * h) - 3 / 2\n    let q := chi / h + ch / (u * h) - gk / (2 * u * h) - 1 - 3 * m / 2\n    2 * q - m ^ 2 = 1 / 4 + 2 * chi / h +\n      (2 * ch / u - gk / u) / h - (mu - k / (2 * h)) ^ 2 := by\n  dsimp\n  field_simp\n  ring\n\ntheorem noether_identity (chi h K2 c2 : ℝ) (hh : h ≠ 0)\n    (hchi : 12 * chi = K2 + c2) :\n    1 / 4 + 2 * chi / h - K2 / (4 * h) =\n      1 / 4 - (K2 - 2 * c2) / (12 * h) := by\n  field_simp\n  nlinarith [hchi]\n\ntheorem obstruction_assembly (h c v variance : ℝ) (hh : 0 < h)\n    (hv : 0 ≤ v) (hu : v ≤ 1 / 4 - c / (12 * h) + variance) :\n    c ≤ (3 + 12 * variance) * h := by\n  have hd : c / (12 * h) ≤ 1 / 4 + variance := by linarith\n  have hm := (div_le_iff₀ (by positivity : 0 < 12 * h)).mp hd\n  nlinarith\n\ntheorem strict_obstruction_assembly (h c v variance : ℝ) (hh : 0 < h)\n    (hv : 0 ≤ v) (hu : v ≤ 1 / 4 - c / (12 * h) + variance)\n    (hvariance : variance < 1 / 4) :\n    c < 6 * h := by\n  have hd : c / (12 * h) < 1 / 2 := by linarith\n  have hm := (div_lt_iff₀ (by positivity : 0 < 12 * h)).mp hd\n  nlinarith\n\nend NongradedObstruction\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/nongraded-obstruction/lean/statement_fidelity.md",
+    "text": "# Reading of `Main.lean`\n\nClaim `C_NG_ALG`, not claim `C_NG`, is the statement certified by Lean.\nAll scalar variables are real numbers. Finite sums are genuinely arbitrary:\nthe number of Cartier layers is any natural number, and the variance and\nmixture declarations quantify over any finite type. There is no bounded\nenumeration and no assertion that a sheaf is represented by a sampled tuple.\n\n`NongradedObstruction.layer_quadratic_nonneg` proves, for every natural k\nand every sequence with 0 <= n(j) <= N,\n\n    N sum_{j<k} (2j+1)n(j) - (sum_{j<k} n(j))^2 >= 0.\n\nNo decrease or positivity of the layer ranks is assumed. The bounds on every\nnatural index lose no finite case: extend a finite sequence by zero. The\ndeclaration `layer_chern_nonneg` allows the second Chern-character numerator\nto exceed the rank-only lower bound. Geometrically, N is a rank, n(j) is a\nquotient-layer rank, and d is twice the second Chern character after twisting.\nObtaining those facts from coherent sheaves is proved in `REPORT.md`, not Lean.\n\n`centered_sum` and `variance_identity` give the weighted square identities.\n`weighted_variance_bound` assumes nonnegative weights summing to one and\nreal values between a and b, and proves variance <= (b-a)^2/4.\n`weighted_variance_strict` additionally assumes a <= b and b-a < 1 and\nproves variance < 1/4, including a one-factor or zero-width interval.\nThe weights are NOT assumed equal. `mixture_identity` proves the exact\nmixture identity for normalized first and second Chern characters; positivity\nis unnecessary for that identity.\n\n`potential_increment` proves the lower bound p(k) >= p(0)+k/r for a sequence\nwhose successive increments are at least 1/r. `no_infinite_modifications`\nassumes r>0 and excludes any such infinite real sequence bounded above.\nThe sheaf-theoretic increment and upper bound are separate prose obligations.\n\n`rr_variance_identity` is the identity obtained by equating the linear and\nconstant terms in the two surface Euler polynomials. Here chi is chi(O_X),\nh=H^2, u is the factor rank, mu its normalized slope, k=K_X.H,\nch=ch_2(G), and gk=c_1(G).K_X. The displayed nonzero-denominator hypotheses\nare sufficient; this declaration does NOT assert Riemann--Roch or Bogomolov.\n`noether_identity` uses the explicitly assumed scalar identity\n12 chi=K2+c2 and h != 0; it does NOT prove Noether's geometric theorem.\n\n`obstruction_assembly` assumes h>0, 0<=v, and\nv<=1/4-c/(12h)+variance and proves c<=(3+12 variance)h.\n`strict_obstruction_assembly` adds variance<1/4 and proves c<6h.\nIn the geometric application c=K_X^2-2c_2(X). The conclusion is universal\nreal algebra, not a proof of the existence, restriction, modification,\nor finite-pushforward properties of an arbitrary MCM module.\n\nThe geometric theorem `C_NG` additionally depends on `C_NG_MODEL`,\n`C_NG_BALANCE`, `C_NG_LATTICE`, and `C_NG_FACTOR`, proved in `REPORT.md`\nusing the external commutative-algebra and surface theorems recorded in the\nledger. These obligations remain subject to independent human review.\nCompilation alone must never be reported as a kernel proof of `C_NG`.\n"
+  },
+  "subject": {
+    "content_hash": "d7e4d5ea6f6f2b0e64c644481e768d2634d8578e519a6b9608bea0aeeaa51028",
+    "kind": "claim",
+    "subject_id": "C_NG_ALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C318CO2ALG-1ea2c36dbfdf",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/318/first-pass/coheight-two-unit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/318/first-pass/coheight-two-unit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15374,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/318/first-pass/coheight-two-unit/Main.lean",
+    "source_sha256": "16aeffce8a8c2fc08b4e4f8ef2d3502103a9bc2173dc232146b6d7d1ae66645e",
+    "statement_fidelity": "families/318/first-pass/coheight-two-unit/statement_fidelity.md",
+    "statement_fidelity_sha256": "6732b4aab515ff555487d705faab1f43045aa41d735f162bbe852b59d6710860",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/coheight-two-unit/Main.lean",
+    "text": "import Mathlib\n\nnamespace CoheightTwo\n\nabbrev Vec (R : Type*) := Fin 4 → R\n\nsection RingModel\n\nvariable {R : Type*} [CommRing R]\n\ndef cup1 (v : Vec R) : Vec R := ![0, v 0, 0, v 2]\n\ndef cup3 (v : Vec R) : Vec R := ![0, 0, v 0, -v 1]\n\ndef scalarUnit (a : R) : Vec R := ![a, 0, 0, 0]\n\ndef cupMap (a : R) (x : Vec R) : Vec R :=\n  x 0 • scalarUnit a +\n  x 1 • cup1 (scalarUnit a) +\n  x 2 • cup3 (scalarUnit a) +\n  x 3 • cup1 (cup3 (scalarUnit a))\n\ntheorem cup1_sq (v : Vec R) : cup1 (cup1 v) = 0 := by\n  ext i\n  fin_cases i <;> simp [cup1]\n\ntheorem cup3_sq (v : Vec R) : cup3 (cup3 v) = 0 := by\n  ext i\n  fin_cases i <;> simp [cup3]\n\ntheorem cup_anticommute (v : Vec R) :\n    cup1 (cup3 v) + cup3 (cup1 v) = 0 := by\n  ext i\n  fin_cases i <;> simp [cup1, cup3]\n\ntheorem cupMap_eq_smul (a : R) (x : Vec R) :\n    cupMap a x = a • x := by\n  ext i\n  fin_cases i <;>\n    simp [cupMap, scalarUnit, cup1, cup3, mul_comm]\n\ntheorem unit_cupMap_bijective (u : Rˣ) :\n    Function.Bijective (cupMap (u : R)) := by\n  constructor\n  · intro x y h\n    have h' := congrArg (fun v : Vec R => ((u⁻¹ : Rˣ) : R) • v) h\n    simpa [cupMap_eq_smul, smul_smul] using h'\n  · intro y\n    refine ⟨((u⁻¹ : Rˣ) : R) • y, ?_⟩\n    simp [cupMap_eq_smul, smul_smul]\n\ntheorem isUnit_cupMap_bijective (a : R) (ha : IsUnit a) :\n    Function.Bijective (cupMap a) := by\n  rcases ha with ⟨u, rfl⟩\n  exact unit_cupMap_bijective u\n\nend RingModel\n\nsection FieldModel\n\nvariable {F : Type*} [Field F]\n\ntheorem nonzero_cupMap_bijective (a : F) (ha : a ≠ 0) :\n    Function.Bijective (cupMap a) := by\n  exact isUnit_cupMap_bijective a (isUnit_iff_ne_zero.mpr ha)\n\nvariable {W V U : Type*}\n  [AddCommGroup W] [Module F W]\n  [AddCommGroup V] [Module F V]\n  [AddCommGroup U] [Module F U]\n\ntheorem exact_of_scalar_homotopy\n    (dprev : W →ₗ[F] V) (d : V →ₗ[F] U)\n    (h : V →ₗ[F] W) (hnext : U →ₗ[F] V)\n    (a : F) (ha : a - 1 ≠ 0)\n    (homotopy : ∀ v, dprev (h v) + hnext (d v) = (a - 1) • v) :\n    ∀ v, d v = 0 → ∃ w, dprev w = v := by\n  intro v hv\n  have heq : dprev (h v) = (a - 1) • v := by\n    simpa [hv] using homotopy v\n  refine ⟨(a - 1)⁻¹ • h v, ?_⟩\n  simp [map_smul, heq, smul_smul, ha]\n\nend FieldModel\n\ntheorem proper_central_scalars (r : Fin 2) :\n    (2 : ZMod 5) ^ (2 - r.val) - 1 ≠ 0 := by\n  fin_cases r <;> decide\n\nend CoheightTwo\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/coheight-two-unit/statement_fidelity.md",
+    "text": "# Statement fidelity: conditional algebraic cores only\n\nThe formal source is `Main.lean`, namespace `CoheightTwo`, claim\n`C318CO2ALG`. It does **not** encode `C318CO2`, the ordinary coefficient\ntheorem, or construct an isomorphism with actual Morava-stabilizer\ncohomology.\n\n`Vec R` is a four-coordinate free module. Its coordinates are assigned\ndegrees 0,1,3,4 in the mathematical interpretation; the grading itself\nis not a Lean object. `cup1` and `cup3` are the explicit coordinate\noperators for left multiplication by the two exterior generators.\n`cup1_sq`, `cup3_sq`, and `cup_anticommute` prove their square-zero\nand anticommutation identities over every commutative ring.\n\n`scalarUnit a` is the vector (a,0,0,0). `cupMap a` sends a coordinate\nvector to the ordered linear combination of this element, its two\nspecified generator images, and its ordered product image.\n`cupMap_eq_smul` proves that this is precisely coordinatewise\nmultiplication by a. `unit_cupMap_bijective` and\n`isUnit_cupMap_bijective` quantify over all commutative rings and\nrequire an invertible scalar. `nonzero_cupMap_bijective` quantifies\nover all fields and replaces invertibility by nonzeroness. None\nreplaces invertibility by nonzeroness over a general ring. In the\nordinary coefficient argument, the missing comparison must carry the\nactual degree-zero unit basis to such an invertible multiple.\n\n`exact_of_scalar_homotopy` quantifies over a field, three vector\nspaces W,V,U, four linear maps with the displayed domains, a scalar\na with a-1 nonzero, and the explicit identity\n\n    dprev(h(v)) + hnext(d(v)) = (a-1) v.\n\nIt proves that every v with d(v)=0 is in the image of dprev.\nIt does not assume or prove a group-cohomology comparison, nor does\nit formalize the construction of the homogeneous-bar prism. The\nall-degree prism construction and its continuity are proved in\n`proof.md`. The formal theorem certifies the scalar division step\nonce that homotopy is given.\n\n`proper_central_scalars` checks, over ZMod 5 and for exactly r=0,1,\nthat 2^(2-r)-1 is nonzero. Its interpretation as the actual proper\nsupport weights requires the single prescribed volume line and\norientation convention in `proof.md`.\n\nThe connection to the live question is conditional: the literal\nfinite-frame/common-pole-bound dual comparison and the transport\nof the specified xi_i are separate open assertions\n`C318CO2ORDINARY` and `C318CO2ACTION`. A successful compiler run\ncloses only this algebraic core. It neither proves nor refutes the\nordinary coefficient statement, and it does not certify publication\nnovelty or an independent mathematical review.\n"
+  },
+  "subject": {
+    "content_hash": "3d2c219b040e286d09edfa708dc21315d59f54c5d01ec77df15f75c980e363fb",
+    "kind": "claim",
+    "subject_id": "C318CO2ALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

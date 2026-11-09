@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "operation_id": "graph.polynomial.matching.compute",
+  "inspection": {
+    "description": "Compute the exact matching polynomial M_G(x) of a finite simple graph by the deletion recurrence on graphs with at most 16 vertices.",
+    "input_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["graph"],
+      "properties": {
+        "graph": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["vertex_count"],
+          "properties": {
+            "vertex_count": {"type": "integer", "minimum": 0, "maximum": 64},
+            "edges": {
+              "type": "array",
+              "maxItems": 512,
+              "default": [],
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["u", "v"],
+                "properties": {
+                  "u": {"type": "integer", "minimum": 0},
+                  "v": {"type": "integer", "minimum": 0}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "output_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["terms"],
+      "properties": {
+        "terms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["coefficient", "degree"],
+            "properties": {
+              "coefficient": {"type": "integer"},
+              "degree": {"type": "integer", "minimum": 0}
+            }
+          }
+        }
+      }
+    }
+  },
+  "purpose": "K_3,3 checks that repeated slots retain all six full matchings, including five nonidentity permutations. This finite experiment is not a proof of the tail bound."
+}

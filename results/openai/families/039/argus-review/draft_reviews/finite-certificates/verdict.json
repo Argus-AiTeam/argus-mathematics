@@ -1,0 +1,474 @@
+{
+  "schema_version": 1,
+  "unit_id": "finite-certificates",
+  "contribution_type": "finite_experiment_and_local_linear_certificate",
+  "assessor_role": "Engineer, not independent Reviewer",
+  "assessment": "supported_within_exact_bounded_scope_only",
+  "assessment_detail": "The original checker passes unchanged and its complete structured certificate equals the historical certificate. The exact sampled support and jet assertions are supported. A fresh exact-contract Jacobian operation and a separate determinant/tangent calculation support only the characteristic-two local linear claim. Universal metadata strings are not computational proofs.",
+  "reviewer_acceptance": "pending_native_independent_review",
+  "source": {
+    "attribution": "Historical Argus supplementary checker and accompanying records; no originality or novelty claim.",
+    "old_workspace": "campaigns/9000039",
+    "input_directory": "families/039/first-pass/reshaping_audit",
+    "read_only": true,
+    "input_count": 8,
+    "inputs": [
+      "verify.py",
+      "exact_certificate.json",
+      "verification_task.json",
+      "jacobian_adapter_status.json",
+      "jacobian_contract.json",
+      "jacobian_output.json",
+      "jacobian_payload.json",
+      "jacobian_stderr.txt"
+    ],
+    "verify_py_sha256": "12212ba304991d677cf6110c9fc380df32f34c4ecf8d3745a56759bed8ff0d4b",
+    "old_certificate_sha256": "cad9843e5cdc9bdbcb6ab21abec11a2ae2f2da60c45895175b79f44634f60acc",
+    "hash_manifests": [
+      "replay_inputs_before.json",
+      "replay_inputs_after.json"
+    ],
+    "all_original_input_contents_unchanged": true,
+    "no_old_ledger_or_graph_modified": true,
+    "source_fidelity_and_lean_scope_reviewed_here": false
+  },
+  "exact_bounded_claims": [
+    {
+      "id": "sampled-rational-geometry",
+      "hypotheses": "The 4x3x5 rational grid specified under replay.parameters.geometry, with H=AB, d=max(3/A,2/B) and w=(dw)/d.",
+      "conclusion": "All 60 instances satisfy the checker direction, determinant-one, area and sampled vertical-section assertions.",
+      "decisive_code": "verify.py:180-233",
+      "assessment": "supported_for_sample_only"
+    },
+    {
+      "id": "finite-support-compositions",
+      "hypotheses": "Fixed A=3, B=2, H=6, d=1, w=3/10 and exactly the four configurations listed under replay.configurations.",
+      "conclusion": "The six finite stages preserve cardinality and untouched-label multiplicities, satisfy tested residual polygon containment, node identities through D=9N+1, and graded inclusions only for represented positive degree sums.",
+      "decisive_code": "verify.py:47-65,80-136,274-362",
+      "assessment": "supported_for_sample_only"
+    },
+    {
+      "id": "finite-one-point-hasse-jet-ranks",
+      "hypotheses": "Every sampled degree, six stages, point (1,...,1), and orders 0,1,2,3, over Q or the explicit prime field of the configuration.",
+      "conclusion": "All 48 rank profiles are nonincreasing through the six stages; 288 actual matrix ranks are recorded.",
+      "decisive_code": "verify.py:244-271,345-350",
+      "actual_ranks": "replay_jet_ranks.json",
+      "assessment": "supported_for_sample_only"
+    },
+    {
+      "id": "finite-field-mixed-maxima",
+      "hypotheses": "Only F5, dimension 2, degrees 1 through 4, profiles (0,1) and (1,2), first point (1,1), second in {1,2,3,4}^2 excluding (1,1).",
+      "conclusion": "The maxima over exactly 15 normalized rational tuples are nonincreasing through the six stages; 720 actual matrix ranks are recorded.",
+      "decisive_code": "verify.py:365-385",
+      "actual_ranks": "replay_jet_ranks.json",
+      "assessment": "supported_as_finite_rational_maxima_not_geometric_generic_maxima"
+    },
+    {
+      "id": "two-frobenius-gap-tests",
+      "hypotheses": "Characteristic 2; one-variable supports {0,2} and {-3,-1}.",
+      "conclusion": "Compression returns {0,2} in both cases.",
+      "decisive_code": "verify.py:121-136,407-408",
+      "assessment": "supported_for_these_two_supports"
+    },
+    {
+      "id": "local-characteristic-two-linear-certificate",
+      "hypotheses": "Matrix [[1,1],[0,1]] over F2 with two declared columns, interpreted as the linear part (x,y) -> (xi,eta)=(x+y,y).",
+      "conclusion": "The matrix has rank 2 and determinant 1; the nodal tangent cone y(y+x) has distinct linear factors.",
+      "decisive_evidence": [
+        "verify.py:388-398",
+        "jacobian_inspect.json",
+        "jacobian_payload.json",
+        "jacobian_run.json",
+        "report.md#historical-and-fresh-jacobian-boundary"
+      ],
+      "assessment": "supported_local_linear_claim_only"
+    }
+  ],
+  "replay": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 $WORKSPACE/argus-latest/.venv/bin/python research/draft_reviews/finite-certificates/replay_verify.py",
+    "cwd": "campaigns/9200039",
+    "entrypoint": "runpy.run_path(old_verify_py, run_name='__main__')",
+    "effective_old_script_argv": [
+      "families/039/first-pass/reshaping_audit/verify.py"
+    ],
+    "instrumentation": "Observe returns of existing certificate, support_checks and jet_rank calls only; no checker function replacement, arithmetic modification or extra experiment.",
+    "write_certificate_flag": false,
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "assertions_enabled": true,
+    "python_optimize": 0,
+    "python_toolchain": {
+      "executable": "$WORKSPACE/argus-latest/.venv/bin/python",
+      "resolved_executable": "$WORKSPACE/miniconda3/bin/python3.13",
+      "implementation": "CPython",
+      "version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]"
+    },
+    "runner": {
+      "interpreter": "$WORKSPACE/argus-latest/.venv/bin/python",
+      "module": "argus_skill.tools.subagent",
+      "mode": "direct",
+      "timeout_seconds": 600,
+      "task_id": "old039-finite-certificates-replay-20261107-7a16a9fe",
+      "run_id": "old039-finite-certificates-replay-20261107-7a16a9fe-1794073960685865363",
+      "submitted_receipt": "replay_submission.json",
+      "completed_receipt": "replay_task_status.json",
+      "state": "done",
+      "exit_code": 0
+    },
+    "exit_code": 0,
+    "duration_seconds": 4.7504495228640735,
+    "stdout_file": "replay_stdout.txt",
+    "stderr_file": "replay_stderr.txt",
+    "stderr_empty": true,
+    "stdout": {
+      "status": "verified",
+      "rational_geometry_cases": 60,
+      "support_compositions": 4,
+      "formal_proof_replayed_by_python": false,
+      "independent_review": "pending"
+    },
+    "comparison": {
+      "old": "families/039/first-pass/reshaping_audit/exact_certificate.json",
+      "new": "replay_certificate.json",
+      "structured_equal": true,
+      "byte_equal": true,
+      "old_certificate_overwritten": false,
+      "all_eight_input_hashes_equal_before_and_after": true,
+      "evidence": "replay_comparison.json"
+    },
+    "parameters": {
+      "geometry": {
+        "A": ["1/7", "1", "3", "11/2"],
+        "B": ["2/9", "2", "7/3"],
+        "dw": ["1/32", "1/8", "1/4", "3/10", "333/1000"],
+        "H": "A*B",
+        "d": "max(3/A,2/B)",
+        "w": "(dw)/d",
+        "section_abscissae": ["-b", "-b/2", "0", "a/3", "a"],
+        "tent_abscissae": ["0", "w/3", "w/2", "w"]
+      },
+      "fixed_support": {
+        "A": "3",
+        "B": "2",
+        "H": "6",
+        "d": "1",
+        "w": "3/10",
+        "a": "16/3",
+        "b": "2/3",
+        "t": "8",
+        "i": 4,
+        "p": 1,
+        "q": 1,
+        "first_two_final_intercepts": ["3/10", "20"],
+        "unimodular_matrix": [[1, -1], [-3, 4]],
+        "truncation_total_degree": "9*N+1"
+      }
+    },
+    "configurations": [
+      {
+        "characteristic": 0,
+        "field": "Q",
+        "dimension": 2,
+        "original_intercepts": ["3", "2"],
+        "degrees": [1, 2],
+        "cardinalities": [7, 19],
+        "truncation_total_degrees": [10, 19],
+        "residual_degree_zero_tested": false,
+        "mixed_profiles_tested": false
+      },
+      {
+        "characteristic": 2,
+        "field": "F2",
+        "dimension": 3,
+        "original_intercepts": ["3", "2", "2/3"],
+        "degrees": [1, 2, 3],
+        "cardinalities": [7, 22, 50],
+        "truncation_total_degrees": [10, 19, 28],
+        "residual_degree_zero_tested": true,
+        "zero_residual_fiber": {"degree": 3, "label": [2], "cardinality": 1},
+        "mixed_profiles_tested": false
+      },
+      {
+        "characteristic": 3,
+        "field": "F3",
+        "dimension": 3,
+        "original_intercepts": ["3", "2", "2/3"],
+        "degrees": [1, 2, 3],
+        "cardinalities": [7, 22, 50],
+        "truncation_total_degrees": [10, 19, 28],
+        "residual_degree_zero_tested": true,
+        "zero_residual_fiber": {"degree": 3, "label": [2], "cardinality": 1},
+        "mixed_profiles_tested": false
+      },
+      {
+        "characteristic": 5,
+        "field": "F5",
+        "dimension": 2,
+        "original_intercepts": ["3", "2"],
+        "degrees": [1, 2, 3, 4],
+        "cardinalities": [7, 19, 37, 61],
+        "truncation_total_degrees": [10, 19, 28, 37],
+        "residual_degree_zero_tested": false,
+        "mixed_profiles_tested": true
+      }
+    ],
+    "stage_order": [
+      "original_simplex",
+      "nodal_weighted_least_terms",
+      "shear_then_axis_1_compression",
+      "unimodular_direction_change",
+      "axis_0_compression",
+      "axis_1_compression"
+    ],
+    "label_fibers": {
+      "dimension_two": "Empty label, with multiplicity equal to the full degree cardinality.",
+      "dimension_three_both_characteristics": {
+        "1": [{"label": [0], "multiplicity": 7}],
+        "2": [{"label": [0], "multiplicity": 19}, {"label": [1], "multiplicity": 3}],
+        "3": [{"label": [0], "multiplicity": 37}, {"label": [1], "multiplicity": 12}, {"label": [2], "multiplicity": 1}]
+      },
+      "preserved_at_all_five_transformed_stages": true
+    },
+    "counts": {
+      "rational_geometry_cases": 60,
+      "support_configurations": 4,
+      "degree_configuration_cases": 12,
+      "stages": 6,
+      "stage_supports": 72,
+      "node_identity_truncations": 12,
+      "transformed_stage_cardinality_checks": 60,
+      "transformed_stage_label_multiset_checks": 60,
+      "graded_ordered_degree_pair_inclusion_checks": 78,
+      "one_point_profiles": 48,
+      "one_point_jet_rank_evaluations": 288,
+      "one_point_monotonicity_inequalities": 240,
+      "mixed_profiles": 8,
+      "distinct_normalized_tuples_per_mixed_profile": 15,
+      "mixed_jet_rank_evaluations": 720,
+      "mixed_maximum_monotonicity_inequalities": 40,
+      "total_jet_rank_evaluations": 1008,
+      "explicit_frobenius_and_negative_exponent_cases": 2,
+      "archived_2x2_matrix_local_rank_recomputations": 1
+    },
+    "one_point": {
+      "point": "(1,...,1)",
+      "orders": [0, 1, 2, 3],
+      "dimension_two_row_counts": [1, 3, 6, 10],
+      "dimension_three_row_counts": [1, 4, 10, 20],
+      "actual_ranks_and_shapes": "replay_jet_ranks.json",
+      "rank_vector_table": "report.md#actual-one-point-ranks"
+    },
+    "mixed_jet_maxima": [
+      {"degree": 1, "orders": [0, 1], "stages": [4, 4, 4, 4, 3, 3]},
+      {"degree": 1, "orders": [1, 2], "stages": [7, 6, 6, 6, 5, 5]},
+      {"degree": 2, "orders": [0, 1], "stages": [4, 4, 4, 4, 3, 3]},
+      {"degree": 2, "orders": [1, 2], "stages": [9, 9, 9, 9, 5, 5]},
+      {"degree": 3, "orders": [0, 1], "stages": [4, 4, 4, 4, 3, 3]},
+      {"degree": 3, "orders": [1, 2], "stages": [9, 9, 9, 9, 5, 5]},
+      {"degree": 4, "orders": [0, 1], "stages": [4, 4, 4, 4, 4, 4]},
+      {"degree": 4, "orders": [1, 2], "stages": [9, 9, 9, 9, 8, 8]}
+    ],
+    "historical_task_receipt": {
+      "file": "families/039/first-pass/reshaping_audit/verification_task.json",
+      "state": "submitted",
+      "task_id": "reshaping-exact-replay",
+      "run_id": "reshaping-exact-replay-1793901911949367628",
+      "timeout_seconds": 180,
+      "completion_demonstrated_by_that_receipt": false,
+      "actual_old_checker_python_version": "not recorded",
+      "old_runner_check_with_interpreter": "$WORKSPACE/argus-live-update/.venv/bin/python"
+    }
+  },
+  "arithmetic_and_quantifier_boundary": {
+    "characteristic_zero": "Exact Fraction arithmetic over Q, not floating point or symbolic arbitrary reals.",
+    "positive_characteristics": "Exact arithmetic over the explicit prime fields F2, F3 and F5.",
+    "jets": "Hasse/Taylor coefficient matrices with generalized integer binomials; torus coordinates are nonzero and permit negative powers.",
+    "finite_field_maximum_limitation": "The maxima enumerate only 15 normalized F5-rational pairs. They need not equal maxima over algebraic closures or generic coordinates, because a nonzero minor polynomial may vanish on all base-field rational points. Comparisons of these finite maxima do not by themselves establish geometric generic rank domination.",
+    "fixed_matrix_extension_boundary": "Rank of a fixed displayed matrix is invariant under scalar extension, but point enumeration over the base prime field does not enumerate extension-field configurations.",
+    "universal_metadata_not_proved": [
+      "resolved_statement",
+      "mathematical_proof",
+      "formal_claim",
+      "coverage_boundary"
+    ],
+    "python_invokes_lean": false,
+    "python_reads_universal_proof_report": false,
+    "python_executes_live_jacobian": false
+  },
+  "jacobian": {
+    "historical": {
+      "operation_id": "prime_field.matrix.rank.compute",
+      "server_version": "0.14.0",
+      "protocol_version": "2025-11-25",
+      "transport": "mcp-stdio",
+      "rank": 2,
+      "adapter_exit_code": 0,
+      "timeout": false,
+      "stderr_bytes": 0,
+      "assessed_files": [
+        "jacobian_adapter_status.json",
+        "jacobian_contract.json",
+        "jacobian_output.json",
+        "jacobian_payload.json",
+        "jacobian_stderr.txt"
+      ],
+      "limitation": "Archived transcript validation, not a fresh adapter execution."
+    },
+    "fresh": {
+      "boundary_status": "exact_matching_contract_inspected_and_one_bounded_operation_completed",
+      "interpreter": "$WORKSPACE/argus-live-update/.venv/bin/python",
+      "python_implementation": "CPython",
+      "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+      "module": "argus_skill.tools.jacobian",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "imported_into_argus": false,
+      "probed_with_latest": false,
+      "find": {
+        "query": "matrix rank over a prime finite field",
+        "limit": 3,
+        "candidate_count": 3,
+        "candidate_ids": [
+          "finite_field.linear_map.rank.compute",
+          "prime_field.matrix.rank.compute",
+          "matrix.symbolic.rank.compute"
+        ],
+        "output": "jacobian_find.json",
+        "execution_status": "jacobian_find_status.json",
+        "submitted_receipt": "jacobian_find_submission.json",
+        "completed_receipt": "jacobian_find_task_status.json",
+        "adapter_exit_code": 0
+      },
+      "inspect": {
+        "operation_id": "prime_field.matrix.rank.compute",
+        "exact_typed_contract": "jacobian_inspect.json",
+        "pre_run_contract_assessment": "jacobian_contract_assessment.json",
+        "input_type": "PrimeFieldMatrixRequest",
+        "input_required": ["matrix"],
+        "matrix_type": "PrimeFieldMatrix",
+        "matrix_required": ["prime", "entries", "columns"],
+        "prime_range": [2, 2147483647],
+        "maximum_rows": 256,
+        "maximum_columns": 256,
+        "entries": "Canonical integer residues modulo the explicit prime.",
+        "output_type": "PrimeFieldMatrixRankResult",
+        "output_required": ["prime", "source", "rank"],
+        "read_only": true,
+        "inspected_before_execution": true,
+        "execution_status": "jacobian_inspect_status.json",
+        "submitted_receipt": "jacobian_inspect_submission.json",
+        "completed_receipt": "jacobian_inspect_task_status.json",
+        "adapter_exit_code": 0
+      },
+      "run": {
+        "operation_id": "prime_field.matrix.rank.compute",
+        "mathematical_operation_count": 1,
+        "command": "PYTHONDONTWRITEBYTECODE=1 $WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.jacobian run --operation prime_field.matrix.rank.compute --payload-file families/039/argus-review/draft_reviews/finite-certificates/jacobian_payload.json --timeout 45",
+        "payload_file": "jacobian_payload.json",
+        "payload": {
+          "matrix": {
+            "prime": 2,
+            "entries": [[1, 1], [0, 1]],
+            "columns": 2
+          }
+        },
+        "payload_sha256": "a48321347a42c0723cc6303c8ffbad8a867aba82aa06e73cb91033a06fe68fa9",
+        "historical_payload_byte_equal": true,
+        "payload_fits_exact_contract": true,
+        "server_version": "0.14.0",
+        "protocol_version": "2025-11-25",
+        "schema_version": 1,
+        "transport": "mcp-stdio",
+        "tool": "math.run",
+        "typed_output_file": "jacobian_run.json",
+        "prime": 2,
+        "rank": 2,
+        "output_source_equals_payload": true,
+        "historical_structured_output_equal": true,
+        "reported_runtime_ms": 1,
+        "adapter_exit_code": 0,
+        "durable_task_exit_code": 0,
+        "adapter_status": "completed",
+        "timeout": false,
+        "unknown": false,
+        "transport_error": null,
+        "structured_error": null,
+        "stderr_bytes": 0,
+        "adapter_timeout_seconds": 45,
+        "process_timeout_seconds": 75,
+        "durable_timeout_seconds": 120,
+        "execution_status": "jacobian_run_status.json",
+        "submitted_receipt": "jacobian_run_submission.json",
+        "completed_receipt": "jacobian_run_task_status.json",
+        "task_id": "old039-finite-certificates-jacobian-run-20261107-7a16a9fe",
+        "run_id": "old039-finite-certificates-jacobian-run-20261107-7a16a9fe-1794074079980780075"
+      }
+    },
+    "manual_assessment_independent_of_adapter": {
+      "determinant": "1*1-1*0=1 in F2",
+      "linear_rank": 2,
+      "tangent_cone": "y^2+xy = y(y+x) in characteristic 2",
+      "distinct_linear_tangents": true,
+      "conclusion": "The characteristic-two linear coordinate map is invertible and the two tangent directions are distinct.",
+      "not_certified": "The complete nonlinear formal change, all-degree reshaping, global geometry or maximality."
+    },
+    "all_fresh_durable_tasks_completed": true,
+    "still_running_receipts": []
+  },
+  "unresolved_universal_obligations": [
+    {
+      "obligation": "All real admissible intercepts and dw<1/3.",
+      "concrete_gap": "Only a 60-element rational parameter grid and finitely many vertical sections were evaluated; the script does not read or check a proof covering unsampled real parameters."
+    },
+    {
+      "obligation": "All degrees and all characteristics, with a coherent infinite graded construction.",
+      "concrete_gap": "Only the twelve listed degree/characteristic cases and truncated formal series were constructed; graded products are tested only when their positive degree sum remains represented."
+    },
+    {
+      "obligation": "Arbitrary dimension, labels and residual slices including residual zero.",
+      "concrete_gap": "Only dimensions two and three occur, with third intercept 2/3 and a single zero-residual label at degree 3 in each of F2 and F3; no degree-zero family or arbitrary label sets are tested."
+    },
+    {
+      "obligation": "Arbitrary mixed jet profiles and geometric generic maximum-rank transfer.",
+      "concrete_gap": "One-point orders stop at 3; mixed tests use only two profiles, two points and 15 normalized F5-rational tuples per degree. Finite rational maxima need not equal generic or algebraically closed maxima."
+    },
+    {
+      "obligation": "Universal composition and geometric hypotheses needed by downstream maximality.",
+      "concrete_gap": "Sampled support membership and ranks do not prove universal specialization/composition arguments or surrounding geometric constructions; those arguments are assigned to other review units."
+    }
+  ],
+  "nonclaims": [
+    "This unit independently proves C_RS_STRONG.",
+    "This unit independently proves C_RS_COMPOSITION.",
+    "This Python replay proves or formally replays C_RS_HEIGHT.",
+    "This unit verifies maximality.",
+    "A passed or failed adapter computation decides a universal theorem.",
+    "This Engineer assessment supplies native independent acceptance.",
+    "Completion of this unit completes the entire old-draft review."
+  ],
+  "evidence_paths": {
+    "base": "research/draft_reviews/finite-certificates",
+    "report": "report.md",
+    "verdict": "verdict.json",
+    "replay_observer": "replay_verify.py",
+    "replay_stdout": "replay_stdout.txt",
+    "replay_stderr": "replay_stderr.txt",
+    "replay_execution_metadata": "replay_execution.json",
+    "replay_actual_certificate": "replay_certificate.json",
+    "replay_comparison": "replay_comparison.json",
+    "artifact_consistency_validation": "validation.json",
+    "all_actual_jet_ranks": "replay_jet_ranks.json",
+    "all_stage_supports_and_labels": "replay_stage_supports.json",
+    "original_input_hashes_before": "replay_inputs_before.json",
+    "original_input_hashes_after": "replay_inputs_after.json",
+    "replay_submitted_and_check_with_receipt": "replay_submission.json",
+    "replay_completed_receipt": "replay_task_status.json",
+    "jacobian_capture_driver": "capture_jacobian.py",
+    "jacobian_find": "jacobian_find.json",
+    "jacobian_exact_contract": "jacobian_inspect.json",
+    "jacobian_pre_run_contract_assessment": "jacobian_contract_assessment.json",
+    "jacobian_exact_payload": "jacobian_payload.json",
+    "jacobian_typed_output": "jacobian_run.json",
+    "jacobian_run_status": "jacobian_run_status.json",
+    "jacobian_submitted_and_check_with_receipt": "jacobian_run_submission.json",
+    "jacobian_completed_receipt": "jacobian_run_task_status.json"
+  }
+}

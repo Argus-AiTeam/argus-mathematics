@@ -1,0 +1,165 @@
+{
+  "goal": "C9000245",
+  "routes": {},
+  "nodes": {
+    "C9000245": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 245 (Weak normalization implies strong normalization in pure type systems.; papers: Weak and strong normalization in pure type systems; Lean status: Partially/Comparator formalized (lean/docs/245.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PTS_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PTS_MAIN": {
+      "statement": "Theorem thm:main: system-wide weak beta normalization implies system-wide strong beta normalization for arbitrary PTS specifications, including annotations and open contexts.",
+      "status": "open",
+      "depends_on": ["C_PTS_FINITE", "C_PTS_CANDIDATES", "C_COMPONENT_SIMPLE", "C_OBSERVATION_INTERFACE", "C_GRAPH_EXCLUSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Weak-and-strong-normalization-in-pure-type-systems-September-25-2026/build/sections/erasure.tex"]
+    },
+    "C_PTS_FINITE": {
+      "statement": "pts:finite-restriction reduces the normalization question to finite specifications.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_PTS_CANDIDATES": {
+      "statement": "prop:advance-component and prop:interfaces-imply-sn turn the component interfaces into strong normalization.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_COMPONENT_SIMPLE": {
+      "statement": "prop:signed-component and prop:one-child-component realize the simpler component interfaces.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_OBSERVATION_INTERFACE": {
+      "statement": "obs:interface-theorem realizes the remaining observation interface under obs:forbidden, using the uniform bounds and substitution/reduction lemmas.",
+      "status": "open",
+      "depends_on": ["C_GRAPH_EXCLUSION", "C_OBSERVATION_BOUNDS"],
+      "reviewer_confirmed": false
+    },
+    "C_OBSERVATION_BOUNDS": {
+      "statement": "obs:bound-statement, obs:substitution, and obs:reduction-transport establish the uniform bounds and transport needed by the observation interface.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_GRAPH_EXCLUSION": {
+      "statement": "prop:enc-exclusion derives obs:forbidden from system-wide weak normalization and a typed labelled terminal proof.",
+      "status": "open",
+      "depends_on": ["C_CHANNEL_REALIZATION", "C_GUARDED_DIAGONAL", "C_ERASURE_OBSTRUCTION"],
+      "reviewer_confirmed": false
+    },
+    "C_ERASURE_OBSTRUCTION": {
+      "statement": "lem:enc-labelled-metatheory and lem:enc-no-normal-proof lift full annotated reduction and exclude normal proof-mode terminal erasures.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_CHANNEL_REALIZATION": {
+      "statement": "The wrapper and channel construction realizes the stated primitive coding, cancellation, rounding, quantifier-domain, and specialization laws in the given PTS.",
+      "status": "open",
+      "depends_on": ["C_TYPED_PROBE_BRIDGE"],
+      "reviewer_confirmed": false
+    },
+    "C_TYPED_PROBE_BRIDGE": {
+      "statement": "The actual labelled channel macros preserve typing and exact open parameters; Access and the uniform probe derive raw lift cancellation, rounded probe evaluation, lift congruence and lift validity from the exposed primitive inputs and exactly generic admissibility.",
+      "status": "open",
+      "depends_on": ["C_TPB_TYPING", "C_TPB_ACCESS", "C_TPB_LIFT_LAWS"],
+      "reviewer_confirmed": false,
+      "mechanical_status": "conditional_kernel",
+      "remaining": "Host-invoked independent fidelity review; actual primitive wrapper, logical and marker PTS realization remains upstream. No full normalization or novelty claim.",
+      "evidence": [
+        "research/typed_probe_bridge/Main.lean",
+        "research/typed_probe_bridge/STATEMENT_FIDELITY.md",
+        "research/typed_probe_bridge/exact_certificate.json",
+        "research/typed_probe_bridge/certificates/C_TYPED_PROBE_BRIDGE-60eacc19faf63765.json"
+      ]
+    },
+    "C_TPB_TYPING": {
+      "statement": "All local macro callbacks and the two native data lambdas of z_i have their precise supporting products; V, X and P_X do not depend on the later A_0,m_0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "mechanical_status": "checked_in_parent_conditional_certificate",
+      "remaining": "Independent review of the relative typed syntax to primitive PTS interpretation.",
+      "evidence": ["research/typed_probe_bridge/Main.lean", "research/typed_probe_bridge/STATEMENT_FIDELITY.md"]
+    },
+    "C_TPB_ACCESS": {
+      "statement": "Under not D(m), the expanded Access(Bundle(m,y),Psi) is equivalent to Psi(m,Round(y)); m is never rounded or replaced by equivalent data.",
+      "status": "open",
+      "depends_on": ["C_TPB_TYPING"],
+      "reviewer_confirmed": false,
+      "mechanical_status": "checked_in_parent_conditional_certificate",
+      "evidence": ["research/typed_probe_bridge/Main.lean", "research/typed_probe_bridge/exact_certificate.json"]
+    },
+    "C_TPB_LIFT_LAWS": {
+      "statement": "Under generic Adm the constructed lifts and uniform probes satisfy raw cancellation, rounded evaluation, congruence and validity for arbitrary pointwise-equivalent predicate codes without Ext.",
+      "status": "open",
+      "depends_on": ["C_TPB_ACCESS", "C_TPB_TYPING"],
+      "reviewer_confirmed": false,
+      "mechanical_status": "checked_in_parent_conditional_certificate",
+      "evidence": ["research/typed_probe_bridge/Main.lean", "research/typed_probe_bridge/exact_certificate.json"]
+    },
+    "C_PAIRING_LAWS": {
+      "statement": "rel-tags, rel-query-realization, rel-observation-equivalence, rel-witnesses, and rel-pair-laws realize the specialized responsive pairing interface.",
+      "status": "open",
+      "depends_on": ["C_CHANNEL_REALIZATION"],
+      "reviewer_confirmed": false
+    },
+    "C_GUARDED_DIAGONAL": {
+      "statement": "Conditional on the explicitly stated upstream coding, lift/tag/rounding, responsive pairing, and query laws, rel-response-predicate through rel-contradiction derive the designated terminal formula, retaining all guards and coded quantifier domains.",
+      "status": "open",
+      "depends_on": ["C_GD_RESPONSE", "C_GD_SHIFT", "C_GD_IND_CONGRUENCE", "C_GD_WF", "C_GD_NEGATIVE", "C_PAIRING_LAWS"],
+      "reviewer_confirmed": false,
+      "mechanical_status": "conditional_kernel",
+      "remaining": "Independent statement-fidelity review; upstream PTS realization stays open.",
+      "evidence": [
+        "research/guarded_diagonal/Main.lean",
+        "research/guarded_diagonal/STATEMENT_FIDELITY.md",
+        "research/guarded_diagonal/exact_certificate.json",
+        "research/guarded_diagonal/certificates/C_GUARDED_DIAGONAL-d89005dc9a52596d.json"
+      ]
+    },
+    "C_GD_RESPONSE": {
+      "statement": "rel-response-predicate: rounded response codes are extensional under Resp, and SB holds at valid points.",
+      "status": "open",
+      "depends_on": ["C_PAIRING_LAWS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/guarded_diagonal/Main.lean", "research/guarded_diagonal/STATEMENT_FIDELITY.md"]
+    },
+    "C_GD_SHIFT": {
+      "statement": "rel-shift: delta is valid and congruent; extensional codes have extensional shifts, correct evaluation, and guarded predecessor comparison.",
+      "status": "open",
+      "depends_on": ["C_GD_RESPONSE", "C_CHANNEL_REALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/guarded_diagonal/Main.lean", "research/guarded_diagonal/STATEMENT_FIDELITY.md"]
+    },
+    "C_GD_IND_CONGRUENCE": {
+      "statement": "rel-ind-congruence: guarded Ind respects pointwise equivalence without assuming Ext.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/guarded_diagonal/Main.lean", "research/guarded_diagonal/STATEMENT_FIDELITY.md"]
+    },
+    "C_GD_WF": {
+      "statement": "rel-wf: raw WF cancellation yields validity without Ext, guarded evaluation, and the induction builder.",
+      "status": "open",
+      "depends_on": ["C_GD_SHIFT", "C_GD_IND_CONGRUENCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/guarded_diagonal/Main.lean", "research/guarded_diagonal/STATEMENT_FIDELITY.md"]
+    },
+    "C_GD_NEGATIVE": {
+      "statement": "rel-contradiction: construct Q congruence and negative-code evaluation, Ext and Ind, then Q(WF) and the terminal proof.",
+      "status": "open",
+      "depends_on": ["C_GD_WF", "C_GD_SHIFT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/guarded_diagonal/Main.lean", "research/guarded_diagonal/STATEMENT_FIDELITY.md"]
+    }
+  }
+}

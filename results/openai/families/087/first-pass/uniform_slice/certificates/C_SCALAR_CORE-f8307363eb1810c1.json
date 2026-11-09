@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_SCALAR_CORE-7d286e76cc1f",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/087/first-pass/uniform_slice/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/087/first-pass/uniform_slice/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 17072,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/087/first-pass/uniform_slice/Main.lean",
+    "source_sha256": "74d406f1abe5017e62d7b32a3cdb3da1c299182186b7cdad10c22c9b2a2bec41",
+    "statement_fidelity": "families/087/first-pass/uniform_slice/statement_fidelity.md",
+    "statement_fidelity_sha256": "9587c280e026a936d009bc623a6c2c7ba01504420f7cfbb763beef9a4c3a932b",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/uniform_slice/Main.lean",
+    "text": "import Mathlib\n\nnamespace UniformSlice\n\ntheorem resolvent_slack (q x y : ℝ) :\n    (1 + q) * (1 + x) - ((1 + x) ^ 2 + y ^ 2) =\n      (q ^ 2 - x ^ 2 - y ^ 2) + (1 - q) * (q - x) := by\n  ring\n\ntheorem disk_resolvent (q x y : ℝ) (hq0 : 0 ≤ q) (hq1 : q < 1)\n    (hxy : x ^ 2 + y ^ 2 ≤ q ^ 2) :\n    1 / (1 + q) ≤ (1 + x) / ((1 + x) ^ 2 + y ^ 2) := by\n  have hx2 : x ^ 2 ≤ q ^ 2 := by nlinarith [sq_nonneg y]\n  have hx := abs_le.1 (abs_le_of_sq_le_sq hx2 hq0)\n  have hp : 0 < 1 + q := by linarith\n  have hxp : 0 < 1 + x := by linarith [hx.1]\n  have hd : 0 < (1 + x) ^ 2 + y ^ 2 := by\n    nlinarith [sq_pos_of_pos hxp, sq_nonneg y]\n  apply (div_le_div_iff₀ hp hd).2\n  have hm : 0 ≤ (1 - q) * (q - x) :=\n    mul_nonneg (by linarith) (by linarith [hx.2])\n  nlinarith [resolvent_slack q x y]\n\ntheorem exponential_peak (x : ℝ) :\n    x * Real.exp (-x) ≤ Real.exp (-1) := by\n  have hx : x ≤ Real.exp (x - 1) := by\n    simpa using Real.add_one_le_exp (x - 1)\n  calc\n    x * Real.exp (-x) ≤ Real.exp (x - 1) * Real.exp (-x) :=\n      mul_le_mul_of_nonneg_right hx (Real.exp_pos _).le\n    _ = Real.exp (-1) := by\n      rw [← Real.exp_add]\n      congr 1\n      ring\n\ntheorem endpoint_peak (H : ℝ) :\n    H / 2 * Real.exp (-(H / 2)) ≤ Real.exp (-1) :=\n  exponential_peak (H / 2)\n\ntheorem left_half_kernel (H y : ℝ) (hH : 0 < H) (hy : y ≤ H / 2) :\n    Real.sqrt (y / (H - y)) ≤ 1 := by\n  have hd : 0 < H - y := by linarith\n  apply Real.sqrt_le_one.mpr\n  apply (div_le_iff₀ hd).2\n  linarith\n\ntheorem tip_constant_square (p : ℝ) :\n    (3 * Real.sqrt 2 * p ^ 2 / 8) ^ 2 * (p ^ 2 / 2) =\n      (3 * p ^ 3 / 8) ^ 2 := by\n  calc\n    (3 * Real.sqrt 2 * p ^ 2 / 8) ^ 2 * (p ^ 2 / 2) =\n        9 * (Real.sqrt 2) ^ 2 * p ^ 6 / 128 := by ring\n    _ = (3 * p ^ 3 / 8) ^ 2 := by\n      rw [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]\n      ring\n\nend UniformSlice\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/uniform_slice/statement_fidelity.md",
+    "text": "# Statement fidelity: the universal scalar core\n\nClaim: `C_SCALAR_CORE`. Source: `Main.lean`. All variables below are real;\nthere are no finite grids, rational-only restrictions, axioms, or omitted cases.\n\nAll declarations are in namespace `UniformSlice`.\n`resolvent_slack` is an identity for arbitrary `q`, `x`, and `y`.\n`disk_resolvent` assumes `0 <= q < 1` and\n`x^2 + y^2 <= q^2`, and concludes\n\n    1/(1+q) <= (1+x)/((1+x)^2+y^2).\n\nThe right side is the real part of `1/(1+z)` for `z=x+iy`.\nFor the derivative argument take `z=s^2 w^2` and `q=s^2 |w|^2`,\nwhere `|w|<1` and `0<=s<=1`. The norm hypothesis and `q<1` then hold.\nThis substitution and its integration are analytic arguments in `REPORT.md`,\nnot declarations of the Lean file.\n\n`exponential_peak` proves `x exp(-x) <= exp(-1)` for every real\n`x`, with no positivity assumption. `endpoint_peak` specializes\nit to `x=H/2`, still for every real `H`. This bounds the second half of the\nendpoint integral after the analytic substitution `y=k(1-r)`.\n\n`left_half_kernel` assumes only `H>0` and `y<=H/2` and proves\n`sqrt(y/(H-y))<=1`. Real square root has its Mathlib total meaning, zero on\nnegative inputs. In the application `0<=y<=H/2`, so this is the usual\nnonnegative square root and the denominator is strictly positive.\n\n`tip_constant_square` is an identity for every real `p`:\n\n    (3 sqrt(2) p^2/8)^2 (p^2/2) = (3 p^3/8)^2.\n\nAt `p=pi` it checks the constant conversion in the angular tip estimate;\nthe positivity and order implications are supplied in the analytic proof.\n\nThe file does **not** encode the holomorphic map, univalence, integration,\nthe arctangent estimate, convergence of the error sequence, or the full slice\nproposition. In particular a kernel-checked scalar claim is not a\nkernel-checked Mahler theorem. Those distinctions are also explicit in\n`exact_certificate.json` and `REPORT.md`.\n"
+  },
+  "subject": {
+    "content_hash": "374471bfbedb6f2e5f1cd924e56aee969f9b2cba1785af1922de0601715abd96",
+    "kind": "claim",
+    "subject_id": "C_SCALAR_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-V_FOUR_ENTRY_CORE-31ce1790e88c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/303/first-pass/four-entry-core/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/303/first-pass/four-entry-core/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 9640,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/303/first-pass/four-entry-core/Main.lean",
+    "source_sha256": "e8ccc65b85c1330ab34d8078572f19c62618e204c57401a9f8f9ed4454c135fb",
+    "statement_fidelity": "families/303/first-pass/four-entry-core/statement_fidelity.md",
+    "statement_fidelity_sha256": "051799c41d33d2306a0a2bab7023c5fab918c5ed4f61068a412c27201ee30547",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'FourEntryCore.complement_annihilates' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FourEntryCore.scaling_isometry' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FourEntryCore.defect_nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FourEntryCore.cutoff_compression' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FourEntryCore.two_column_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FourEntryCore.four_entry_impossible' depends on axioms: [propext, Classical.choice, Quot.sound]\n'FourEntryCore.graph_recovery' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/four-entry-core/Main.lean",
+    "text": "import Mathlib.Analysis.CStarAlgebra.Classes\nimport Mathlib.Tactic.NoncommRing\n\nnamespace FourEntryCore\n\nvariable {A : Type*} [CStarAlgebra A]\n\ndef defect (r b : A) : A := 1 - (r + b) * star (r + b)\n\ntheorem complement_annihilates {H b r : A}\n    (hb : star b = b) (hb2 : b * b = 1 - H * H)\n    (hHr : H * r = r) : b * r = 0 := by\n  apply (CStarRing.star_mul_self_eq_zero_iff (b * r)).mp\n  calc\n    star (b * r) * (b * r) = star r * (b * b) * r := by\n      rw [star_mul, hb]\n      noncomm_ring\n    _ = star r * r - star r * (H * (H * r)) := by\n      rw [hb2]\n      noncomm_ring\n    _ = 0 := by rw [hHr, hHr, sub_self]\n\ntheorem scaling_isometry {H b r : A}\n    (hb : star b = b) (hb2 : b * b = 1 - H * H)\n    (hHr : H * r = r) (hrr : star r * r = H * H) :\n    star (r + b) * (r + b) = 1 := by\n  have hbr := complement_annihilates hb hb2 hHr\n  have hrb : star r * b = 0 := by\n    simpa only [star_mul, star_star, hb, star_zero] using congrArg star hbr\n  calc\n    star (r + b) * (r + b) =\n        star r * r + star r * b + b * r + b * b := by\n      rw [star_add, hb]\n      noncomm_ring\n    _ = 1 := by rw [hrr, hrb, hbr, hb2]; noncomm_ring\n\ntheorem scaling_orthogonal {H b r₁ r₂ : A}\n    (hb : star b = b) (hb2 : b * b = 1 - H * H)\n    (hHr₂ : H * r₂ = r₂) (h12 : star r₁ * r₂ = 0) :\n    star (r₁ + b) * r₂ = 0 := by\n  have hbr₂ := complement_annihilates hb hb2 hHr₂\n  rw [star_add, hb, add_mul, h12, hbr₂, zero_add]\n\ntheorem defect_selfadjoint (r b : A) :\n    star (defect r b) = defect r b := by\n  simp only [defect, star_sub, star_one, star_mul, star_star]\n\ntheorem defect_idempotent {r b : A}\n    (hv : star (r + b) * (r + b) = 1) :\n    defect r b * defect r b = defect r b := by\n  calc\n    defect r b * defect r b =\n        1 - (r + b) * star (r + b) - (r + b) * star (r + b) +\n          (r + b) * (star (r + b) * (r + b)) * star (r + b) := by\n      dsimp [defect]\n      noncomm_ring\n    _ = defect r b := by rw [hv]; dsimp [defect]; noncomm_ring\n\ntheorem defect_nonzero {H b r₁ r₂ : A}\n    (hH : star H = H) (hHne : H ≠ 0)\n    (hb : star b = b) (hb2 : b * b = 1 - H * H)\n    (hHr₂ : H * r₂ = r₂) (h22 : star r₂ * r₂ = H * H)\n    (h12 : star r₁ * r₂ = 0) : defect r₁ b ≠ 0 := by\n  have horth := scaling_orthogonal hb hb2 hHr₂ h12\n  have hPr₂ : defect r₁ b * r₂ = r₂ := by\n    dsimp [defect]\n    rw [sub_mul, one_mul, mul_assoc, horth, mul_zero, sub_zero]\n  intro hP\n  have hr₂ : r₂ = 0 := by simpa only [hP, zero_mul] using hPr₂.symm\n  have hHsq : H * H = 0 := by\n    rw [← h22, hr₂, star_zero, zero_mul]\n  apply hHne\n  exact (CStarRing.star_mul_self_eq_zero_iff H).mp (by simpa only [hH] using hHsq)\n\ntheorem cutoff_compression {H b r K : A}\n    (hK : star K = K) (hb : star b = b)\n    (hb2 : b * b = 1 - H * H)\n    (hKH : K * H = H) (hHr : H * r = r)\n    (hrK : r * K = r) (hKb : K * b = b * K) :\n    K * defect r b * K = defect r b := by\n  have hKr : K * r = r := by\n    calc\n      K * r = K * (H * r) := by rw [hHr]\n      _ = (K * H) * r := (mul_assoc K H r).symm\n      _ = r := by rw [hKH, hHr]\n  have hKrs : K * star r = star r := by\n    simpa only [star_mul, hK] using congrArg star hrK\n  have hp : defect r b = H * H - r * star r - r * b - b * star r := by\n    dsimp [defect]\n    rw [star_add, hb]\n    calc\n      1 - (r + b) * (star r + b) =\n          1 - r * star r - r * b - b * star r - b * b := by noncomm_ring\n      _ = H * H - r * star r - r * b - b * star r := by\n        rw [hb2]\n        noncomm_ring\n  have hleft : K * defect r b = defect r b := by\n    simp only [hp, mul_sub, ← mul_assoc]\n    rw [hKH, hKr, hKb]\n    simp only [mul_assoc, hKrs]\n  have hright : defect r b * K = defect r b := by\n    simpa only [star_mul, hK, defect_selfadjoint] using congrArg star hleft\n  rw [hleft, hright]\n\ntheorem two_column_obstruction {P B₃ B₄ : A} {h : Complex}\n    (hh : h ≠ 0)\n    (hdiag : (B₃ * star B₃) * P = h • P)\n    (hsupport : P * B₄ = B₄)\n    (horth : star B₃ * B₄ = 0)\n    (hgram : star B₃ * B₃ = star B₄ * B₄) : P = 0 := by\n  have hscalar : h • B₄ = 0 := by\n    calc\n      h • B₄ = h • (P * B₄) := by rw [hsupport]\n      _ = (h • P) * B₄ := (smul_mul_assoc h P B₄).symm\n      _ = ((B₃ * star B₃) * P) * B₄ := by rw [hdiag]\n      _ = B₃ * (star B₃ * (P * B₄)) := by noncomm_ring\n      _ = 0 := by rw [hsupport, horth, mul_zero]\n  have hB₄ : B₄ = 0 := (smul_eq_zero.mp hscalar).resolve_left hh\n  have hB₃ : B₃ = 0 := by\n    apply (CStarRing.star_mul_self_eq_zero_iff B₃).mp\n    simpa only [hB₄, star_zero, zero_mul] using hgram\n  have hP : h • P = 0 := by\n    rw [← hdiag, hB₃, zero_mul, zero_mul]\n  exact (smul_eq_zero.mp hP).resolve_left hh\n\ntheorem four_entry_impossible {H b r₁ r₂ B₃ B₄ : A} {h : Complex}\n    (hH : star H = H) (hHne : H ≠ 0)\n    (hb : star b = b) (hb2 : b * b = 1 - H * H)\n    (hHr₂ : H * r₂ = r₂)\n    (h22 : star r₂ * r₂ = H * H)\n    (h12 : star r₁ * r₂ = 0)\n    (hh : h ≠ 0)\n    (hdiag : (B₃ * star B₃) * defect r₁ b = h • defect r₁ b)\n    (hsupport : defect r₁ b * B₄ = B₄)\n    (horth : star B₃ * B₄ = 0)\n    (hgram : star B₃ * B₃ = star B₄ * B₄) : False := by\n  exact (defect_nonzero hH hHne hb hb2 hHr₂ h22 h12)\n    (two_column_obstruction hh hdiag hsupport horth hgram)\n\ntheorem graph_recovery {t S X inverse : A}\n    (htS : t * S = S) (hXt : X * t = X)\n    (hcutoff : S * (X * inverse) = S) :\n    t * S * X * t * inverse = S := by\n  calc\n    t * S * X * t * inverse = (t * S) * (X * t) * inverse := by noncomm_ring\n    _ = S * (X * inverse) := by rw [htS, hXt]; noncomm_ring\n    _ = S := hcutoff\n\n#print axioms complement_annihilates\n#print axioms scaling_isometry\n#print axioms defect_nonzero\n#print axioms cutoff_compression\n#print axioms two_column_obstruction\n#print axioms four_entry_impossible\n#print axioms graph_recovery\n\nend FourEntryCore\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/four-entry-core/statement_fidelity.md",
+    "text": "# Statement fidelity: FourEntryCore\n\nThe source is an independent formalization of the noncommutative core of\n`prop:four-avoidance`, not a formalization of all C*-algebra analysis in\nthat proposition. Every declaration quantifies over an arbitrary unital\ncomplex C*-algebra `A`. This is the operator algebra on the nondegenerate\nHilbert space used in the manuscript's final irreducible representation;\nit is not a unitality assumption on the original algebra `C`.\n\nThe star operation is the adjoint, and multiplication is not commutative.\n`H`, `b`, `K`, `r₁`, `r₂`, `B₃`, and `B₄` are arbitrary elements of `A`.\nThe manuscript instantiates `b=(1-H²)^(1/2)` and\n`r_i=h^(-1/2) B_i* H`. Their analytic origins are not extra Lean\naxioms: the source takes only the explicitly displayed algebraic\nrelations as hypotheses and the report proves that they follow.\n\n`complement_annihilates` uses `b*=b`, `b²=1-H²`, and `Hr=r`\nto prove `br=0` through the C*-identity `z*z=0 -> z=0`.\nIt does not assume this annihilation. `scaling_isometry` additionally\nuses `r*r=H²` to prove `(r+b)*(r+b)=1`, with the first star\non the entire first factor. `scaling_orthogonal` proves\n`(r₁+b)*r₂=0` from `Hr₂=r₂` and `r₁*r₂=0`.\n\n`defect r b` means `1-(r+b)(r+b)*`.\n`defect_selfadjoint` proves that this is selfadjoint without extra\nhypotheses. `defect_idempotent` uses the just-proved isometry relation.\n`defect_nonzero` assumes `H*=H`, `H!=0`, `b*=b`,\n`b²=1-H²`, `Hr₂=r₂`, `r₂*r₂=H²`, and `r₁*r₂=0`.\nIt proves that the defect is nonzero, rather than assuming a nonzero\nprojection. The separate isometry/idempotence theorems establish that\nthe manuscript's defect is a projection; nonzeroness needs fewer\nhypotheses than that fact.\n\n`cutoff_compression` proves `KPK=P` for this explicit defect `P`,\nnot for an arbitrary postulated projection. Its assumptions are\n`K*=K`, `b*=b`, `b²=1-H²`, `KH=H`, `Hr=r`, `rK=r`,\nand `Kb=bK`. In the manuscript the scalar ramps give `KH=H`,\nthe first support relation gives `Hr=r`, the definition of `r` gives\n`rK=r`, and `K,b` are commuting functions of `X`. The report separately\nuses continuous functional calculus to identify the clipped fixed\nelement `P₀=chi(KPK)` with the projection `P`.\n\n`two_column_obstruction` quantifies over *arbitrary* `P,B₃,B₄`\nand an arbitrary nonzero complex scalar `h`. It assumes exactly\n`(B₃B₃*)P=h P`, `PB₄=B₄`, `B₃*B₄=0`, and\n`B₃*B₃=B₄*B₄`, and proves `P=0`. There is no assumption\nthat `P` is positive or a projection; this is a genuine strengthening\nof the algebraic final step. `four_entry_impossible` combines it\nwith `defect_nonzero` and concludes `False`. It does not import an\nassumption equivalent to four-entry avoidance or to pure infiniteness.\nIn the manuscript `h=1/2`, viewed as a complex scalar.\n\n`graph_recovery` proves the noncommutative recovery identity\n`t S X t inverse = S` from `tS=S`, `Xt=X`, and\n`S(X inverse)=S`. Here `inverse=h_inv(X)`. The report supplies\nthese relations from represented supports and identifies the measured\nformula with its left side. This declaration alone does not construct\nthe slots or prove the zero-defect or norm-signal analysis.\n\nNot formalized here: property (P), Cuntz comparison and cutoff\ntransport; actual operator ranges and Borel calculus; the directed\nultrafilter and norm ultraproduct; irreducible-representation existence;\nthe scalar spectral cutoffs; the graph-slot construction and its\nrepresented norm signals. These have explicit proofs or cited\nfoundations in `report.md` and require the Host Reviewer's mathematical\nassessment. In particular a kernel success for this file must never\nbe presented as a kernel proof of the complete avoidance proposition.\n\nThe source prints its transitive axioms for the main declarations.\nOnly Lean's standard foundational axioms may occur; no user axiom,\nproof placeholder, or assumed obstruction is permitted.\n"
+  },
+  "subject": {
+    "content_hash": "aed4b86fed3c0896ff61091319f230435578d25f086b5d9d8dae9415295cf233",
+    "kind": "claim",
+    "subject_id": "V_FOUR_ENTRY_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

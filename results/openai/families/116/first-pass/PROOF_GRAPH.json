@@ -1,0 +1,188 @@
+{
+  "goal": "C9000116",
+  "routes": {
+    "R_SHIFT_CASORATIAN": {
+      "goal": "C_SHIFT_ORDER",
+      "obligations": [
+        "C_SHIFT_ROWS",
+        "C_SHIFT_CASORATIAN",
+        "C_SHIFT_MINOR_TRANSFER",
+        "C_SHIFT_DEGREE"
+      ],
+      "status": "retired",
+      "retired_because": "The completed formal proof replaces equality of minimum minor valuations with a direct polynomial-minor factorization; the original proposition is not refuted.",
+      "evidence": ["research/shift_order/Main.lean", "research/shift_order/REPORT.md"]
+    },
+    "R_WORD_POLE_MINIMAL": {
+      "goal": "C_WORD_INDEPENDENCE",
+      "obligations": [
+        "C_WORD_CONSTRUCTION",
+        "C_WORD_FIXED",
+        "C_WORD_POLES",
+        "C_WORD_MINIMAL"
+      ],
+      "status": "retired",
+      "retired_because": "The pre-formal version-2 plan was superseded by the version-3 source-bound route, not refuted mathematically.",
+      "evidence": ["research/MATH_STATE.json", "research/word_independence/Main.lean"]
+    },
+    "R_WORD_INSTANTIATED": {
+      "goal": "C_WORD_INDEPENDENCE",
+      "obligations": [
+        "C_WORD_CONSTRUCTION",
+        "C_WORD_FIXED",
+        "C_WORD_POLES",
+        "C_WORD_MINIMAL"
+      ],
+      "status": "active",
+      "evidence": [
+        "research/word_independence/Main.lean",
+        "research/word_independence/statement_fidelity.md",
+        "research/word_independence/REPORT.md"
+      ]
+    },
+    "R_SHIFT_POLYNOMIAL_MINORS": {
+      "goal": "C_SHIFT_ORDER",
+      "obligations": [
+        "C_SHIFT_ROWS",
+        "C_SHIFT_CASORATIAN",
+        "C_SHIFT_POLYNOMIAL_FACTOR",
+        "C_SHIFT_DEGREE"
+      ],
+      "status": "active",
+      "evidence": [
+        "research/shift_order/Main.lean",
+        "research/shift_order/REPORT.md",
+        "research/shift_order/verify.py",
+        "research/shift_order/exact_certificate.json",
+        "research/shift_order/certificates/C_SHIFT_ORDER-4a39ed445b850398.json"
+      ]
+    }
+  },
+  "nodes": {
+    "C9000116": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 116 (Uniform black-box noncommutative identity testing across characteristics.; papers: Uniform Matrix Hitting Points in Every Positive Characteristic; One Rational Matrix Hitting Point for Noncommutative Formulas; Polynomial Hitting Lists for Noncommutative Rational Formulas; Lean status: Partially/Comparator formalized (lean/docs/116.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_SHIFT_TRUNCATION",
+        "C_COEFFICIENT_DESCENT"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SHIFT_ORDER": {
+      "statement": "With exactly thm:order's arbitrary-field hypotheses, every nonzero constant scalar component uHv has order at most nu*binom(m,2).",
+      "status": "proved",
+      "depends_on": ["C_SHIFT_ROWS", "C_SHIFT_CASORATIAN", "C_SHIFT_POLYNOMIAL_FACTOR", "C_SHIFT_DEGREE"],
+      "reviewer_confirmed": true,
+      "evidence": [
+        "research/shift_order/Main.lean",
+        "research/shift_order/REPORT.md",
+        "research/shift_order/verify.py",
+        "research/shift_order/exact_certificate.json",
+        "research/shift_order/certificates/C_SHIFT_ORDER-4a39ed445b850398.json",
+        "research/MATH_STATE.json"
+      ]
+    },
+    "C_SHIFT_ROWS": {
+      "statement": "Successive shifts satisfy sigma^j(uH)=R_j H with R_(j+1)=sigma(R_j)P/Q, denominators units and row numerator degree at most j*nu.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shift_order/Main.lean", "research/shift_order/REPORT.md"]
+    },
+    "C_SHIFT_CASORATIAN": {
+      "statement": "A finite-dimensional constant span of series has a distinct-order basis; its shift Casoratian is nonzero and has order the sum of those orders.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shift_order/Main.lean", "research/shift_order/REPORT.md"]
+    },
+    "C_SHIFT_MINOR_TRANSFER": {
+      "statement": "Right multiplication by a matrix invertible over K[[z]] preserves the minimum valuation of maximal minors.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shift_order/REPORT.md"]
+    },
+    "C_SHIFT_DEGREE": {
+      "statement": "Every nonzero k-minor of the first k rational rows has unit denominator and polynomial numerator degree at most nu*binom(k,2).",
+      "status": "open",
+      "depends_on": ["C_SHIFT_ROWS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shift_order/Main.lean", "research/shift_order/REPORT.md"]
+    },
+    "C_SHIFT_POLYNOMIAL_FACTOR": {
+      "statement": "For the polynomial numerator row matrix N and an order basis with Casoratian W, N(HL)=DW has nonzero determinant and N=(DW)(AJ); hence some nonzero k-minor of N has order at least ord(det W), without assuming minimum-minor invariance.",
+      "status": "open",
+      "depends_on": ["C_SHIFT_ROWS", "C_SHIFT_CASORATIAN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shift_order/Main.lean", "research/shift_order/REPORT.md"]
+    },
+    "C_WORD_INDEPENDENCE": {
+      "statement": "For every field F and n>=1, the actual recursively constructed h_empty=1 and (sigma-1)h_(iw)=z/(1-(1+t)^i*z)*h_w, h_(iw)(0)=0, are linearly independent over F(t)(z).",
+      "status": "open",
+      "depends_on": ["C_WORD_CONSTRUCTION", "C_WORD_FIXED", "C_WORD_POLES", "C_WORD_MINIMAL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/word_independence/Main.lean",
+        "research/word_independence/statement_fidelity.md",
+        "research/word_independence/REPORT.md",
+        "research/word_independence/verify.py",
+        "research/word_independence/exact_certificate.json",
+        "research/word_independence/certificates/certificates/C_WORD_INDEPENDENCE-0ac71bbe2d9ab11f.json"
+      ]
+    },
+    "C_WORD_CONSTRUCTION": {
+      "statement": "The exact kernel and coefficient recursion construct the unique zero-constant shift antiderivative, linearly and with order raising, over every field.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/word_independence/Main.lean", "research/word_independence/statement_fidelity.md"]
+    },
+    "C_WORD_FIXED": {
+      "statement": "Substitution z->t*z on F(t)((z)) has fixed field exactly F(t), in arbitrary characteristic.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/word_independence/Main.lean", "research/word_independence/statement_fidelity.md"]
+    },
+    "C_WORD_POLES": {
+      "statement": "The explicit letter pole orbits are infinite and disjoint, and no nonzero constant combination of the kernels is a rational shift difference.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/word_independence/Main.lean", "research/word_independence/statement_fidelity.md"]
+    },
+    "C_WORD_MINIMAL": {
+      "statement": "The correctly shifted minimal-relation transform, fixed-field calculation and nonsummability obstruction imply independence of all finite words.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/word_independence/Main.lean", "research/word_independence/statement_fidelity.md"]
+    },
+    "C_FORMULA_SYSTEM": {
+      "statement": "The staged prop:formula-system and lem:formula-representation place h_f in a regular invertible shift system with m<=2s and nu<=n.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Uniform-Matrix-Hitting-Points-in-Every-Positive-Characteristic-October-4-2026/build/sections/systems.tex"]
+    },
+    "C_SHIFT_TRUNCATION": {
+      "statement": "Conditional on the order bound, word-series independence and formula-system construction, a nonzero formula series survives truncation at N=1+n*binom(2s,2).",
+      "status": "open",
+      "depends_on": ["C_SHIFT_ORDER", "C_WORD_INDEPENDENCE", "C_FORMULA_SYSTEM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Uniform-Matrix-Hitting-Points-in-Every-Positive-Characteristic-October-4-2026/build/sections/construction.tex"]
+    },
+    "C_COEFFICIENT_DESCENT": {
+      "statement": "The staged lem:coefficient-descent preserves nonvanishing after finite coefficient-ring reduction and the regular representation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Uniform-Matrix-Hitting-Points-in-Every-Positive-Characteristic-October-4-2026/build/sections/construction.tex"]
+    }
+  }
+}

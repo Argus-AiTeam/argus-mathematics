@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_PATH_CORE-0072e6441b0e",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/280/first-pass/energy-bootstrap/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/280/first-pass/energy-bootstrap/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16113,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/280/first-pass/energy-bootstrap/Main.lean",
+    "source_sha256": "fc8ebb18fa5d694bec59d80a81084a6d96969dd06af275baf597d9428a8dd6fc",
+    "statement_fidelity": "families/280/first-pass/energy-bootstrap/statement_fidelity.md",
+    "statement_fidelity_sha256": "bca860a58b8f082c10ac151430be2990d8016fa22352938ba507b91049c6287e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/energy-bootstrap/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace EnergyBootstrap\n\nnoncomputable section\n\ndef rowDegree {I J : Type*} [Fintype J] (R : I → J → Prop) (i : I) : ℕ := by\n  classical\n  exact (Finset.univ.filter (R i)).card\n\ndef colDegree {I J : Type*} [Fintype I] (R : I → J → Prop) (j : J) : ℕ := by\n  classical\n  exact (Finset.univ.filter (fun i => R i j)).card\n\ndef edgeSum {I J : Type*} [Fintype I] [Fintype J]\n    (R : I → J → Prop) (a : I → ℝ) (b : J → ℝ) : ℝ := by\n  classical\n  exact ∑ i, ∑ j, if R i j then a i * b j else 0\n\ntheorem graphSchur {I J : Type*} [Fintype I] [Fintype J]\n    (R : I → J → Prop) (a : I → ℝ) (b : J → ℝ) (r s : ℕ)\n    (hr : ∀ i, rowDegree R i ≤ r) (hs : ∀ j, colDegree R j ≤ s) :\n    (edgeSum R a b) ^ 2 ≤\n      ((r : ℝ) * (s : ℝ)) * (∑ i, a i ^ 2) * (∑ j, b j ^ 2) := by\n  classical\n  let E : Finset (I × J) := Finset.univ.filter (fun e => R e.1 e.2)\n  have hE : edgeSum R a b = ∑ e ∈ E, a e.1 * b e.2 := by\n    simp [edgeSum, E, Finset.sum_filter, Fintype.sum_prod_type]\n  have hAeq : (∑ e ∈ E, a e.1 ^ 2) =\n      ∑ i, (rowDegree R i : ℝ) * a i ^ 2 := by\n    simp only [E, Finset.sum_filter, Fintype.sum_prod_type]\n    apply Finset.sum_congr rfl\n    intro i hi\n    rw [← Finset.sum_filter]\n    simp [rowDegree, nsmul_eq_mul]\n  have hBeq : (∑ e ∈ E, b e.2 ^ 2) =\n      ∑ j, (colDegree R j : ℝ) * b j ^ 2 := by\n    simp only [E, Finset.sum_filter, Fintype.sum_prod_type]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro j hj\n    rw [← Finset.sum_filter]\n    simp [colDegree, nsmul_eq_mul]\n  have hA : (∑ e ∈ E, a e.1 ^ 2) ≤ (r : ℝ) * ∑ i, a i ^ 2 := by\n    rw [hAeq, Finset.mul_sum]\n    apply Finset.sum_le_sum\n    intro i hi\n    exact mul_le_mul_of_nonneg_right (by exact_mod_cast hr i) (sq_nonneg _)\n  have hB : (∑ e ∈ E, b e.2 ^ 2) ≤ (s : ℝ) * ∑ j, b j ^ 2 := by\n    rw [hBeq, Finset.mul_sum]\n    apply Finset.sum_le_sum\n    intro j hj\n    exact mul_le_mul_of_nonneg_right (by exact_mod_cast hs j) (sq_nonneg _)\n  calc\n    (edgeSum R a b) ^ 2 = (∑ e ∈ E, a e.1 * b e.2) ^ 2 := by rw [hE]\n    _ ≤ (∑ e ∈ E, a e.1 ^ 2) * ∑ e ∈ E, b e.2 ^ 2 :=\n      Finset.sum_mul_sq_le_sq_mul_sq E (fun e => a e.1) (fun e => b e.2)\n    _ ≤ ((r : ℝ) * ∑ i, a i ^ 2) * ((s : ℝ) * ∑ j, b j ^ 2) :=\n      mul_le_mul hA hB (by positivity) (by positivity)\n    _ = _ := by ring\n\nabbrev BoundedTuple (n M : ℕ) := Fin n → Fin (M + 1)\n\ndef indexSum {n M : ℕ} (x : BoundedTuple n M) : ℤ :=\n  ∑ i, ((x i).val : ℤ)\n\ntheorem tupleSumCount (n M : ℕ) (target : ℤ) :\n    Fintype.card {x : BoundedTuple (n + 1) M // indexSum x = target} ≤\n      (M + 1) ^ n := by\n  classical\n  let drop : {x : BoundedTuple (n + 1) M // indexSum x = target} →\n      BoundedTuple n M := fun x i => x.1 i.succ\n  have hinj : Function.Injective drop := by\n    intro x y h\n    apply Subtype.ext\n    funext i\n    refine Fin.cases ?_ (fun k => congrFun h k) i\n    apply Fin.ext\n    have hx := x.2\n    have hy := y.2\n    simp only [indexSum, Fin.sum_univ_succ] at hx hy\n    have ht : (∑ k : Fin n, ((x.1 k.succ).val : ℤ)) =\n        ∑ k : Fin n, ((y.1 k.succ).val : ℤ) := by\n      apply Finset.sum_congr rfl\n      intro k hk\n      exact congrArg (fun z : Fin (M + 1) => (z.val : ℤ)) (congrFun h k)\n    have hz : ((x.1 0).val : ℤ) = ((y.1 0).val : ℤ) := by omega\n    exact_mod_cast hz\n  calc\n    _ ≤ Fintype.card (BoundedTuple n M) := Fintype.card_le_of_injective drop hinj\n    _ = (M + 1) ^ n := by simp [BoundedTuple]\n\ntheorem modeSumSchur (p q M : ℕ) (target : ℤ)\n    (a : BoundedTuple (p + 1) M → ℝ)\n    (b : BoundedTuple (q + 1) M → ℝ) :\n    (edgeSum (fun l r => indexSum r - indexSum l = target) a b) ^ 2 ≤\n      ((M : ℝ) + 1) ^ (p + q) * (∑ l, a l ^ 2) * (∑ r, b r ^ 2) := by\n  classical\n  have hr : ∀ l : BoundedTuple (p + 1) M,\n      rowDegree (fun (l : BoundedTuple (p + 1) M) (r : BoundedTuple (q + 1) M) =>\n        indexSum r - indexSum l = target) l ≤\n        (M + 1) ^ q := by\n    intro l\n    simpa [rowDegree, Fintype.card_subtype, sub_eq_iff_eq_add] using\n      tupleSumCount q M (target + indexSum l)\n  have hs : ∀ r : BoundedTuple (q + 1) M,\n      colDegree (fun (l : BoundedTuple (p + 1) M) (r : BoundedTuple (q + 1) M) =>\n        indexSum r - indexSum l = target) r ≤\n        (M + 1) ^ p := by\n    intro r\n    have hp : ∀ l : BoundedTuple (p + 1) M,\n        (indexSum r - indexSum l = target) ↔\n          (indexSum l = indexSum r - target) := by\n      intro l\n      omega\n    simpa [colDegree, Fintype.card_subtype, hp] using\n      tupleSumCount p M (indexSum r - target)\n  have h := graphSchur (fun l r => indexSum r - indexSum l = target)\n    a b ((M + 1) ^ q) ((M + 1) ^ p) hr hs\n  push_cast at h\n  rw [← pow_add, Nat.add_comm q p] at h\n  exact h\n\ndef pathSquare {J X : Type*} [Fintype J] (sqNorm : X → ℝ) :\n    List (ℝ × (J → X → X)) → X → ℝ\n  | [], v => sqNorm v\n  | T :: ts, v => ∑ j, pathSquare sqNorm ts (T.2 j v)\n\ntheorem iteratedColumns {J X : Type*} [Fintype J] (sqNorm : X → ℝ)\n    (ts : List (ℝ × (J → X → X)))\n    (hcol : ∀ T ∈ ts, 0 ≤ T.1 ∧ ∀ v, (∑ j, sqNorm (T.2 j v)) ≤ T.1 * sqNorm v)\n    (v : X) :\n    pathSquare sqNorm ts v ≤ (ts.map Prod.fst).prod * sqNorm v := by\n  induction ts generalizing v with\n  | nil => simp [pathSquare]\n  | cons T ts ih =>\n      have hT := hcol T (by simp)\n      have hts : ∀ U ∈ ts,\n          0 ≤ U.1 ∧ ∀ v, (∑ j, sqNorm (U.2 j v)) ≤ U.1 * sqNorm v := by\n        intro U hU\n        exact hcol U (by simp [hU])\n      have hprod : 0 ≤ (ts.map Prod.fst).prod := by\n        apply List.prod_nonneg\n        intro c hc\n        obtain ⟨U, hU, rfl⟩ := List.mem_map.mp hc\n        exact (hts U hU).1\n      calc\n        pathSquare sqNorm (T :: ts) v =\n            ∑ j, pathSquare sqNorm ts (T.2 j v) := rfl\n        _ ≤ ∑ j, (ts.map Prod.fst).prod * sqNorm (T.2 j v) :=\n          Finset.sum_le_sum (fun j hj => ih hts (T.2 j v))\n        _ = (ts.map Prod.fst).prod * ∑ j, sqNorm (T.2 j v) := by\n          rw [Finset.mul_sum]\n        _ ≤ (ts.map Prod.fst).prod * (T.1 * sqNorm v) :=\n          mul_le_mul_of_nonneg_left (hT.2 v) hprod\n        _ = ((T :: ts).map Prod.fst).prod * sqNorm v := by\n          simp only [List.map_cons, List.prod_cons]\n          ring\n\ndef rightDisplacement (xs : List (ℕ × ℕ)) : ℝ :=\n  (xs.map (fun x => (x.1 : ℝ) - (x.2 : ℝ))).sum\n\ndef rightBudget (xs : List (ℕ × ℕ)) : ℕ :=\n  (xs.map Prod.fst).sum\n\ntheorem rightPrefixBudget (xs : List (ℕ × ℕ)) (n : ℕ) :\n    rightDisplacement (xs.take n) ≤ (rightBudget xs : ℝ) := by\n  induction xs generalizing n with\n  | nil => simp [rightDisplacement, rightBudget]\n  | cons x xs ih =>\n      cases n with\n      | zero =>\n          change (0 : ℝ) ≤ (rightBudget (x :: xs) : ℝ)\n          positivity\n      | succ n =>\n          have h := ih n\n          simp only [List.take_succ_cons, rightDisplacement, rightBudget,\n            List.map_cons, List.sum_cons, Nat.cast_add] at h ⊢\n          have hj : (0 : ℝ) ≤ x.2 := by positivity\n          linarith\n\ntheorem rightEnergyCutoff (xs : List (ℕ × ℕ)) (n : ℕ) (h N : ℝ) (hh : h ≤ N) :\n    h + rightDisplacement (xs.take n) ≤ N + (rightBudget xs : ℝ) :=\n  add_le_add hh (rightPrefixBudget xs n)\n\ntheorem oneModeIndexBound (h h' M : ℝ) (c j : ℕ)\n    (hin : h ≤ M) (hout : 0 ≤ h')\n    (hshift : h' = h + (c : ℝ) - (j : ℝ)) :\n    (j : ℝ) ≤ M + (c : ℝ) := by\n  linarith\n\ntheorem mixedExponentIdentity (DL DR p q nL nR : ℤ) :\n    (2 * DL - p) + (2 * DR - q) + (q - 1) + (p - 1) +\n        2 * (nL + nR) =\n      2 * (DL + DR + nL + nR - 1) := by\n  ring\n\nend\n\nend EnergyBootstrap\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/energy-bootstrap/statement_fidelity.md",
+    "text": "# Statement fidelity: the finite operator-path core\n\nThe declarations in `Main.lean` are in namespace `EnergyBootstrap`.\nThey do not formalize a vertex operator algebra, an unbounded operator,\nZhu convergence, Mobius covariance, the contraction limits, or strong\nlocality. The analytic application of this core is a separate argument\nin `report.md`; a compiler success does not certify that application.\n\n`graphSchur` quantifies over arbitrary finite left and right types, any\nbipartite relation, arbitrary real path weights, and natural row/column\ndegree bounds r,s. It proves that the square of the sum of products on\nthe edges is at most r*s times the product of the two sums of squares.\nNeither orthogonality of paths nor a bound on Hilbert-space dimension\nis a hypothesis. The degree hypotheses are counts, not the inequality\nunder audit.\n\n`tupleSumCount` quantifies over every natural n,M and every integer target.\nAmong tuples of length n+1 with entries in {0,...,M}, at most (M+1)^n\nhave that target sum. Its proof deletes one coordinate and proves the\nresulting map injective using the sum equation. Targets outside the\npossible range and n=0 are included.\n\n`modeSumSchur` combines those two statements for arbitrary tuple lengths\np+1,q+1, every common index bound M, and every integer target for the\ndifference of the two tuple sums. The squared count factor is\n(M+1)^(p+q), namely (M+1)^(left_length+right_length-2).\nThe weights are arbitrary real numbers. For the manuscript, specialize\nthem to the norms of the two operator paths. Constants attached to a\nfixed monomial and its binomial coefficients are handled outside Lean.\n\n`iteratedColumns` is an all-length composition result, not a scalar\ncontraction assumption. It quantifies over any type X, any finite mode\nindex type J, a real-valued squared-size function, and any finite list\nof families of actual maps J -> X -> X with nonnegative column-bound\nconstants. The hypothesis gives each one-factor sum-of-squared-size\nbound at every vector. The conclusion bounds the sum over all composed\npaths by the product of those constants times the initial squared size.\nTaking X to be the fixed spectral-cutoff Hilbert subspace and squared\nsize to be the squared norm gives the path-square estimates. Linearity\nof the maps is not needed for this stronger elementary statement.\n\n`rightPrefixBudget` and `rightEnergyCutoff` quantify over lists of natural\npairs (c_i,j_i), all prefix lengths, and arbitrary real initial and cutoff\nenergies h,N with h<=N. The energy increments are c_i-j_i; every prefix\nhas energy at most N+sum(c_i), irrespective of the j_i. In the application,\nc_i=d_i-1 for right modes. Left adjoints have nonpositive increments\nand are the zero-budget specialization. Real, rather than integer,\nenergies include modules with nonintegral lowest conformal weight.\n\n`oneModeIndexBound` uses real input/output energies and natural c,j.\nFrom input<=M, output>=0, and output=input+c-j, it proves j<=M+c.\nIt supplies the index bound only on a nonzero, nonnegative-energy path.\nIt does not assume a finite-support property for a full Mobius transform.\n\n`mixedExponentIdentity` is the integer exponent equality after the\npath-square estimates, completion counts, and derivative factors are\ncombined. It is an auxiliary algebraic identity, not a proof of the\noperator inequality in isolation.\n\nThe source introduces no new axioms and uses no proof placeholders.\nIndependent review still has to check this translation and its analytic\nuse in the manuscript audit.\n"
+  },
+  "subject": {
+    "content_hash": "798a111dfb7d29263a0957448687493ac425130edc74a5fbecd09b92f9322487",
+    "kind": "claim",
+    "subject_id": "C_PATH_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

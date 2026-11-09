@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C318ALG-8ad703cbe0aa",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/318/first-pass/prime-five-kernel/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/318/first-pass/prime-five-kernel/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14503,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/318/first-pass/prime-five-kernel/Main.lean",
+    "source_sha256": "0f7efcd8dd765adcb5c3cbe3029a672d88c1dc7c88408e6f5ee30853d6398d14",
+    "statement_fidelity": "families/318/first-pass/prime-five-kernel/statement_fidelity.md",
+    "statement_fidelity_sha256": "089cb584bb8cf22f3282ebf02ddf23ccbe39cc2ecf8c2a849261dcd1358e0a71",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'PrimeFiveKernel.zero_of_constant_tail' depends on axioms: [propext, Quot.sound]\n'PrimeFiveKernel.power_vanishes' depends on axioms: [propext, Quot.sound]\n'PrimeFiveKernel.canonical_kernel_of_detection' depends on axioms: [propext, Quot.sound]\n'PrimeFiveKernel.prime_five_kernel_interval' depends on axioms: [propext, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/prime-five-kernel/Main.lean",
+    "text": "import Mathlib\n\nnamespace PrimeFiveKernel\n\nstructure MultiplicativeFiltration (R : Type*) [Ring R] where\n  level : ℕ → AddSubgroup R\n  decreasing : ∀ {i j : ℕ}, i ≤ j → level j ≤ level i\n  one_mem : (1 : R) ∈ level 0\n  mul_mem : ∀ {i j : ℕ} {x y : R},\n    x ∈ level i → y ∈ level j → x * y ∈ level (i + j)\n  separated : ∀ x : R, (∀ i : ℕ, x ∈ level i) → x = 0\n\ntheorem zero_of_constant_tail {R : Type*} [Ring R]\n    (F : MultiplicativeFiltration R) {N : ℕ}\n    (stable : ∀ s : ℕ, N ≤ s → F.level s = F.level (s + 1))\n    {x : R} (hx : x ∈ F.level N) : x = 0 := by\n  apply F.separated x\n  intro s\n  induction s with\n  | zero => exact F.decreasing (Nat.zero_le N) hx\n  | succ s ih =>\n    by_cases hs : N ≤ s\n    · rw [← stable s hs]\n      exact ih\n    · exact F.decreasing (by omega) hx\n\ntheorem power_mem {R : Type*} [Ring R]\n    (F : MultiplicativeFiltration R) {x : R} {f : ℕ}\n    (hx : x ∈ F.level f) (m : ℕ) : x ^ m ∈ F.level (f * m) := by\n  induction m with\n  | zero => simpa using F.one_mem\n  | succ m ih =>\n    simpa only [pow_succ, Nat.mul_succ] using F.mul_mem ih hx\n\ntheorem power_vanishes {R : Type*} [Ring R]\n    (F : MultiplicativeFiltration R) {N f m : ℕ}\n    (stable : ∀ s : ℕ, N ≤ s → F.level s = F.level (s + 1))\n    {x : R} (hx : x ∈ F.level f) (bound : N ≤ f * m) :\n    x ^ m = 0 := by\n  exact zero_of_constant_tail F stable (F.decreasing bound (power_mem F hx m))\n\ntheorem nonzero_of_nonzero_graded {R : Type*} [Ring R]\n    (F : MultiplicativeFiltration R) {x : R} {s : ℕ}\n    (hx : x ∉ F.level (s + 1)) : x ≠ 0 := by\n  intro hz\n  apply hx\n  rw [hz]\n  exact (F.level (s + 1)).zero_mem\n\ntheorem smaller_power_nonzero {R : Type*} [MonoidWithZero R]\n    {x : R} {m k : ℕ} (hm : m ≤ k) (hk : x ^ k ≠ 0) : x ^ m ≠ 0 := by\n  intro hz\n  apply hk\n  have he : m + (k - m) = k := Nat.add_sub_of_le hm\n  calc\n    x ^ k = x ^ (m + (k - m)) := by rw [he]\n    _ = x ^ m * x ^ (k - m) := pow_add x m (k - m)\n    _ = 0 := by rw [hz, zero_mul]\n\ntheorem canonical_kernel_of_detection\n    {A V B W D : Type*} [Ring A] [Ring V] [Ring B] [Ring W] [Ring D]\n    (i : A →+* V) (upper : A →+* B) (j : B →+* W)\n    (canonical : V →+* W) (detector : V →+* D)\n    (square : canonical.comp i = j.comp upper)\n    {x : A} {m : ℕ}\n    (detected : (detector (i x)) ^ m ≠ 0)\n    (killed : (upper x) ^ m = 0) :\n    (i x) ^ m ≠ 0 ∧ canonical ((i x) ^ m) = 0 := by\n  have hs : canonical (i x) = j (upper x) := by\n    exact congrArg (fun f : A →+* W => f x) square\n  constructor\n  · intro hz\n    apply detected\n    simpa only [map_pow, map_zero] using congrArg detector hz\n  · calc\n      canonical ((i x) ^ m) = (canonical (i x)) ^ m := map_pow _ _ _\n      _ = (j (upper x)) ^ m := congrArg (fun y : W => y ^ m) hs\n      _ = j ((upper x) ^ m) := (map_pow _ _ _).symm\n      _ = 0 := by rw [killed, map_zero]\n\ntheorem prime_five_kernel_interval\n    {A V B W D : Type*} [Ring A] [Ring V] [Ring B] [Ring W] [Ring D]\n    (i : A →+* V) (upper : A →+* B) (j : B →+* W)\n    (canonical : V →+* W) (detector : V →+* D)\n    (square : canonical.comp i = j.comp upper)\n    (F : MultiplicativeFiltration B)\n    (stable : ∀ s : ℕ, 26 ≤ s → F.level s = F.level (s + 1))\n    {x : A} (in_two : upper x ∈ F.level 2)\n    (detected_sixteen : (detector (i x)) ^ 16 ≠ 0)\n    {m : ℕ} (hm : 13 ≤ m) (hm' : m ≤ 16) :\n    (i x) ^ m ≠ 0 ∧ canonical ((i x) ^ m) = 0 := by\n  apply canonical_kernel_of_detection i upper j canonical detector square\n  · exact smaller_power_nonzero hm' detected_sixteen\n  · exact power_vanishes F stable in_two (by omega)\n\ntheorem prime_five_degrees :\n    2 * 5 * (5 - 1) - 2 = 38 ∧\n    38 * 13 = 494 ∧ 38 * 14 = 532 ∧ 38 * 15 = 570 ∧ 38 * 16 = 608 ∧\n    2 * 12 < 26 ∧ 26 ≤ 2 * 13 ∧ 27 ≤ 2 * 16 := by\n  decide\n\n#print axioms zero_of_constant_tail\n#print axioms power_vanishes\n#print axioms canonical_kernel_of_detection\n#print axioms prime_five_kernel_interval\n\nend PrimeFiveKernel\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/prime-five-kernel/statement_fidelity.md",
+    "text": "# Statement fidelity: the actual-image filtered-ring reduction\n\nThis document describes `PrimeFiveKernel` in `Main.lean`. It does not claim\nthat Lean defines spectra, Morava localization, homotopy fixed points,\nthe sphere element beta_1, or any of the cited topological theorems.\n\n`MultiplicativeFiltration R` is a decreasing sequence of additive subgroups\nof an arbitrary, possibly noncommutative, ring. It contains 1 at index zero,\nmultiplies index i and index j into index i+j, and is separated: an element\nbelonging to every level is zero. This last assertion is a hypothesis, not a\nconsequence inferred from convergence by Lean.\n\n`zero_of_constant_tail` proves that an element of level N is zero if all\nlevels from N onward equal their successors. Vanishing successive quotients\nin the topological application imply these equalities; the construction of\nthose quotients is outside the formalization.\n\n`power_mem` proves membership of x^m in level f*m from membership of x in\nlevel f, for every natural m, including zero.\n`power_vanishes` combines that fact with a constant tail and N <= f*m.\n`nonzero_of_nonzero_graded` proves nonvanishing from nonmembership in the\nnext additive subgroup. It does not construct an associated-graded ring.\n`smaller_power_nonzero` proves, for every monoid with zero, that a nonzero\nkth power forces every mth power with m <= k to be nonzero.\n\n`canonical_kernel_of_detection` quantifies over five arbitrary rings and\nfive specified ring homomorphisms:\n\n- i: A -> V, the lower sphere/completion/localization image;\n- upper: A -> B, the upper sphere-unit image;\n- j: B -> W, the further upper completion/localization image;\n- canonical: V -> W, the specified map being audited;\n- detector: V -> D, the actual lower detector.\n\nIt assumes the equality canonical.comp i = j.comp upper, nonzero detected\nmth power, and zero upper mth power. It proves that the mth power in V is\nnonzero and its image under the *specified* canonical map is zero. The\ncommutative square is a hypothesis; no arbitrary kernel map is substituted.\nThe topological completion/naturality argument constructs precisely this\nsquare. Forgetting the grading by taking the total homotopy ring is\nlegitimate for these associative products; the formal theorem itself\ndoes not encode grading.\n\n`prime_five_kernel_interval` assumes the same maps and square, a separated\nmultiplicative filtration on B with constant tail from 26, membership of\nupper(x) at index two, and nonzero sixteenth detected power. For every\nnatural m with 13 <= m <= 16, it proves nonzero mth power in V and zero\nimage under canonical. These hypotheses are NOT assumed conclusions of the\nprime-five topological claim: their construction and literature inputs are\nproved or exposed individually in `proof.md` and the proof graph.\n\n`prime_five_degrees` checks the exact degree and threshold arithmetic.\nIt makes no assertion about homotopy groups.\n\nThe compiler therefore certifies an unconditional abstract algebraic\nreduction with explicitly quantified hypotheses, not a closed-kernel\nformalization of the topological theorem. External topological assumptions\nremain in `research/MATH_STATE.json`; they are not discharged by this file.\n"
+  },
+  "subject": {
+    "content_hash": "5a0d2a5f0006555d6a04b4db9d0c8831f64a2d3b0edc3a45fc784a8df1b0ad42",
+    "kind": "claim",
+    "subject_id": "C318ALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

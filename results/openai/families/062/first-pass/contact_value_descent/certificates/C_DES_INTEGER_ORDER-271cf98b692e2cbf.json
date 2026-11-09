@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_DES_INTEGER_ORDER-95270558e0f0",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/062/first-pass/contact_value_descent/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/062/first-pass/contact_value_descent/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 9065,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/062/first-pass/contact_value_descent/Main.lean",
+    "source_sha256": "da7fec26e42591955da7e86c0505b0a10ea81864ba8aec3a1651ede0cbec040a",
+    "statement_fidelity": "families/062/first-pass/contact_value_descent/statement_fidelity.md",
+    "statement_fidelity_sha256": "4a3498242c13fd41fe833afa888340541cf90a3eb2bad00049f15412a17d9c55",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/062/first-pass/contact_value_descent/Main.lean:11:39: warning: `Int.ofNat_nonneg` has been deprecated: Use `Int.natCast_nonneg` instead\n'ContactValueDescent.exponent_mul_integer_ne_one' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ContactValueDescent.power_order_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/contact_value_descent/Main.lean",
+    "text": "import Mathlib.Tactic\n\nset_option autoImplicit false\n\nnamespace ContactValueDescent\n\ntheorem exponent_mul_integer_ne_one\n    (e : Nat) (he : 2 <= e) (m : Int) :\n    Not ((e : Int) * m = 1) := by\n  intro h\n  have he0 : (0 : Int) <= (e : Int) := Int.ofNat_nonneg e\n  have he2 : (2 : Int) <= (e : Int) := by exact_mod_cast he\n  have hm : (1 : Int) <= m := by\n    by_contra hn\n    have hm0 : m <= 0 := by omega\n    have hp : (e : Int) * m <= 0 :=\n      mul_nonpos_of_nonneg_of_nonpos he0 hm0\n    omega\n  have hp : (e : Int) <= (e : Int) * m := by\n    calc\n      (e : Int) = (e : Int) * 1 := (mul_one _).symm\n      _ <= (e : Int) * m := mul_le_mul_of_nonneg_left hm he0\n  omega\n\ntheorem power_order_obstruction\n    {A : Type*} [Monoid A] (order : A -> Int)\n    (e : Nat) (he : 2 <= e) (z t : A)\n    (hpower : order (z ^ e) = (e : Int) * order z)\n    (ht : order t = 1) :\n    Not (z ^ e = t) := by\n  intro hroot\n  apply exponent_mul_integer_ne_one e he (order z)\n  calc\n    (e : Int) * order z = order (z ^ e) := hpower.symm\n    _ = order t := congrArg order hroot\n    _ = 1 := ht\n\nend ContactValueDescent\n\n#print axioms ContactValueDescent.exponent_mul_integer_ne_one\n#print axioms ContactValueDescent.power_order_obstruction\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/contact_value_descent/statement_fidelity.md",
+    "text": "# Statement fidelity: contact-value descent and its arithmetic sublemma\n\n## Geometric target C_DES_DESCENT\n\nThe target is exactly Proposition `des:descent` in the staged manuscript\n`Contact-Fano-manifolds-and-the-LeBrun-Salamon-conjecture-September-23-2026`,\n`build/sections/descent.tex`. The full geometric proof is in `report.md`.\n**The geometric proposition is not formalized in Main.lean.**\n\n| Object or quantifier | Manuscript meaning retained in the report |\n|---|---|\n| Ground field | C, characteristic zero. |\n| X | Smooth simply connected complex projective contact Fano manifold; its analytic fundamental group is trivial. |\n| F, theta, L | The given contact sequence, with nondegenerate L-valued Levi form; no replacement contact structure. |\n| Picard hypothesis | Pic(X)=Z[L], not just a choice of some other ample line bundle. |\n| Lines | A dense covering family of free maps f:P1->X with f*L=O(1); no standard splitting type or irreducible tangent-direction variety is assumed. |\n| Z, M | X x X and the actual contact polarization L boxtimes L. |\n| Y | Every proper integral algebraic space over C; no normality, projectivity, dimension, or fiber assumption is added. |\n| p | Every dominant morphism Y->Z; no finiteness or flatness is required. |\n| W12, W21 | Everywhere regular sections of the two vector bundles specified in the proposition, with exactly equal contact values xi. |\n| Conclusion | Existence of exactly one everywhere regular B in H0(Z,M) satisfying p*B=xi, not just rational descent or descent to a different polarization. |\n\n| Source obligation | Report location |\n|---|---|\n| `lines:positive`, `des:line-quotient` | Section 2 proves the intrinsic trivial quotient and its annihilated positive part for every free contact line. |\n| Smooth dominant test evaluation | Section 2 derives an open full-Hom family from the assumed covering family. |\n| Finite image, normalization, `des:base-open` | Section 3; no map from Y to its image's normalization is assumed. |\n| `des:component-section`, `des:all-sheets` | Section 4; every dominating pullback component is used, including components without a generic K-point. |\n| Detection of any branch divisor | Section 5 handles both projection cases, codimension-two avoidance, transversality, and meeting U simultaneously. |\n| `des:branch-model`, `des:pullback-germ` | Section 6 constructs the analytic coordinates and the smooth dominating pullback germ; vertical or embedded components elsewhere are harmless. |\n| Codimension-one unramifiedness | Section 6 treats an arbitrary ramification divisor and every positive integer index greater than one. |\n| Purity at nonclosed points | Section 7 checks normality, regularity, quasi-finiteness, equal positive local dimensions, and all height-one generizations. |\n| Connectedness and final descent | Section 7 obtains degree one analytically, finite birational descent algebraically, and uniqueness by dominance. |\n\nThe known source results used by the report are explicit assumptions of\nC_DES_DESCENT in MATH_STATE.json. Engineer source reading is not an\nindependent citation approval. The other manuscript propositions remain\nunverified; none is silently assumed as an input to this descent theorem.\n\n## Exactly what Main.lean formalizes: C_DES_INTEGER_ORDER\n\nThe two declarations are:\n\n1. `ContactValueDescent.exponent_mul_integer_ne_one` (unqualified declaration\n   name: `exponent_mul_integer_ne_one`):\n   for every natural number e with 2<=e and every integer m,\n   `(e : Int) * m != 1`.\n2. `ContactValueDescent.power_order_obstruction` (unqualified declaration\n   name: `power_order_obstruction`):\n   for every type A with a monoid structure, every function\n   `order : A -> Int`, every natural e>=2, and all z,t in A, if\n   `order (z^e) = (e : Int) * order z` and `order t = 1`,\n   then `z^e != t`.\n\nAll these quantifiers and both order hypotheses are explicit. The function\n`order` is not asserted to be a valuation; the theorem assumes only the\nspecified power equality. No field, analytic ring, smoothness, properness,\nfinite morphism, normalization, purity, or covering-space theorem is encoded.\nBoth conclusions use propositional `Not`, not Boolean inequality.\nThere are no user-declared axioms or omitted proof terms.\n\nIn report Section 6, after the independent geometric arguments produce a\ndegree-one sheet, instantiate A conceptually as the multiplicative monoid of\nnonzero meromorphic germs on that sheet. The germ called t in the formal\nstatement represents `a(t_base)`, not necessarily the chosen base parameter.\nTransversality gives its order one. Ordinary vanishing order gives the\npower equality. The nonzero germ z represents the local branch coordinate\nafter absorbing the analytic unit; its e-th power is `a(t_base)`.\nThe second declaration rules out precisely this equality when e>=2.\nThis analytic instantiation is explained in prose, not constructed in Lean.\n\nThus a real successful Lean 4.31.0 compiler run certifies only the universal\ninteger-order obstruction. It cannot certify C_DES_DESCENT or the\nclassification. The compiler result must be bound to this unchanged file\nand Main.lean by the official evidence command with\n`--claim C_DES_INTEGER_ORDER`. Fidelity itself remains a human judgement.\n\n## Standalone exact replay\n\n`verify.py` rechecks the exact cubic discriminant and the stored typed\nJacobian result and validates the fresh compiler record for the arithmetic\nsublemma. A finite cubic instance is not substituted for the universal\narithmetic theorem, and neither is substituted for the complete geometric\nproof. Independent Reviewer examination of the report, its hypotheses, and\nits citations is still required.\n"
+  },
+  "subject": {
+    "content_hash": "2095267ee6d520e88e9cda56c5d0fe28fd5d93d00e704658544400319485b9c2",
+    "kind": "claim",
+    "subject_id": "C_DES_INTEGER_ORDER"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

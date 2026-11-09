@@ -1,0 +1,32 @@
+{
+  "state": "running",
+  "task_id": "c118-structural-gap-official-lean431-certification",
+  "run_id": "c118-structural-gap-official-lean431-certification-1793910737325117050",
+  "description": "background task",
+  "command": "export ARGUS_SKILL_MATHLIB_WORKSPACE=$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0; $WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.lean_evidence verify --project-root . --claim C118_STRUCTURAL_GAP research/structural_gap_certification/Main.lean --statement-fidelity research/structural_gap_certification/STATEMENT_FIDELITY.md --timeout 3600 > research/structural_gap_certification/official_verify.json 2> research/structural_gap_certification/official_verify.stderr.log; verify_status=$?; $WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.math_state check --project-root campaigns/9000118 > research/structural_gap_certification/math_state_check.json 2> research/structural_gap_certification/math_state_check.stderr.log; state_status=$?; $WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.proof_graph_check check --project-root campaigns/9000118 > research/structural_gap_certification/proof_graph_check.json 2> research/structural_gap_certification/proof_graph_check.stderr.log; graph_status=$?; printf \"{\\\"verify_exit_code\\\":%d,\\\"math_state_check_exit_code\\\":%d,\\\"proof_graph_check_exit_code\\\":%d}\\n\" \"$verify_status\" \"$state_status\" \"$graph_status\" > research/structural_gap_certification/validation_exit_codes.json; exit \"$verify_status\"",
+  "pid": 629715,
+  "worker_pid": 629714,
+  "process_identity": {
+    "pid": 629715,
+    "start_time_ticks": "244637089"
+  },
+  "worker_process_identity": {
+    "pid": 629714,
+    "start_time_ticks": "244637088"
+  },
+  "started_at": 1793910737.3318863,
+  "mode": "direct",
+  "run_dir": null,
+  "exit_status_path": "campaigns/9000118/.argus_subagents/c118-structural-gap-official-lean431-certification_logs/exit_code.c118-structural-gap-official-lean431-certification-1793910737325117050",
+  "stdout_log": ".argus_subagents/c118-structural-gap-official-lean431-certification_logs/stdout.log",
+  "stderr_log": ".argus_subagents/c118-structural-gap-official-lean431-certification_logs/stderr.log",
+  "timeout_seconds": 7200,
+  "timeout_defaulted": false,
+  "supervisor_usage_model": "",
+  "supervisor_input_tokens": 0,
+  "supervisor_cached_input_tokens": 0,
+  "supervisor_output_tokens": 0,
+  "supervisor_reasoning_output_tokens": 0,
+  "cwd": "campaigns/9000118",
+  "live": true
+}

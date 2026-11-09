@@ -1,0 +1,109 @@
+{
+  "goal": "C9000283",
+  "routes": [
+    {
+      "name": "universal-fourier-core",
+      "status": "current",
+      "evidence": "research/openai_manuscript/Polynomial-Time-Unitary-Synthesis-from-a-Boolean-Oracle-October-5-2026/build/sections/04-fields.tex"
+    }
+  ],
+  "nodes": {
+    "C9000283": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 283 (Polynomial-time unitary synthesis from a Boolean oracle.; papers: Polynomial-Time Unitary Synthesis from a Boolean Oracle; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_MAIN_SYNTHESIS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN_SYNTHESIS": {
+      "statement": "For n>=1 a uniform polynomial-time fixed-gate Boolean-oracle circuit approximates every n-qubit unitary channel within full diamond norm 1/2 after choosing the oracle; no efficient oracle construction is asserted (thm:main).",
+      "status": "open",
+      "depends_on": ["C_RECURSION", "C_COMPILATION"],
+      "reviewer_confirmed": false
+    },
+    "C_RECURSION": {
+      "statement": "A single smaller-circuit call per recursion level yields the uniform clean programmable synthesis bound (rec:step and rec:skeleton).",
+      "status": "open",
+      "depends_on": ["C_CONTRACTION", "C_CLEAN_ENCODING", "C_FOURIER_FIELDS", "C_SLOT_INTERFACE"],
+      "reviewer_confirmed": false
+    },
+    "C_CONTRACTION": {
+      "statement": "Uniform conditioning produces an internal contraction of norm at most 3/4 with the stated dimension decrease and slot resources (contract:moment, contract:block, contract:depth).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_CLEAN_ENCODING": {
+      "statement": "Row-sparse near-isometries have the claimed coherent clean encoders and resource bounds (encode:row-sparse and encode:implementation).",
+      "status": "open",
+      "depends_on": ["C_FOURIER_FIELDS", "C_SLOT_INTERFACE"],
+      "reviewer_confirmed": false
+    },
+    "C_COMPILATION": {
+      "statement": "Phase-sensitive uniformly controlled slots compile into H,T,T-dagger,CNOT and one Boolean oracle with the claimed polynomial resources (compile:words and compile:slots).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_SLOT_INTERFACE": {
+      "statement": "The state preparation, permutation and positive-phase Fourier slot skeletons satisfy their uniform clean interfaces (slot:preparation, slot:permutation, slot:fourier).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_FOURIER_FIELDS": {
+      "statement": "Under every hypothesis of Section 04, feedback is unitary with FE*=R*V, both field Grams lie between (1-r^(2L))I and I, both positive-phase Fourier matrices have row support at most L, and truncated intertwining error is at most 2r^L/(1-r).",
+      "status": "open",
+      "depends_on": ["C_FOURIER_CORE", "C_FEEDBACK", "C_FIELD_GRAMS", "C_FIELD_SUPPORT", "C_FIELD_ERROR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fourier-feedback-audit/report.md", "research/fourier-feedback-audit/exact_certificate.json"]
+    },
+    "C_FOURIER_CORE": {
+      "statement": "Universal formal core: block feedback unitarity and exact intertwining given the solved stable feedback equation; both ordered Gram defect identities and orthogonal coefficient expansion; characteristic-safe Newton reconstruction; the actual binary moment code; and both signed full-row bounds, with a compact prime-field extension. Analytic bridges are separate prose obligations.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fourier-feedback-audit/Main.lean", "research/fourier-feedback-audit/statement_fidelity.md", "research/fourier-feedback-audit/certificates/C_FOURIER_CORE-894bdc23dafca9f6.json"]
+    },
+    "C_FEEDBACK": {
+      "statement": "For every admissible complex unitary block matrix and diagonal unitary feedback, the stable resolvent defines a unitary F and the exact forward/backward intertwining and Y formulas (fields:unitary).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_FIELD_GRAMS": {
+      "statement": "Positive and negative common-phase degrees are distinct modulo 2^b; both averaged field Grams have the claimed Loewner bounds, with the backward product ordered as Z*D*.",
+      "status": "open",
+      "depends_on": ["C_FOURIER_CORE"],
+      "reviewer_confirmed": false
+    },
+    "C_FIELD_SUPPORT": {
+      "statement": "With the positive-phase Fourier convention, E has negative multiset frequencies and R has positive ones; nonzero rows are supported only on members of one length-at-most-L multiset, and the zero row on one port.",
+      "status": "open",
+      "depends_on": ["C_FOURIER_CORE"],
+      "reviewer_confirmed": false
+    },
+    "C_FIELD_ERROR": {
+      "statement": "Stable Neumann tails and the pointwise exact identity imply the field operator-norm error at most 2r^L/(1-r), including r=0 and L=1.",
+      "status": "open",
+      "depends_on": ["C_FEEDBACK"],
+      "reviewer_confirmed": false
+    },
+    "C_COMPACT_GRID": {
+      "statement": "For every prime p>max(s,L), the grid (Z/p)^(L+1) with the same moment-curve phases has all the Section 04 feedback, Gram, signed row-support and error conclusions. One may choose max(s,L)<p<=2max(s,L), reducing the logarithmic grid size to at most (L+1)log2(2max(s,L)); no binary-slot implementation bound is inferred.",
+      "status": "open",
+      "depends_on": ["C_FOURIER_CORE", "C_FEEDBACK", "C_FIELD_GRAMS", "C_FIELD_ERROR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fourier-feedback-audit/report.md", "research/fourier-feedback-audit/Main.lean"]
+    },
+    "C_TRANSFER_CONTEXT": {
+      "statement": "The classical scalar-variable characteristic function of a finite-dimensional unitary colligation is rational inner; this contextual citation is not a dependency of the diagonal-feedback proof.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    }
+  }
+}

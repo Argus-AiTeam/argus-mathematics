@@ -1,0 +1,29 @@
+{
+  "adapter": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.jacobian",
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "inspected_operations": [
+    {
+      "operation_id": "prime_field.matrix.rank.compute",
+      "input": "PrimeFieldMatrixRequest: matrix has prime, canonical-residue entries, and explicit columns; at most 256 by 256.",
+      "output": "PrimeFieldMatrixRankResult: prime, source, rank.",
+      "decision": "Execute on an integer minor with determinant 5, squared row norms 3, and rank loss in characteristic 5."
+    },
+    {
+      "operation_id": "matrix.symbolic.determinant.compute",
+      "input": "SymbolicDeterminantRequest: square canonical rational-function matrix over QQ; at most 8 by 8; bounded exact expansion.",
+      "output": "SymbolicDeterminantResult: canonical rational-function determinant, SYMPY_BAREISS.",
+      "decision": "Inspected; no universal integer-minor divisibility proof operation. Use elementary proof and independently replay a small integer determinant."
+    },
+    {
+      "operation_id": "finite_field.polynomial_map.table.compute",
+      "input": "FiniteMapTableRequest: univariate polynomial and exact finite-field presentation.",
+      "output": "FiniteMapTable: complete domain-bound evaluation table.",
+      "decision": "Inspected; a bounded univariate table does not prove the multivariate interpolation theorem. Prove the theorem and test its line restrictions separately."
+    }
+  ],
+  "executed_operation": "prime_field.matrix.rank.compute",
+  "payload_file": "research/quotient_uniform/jacobian_payload.json",
+  "typed_response_file": "research/quotient_uniform/jacobian_result.json",
+  "limitations": "The operation certifies this finite matrix rank only, not the universal obstruction."
+}

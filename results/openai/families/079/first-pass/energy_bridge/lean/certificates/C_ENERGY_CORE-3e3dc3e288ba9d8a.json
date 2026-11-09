@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_ENERGY_CORE-1b1186ba739f",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/079/first-pass/energy_bridge/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/079/first-pass/energy_bridge/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15760,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/079/first-pass/energy_bridge/lean/Main.lean",
+    "source_sha256": "d1d422c7baa1138c1f69fdecfd10cedb45991c97770ff771233acdda380e80c4",
+    "statement_fidelity": "families/079/first-pass/energy_bridge/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "d3305893a50fe89ee85e57091f46bd46155f01a93f2e152f028c1b4b0f768189",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/energy_bridge/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnoncomputable section\n\nnamespace EnergyBridge\n\nabbrev Q := Quaternion ℝ\n\nsection QuaternionicWall\n\nvariable {ι : Type*} [Fintype ι]\n\ndef pair (v w : ι → Q) : Q := ∑ i, star (v i) * w i\n\ndef act (B : ι → ι → Q) (q : ι → Q) : ι → Q :=\n  fun i => ∑ j, B i j * q j\n\ndef wall (B R : ι → ι → Q) (ν w : ι → Q) (t : ℝ) : ι → ι → Q :=\n  fun i j => B i j + (t : Q) * R i j + ν i * star (w j) + w i * star (ν j)\n\ntheorem pair_right_mul (v w : ι → Q) (a : Q) :\n    pair v (fun i => w i * a) = pair v w * a := by\n  simp [pair, Finset.sum_mul, mul_assoc]\n\ntheorem act_wall (B R : ι → ι → Q) (ν w q : ι → Q) (t : ℝ) :\n    act (wall B R ν w t) q =\n      fun i => act B q i + (t : Q) * act R q i +\n        ν i * pair w q + w i * pair ν q := by\n  funext i\n  simp [act, wall, pair, add_mul, mul_assoc, Finset.sum_add_distrib, Finset.mul_sum]\n\ntheorem boundary_null_pairing\n    (B R : ι → ι → Q) (ν w q v : ι → Q) (t : ℝ)\n    (hB : act B q = 0) (hR : act R q = 0)\n    (hνq : pair ν q = 0) (hvν : pair v ν = 0) :\n    pair v (act (wall B R ν w t) q) = 0 := by\n  have hk : act (wall B R ν w t) q = fun i => ν i * pair w q := by\n    rw [act_wall, hB, hR, hνq]\n    simp\n  rw [hk, pair_right_mul, hvν, zero_mul]\n\nend QuaternionicWall\n\nsection HolomorphicFiber\n\nvariable {ι : Type*} [Fintype ι]\n\ndef squareSum (W : ι → ℂ) : ℂ := ∑ i, W i * W i\n\ndef ratioDifferential (W : ι → ℂ) (y : ℂ) (p : ι → ℂ) : ι → ℂ :=\n  fun i => p i - W i * y\n\ndef passiveDifferential (W : ι → ℂ) (y : ℂ) (p : ι → ℂ) (s : ℂ) : ℂ :=\n  -(squareSum W) / 2 * y + (∑ i, W i * p i) + s\n\ntheorem fiber_null_vector (W : ι → ℂ) :\n    ratioDifferential W 1 W = 0 ∧\n      passiveDifferential W 1 W (-(squareSum W) / 2) = 0 := by\n  constructor\n  · funext i\n    simp [ratioDifferential]\n  · simp only [passiveDifferential, squareSum, mul_one]\n    ring\n\ntheorem null_vector_nonzero (W : ι → ℂ) :\n    ((1 : ℂ), W, -(squareSum W) / 2) ≠ (0, 0, 0) := by\n  intro h\n  have hfirst : (1 : ℂ) = 0 := congrArg Prod.fst h\n  exact one_ne_zero hfirst\n\nvariable [DecidableEq ι]\n\ndef scaledSpatialJacobian (W : ι → ℂ) : Matrix (ι ⊕ Unit) (ι ⊕ Unit) ℂ :=\n  Matrix.fromBlocks 1 (fun i _ => -W i) (fun _ j => W j)\n    (fun _ _ => 1 - squareSum W / 2)\n\ntheorem scaled_spatial_jacobian_det (W : ι → ℂ) :\n    (scaledSpatialJacobian W).det = 1 + squareSum W / 2 := by\n  rw [scaledSpatialJacobian, Matrix.det_fromBlocks_one₁₁]\n  simp [Matrix.det_unique, Matrix.sub_apply, Matrix.mul_apply, squareSum,\n    mul_neg, Finset.sum_neg_distrib]\n  ring\n\ntheorem chart_denominator_nonzero (S : ℂ) (hS : ‖S‖ < 2) :\n    1 + S / 2 ≠ 0 := by\n  intro h\n  have hs : S = -2 := by\n    linear_combination 2 * h\n  rw [hs] at hS\n  norm_num at hS\n\nend HolomorphicFiber\n\nsection RealCompression\n\nvariable {κ : Type*} [Fintype κ] [DecidableEq κ]\n\ntheorem real_compression_singular (M : Matrix κ κ ℝ) (q : κ → ℝ)\n    (hq : q ≠ 0) (hMq : Matrix.mulVec M q = 0) : M.det = 0 := by\n  exact Matrix.exists_mulVec_eq_zero_iff.mp ⟨q, hq, hMq⟩\n\nend RealCompression\n\nend EnergyBridge\n\nend\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/energy_bridge/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: characteristic-wall algebra\n\n`EnergyBridge.boundary_null_pairing` quantifies over every finite index type,\nwith no fixed dimension, and genuine Mathlib quaternions over the real numbers.\n`pair v q` is the quaternionic Hermitian pairing sum conjugate(v_i) q_i;\n`act B q` is left matrix action. Scalars of columns act on the right, exactly\nas in the October manuscript. No commutation of quaternionic factors is used.\n\nThe matrices `B,R` are arbitrary quaternionic matrices. The vectors `nu,w,q,v`\nare arbitrary quaternionic columns and `t` is an arbitrary real number.\nThe hypotheses are `Bq=Rq=0`, `nu^*q=0`, and `v^*nu=0`. The conclusion is\n\n    v^* [B+tR+nu w^*+w nu^*] q = 0.\n\nFor the manuscript, at the wall take `B=H(B0)`, `R=H(r)`,\n`nu=G(r)/|grad r|`, `w=theta |grad r| G(rho)`, and `t=theta rho`.\nThe Hessian product rule for `u=r rho` supplies precisely this displayed\nmatrix. Thus the theorem verifies the compression-kernel algebra even when\nthe full Hessian is indefinite. Hermitian symmetry, positive semidefiniteness,\nthe existence of a nonzero `q`, and the relation between the Moore determinant\nand compression are NOT assumed silently or established by this declaration.\nThey are established in the accompanying mathematical proof.\n\n`EnergyBridge.fiber_null_vector` proves the two differential identities for\nthe October holomorphic chart in every finite transverse dimension. The\nauxiliary complex plane C_k is identified with Mathlib's ordinary complex\nfield, a commutative field isomorphism for this subclaim only. `squareSum W`\nis the BILINEAR sum of the squares, not the Hermitian squared norm.\nThe vector is `(1,W,-sum W_i^2/2)` in `(Y,P,S1)` order. Its first component\nis one; `EnergyBridge.null_vector_nonzero` separately proves it is not zero.\n`ratioDifferential` is `Y dW`, and `passiveDifferential` is `dPhi` when\n`P=YW`. The derivative identities here have no division by `Y`; their use as\nchart differentials requires `Y!=0`, proved for the manuscript's fibers in\nthe mathematical proof rather than by this declaration.\n\n`EnergyBridge.scaled_spatial_jacobian_det` proves, for EVERY finite index\ntype, the ordinary complex determinant identity\n\n    det [[I,-W],[W^t,1-sum W_i^2/2]] = 1+sum W_i^2/2.\n\nAt fixed `sqrt(2) tau`, the spatial coordinates can be `(P,Y)`. This is the\nJacobian of `(W,Phi)` with its first rows multiplied by `Y`, in that order.\nIt is a complex determinant, NOT the Moore determinant of a general\nquaternionic matrix. `EnergyBridge.chart_denominator_nonzero` proves that\nthe right side is nonzero whenever the complex number `S=sum W_i^2`\nhas norm less than two. The actual bound follows from\n`|sum W_i^2|<=sum |W_i|^2<=w0^2=1/100`.\n\n`EnergyBridge.real_compression_singular` is the real-matrix fact that a\nnonzero null vector forces determinant zero, in every finite dimension.\nIt does not itself construct a real representation of a quaternionic\ncompression or prove the Moore determinant's fourth-power identity.\n\nThe helper declarations `pair_right_mul` and `act_wall` prove the ordered\nfinite-sum expansions used by `boundary_null_pairing`.\n\nThis formal source certifies the load-bearing finite-dimensional algebra,\nnot the analytic moving-domain Green identity, cofactor-divergence theorem,\nDirichlet solvability, smooth parameter dependence, scale estimates,\nSeptember entropy argument, or the local-smoothing theorem. Those distinctions\nare part of the claim, not omissions to be filled by the compiler.\n"
+  },
+  "subject": {
+    "content_hash": "871e3e74ef23d1f77ea02aeafd710af59d602702133d4830d2fb607b86dd46e3",
+    "kind": "claim",
+    "subject_id": "C_ENERGY_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,190 @@
+{
+  "claim": "C_TAIL_KERNEL",
+  "associated_geometric_claim": "C_COMMON_TAIL_DIMENSION",
+  "result_class": "new_reduction",
+  "proof_kind": "classical geometric proof with exact universal algebra certificates",
+  "review_status": "independent_review_required",
+  "statement_fidelity": {
+    "full_theorem": "report.md, Statement fidelity and Sections 1-5",
+    "machine_checked_postcondition": "Eight ideal-membership identities in a free associative algebra prove the two-tail annihilation, flat-line, orbit-to-commutator, arbitrary-word induction, and all-grade-piece preservation implications in every finite dimension. A block identity proves rank preservation from kernel containment. Together with the stated Hodge curvature and orthogonal-grading interpretation, the first two null curvatures force every tail curvature to vanish.",
+    "not_machine_checked": [
+      "Borel fixed point and highest-weight theory in the root-kernel theorem",
+      "monodromy normality, fixed part, and algebraic orbit filling",
+      "canonical Hodge norm estimates and the full-mass argument",
+      "the geometric hypotheses of an arbitrary input variation",
+      "publication-level significance or novelty"
+    ],
+    "no_refutation_of_manuscript": true,
+    "quantifiers": "The local common-kernel assertion applies to every polarized complex pure variation on any complex manifold and every holomorphic highest-piece line on the constant-rank locus, with no bound on the lengths or ranks of the tails. The associated geometric theorem retains every h and compatible algebraic line in prop:tail-rank and every rational c0,c1>0, cj>=0 for j>=2, and t>=0, and proves nu(Pc+tH)=nu(Pc)=nu(L0+L1).",
+    "dimensions": "arbitrary; the universal identities are not a bounded matrix search"
+  },
+  "local_structural_hypotheses": [
+    "Hodge orthogonal grading and a grading-preserving Chern connection",
+    "integrable degree-lowering Higgs contractions",
+    "Gi spans all words of length i applied to the highest-piece line, on the constant-rank locus",
+    "the Hodge subbundle curvature formula (1) in report.md",
+    "the word_induction relation is the induction hypothesis of a universally checked induction step, not an additional geometric assumption",
+    "cyclic_adjoint follows by taking the adjoint of the all-word annihilation after that induction"
+  ],
+  "symbols": {
+    "l": "orthogonal projection onto ell",
+    "q": "orthogonal projection onto U1",
+    "r": "orthogonal projection onto G1",
+    "a": "theta(v)",
+    "x": "the adjoint of a",
+    "d": "the Chern derivative evaluated on a local line section",
+    "y": "any element of the degree-minus-one restricted monodromy ideal",
+    "u": "orthogonal projection onto U0",
+    "k": "orthogonal projection onto any one grade piece Gi",
+    "z": "any contraction of the Higgs field",
+    "w": "an arbitrary finite word in Higgs contractions; its annihilation is the induction hypothesis",
+    "rank_block_symbols": "Only in the separate rank certificate: p is a factor for the first two curvature forms, b collects extra tail factors, and c factors the marked form through p."
+  },
+  "hypotheses": {
+    "generation": {"a l": 1, "q a l": -1},
+    "adjoint_tail_null": {"q a": 1, "q a q": -1},
+    "orthogonality": {"q l": 1},
+    "g1_in_tail": {"q r": 1, "r": -1},
+    "tail_null": {"x q": 1, "q x q": -1},
+    "raising_grade": {"q x r": 1},
+    "chern_normal_null": {"d l": 1, "l d l": -1, "q d l": -1},
+    "chern_grading": {"q d l": 1},
+    "orbit_fill": {"r y l": 1, "y l": -1},
+    "highest_grade": {"x l": 1},
+    "higgs_commutes": {"a z": 1, "z a": -1},
+    "tail_zero_raising_null": {"x u": 1, "u x u": -1},
+    "piece_in_tail_zero": {"u k": 1, "k": -1},
+    "chern_tail_zero_null": {"d u": 1, "u d u": -1},
+    "grading_isolation": {"u d k": 1, "k d k": -1}
+  },
+  "span_induction": {
+    "base": "a_kills_line",
+    "step": "cyclic_action_step",
+    "local_induction_hypothesis": {"a w l": 1},
+    "line_projection": "l",
+    "generated_span_projection": "u",
+    "generators": "all Higgs contractions z, each commuting with a",
+    "conclusion": {"a u": 1},
+    "adjoint_conclusion": {"u x": 1}
+  },
+  "derivations": [
+    {
+      "id": "a_kills_line",
+      "target": {"a l": 1},
+      "terms": [
+        {"coefficient": 1, "left": "", "relation": "generation", "right": ""},
+        {"coefficient": 1, "left": "", "relation": "adjoint_tail_null", "right": "l"},
+        {"coefficient": 1, "left": "q a", "relation": "orthogonality", "right": ""}
+      ]
+    },
+    {
+      "id": "x_kills_g1",
+      "target": {"x r": 1},
+      "terms": [
+        {"coefficient": -1, "left": "x", "relation": "g1_in_tail", "right": ""},
+        {"coefficient": 1, "left": "", "relation": "tail_null", "right": "r"},
+        {"coefficient": 1, "left": "q x", "relation": "g1_in_tail", "right": ""},
+        {"coefficient": 1, "left": "", "relation": "raising_grade", "right": ""}
+      ]
+    },
+    {
+      "id": "flat_line",
+      "target": {"d l": 1, "a l": 1, "l d l": -1, "l a l": -1},
+      "terms": [
+        {"coefficient": 1, "left": "", "relation": "chern_normal_null", "right": ""},
+        {"coefficient": 1, "left": "", "relation": "chern_grading", "right": ""},
+        {"coefficient": 1, "left": "", "relation": "a_kills_line", "right": ""},
+        {"coefficient": -1, "left": "l", "relation": "a_kills_line", "right": ""}
+      ]
+    },
+    {
+      "id": "all_commutators_kill_line",
+      "target": {"x y l": 1, "y x l": -1},
+      "terms": [
+        {"coefficient": 1, "left": "", "relation": "x_kills_g1", "right": "y l"},
+        {"coefficient": -1, "left": "x", "relation": "orbit_fill", "right": ""},
+        {"coefficient": -1, "left": "y", "relation": "highest_grade", "right": ""}
+      ]
+    },
+    {
+      "id": "cyclic_action_step",
+      "target": {"a z w l": 1},
+      "terms": [
+        {"coefficient": 1, "left": "", "relation": "higgs_commutes", "right": "w l"},
+        {"coefficient": 1, "left": "z", "relation": "word_induction", "right": ""}
+      ]
+    },
+    {
+      "id": "x_kills_generated_tail",
+      "target": {"x u": 1},
+      "terms": [
+        {"coefficient": 1, "left": "", "relation": "tail_zero_raising_null", "right": ""},
+        {"coefficient": 1, "left": "", "relation": "cyclic_adjoint", "right": "u"}
+      ]
+    },
+    {
+      "id": "x_kills_arbitrary_piece",
+      "target": {"x k": 1},
+      "terms": [
+        {"coefficient": 1, "left": "", "relation": "x_kills_generated_tail", "right": "k"},
+        {"coefficient": -1, "left": "x", "relation": "piece_in_tail_zero", "right": ""}
+      ]
+    },
+    {
+      "id": "chern_preserves_arbitrary_piece",
+      "target": {"d k": 1, "k d k": -1},
+      "terms": [
+        {"coefficient": -1, "left": "d", "relation": "piece_in_tail_zero", "right": ""},
+        {"coefficient": 1, "left": "", "relation": "chern_tail_zero_null", "right": "k"},
+        {"coefficient": 1, "left": "u d", "relation": "piece_in_tail_zero", "right": ""},
+        {"coefficient": 1, "left": "", "relation": "grading_isolation", "right": ""}
+      ]
+    }
+  ],
+  "rank_certificate": {
+    "meaning": "Kernel containment gives Hfactor=c*p. Adding arbitrary other tail factors b does not change the rank when Hfactor is stacked.",
+    "stack": [[{"p": 1}], [{"b": 1}], [{"c p": 1}]],
+    "eliminator": [
+      [{"": 1}, {}, {}],
+      [{}, {"": 1}, {}],
+      [{"c": -1}, {}, {"": 1}]
+    ],
+    "inverse": [
+      [{"": 1}, {}, {}],
+      [{}, {"": 1}, {}],
+      [{"c": 1}, {}, {"": 1}]
+    ],
+    "reduced_stack": [[{"p": 1}], [{"b": 1}], [{}]]
+  },
+  "diagonal_obstruction": {
+    "algebra": "sl4(C)",
+    "representation": "adjoint",
+    "grading_element": [1, 1, 0, 0],
+    "highest_basis": [[1, 3], [1, 4], [2, 3], [2, 4]],
+    "x": [1, 3],
+    "s": [2, 4],
+    "y": [3, 2],
+    "codomain_basis": ["e11-e33", "e34", "e21"],
+    "x_star_on_highest": [[-1, 0, 0, 0], [0, 1, 0, 0], [0, 0, -1, 0]],
+    "scope": "Refutes only a proposed diagonal-only audit shortcut, not the manuscript's universally quantified commutator hypothesis."
+  },
+  "jacobian": {
+    "operation_id": "matrix.symbolic.rank.compute",
+    "payload": "jacobian_payload.json",
+    "typed_output": "jacobian_output.json",
+    "adapter_status": "jacobian_status.json",
+    "expected_rank": 3,
+    "expected_pivots": [0, 1, 2],
+    "role": "Independent exact rank replay of the explicit diagonal-shortcut obstruction; not evidence for the geometric theorem by itself."
+  },
+  "external_assumptions": [
+    "Borel fixed point for a connected solvable algebraic group on a nonempty complete variety",
+    "standard complex semisimple root-string, highest-weight, and compact-adjoint facts",
+    "Andre connected-monodromy normality for good polarized variations on smooth algebraic bases",
+    "Schmid fixed part for a polarized variation on a compactifiable base",
+    "regular-singular Riemann-Hilbert full faithfulness for algebraic flat tensor sections",
+    "several-variable Hodge norm bounds for unipotent canonical extensions",
+    "zero-Lelong regularization implies nefness on a compact Kahler manifold",
+    "full Monge-Ampere mass is preserved under passage to a less singular potential"
+  ]
+}

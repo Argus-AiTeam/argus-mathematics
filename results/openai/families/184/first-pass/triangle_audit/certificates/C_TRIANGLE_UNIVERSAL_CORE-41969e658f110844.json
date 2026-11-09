@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_TRIANGLE_UNIVERSAL_CORE-159107b5b897",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/184/first-pass/triangle_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/184/first-pass/triangle_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15552,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/184/first-pass/triangle_audit/Main.lean",
+    "source_sha256": "b83720f66cfb59c2c56248658ec9b998ee76f10bc8c5944482ef36616f20cb17",
+    "statement_fidelity": "families/184/first-pass/triangle_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "b6f8ea98b6245b1b599b808dbafd1374d00f379a68a213836db151d51c7a5a06",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/triangle_audit/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace TriangleAudit\n\ntheorem reversible_swap {I : Type*} [Fintype I]\n    (pi : I → ℝ) (K f : I → I → ℝ)\n    (balance : ∀ v y, pi v * K v y = pi y * K y v) :\n    (∑ v, ∑ y, pi v * K v y * f v y) =\n      ∑ v, ∑ y, pi v * K v y * f y v := by\n  calc\n    (∑ v, ∑ y, pi v * K v y * f v y) =\n        ∑ y, ∑ v, pi v * K v y * f v y := Finset.sum_comm\n    _ = ∑ y, ∑ v, pi y * K y v * f v y := by\n      apply Finset.sum_congr rfl\n      intro y _\n      apply Finset.sum_congr rfl\n      intro v _\n      rw [balance v y]\n    _ = ∑ v, ∑ y, pi v * K v y * f y v := rfl\n\ntheorem averaged_cutoff {I : Type*} [Fintype I]\n    (prob ell : I → ℝ) (b t H : ℝ)\n    (hp : ∀ i, 0 ≤ prob i) (htotal : ∑ i, prob i = 1)\n    (hlower : ∀ i, -b ≤ ell i)\n    (hmean : ∑ i, prob i * ell i ≤ H) :\n    (t + b) * (∑ i, if t < ell i then prob i else 0) ≤ H + b := by\n  classical\n  calc\n    (t + b) * (∑ i, if t < ell i then prob i else 0) =\n        ∑ i, if t < ell i then (t + b) * prob i else 0 := by\n      simp only [Finset.mul_sum, mul_ite, mul_zero]\n    _ ≤ ∑ i, prob i * (ell i + b) := by\n      apply Finset.sum_le_sum\n      intro i _\n      by_cases hi : t < ell i\n      · simp only [hi, ite_true]\n        have hprod := mul_le_mul_of_nonneg_left (le_of_lt hi) (hp i)\n        nlinarith\n      · simp only [hi, ite_false]\n        apply mul_nonneg (hp i)\n        linarith [hlower i]\n    _ = (∑ i, prob i * ell i) + b := by\n      simp_rw [mul_add]\n      rw [Finset.sum_add_distrib, ← Finset.sum_mul, htotal, one_mul]\n    _ ≤ H + b := by linarith\n\ntheorem averaged_cutoff_probability {I : Type*} [Fintype I]\n    (prob ell : I → ℝ) (b t H : ℝ)\n    (hp : ∀ i, 0 ≤ prob i) (htotal : ∑ i, prob i = 1)\n    (hlower : ∀ i, -b ≤ ell i)\n    (hmean : ∑ i, prob i * ell i ≤ H) (hdenom : 0 < t + b) :\n    (∑ i, if t < ell i then prob i else 0) ≤ (H + b) / (t + b) := by\n  classical\n  apply (le_div_iff₀ hdenom).2\n  simpa only [mul_comm] using averaged_cutoff prob ell b t H hp htotal hlower hmean\n\ntheorem halving_sum (e : ℕ → ℝ)\n    (hnonneg : ∀ i, 0 ≤ e i)\n    (hhalf : ∀ i, e (i + 1) ≤ e i / 2) (n : ℕ) :\n    (∑ i ∈ Finset.range n, e i) ≤ 2 * e 0 := by\n  have stronger : ∀ k, (∑ i ∈ Finset.range k, e i) + 2 * e k ≤ 2 * e 0 := by\n    intro k\n    induction k with\n    | zero => simp\n    | succ k ih =>\n      rw [Finset.sum_range_succ]\n      linarith [hhalf k]\n  have htail : 0 ≤ 2 * e n := mul_nonneg (by norm_num) (hnonneg n)\n  linarith [stronger n]\n\ntheorem telescoping_loss (T eps b : ℕ → ℝ) (M0 : ℝ)\n    (hstep : ∀ i, T i ≤ T (i + 1) + eps i * T 0 + b i * M0) (n : ℕ) :\n    T 0 ≤ T n + T 0 * (∑ i ∈ Finset.range n, eps i) +\n      M0 * (∑ i ∈ Finset.range n, b i) := by\n  induction n with\n  | zero => simp\n  | succ n ih =>\n    rw [Finset.sum_range_succ, Finset.sum_range_succ]\n    nlinarith [hstep n]\n\ntheorem bounded_mass_iteration (T M eps b : ℕ → ℝ) (L : ℝ) (n : ℕ)\n    (hT0 : 0 ≤ T 0) (hM0 : 0 ≤ M 0)\n    (heps : ∀ i, 0 ≤ eps i) (hb : ∀ i, 0 ≤ b i)\n    (hTle : ∀ i, T i ≤ T 0) (hMle : ∀ i, M i ≤ M 0)\n    (hrec : ∀ i, (1 - eps i) * T i - b i * M i ≤ T (i + 1))\n    (hsumeps : (∑ i ∈ Finset.range n, eps i) ≤ 1 / 2)\n    (hsumb : (∑ i ∈ Finset.range n, b i) ≤ 1)\n    (hterminal : 3 * T n ≤ L * M 0) :\n    T 0 ≤ 2 * (1 + L / 3) * M 0 := by\n  have hstep : ∀ i, T i ≤ T (i + 1) + eps i * T 0 + b i * M 0 := by\n    intro i\n    have he := mul_le_mul_of_nonneg_left (hTle i) (heps i)\n    have hm := mul_le_mul_of_nonneg_left (hMle i) (hb i)\n    nlinarith [hrec i]\n  have htel := telescoping_loss T eps b (M 0) hstep n\n  have he := mul_le_mul_of_nonneg_left hsumeps hT0\n  have hm := mul_le_mul_of_nonneg_left hsumb hM0\n  nlinarith\n\ntheorem small_endpoint_bound (n x ell : ℝ) (p : ℕ)\n    (hn : 0 ≤ n) (hx : 0 ≤ x) (hell : 1 / 2 ≤ ell) :\n    n ^ p ≤ (2 : ℝ) ^ p * (x + n * ell) ^ p := by\n  have hprod : 0 ≤ n * (ell - 1 / 2) :=\n    mul_nonneg hn (sub_nonneg.mpr hell)\n  have hbase : n ≤ 2 * (x + n * ell) := by nlinarith\n  have hp := pow_le_pow_left₀ hn hbase p\n  simpa only [mul_pow] using hp\n\ntheorem profile_separation (n ell : ℝ) (p q : ℕ)\n    (hn : 0 ≤ n) (hell : ell ≤ 1) (hpq : q ≤ p)\n    (hbase_nonneg : 0 ≤ n + n * ell) :\n    (n + n * ell) ^ q * n ^ (p - q) ≤ (2 : ℝ) ^ q * n ^ p := by\n  have hprod : 0 ≤ n * (1 - ell) :=\n    mul_nonneg hn (sub_nonneg.mpr hell)\n  have hbase : n + n * ell ≤ 2 * n := by nlinarith\n  have hp := pow_le_pow_left₀ hbase_nonneg hbase q\n  have hsum : q + (p - q) = p := by omega\n  calc\n    (n + n * ell) ^ q * n ^ (p - q) ≤\n        (2 * n) ^ q * n ^ (p - q) :=\n      mul_le_mul_of_nonneg_right hp (pow_nonneg hn _)\n    _ = (2 : ℝ) ^ q * (n ^ q * n ^ (p - q)) := by rw [mul_pow]; ring\n    _ = (2 : ℝ) ^ q * n ^ p := by rw [← pow_add, hsum]\n\nend TriangleAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/triangle_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: universal algebraic core\n\n`Main.lean` uses Lean 4.31.0 and Mathlib. All declarations below are in\nnamespace `TriangleAudit`. It proves the following universally quantified\nstatements, not sampled instances.\n\n* `reversible_swap` concerns every finite index type and\n  real functions `pi`, `K`, and `f`. Detailed balance is an explicit\n  hypothesis. Its conclusion exchanges both coordinates in the\n  expectation. It does not derive detailed balance for graph kernels.\n* `averaged_cutoff` and\n  `averaged_cutoff_probability` concern every finite\n  probability vector and real-valued observable with a specified lower\n  bound and mean bound. The latter requires a positive denominator.\n  Their conclusion bounds the mass of the strict upper-tail event.\n  In the graph proof the observable is the reversed-row log density,\n  the lower shift is `log x`, and the threshold is `sqrt x`.\n* `halving_sum` concerns every nonnegative real sequence\n  satisfying the displayed halving inequality and every finite length.\n  It bounds its partial sum by twice its first term.\n* `telescoping_loss` and\n  `bounded_mass_iteration` concern arbitrary real\n  sequences. The latter assumes nonnegative initial masses and losses,\n  upper bounds by initial masses, the one-step mass recurrence, total\n  losses at most `1/2` and `1`, and the terminal estimate `3*T n<=L*M 0`.\n  It concludes `T 0<=2*(1+L/3)*M 0`. There is no graph-order bound or\n  assumption about a minimum vertex weight.\n* `small_endpoint_bound` concerns every nonnegative real\n  `n,x`, every real `ell>=1/2`, and every natural exponent. It proves\n  the power inequality used to verify the small endpoint of the\n  strict-hierarchy construction.\n* `profile_separation` concerns every nonnegative real\n  `n`, every real `ell<=1` with `n+n*ell>=0`, and natural exponents\n  `q<=p`. It proves the power inequality giving the lower-exponent\n  obstruction. The graph application takes `ell=log 2`; the logarithm\n  bounds and set eligibility are proved separately in `proof.md`.\n\nThe file does **not** encode a finite graph, prove the entropy support\nestimate, construct the shared coupling, or formalize the entire\npolynomial-profile triangle theorem. Those arguments are provided in\n`proof.md` and require independent mathematical review. A compiler\nsuccess for this file must be attached only to `C_TRIANGLE_UNIVERSAL_CORE`,\nnot used to mark either manuscript's complete main theorem, or the full\ngraph-theoretic generalization, as kernel-verified.\n\nThere are no additional axioms, placeholder proofs, finite-search\noracles, or assumptions taken from the manuscript comparator.\n"
+  },
+  "subject": {
+    "content_hash": "821541db9ca8c1b0398c1343276e0919ea2d92c7bd4a1832dbcdf5959369d690",
+    "kind": "claim",
+    "subject_id": "C_TRIANGLE_UNIVERSAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

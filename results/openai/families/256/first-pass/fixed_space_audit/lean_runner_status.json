@@ -1,0 +1,64 @@
+{
+  "state": "error",
+  "task_id": "fs-lean-core",
+  "run_id": "fs-lean-core-1793910296859925112",
+  "description": "background task",
+  "command": "set -o pipefail\n$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.math_state revise-claim --id L_FS_FORMAL --formal-file research/fixed_space_audit/Main.lean && $WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.lean_evidence verify research/fixed_space_audit/Main.lean --statement-fidelity research/fixed_space_audit/statement_fidelity.md --claim L_FS_FORMAL --project-root campaigns/9000256 --timeout 480 | tee research/fixed_space_audit/lean_verify_result.json\nlean_status=$?\nPROJECT_ROOT=\"$(pwd -P)\"\n$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.math_state check --project-root \"$PROJECT_ROOT\" | tee research/fixed_space_audit/math_state_compile_check.json\nstate_status=$?\n$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.proof_graph_check check --project-root \"$PROJECT_ROOT\" | tee research/fixed_space_audit/proof_graph_compile_check.txt\ngraph_status=$?\nprintf \"project_root=%s lean_exit=%s math_state_exit=%s proof_graph_exit=%s\\n\" \"$PROJECT_ROOT\" \"$lean_status\" \"$state_status\" \"$graph_status\"\ntest \"$lean_status\" -eq 0 && test \"$state_status\" -eq 0 && test \"$graph_status\" -eq 0",
+  "exit_code": 1,
+  "elapsed_seconds": 4.6,
+  "completed_at": 1793910301.5035756,
+  "pid": 582362,
+  "worker_pid": 582361,
+  "mode": "direct",
+  "process_identity": {
+    "pid": 582362,
+    "start_time_ticks": "244593044"
+  },
+  "worker_process_identity": {
+    "pid": 582361,
+    "start_time_ticks": "244593042"
+  },
+  "run_dir": "families/256/first-pass/fixed_space_audit/lean_run",
+  "stdout_tail": "path\": \"$WORKSPACE/.elan/bin/lake env lean\",\n      \"version\": \"Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)\"\n    },\n    \"lake\": {\n      \"available\": true,\n      \"path\": \"$WORKSPACE/.elan/bin/lake\",\n      \"version\": \"Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)\"\n    },\n    \"elan\": {\n      \"available\": true,\n      \"path\": \"$WORKSPACE/.elan/bin/elan\",\n      \"version\": \"elan 4.2.3 (b6cec7e10 2026-06-08)\"\n    }\n  },\n  \"command\": [\n    \"$WORKSPACE/.elan/bin/lake\",\n    \"env\",\n    \"lean\",\n    \"families/256/first-pass/fixed_space_audit/Main.lean\"\n  ],\n  \"cwd\": \"$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0\",\n  \"exit_code\": 1,\n  \"stdout\": \"families/256/first-pass/fixed_space_audit/Main.lean:67:2: error: Type mismatch: After simplification, term\\n  exteriorPower.pairingDual_\u03b9Multi_\u03b9Multi (fun j => LinearMap.proj j) fun i => M i\\n has type\\n  True\\nbut is expected to have type\\n  (Matrix.of fun i j => M i j).det = M.det\\nfamilies/256/first-pass/fixed_space_audit/Main.lean:105:6: warning: try 'simp' instead of 'simpa'\\n\\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\\n\",\n  \"stderr\": \"\",\n  \"proof_holes\": [],\n  \"audit_command\": [],\n  \"audit_exit_code\": null,\n  \"audit_stdout\": \"\",\n  \"audit_stderr\": \"\",\n  \"duration_ms\": 4082,\n  \"source_sha256\": \"28585bdd4d10b3300f2da4246bd6f8bccabe67366f685103c6ba85608856a733\",\n  \"statement_fidelity\": \"families/256/first-pass/fixed_space_audit/statement_fidelity.md\",\n  \"statement_fidelity_sha256\": \"f1c9f6381ef9bb6227a6f0225c08e1e407bb5f44d965d9a476f565b94cd7d673\",\n  \"lake_workspace\": \"$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0\",\n  \"environment_failure\": \"\",\n  \"kernel\": {\n    \"recorded\": {\n      \"evidence_id\": \"lean-L_FS_FORMAL-ed25f0876508\",\n      \"subject\": {\n        \"kind\": \"claim\",\n        \"subject_id\": \"L_FS_FORMAL\",\n        \"content_hash\": \"117fcf3694a3ae068540adc4be58c08a7f98491903d5528b16f7c69514eafd26\"\n      },\n      \"tier\": \"mechanical\",\n      \"verdict\": \"inconclusive\",\n      \"produced_by\": \"lean_evidence/lean 4.31.0\",\n      \"artifact\": \"research/fixed_space_audit/certificates/L_FS_FORMAL-c5402ac4d471e485.json\"\n    },\n    \"changed\": true,\n    \"refusals\": [],\n    \"statement_fidelity\": {\n      \"document\": \"research/fixed_space_audit/statement_fidelity.md\",\n      \"verified_by\": null,\n      \"note\": \"a proof kernel established the formal statement recorded on this claim; nothing has checked that the formal statement says what the natural statement says, and no tier in this schema encodes that it has\"\n    }\n  }\n}\n{\n  \"ok\": true,\n  \"issues\": []\n}\nproof graph valid: 9 node(s)\nproject_root=campaigns/9000256 lean_exit=1 math_state_exit=0 proof_graph_exit=0\n",
+  "stderr_tail": "",
+  "stdout_log": ".argus_subagents/fs-lean-core_logs/stdout.log",
+  "stderr_log": ".argus_subagents/fs-lean-core_logs/stderr.log",
+  "timeout_seconds": 600,
+  "timeout_defaulted": false,
+  "supervisor_usage_model": "",
+  "supervisor_input_tokens": 0,
+  "supervisor_cached_input_tokens": 0,
+  "supervisor_output_tokens": 0,
+  "supervisor_reasoning_output_tokens": 0,
+  "cwd": "campaigns/9000256",
+  "resource_demand": {
+    "accelerator": "none",
+    "device_count": 0,
+    "mem_mib_estimate": 0,
+    "expected_duration_seconds": 180,
+    "checkpointable": false,
+    "intent": "Compile the universal fixed-space exterior-algebra core and record genuine Lean evidence"
+  },
+  "resource_grant_id": "14695a84e340472ca359c13d0136906e",
+  "resource_grant": {
+    "device_identities": [],
+    "devices": [],
+    "env": {}
+  },
+  "resource_enforcement": "strict",
+  "resource_warning": "",
+  "resource_ledger_root": "/var$TMP",
+  "resource_owner": {
+    "unix_user": "argustest",
+    "unix_uid": 1000,
+    "pid": 582361,
+    "start_ticks": "244593042",
+    "process_identity": {
+      "pid": 582361,
+      "start_time_ticks": "244593042"
+    },
+    "project_root": "campaigns/9000256",
+    "task_id": "fs-lean-core"
+  },
+  "live": false
+}

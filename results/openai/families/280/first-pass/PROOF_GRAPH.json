@@ -1,0 +1,153 @@
+{
+  "goal": "C9000280",
+  "routes": [
+    {
+      "name": "energy-bootstrap: independent operator proof",
+      "status": "untried",
+      "evidence": "research/energy-bootstrap/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000280": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 280 (Unitary vertex operator algebras and conformal nets.; papers: Strongly rational unitary vertex operator algebras and conformal nets; Lean status: Partially/Comparator formalized (lean/docs/280.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_ENERGY_AUDIT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_ENERGY_AUDIT": {
+      "statement": "Independently verify or exactly refute a load-bearing assertion of build/02-energy.tex, without claiming the rest of the main theorem.",
+      "status": "open",
+      "depends_on": ["C_SHARP_NORMAL", "C_ZERO_TRANSFER", "C_POLYNOMIAL", "C_OPTIMAL", "C_LOCALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/energy-bootstrap/report.md"]
+    },
+    "C_FILTRATION": {
+      "statement": "lem:energy-filtration: negative ordinary-mode monomials span each weight, with generator degree at most w-1 for C2(V)_w.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_FIXED_CUTOFF": {
+      "statement": "The nested negative-product expansion has left/right mode indices as stated; in bounded-endpoint matrix elements every path has intermediate energy at most N+c_b and mode parameters O_b(N+1).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_SHARP_NORMAL": {
+      "statement": "lem:sharp-normal-product: ||b[0]P_N|| <= C_b N^(w-1) X_(N+c_b)^(D_b) for every fixed negative-product generator monomial of weight w>=2.",
+      "status": "open",
+      "depends_on": ["C_FIXED_CUTOFF", "C_GENERAL_COLUMN"],
+      "reviewer_confirmed": false
+    },
+    "C_PATH_CORE": {
+      "statement": "Universal finite Schur pairing, constrained tuple completion count, all-length iteration of columns of maps, and real-energy fixed-cutoff/index bounds.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/energy-bootstrap/Main.lean", "research/energy-bootstrap/statement_fidelity.md", "research/energy-bootstrap/certificates/C_PATH_CORE-8a27ff5604f256fb.json"]
+    },
+    "C_GENERAL_COLUMN": {
+      "statement": "Theorem A: positively graded Hermitian mode families with the algebraic negative-product expansion satisfy the sharp zero-mode bound for every fixed nested monomial, with c_b=sum_i(d_i-1); no C2-cofiniteness or optimal energy bound is assumed.",
+      "status": "open",
+      "depends_on": ["C_PATH_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/energy-bootstrap/report.md", "research/energy-bootstrap/exact_certificate.json"]
+    },
+    "C_C2_BOOTSTRAP": {
+      "statement": "On the vacuum of any simple unitary CFT-type C2-cofinite VOA, the filtration, positive trace start, both contractions and Mobius zero-mode transfer prove polynomial bounds and optimal order d-1 for all Hermitian quasi-primaries of weight d>=2, without rationality.",
+      "status": "open",
+      "depends_on": ["C_GENERAL_COLUMN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/energy-bootstrap/report.md"]
+    },
+    "C_C2_LOCALITY": {
+      "statement": "Theorem B: a simple unitary CFT-type C2-cofinite VOA is CKLW-strongly local and generates an irreducible conformal net; originality and independent analytic review remain outstanding.",
+      "status": "open",
+      "depends_on": ["C_C2_BOOTSTRAP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/energy-bootstrap/report.md"]
+    },
+    "C_POLYNOMIAL": {
+      "statement": "The positive trace start, finite-generator filtration, commutator descent and additive-cutoff contraction give polynomial energy bounds on every already unitary grading-restricted module.",
+      "status": "open",
+      "depends_on": ["C_FILTRATION", "C_FIXED_CUTOFF"],
+      "reviewer_confirmed": false
+    },
+    "C_ZERO_TRANSFER": {
+      "statement": "eq:sharp-zero-mode: Mobius covariance and a dimension-independent spectral-tail estimate transfer the nonzero-mode bound to ||a[0]P_N|| <= C N^(d-1) X_(KN+c)^(d-1).",
+      "status": "open",
+      "depends_on": ["C_SHARP_NORMAL", "C_POLYNOMIAL"],
+      "reviewer_confirmed": false
+    },
+    "C_OPTIMAL": {
+      "statement": "thm:energy: every Hermitian quasi-primary of weight d>=2 has energy order d-1 on each grading-restricted unitary module, with polynomial dependence on its physical mode.",
+      "status": "open",
+      "depends_on": ["C_FILTRATION", "C_SHARP_NORMAL", "C_POLYNOMIAL", "C_ZERO_TRANSFER"],
+      "reviewer_confirmed": false
+    },
+    "C_LOCALITY": {
+      "statement": "cor:locality: every simple unitary strongly rational VOA is CKLW-strongly local and generates an irreducible conformal net.",
+      "status": "open",
+      "depends_on": ["C_OPTIMAL"],
+      "reviewer_confirmed": false
+    },
+    "C_ANNULUS": {
+      "statement": "lem:charged-tools: transport-dominated charged fields with an already integrated source have polynomial bounds and bounded local annulus regularizations.",
+      "status": "open",
+      "depends_on": ["C_OPTIMAL", "C_LOCALITY"],
+      "reviewer_confirmed": false
+    },
+    "C_INTEGRATION": {
+      "statement": "thm:integration: every already unitary grading-restricted module has a unique compatible normal net action carrying the actual closed smeared fields.",
+      "status": "open",
+      "depends_on": ["C_ANNULUS", "C_LOCALITY"],
+      "reviewer_confirmed": false
+    },
+    "C_FUSION_POSITIVE": {
+      "statement": "thm:positive-fusion: the canonical invariant form on M fusion N is positive definite for unitary finite-length inputs.",
+      "status": "open",
+      "depends_on": ["C_INTEGRATION", "C_ANNULUS"],
+      "reviewer_confirmed": false
+    },
+    "C_PERMUTATION": {
+      "statement": "lem:permutation-before-positivity: (P tensor P^vee) fusion_(V tensor V) T_sigma(V) is T_sigma(P fusion_V P^vee), without positivity assumptions on P.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_STRONG_UNITARITY": {
+      "statement": "thm:strong-unitarity: every ordinary simple V-module admits a positive invariant Hermitian form.",
+      "status": "open",
+      "depends_on": ["C_FUSION_POSITIVE", "C_PERMUTATION"],
+      "reviewer_confirmed": false
+    },
+    "C_CWX_EMBEDDING": {
+      "statement": "thm:cwx-embedding: integration is a fully faithful braided unitary tensor functor with dualizable finite-index image.",
+      "status": "open",
+      "depends_on": ["C_INTEGRATION", "C_FUSION_POSITIVE", "C_STRONG_UNITARITY", "C_ANNULUS"],
+      "reviewer_confirmed": false
+    },
+    "C_EXHAUSTION": {
+      "statement": "prop:exhaustion: every irreducible locally normal representation is the strong integration of an ordinary simple unitary V-module, without an energy-multiplicity or index assumption.",
+      "status": "open",
+      "depends_on": ["C_LOCALITY", "C_INTEGRATION"],
+      "reviewer_confirmed": false
+    },
+    "C_COMPLETE_RATIONALITY": {
+      "statement": "thm:rationality: A_V is completely rational and the CWX embedding exhausts its additive finite-index DHR category.",
+      "status": "open",
+      "depends_on": ["C_EXHAUSTION", "C_CWX_EMBEDDING"],
+      "reviewer_confirmed": false
+    },
+    "C_MAIN": {
+      "statement": "thm:main: strong locality, complete unitarity, strong module integration, complete rationality, and the braided unitary CWX equivalence.",
+      "status": "open",
+      "depends_on": ["C_LOCALITY", "C_INTEGRATION", "C_FUSION_POSITIVE", "C_STRONG_UNITARITY", "C_COMPLETE_RATIONALITY", "C_CWX_EMBEDDING"],
+      "reviewer_confirmed": false
+    }
+  }
+}

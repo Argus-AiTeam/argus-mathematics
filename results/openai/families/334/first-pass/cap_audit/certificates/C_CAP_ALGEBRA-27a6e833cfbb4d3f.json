@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CAP_ALGEBRA-10d5b75db2b8",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/334/first-pass/cap_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/334/first-pass/cap_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15551,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/334/first-pass/cap_audit/Main.lean",
+    "source_sha256": "4cdeddb6448e250b43ace2c0b8e2cabc4020e0a774ea90bcb51bf72f54a3c4d5",
+    "statement_fidelity": "families/334/first-pass/cap_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "006002f0e923dd5e0badf728824669c30f7bbf27a23160e6217e4803a95de20e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/334/first-pass/cap_audit/Main.lean:27:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/334/first-pass/cap_audit/Main.lean:54:4: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/cap_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace CapAudit\n\ntheorem directed_T (H Is eps t B : ℝ) :\n    ((H - Is) - eps * (1 + t * B)) / 2 + B * eps * t =\n      (H - Is - eps + eps * t * B) / 2 := by\n  ring\n\ntheorem directed_S (A As At H Is eps t B mu r : ℝ) :\n    As / 2 + A * (-H + Is) / 2 +\n        eps / 2 * (A + t * At + t * A * B) - (mu * As + A * r) =\n      -(mu - 1 / 2) * As + eps * t * At / 2 - H * A / 2 +\n        A * ((Is + eps + eps * t * B) / 2 - r) := by\n  ring\n\ntheorem directed_J (A As H Is eps t mu r : ℝ) :\n    eps * t * (mu * As + A * r - As - A * (-H + Is)) =\n      eps * t * ((mu - 1) * As + A * (H - Is + r)) := by\n  ring\n\ntheorem square_completion (T S J x y : ℝ) (hT : T ≠ 0) :\n    T * x ^ 2 + S * y ^ 2 + J * x * y =\n      T / 2 * x ^ 2 + (S - J ^ 2 / (2 * T)) * y ^ 2 +\n        (T * x + J * y) ^ 2 / (2 * T) := by\n  field_simp [hT]\n  <;> ring\n\ntheorem quadratic_lower (T S J x y : ℝ) (hT : 0 < T) :\n    T / 2 * x ^ 2 + (S - J ^ 2 / (2 * T)) * y ^ 2 ≤\n      T * x ^ 2 + S * y ^ 2 + J * x * y := by\n  rw [square_completion T S J x y (ne_of_gt hT)]\n  exact le_add_of_nonneg_right\n    (div_nonneg (sq_nonneg _) (by positivity))\n\ntheorem uniform_coercivity (T S J H gamma x y : ℝ)\n    (hH : 0 < H) (hT : H / 4 ≤ T)\n    (hS : gamma ≤ S - J ^ 2 / (2 * T)) :\n    H / 8 * x ^ 2 + gamma * y ^ 2 ≤\n      T * x ^ 2 + S * y ^ 2 + J * x * y := by\n  have hTp : 0 < T := by linarith\n  have hx : H / 8 * x ^ 2 ≤ T / 2 * x ^ 2 :=\n    mul_le_mul_of_nonneg_right (by linarith) (sq_nonneg x)\n  have hy : gamma * y ^ 2 ≤ (S - J ^ 2 / (2 * T)) * y ^ 2 :=\n    mul_le_mul_of_nonneg_right hS (sq_nonneg y)\n  linarith [quadratic_lower T S J x y hTp]\n\ntheorem scaled_young (v e u x : ℝ) (hv : 0 < v) :\n    u * e * x ≤ v / 4 * x ^ 2 + (e ^ 2 / v) * u ^ 2 := by\n  have hid :\n      v / 4 * x ^ 2 + (e ^ 2 / v) * u ^ 2 - u * e * x =\n        (v * x - 2 * e * u) ^ 2 / (4 * v) := by\n    field_simp [ne_of_gt hv]\n    <;> ring\n  have hn : 0 ≤ (v * x - 2 * e * u) ^ 2 / (4 * v) :=\n    div_nonneg (sq_nonneg _) (by positivity)\n  linarith\n\ntheorem transverse_drift_decomposition (K Ky G Gy v vy r l : ℝ) :\n    K * G * vy + v * (G * Ky + l * (Ky * G + K * Gy) + K * r) -\n        (l + 1) * (G * v * Ky + K * Gy * v + 2 * K * G * vy) =\n      K * (v * r - v * Gy - (2 * l + 1) * G * vy) := by\n  ring\n\ntheorem high_factor_count (l : ℕ) (hl : 8 ≤ l) :\n    l < 2 * (l - 3) := by\n  omega\n\ntheorem no_two_high_factors (l a b : ℕ) (hl : 8 ≤ l)\n    (ha : l - 3 ≤ a) (hb : l - 3 ≤ b) (hab : a + b ≤ l) :\n    False := by\n  omega\n\nend CapAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/cap_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: claim C_CAP_ALGEBRA\n\n`Main.lean` imports the host's built Mathlib and defines the namespace\n`CapAudit`. This is a formalization of exact algebra/coercivity used in\nthe complete analytic cap proof in `report.md`, not a formalization of\nProposition cap or of its PDE estimate.\n\nEvery variable in the first eight declarations below is universally\nquantified over the real numbers; no coefficient is implicitly positive.\n\n| Declaration | Exact reading and hypotheses |\n|---|---|\n| `directed_T` | The two displayed normalized expressions for the multiplier's tangential coefficient agree, for arbitrary real `H Is eps t B`. |\n| `directed_S` | Substituting `C=mu*As+A*r` and the first derivatives of the weight gives exactly the normalized transverse expression; `A As At H Is eps t B mu r` are arbitrary reals. |\n| `directed_J` | The two normalized cross-coefficient expressions agree, for arbitrary real `A As H Is eps t mu r`. |\n| `square_completion` | For arbitrary real `T S J x y`, assuming `T != 0`, the quadratic form equals the displayed split plus `(T*x+J*y)^2/(2*T)`. |\n| `quadratic_lower` | Assuming `T>0`, dropping that nonnegative square gives the stated lower bound. No sign hypothesis on `S` or `J` is omitted. |\n| `uniform_coercivity` | Assuming `H>0`, `T>=H/4`, and `S-J^2/(2*T)>=gamma`, the quadratic form bounds `(H/8)*x^2+gamma*y^2`. `gamma` is arbitrary: the analytic proof separately supplies a uniformly positive choice. |\n| `scaled_young` | Assuming `v>0`, the signed product `u*e*x` is at most `(v/4)*x^2+(e^2/v)*u^2`. Applying it also to `-e` gives the absolute-value version. |\n| `transverse_drift_decomposition` | The exact polynomial identity in equation (22), before division by the uniformly positive `G*v^2`, holds for arbitrary real `K Ky G Gy v vy r l`. `Ky`, `Gy`, `vy` are scalar slots, not Lean derivatives; identifying them with derivatives belongs to the analytic proof. |\n\n`high_factor_count` quantifies over a natural number `l>=8` and proves\n`l < 2*(l-3)` with natural truncated subtraction.\n`no_two_high_factors` quantifies over natural `l a b` and proves that\n`l>=8`, `a>=l-3`, `b>=l-3`, and `a+b<=l` cannot all hold.\nIdentifying these counts with terms in the differentiated equation is\nthe chain-rule argument in the report, not a fact encoded in Lean.\n\nIn the application, `x,y` in the quadratic declarations stand for\n`u_t,u_s`; they are not the physical coordinate variables.\n`T,S,J` stand for the multiplier coefficients, or for their normalized\nversions with a consistent common positive factor. `H=lambda+p/d`\nis positive in the analytic application. `Is` means the scalar `I_s`,\nnot a set or an independent estimate.\n\nThe file contains no PDE functions, integration domain, trace operator,\nSobolev space, flow map, curvature tensor, compactness argument, or\nmetric-height family. In particular it does not prove existence of the\npositive uniform margin near the curvature zero set, bounds on elliptic\ncutoff errors, vanishing of artificial-edge fluxes, or the all-orders\nnonlinear bootstrap. Those are proved in prose in the report and remain\nsubject to independent mathematical review. A successful compiler run\ncertifies only the universally quantified statements listed here.\n"
+  },
+  "subject": {
+    "content_hash": "b457a1b192d84b6bf13c3dbd7d42036d996c1c2c5c371b88bb647a78cd06b14c",
+    "kind": "claim",
+    "subject_id": "C_CAP_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

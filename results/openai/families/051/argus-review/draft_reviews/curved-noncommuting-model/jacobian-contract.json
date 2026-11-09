@@ -1,0 +1,78 @@
+{
+  "inspection": {
+    "interpreter": "$WORKSPACE/argus-live-update/.venv/bin/python",
+    "module": "argus_skill.tools.jacobian",
+    "discovery_query": "exact rational matrix determinant",
+    "candidate_operations": ["matrix.determinant.compute", "matrix.symbolic.determinant.compute"],
+    "selected_operation": "matrix.symbolic.determinant.compute",
+    "server": {"name": "jacobian", "version": "0.14.0"},
+    "protocol_version": "2025-11-25",
+    "transport": "mcp-stdio",
+    "read_only": true,
+    "inspection_completed_before_run": true
+  },
+  "input_schema": {
+    "title": "SymbolicDeterminantRequest",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["matrix"],
+    "properties": {"matrix": {"$ref": "#/$defs/SymbolicMatrix"}},
+    "$defs": {
+      "CanonicalRational": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["num", "den"],
+        "properties": {
+          "num": {"type": "string", "pattern": "^(?:0|-?[1-9][0-9]*)$"},
+          "den": {"type": "string", "pattern": "^(?:0|-?[1-9][0-9]*)$"}
+        }
+      },
+      "RationalPolynomialTerm": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["coefficient", "exponents"],
+        "properties": {
+          "coefficient": {"$ref": "#/$defs/CanonicalRational"},
+          "exponents": {"type": "array", "minItems": 0, "maxItems": 8, "items": {"type": "integer"}}
+        }
+      },
+      "SparseRationalPolynomial": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {"terms": {"type": "array", "default": [], "maxItems": 4096, "items": {"$ref": "#/$defs/RationalPolynomialTerm"}}}
+      },
+      "RationalFunction": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["variables", "numerator", "denominator"],
+        "properties": {
+          "domain": {"type": "string", "const": "QQ", "default": "QQ"},
+          "variables": {"type": "array", "minItems": 0, "maxItems": 8, "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$"}},
+          "numerator": {"$ref": "#/$defs/SparseRationalPolynomial"},
+          "denominator": {"$ref": "#/$defs/SparseRationalPolynomial"}
+        }
+      },
+      "SymbolicMatrix": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["variables", "entries"],
+        "properties": {
+          "variables": {"type": "array", "minItems": 0, "maxItems": 8, "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$"}},
+          "entries": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"type": "array", "items": {"$ref": "#/$defs/RationalFunction"}}}
+        }
+      }
+    }
+  },
+  "contract_semantics": {
+    "input": "A square matrix over QQ(z,w), with reduced rational entries, positive rational denominators, monic polynomial denominators, nonzero sparse terms in descending lexicographic exponent order.",
+    "larger_than_1_by_1": "Polynomial entries required; derived determinant expansion at most 256 terms, exponent 64, and 128-digit coefficient components.",
+    "output": "SymbolicDeterminantResult: required determinant of the RationalFunction type above; method is the constant SYMPY_BAREISS.",
+    "not_encoded": "Complex conjugation, Hermitian positivity, geometry, Sobolev regularity, or any analytic theorem.",
+    "transcription_scope": "Validation fields and semantic restrictions transcribed from this session's inspect result; presentation-only descriptions, titles, and examples omitted."
+  },
+  "mathematical_binding": {
+    "matrix": "[[(3+zw)/4, z(zw-1)/4], [w(zw-1)/4, 1]]",
+    "specialization": "Only after the algebraic calculation set w=conjugate(z), u=zw.",
+    "purpose": "One bounded symbolic diagnostic in place of the old rejected 4x4 realification request; no extension of the mathematical claim."
+  }
+}

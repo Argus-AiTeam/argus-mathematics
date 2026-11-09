@@ -1,0 +1,144 @@
+{
+  "goal": "C9000084",
+  "routes": [
+    {
+      "name": "R_GEOMETRIC_BRIDGE",
+      "status": "current",
+      "evidence": "research/geometric-bridge/proof.md"
+    }
+  ],
+  "nodes": {
+    "C9000084": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 084 (The geometric case of the Erdős similarity conjecture.; papers: The geometric case of the Erdős similarity conjecture; The dyadic case of the Erdős similarity conjecture; Lean status: Partially/Comparator formalized (lean/docs/084.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_GEOMETRIC_MAIN"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_GEOMETRIC_MAIN": {
+      "statement": "For every real 0<q<1 and 0<eta<1, a compact subset of [0,1] of measure greater than 1-eta avoids every signed affine copy of {q^n:n>=1}. Manuscript Theorem main.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_PERIODIC", "C_GEOMETRIC_GLOBAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-geometric-case-of-the-Erdos-similarity-conjecture-October-5-2026/build/sections/01-introduction.tex"]
+    },
+    "C_GEOMETRIC_GLOBAL": {
+      "statement": "The summable union of signed dyadic dilations of the periodic hitting sets gives the compact avoiding set, with removed measure at most 7*eta/16.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-geometric-case-of-the-Erdos-similarity-conjecture-October-5-2026/build/sections/02-periodic.tex"]
+    },
+    "C_GEOMETRIC_PERIODIC": {
+      "statement": "For 0<q,p<1 there is an open 1-periodic H of density at most 6p hitting every x+t*q^n with t in [1,2] at some n>=1.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_CONDITIONAL_SCALES", "C_GEOMETRIC_DENSITY", "C_GEOMETRIC_NODEFAULT", "C_GEOMETRIC_REPAIR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-geometric-case-of-the-Erdos-similarity-conjecture-October-5-2026/build/sections/05-scales.tex"]
+    },
+    "C_GEOMETRIC_DENSITY": {
+      "statement": "The concrete random routing set B has expected periodic density p.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-geometric-case-of-the-Erdos-similarity-conjecture-October-5-2026/build/sections/04-routing.tex"]
+    },
+    "C_GEOMETRIC_NODEFAULT": {
+      "statement": "The center route has no default with probability (1-2^(1-M))^d.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-geometric-case-of-the-Erdos-similarity-conjecture-October-5-2026/build/sections/04-routing.tex"]
+    },
+    "C_GEOMETRIC_REPAIR": {
+      "statement": "Parameter choice, small unstable-center density, integration, and open-neighborhood repair turn the conditional-scale bound into a periodic hitting set of density at most 6p.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_STABILITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-geometric-case-of-the-Erdos-similarity-conjecture-October-5-2026/build/sections/05-scales.tex"]
+    },
+    "C_GEOMETRIC_CONDITIONAL_SCALES": {
+      "statement": "The original conditional-scales lemma: on each positive-mass center atom with a first default of height h and r=r_h, the conditional all-indices miss at some t in [1,2] has probability at most D_M,q(r)*exp(-p*(M-1)*r/2), for all real 0<q,p<1.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_SHARP_CONDITIONAL_SCALES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric-bridge/proof.md", "research/geometric-bridge/statement-fidelity.md", "research/geometric-bridge/exact_certificate.json", "research/geometric-bridge/lean-evidence/certificates/C_GEOMETRIC_CONDITIONAL_SCALES-f5e28a084227b441.json"]
+    },
+    "C_GEOMETRIC_GRID": {
+      "statement": "N_b=2^ceil(log_2(4*q^(-b)/(1-q))) satisfies its two-sided size bound and nesting; window points including the center have distinct periodic keys, including wraparound and half-open boundaries.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-geometric-case-of-the-Erdos-similarity-conjecture-October-5-2026/build/sections/03-windows.tex", "research/geometric-bridge/Main.lean", "research/geometric-bridge/proof.md"]
+    },
+    "C_GEOMETRIC_STABILITY": {
+      "statement": "The original one-sided stable-center condition preserves all earlier preorder keys and has the stated exceptional-density bound.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_GRID", "C_GEOMETRIC_STABLE_KEYS"],
+      "reviewer_confirmed": false,
+      "unverified_part": "The Lean file proves the one-sided stable-key implication, not the measurable-periodic exceptional-center density estimate used later in the full manuscript.",
+      "evidence": ["research/openai_manuscript/The-geometric-case-of-the-Erdos-similarity-conjecture-October-5-2026/build/sections/03-windows.tex"]
+    },
+    "C_GEOMETRIC_TRIAL_ADDRESSES": {
+      "statement": "The actual local tests have mutually distinct selector addresses avoiding every exposed center address, and selector-dependent terminal addresses are injective for every selector realization.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_GRID"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric-bridge/Main.lean", "research/geometric-bridge/statement-fidelity.md", "research/geometric-bridge/proof.md"]
+    },
+    "C_GEOMETRIC_LOCAL_ROUTING": {
+      "statement": "For the first default vertex on a center atom, the concrete point route preserves ancestors and rejects earlier children, so every successful local test gives membership in B.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_STABLE_KEYS", "C_GEOMETRIC_WINDOW_REALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric-bridge/Main.lean", "research/geometric-bridge/proof.md"]
+    },
+    "C_GEOMETRIC_FIXED_SCALE": {
+      "statement": "At every fixed normalized scale on the center atom the exact all-tests failure probability is (1-p/2)^((M-1)*r), with the manuscript's concrete address maps.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_TRIAL_ADDRESSES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric-bridge/Main.lean", "research/geometric-bridge/proof.md", "research/geometric-bridge/upstream.json"]
+    },
+    "C_GEOMETRIC_REPRESENTATIVES": {
+      "statement": "The concrete edge-and-subtree endpoint grids yield a representative set fixed before all unexposed tables, uniformly for every completion, with cardinality at most 4+2*(M-1)*r*(1+2*c*q^(-2*r)).",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_GRID", "C_GEOMETRIC_WINDOW_SPAN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric-bridge/Main.lean", "research/geometric-bridge/proof.md", "research/geometric-bridge/statement-fidelity.md"]
+    },
+    "C_GEOMETRIC_WINDOW_SPAN": {
+      "statement": "For every edge of height h the concrete recursively assigned preorder window and child subtree have span at most 2*r_h.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-geometric-case-of-the-Erdos-similarity-conjecture-October-5-2026/build/sections/03-windows.tex"]
+    },
+    "C_GEOMETRIC_WINDOW_REALIZATION": {
+      "statement": "For every original parameter choice and first-default node, the actual original preorder windows instantiate all LocalWindows and Predecessors endpoint fields in Main.lean, with r1=r0, arbitrary allowed n0>=1, actual predecessor endpoints, and trial indices contained in the original index union. This realization is proved in prose, not constructed by the Lean file.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_WINDOW_SPAN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric-bridge/proof.md", "research/geometric-bridge/statement-fidelity.md"]
+    },
+    "C_GEOMETRIC_SHARP_CONDITIONAL_SCALES": {
+      "statement": "For the original geometric construction, stable center and positive-mass first-default atom, writing c=4/(1-q), r=r_h and k=(M-1)*r, the original all-indices/all-real-scales conditional miss probability is at most [1+k*(1+2*c/q^(2*r))]*(1-p/2)^k, hence at most the same improved prefactor times exp(-p*k/2), for all real 0<q,p<1.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_FIXED_SCALE", "C_GEOMETRIC_LOCAL_ROUTING", "C_GEOMETRIC_REPRESENTATIVES", "C_GEOMETRIC_WINDOW_REALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric-bridge/Main.lean", "research/geometric-bridge/proof.md", "research/geometric-bridge/statement-fidelity.md", "research/geometric-bridge/lean-evidence/certificates/C_GEOMETRIC_CONDITIONAL_SCALES-f5e28a084227b441.json"]
+    },
+    "C_GEOMETRIC_STABLE_KEYS": {
+      "statement": "For every real q in (0,1), every real center x, every t in [1,2], and naturals a<=n, b<=B, if the original predecessor lattice at resolution N_B has no point in (x,x+2*q^a], then J_b(x+t*q^n)=J_b(x). This is separate from the unformalized exceptional-center density estimate.",
+      "status": "open",
+      "depends_on": ["C_GEOMETRIC_GRID"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/geometric-bridge/Main.lean", "research/geometric-bridge/proof.md"]
+    }
+  }
+}

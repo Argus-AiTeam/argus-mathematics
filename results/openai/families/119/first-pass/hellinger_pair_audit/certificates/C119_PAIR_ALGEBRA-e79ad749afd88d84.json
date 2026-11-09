@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C119_PAIR_ALGEBRA-9f765a2aa4b5",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/119/first-pass/hellinger_pair_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/119/first-pass/hellinger_pair_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15831,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/119/first-pass/hellinger_pair_audit/Main.lean",
+    "source_sha256": "e95a5b2a4c650956bfd968e11a40067f747c807e04b7059fff7300c6311d47b8",
+    "statement_fidelity": "families/119/first-pass/hellinger_pair_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "94ea7efe613174258760f227e9b7ae7466862d13966145483eca5be9f92a5769",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/hellinger_pair_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace HellingerPairAudit\n\nnoncomputable def pairD (g0 gd ge g1 : ℝ) : ℝ :=\n  (gd + ge - g0 - g1) / 2\n\nnoncomputable def pairK (δ z g0 gd ge g1 : ℝ) : ℝ :=\n  -((((g1 - gd) / ((1 - δ) * z) - (gd - g0) / (δ * z)) / z) +\n    (((g1 - ge) / (δ * z) - (ge - g0) / ((1 - δ) * z)) / z)) / 8\n\ntheorem deficit_normalization\n    (δ z g0 gd ge g1 : ℝ)\n    (hδ : δ ≠ 0) (h1 : 1 - δ ≠ 0) (hz : z ≠ 0) :\n    pairD g0 gd ge g1 =\n      (4 * δ * (1 - δ)) * z ^ 2 * pairK δ z g0 gd ge g1 := by\n  unfold pairD pairK\n  field_simp [hδ, h1, hz]\n  ring\n\ntheorem shear_normalization\n    (z L g0 g1 : ℝ) (hz : z ≠ 0) (hL : L ≠ 0) :\n    z - (g1 - g0) / (4 * L) =\n      z * (1 - ((g1 - g0) / z) / (4 * L)) := by\n  field_simp [hz, hL]\n\ntheorem quadratic_gap_factorization\n    (s2 z K S Λ μ W : ℝ) :\n    (s2 * z ^ 2 * K) * (S + Λ * (s2 * z ^ 2 * K)) -\n        μ * s2 * (z * W) ^ 2 =\n      s2 * z ^ 2 * (K * (S + Λ * (s2 * z ^ 2 * K)) - μ * W ^ 2) := by\n  ring\n\ntheorem original_pair_of_normalized_gap\n    (δ z L μ Λ S g0 gd ge g1 : ℝ)\n    (hδ : 0 < δ) (h1 : δ < 1) (hz : 0 < z) (hL : L ≠ 0)\n    (hgap :\n      0 < pairK δ z g0 gd ge g1 * (S + Λ * pairD g0 gd ge g1) -\n        μ * (1 - ((g1 - g0) / z) / (4 * L)) ^ 2) :\n    μ * (4 * δ * (1 - δ)) * (z - (g1 - g0) / (4 * L)) ^ 2 <\n      pairD g0 gd ge g1 * (S + Λ * pairD g0 gd ge g1) := by\n  have hd := deficit_normalization δ z g0 gd ge g1\n    (ne_of_gt hδ) (ne_of_gt (sub_pos.mpr h1)) (ne_of_gt hz)\n  have ht := shear_normalization z L g0 g1 (ne_of_gt hz) hL\n  have hs : 0 < 4 * δ * (1 - δ) :=\n    mul_pos (mul_pos (by norm_num) hδ) (sub_pos.mpr h1)\n  have hp := mul_pos (mul_pos hs (sq_pos_of_pos hz)) hgap\n  have hi :\n      pairD g0 gd ge g1 * (S + Λ * pairD g0 gd ge g1) -\n          μ * (4 * δ * (1 - δ)) * (z - (g1 - g0) / (4 * L)) ^ 2 =\n        (4 * δ * (1 - δ)) * z ^ 2 *\n          (pairK δ z g0 gd ge g1 * (S + Λ * pairD g0 gd ge g1) -\n            μ * (1 - ((g1 - g0) / z) / (4 * L)) ^ 2) := by\n    rw [hd, ht]\n    ring\n  rw [← hi] at hp\n  linarith\n\nend HellingerPairAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/hellinger_pair_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: the exact algebraic bridge\n\nThis document describes the declarations in `Main.lean`, namespace\n`HellingerPairAudit`. It does not claim that Lean checks the interval\nprogram, concavity, region coverage, or the whole scalar lemma.\n\nAll scalar variables are arbitrary real numbers. `g0,gd,ge,g1` denote\nthe four values `G(p0),G(p_delta),G(p_(1-delta)),G(p1)`, but the\nformal algebra allows arbitrary values, so it requires no smoothness\nor concavity of `G`. The spacing `z` denotes `p1-p0`, and `delta`\ndenotes the interpolation weight. Translating every node by `p0`\ndoes not change any node distance.\n\n`pairD` is exactly `(gd+ge-g0-g1)/2`. `pairK` is minus one eighth\nof the sum of the two second divided differences. For nodes\n`p0,p_delta,p1`, the successive distances are `delta*z`,\n`(1-delta)*z`, and `z`; for `p0,p_(1-delta),p1` the first two\nare interchanged. The explicit expression in `pairK` preserves this\norder. In particular it is not the negated or rescaled curvature\nfrom the reflected endpoint parametrization.\n\n`deficit_normalization` quantifies over all six real inputs with\n`delta!=0`, `1-delta!=0`, and `z!=0`, and proves\n`D=4*delta*(1-delta)*z^2*K`. `shear_normalization` quantifies over\nall four real inputs with `z!=0,L!=0` and proves\n`z-(g1-g0)/(4L)=z*(1-((g1-g0)/z)/(4L))`.\n\n`quadratic_gap_factorization` is an unconditional polynomial identity\nfor seven arbitrary real inputs. Its symbol `s2` means the scalar\n`s^2`, not the scalar `s`; no positivity is needed for this identity.\n\n`original_pair_of_normalized_gap` assumes `0<delta<1`, `z>0`,\n`L!=0`, and strictly positive\n\n    K*(S+Lambda*D)-mu*(1-((g1-g0)/z)/(4L))^2.\n\nIt proves the strict original quadratic inequality with noise factor\n`4*delta*(1-delta)`. The real inputs `mu,Lambda,S` have no other\nhypotheses. In the application `S=alpha*G(p1)+(1-alpha)*G(p0)`;\nthat specialization is not needed for this algebra.\n\nThe positive-gap hypothesis is substantive and is NOT proved in\nLean. It is supplied by the independent normalized interval signs\nand the analytic bridge in `PROOF.md`. The separate assertion\n`D>=0` is NOT a conclusion of this formalization: the prose proof\nderives it from repeated-node endpoint signs and strict concavity.\n\nRepeated original endpoints (`z=0`), zero noise, and singular\nprobability endpoints are not passed to divisions by zero. The first\ntwo are handled directly in the prose theorem, and distinct pairs\nincluding a probability endpoint still have `z>0` and the positive\nnode distances encoded here. Therefore the abstract algebra applies\nto those distinct boundary pairs without requiring derivatives of\n`G` there.\n"
+  },
+  "subject": {
+    "content_hash": "3566380521e770635814cd00e9137c5b163aa8c03cae9e47ca9c4386af7928c0",
+    "kind": "claim",
+    "subject_id": "C119_PAIR_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,83 @@
+OAI closure: 35 modules; source patches: 9
+CACHED OAI.GroupTheory.Thompson.BoundaryAlgebra
+CACHED OAI.GroupTheory.Thompson.FiniteAverage
+CACHED OAI.GroupTheory.Thompson.UnitBall
+CACHED OAI.GroupTheory.Thompson.HilbertAverage
+CACHED OAI.GroupTheory.Thompson.CorrelationVariance
+CACHED OAI.GroupTheory.Thompson.DisplacementEstimate
+CACHED OAI.GroupTheory.Thompson.FiniteCorrelationBoundary
+CACHED OAI.GroupTheory.Thompson.Model
+CACHED OAI.GroupTheory.Thompson.DyadicArithmetic
+CACHED OAI.GroupTheory.Thompson.BasicInterval
+CACHED OAI.GroupTheory.Thompson.DyadicGapChain
+CACHED OAI.GroupTheory.Thompson.DyadicGapPartition
+CACHED OAI.GroupTheory.Thompson.IntervalHomeomorph
+CACHED OAI.GroupTheory.Thompson.StandardPL
+CACHED OAI.GroupTheory.Thompson.IntervalCharts
+CACHED OAI.GroupTheory.Thompson.AffinePiece
+CACHED OAI.GroupTheory.Thompson.SortedSubdivision
+CACHED OAI.GroupTheory.Thompson.OrderedChainKnots
+CACHED OAI.GroupTheory.Thompson.OrderedPLInterpolation
+CACHED OAI.GroupTheory.Thompson.AffineTransport
+CACHED OAI.GroupTheory.Thompson.IntervalFamily
+CACHED OAI.GroupTheory.Thompson.BasicIntervalNesting
+CACHED OAI.GroupTheory.Thompson.BasicPartition
+CACHED OAI.GroupTheory.Thompson.RecursiveColoring
+CACHED OAI.GroupTheory.Thompson.PartitionColorFamily
+CACHED OAI.GroupTheory.Thompson.AffineGridArithmetic
+CACHED OAI.GroupTheory.Thompson.UniformPartition
+CACHED OAI.GroupTheory.Thompson.UniformPL
+CACHED OAI.GroupTheory.Thompson.DyadicImages
+CACHED OAI.GroupTheory.Thompson.PLRefinement
+CACHED OAI.GroupTheory.Thompson.StandardF
+CACHED OAI.GroupTheory.Thompson.RestrictionCovariance
+CACHED OAI.GroupTheory.Thompson.GlobalColors
+CACHED OAI.GroupTheory.Thompson.TransportFamily
+CACHED OAI.GroupTheory.Thompson.FiniteBoundary
+@OAI.ThompsonNonamenability.exists_fixed_boundary : ∀ {E : Type u_1} [inst : NormedAddCommGroup E]
+  [InnerProductSpace ℝ E] (f : OAI.ThompsonNonamenability.UnitBall E → OAI.ThompsonNonamenability.UnitBall E) (L δ : ℝ),
+  0 < L →
+    0 < δ →
+      (∀ (x y : OAI.ThompsonNonamenability.UnitBall E), ‖↑(f x) - ↑(f y)‖ ≤ L * ‖↑x - ↑y‖) →
+        (∀ (x : OAI.ThompsonNonamenability.UnitBall E), δ ≤ ‖↑(f x) - ↑x‖) →
+          ∀ (D : ℕ),
+            2 ≤ D →
+              4 * L ^ 2 / δ ^ 2 < ↑D →
+                ∃ S,
+                  S.Nonempty ∧
+                    0 < OAI.ThompsonNonamenability.boundaryConstant L δ D ∧
+                      ∀ (A : Finset OAI.ThompsonNonamenability.F),
+                        A.Nonempty →
+                          ∃ h ∈ S,
+                            OAI.ThompsonNonamenability.boundaryConstant L δ D ≤
+                              OAI.ThompsonNonamenability.boundaryRatio A h
+'OAI.ThompsonNonamenability.exists_fixed_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+def OAI.ThompsonNonamenability.F : Type :=
+{ f // StrictMono ⇑f.toHomeomorph ∧ OAI.ThompsonNonamenability.HasDyadicPLPieces f }
+def OAI.ThompsonNonamenability.globalColor.{uE} : {E : Type uE} →
+  [inst : NormedAddCommGroup E] →
+    [InnerProductSpace ℝ E] →
+      {D : ℕ} →
+        0 < D →
+          (OAI.ThompsonNonamenability.UnitBall E → OAI.ThompsonNonamenability.UnitBall E) →
+            ℕ →
+              OAI.ThompsonNonamenability.IntervalIndex D →
+                OAI.ThompsonNonamenability.F → OAI.ThompsonNonamenability.UnitBall E :=
+fun {E} [NormedAddCommGroup E] [InnerProductSpace ℝ E] {D} hD f n q g =>
+  OAI.ThompsonNonamenability.optionFamilyColor hD f (OAI.ThompsonNonamenability.imagePartitionOption g n) q
+def OAI.ThompsonNonamenability.fixedTransportSet : {D : ℕ} → 2 ≤ D → Finset OAI.ThompsonNonamenability.F :=
+fun {D} hD =>
+  Finset.image (OAI.ThompsonNonamenability.pairTransport hD) (OAI.ThompsonNonamenability.orderedIntervalPairs D).attach
+def OAI.ThompsonNonamenability.boundaryRatio.{uG} : {G : Type uG} → [Group G] → [DecidableEq G] → Finset G → G → ℝ :=
+fun {G} [Group G] [DecidableEq G] A h => ↑(symmDiff (OAI.ThompsonNonamenability.leftTranslate h A) A).card / ↑A.card
+def OAI.ThompsonNonamenability.boundaryConstant : ℝ → ℝ → ℕ → ℝ :=
+fun L δ D => (δ ^ 2 / L ^ 2 - 4 / ↑D) / (4 * (1 - 1 / ↑D))
+@[reducible] def OAI.ThompsonNonamenability.UnitBall.{uE} : (E : Type uE) →
+  [SeminormedAddCommGroup E] → Type (max 0 uE) :=
+fun E [SeminormedAddCommGroup E] => { x // ‖x‖ ≤ 1 }
+@[reducible] def OAI.ThompsonNonamenability.IntervalIndex : ℕ → Type :=
+fun D => Fin D ⊕ Fin D × Fin D
+def OAI.ThompsonNonamenability.leftTranslate.{uG} : {G : Type uG} →
+  [Group G] → [DecidableEq G] → G → Finset G → Finset G :=
+fun {G} [Group G] [DecidableEq G] h A => Finset.image (fun g => h * g) A
+SUCCESS: compiled=0 cached=35 modules=35 probe_exit=0; receipt=families/248/first-pass/boundary_audit/upstream/.replay/20261105T185013.995206Z/report.json

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_SLICE_CORE-57015204d06b",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/302/first-pass/coherent-adams-lift/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/302/first-pass/coherent-adams-lift/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14691,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/302/first-pass/coherent-adams-lift/Main.lean",
+    "source_sha256": "027c75a572b1cf77ce3c4f99175293f7d125933e58c2e885440b3e7519169966",
+    "statement_fidelity": "families/302/first-pass/coherent-adams-lift/statement_fidelity.md",
+    "statement_fidelity_sha256": "235c4f31964123a26b73822836f1a91d6fdee0e05387f16c9bb690607f07788c",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'CoherentAdams.overlap_split' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CoherentAdams.overlap_telescope' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CoherentAdams.two_positive_intervals_give_break' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CoherentAdams.slice_break_count' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CoherentAdams.restricted_factor_hits_vertex' depends on axioms: [propext, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/coherent-adams-lift/Main.lean",
+    "text": "import Mathlib\n\nnamespace CoherentAdams\n\nnoncomputable def overlap (a b l u : ℝ) : ℝ :=\n  max 0 (min b u - max a l)\n\ntheorem overlap_nonneg (a b l u : ℝ) : 0 ≤ overlap a b l u :=\n  le_max_left _ _\n\ntheorem overlap_self (a l u : ℝ) : overlap a a l u = 0 := by\n  unfold overlap\n  exact max_eq_left (sub_nonpos.mpr ((min_le_left a u).trans (le_max_left a l)))\n\ntheorem overlap_split (a b c l u : ℝ)\n    (hab : a ≤ b) (hbc : b ≤ c) (hlu : l ≤ u) :\n    overlap a c l u = overlap a b l u + overlap b c l u := by\n  by_cases hbl : b ≤ l\n  · have hal : a ≤ l := hab.trans hbl\n    have hbu : b ≤ u := hbl.trans hlu\n    simp only [overlap, max_eq_right hal, max_eq_right hbl, min_eq_left hbu,\n      max_eq_left (sub_nonpos.mpr hbl), zero_add]\n  · by_cases hub : u ≤ b\n    · have huc : u ≤ c := hub.trans hbc\n      have hlb : l ≤ b := hlu.trans hub\n      simp only [overlap, min_eq_right huc, min_eq_right hub, max_eq_left hlb,\n        max_eq_left (sub_nonpos.mpr hub), add_zero]\n    · have hlb : l ≤ b := by linarith\n      have hbu : b ≤ u := by linarith\n      have hleft : max a l ≤ b := max_le hab hlb\n      have hright : b ≤ min c u := le_min hbc hbu\n      unfold overlap\n      rw [min_eq_left hbu, max_eq_left hlb,\n        max_eq_right (sub_nonneg.mpr hleft),\n        max_eq_right (sub_nonneg.mpr hright),\n        max_eq_right (sub_nonneg.mpr (hleft.trans hright))]\n      ring\n\ntheorem overlap_telescope (s : ℕ → ℝ) (hs : Monotone s)\n    (l u : ℝ) (hlu : l ≤ u) (k : ℕ) :\n    (∑ a ∈ Finset.range k, overlap (s a) (s (a + 1)) l u) =\n      overlap (s 0) (s k) l u := by\n  induction k with\n  | zero => simp [overlap_self]\n  | succ k ih =>\n      rw [Finset.sum_range_succ, ih]\n      exact (overlap_split (s 0) (s k) (s (k + 1)) l u\n        (hs (Nat.zero_le k)) (hs (Nat.le_succ k)) hlu).symm\n\ntheorem overlap_unit (l u : ℝ) (hl : 0 ≤ l) (hlu : l ≤ u) (hu : u ≤ 1) :\n    overlap 0 1 l u = u - l := by\n  unfold overlap\n  rw [min_eq_right hu, max_eq_right hl, max_eq_right (sub_nonneg.mpr hlu)]\n\ntheorem overlap_positive_endpoints (a b l u : ℝ) (h : 0 < overlap a b l u) :\n    l < b ∧ a < u := by\n  simp only [overlap, lt_max_iff, lt_self_iff_false, false_or, sub_pos] at h\n  exact ⟨(le_max_right a l).trans_lt (h.trans_le (min_le_left b u)),\n    (le_max_left a l).trans_lt (h.trans_le (min_le_right b u))⟩\n\ntheorem two_positive_intervals_give_break\n    (a b c d l u : ℝ) (hbc : b ≤ c)\n    (hfirst : 0 < overlap a b l u) (hsecond : 0 < overlap c d l u) :\n    l < b ∧ b < u := by\n  have h1 := overlap_positive_endpoints a b l u hfirst\n  have h2 := overlap_positive_endpoints c d l u hsecond\n  exact ⟨h1.1, hbc.trans_lt h2.2⟩\n\ntheorem slice_break_count (j ell : ℕ)\n    (breaks : Fin j → ℝ) (lo hi : Fin ell → ℝ)\n    (separated : ∀ r t : Fin ell, r < t → hi r ≤ lo t)\n    (bad : Finset (Fin ell))\n    (contains : ∀ r ∈ bad, ∃ a : Fin j, lo r < breaks a ∧ breaks a < hi r) :\n    bad.card ≤ j := by\n  classical\n  let witness : {r // r ∈ bad} → Fin j :=\n    fun r => Classical.choose (contains r.val r.property)\n  have hw (r : {r // r ∈ bad}) :\n      lo r.val < breaks (witness r) ∧ breaks (witness r) < hi r.val :=\n    Classical.choose_spec (contains r.val r.property)\n  have hinj : Function.Injective witness := by\n    intro r t heq\n    apply Subtype.ext\n    by_contra hne\n    rcases lt_or_gt_of_ne hne with hrt | htr\n    · have hs := separated r.val t.val hrt\n      have hr := hw r\n      have ht := hw t\n      rw [heq] at hr\n      linarith\n    · have hs := separated t.val r.val htr\n      have hr := hw r\n      have ht := hw t\n      rw [heq] at hr\n      linarith\n  simpa using Fintype.card_le_of_injective witness hinj\n\ntheorem restricted_factor_hits_vertex (ell j n : ℕ)\n    (restricted bad : Finset (Fin ell))\n    (hrestricted : n ≤ restricted.card) (hbad : bad.card ≤ j) (hjn : j < n) :\n    ∃ r ∈ restricted, r ∉ bad := by\n  classical\n  by_contra h\n  have hsub : restricted ⊆ bad := by\n    intro r hr\n    by_contra hnot\n    exact h ⟨r, hr, hnot⟩\n  have hcard := Finset.card_le_card hsub\n  omega\n\nend CoherentAdams\n\n#print axioms CoherentAdams.overlap_split\n#print axioms CoherentAdams.overlap_telescope\n#print axioms CoherentAdams.two_positive_intervals_give_break\n#print axioms CoherentAdams.slice_break_count\n#print axioms CoherentAdams.restricted_factor_hits_vertex\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/coherent-adams-lift/statement_fidelity.md",
+    "text": "# Statement fidelity and evidence boundary\n\nThe target is Proposition `prop:compatible-adams-lift` in the staged\nSeptember 25, 2026 companion manuscript, `build/sections/02-filtered-products.tex`.\nHere a commutative ring spectrum is an E-infinity ring spectrum under the\nsphere. Its unit fiber is `I_R = fib(S -> R)`; the map from its n-fold smash\npower to the sphere is the smash of the n fiber inclusions.\n\nThe mathematical assertion to be proved is the following. For every pointed\nCW inclusion `G -> E`, every commutative ring spectrum R, every integer d,\nevery stable map `v : Sigma^infinity E -> Sigma^d S`, and every pair of\nintegers `1 <= n <= ell`, suppose the restriction of the unit composite of\nv to G is nullhomotopic. Then the restriction of the ell-fold smash of v\nto the entire subspace of `E^smash ell` having at least n coordinates in G\nfactors, in spectra, through `Sigma^(d ell) I_R^smash n`. No connectivity,\nlocalization, flatness, or parity hypothesis is imposed. The original\nproposition additionally assumes the CW pair finite. Dropping finiteness\nis a stated extension, not a change to the original assertion.\n\nThe conclusion is existence of one lift on the union, with a homotopy\nidentifying its composite with the restricted smash power. It is not just\nexistence of a lift separately on each product subspace. Neither uniqueness\nof the lift nor equivariance under permutations of the factors is asserted.\nA nullhomotopy of the R-valued restriction can be chosen once for the proof.\n\nThe proof must construct a null morphism in the functor category on the\nfull truncated simplex category before restricting its cone to the punctured\nunit cube. Objectwise zero homotopy classes would not suffice.\n\nExecutable evidence will be explicitly separated from the spectral argument.\nA finite chain-complex computation cannot certify this assertion about all\nring spectra. Any arithmetic or combinatorial certificate accompanying the\nproof is evidence only for the precise parameter identities it checks.\nIndependent mathematical review of the functor-category and total-fiber\narguments remains required.\n\n## Lean claim C_SLICE_CORE\n\n`Main.lean` imports Mathlib in Lean 4.31.0 and uses the namespace\n`CoherentAdams`. Its definition `overlap a b l u` is the real number\n`max 0 (min b u - max a l)`. The following declarations are the\nformalized, load-bearing parameter core:\n\n- `overlap_split`: for all five real inputs with `a <= b <= c`\n  and `l <= u`, overlap is additive across the break b.\n- `overlap_telescope`: for every monotone sequence of real endpoints,\n  every interval with `l <= u`, and every natural k, the sum of k\n  adjacent overlaps is the overlap of their combined interval.\n- `overlap_unit`: for `0 <= l <= u <= 1`, overlap with `[0,1]`\n  is exactly `u-l`.\n- `overlap_positive_endpoints`: strictly positive overlap forces\n  `l < b` and `a < u`, for arbitrary real inputs.\n- `two_positive_intervals_give_break`: if the first interval's right\n  endpoint b is at most the second interval's left endpoint c, and\n  both overlaps with the same slice are positive, then `l < b < u`.\n- `slice_break_count`: for arbitrary naturals j and ell, a family\n  of j real breaks and ell ordered slices with `hi r <= lo t`\n  whenever `r<t`, every finite set of slices each containing a\n  break in its strict interior has cardinality at most j. This\n  is stronger than the equal-width instance used in the proof.\n  No existence of a break for an empty slice is assumed.\n- `restricted_factor_hits_vertex`: for arbitrary naturals ell,j,n,\n  if a finite restricted-coordinate set has size at least n, the\n  bad-coordinate set has size at most j, and `j<n`, some restricted\n  coordinate is outside the bad set.\n\nThe two auxiliary declarations `overlap_nonneg` and `overlap_self`\nstate the indicated elementary properties without extra hypotheses.\nAll quantifiers are universal and all finite sets use distinct\nindices; repeated real break values are allowed.\n\nThe source does not define or formalize the simplex category,\ncontinuity, natural transformations, spectra, CW spaces, stable maps,\nthe mapping-space adjunction, or a coherent null cone. The formalized\nreal identities and finite cardinal arguments enter Section 1 of\n`proof.md`; Sections 2-4 are a general mathematical proof, not a\nLean proof. A compiler success on C_SLICE_CORE must not be attached\nto C_COHERENT_ADAMS_LIFT as though the spectral theorem had been\nencoded in Lean.\n"
+  },
+  "subject": {
+    "content_hash": "0ed5e45b1e1e90e1067868a81d20a7d433606c7ab70590ec6ac77c060c87f4ce",
+    "kind": "claim",
+    "subject_id": "C_SLICE_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

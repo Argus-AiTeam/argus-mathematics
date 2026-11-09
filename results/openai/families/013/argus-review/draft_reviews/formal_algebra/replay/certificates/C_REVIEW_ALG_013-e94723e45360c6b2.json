@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_REVIEW_ALG_013-d0a98d5f2b0c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-latest/argus_skill/tools/lean_axiom_audit.lean",
+      "families/013/argus-review/draft_reviews/formal_algebra/replay/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/013/argus-review/draft_reviews/formal_algebra/replay/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15540,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/013/argus-review/draft_reviews/formal_algebra/replay/Main.lean",
+    "source_sha256": "ad826281105091df53f2e657a256cb8b624282206f7fc165e6a5d17943ee4112",
+    "statement_fidelity": "families/013/argus-review/draft_reviews/formal_algebra/replay/statement_fidelity.md",
+    "statement_fidelity_sha256": "700d47efc592026127f4a29e3b74e2f35b2a50e8318f9b2cc1b8cb1181a18c83",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/013/argus-review/draft_reviews/formal_algebra/replay/Main.lean:27:57: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/013/argus-review/draft_reviews/formal_algebra/replay/Main.lean:27:57: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/013/argus-review/draft_reviews/formal_algebra/replay/Main.lean:39:67: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/013/argus-review/draft_reviews/formal_algebra/replay/Main.lean:39:67: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/013/argus-review/draft_reviews/formal_algebra/replay/Main.lean:63:18: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/draft_reviews/formal_algebra/replay/Main.lean",
+    "text": "import Mathlib\n\nset_option autoImplicit false\n\nnamespace TreeComparison\n\nvariable {K : Type*} [Field K]\n\ntheorem reconstruction_difference\n    (D p u Hplus Hminus splus sminus sn : K)\n    (hD : D ≠ 0) (hp : p ≠ 0) (hu : u ≠ 0)\n    (hplus : Hplus ≠ 0) (hminus : Hminus ≠ 0)\n    (hrec : splus * Hminus - sminus * Hplus = sn * p * u) :\n    splus / (D * p * u * Hplus) - sminus / (D * p * u * Hminus) =\n      sn / (D * Hplus * Hminus) := by\n  field_simp [hD, hp, hu, hplus, hminus]\n  linear_combination hrec\n\ntheorem held_ratio_square\n    (D p u Hfree Hheld sfree sheld sn : K)\n    (hD : D ≠ 0) (hp : p ≠ 0) (hu : u ≠ 0)\n    (hfree : Hfree ≠ 0) (hheld : Hheld ≠ 0)\n    (hsheld : sheld ≠ 0) (hsn : sn ≠ 0) :\n    (sfree / (D * p * u * Hfree) / (sheld / (D * p * u * Hheld))) /\n        (sn / (D * Hfree * Hheld)) =\n      (D * sfree / (sheld * sn)) * Hheld ^ 2 := by\n  field_simp [hD, hp, hu, hfree, hheld, hsheld, hsn] <;> ring\n\ntheorem reconstructed_square\n    (D p u Hplus Hminus splus sminus sn : K)\n    (hD : D ≠ 0) (hp : p ≠ 0) (hu : u ≠ 0)\n    (hplus : Hplus ≠ 0) (hminus : Hminus ≠ 0)\n    (hsplus : splus ≠ 0) (hsminus : sminus ≠ 0) (hsn : sn ≠ 0) :\n    p ^ 2 =\n      (splus * sminus / (sn * D * u ^ 2)) *\n        (sn / (D * Hplus * Hminus)) /\n        ((splus / (D * p * u * Hplus)) *\n          (sminus / (D * p * u * Hminus))) := by\n  field_simp [hD, hp, hu, hplus, hminus, hsplus, hsminus, hsn] <;> ring\n\ntheorem bad_held_cancellation\n    (p d e c y : K) (he : e ≠ 0)\n    (h : p ^ 2 * d * e = c * y) :\n    d * p ^ 2 = c * y / e := by\n  field_simp [he]\n  linear_combination h\n\ntheorem square_fiber\n    (z w : K) (h : z ^ 2 = w ^ 2) :\n    z = w ∨ z = -w := by\n  have hf : (z - w) * (z + w) = 0 := by\n    calc\n      (z - w) * (z + w) = z ^ 2 - w ^ 2 := by ring\n      _ = 0 := sub_eq_zero.mpr h\n  rcases mul_eq_zero.mp hf with hleft | hright\n  · exact Or.inl (sub_eq_zero.mp hleft)\n  · exact Or.inr (eq_neg_iff_add_eq_zero.mpr hright)\n\ntheorem affine_composition\n    (r s t : K) (hr : r ≠ 0) :\n    s - s ^ 2 * ((r - t) / r ^ 2) =\n      (s / r) ^ 2 * t + s - s ^ 2 / r := by\n  field_simp [hr] <;> ring\n\ntheorem affine_fixed_ratio_injective\n    (z r r' : K) (hz : z ≠ 0) (hone : z ≠ 1)\n    (h : r * (z - z ^ 2) = r' * (z - z ^ 2)) :\n    r = r' := by\n  have hfactor : z - z ^ 2 ≠ 0 := by\n    rw [show z - z ^ 2 = z * (1 - z) by ring]\n    exact mul_ne_zero hz (sub_ne_zero.mpr (Ne.symm hone))\n  have hmul : (r - r') * (z - z ^ 2) = 0 := by\n    linear_combination h\n  rcases mul_eq_zero.mp hmul with heq | hzero\n  · exact sub_eq_zero.mp heq\n  · exact (hfactor hzero).elim\n\ntheorem quadratic_pairs_of_coefficients\n    (b1 b2 b3 b4 : K)\n    (hsum : b1 + b2 = b3 + b4)\n    (hprod : b1 * b2 = b3 * b4) :\n    (b1 = b3 ∧ b2 = b4) ∨ (b1 = b4 ∧ b2 = b3) := by\n  have hf : (b1 - b3) * (b1 - b4) = 0 := by\n    linear_combination b1 * hsum - hprod\n  rcases mul_eq_zero.mp hf with hleft | hright\n  · have hb : b1 = b3 := sub_eq_zero.mp hleft\n    exact Or.inl ⟨hb, by linear_combination hsum - hb⟩\n  · have hb : b1 = b4 := sub_eq_zero.mp hright\n    exact Or.inr ⟨hb, by linear_combination hsum - hb⟩\n\ntheorem off_diagonal_collision_unique\n    (a a' b1 b2 b3 b4 : K)\n    (hoff : ¬ ((b1 = b3 ∧ b2 = b4) ∨ (b1 = b4 ∧ b2 = b3)))\n    (ha : (a - b1) * (a - b2) = (a - b3) * (a - b4))\n    (ha' : (a' - b1) * (a' - b2) = (a' - b3) * (a' - b4)) :\n    a = a' := by\n  by_contra hne\n  have hf : (a - a') * ((b3 + b4) - (b1 + b2)) = 0 := by\n    linear_combination ha - ha'\n  have hdelta : (b3 + b4) - (b1 + b2) = 0 :=\n    (mul_eq_zero.mp hf).resolve_left (sub_ne_zero.mpr hne)\n  have hsum : b1 + b2 = b3 + b4 := by\n    linear_combination -hdelta\n  have hprod : b1 * b2 = b3 * b4 := by\n    linear_combination ha + a * hsum\n  exact hoff (quadratic_pairs_of_coefficients b1 b2 b3 b4 hsum hprod)\n\ntheorem cycle_index_unique\n    {G : Type*} [Group G] (x y z : G)\n    (hx : x * z = 1) (hy : y * z = 1) :\n    x = y := by\n  exact mul_right_cancel (hx.trans hy.symm)\n\ntheorem local_constant_budget :\n    32 * 256 + 64 * 8192 ≤ (2 : ℕ) ^ 20 := by\n  norm_num\n\nend TreeComparison\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/draft_reviews/formal_algebra/replay/statement_fidelity.md",
+    "text": "# Statement fidelity: universal algebra in the tree comparison\n\nClaim: `C_TREE_ALGEBRA`. Namespace: `TreeComparison`.\n\nThe declarations below quantify over an arbitrary field K, with all scalar\nvariables explicitly quantified. They therefore apply, in particular, to every\nodd prime field. The `Group` in `cycle_index_unique` is an arbitrary group;\nthe application is the group of multiplicative characters.\n\n* `reconstruction_difference` states y_plus-y_minus=y_parent using exactly\n  the rational formulas of eq:src36. D, p, u, Hplus, Hminus are assumed\n  nonzero. The reconstruction equation is a separate hypothesis in\n  denominator-cleared form. The theorem does not divide by a zero p and\n  does not purport to describe invalid diagram points.\n* `held_ratio_square` states (y_free/y_held)/d =\n  D*s_free*H_held^2/(s_held*s_pair), the identity\n  eq:tree-held-square. The displayed nonzero denominator hypotheses are\n  present. Swapping the two leaves gives the opposite orientation;\n  its pair difference is then -d in the analytic application.\n* `reconstructed_square` is eq:tree-p-square after substituting d, e,\n  and y from eq:src36. All parameters that occur as denominators, including\n  the three frequencies, are assumed nonzero. This is a rational identity,\n  not an assertion that arbitrary p satisfies the reconstruction rule.\n* `bad_held_cancellation` derives d*p^2=c*y/e from\n  p^2*d*e=c*y and e nonzero. It is the cancellation that removes the\n  variable reconstructed entry from a held-parameter square.\n* `square_fiber` says that two elements with equal squares differ by a\n  sign. It does not assert that every element is a square. Combined with\n  fixed-ratio injectivity it gives at most two nonidentity affine\n  representations; no cardinality assertion is silently encoded here.\n* `affine_composition` computes the coordinate map underlying U_r^*U_s\n  for U_r F(t)=F(r-r^2 t), with r nonzero.\n* `affine_fixed_ratio_injective` says that if z is neither zero nor one,\n  equality of r*(z-z^2) and r'*(z-z^2) forces r=r'.\n  The excluded z=1 is exactly the identity contribution, which the\n  analytic proof treats separately.\n* `quadratic_pairs_of_coefficients` proves that equal sums and equal\n  products force two ordered pairs to agree up to swapping.\n* `off_diagonal_collision_unique` says that two unequal unordered pairs\n  can satisfy (a-b1)(a-b2)=(a-b3)(a-b4) for at most one a.\n  It is stronger than the version requiring the common product to be\n  nonzero. Repeated b's are allowed.\n* `cycle_index_unique` is right cancellation: for fixed z, x*z=1 and\n  y*z=1 imply x=y. Inverses handle a negative exponent on a cycle index.\n  It includes the one-quartet parallel-edge case.\n* `local_constant_budget` is the natural-number inequality used to add\n  the 32 same-pair and 64 cross-pair majorants.\n\nThese are universal algebraic ingredients, not a formalization of the\ncomplete analytic tree theorem `C_TREE`. In particular Lean does not\nformalize the Fourier/character expansions, probability laws, operator\nnorm bounds, quartet integration, or graph-cycle existence. Those parts\nare proved in `report.md` and require independent mathematical review.\nCompilation cannot establish the truth of this fidelity document.\n"
+  },
+  "subject": {
+    "content_hash": "c84b4526a2ce41e71ace1a4654043d09c7eb90b87ad20058b395de2c91578c11",
+    "kind": "claim",
+    "subject_id": "C_REVIEW_ALG_013"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

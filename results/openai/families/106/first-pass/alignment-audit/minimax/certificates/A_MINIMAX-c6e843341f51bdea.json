@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-A_MINIMAX-c942b8a54b9b",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/106/first-pass/alignment-audit/minimax/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/106/first-pass/alignment-audit/minimax/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15937,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/106/first-pass/alignment-audit/minimax/Main.lean",
+    "source_sha256": "1a5d2a36bc9878f18b185779b03ecfdc6b3b4c1ebeb8aef5d78acc85dd5eeb35",
+    "statement_fidelity": "families/106/first-pass/alignment-audit/minimax/statement_fidelity.md",
+    "statement_fidelity_sha256": "fd628b840159a529e364a1c64ac2a7424983d96144c395ee7f2a55cf0553bb6f",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/alignment-audit/minimax/Main.lean",
+    "text": "import Mathlib\n\nopen Finset\n\nnamespace AlignmentMinimax\n\nuniverse u v\n\nnoncomputable def payoff {P : Type u} {Q : Type v} [Fintype P] [Fintype Q]\n    (b : P → Q → ℝ) (x : P → ℝ) (y : Q → ℝ) : ℝ :=\n  ∑ p, x p * ∑ q, y q * b p q\n\nnoncomputable def leftLinear {P : Type u} {Q : Type v} [Fintype P] [Fintype Q]\n    (b : P → Q → ℝ) (y : Q → ℝ) : (P → ℝ) →ₗ[ℝ] ℝ where\n  toFun x := payoff b x y\n  map_add' x z := by simp [payoff, add_mul, Finset.sum_add_distrib]\n  map_smul' c x := by\n    simp [payoff, Pi.smul_apply, smul_eq_mul, Finset.mul_sum, mul_assoc]\n\nnoncomputable def rightLinear {P : Type u} {Q : Type v} [Fintype P] [Fintype Q]\n    (b : P → Q → ℝ) (x : P → ℝ) : (Q → ℝ) →ₗ[ℝ] ℝ where\n  toFun y := payoff b x y\n  map_add' y z := by\n    simp [payoff, add_mul, mul_add, Finset.sum_add_distrib]\n  map_smul' c y := by\n    simp [payoff, Pi.smul_apply, smul_eq_mul, Finset.mul_sum,\n      mul_comm, mul_left_comm]\n\ntheorem payoff_single_right {P : Type u} {Q : Type v} [Fintype P] [Fintype Q]\n    [DecidableEq Q] (b : P → Q → ℝ) (x : P → ℝ) (q : Q) :\n    payoff b x (Pi.single q 1) = ∑ p, x p * b p q := by\n  simp [payoff, Pi.single_apply]\n\ntheorem payoff_single_left {P : Type u} {Q : Type v} [Fintype P] [Fintype Q]\n    [DecidableEq P] (b : P → Q → ℝ) (p : P) (y : Q → ℝ) :\n    payoff b (Pi.single p 1) y = ∑ q, y q * b p q := by\n  simp [payoff, Pi.single_apply]\n\ntheorem randomized_adversary {P : Type u} {Q : Type v}\n    [Fintype P] [Fintype Q] [Nonempty P] [Nonempty Q]\n    (b : P → Q → ℝ) (ξ : ℝ)\n    (hbad : ∀ x ∈ stdSimplex ℝ P, ∃ q, ξ < ∑ p, x p * b p q) :\n    ∃ y ∈ stdSimplex ℝ Q, ∀ p, ξ < ∑ q, y q * b p q := by\n  classical\n  obtain ⟨p₀⟩ := ‹Nonempty P›\n  obtain ⟨q₀⟩ := ‹Nonempty Q›\n  have hX : (stdSimplex ℝ P).Nonempty :=\n    ⟨Pi.single p₀ 1, single_mem_stdSimplex ℝ p₀⟩\n  have hY : (stdSimplex ℝ Q).Nonempty :=\n    ⟨Pi.single q₀ 1, single_mem_stdSimplex ℝ q₀⟩\n  have hleft : ∀ y ∈ stdSimplex ℝ Q,\n      LowerSemicontinuousOn (fun x : P → ℝ => payoff b x y) (stdSimplex ℝ P) := by\n    intro y _\n    have hc : Continuous (fun x : P → ℝ => payoff b x y) := by\n      unfold payoff\n      fun_prop\n    exact hc.continuousOn.lowerSemicontinuousOn\n  have hright : ∀ x ∈ stdSimplex ℝ P,\n      UpperSemicontinuousOn (fun y : Q → ℝ => payoff b x y) (stdSimplex ℝ Q) := by\n    intro x _\n    have hc : Continuous (fun y : Q → ℝ => payoff b x y) := by\n      unfold payoff\n      fun_prop\n    exact hc.continuousOn.upperSemicontinuousOn\n  have hconvex : ∀ y ∈ stdSimplex ℝ Q,\n      QuasiconvexOn ℝ (stdSimplex ℝ P) (fun x => payoff b x y) := by\n    intro y _\n    exact ((leftLinear b y).convexOn (convex_stdSimplex ℝ P)).quasiconvexOn\n  have hconcave : ∀ x ∈ stdSimplex ℝ P,\n      QuasiconcaveOn ℝ (stdSimplex ℝ Q) (fun y => payoff b x y) := by\n    intro x _\n    exact ((rightLinear b x).concaveOn (convex_stdSimplex ℝ Q)).quasiconcaveOn\n  obtain ⟨x, hx, y, hy, hxy⟩ := Sion.exists_isSaddlePointOn\n    hX (convex_stdSimplex ℝ P) (isCompact_stdSimplex ℝ P) hleft hconvex\n    (convex_stdSimplex ℝ Q) hY (isCompact_stdSimplex ℝ Q) hright hconcave\n  obtain ⟨q, hq⟩ := hbad x hx\n  refine ⟨y, hy, ?_⟩\n  intro p\n  have h₁ := hxy x hx (Pi.single q 1) (single_mem_stdSimplex ℝ q)\n  have h₂ := hxy (Pi.single p 1) (single_mem_stdSimplex ℝ p) y hy\n  rw [payoff_single_right] at h₁\n  rw [payoff_single_left] at h₂\n  exact hq.trans_le (h₁.trans h₂)\n\nend AlignmentMinimax\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/alignment-audit/minimax/statement_fidelity.md",
+    "text": "# Fidelity of the finite minimax formalization\n\nThe claim is `A_MINIMAX`. The source proves the finite-game implication\nused at each value of `r` in the manuscript, in the stronger form of an\narbitrary finite real payoff matrix.\n\nThe row type `P` and column type `Q` are arbitrary finite nonempty\ntypes. They stand for the `s`-element sampling sets and the finite\nallowed list patterns, respectively. Their sizes are not fixed or\nbounded by the formal theorem. The payoff `b : P -> Q -> Real` is\narbitrary; in the manuscript it is the bad-set indicator.\n\n`stdSimplex Real P` and `stdSimplex Real Q` are the actual finite\nprobability simplices: all coordinates are nonnegative and their sum\nis one. `payoff b x y` is the bilinear expected payoff under the two\nmixed strategies.\n\nThe principal declaration `randomized_adversary` has hypothesis\n\n    forall x in stdSimplex Real P,\n      exists q, xi < sum p, x p * b p q.\n\nThis is exactly failure of a sampling law that bounds every pure\npattern's badness expectation by `xi`, not a statement with the two\nplayers interchanged. Its conclusion is\n\n    exists y in stdSimplex Real Q,\n      forall p, xi < sum q, y q * b p q.\n\nThus one random pattern law works against **every** pure sampled set.\nThe conclusion is strict, and in particular implies the manuscript's\nlower bound `>= xi`. There is no hidden restriction on `xi`; taking\n`xi > 0` gives the application in the source.\n\nThe proof applies Mathlib's kernel-proved\n`Sion.exists_isSaddlePointOn`. It proves continuity and the required\nquasiconvexity/quasiconcavity of the finite bilinear payoff, and uses\nthe compactness, convexity, and nonemptiness of both actual\nprobability simplices. `payoff_single_left` and\n`payoff_single_right` explicitly identify pure strategies, fixing the\norientation of the final two saddle-point inequalities.\n\nFor each `r >= s`, the manuscript's finite pattern space is nonempty\n(the empty-list family is allowed), and the sampling space is\nnonempty. Specializing the arbitrary finite types therefore gives\nthe claimed implication for every `r`. The theorem does not impose\nan upper bound on the label universe or choose a pattern after the\nsampled set.\n\nThere are no project-defined axioms or assumed minimax propositions.\nThe formerly recorded external `FINITE_MINIMAX` dependency is\ndischarged by this formal theorem, rather than by a self-attributed\nliterature citation. The source does not prove Ramsey homogenization,\ncountable extension, invariant cuts, or the final alignment theorem.\n"
+  },
+  "subject": {
+    "content_hash": "916f2426277daa726db9581642d4aedfd6a2fc88857181e82a3723c14c64d454",
+    "kind": "claim",
+    "subject_id": "A_MINIMAX"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

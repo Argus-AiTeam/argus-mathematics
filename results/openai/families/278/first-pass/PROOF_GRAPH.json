@@ -1,0 +1,106 @@
+{
+  "goal": "C9000278",
+  "routes": [
+    {
+      "name": "Scoped uniform-channel verification inside the full theorem dependency graph",
+      "status": "current",
+      "evidence": "research/crossover_audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000278": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 278 (Failure of Kohn–Sham ensemble representation.; papers: A Coulomb ground-state density without Kohn-Sham ensemble representation; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_MAIN_278"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN_278": {
+      "statement": "The finite Coulomb molecule in thm:main has no ground-state noninteracting ensemble representation in the stated potential class.",
+      "status": "open",
+      "depends_on": ["C_SETUP_278", "C_DENSITY_278", "C_ANGLE_278", "C_ENSEMBLE_278", "C_OBSTRUCTION_278", "C_CHARGE_278", "C_SCALING_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md"]
+    },
+    "C_SETUP_278": {
+      "statement": "The fixed-D spectral, parity, positivity, and small-coupling graph-norm conclusions of Section 1 hold.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    },
+    "C_CUTOFF_278": {
+      "statement": "The cutoff equation has an O(lambda exp(-sigma r)) residual with all fixed finite x derivatives, sigma greater than gamma, and a twice-differentiated density cutoff error.",
+      "status": "open",
+      "depends_on": ["C_SETUP_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    },
+    "C_SLOW_278": {
+      "statement": "The projected slow expansion has uniform angular and first two radial remainder bounds and a uniformly simple angular zero.",
+      "status": "open",
+      "depends_on": ["C_CUTOFF_278", "C_SETUP_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    },
+    "C_PLANE_278": {
+      "statement": "The complementary expansion retains bG, has O(lambda A r^-5) error through two ordinary derivatives, and has the stated nonzero equatorial coefficient.",
+      "status": "open",
+      "depends_on": ["C_CUTOFF_278", "C_SLOW_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    },
+    "C_CROSSOVER_278": {
+      "statement": "Conditional on the recorded Section 1 spectral input, for each fixed D>=100 there exist Lambda_D>0, R_D and C_D,c_D>0, independent of lambda in [0,Lambda_D], such that the cutoff and differentiated channel expansions hold, ||F||>=c_D(A|omega_z|+b+lambda*A*r^-4), b/||F||<=2, the three quantitative density-drift suprema for R>=R_D are bounded by 100(|gamma-k|+|gamma-k|^2)+C_D/R, and n(p,z1)/n(p,z2)<=20 for all sufficiently large common p and 0<=z1<=z2<=10.",
+      "status": "open",
+      "depends_on": ["C_CUTOFF_278", "C_SLOW_278", "C_PLANE_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md", "research/crossover_audit/verify.py", "research/crossover_audit/exact_certificate.json"]
+    },
+    "C_DENSITY_278": {
+      "statement": "All assertions of prop:density-properties, including the fixed-positive-coupling plane tail and translation limits, hold.",
+      "status": "open",
+      "depends_on": ["C_CROSSOVER_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    },
+    "C_ANGLE_278": {
+      "statement": "The angle minimization, exterior gap, weighted spectral gap, and quantitative sufficient tests of Section 3 hold.",
+      "status": "open",
+      "depends_on": ["C_SETUP_278", "C_DENSITY_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    },
+    "C_ENSEMBLE_278": {
+      "statement": "The kinetic ensemble certificate and identification of any representing potential up to an additive constant in Section 4 hold.",
+      "status": "open",
+      "depends_on": ["C_ANGLE_278", "C_DENSITY_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    },
+    "C_OBSTRUCTION_278": {
+      "statement": "The translated-potential compactness and exterior form limit yield the fixed-density obstruction in Section 5.",
+      "status": "open",
+      "depends_on": ["C_ANGLE_278", "C_DENSITY_278", "C_ENSEMBLE_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    },
+    "C_CHARGE_278": {
+      "statement": "The Section 6 finite charge prescription passes its forward tests for all folded minimizers.",
+      "status": "open",
+      "depends_on": ["C_SETUP_278", "C_DENSITY_278", "C_ANGLE_278", "C_OBSTRUCTION_278"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    },
+    "C_SCALING_278": {
+      "statement": "The dilation in prop:scaling preserves the obstruction and gives integer nuclear charges.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/crossover_audit/report.md"]
+    }
+  }
+}

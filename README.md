@@ -43,17 +43,19 @@ As of **November 5, 2026**, the archive contains **84 standalone open-problem re
 
 ---
 
-## Verifying OpenAI's `openai/math` Collection with Argus (status 2026-11-09)
+## Verifying OpenAI's `openai/math` Collection with Argus
 
-Upstream: `openai/math` @ `4eaee875`, with 373 active result families and 721 manuscripts. OpenAI withdrew 3 further manuscripts on 2026-10-06; they are out of scope.
+- **Improvements over OpenAI's stated results.** **134 of 373 families** contain an improvement that held up under verification; in **55** of them the key step was checked independently.
+- **Headline results:**
+  - `127`: the main theorem `I(f) ≤ 8d√n` improves to `4d√n`.
+  - `332`: the main theorem `N₂(ℓ₁) ≤ 12√21` improves to `6√14`.
+  - `175`: the main constant shrinks about 809 times.
+  - `318`: weak chromatic splitting fails at height 3, p = 5. OpenAI leaves this question open. The derivation still needs expert review.
+- **Issues in OpenAI's manuscripts.** No mathematical error was found. Three minor issues stand: a lemma locator (`320`), a dead DOI (`318`) and a wording gap (`247`).
+- **Lean.** 384 Lean 4.31.0 core-lemma certificates in 314 families, about 120,000 distinct Argus-authored lines.
+- **Drafts.** All Argus drafts for the 373 families are in [`results/openai/`](results/openai/).
 
-- **Work done.** An exploratory first pass ran one Argus campaign per family. It was not a per-manuscript review, and it cost $1,861.55 at provider token-meter rates. A systematic review of that work is in progress: **54 / 373 families** reviewed so far.
-- **Errors in OpenAI's manuscripts.** **No mathematical error has been established.** Three minor issues stand: a wrong lemma number (`320`), a dead DOI (`318`), and a reading-dependent wording gap (`247`).
-- **Improvements.** In **38 of the 54 reviewed families**, the review supports at least one improvement over the stated OpenAI result: sharper constants or exponents, weaker hypotheses, generalizations, or sharpness examples. Examples include an optimal barrier constant with a matching construction (`071`), one factor of `d` removed from an exponent (`028`), and an error term improved from `L^{-t-1/2}` to `L^{-t-1}` (`026`). The other 16 reviewed families independently confirm OpenAI's results.
-- **Lean.** There are 384 Lean 4.31.0 core-lemma certificates in 314 families, each recorded as compiling with no `sorry`. They contain about 120,000 distinct Argus-authored lines. In addition, about 52,000 lines are ported from OpenAI's Lean, and family `156` has a 346,954-line machine-generated SAT replay.
-- **Caveats.** Acceptance so far is by Argus's own AI Reviewer, not by human experts, and no improvement has been checked for novelty against the literature.
-
-Report: [English](docs/openai-math-audit-findings.md) · [中文](docs/openai-math-audit-findings.zh-CN.md) · Ledger: [`data/openai-math-373-audit.json`](data/openai-math-373-audit.json)
+Report: [English](docs/openai-math-audit-findings.md) · [中文](docs/openai-math-audit-findings.zh-CN.md) · Verification data: [`data/openai-verification.json`](data/openai-verification.json) · Ledger: [`data/openai-math-373-audit.json`](data/openai-math-373-audit.json)
 
 ---
 

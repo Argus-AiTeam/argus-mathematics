@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_OP_ALGEBRA-9ae67141e797",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/145/first-pass/operator_square/formal/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/145/first-pass/operator_square/formal/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16078,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/145/first-pass/operator_square/formal/Main.lean",
+    "source_sha256": "e9c14962f1b8ba86b01982a68d7ea69016e39bc2e1517b23f0a5c5385444f18a",
+    "statement_fidelity": "families/145/first-pass/operator_square/formal/statement_fidelity.md",
+    "statement_fidelity_sha256": "ea1422da3e0a0cfa01ca3e47ec2eed190d9fbe8b5b258307fbed6c0007656131",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/145/first-pass/operator_square/formal/Main.lean:97:0: warning: automatically included section variable(s) unused in theorem `OperatorSquare.cancel_dense_range`:\n  [CompleteSpace H1]\n  [CompleteSpace H2]\n  [CompleteSpace H3]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [CompleteSpace H1] [CompleteSpace H2] [CompleteSpace H3] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/145/first-pass/operator_square/formal/Main.lean:107:0: warning: automatically included section variable(s) unused in theorem `OperatorSquare.contraction_projection`:\n  [CompleteSpace H1]\n  [CompleteSpace H2]\n  [CompleteSpace H3]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [CompleteSpace H1] [CompleteSpace H2] [CompleteSpace H3] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/operator_square/formal/Main.lean",
+    "text": "import Mathlib.Analysis.InnerProductSpace.Adjoint\nimport Mathlib.Topology.DenseEmbedding\n\nnoncomputable section\n\nopen scoped InnerProduct\n\nnamespace OperatorSquare\n\nvariable {H1 H2 H3 H4 : Type*}\n  [NormedAddCommGroup H1] [InnerProductSpace ℂ H1] [CompleteSpace H1]\n  [NormedAddCommGroup H2] [InnerProductSpace ℂ H2] [CompleteSpace H2]\n  [NormedAddCommGroup H3] [InnerProductSpace ℂ H3] [CompleteSpace H3]\n  [NormedAddCommGroup H4] [InnerProductSpace ℂ H4] [CompleteSpace H4]\n\ntheorem rectangle_squares\n    (F : H2 →L[ℂ] H1) (G : H4 →L[ℂ] H3)\n    (K : H3 →L[ℂ] H1) (N : H4 →L[ℂ] H2)\n    (h1 : F ∘L N = K ∘L G)\n    (h2 : F† ∘L K = N ∘L G†) :\n    ((K ∘L K†) ∘L F = F ∘L (N ∘L N†)) ∧\n    ((K† ∘L K) ∘L G = G ∘L (N† ∘L N)) ∧\n    ((F† ∘L F) ∘L N = N ∘L (G† ∘L G)) ∧\n    ((F ∘L F†) ∘L K = K ∘L (G ∘L G†)) := by\n  have h2star : K† ∘L F = G ∘L N† := by\n    simpa only [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint]\n      using congrArg (fun T => T†) h2\n  refine ⟨?_, ?_, ?_, ?_⟩\n  · calc\n      (K ∘L K†) ∘L F = K ∘L (K† ∘L F) := by\n        simp only [ContinuousLinearMap.comp_assoc]\n      _ = K ∘L (G ∘L N†) := by rw [h2star]\n      _ = (K ∘L G) ∘L N† := by simp only [ContinuousLinearMap.comp_assoc]\n      _ = (F ∘L N) ∘L N† := by rw [h1]\n      _ = F ∘L (N ∘L N†) := by simp only [ContinuousLinearMap.comp_assoc]\n  · calc\n      (K† ∘L K) ∘L G = K† ∘L (K ∘L G) := by\n        simp only [ContinuousLinearMap.comp_assoc]\n      _ = K† ∘L (F ∘L N) := by rw [h1]\n      _ = (K† ∘L F) ∘L N := by simp only [ContinuousLinearMap.comp_assoc]\n      _ = (G ∘L N†) ∘L N := by rw [h2star]\n      _ = G ∘L (N† ∘L N) := by simp only [ContinuousLinearMap.comp_assoc]\n  · calc\n      (F† ∘L F) ∘L N = F† ∘L (F ∘L N) := by\n        simp only [ContinuousLinearMap.comp_assoc]\n      _ = F† ∘L (K ∘L G) := by rw [h1]\n      _ = (F† ∘L K) ∘L G := by simp only [ContinuousLinearMap.comp_assoc]\n      _ = (N ∘L G†) ∘L G := by rw [h2]\n      _ = N ∘L (G† ∘L G) := by simp only [ContinuousLinearMap.comp_assoc]\n  · calc\n      (F ∘L F†) ∘L K = F ∘L (F† ∘L K) := by\n        simp only [ContinuousLinearMap.comp_assoc]\n      _ = F ∘L (N ∘L G†) := by rw [h2]\n      _ = (F ∘L N) ∘L G† := by simp only [ContinuousLinearMap.comp_assoc]\n      _ = (K ∘L G) ∘L G† := by rw [h1]\n      _ = K ∘L (G ∘L G†) := by simp only [ContinuousLinearMap.comp_assoc]\n\ntheorem fixed_target_squares {X C D : Type*} [Nonempty D]\n    (F : X → H2 →L[ℂ] H1) (K : C → H3 →L[ℂ] H1)\n    (N : D → H4 →L[ℂ] H2)\n    (htotal : Dense (Submodule.span ℂ {v : H1 | ∃ x w, F x w = v} : Set H1))\n    (heq : ∀ c x d,\n      (K c ∘L (K c)†) ∘L F x = F x ∘L (N d ∘L (N d)†)) :\n    ∀ c c', K c ∘L (K c)† = K c' ∘L (K c')† := by\n  classical\n  let d : D := Classical.choice inferInstance\n  intro c c'\n  apply ContinuousLinearMap.ext_on htotal\n  rintro v ⟨x, w, rfl⟩\n  calc\n    (K c ∘L (K c)†) (F x w)\n        = (F x ∘L (N d ∘L (N d)†)) w :=\n      congrArg (fun T : H2 →L[ℂ] H1 => T w) (heq c x d)\n    _ = (K c' ∘L (K c')†) (F x w) :=\n      (congrArg (fun T : H2 →L[ℂ] H1 => T w) (heq c' x d)).symm\n\ntheorem total_adjoint_fixed_square_injective {I : Type*}\n    (F : I → H1 →L[ℂ] H2) (S : H1 →L[ℂ] H1)\n    (hsquare : ∀ i, (F i)† ∘L F i = S)\n    (htotal : ∀ v : H1,\n      (∀ i w, inner ℂ (((F i)†) w) v = 0) → v = 0) :\n    Function.Injective S := by\n  intro u v huv\n  have hS : S (u - v) = 0 := by simp [map_sub, huv]\n  have hzero : u - v = 0 := by\n    apply htotal (u - v)\n    intro i w\n    have hmem : u - v ∈ ((F i)† ∘L F i).ker := by\n      change ((F i)† ∘L F i) (u - v) = 0\n      rw [hsquare i]\n      exact hS\n    rw [ContinuousLinearMap.ker_adjoint_comp_self] at hmem\n    change F i (u - v) = 0 at hmem\n    rw [ContinuousLinearMap.adjoint_inner_left, hmem, inner_zero_right]\n  exact sub_eq_zero.mp hzero\n\ntheorem cancel_dense_range\n    (A : H1 →L[ℂ] H2) (S T : H2 →L[ℂ] H3)\n    (hA : DenseRange A) (heq : S ∘L A = T ∘L A) : S = T := by\n  have hfun : (fun x => S x) = (fun x => T x) :=\n    hA.equalizer S.continuous T.continuous (by\n      funext x\n      exact congrArg (fun Q : H1 →L[ℂ] H3 => Q x) heq)\n  ext x\n  exact congrFun hfun x\n\ntheorem contraction_projection\n    (C : H2 →L[ℂ] H3 →L[ℂ] H1)\n    (P0 : H1 →L[ℂ] H1) (P1 : H2 →L[ℂ] H2) (P2 : H3 →L[ℂ] H3)\n    (hP2 : ∀ h, P2 (P2 h) = P2 h)\n    (hleft : ∀ g h, P0 (C g h) = C g (P2 h))\n    (hright : ∀ g h, P0 (C g h) = C (P1 g) h) :\n    ∀ g h, P0 (C g h) = C (P1 g) (P2 h) := by\n  intro g h\n  calc\n    P0 (C g h) = C g (P2 h) := hleft g h\n    _ = P0 (C g (P2 h)) := by\n      have heq := hleft g (P2 h)\n      rw [hP2] at heq\n      exact heq.symm\n    _ = C (P1 g) (P2 h) := hright g (P2 h)\n\nend OperatorSquare\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/operator_square/formal/statement_fidelity.md",
+    "text": "# Formal statement fidelity: C_OP_ALGEBRA\n\n`Main.lean` formalizes part of the Hilbert-space core of the operator-square\nargument, not the entire probability theorem C_OP_CORE. All four spaces are\narbitrary complete complex inner-product spaces, with no finite-dimensionality,\nsurjectivity, inverse bound, or identification between the four spaces.\n\nThe arrow types are H2 -> H1 for F, H4 -> H3 for G, H3 -> H1 for K,\nand H4 -> H2 for N. Thus they agree with the manuscript's restricted row A,\nrow B, column s, and column t operators, respectively. Composition is read\nright to left, and the dagger is the Hilbert-space adjoint.\n\nAll the following declarations are in the namespace `OperatorSquare`.\n\n* `rectangle_squares` assumes exactly FN = KG and F* K = N G*.\n  It proves the four typed identities KK* F = F NN*, K* K G = G N* N,\n  F* F N = N G* G, and FF* K = K GG*. It assumes no positivity or\n  invertibility beyond what an adjoint square automatically has.\n* `fixed_target_squares` quantifies over arbitrary parameter\n  types X, C, D, with D nonempty. If the F ranges have dense linear span\n  and KK* F = F NN* for every parameter triple, all target squares KK*\n  agree. The probability proof must still justify the passage from\n  almost-everywhere independent parameter triples to this totality argument.\n* `total_adjoint_fixed_square_injective` assumes F_i* F_i = S\n  for every i, and that only the zero vector is orthogonal to every adjoint\n  range. It proves injectivity of S. This does not assert a bounded inverse.\n* `cancel_dense_range` proves S A = T A implies S = T\n  when A has dense range. Dense range is an explicit hypothesis, not a\n  consequence of mere injectivity for a general operator.\n* `contraction_projection` concerns a bounded complex-bilinear map C\n  (no bound of one on its norm is assumed), three bounded maps P0, P1, P2,\n  and idempotence of P2.\n  From the two one-input projection identities it proves the two-input\n  identity P0 C(g,h) = C(P1 g,P2 h). The conditional-integral formulas and\n  the two one-input identities are proved in the accompanying mathematical\n  argument; they are not proved by Lean.\n\nThere are no added axioms, proof holes, conditional probability definitions,\nalmost-everywhere quantifiers, polar decompositions, compact-group\nclassification, tensor-span completeness, or passage to full k-coordinate\nexactness in this formal source. Those analytic and measurable steps are\nclaims for independent mathematical review in\n`research/operator_square/theorem.md`. Neither the finite experiment nor\nthis compiler run is advertised as a formal proof of C_OP_CORE or of\nRokhlin's multiple-mixing conjecture.\n"
+  },
+  "subject": {
+    "content_hash": "2df44b6e0ec6bdcf0869539ea939d582ecb07c51eadfba731089d897088a248e",
+    "kind": "claim",
+    "subject_id": "C_OP_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

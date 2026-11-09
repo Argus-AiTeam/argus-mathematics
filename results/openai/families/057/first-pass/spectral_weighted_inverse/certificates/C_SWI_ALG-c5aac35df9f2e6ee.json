@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_SWI_ALG-4661ff3430e8",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/057/first-pass/spectral_weighted_inverse/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/057/first-pass/spectral_weighted_inverse/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15217,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/057/first-pass/spectral_weighted_inverse/Main.lean",
+    "source_sha256": "eac2ed81cfb7b2d004412f8cf2e24b344166c4be575c0e5c1014307c510fd934",
+    "statement_fidelity": "families/057/first-pass/spectral_weighted_inverse/statement_fidelity.md",
+    "statement_fidelity_sha256": "a80c261f7cbdf047938f4f8988326cf7859231b4c5e7fc570e0e0d0e6972d48d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/spectral_weighted_inverse/Main.lean",
+    "text": "import Mathlib\n\nnamespace WeightedInverse\n\ntheorem squared_comparison\n    (delta B a H N energy lift : ℝ)\n    (hdelta : 0 < delta) (hB : 0 ≤ B) (henergy : 0 ≤ energy)\n    (hcauchy : H ^ 2 ≤ energy * lift)\n    (hlift : delta * lift ≤ B * N)\n    (hbochner : delta * N ≤ energy + a * H) :\n    delta ^ 2 * H ^ 2 ≤ B * energy * (energy + a * H) := by\n  calc\n    delta ^ 2 * H ^ 2 ≤ delta ^ 2 * (energy * lift) :=\n      mul_le_mul_of_nonneg_left hcauchy (sq_nonneg delta)\n    _ = (delta * energy) * (delta * lift) := by ring\n    _ ≤ (delta * energy) * (B * N) :=\n      mul_le_mul_of_nonneg_left hlift (mul_nonneg hdelta.le henergy)\n    _ = (B * energy) * (delta * N) := by ring\n    _ ≤ (B * energy) * (energy + a * H) :=\n      mul_le_mul_of_nonneg_left hbochner (mul_nonneg hB henergy)\n\ntheorem normalized_comparison\n    (delta B a N energy lift : ℝ)\n    (hdelta : 0 < delta) (hB : 0 ≤ B) (henergy : 0 ≤ energy)\n    (hcauchy : 1 ≤ energy * lift)\n    (hlift : delta * lift ≤ B * N)\n    (hbochner : delta * N ≤ energy + a) :\n    delta ^ 2 ≤ B * energy * (energy + a) := by\n  simpa using\n    squared_comparison delta B a 1 N energy lift\n      hdelta hB henergy (by simpa using hcauchy) hlift (by simpa using hbochner)\n\ntheorem quadratic_gap_lower_bound\n    (mu r a : ℝ) (hmu : 0 ≤ mu) (hr : 0 < r) (ha : 0 ≤ a)\n    (hcomparison : r * (r + a) ≤ mu * (mu + a)) :\n    r ≤ mu := by\n  by_contra h\n  have hlt : mu < r := lt_of_not_ge h\n  have hpositive : 0 < (r - mu) * (r + mu + a) :=\n    mul_pos (sub_pos.mpr hlt) (by linarith)\n  nlinarith\n\ntheorem inverse_squared_bound\n    (mu s a : ℝ) (hmu : 0 < mu) (hs : 0 < s) (ha : 0 ≤ a)\n    (hcomparison : s ^ 2 ≤ mu * (mu + a)) :\n    1 / mu ≤ 1 / s + a / s ^ 2 := by\n  have htarget : s ^ 2 ≤ mu * (s + a) := by\n    by_cases h : mu ≤ s\n    · have hproduct : mu * mu ≤ mu * s :=\n        mul_le_mul_of_nonneg_left h hmu.le\n      nlinarith\n    · have hsmu : s ≤ mu := le_of_lt (lt_of_not_ge h)\n      have hproduct : s * s ≤ s * mu :=\n        mul_le_mul_of_nonneg_left hsmu hs.le\n      have hnonnegative : 0 ≤ mu * a := mul_nonneg hmu.le ha\n      nlinarith\n  calc\n    1 / mu ≤ (s + a) / s ^ 2 :=\n      (div_le_div_iff₀ hmu (sq_pos_of_pos hs)).2 (by nlinarith [htarget])\n    _ = 1 / s + a / s ^ 2 := by\n      field_simp\n\ntheorem completing_square (mu a : ℝ) :\n    (2 * mu + a) ^ 2 = 4 * (mu * (mu + a)) + a ^ 2 := by\n  ring\n\ntheorem curvature_sum_lower_bound\n    {ι : Type*} [DecidableEq ι]\n    (J : Finset ι) (eigenvalue : ι → ℝ) (c : ℝ)\n    (hlower : ∀ j ∈ J, -c ≤ eigenvalue j) :\n    -(J.card : ℝ) * c ≤ ∑ j ∈ J, eigenvalue j := by\n  calc\n    -(J.card : ℝ) * c = ∑ _j ∈ J, -c := by simp\n    _ ≤ ∑ j ∈ J, eigenvalue j := Finset.sum_le_sum hlower\n\nend WeightedInverse\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/spectral_weighted_inverse/statement_fidelity.md",
+    "text": "# Statement fidelity: scalar core of the weighted inverse estimate\n\nThis document describes only the declarations in `Main.lean`, all in\nnamespace `WeightedInverse`. The associated\nledger claim is `C_SWI_ALG`, not the complete analytic claim `C_SWI`.\n\nAll numerical variables in the first five declarations are arbitrary real\nnumbers. There is no finite sampling or discretization.\n\n`squared_comparison` assumes `delta > 0`, `B >= 0`,\n`energy >= 0`, and the three inequalities\n\n    H^2 <= energy * lift\n    delta * lift <= B * N\n    delta * N <= energy + a * H.\n\nIt proves\n\n    delta^2 * H^2 <= B * energy * (energy + a * H).\n\nFor the analytic application, `H` is the weighted squared norm of a closed\nform, `N` its unweighted squared norm, `energy` its weighted adjoint energy,\nand `lift` the weighted squared norm of an admissible unweighted minimal\nprimitive. `B = exp(b)` and `a = m*C0*t`. The three hypotheses respectively\ncome from the adjoint identity and Cauchy--Schwarz, comparison of the\nprimitive norms, and the Bochner estimate. Lean does NOT prove that these\nanalytic hypotheses hold.\n\n`normalized_comparison` is the same implication with `H=1`.\nIt proves `delta^2 <= B*energy*(energy+a)`. Normalizing a nonzero analytic\nform to weighted norm one therefore gives the desired quadratic inequality\nfor its Rayleigh quotient. A lower spectral band then has energy at most\n`mu`, so the manuscript's inequality follows by monotonicity on nonnegative\nnumbers. The normalization and spectral statements are not encoded in Lean.\n\n`quadratic_gap_lower_bound` assumes `mu >= 0`, `r > 0`,\n`a >= 0`, and `r*(r+a) <= mu*(mu+a)`, and proves `r <= mu`.\nTaking `r = (sqrt(a^2+4*delta^2/B)-a)/2` gives the sharp quadratic lower\nbound when `B>0`. Lean proves the monotonicity implication, not that\nsubstitution or a spectral theorem.\n\n`inverse_squared_bound` assumes `mu > 0`, `s > 0`,\n`a >= 0`, and `s^2 <= mu*(mu+a)`, and proves\n\n    1/mu <= 1/s + a/s^2.\n\nThe analytic substitution is `s = delta*exp(-b/2)`. Thus the squared\nminimal-inverse norm is at most\n`exp(b/2)/delta + a*exp(b)/delta^2`. Taking square roots and using\n`sqrt(x+y) <= sqrt(x)+sqrt(y)` gives the bound in the manuscript.\nNeither exponentials nor Hilbert-space operator norms occur in this source.\n\n`completing_square` proves the exact polynomial identity\n`(2*mu+a)^2 = 4*mu*(mu+a)+a^2`. The Jacobian certificate independently\nchecks the same completed square over the rationals.\n\n`curvature_sum_lower_bound` quantifies over any index type\nwith decidable equality, any finite subset `J`, any real-valued function on\nthe index type, and any real `c`. Assuming each selected value is at least\n`-c`, it proves their sum is at least `-card(J)*c`. No sign assumption on\n`c` is needed for this implication. In the analytic application `c=C0*t`\nis nonnegative and `card(J)=q<=m`. The identification of the curvature\ncommutator on top-holomorphic-degree forms with that sum is proved in prose,\nnot encoded in Lean.\n\nThe source does not formalize complete manifolds, orbifolds, differential\noperators, Chern connections, Bochner--Kodaira, spectral calculus, Serre\nduality, or any of the manuscript's downstream theorems. A successful\ncompiler run certifies these universal algebraic implications only.\n"
+  },
+  "subject": {
+    "content_hash": "5c8d70ee76cf9d335caa9bf623c93321865d68154f574db3265fe6acdca18b9f",
+    "kind": "claim",
+    "subject_id": "C_SWI_ALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C180_ALGEBRA-b76181e5c9e9",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/180/first-pass/paired_state_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/180/first-pass/paired_state_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15736,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/180/first-pass/paired_state_audit/Main.lean",
+    "source_sha256": "205baf021c7fc79f4d3132956f9e2f6c8476b9525a60590a9d843d1aa3d029f5",
+    "statement_fidelity": "families/180/first-pass/paired_state_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "5cbffee1ddd35f9297d190190a330d6479cbf669d646242af390086229021580",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/paired_state_audit/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\nopen Polynomial\n\nnoncomputable section\n\nnamespace PairedState\n\ntheorem disk_sign (B W I h l : Int)\n    (hfaces : B + W = 2 * I + h - 2)\n    (hsides : 3 * (B - W) = 2 * l - h)\n    (hmatching : B = I + l) :\n    2 * l - h = -3 := by\n  omega\n\ntheorem involution_sum_zero {P : Type*} [Fintype P]\n    (flip : P -> P) (hinv : Function.Involutive flip)\n    (w : P -> Complex) (hflip : ∀ p, w (flip p) = -w p) :\n    (∑ p, w p) = 0 := by\n  classical\n  have hperm := hinv.bijective.sum_comp w\n  have hneg : (∑ p, w p) = -(∑ p, w p) := by\n    calc\n      (∑ p, w p) = ∑ p, w (flip p) := hperm.symm\n      _ = ∑ p, -w p := Finset.sum_congr rfl (fun p _ => hflip p)\n      _ = -(∑ p, w p) := Finset.sum_neg_distrib w\n  linear_combination (1 / 2 : Complex) * hneg\n\ndef normFactor (q d : Nat) : Polynomial Complex :=\n  (1 + X) ^ q * ∑ j ∈ Finset.range d, (1 + X) ^ j\n\ntheorem difference_factor (q d : Nat) :\n    (1 + X : Polynomial Complex) ^ (q + d) - (1 + X) ^ q =\n      X * normFactor q d := by\n  have hgeom :\n      (X : Polynomial Complex) * (∑ j ∈ Finset.range d, (1 + X) ^ j) =\n        (1 + X) ^ d - 1 := by\n    (convert mul_geom_sum (1 + X : Polynomial Complex) d using 1; ring)\n  rw [pow_add]\n  calc\n    (1 + X : Polynomial Complex) ^ q * (1 + X) ^ d - (1 + X) ^ q =\n        (1 + X) ^ q * ((1 + X) ^ d - 1) := by ring\n    _ = (1 + X) ^ q *\n        (X * (∑ j ∈ Finset.range d, (1 + X) ^ j)) := by rw [hgeom]\n    _ = X * normFactor q d := by unfold normFactor; ring\n\ntheorem shifted_pow_zero (n : Nat) :\n    ((1 + X : Polynomial Complex) ^ n).coeff 0 = 1 := by\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      rw [pow_succ, Polynomial.mul_coeff_zero, ih]\n      simp\n\ntheorem normFactor_zero (q d : Nat) :\n    (normFactor q d).coeff 0 = (d : Complex) := by\n  change Polynomial.constantCoeff (normFactor q d) = (d : Complex)\n  simp [normFactor, shifted_pow_zero]\n\ndef amplitude (c : Nat) (q d : Fin c -> Nat) : Polynomial Complex :=\n  ∏ j, normFactor (q j) (d j)\n\ntheorem amplitude_zero (c : Nat) (q d : Fin c -> Nat) :\n    (amplitude c q d).coeff 0 = ((∏ j, d j : Nat) : Complex) := by\n  change Polynomial.constantCoeff (amplitude c q d) = _\n  simp [amplitude, normFactor, shifted_pow_zero]\n\ntheorem oriented_group_factor (c : Nat) (q d : Fin c -> Nat) :\n    (∏ j, C (-Complex.I) *\n      ((1 + X : Polynomial Complex) ^ (q j + d j) - (1 + X) ^ (q j))) =\n      C ((-Complex.I) ^ c) * (X ^ c * amplitude c q d) := by\n  simp_rw [difference_factor]\n  rw [Finset.prod_mul_distrib, Finset.prod_mul_distrib]\n  simp [amplitude, Finset.prod_const, map_pow]\n\ndef grouped {G : Type*} (S : Finset G) (c : G -> Nat)\n    (B : G -> Polynomial Complex) : Polynomial Complex :=\n  ∑ g ∈ S, C ((-Complex.I) ^ c g) * (X ^ c g * B g)\n\ndef minMass {G : Type*} (S : Finset G) (c b : G -> Nat) (m : Nat) : Nat :=\n  ∑ g ∈ S, if c g = m then b g else 0\n\ntheorem coefficient_at_min {G : Type*} (S : Finset G)\n    (c : G -> Nat) (B : G -> Polynomial Complex) (b : G -> Nat) (m : Nat)\n    (hc : ∀ g ∈ S, m ≤ c g)\n    (hB : ∀ g ∈ S, (B g).coeff 0 = (b g : Complex)) :\n    (grouped S c B).coeff m = (-Complex.I) ^ m * (minMass S c b m : Complex) := by\n  classical\n  calc\n    (grouped S c B).coeff m =\n        ∑ g ∈ S, if c g = m then (-Complex.I) ^ m * (b g : Complex) else 0 := by\n      unfold grouped\n      rw [Polynomial.finsetSum_coeff]\n      apply Finset.sum_congr rfl\n      intro g hg\n      rw [Polynomial.coeff_C_mul]\n      by_cases h : c g = m\n      · simp [Polynomial.coeff_X_pow_mul', h, hB g hg]\n      · have hn : ¬ c g ≤ m := by have := hc g hg; omega\n        simp [Polynomial.coeff_X_pow_mul', hn, h]\n    _ = (-Complex.I) ^ m *\n        (∑ g ∈ S, if c g = m then (b g : Complex) else 0) := by\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro g _\n      split_ifs <;> simp\n    _ = (-Complex.I) ^ m * (minMass S c b m : Complex) := by\n      congr 1\n      simp [minMass]\n\ntheorem coefficients_below_min {G : Type*} (S : Finset G)\n    (c : G -> Nat) (B : G -> Polynomial Complex) (m k : Nat)\n    (hc : ∀ g ∈ S, m ≤ c g) (hk : k < m) :\n    (grouped S c B).coeff k = 0 := by\n  classical\n  unfold grouped\n  rw [Polynomial.finsetSum_coeff]\n  apply Finset.sum_eq_zero\n  intro g hg\n  rw [Polynomial.coeff_C_mul]\n  have hn : ¬ c g ≤ k := by have := hc g hg; omega\n  simp [Polynomial.coeff_X_pow_mul', hn]\n\ntheorem minMass_pos {G : Type*} (S : Finset G) (c b : G -> Nat) (m : Nat)\n    (hb : ∀ g ∈ S, 0 < b g)\n    (hmin : ∃ g ∈ S, c g = m) :\n    0 < minMass S c b m := by\n  classical\n  obtain ⟨g, hg, hm⟩ := hmin\n  unfold minMass\n  refine Finset.sum_pos' (fun _ _ => Nat.zero_le _) ?_\n  exact ⟨g, hg, by simpa [hm] using hb g hg⟩\n\ntheorem grouped_nonzero {G : Type*} (S : Finset G)\n    (c : G -> Nat) (B : G -> Polynomial Complex) (b : G -> Nat) (m : Nat)\n    (hc : ∀ g ∈ S, m ≤ c g)\n    (hB : ∀ g ∈ S, (B g).coeff 0 = (b g : Complex))\n    (hb : ∀ g ∈ S, 0 < b g)\n    (hmin : ∃ g ∈ S, c g = m) :\n    grouped S c B ≠ 0 := by\n  have hm := minMass_pos S c b m hb hmin\n  have hm' : (minMass S c b m : Complex) ≠ 0 := by\n    exact_mod_cast (ne_of_gt hm)\n  have hcoeff : (grouped S c B).coeff m ≠ 0 := by\n    rw [coefficient_at_min S c B b m hc hB]\n    exact mul_ne_zero (pow_ne_zero _ (neg_ne_zero.mpr Complex.I_ne_zero)) hm'\n  intro hz\n  apply hcoeff\n  simp [hz]\n\ndef cycleSum {G : Type*} (S : Finset G) (c : G -> Nat)\n    (q d : (g : G) -> Fin (c g) -> Nat) : Polynomial Complex :=\n  ∑ g ∈ S, ∏ j, C (-Complex.I) *\n    ((1 + X : Polynomial Complex) ^ (q g j + d g j) - (1 + X) ^ q g j)\n\ntheorem cycleSum_nonzero {G : Type*} (S : Finset G) (c : G -> Nat)\n    (q d : (g : G) -> Fin (c g) -> Nat)\n    (hne : S.Nonempty) (hd : ∀ g ∈ S, ∀ j, 0 < d g j) :\n    cycleSum S c q d ≠ 0 := by\n  classical\n  obtain ⟨g0, hg0, hmin⟩ := S.exists_min_image c hne\n  have heq : cycleSum S c q d =\n      grouped S c (fun g => amplitude (c g) (q g) (d g)) := by\n    unfold cycleSum grouped\n    exact Finset.sum_congr rfl (fun g _ => oriented_group_factor (c g) (q g) (d g))\n  rw [heq]\n  apply grouped_nonzero S c (fun g => amplitude (c g) (q g) (d g))\n    (fun g => ∏ j, d g j) (c g0) hmin\n  · intro g _\n    exact amplitude_zero (c g) (q g) (d g)\n  · intro g hg\n    exact Finset.prod_pos (fun j _ => hd g hg j)\n  · exact ⟨g0, hg0, rfl⟩\n\nend PairedState\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/paired_state_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: the uniform algebraic core\n\n`Main.lean` uses Lean 4.31.0 and Mathlib. Its declarations are in namespace\n`PairedState`. It does NOT encode a triangulated sphere, the geometric meaning\nof a face, an actual matching, or the predicate that an opposite-edge graph\nis a forest. Those parts of the complete uniform theorem are proved in\n`report.md` and require independent mathematical review.\n\n`disk_sign` quantifies over five arbitrary integers B,W,I,h,l and proves\n2*l-h=-3 from exactly the three disk equations: the unsigned triangle count,\nthe signed edge-side count, and B=I+l. It does not assert that a particular\nembedding or matching satisfies those equations.\n\n`involution_sum_zero` quantifies over every finite type P, an involution\nflip:P->P, and complex weights w satisfying w(flip p)=-w(p). It proves their\nfinite sum is zero. No fixed-point-free or permutation hypothesis is silently\nadded: involutivity supplies bijectivity, and the sign relation is explicit.\nThe construction of this involution on actual partners is Section 2 of\n`report.md`, not a theorem about graphs in this Lean file.\n\n`normFactor(q,d)` is the polynomial in the shifted variable y,\n(1+y)^q * sum_(j<d) (1+y)^j, for arbitrary natural q,d.\n`difference_factor` proves the exact polynomial identity\n(1+y)^(q+d)-(1+y)^q = y*normFactor(q,d).\n`normFactor_zero` proves its constant coefficient is d.\nNeither declaration needs positivity; d=0 is permitted.\n`shifted_pow_zero` is the supporting uniform identity that the constant\ncoefficient of (1+y)^n is 1 for every natural n.\n\n`amplitude(c,q,d)` is the product of those normalized factors over Fin c.\n`amplitude_zero` proves its constant coefficient is the natural product\nof the d-values, embedded in the complex numbers.\n`oriented_group_factor` proves the full product factorization, with phase\n(-i)^c and y^c. These declarations quantify over every natural c and\nevery pair of functions q,d:Fin c->Nat, including the empty product.\nFor an actual group one sets q=Lminus and d=Lplus-Lminus; their nonnegativity\nand strict positivity respectively are established geometrically in the\nreport, not assumed as a formal graph theorem.\n\n`grouped(S,c,B)` is the polynomial sum over an arbitrary finite set S of\nC((-i)^(c(g))) * y^(c(g)) * B(g). It does not identify this sum with the\nactual pair sum; that equality is proved in report Sections 2 and 5.\n`minMass(S,c,b,m)` is the natural sum of b(g) over exactly those g in S\nwhose c-value is m.\n\n`coefficient_at_min` assumes m<=c(g) for g in S and that B(g)'s constant\ncoefficient is the natural number b(g). It proves the coefficient of y^m\nis (-i)^m times minMass. `coefficients_below_min` proves the coefficients\nof every degree k<m vanish. Both results are uniform in the size of S,\nthe natural exponents, the amplitudes, and the minimum m.\n\n`minMass_pos` explicitly assumes all b(g)>0 on S and that some g in S\nhas c(g)=m, and proves minMass>0. `grouped_nonzero` combines those\nhypotheses with the coefficient theorem to prove the grouped polynomial\nis nonzero. A finite nonempty family has such a minimum; the geometric\nproof constructs b(g)=product_C Delta_C>0, rather than obtaining this\npositivity from the compiler.\n\n`cycleSum(S,c,q,d)` is the complete sum of the oriented cycle products\nthemselves, not an unspecified family of normalized amplitudes.\n`cycleSum_nonzero` proves it is nonzero for every nonempty finite S and\nevery natural family c, q, d with all d-values strictly positive. It\nobtains a minimizing group from finiteness, derives the normalized\nconstant coefficients using `amplitude_zero`, and derives their\npositivity from the d-values. Its hypotheses do not assume the desired\nnonzero coefficient, a minimum witness, or a forest. It still requires\nthe geometric identification q=Lminus and d=Delta_C supplied in the report.\n\nThus the formal source discharges the universal disk-equation elimination,\nsign-reversing involution summation, group factorization, and minimum-order\nnoncancellation mechanism. It is genuine uniform algebraic verification,\nnot bounded enumeration, but it is NOT a complete Lean formalization of\nProposition prop:forest-state or of Barnette's conjecture. The claim ledger\nattaches its compiler evidence only to C180_ALGEBRA.\n"
+  },
+  "subject": {
+    "content_hash": "68f48abf80c38c3a5122306548c004cfd3b5aef4e80ef29764c4d92e077ad708",
+    "kind": "claim",
+    "subject_id": "C180_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

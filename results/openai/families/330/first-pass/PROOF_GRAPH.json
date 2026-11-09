@@ -1,0 +1,172 @@
+{
+  "goal": "C9000330",
+  "routes": [
+    {
+      "name": "R_SIGNED_CONTINUATION_FORMAL",
+      "status": "current",
+      "evidence": "research/signed_continuation/report.md"
+    },
+    {
+      "name": "R_LOCAL_LIMIT_EXPLICIT",
+      "status": "current",
+      "evidence": "research/adaptive_support/report.md"
+    },
+    {
+      "name": "R_ADAPTIVE_COLOR_ONLY",
+      "status": "current",
+      "evidence": "research/adaptive_support/report.md"
+    },
+    {
+      "name": "R_INDEPENDENT_SUPPORT",
+      "status": "ruled_out",
+      "retired_because": "Independently sampled supports have the wrong quantifier order; color-only type discrepancy is uniform over all subsequently chosen state data.",
+      "evidence": "research/adaptive_support/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000330": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 330 (A uniformly discrete counterexample to bounded approximation in Lipschitz-free spaces.; papers: A uniformly discrete counterexample to bounded approximation in Lipschitz-free spaces; Lean status: Partially/Comparator formalized (lean/docs/330.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_SIGNED_CONTINUATION", "C_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SIGNED_CONTINUATION": {
+      "statement": "Actual finite matched-walk records imply opposing Lipschitz scalar tests and Lambda >= 2*a0 - 4*L*V*(1/Delta + beta) for arbitrary signed coefficients.",
+      "status": "proved",
+      "depends_on": ["C_CONTINUATION_RECORDS", "C_OPPOSING_TESTS", "C_SIGNED_AVERAGING"],
+      "reviewer_confirmed": true,
+      "evidence": [
+        "research/signed_continuation/report.md",
+        "research/signed_continuation/Main.lean",
+        "research/signed_continuation/statement_fidelity.md",
+        "research/signed_continuation/lean_check.json",
+        "research/signed_continuation/certificates/C_SIGNED_CONTINUATION-07753b02e93573fe.json"
+      ]
+    },
+    "C_CONTINUATION_RECORDS": {
+      "statement": "Absence of a length-n matched walk bounds actual continuation records and forces an exceptional direction at one end of every compatible nearby state transition.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/signed_continuation/report.md", "research/signed_continuation/Main.lean"]
+    },
+    "C_OPPOSING_TESTS": {
+      "statement": "Bump activation and the derived exceptional-direction property give consistent opposing Lipschitz prescriptions, extendible with range [-L,L].",
+      "status": "open",
+      "depends_on": ["C_CONTINUATION_RECORDS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/signed_continuation/report.md", "research/signed_continuation/Main.lean"]
+    },
+    "C_SIGNED_AVERAGING": {
+      "statement": "Signed variation controls each exceptional-state loss; regular incidence averaging and reversal give the stated uniform obstruction.",
+      "status": "open",
+      "depends_on": ["C_OPPOSING_TESTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/signed_continuation/report.md", "research/signed_continuation/Main.lean"]
+    },
+    "C_LOCAL_LIMIT": {
+      "statement": "The deterministic colored regular multigraph sequence has the stated induced rooted colored tree limit (lem:local-limit).",
+      "status": "open",
+      "depends_on": ["C_PERM_EXPLORATION"],
+      "reviewer_confirmed": false,
+      "engineer_proof_complete": true,
+      "proof_kind": "self-contained permutation-exploration and exact deterministic-selection proof",
+      "independent_review": "pending",
+      "evidence": [
+        "research/openai_manuscript/Failure-of-Bounded-Approximation-in-a-Lipschitz-Free-Space-over-a-Uniformly-Discrete-Metric-Space-September-26-2026/build/sections/blocks.tex",
+        "research/adaptive_support/report.md",
+        "research/adaptive_support/exact_certificate.json"
+      ]
+    },
+    "C_PERM_EXPLORATION": {
+      "statement": "One- and two-root induced permutation explorations have collision probability at most c_r^2/(N-c_r), and squared type-frequency error at most 1/N+3 c_r^2/(N-c_r).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_proof_complete": true,
+      "independent_review": "pending",
+      "evidence": ["research/adaptive_support/report.md", "research/adaptive_support/verify.py"]
+    },
+    "C_ADAPTIVE_TRANSFER": {
+      "statement": "Every finite state system simultaneously satisfies beta_m(S,n) <= epsilon_m,n + |S|(H/k)(Delta Q H/k)^n; local convergence and k>2 Delta Q H give n>=2 followed by arbitrarily large graph indices.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "mechanical_status": "closed_kernel",
+      "independent_review": "pending",
+      "evidence": [
+        "research/adaptive_support/report.md",
+        "research/adaptive_support/Main.lean",
+        "research/adaptive_support/statement_fidelity.md",
+        "research/adaptive_support/lean_check.json",
+        "research/adaptive_support/certificates/C_ADAPTIVE_TRANSFER-6cd7576d9e877369.json",
+        "research/adaptive_support/exact_certificate.json"
+      ]
+    },
+    "C_BLOCK_GEOMETRY": {
+      "statement": "The anchor metric, label map, small-ball and coordinate bounds satisfy lem:block-geometry.",
+      "status": "open",
+      "depends_on": ["C_LOCAL_LIMIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Failure-of-Bounded-Approximation-in-a-Lipschitz-Free-Space-over-a-Uniformly-Discrete-Metric-Space-September-26-2026/build/sections/blocks.tex"]
+    },
+    "C_FINITE_SUPPORT": {
+      "statement": "Finite-rank anchor approximation admits the common finite-support perturbation of lem:finite-support.",
+      "status": "open",
+      "depends_on": ["C_BLOCK_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Failure-of-Bounded-Approximation-in-a-Lipschitz-Free-Space-over-a-Uniformly-Discrete-Metric-Space-September-26-2026/build/sections/operators.tex"]
+    },
+    "C_MEASURE_BOUNDS": {
+      "statement": "The affine signed measures obey the total-variation and bump-integral bounds of lem:measure-bounds.",
+      "status": "open",
+      "depends_on": ["C_FINITE_SUPPORT", "C_BLOCK_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Failure-of-Bounded-Approximation-in-a-Lipschitz-Free-Space-over-a-Uniformly-Discrete-Metric-Space-September-26-2026/build/sections/operators.tex"]
+    },
+    "C_RARE_WALKS": {
+      "statement": "For each already fixed operator-dependent support, successive choices of n and m give beta < 1/(20V), as in lem:rare-walks.",
+      "status": "open",
+      "depends_on": ["C_LOCAL_LIMIT", "C_ADAPTIVE_TRANSFER", "C_BLOCK_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "independent_review": "pending for the probabilistic component; block geometry remains separately open",
+      "evidence": [
+        "research/openai_manuscript/Failure-of-Bounded-Approximation-in-a-Lipschitz-Free-Space-over-a-Uniformly-Discrete-Metric-Space-September-26-2026/build/sections/walks.tex",
+        "research/adaptive_support/report.md",
+        "research/adaptive_support/exact_certificate.json"
+      ]
+    },
+    "C_BLOCKS": {
+      "statement": "For each p >= 1 the fixed finite anchor set defeats all finite-rank operators of norm at most p (thm:blocks).",
+      "status": "open",
+      "depends_on": ["C_BLOCK_GEOMETRY", "C_FINITE_SUPPORT", "C_MEASURE_BOUNDS", "C_RARE_WALKS", "C_SIGNED_CONTINUATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Failure-of-Bounded-Approximation-in-a-Lipschitz-Free-Space-over-a-Uniformly-Discrete-Metric-Space-September-26-2026/build/sections/tests.tex"]
+    },
+    "C_COEFFICIENTS": {
+      "statement": "The bounded separated block coefficient isomorphism obeys the stated l1 bounds and gives 2B-BAP (prop:coefficients).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Failure-of-Bounded-Approximation-in-a-Lipschitz-Free-Space-over-a-Uniformly-Discrete-Metric-Space-September-26-2026/build/sections/reduction.tex"]
+    },
+    "C_WEDGE": {
+      "statement": "The metric wedge preserves the block obstructions and has AP from its finite-block retractions and coefficient approximations.",
+      "status": "open",
+      "depends_on": ["C_BLOCKS", "C_COEFFICIENTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Failure-of-Bounded-Approximation-in-a-Lipschitz-Free-Space-over-a-Uniformly-Discrete-Metric-Space-September-26-2026/build/sections/reduction.tex"]
+    },
+    "C_MAIN": {
+      "statement": "The manuscript's countable uniformly discrete unbounded nonproper space has AP and fails every finite BAP bound (thm:main).",
+      "status": "open",
+      "depends_on": ["C_BLOCKS", "C_WEDGE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Failure-of-Bounded-Approximation-in-a-Lipschitz-Free-Space-over-a-Uniformly-Discrete-Metric-Space-September-26-2026/build/sections/introduction.tex"]
+    }
+  }
+}

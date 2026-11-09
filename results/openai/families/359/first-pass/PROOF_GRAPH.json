@@ -1,0 +1,101 @@
+{
+  "goal": "C9000359",
+  "routes": {
+    "R359_CORE_CERTIFICATION": {
+      "goal": "C359_CORE",
+      "obligations": [
+        "C359_TENSOR",
+        "C359_COERCIVITY",
+        "C359_PINCH"
+      ],
+      "status": "active"
+    },
+    "R359_EXPLICIT_PINCH": {
+      "goal": "C359_EXPLICIT_PINCH",
+      "obligations": ["C359_TENSOR", "C359_COERCIVITY"],
+      "status": "active"
+    }
+  },
+  "nodes": {
+    "C9000359": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 359 (Negative Kähler curvature without bounded holomorphic coordinates.; papers: A negatively pinched Kähler threefold without bounded holomorphic coordinates; One-sided negative sectional curvature and the holomorphic Liouville property; Lean status: Partially/Comparator formalized (lean/docs/359.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C359_CORE", "C359_NOVELTY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C359_CORE": {
+      "statement": "Independently certify the threefold Hartogs tensor and eventual negativity on all real two-planes, with fixed admissible bounds and an executable exact certificate. This does not certify either complete manuscript.",
+      "status": "open",
+      "depends_on": ["C359_TENSOR", "C359_COERCIVITY", "C359_PINCH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hartogs_real_planes/proof.md"]
+    },
+    "C359_TENSOR": {
+      "statement": "The gauged Hartogs potential has the tensor blocks in curv:tensor, including the zero section, and curv:real-plane gives the stated real-sectional normalization.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hartogs_real_planes/proof.md", "research/certificates/hartogs_real_planes/verify.py"]
+    },
+    "C359_COERCIVITY": {
+      "statement": "An exact all-plane coercive inequality controls the mixed-block degeneracy and the three-horizontal perturbation, rather than only testing complex lines or sampled planes.",
+      "status": "open",
+      "depends_on": ["C359_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hartogs_real_planes/proof.md", "research/certificates/hartogs_real_planes/exact_certificate.json"]
+    },
+    "C359_PINCH": {
+      "statement": "For fixed 0<c<=C and finite Ce, a finite lambda0(c,C,Ce) makes H_R<0 for every lambda>=lambda0, every x>=0, every cI<=h<=CI, every permitted error tensor, and every real two-plane, as in pinch:positivity.",
+      "status": "open",
+      "depends_on": ["C359_EXPLICIT_PINCH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hartogs_real_planes/proof.md", "research/certificates/hartogs_real_planes/exact_certificate.json"]
+    },
+    "C359_EXPLICIT_PINCH": {
+      "statement": "The quantified theorem in proof.md gives an explicit Lambda(c,C,Ce) and explicit positive Acurv,Bcurv for every admissible real plane, error tensor, and x>=0.",
+      "status": "open",
+      "depends_on": ["C359_TENSOR", "C359_COERCIVITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hartogs_real_planes/proof.md", "research/certificates/hartogs_real_planes/exact_certificate.json", "research/certificates/hartogs_real_planes/verify.py"]
+    },
+    "C359_ALGEBRA": {
+      "statement": "The universal spectral-corner coercivity and scalar absorption/threshold implications in Main.lean hold under their explicit real hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hartogs_real_planes/Main.lean", "research/certificates/hartogs_real_planes/statement_fidelity.md"]
+    },
+    "C359_DIMENSION_FREE": {
+      "statement": "For every horizontal complex dimension n>=1, the same mixed coercivity, explicit threshold and curvature constants hold for all tensors of the displayed algebraic form with the same full Frobenius error bounds. Compress the two horizontal vectors to their at-most-two-dimensional complex span; use dimension-free contraction bounds.",
+      "status": "open",
+      "depends_on": ["C359_EXPLICIT_PINCH", "C359_COERCIVITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hartogs_real_planes/proof.md", "research/certificates/hartogs_real_planes/exact_certificate.json"]
+    },
+    "C359_BASE": {
+      "statement": "The positive-density and potential construction in the threefold sections 04-06 satisfies all hypotheses needed by metric:transfer; not settled by the real-plane mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C359_ONESIDED": {
+      "statement": "The separate one-sided construction preserves curvature through profile changes, shears, and center motion; not settled by the threefold mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C359_NOVELTY": {
+      "statement": "Any proposed publishable strengthening is compared with the staged proof and relevant known results, and independently reviewed; routine identities alone do not complete the campaign.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/certificates/hartogs_real_planes/proof.md"]
+    }
+  }
+}

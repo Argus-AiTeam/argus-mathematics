@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_ARCH_RESOLVENT-10d054cc2188",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/237/first-pass/strip_arch_audit/lean_evidence/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/237/first-pass/strip_arch_audit/lean_evidence/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14426,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/237/first-pass/strip_arch_audit/lean_evidence/Main.lean",
+    "source_sha256": "f7328299cbf477d482ecc0a784a62303b686b35f6dd51d87a79df38c7b2a8f57",
+    "statement_fidelity": "families/237/first-pass/strip_arch_audit/lean_evidence/statement_fidelity.md",
+    "statement_fidelity_sha256": "92eae552768d968a7f6b08096a7010c28a089573949a2a3dc16f24547fa69646",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/strip_arch_audit/lean_evidence/Main.lean",
+    "text": "import Mathlib\n\nnamespace StripArchAudit\n\nsection SourceEquations\n\nvariable {K V0 V1 W0 W1 : Type*}\nvariable [Ring K]\nvariable [AddCommGroup V0] [AddCommGroup V1]\nvariable [AddCommGroup W0] [AddCommGroup W1]\nvariable [Module K V0] [Module K V1] [Module K W0] [Module K W1]\n\ntheorem projected_source\n    (tx : V1 →ₗ[K] V1) (tr : W1 →ₗ[K] W1)\n    (bx : V0 →ₗ[K] V1) (br : W0 →ₗ[K] W1)\n    (q0 : V0 →ₗ[K] W0) (q1 : V1 →ₗ[K] W1)\n    (px : V0) (pr : W0) (hx : V1) (hr : W1)\n    (hp : q0 px = pr)\n    (hx_eq : hx - tx hx = bx px)\n    (hr_eq : hr - tr hr = br pr)\n    (htransfer : forall v, q1 (tx v) = tr (q1 v))\n    (hinsertion : forall p, q1 (bx p) = br (q0 p))\n    (hunique : Function.Injective (fun w : W1 => w - tr w)) :\n    q1 hx = hr := by\n  apply hunique\n  calc\n    q1 hx - tr (q1 hx) = q1 (hx - tx hx) := by rw [map_sub, htransfer]\n    _ = q1 (bx px) := congrArg q1 hx_eq\n    _ = br (q0 px) := hinsertion px\n    _ = br pr := by rw [hp]\n    _ = hr - tr hr := hr_eq.symm\n\ntheorem inserted_source\n    (tx : V1 →ₗ[K] V1) (tr : W1 →ₗ[K] W1)\n    (bx : V0 →ₗ[K] V1) (br : W0 →ₗ[K] W1)\n    (s0 : W0 →ₗ[K] V0) (s1 : W1 →ₗ[K] V1)\n    (px : V0) (pr : W0) (hx : V1) (hr : W1)\n    (hp : s0 pr = px)\n    (hx_eq : hx - tx hx = bx px)\n    (hr_eq : hr - tr hr = br pr)\n    (htransfer : forall w, tx (s1 w) = s1 (tr w))\n    (hinsertion : forall p, bx (s0 p) = s1 (br p))\n    (hunique : Function.Injective (fun v : V1 => v - tx v)) :\n    hx = s1 hr := by\n  apply hunique\n  calc\n    hx - tx hx = bx px := hx_eq\n    _ = bx (s0 pr) := by rw [hp]\n    _ = s1 (br pr) := hinsertion pr\n    _ = s1 (hr - tr hr) := congrArg s1 hr_eq.symm\n    _ = s1 hr - tx (s1 hr) := by rw [map_sub, htransfer]\n\nend SourceEquations\n\ntheorem adjoint_pairing_reduction\n    {L R Lred Rred S : Type*}\n    (insert : Rred -> R) (project : L -> Lred)\n    (glue : L -> R -> S) (glueRed : Lred -> Rred -> S)\n    (hadjoint : forall l r, glue l (insert r) = glueRed (project l) r)\n    (left : L) (right : R) (leftRed : Lred) (rightRed : Rred)\n    (hleft : project left = leftRed) (hright : right = insert rightRed) :\n    glue left right = glueRed leftRed rightRed := by\n  rw [hright, hadjoint, hleft]\n\ntheorem arch_interpolation\n    {F : Type*} [Field F]\n    (N : Nat) (hN : 2 <= N)\n    (p q : Polynomial F) (nodes : Finset F)\n    (hp : p.natDegree <= 2 * N)\n    (hq : q.natDegree <= 2 * N)\n    (hcard : 4 * N - 3 <= nodes.card)\n    (heval : forall x, x ∈ nodes -> p.eval x = q.eval x) :\n    p = q := by\n  apply Polynomial.eq_of_natDegree_lt_card_of_eval_eq' p q nodes heval\n  have hmax : max p.natDegree q.natDegree <= 2 * N := max_le hp hq\n  have hstrict : 2 * N < 4 * N - 3 := by omega\n  exact lt_of_le_of_lt hmax (lt_of_lt_of_le hstrict hcard)\n\nend StripArchAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/strip_arch_audit/lean_evidence/statement_fidelity.md",
+    "text": "# Statement fidelity\n\n`Main.lean` formalizes the dimension-independent algebraic bridge used by\nthe strip arch proof. It does **not** encode the honeycomb lattice, the\nPfaffian, the vacuum polynomial construction, convergence of infinite\npath sums, or the full assertion of Proposition `prop:arch-formula`.\nThose identifications and arguments are in `report.md`; the exact local\ndiagram identities are checked in `verify.py`.\n\nThe declarations described below are `projected_source`,\n`inserted_source`, `adjoint_pairing_reduction`, and `arch_interpolation`,\nall in namespace `StripArchAudit`.\n\n## `StripArchAudit.projected_source`\n\nThe scalar ring `K` is arbitrary. `V0,V1,W0,W1` are arbitrary modules\nover it, with additive commutative groups. The maps `tx,tr` are source\ntransfers on the large and reduced one-source modules; `bx,br` insert a\nsource from the corresponding vacuum modules. `q0,q1` are linear\nprojection maps, not coordinate transposes and not assumed to be\nisometries.\n\nAll vectors and maps are universally quantified. The hypotheses are:\n`q0 px = pr`; the two inhomogeneous source equations\n`hx-tx hx=bx px` and `hr-tr hr=br pr`; projection intertwining for both\nthe transfer and source insertion; and injectivity of `w -> w-tr w`.\nThe conclusion is exactly `q1 hx=hr`. In the manuscript application,\nthe projections are the diagrammatic `S_s^t` in their respective\nsectors. Injectivity follows at the regular mixed lists from the\nrestricted transfer decay, and elsewhere only by rational continuation.\n\n## `StripArchAudit.inserted_source`\n\nThe same types and source equations occur, but `s0,s1` insert the\nreduced vacuum/source modules into the larger ones. The hypotheses are\n`s0 pr=px`, the forward transfer and insertion intertwiners, and\ninjectivity of `v -> v-tx v`. The conclusion is `hx=s1 hr`.\nNo relation between these insertion maps and the projection maps is\nassumed.\n\n## `StripArchAudit.adjoint_pairing_reduction`\n\nThe five types, insertion and projection functions, and pairing\nfunctions are arbitrary. Assuming the adjoint gluing relation\n`glue l (insert r)=glueRed (project l) r`, projected equality of the\nleft source and inserted equality of the right source, the conclusion\nis equality of the two glued values. Bilinearity is not needed for this\nimplication, so the formal statement is more general than the\ndiagrammatic application. In particular there is no hypothesis\n`S_s^t S_s=I`.\n\n## `StripArchAudit.arch_interpolation`\n\nFor every field `F`, every natural number `N>=2`, and any polynomials\n`p,q` of natural degree at most `2N`, a finite set of at least `4N-3`\ndistinct nodes on which they agree forces `p=q`. The finite set type\nitself removes duplicate nodes. The source's trigonometric\nspecializations are shown to be generically distinct in the prose\nproof; that identification is not a Lean hypothesis silently proved\nby the compiler. The `N=0,1` arch base cases are outside this\ndeclaration.\n\nThe mechanical evidence is attached to claim `C_ARCH_RESOLVENT`,\nwhose projection/pairing assertion is proved by the first three\ndeclarations. The fourth declaration additionally certifies the\nabstract uniqueness implication in claim `C_ARCH_INTERPOLATION`;\nit must not be presented as a Lean formalization of the entire arch\nformula.\n"
+  },
+  "subject": {
+    "content_hash": "63efe557204f82a49c01228384fcbf38cd4615424063a846955f2219e6a2d958",
+    "kind": "claim",
+    "subject_id": "C_ARCH_RESOLVENT"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

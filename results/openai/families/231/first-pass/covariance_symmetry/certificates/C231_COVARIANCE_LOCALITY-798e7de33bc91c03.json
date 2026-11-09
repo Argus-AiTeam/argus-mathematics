@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C231_COVARIANCE_LOCALITY-aaee2c867615",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/231/first-pass/covariance_symmetry/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/231/first-pass/covariance_symmetry/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15787,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/231/first-pass/covariance_symmetry/Main.lean",
+    "source_sha256": "a5dac9ceff51ca712ae52bb9554d673f8070619452d279695ea9ece648bedf0d",
+    "statement_fidelity": "families/231/first-pass/covariance_symmetry/statement_fidelity.md",
+    "statement_fidelity_sha256": "e8ac10a730941bbf2c396710c151e48e93300c3dd291331c1eaee942dcbafb8d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/231/first-pass/covariance_symmetry/Main.lean:50:0: warning: automatically included section variable(s) unused in theorem `CovarianceLocality.rank_gap`:\n  [DecidableEq A]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq A] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\n'CovarianceLocality.factorization_of_zero_rank_covariance' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CovarianceLocality.covariance_locality' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/covariance_symmetry/Main.lean",
+    "text": "import Mathlib\n\nnoncomputable section\n\nnamespace CovarianceLocality\n\nabbrev Cube (A : Type*) := A → Bool\n\ndef bit : Bool → ℝ\n  | false => 0\n  | true => 1\n\nvariable {A B : Type*} [Fintype A] [Fintype B]\n  [DecidableEq A] [DecidableEq B]\n\nstructure Law (A B : Type*) [Fintype A] [Fintype B]\n    [DecidableEq A] [DecidableEq B] where\n  mass : Cube A → Cube B → ℝ\n  nonneg : ∀ x y, 0 ≤ mass x y\n  normalized : ∑ x, ∑ y, mass x y = 1\n\ndef expectation (p : Law A B) (f : Cube A → Cube B → ℝ) : ℝ :=\n  ∑ x, ∑ y, p.mass x y * f x y\n\ndef covariance (p : Law A B) (f : Cube A → ℝ) (g : Cube B → ℝ) : ℝ :=\n  expectation p (fun x y => f x * g y) -\n    expectation p (fun x _ => f x) * expectation p (fun _ y => g y)\n\ndef NegAssociated (p : Law A B) : Prop :=\n  ∀ (f : Cube A → ℝ) (g : Cube B → ℝ),\n    Monotone f → Monotone g → covariance p f g ≤ 0\n\ndef rank (x : Cube A) : ℝ := ∑ i, bit (x i)\n\ndef atom (a x : Cube A) : ℝ := if x = a then 1 else 0\n\nomit [DecidableEq A] in\ntheorem atom_bounds (a x : Cube A) : 0 ≤ atom a x ∧ atom a x ≤ 1 := by\n  classical\n  unfold atom\n  split_ifs <;> norm_num\n\nomit [Fintype A] [DecidableEq A] in\ntheorem bit_monotone (i : A) : Monotone (fun x : Cube A => bit (x i)) := by\n  intro x y h\n  have hi := h i\n  cases hx : x i <;> cases hy : y i <;> simp_all [bit]\n  exact False.elim ((by decide : ¬ ((true : Bool) ≤ false)) hi)\n\ntheorem rank_gap {x y : Cube A} (h : x ≤ y) (hne : x ≠ y) :\n    rank x + 1 ≤ rank y := by\n  classical\n  have hex : ∃ i, x i ≠ y i := by\n    by_contra hn\n    push Not at hn\n    exact hne (funext hn)\n  obtain ⟨i, hi⟩ := hex\n  have hgap : 1 ≤ bit (y i) - bit (x i) := by\n    have hxy := h i\n    cases hx : x i <;> cases hy : y i <;> simp_all [bit]\n    exact False.elim ((by decide : ¬ ((true : Bool) ≤ false)) hxy)\n  have hs : bit (y i) - bit (x i) ≤\n      ∑ j, (bit (y j) - bit (x j)) :=\n    Finset.single_le_sum\n      (fun j _ => sub_nonneg.mpr (bit_monotone j h)) (Finset.mem_univ i)\n  rw [Finset.sum_sub_distrib] at hs\n  change bit (y i) - bit (x i) ≤ rank y - rank x at hs\n  linarith\n\ntheorem rank_add_bounded_monotone (f : Cube A → ℝ)\n    (hf : ∀ x, 0 ≤ f x ∧ f x ≤ 1) :\n    Monotone (fun x => rank x + f x) := by\n  intro x y h\n  by_cases he : x = y\n  · subst y\n    exact le_rfl\n  · have hg := rank_gap h he\n    obtain ⟨hfx0, hfx1⟩ := hf x\n    obtain ⟨hfy0, hfy1⟩ := hf y\n    linarith\n\ntheorem rank_sub_bounded_monotone (f : Cube A → ℝ)\n    (hf : ∀ x, 0 ≤ f x ∧ f x ≤ 1) :\n    Monotone (fun x => rank x - f x) := by\n  intro x y h\n  by_cases he : x = y\n  · subst y\n    exact le_rfl\n  · have hg := rank_gap h he\n    obtain ⟨hfx0, hfx1⟩ := hf x\n    obtain ⟨hfy0, hfy1⟩ := hf y\n    linarith\n\ntheorem covariance_add_left (p : Law A B) (f h : Cube A → ℝ)\n    (g : Cube B → ℝ) :\n    covariance p (fun x => f x + h x) g =\n      covariance p f g + covariance p h g := by\n  simp only [covariance, expectation, add_mul, mul_add, Finset.sum_add_distrib]\n  ring\n\ntheorem covariance_sub_left (p : Law A B) (f h : Cube A → ℝ)\n    (g : Cube B → ℝ) :\n    covariance p (fun x => f x - h x) g =\n      covariance p f g - covariance p h g := by\n  simp only [covariance, expectation, sub_mul, mul_sub, Finset.sum_sub_distrib]\n  ring\n\ntheorem covariance_add_right (p : Law A B) (f : Cube A → ℝ)\n    (g h : Cube B → ℝ) :\n    covariance p f (fun y => g y + h y) =\n      covariance p f g + covariance p f h := by\n  simp only [covariance, expectation, mul_add, Finset.sum_add_distrib]\n  ring\n\ntheorem covariance_sub_right (p : Law A B) (f : Cube A → ℝ)\n    (g h : Cube B → ℝ) :\n    covariance p f (fun y => g y - h y) =\n      covariance p f g - covariance p f h := by\n  simp only [covariance, expectation, mul_sub, Finset.sum_sub_distrib]\n  ring\n\ntheorem covariance_sum_left {K : Type*} (p : Law A B) (s : Finset K)\n    (f : K → Cube A → ℝ) (g : Cube B → ℝ) :\n    covariance p (fun x => ∑ i ∈ s, f i x) g =\n      ∑ i ∈ s, covariance p (f i) g := by\n  classical\n  induction s using Finset.induction_on with\n  | empty => simp [covariance, expectation]\n  | @insert i s hi ih =>\n      simp only [Finset.sum_insert hi]\n      rw [covariance_add_left, ih]\n\ntheorem covariance_sum_right {K : Type*} (p : Law A B) (s : Finset K)\n    (f : Cube A → ℝ) (g : K → Cube B → ℝ) :\n    covariance p f (fun y => ∑ j ∈ s, g j y) =\n      ∑ j ∈ s, covariance p f (g j) := by\n  classical\n  induction s using Finset.induction_on with\n  | empty => simp [covariance, expectation]\n  | @insert j s hj ih =>\n      simp only [Finset.sum_insert hj]\n      rw [covariance_add_right, ih]\n\ntheorem rank_covariance (p : Law A B) :\n    covariance p rank rank =\n      ∑ i, ∑ j, covariance p (fun x => bit (x i)) (fun y => bit (y j)) := by\n  unfold rank\n  rw [covariance_sum_left]\n  apply Finset.sum_congr rfl\n  intro i _\n  exact covariance_sum_right p Finset.univ (fun x => bit (x i))\n    (fun j y => bit (y j))\n\ntheorem bounded_covariance_zero (p : Law A B) (hna : NegAssociated p)\n    (hzero : covariance p rank rank = 0)\n    (f : Cube A → ℝ) (g : Cube B → ℝ)\n    (hf : ∀ x, 0 ≤ f x ∧ f x ≤ 1)\n    (hg : ∀ y, 0 ≤ g y ∧ g y ≤ 1) :\n    covariance p f g = 0 := by\n  have hpp := hna (fun x => rank x + f x) (fun y => rank y + g y)\n    (rank_add_bounded_monotone f hf) (rank_add_bounded_monotone g hg)\n  have hpm := hna (fun x => rank x + f x) (fun y => rank y - g y)\n    (rank_add_bounded_monotone f hf) (rank_sub_bounded_monotone g hg)\n  have hmp := hna (fun x => rank x - f x) (fun y => rank y + g y)\n    (rank_sub_bounded_monotone f hf) (rank_add_bounded_monotone g hg)\n  have hmm := hna (fun x => rank x - f x) (fun y => rank y - g y)\n    (rank_sub_bounded_monotone f hf) (rank_sub_bounded_monotone g hg)\n  simp only [covariance_add_left, covariance_sub_left,\n    covariance_add_right, covariance_sub_right] at hpp hpm hmp hmm\n  linarith\n\ntheorem factorization_of_zero_rank_covariance (p : Law A B)\n    (hna : NegAssociated p) (hzero : covariance p rank rank = 0) :\n    ∀ x y, p.mass x y = (∑ v, p.mass x v) * (∑ u, p.mass u y) := by\n  classical\n  intro x y\n  have hc := bounded_covariance_zero p hna hzero (atom x) (atom y)\n    (atom_bounds x) (atom_bounds y)\n  have he : p.mass x y - (∑ v, p.mass x v) * (∑ u, p.mass u y) = 0 := by\n    simpa [covariance, expectation, atom, mul_ite, ite_mul] using hc\n  exact sub_eq_zero.mp he\n\ntheorem covariance_locality (p : Law A B) (hna : NegAssociated p)\n    (hpair : ∀ i j,\n      covariance p (fun x => bit (x i)) (fun y => bit (y j)) = 0) :\n    ∀ x y, p.mass x y = (∑ v, p.mass x v) * (∑ u, p.mass u y) := by\n  apply factorization_of_zero_rank_covariance p hna\n  rw [rank_covariance]\n  simp [hpair]\n\nend CovarianceLocality\n\n#print axioms CovarianceLocality.factorization_of_zero_rank_covariance\n#print axioms CovarianceLocality.covariance_locality\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/covariance_symmetry/statement_fidelity.md",
+    "text": "# Statement fidelity: finite covariance locality\n\nClaim: `C231_COVARIANCE_LOCALITY`.\n\nThe declarations described here are\n`CovarianceLocality.factorization_of_zero_rank_covariance` and\n`CovarianceLocality.covariance_locality` in `Main.lean`.\n\nBoth quantify over arbitrary finite coordinate types A and B, including\nempty types. A Boolean configuration on A is a function `A -> Bool`, with\nthe coordinatewise order `false < true`; likewise for B. `bit false = 0`\nand `bit true = 1`. The decidable-equality instances impose no mathematical\nrestriction on finite types.\n\n`Law A B` is an actual joint probability mass function on the two finite\nBoolean cubes: all masses are nonnegative and their double sum is one.\n`expectation` is its weighted finite sum. `covariance p f g` is exactly\nE[f(X_A)g(X_B)] - E[f(X_A)]E[g(X_B)]. `NegAssociated p` assumes this\ncovariance is nonpositive for EVERY pair of increasing real-valued\nfunctions on the two respective cubes. This is cross-block negative\nassociation, not just nonpositive pairwise covariance. Full negative\nassociation of an ambient binary law implies this hypothesis for any\ntwo disjoint finite blocks.\n\n`rank` is the sum of the 0/1 coordinates. The first theorem assumes zero\ncovariance of the two rank sums. Its conclusion, for EVERY pair of block\nconfigurations x and y, is\n\n    p(x,y) = (sum_v p(x,v)) (sum_u p(u,y)).\n\nThus it states product factorization of the entire finite joint law, not\nonly independence of individual coordinates. Its proof constructs the\nincreasing envelopes `rank +/- f` for arbitrary [0,1]-valued functions,\nuses all four negative-association inequalities, and specializes to\nsingle-configuration indicators.\n\nThe second theorem replaces the rank-covariance hypothesis by zero\ncovariance for EVERY cross-block coordinate pair. `rank_covariance`\nproves that the former is the finite sum of the latter. The same full\nfactorization follows. This explicitly rules out the invalid inference\nfrom pairwise independence alone: negative association remains an\nessential hypothesis.\n\nThere are no assumed mathematical axioms beyond Lean/Mathlib's ordinary\nfoundations and no external theorem declared as an axiom. The probability\nnormalization and positivity are structural hypotheses of `Law`; the\nalgebraic argument actually works without needing them separately.\n\n## What this compilation does not verify\n\nThe compiler does NOT verify real stability implies negative association,\nsymmetric homogenization, the strongly Rayleigh covariance-row estimate,\ncountable extension by cylinder events, finiteness/exhaustion of the\nthreshold-graph balls, posterior locality for Brownian histories,\nmartingale convergence, the joint innovation law, deterministic Picard\ninversion, uniform-to-Wiener coding, Borel measurability, or the final\nevery-input/full-permutation-equivariant sampling theorem. These steps\nare proved or explicitly cited in `theorem.md` and require mathematical\nreview. In particular this is a formal certification of the load-bearing\nFINITE block-independence core, not a formalization of the whole sampler\nand not a claim that the independence principle is new.\n"
+  },
+  "subject": {
+    "content_hash": "508eb0e140ccb93abbf6ee3f3d52242240f80f94c990b82fd16624550a14d6be",
+    "kind": "claim",
+    "subject_id": "C231_COVARIANCE_LOCALITY"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

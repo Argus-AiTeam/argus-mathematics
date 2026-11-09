@@ -1,0 +1,190 @@
+{
+  "goal": "C9000282",
+  "routes": [
+    {
+      "name": "R_SUBTRACTIONS_DERIVATION",
+      "status": "current",
+      "goal": "C9000282",
+      "obligations": ["C_SUBTRACTIONS"],
+      "evidence": "research/two_horizon_subtractions/proof.md"
+    },
+    {
+      "name": "R_SUBTRACTIONS_OBSTRUCTION",
+      "status": "ruled_out",
+      "goal": "C9000282",
+      "obligations": ["C_PREMISE_OBSTRUCTION"],
+      "evidence": "research/two_horizon_subtractions/proof.md",
+      "retired_because": "The conditional polynomial-orbit theorem excludes an obstruction satisfying all exact premises. Independent review remains pending; upstream failure of D:causal-continuation or D:jump is not excluded."
+    }
+  ],
+  "nodes": {
+    "C9000282": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 282 (From scale symmetry to local conformal symmetry in four-dimensional QFT.; papers: Scale and conformal symmetry in four-dimensional operational quantum field theory; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_SUBTRACTIONS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_FRAMEWORK": {
+      "statement": "ass:framework: operational Wightman, locality, spectrum, covariance and homogeneous-field assumptions; assumed, not independently established.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_MAIN": {
+      "statement": "thm:main: physical dimension-two scalar improvement and local conformal symmetry in the original theory.",
+      "status": "open",
+      "depends_on": ["C_FRAMEWORK", "C_IMPROVEMENT"],
+      "reviewer_confirmed": false
+    },
+    "C_SPECTRAL": {
+      "statement": "F:old-domain -> F:strip-comparison -> F:spectral-comparison.",
+      "status": "open",
+      "depends_on": ["C_FRAMEWORK"],
+      "reviewer_confirmed": false
+    },
+    "C_WARD_MEASURE": {
+      "statement": "N:Ward-proposition -> N:measure-proposition -> N:moment-comparison and D:measure-input.",
+      "status": "open",
+      "depends_on": ["C_FRAMEWORK", "C_SPECTRAL"],
+      "reviewer_confirmed": false
+    },
+    "K_EG_SPLITTING": {
+      "statement": "External finite-order local causal splitting theorem; source read, independent citation attribution pending. It does not imply the fixed-output restriction on its own.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_horizon_subtractions/epstein_glaser_1973.pdf"]
+    },
+    "K_TUBE": {
+      "statement": "External Fourier-Laplace cone/tube theorem; source read, independent citation attribution pending.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_horizon_subtractions/bros_iagolnitzer_1973.pdf"]
+    },
+    "K_SEMILOCAL": {
+      "statement": "Known failure of the on-shell-amplitude shortcut; not evidence of a nonseparated remainder in this channel.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_horizon_subtractions/proof.md"]
+    },
+    "C_CAUSAL": {
+      "statement": "D:causal-continuation: the common covariant splitting, fixed-virtuality restrictions, uniform finite growth, spectral support, relative sign and common gap. Unreviewed extra manuscript arguments remain.",
+      "status": "open",
+      "depends_on": ["C_FRAMEWORK", "K_EG_SPLITTING", "K_TUBE"],
+      "reviewer_confirmed": false
+    },
+    "C_PLANE": {
+      "statement": "D:plane-matrix, including fixed-normal pullback.",
+      "status": "open",
+      "depends_on": ["C_WARD_MEASURE", "C_CAUSAL"],
+      "reviewer_confirmed": false
+    },
+    "C_JUMP": {
+      "statement": "D:jump: both horizon jumps have the specified Hilbert-wave formula with the same nonzero normalization.",
+      "status": "open",
+      "depends_on": ["C_PLANE", "C_WARD_MEASURE"],
+      "reviewer_confirmed": false
+    },
+    "C_COVARIANT_REMAINDER": {
+      "statement": "Common-order Cauchy subtraction intertwines the z-independent polynomial null-rotation action, forcing polynomial r dependence. Engineer proof gives the conservative bound 2t+2+2e; independent review pending.",
+      "status": "open",
+      "depends_on": ["C_CAUSAL", "K_TUBE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_horizon_subtractions/proof.md", "research/two_horizon_subtractions/exact_certificate.json"]
+    },
+    "C_HILBERT_REGULARIZATION": {
+      "statement": "For every d>=2, the cutoff prescription is H-valued and continuous and its difference from the Cauchy wave is an H-valued transverse polynomial of degree at most 2d+2. Engineer-supported; independent review pending.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_horizon_subtractions/proof.md", "research/two_horizon_subtractions/exact_certificate.json"]
+    },
+    "C_TWO_HORIZON": {
+      "statement": "D:two-horizon follows conditionally from the common gap, common jump normalization, covariance, wave regularization and output-frame rotation, including the transverse axes. Exact algebra replayed; independent review pending.",
+      "status": "open",
+      "depends_on": ["C_CAUSAL", "C_JUMP", "C_COVARIANT_REMAINDER", "C_HILBERT_REGULARIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_horizon_subtractions/proof.md", "research/two_horizon_subtractions/exact_certificate.json"]
+    },
+    "C_SUBTRACTIONS": {
+      "statement": "D:subtractions: continuous Hilbert-wave regularizations and uniformly finite separated P_q+P_r ambiguity. Conditional Engineer derivation recorded, not verification of the upstream QFT premises.",
+      "status": "open",
+      "depends_on": ["C_TWO_HORIZON", "C_HILBERT_REGULARIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_horizon_subtractions/proof.md", "research/two_horizon_subtractions/exact_certificate.json", "research/two_horizon_subtractions/verify.py"]
+    },
+    "C_PREMISE_OBSTRUCTION": {
+      "statement": "A matrix satisfying all precise premises but violating separation is excluded by the conditional Engineer theorem; the refutes judgement is not a refutation of a manuscript assertion. Independent review pending.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/two_horizon_subtractions/proof.md"]
+    },
+    "C_RADIAL": {
+      "statement": "D:radial-identity after two annular tests remove the separated terms.",
+      "status": "open",
+      "depends_on": ["C_SUBTRACTIONS", "C_WARD_MEASURE"],
+      "reviewer_confirmed": false
+    },
+    "C_EXACT_TAIL": {
+      "statement": "D:exact-tail and D:tail-relations from Hankel transfer and inherited spectral comparisons.",
+      "status": "open",
+      "depends_on": ["C_SPECTRAL", "C_WARD_MEASURE"],
+      "reviewer_confirmed": false
+    },
+    "C_PLATEAU": {
+      "statement": "D:plateau-estimates and the weighted-tail expansion.",
+      "status": "open",
+      "depends_on": ["C_EXACT_TAIL", "C_HILBERT_REGULARIZATION"],
+      "reviewer_confirmed": false
+    },
+    "C_CRITICAL": {
+      "statement": "D:critical-comparison / D:order-zero: logarithmic pairing and positivity eliminate d_l.",
+      "status": "open",
+      "depends_on": ["C_RADIAL", "C_EXACT_TAIL", "C_PLATEAU", "C_WARD_MEASURE"],
+      "reviewer_confirmed": false
+    },
+    "C_CONE_CHARGES": {
+      "statement": "C:single-insertion, C:canonical-Pi, C:Q-zero: local charge forms and zero residual dilation charge.",
+      "status": "open",
+      "depends_on": ["C_CRITICAL", "C_SPECTRAL"],
+      "reviewer_confirmed": false
+    },
+    "C_MODULAR": {
+      "statement": "C:cone-modularity and C:time-mobius: actual modular groups and time-Mobius action.",
+      "status": "open",
+      "depends_on": ["C_CONE_CHARGES", "C_FRAMEWORK"],
+      "reviewer_confirmed": false
+    },
+    "C_EXTRACTION": {
+      "statement": "E:accessible-scalar, E:bounded-approximation and E:accessible-products.",
+      "status": "open",
+      "depends_on": ["C_MODULAR", "C_CRITICAL"],
+      "reviewer_confirmed": false
+    },
+    "C_RETURN": {
+      "statement": "P:short-products, P:pair-representation and P:return identify l=S.",
+      "status": "open",
+      "depends_on": ["C_EXTRACTION", "C_MODULAR"],
+      "reviewer_confirmed": false
+    },
+    "C_RECONSTRUCTION": {
+      "statement": "R:mixed-products, R:pure-products, R:causal-solution and R:affiliation reconstruct the physical field in the original net.",
+      "status": "open",
+      "depends_on": ["C_RETURN", "C_EXTRACTION", "C_SPECTRAL"],
+      "reviewer_confirmed": false
+    },
+    "C_IMPROVEMENT": {
+      "statement": "R:improvement, R:Ward-Lie and R:compatible-families.",
+      "status": "open",
+      "depends_on": ["C_RECONSTRUCTION", "C_CONE_CHARGES"],
+      "reviewer_confirmed": false
+    }
+  }
+}

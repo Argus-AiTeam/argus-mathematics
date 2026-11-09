@@ -1,0 +1,72 @@
+{
+  "certificate_kind": "exact_algebra_and_all_depth_induction",
+  "claim": "C_EXACT_ALGEBRA",
+  "supports_prose_claims": ["C_FRAME_EXTENSION", "C_LIFT", "C_PACKING", "C_SAMPLING"],
+  "dimension": 3,
+  "layer_codimension": 1,
+  "inverse_jacobian_power": 3,
+  "overlap_growth_power": 2,
+  "dyadic_base": 2,
+  "depth_quantifier": "every natural N, not a bounded search",
+  "geometric_sum": {
+    "ratio": [1, 2],
+    "sum_bound": [2, 1],
+    "partial_sum_coefficients_in_z": [[2, 1], [-2, 1]],
+    "z_meaning": "2^(-N)",
+    "next_z_multiplier": [1, 2],
+    "next_term_coefficients_in_z": [[0, 1], [1, 1]]
+  },
+  "frame_transport": {
+    "matrix": "Id+(v-w)w^T/(w dot w)",
+    "hypotheses": ["w is nonzero", "v dot w > 0"],
+    "image_identity": "T(v,w)w=v",
+    "determinant_identity": "det(T(v,w))=(v dot w)/(w dot w)",
+    "denominator_cleared_identity": "det(d Id+(v-w)w^T)=d^2(v dot w), d=w dot w"
+  },
+  "packing": {
+    "slab_count": 6,
+    "tangential_dimension": 2,
+    "projection_length_factor": 2,
+    "volume_coefficient": 24,
+    "hypotheses": [
+      "0<lambda<=s",
+      "simplex interiors are disjoint",
+      "volume(D)>=v lambda^3",
+      "diam(D)<=d lambda",
+      "D is contained in 0<t<b lambda",
+      "y in B(x_D,A s)"
+    ],
+    "count_bound": "24 b (A+d)^2/v * (s/lambda)^2"
+  },
+  "radial_collapse": {
+    "hypotheses": ["0<a<b<1", "a<r<=b"],
+    "middle_formula": "b(r-a)/(b-a)",
+    "angular_deficit": "1-psi(r)/r=a(b-r)/(r(b-a))"
+  },
+  "energy_constant": {
+    "formula": "48 J b (A+d)^2/(v m^3) * (P L/m)^p",
+    "allowed_parameters": ["J", "b", "A", "d", "v", "m", "P", "L", "p"],
+    "excluded_parameters": ["s", "lambda", "h", "N"],
+    "hypotheses": [
+      "the finite reference atlas constructed in proof.md exists",
+      "m is a common positive lower singular-value bound",
+      "L bounds normalized first derivatives",
+      "J bounds the number of chart pieces per simplex",
+      "P bounds all radial-collapse Lipschitz constants"
+    ]
+  },
+  "mathematical_proof": "proof.md",
+  "formal_source": "Main.lean",
+  "formal_reading": "statement_fidelity.md",
+  "jacobian_operation": "matrix.symbolic.determinant.compute",
+  "jacobian_payload": "../jacobian/scalar-expansion.payload.json",
+  "jacobian_output": "../jacobian/scalar-expansion.output.json",
+  "jacobian_status": "../jacobian/scalar-expansion.status.json",
+  "limitations": [
+    "The replay checks exact identities and the induction, not the existence of the geometric atlas.",
+    "Topology and analytic gluing are proved in prose using explicitly cited classical theorems.",
+    "A compiler verdict belongs only to C_EXACT_ALGEBRA and must be obtained by lean_evidence.",
+    "Independent Reviewer acceptance is not asserted.",
+    "Neither manuscript main theorem is certified."
+  ]
+}

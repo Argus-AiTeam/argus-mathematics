@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FINITE_HOLDER-bcfd85ed7b9c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/346/first-pass/signed_excess_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/346/first-pass/signed_excess_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14938,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/346/first-pass/signed_excess_audit/Main.lean",
+    "source_sha256": "398660b5bececa80cc3ce7bacac0052a4ef9a8bf03ef1e4f5ec3c326b21b8469",
+    "statement_fidelity": "families/346/first-pass/signed_excess_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "0f23cdb6add8624595c625b0ade577afc44c7907e34d369ba1995510018c228d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/signed_excess_audit/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace SignedExcessAudit\n\ntheorem finite_weighted_flux_fourth\n    {ι : Type*} (s : Finset ι) (w v q : ι → ℝ)\n    (hw : ∀ i ∈ s, 0 ≤ w i) :\n    (∑ i ∈ s, w i * v i * q i) ^ 4 ≤\n      (∑ i ∈ s, w i * v i ^ 4) *\n        (∑ i ∈ s, w i * q i ^ 2) ^ 2 * (∑ i ∈ s, w i) := by\n  have h₁ :\n      (∑ i ∈ s, w i * v i * q i) ^ 2 ≤\n        (∑ i ∈ s, w i * v i ^ 2) * (∑ i ∈ s, w i * q i ^ 2) := by\n    apply Finset.sum_sq_le_sum_mul_sum_of_sq_le_mul s\n    · intro i hi\n      exact mul_nonneg (hw i hi) (sq_nonneg (v i))\n    · intro i hi\n      exact mul_nonneg (hw i hi) (sq_nonneg (q i))\n    · intro i hi\n      exact le_of_eq (by ring)\n  have h₂ :\n      (∑ i ∈ s, w i * v i ^ 2) ^ 2 ≤\n        (∑ i ∈ s, w i * v i ^ 4) * (∑ i ∈ s, w i) := by\n    apply Finset.sum_sq_le_sum_mul_sum_of_sq_le_mul s\n    · intro i hi\n      exact mul_nonneg (hw i hi) (by positivity)\n    · exact hw\n    · intro i hi\n      exact le_of_eq (by ring)\n  have hV : 0 ≤ ∑ i ∈ s, w i * v i ^ 2 :=\n    Finset.sum_nonneg fun i hi => mul_nonneg (hw i hi) (sq_nonneg (v i))\n  have hE : 0 ≤ ∑ i ∈ s, w i * q i ^ 2 :=\n    Finset.sum_nonneg fun i hi => mul_nonneg (hw i hi) (sq_nonneg (q i))\n  calc\n    (∑ i ∈ s, w i * v i * q i) ^ 4 =\n        ((∑ i ∈ s, w i * v i * q i) ^ 2) ^ 2 := by ring\n    _ ≤ ((∑ i ∈ s, w i * v i ^ 2) *\n        (∑ i ∈ s, w i * q i ^ 2)) ^ 2 := by\n      gcongr\n    _ = (∑ i ∈ s, w i * v i ^ 2) ^ 2 *\n        (∑ i ∈ s, w i * q i ^ 2) ^ 2 := by ring\n    _ ≤ ((∑ i ∈ s, w i * v i ^ 4) * (∑ i ∈ s, w i)) *\n        (∑ i ∈ s, w i * q i ^ 2) ^ 2 :=\n      mul_le_mul_of_nonneg_right h₂ (sq_nonneg _)\n    _ = (∑ i ∈ s, w i * v i ^ 4) *\n        (∑ i ∈ s, w i * q i ^ 2) ^ 2 * (∑ i ∈ s, w i) := by ring\n\ntheorem interpolation_exponent (m p : ℝ) :\n    2 / p + (1 - 2 / p) * (1 - m / 2) =\n      1 - m * (1 / 2 - 1 / p) := by ring\n\ntheorem uniform_concentration_exponent (m : ℕ) :\n    (0 : ℝ) < 1 / (2 * ((m : ℝ) + 1)) ∧\n      (1 / 2 : ℝ) ≤ 1 - (m : ℝ) / (2 * ((m : ℝ) + 1)) := by\n  constructor\n  · positivity\n  · have hm : (0 : ℝ) < 2 * ((m : ℝ) + 1) := by positivity\n    have h : (m : ℝ) / (2 * ((m : ℝ) + 1)) ≤ 1 / 2 := by\n      apply (div_le_iff₀ hm).2\n      nlinarith\n    linarith\n\nend SignedExcessAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/signed_excess_audit/statement_fidelity.md",
+    "text": "# Finite algebra in the signed-excess concentration bridge\n\n`SignedExcessAudit.finite_weighted_flux_fourth` quantifies over an arbitrary\ntype, an arbitrary finite subset, nonnegative real weights, and arbitrary real\narrays `v` and `q`. It proves\n\n\\[\n(\\sum w_i v_i q_i)^4\n\\leq (\\sum w_i v_i^4)(\\sum w_i q_i^2)^2(\\sum w_i).\n\\]\n\nThere are no positivity hypotheses on the height or flux arrays, and zero\nweights and the empty set are allowed. The weights represent the entire\nweighted mass, not Jacobian-weighted mass; hence the algebra does not discard\nsingular projected mass. The proof uses two weighted Cauchy--Schwarz\ninequalities. Restricting the finite set gives the same inequality on an\nexceptional set.\n\n`interpolation_exponent` is the exact real algebraic exponent identity in\nthe interpolation of the dyadic increment bounds.\n`uniform_concentration_exponent` proves positivity of\n`1/(2(m+1))` and the lower bound `1/2` for `1-m/(2(m+1))`, for every natural\ndimension (including zero as a harmless algebraic extension).\n\n**Fidelity boundary:** These declarations do not encode varifolds, stationarity,\nprojection fibers, infinite sums, Gaussian localization, or publication\nnovelty. The fourth-moment inequality is an algebraic special case of the\nanalytic Holder step; its use with a geometric fourth-moment estimate is\nrestricted to dimensions where that moment is admissible. General dimensions\nin the mathematical proof use `p=2(m+1)/m`, not an inadmissible fourth moment.\nA successful compiler run certifies only claim `C_FINITE_HOLDER` and these\nexplicit algebraic supporting declarations. It does not certify\n`C_CONCENTRATION`, `C_LT_CONFIG`, either main regularity theorem, or the new\nendpoint analytic refinement. Those require independent mathematical review.\n"
+  },
+  "subject": {
+    "content_hash": "84a1cf1c6efb90a01895f58d93bcd0f7a0d3edf6bfb8cbefc7b17b1831778086",
+    "kind": "claim",
+    "subject_id": "C_FINITE_HOLDER"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

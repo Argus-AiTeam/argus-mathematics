@@ -1,0 +1,478 @@
+  A COUNTEREXAMPLE TO THE SHUB ENTROPY
+              CONJECTURE
+
+       Abstract. This is an expository note. For every finite r ≥ 1, we
+       construct a non-invertible C r self-map of S 1 × S2 × S2 × S2 with
+       zero topological entropy and eigenvalue 2 for f∗ on the second
+       homology group. Every orbit either converges to a fixed point or
+       is asymptotic to an orbit of period 20. The idea is to start with
+       z 7→ z 2 on the Riemann sphere (the first S2 factor) and then destroy
+       the entropy of the doubling map on the equator by pushing all
+       poinst either to the north pole or to the south pole in a non-uniform
+       fashion via a computer program like algorithm. This algorithm
+       is using the “clock” variable t ∈ S 1 which plans how to push z
+       to the north and auxiliary “memory and amplification” variables
+       (w1 , w2 ) ∈ S2 × S2 which execute this push. If the clock “stalls”
+       then the push never happens and the orbits sinks to the south.
+       This algorithm can be realized as a single explicit C r map. The
+       low regularity of the map is due to roughness of perturbations
+       which are used to set the pushing algorithm in motion. One can
+       replace S2 × S2 by any 4-manifold as auxiliary variables have local
+       nature. With some extra care one can reduce the dimension of
+       auxiliary variable to 3 and obtain a similar map on S 1 × S2 × S3 .
+          The example was constructed by undisclosed model by Ope-
+       nAI [O26] and released on the historic slop-drop day, October 6,
+       2026. I claim no credit for the construction, I used GPT Sol 6.1 to
+       simplify and help me understand OpenAI proof. It is completely
+       elementary and could be understood by anyone with basic calculus
+       knowledge.
+          Andrey Gogolev.
+
+
+
+                             1. Introduction
+  Michael Shub asked whether
+                              htop (f ) ≥ log ρ(f∗ )
+            1
+for every C self-map of a closed smooth manifold, where f∗ is the in-
+duced action on homology [S74, S06]. Celebrated work of Yosef Yomdin
+establishes this conjecture for C ∞ maps [Y87]. Instead of surveying
+the history of the problem let me refer the reader to the beautiful
+expository survey by Anatole Katok [K86] “A Conjecture about En-
+tropy”, which captures perfectly the state of the art pre-Yomdin. Yosef
+  Date: October 11, 2026.
+                                        1
+2     A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE
+
+Yomdin recently passed away and didn’t see his old work confirmed to
+be optimal. I take this opportunity to translate an excerpt from his
+reminiscences [Y26]:
+       “The most remarkable thing about the Max Planck In-
+       stitute was that it was undoubtedly a place of pilgrimage
+       for all the world’s best mathematicians. I spoke with
+       M. Gromov there several times, and these conversations
+       helped me greatly in my work. A. Katok also visited
+       once. I told him about my work, and he explained sev-
+       eral problems in dynamics that he thought I might try to
+       approach. He particularly emphasized the Entropy Con-
+       jecture, which I began to think about more and more from
+       then on. Three years later, by then at IHES, I managed
+       to solve this problem.”
+   From now on lets fix the target regularity r ≥ 1 and proceed to
+construct the posited C r map f : M → M , where M = S 1 ×S2 ×S2 ×S2 .
+We will use (t, z, w1 , w2 ) as coordinates on M and view t ∈ S 1 = R/20Z
+as the clock coordinate. We identify S2 with the extended complex
+plane C b via the standard stereographic projection, so that |z| = 1
+is the equator, where the entropy is concentrated. We denote by N
+for the north ∞ pole and by S the south pole 0 ∈ C. We also do
+the same identification for remaining S2 factors and view w1 , w2 ∈ C,
+these are auxiliary coordinates which will always settle at a fixed point
+(and to avoid confusion we won’t call 0 the south pole when auxiliary
+coordinates are considered).
+   Once the map is defined, it will be clear that it is homotopic to
+(t, z, w1 , w2 ) 7→ (t, z 2 , 0, 0) hence ρ(f∗ ) = 2.
+
+      2. Asymptotic behaviour and vanishing entropy
+  We will choose a sufficiently large number R > 2 (4.1) and construct
+f so that every orbit either converges to a point of AS or is asymptotic
+to a periodic orbit in AN , where
+                     AN = S 1 × {N } × {0} × {0}
+and
+             AS = {(10, S, 0, 0)}
+                    ∪ {(10, S, w1 , 0) : |w1 | = 2R}
+                    ∪ {(10, S, 0, w2 ) : |w2 | = 2R}
+                    ∪ {(10, S, w1 , w2 ) : |w1 | = |w2 | = 2R}.
+        A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE                    3
+
+We call these the north and south attractors. The north attractor AN
+will be a periodic circle, with f (t, N, 0, 0) = (t + 1, N, 0, 0). The south
+attractor AS will be fixed pointwise and consists of one isolated point,
+two circles, and a torus. It is not an attractor in the usual sense —
+points arbitrarily close to AS can escape to AN .
+   It already implies vanishing entropy. Every f -invariant probability
+measure µ is supported on AS ∪ AN . Otherwise Poincaré recurrence
+gives a recurrent point x ∈ supp µ \ (AS ∪ AN ). The variational prin-
+ciple [M76] therefore gives
+                        htop (f ) = sup hµ (f ) = 0.
+                                     µ
+
+Hence our goal is to show that for any x ∈ M we have f n (x) → AS ∪AN ,
+n → ∞.
+
+                             3. Clockwork
+   The clock t-coordinate will alway increase on S 1 = R/20Z unless
+t = 10. For |z| ≥ 3/4, the clock dynamics on S 1 is unform rotation
+t 7→ t + 1. For |z| ≤ 1/2, it is t 7→ t + b(t), where we choose a smooth
+function b : S 1 → [0, 1] satisfying the following conditions,
+          b(t) = 0 ⇐⇒ t = 10,            b(t) = 1 if |t − 10| ≥ 2,
+(3.1)
+                      t + b(t) ≤ 10 (8 ≤ t ≤ 10).
+Here we idetify S 1 with the interval [0, 20]. The last condition means
+that 10 is a semi-stable fixed point and the clock t 7→ t+b(t) will “stall”
+at 10.
+  Between these two regions we interpolate smoothly:
+                     h(t, z) = b(t) + (1 − b(t))e(z),
+
+
+
+
+                                Figure 1
+4       A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE
+
+where e : S2 → [0, 1] is a smooth radial function which vanishes for
+|z| ≤ 1/2 and equals one for |z| ≥ 3/4. The dynamics on the first
+coordinate is then defined by
+                     tn+1 = tn + h(tn , zn )      (mod 20).
+Thus the clock advances by one outside (8, 12), and also whenever the
+main coordinate lies on or outside the circle of radius 3/4. It can slow
+down only near 10 when |z| < 3/4 and could stall at 10 if |z| < 1/2.
+   We use t̄n for a real lift of the clock coordinate tn . That is, if b̄ : R →
+[0, 1] be the 20-periodic lift of b, then
+                      h̄(t, z) = b̄(t) + (1 − b̄(t))e(z),
+(3.2)
+                         t̄n+1 = t̄n + h̄(t̄n , zn ).
+Every orbit has one of the following two behaviors.
+    Stalled clock. The sequence t̄n is bounded above. In this case t̄n →
+t̄∗ = 20k + 10 for some k ∈ Z. We will see that in this case orbits
+converge to AS
+    Ticking clock. We have t̄n → +∞, so the clock keeps going around
+the circle. A full circle takes at least 20 iterates and could take much
+longer due to a slow down at 10 (mod 20). Now we roughly describe
+the purpose of different time intervals on the clock which are used to
+interact with the auxiliary variables (w1 , w2 ) to execute the push to N
+after which the orbit converges to the periodic circle AN .
+     (1) Reset: [0, 3]. Both auxiliary coordinates are set to zero, clearing
+          the “memory.”
+     (2) Preparation: [4, 7]. Tiny “signals” si are added to the auxil-
+          iary variables wi , i = 1, 2. Each signal records the direction
+          of the square of the z-coordinate at its predicted future push
+          time. The signal is scaled down according to the predicted delay
+          before activation. The signal function is merely C r due to its
+          sensitive dependence on the initial point near the stalled clock
+          regime.
+     (3) Amplification: [4, 15]. Amplification of the signals occur in the
+          auxiliary variables through the possibly long wait near 10. It
+          increases a small signal without changing its direction. If the
+          clock stalls, the signal is never used to correct the z-coordinate.
+     (4) Activation and Correction: [15, 18]. Each auxiliary variable is
+          read at most once and used to push the main variable z to
+          N . The stored correction in the auxiliary variables has same
+          direction as the square of z, so it increases the absolute value
+          of z. On the subinterval [16, 17] at least one auxiliary variable
+          is read and is strong enough to push z into the basin of N .
+        A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE                         5
+
+   (5) Dynamics in the basin of AN . After the push the z-coordinate
+       tends to the north pole, the clock advances by one at every
+       step, and no new signals are prepared. The next reset sets both
+       auxiliary variables permanently to 0, and the orbit becomes
+       asymptotic to the periodic circle AN .
+
+                       4. The signal preparation
+  Here we explain the construction of the signals si sent to the auxiliary
+variables during preparation. To determine their direction and mag-
+nitude, we first follow the dynamics without corrections to the main
+coordinate up to the predicted activation time.
+  We start with the initial dynamics G : R × S2 → R × S2 given by
+         G(t, z) = (t + h̄(t, z), z 2 ),      Gm (t, z) = (Tm (t, z), zm ).
+  Choose R so that
+(4.1)                              R > ∥DG∥r .
+We write ∥ · ∥ for the uniform norm.
+Remark 4.1. We note that ∥DG∥ ≥ 2, so R > 2r ≥ 2. If we use the
+product of the standard metric on R and a standard round metric on
+S2 then one can arrange ∥DG∥ < 4.
+  Choose smooth β1 , β2 : S 1 → [0, 1] and intervals J1 , J2 such that
+              supp βi ⊂ Ji ⊂ (15, 18),          |Ji | < 1,   i = 1, 2,
+                    max{β1 (t), β2 (t)} = 1,      16 ≤ t ≤ 17.
+These functions will be responsible for activating the auxiliary vari-
+ables and providing the push toward N . Also define the non-periodic
+functions βi0 : R → [0, 1] by
+                            (
+                             βi (t mod 20), 0 < t < 20,
+                  βi0 (t) =
+                             0,             t∈/ (0, 20).
+  Choose a smooth function α : R → [0, 1] such that
+                    supp α ⊂ (4, 7),         α = 1 on [5, 6].
+Choose a smooth cut-off χ : [0, ∞) → [0, 1] such that
+ χ(|z|) = 1 (1/2 ≤ |z| ≤ 2),               χ(|z|) = 0 (|z| ≤ 1/3 or |z| ≥ 3).
+  Since |Ji | < 1, for each fixed (t, z), there is at most one integer m ≥ 1
+with βi0 (Tm (t, z)) > 0. We define the signal functions si : S 1 × S2 → C
+6       A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE
+
+using the representative 0 ≤ t < 20 of the clock coordinate.
+                                               2m+1
+               
+                             1−m 0               z
+                 α(t)χ(|z|)R    βi (Tm (t, z))         , if m exists,
+               
+   si (t, z) =                                  |z|
+               
+               0,                                       otherwise.
+Equivalently, since at most one summand is non-zero at each point,
+                                                          2m+1
+                                 X
+                                       1−m 0               z
+(4.2)     si (t, z) = α(t)χ(|z|)     R    βi (Tm (t, z))         .
+                                 m≥1
+                                                          |z|
+This series representation will be used to prove C r regularity. The non-
+periodic cut-off βi0 ensures that only the predicted visit in the current
+clock turn contributes to the signal.
+
+                          5. The counterexample
+    Choose a smooth p : [0, ∞) → [0, 2] satisfying
+          p(u) = u (0 ≤ u ≤ 1),              p(u) = 2 (2 ≤ u ≤ 3R),
+             p is increasing on [1, 2],           p(u) = 0 (u ≥ 4R).
+For w ∈ C \ {0} let
+                                    w
+                 P (w) = p(|w|)        ,      P (∞) = P (0) = 0.
+                                   |w|
+Thus we have a smooth map P : S2 → C ⊂ S2 with |P | ≤ 2, and
+P (w) = w on the closed unit disk. We will use
+(5.1)                  p(u) ≥ min(u, 1),          0 ≤ u ≤ 3R.
+Choose a smooth γ : S 1 → [0, R] such that
+             γ = 0 on [0, 3] ∪ [19, 20],             γ = R on [4, 18].
+This function is responsible for setting the auxiliary variables to zero
+after each clock turn and for amplification of the signals on [4, 18].
+Define the correction function
+         C(t, w1 , w2 ) = 2β1 (t)P (w1 ) + 2β2 (t)P (w2 ),           |C| ≤ 8.
+Our map f : (t, z, w1 , w2 ) 7→ (t′ , z ′ , w1′ , w2′ ) is finally defined by
+                     t′ = t + h(t, z),
+(5.2)               z ′ = z 2 + C(t, w1 , w2 ),
+                    wi′ = γ(t)P (wi ) + si (t, z),       i = 1, 2.
+At z = N , set z ′ = N . Note that |wi′ | ≤ 2R + 1 < 3R. Thus every
+auxiliary variable lies in the disk after the first iteration: |w| < 3R.
+        A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE                         7
+
+  A visit to [0, 3] resets both auxiliary coordinates to 0. Signals are
+added during (4, 7), and corrections to z occur only during (15, 18).
+
+                               6. Regularity
+  The main component of (5.2) is smooth at N . In the local chart
+ζ = 1/z, it is given by
+
+                           ′         ζ2
+                          ζ =                       .
+                              1 + C(t, w1 , w2 )ζ 2
+Since |C| ≤ 8, the denominator is non-zero for |ζ| < 1/4.
+   Hence all ingredients in the definition of f are smooth except the
+signal functions si , i = 1, 2.
+   The chain rule gives
+(6.1)               ∥Dj Gm ∥ ≤ Cj ∥DG∥jm ,          j ≥ 1.
+This is standard. Indeed, let K = ∥DG∥ ≥ 2. For j = 1, the chain
+rule expresses D(Gm ) as a composition of m derivatives of G. Thus
+the estimate holds with C1 = 1.
+  Now induct on j. Assume the estimate holds for all derivative orders
+below j, and let Hm = ∥Dj Gm ∥. Differentiating Gm+1 = G ◦ Gm
+j times gives one term DG(Gm )Dj Gm , whose norm is at most KHm .
+Each remaining term contains derivatives of Gm of orders below j whose
+orders add up to j. The induction hypothesis bounds their product by
+a constant times K jm . Consequently,
+                         Hm+1 ≤ KHm + Bj K jm .
+Here Bj depends on j, the derivative bounds of G up to order j, and
+the previously obtained constants C1 , . . . , Cj−1 , but is independent of
+m. Choosing Cj sufficiently large and inducting on m therefore proves
+(6.1). Since Tm is the first coordinate of Gm , it satisfies the same
+derivative bounds. By the chain rule, these bounds also control the
+derivatives of βi0 ◦ Tm appearing in the signals si .
+  Recall the series representation (4.2), which we can write as
+                        X
+            si (t, z) =    si,m (t, z),
+                        m≥1
+                                                                   2m+1
+                                                               z
+           si,m (t, z) = α(t)χ(|z|)R1−m βi0 (Tm (t, z))                     .
+                                                              |z|
+The summands are smooth. We will show that their C r norms are
+summable.
+8     A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE
+
+   Recall that χ is supported on 1/3 ≤ |z| ≤ 3. Repeated application
+of the product rule gives for k ≥ 0,
+                             k
+                               z
+                     χ(|z|)            ≤ cj (1 + k)j ,
+                              |z|    j  C
+where cj is independent of k. Indeed, view the power as a product of k
+copies of z/|z|. Applying the product rule j times produces at most (1+
+k)j terms. Each term contains at most j differentiated factors, whose
+derivatives are bounded, while the undifferentiated direction factors
+have absolute value one.
+  Applying the product rule distributes at most r differentiations among
+the factors defining si,m . Combining the preceding estimate with (6.1)
+therefore gives
+                      ∥si,m ∥C r ≤ Mr R1−m ∥DG∥rm .
+These norms are summable by the coice of R (4.1). The series therefore
+converges in C r on [0, 20] × S2 . The summands vanish near both poles
+and near the endpoints of this interval, so s1 , s2 are C r on S 1 × S2 .
+  All remaining terms other than si are smooth. Hence f is C r .
+
+                        7. Asymptotic behavior
+   Here we will use the notation (tn , zn , w1,n , w2,n ) for an orbit of f . We
+also use the clock lift t̄n ∈ R defined by (3.2).
+7.1. Stalled clock. If t̄n → t̄∗ = 10 + 20k then eventually C = 0. Also
+|zn | < 3/4 for all sufficiently large n, since otherwise h̄(t̄n , zn ) = 1. In
+this region zn+1 = zn2 , so zn → S.
+   Also, eventually γ(tn ) = R and s1 = s2 = 0, and each auxiliary
+variable follows wi 7→ RP (wi ). According to the definition of P each
+wi is either 0 or will become constant with absolute value 2R. Hence
+orbits with bounded t̄n converge to a fixed point of f .
+7.2. Ticking clock. First observe that |C| ≤ 8 gives
+                            |z ′ | ≥ |z|2 − 8 ≥ 2|z|
+whenever |z| ≥ 4. Thus an orbit entering the region |z| ≥ 4 stays there
+and tends to N . Here h = 1 and s1 = s2 = 0, so the clock advances
+by one at every step and a later reset makes both auxiliary variables
+zero permanently. Also t̄n+1 = t̄n + 1 and our orbit is asymptotic to an
+orbit of exact period 20 in AN .
+   It remains to show that if the clock doesn’t stall then the orbit must
+enter the region |z| ≥ 4. We argue by contradiction and suppose that
+t̄n → +∞ and |zn | < 4 for every n. Choose a complete clock turn,
+       A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE                              9
+
+which we identify with [0, 20). Visits to [0, 3] resets both auxiliary
+variables before preparation.
+   Let I be the set of preparation indices, namely those with α(t̄k ) > 0,
+in the chosen turn. Recall that α is supported inside (4, 7) and equals
+to 1 on [5, 6], so I has at most three indices. Let k0 be the first index
+where α is positive, that is, k0 = min I.
+   For every k ∈ I we claim that
+                                 1/2 < |zk | < 2.
+Indeed, the region 4 ≤ t ≤ 10, |z| ≤ 1/2 is forward invariant: there
+C = 0, e = 0, and (3.1), prevents the clock from passing 10. Entering
+this region would contradict t̄n → ∞. On the other hand, |zk | ≥ 2
+would give |zk+1 | = |zk |2 ≥ 4, since no correction is applied during
+preparation. Hence χ(|zk |) = 1 for every k ∈ I.
+  For every n ≥ k0 up to clock entering (15, 16), there is no correction
+(C = 0) and repeated squaring gives
+                                                2n−k0
+                                 zn         zk0
+(7.1)                                =                  .
+                               |zn |      |zk0 |
+  Starting at any preparation index k, the dynamics of first two vari-
+ables (t̄n , zn ) agrees with Gn−k (t̄k , zk ), until the clock enters (15, 16) (re-
+call G from Section 4). During this clock turn, βi0 (t̄n ) = βi (t̄n mod 20).
+Each βi0 is positive at at most one reading t̄ℓi , since |Ji | < 1. If this
+reading exists, (4.2) and (7.1) used for k give
+                                                                        2ℓi −k0 +1
+                                              1+k−ℓi 0             zk0
+(7.2)         si (t̄k mod 20, zk ) = α(t̄k )R        βi (t̄ℓi )                      .
+                                                                  |zk0 |
+Otherwise every preparation input for that auxiliary is zero. Since
+max{β1 (t), β2 (t)} = 1 on [16, 17] at least one correction happens. The
+point is that while there could be several, up to 3, signals being sent
+
+
+
+
+                                    Figure 2
+10    A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE
+
+to the auxiliary variable during preparation they are all non-negative
+multiples of the same unit complex number and at least one of them is
+sufficiently strong where α = 1. The auxiliary dynamics then amplifies
+the signal using P , which preserves this direction in C, until correction
+happens at time ℓi .
+  Unitl correction, the variable z is being squared and the direction
+                                              n−k
+(argument) of zn is the same as (zk0 /|zk0 |)2 0 . At n = ℓi , the auxiliary
+therefore lies on the ray of the current square, giving
+                                                                zn 2
+                                                                       
+                     2
+(7.3) zn+1 = |zn | + 2β1 (tn )p(|wn,1 |) + 2β2 (tn )p(|wn,2 |)            .
+                                                                  |zn |
+Take k ∈ I with α(t̄k ) = 1. Let m be the first index in this turn with
+t̄m ≥ 16. Then t̄m ∈ [16, 17), and each activation index ℓi that exists
+lies in {m−1, m, m+1}. Moreover, βi (tm ) = 1 for at least one i; choose
+such an i, so that ℓi = m. Recalling α(t̄k ) = 1 and χ(|zk |) = 1, (7.2)
+gives |si (t̄k mod 20, zk )| = Rk+1−m . Since γ(tk ) = R and both terms lie
+on the same ray,
+               |wk+1,i | = RP (wk,i ) + si (t̄k mod 20, zk )
+                        = Rp(|wk,i |) + Rk+1−m ≥ Rk+1−m .
+Until time m, all inputs to this auxiliary lie on the same ray, γ = R,
+and |wn,i | < 3R. Therefore (5.1) gives
+             |wn+1,i | ≥ R min(|wn,i |, 1),       k + 1 ≤ n < m.
+Since Rn−m ≤ 1 for n ≤ m, induction yields
+                   |wn,i | ≥ Rn−m ,        k + 1 ≤ n ≤ m.
+In particular, |wm,i | ≥ 1 and p(|wm,i |) ≥ 1. And (7.3) now gives
+                          |zm+1 | ≥ |zm |2 + 2 > 2.
+The next clock time t̄m+1 is in [17, 18), so its correction C(tm+1 , w1,m+1 , w2,m+1 )
+is either zero or again aligned and positive. Hence |zm+2 | ≥ |zm+1 |2 > 4,
+contradicting our assumption. We conclude that id t̄n → ∞ is therefore
+asymptotic to a periodic orbit in AN .
+Remark 7.1. Near the isolated fixed point in AS the local dynamics is
+                (t, z, w1 , w2 ) 7−→ (t + b(t), z 2 , Rw1 , Rw2 ).
+
+                            8. Final remarks
+Remark 8.1. The recurrent set is exactly AS ∪ AN . The non-wandering
+set Ω(f ) is larger: it contains the disk
+                  D = {10} × {|z| ≤ 1/2} × {0} × {0}.
+      A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE                     11
+
+Each point on D converges to the fixed point {10} × S × {0} × {0}.
+  Take a point x = (10, z0 , 0, 0) ∈ D, z0 ̸= S. Backward square roots
+and clock preimages give
+        Gd (τ + 1, q) = (30, z0 ),         τ ∈ [16, 17),   0 < |q| < 1.
+Indeed, backward radii tend to 1, eventually making every backward
+clock step exactly one. Choose i with βi (τ ) = 1. Set s0 = τ and choose
+successive clock preimages satisfying
+           10 < sn < sn−1 ,          sn + b̄(sn ) = sn−1   (n ≥ 1).
+Then sn → 10. Define the initial auxiliary pair wn = (w1,n , w2,n ) ∈ C2
+by
+                                     n+1
+                             q − z02
+                     wi,n =           ,    w3−i,n = 0.
+                               2Rn
+For yn = (sn , z0 , wn ), we have |z| ≤ 1/2 until activation, and the se-
+lected auxiliary variable remains in the unit disk, since
+                                       n+1
+                j        |q| + |z0 |2
+             |R wi,n | ≤                     < 1,     0 ≤ j ≤ n.
+                                2
+Its unique activation at τ sends the main z-coordinate to q. The next
+reset clears both auxiliaries and the clock variable stalls at 30, so no
+new signals are added. Thus the clock and main coordinate follow G,
+giving
+                  f n+1+d (yn ) = x, yn −→ x, n → ∞
+This proves that x is non-wandering.
+Remark 8.2. With a modified signal one can replace the two auxiliary
+spheres by one S3 , obtaining a similar C r map on S 1 × S2 × S3 .
+Remark 8.3. Lipschitz counterexample in the invertible setting can be
+found in the report on the conversation among R. Bowen, M. Hirsch,
+A. Manning, C. Pugh, B. Sanderson, M. Shub and R. Williams [P75].
+Likely finite smoothness counterexamples also exist in diffeomorphism
+setting.
+Remark 8.4. Given the new example one can ask for examples with
+finite collection of periodic points of any given period. I expect that it
+should also be possible by replacing the periodic attractor by a quasi-
+periodic one. The remaining unresolved question is the Entropy Con-
+jecture for aspherical manifolds. One can still hope for it to be true
+even in the C 0 setting.
+12     A COUNTEREXAMPLE TO THE SHUB ENTROPY CONJECTURE
+
+                                References
+[K86] A. B. Katok, A conjecture about entropy, Amer. Math. Soc. Transl. Ser. 2
+      133 (1986), 91–108.
+[M76] M. Misiurewicz, A short proof of the variational principle for a ZN
+                                                                        + action
+      on a compact space, Astérisque 40 (1976), 147–157.
+[O26] OpenAI, A C 1 Counterexample to the Entropy Conjecture, OpenAI Math
+      Release preprint, September 25, 2026. https://github.com/openai/
+      math/blob/main/preprints/A-C1-Counterexample-to-the-Entropy-
+      Conjecture-September-25-2026/article.pdf.
+[P75] C. C. Pugh, On the entropy conjecture, in Dynamical Systems—Warwick
+      1974, Lecture Notes in Mathematics, vol. 468, Springer, 1975, pp. 257–261.
+[S74] M. Shub, Dynamical systems, filtrations and entropy, Bull. Amer. Math. Soc.
+      80 (1974), no. 1, 27–41.
+[S06] M. Shub, All, most, some differentiable dynamical systems, in Proceedings
+      of the International Congress of Mathematicians, Madrid 2006, vol. III, Eu-
+      ropean Mathematical Society, Zürich, 2006, pp. 99–120. https://doi.org/
+      10.4171/022-3/5.
+[Y87] Y. Yomdin, Volume growth and entropy, Israel J. Math. 57 (1987), 285–300.
+[Y26] Y. Yomdin, Putevye zametki (in Russian), Samizdat, 2026. https://
+      samlib.ru/j/jomdin_i/putevye_zametki_2.shtml.
+
+Department of Mathematics, The Ohio State University, Columbus,
+OH 43210, USA
+Email address: <email>
+

@@ -1,0 +1,124 @@
+{
+  "goal": "C9000343",
+  "routes": {},
+  "nodes": {
+    "C9000343": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 343 (Symplectic ball packing in higher dimensions.; papers: Symplectic Ball Packings in Higher Dimensions; Lean status: Partially/Comparator formalized (lean/docs/343.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C343_HANDLE",
+        "C343_PUBLICATION_REVIEW"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C343_MAIN": {
+      "statement": "Manuscript intro:main: for n>=3, closed balls of capacities R_i embed disjointly in Int B(R) iff sum R_i^n<R^n and R_i+R_j<R for i<j.",
+      "status": "open",
+      "depends_on": ["C343_NECESSITY", "C343_APPLICATIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Symplectic-Ball-Packings-in-Higher-Dimensions-September-23-2026/build/sections/introduction.tex"]
+    },
+    "C343_NECESSITY": {
+      "statement": "Strict volume and two-ball inequalities are necessary under the closed-source, open-target convention.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Symplectic-Ball-Packings-in-Higher-Dimensions-September-23-2026/build/sections/introduction.tex"]
+    },
+    "C343_APPLICATIONS": {
+      "statement": "The small-capacity, higher-dimensional large-ball, and six-dimensional large-ball cases give all sufficiency cases.",
+      "status": "open",
+      "depends_on": ["C343_SURFACE", "C343_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Symplectic-Ball-Packings-in-Higher-Dimensions-September-23-2026/build/sections/conclusion.tex"]
+    },
+    "C343_GEOMETRY": {
+      "statement": "The geometric model, volume, outer-face separation, and relative transfer/avoidance assertions in geometry.tex, applications.tex, and sixdim.tex hold.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C343_COMPARISON": {
+      "statement": "Lemma cmp:comparison supplies K, a neighborhood Hamiltonian isotopy preserving V, a strict comparison inequality, and uniform outer-face commutation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Symplectic-Ball-Packings-in-Higher-Dimensions-September-23-2026/build/sections/comparison.tex"]
+    },
+    "C343_SURFACE": {
+      "statement": "Lemma surf:packing gives neighborhood embeddings of all requested smaller closed balls in a finite model.",
+      "status": "open",
+      "depends_on": ["C343_COMPARISON", "C343_HANDLE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Symplectic-Ball-Packings-in-Higher-Dimensions-September-23-2026/build/sections/surface.tex"]
+    },
+    "C343_HANDLE": {
+      "statement": "For every admissible finite-model family and supplied comparison data with uniform positive gap, Steps 2-5 give disjoint neighborhood embeddings of the requested closed balls, for every m>=1.",
+      "status": "open",
+      "depends_on": ["C343_PROFILE", "C343_NORMALIZE", "C343_LAYERS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/handle_packing_audit/construction.md", "research/handle_packing_audit/exact_certificate.json", "research/handle_packing_audit/verify.py"]
+    },
+    "C343_NORMALIZE": {
+      "statement": "Finite-surface selection, small background area, relative primitives, and annular normalization preserve the stated uniform gap and boundary conditions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/handle_packing_audit/construction.md"]
+    },
+    "C343_PROFILE": {
+      "statement": "For every m>=1, compact full-dimensional moment polytope (not necessarily downward), compact handle surface with a positive toric-horizontal model, positive smooth toric profiles h_i, and supplied face-commuting Hamiltonian q with min_V(K o q^{-1}-K+A-sum h_i)>0, disjoint product strips 0<T<1,0<x<h_i(p) embed symplectically; compact radial fiberwise regions have neighborhood embeddings.",
+      "status": "open",
+      "depends_on": ["C343_NORMALIZE", "C343_ALGEBRA", "C343_GLUE", "C343_MOSER", "C343_LAYERS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/handle_packing_audit/construction.md", "research/handle_packing_audit/exact_certificate.json"]
+    },
+    "C343_ALGEBRA": {
+      "statement": "The toric and one-covector top-power formulas and signed Hamiltonian suspension are valid in every fiber dimension.",
+      "status": "open",
+      "depends_on": ["C343_SQUARE_ZERO"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/handle_packing_audit/construction.md", "research/handle_packing_audit/exact_certificate.json"]
+    },
+    "C343_SQUARE_ZERO": {
+      "statement": "For every commutative ring, a,b with b*b=0, and n>=0, (a+b)^(n+1)=a^(n+1)+(n+1)*a^n*b.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/handle_packing_audit/lean/Main.lean", "research/handle_packing_audit/lean/statement_fidelity.md", "research/handle_packing_audit/lean/lean_check.json", "research/handle_packing_audit/lean/certificates/C343_SQUARE_ZERO-e4f6cb5ca03ffa6d.json"]
+    },
+    "C343_GLUE": {
+      "statement": "Both deformations have matching horizontal primitives at both annular ends and remain symplectic, including the angle-dependent residual layer.",
+      "status": "open",
+      "depends_on": ["C343_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/handle_packing_audit/construction.md"]
+    },
+    "C343_MOSER": {
+      "statement": "Common outer-face commutation collars imply a horizontal relative Moser isotopy preserving every face intersection and extending to a compact neighborhood.",
+      "status": "open",
+      "depends_on": ["C343_GLUE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/handle_packing_audit/construction.md"]
+    },
+    "C343_LAYERS": {
+      "statement": "The strictly increasing layer coordinate, correctly signed toric shear, and thin-planar disk give disjoint compact ball images with neighborhood extensions across all fiber axes.",
+      "status": "open",
+      "depends_on": ["C343_MOSER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/handle_packing_audit/construction.md"]
+    },
+    "C343_PUBLICATION_REVIEW": {
+      "statement": "The independent Reviewer reproduces the certificate, checks statement fidelity and analytic proof, and assesses publishable significance and novelty; no approval is assumed.",
+      "status": "open",
+      "depends_on": ["C343_HANDLE"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    }
+  }
+}

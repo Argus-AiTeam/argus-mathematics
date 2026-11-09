@@ -1,0 +1,248 @@
+Content type text/plain; charset=utf-8 cannot be simplified to markdown. Here is the raw content:
+Contents of https://r.jina.ai/https://eccc.weizmann.ac.il/report/2026/199/download/:
+Title: https://eccc.weizmann.ac.il/report/2026/199/download/
+
+URL Source: https://eccc.weizmann.ac.il/report/2026/199/download/
+
+Number of Pages: 17
+
+Markdown Content:
+# Parallel Repetition for Entangled Games with Gap Exponent Three 
+
+Zhao Song ∗
+
+August 5, 2026 
+
+Abstract 
+
+We prove that every finite two-player game G with entangled value ω∗(G) = 1 − ϵ satisfies 
+
+ω∗(G⊗n) ≤ exp( −Ω( ϵ3
+
+ϵ + ℓ n)) for every n ≥ 1, where ℓ := log( |A|| B|), and A and B are the answer alphabets. Compared with Chapter 6 of the OpenAI report [Ope26], this improves the gap exponent from thirteen to three and matches the cubic gap dependence in Holenstein’s general classical bound [Hol09]: 
+
+ω(G⊗n) ≤ exp( −Ω( (1 − ω(G)) 3
+
+1 + ℓ n)) .
+
+The proof replaces the randomly shifted logarithmic grid used in quantum correlated sampling by smooth soft labels. This makes the relevant label infidelity quadratic in the distance between state descriptions and avoids a Jensen loss when averaging over questions. Together with the postselection argument, these improvements yield the cubic gap dependence stated above. 
+
+# 1 Introduction 
+
+Parallel repetition is a basic method for amplifying the soundness of two-player games: the verifier samples independent coordinates, and the players must win every coordinate. For classical strate-gies, exponential decay was established by Raz [Raz98], and Holenstein [Hol09] subsequently gave a substantially simpler information-theoretic proof based on dependency breaking and correlated sampling. Here ω(G) denotes the classical value of G, the supremum of the winning probability over strategies in which the two players share randomness but no entanglement. His bound is 
+
+ω(G⊗n) ≤ exp( −Ω((1 − ω(G)) 3n/ (1 + ℓ))) ,
+
+for every n ≥ 1, where ℓ := log( |A|| B|) and A, B are the answer alphabets; this remains the best known gap dependence for general classical games. Rao [Rao11] sharpened the gap dependence for projection games, whereas Raz [Raz11] showed that the strongest linear-gap bound cannot hold in full generality. The entangled setting is more delicate because conditioning on success changes a shared quantum state, while the players must reconstruct the resulting local descriptions without communication. The general quantum analogue of Raz’s theorem was explicitly identified as open by Cleve, Høyer, Toner, and Watrous [CHTW04]. Exact or exponential repetition was subsequently es-tablished under additional structure: quantum XOR games [CSUU08], entangled unique games 
+
+> ∗<email> . The author would like to thank Omri Weinstein for helpful discussions.
+
+1ISSN 1433-8092 Electronic Colloquium on Computational Complexity, Report No. 199 (2026) [KRT10], projection games [DSV15], games with strictly positive Cartesian question support [CS14], and free or product-distribution games [JPY14, CS15]. Dinur, Steurer, and Vidick [DSV15] also introduced the quantum correlated-sampling primitive that later became central to general parallel-repetition arguments. For general entangled games, Kempe and Vidick [KV11] obtained amplification by adding con-sistency or dummy questions, and Bavarian, Vidick, and Yuen [BVY17] proved exponential ampli-fication after anchoring the game. Because these transformations modify the game, they do not establish a repetition theorem for the original game. Yuen [Yue16] proved polynomial decay for arbitrary unmodified games. The recent OpenAI report [Ope26] established exponential decay with explicit alphabet dependence for every finite two-player entangled game. Writing ϵ := 1 − ω∗(G), its theorem gives 
+
+ω∗(G⊗n) ≤ exp( −Ω( ϵ13 n/ (ϵ + ℓ))) .
+
+The report does not claim that the exponent 13 is optimal. It states that this exponent arises from the quantitative loss in the standard quantum correlated-sampling lemma of Dinur, Steurer, and Vidick [DSV15, Lemma 17]. Kempe and Regev [KR10] show that no universal exponent below 2 is possible, even for constant-answer entangled unique games. Before the present work, the optimal exponent for general entangled games was therefore known only to lie between 2 and 13: 
+
+What is the optimal exponent of ϵ in general quantum parallel repetition? 
+
+1.1 Our Results 
+
+We improve Theorem 1.1 of [Ope26, Chapter 6] from ϵ13 to ϵ3, which matches the classical bound of Holenstein [Hol09] quoted above. 
+
+Theorem 1.1 (Improved parallel-repetition exponent, informal version of Theorem 4.6) . There is a universal constant c3 > 0 such that every finite two-player entangled game G with ω∗(G) = 1 − ϵ
+
+satisfies 
+
+ω∗(G⊗n) ≤ exp( −c3ϵ3n/ (ϵ + ℓ)) 
+
+for every integer n ≥ 1. Here ℓ := log( |A|| B|).
+
+For fixed answer alphabets, the theorem gives a constant-factor reduction in value after O(ϵ−3)repetitions and exponential decay thereafter. Its cubic dependence on the gap matches Holenstein’s [Hol09] general classical bound, while applying to arbitrary finite entangled games without mod-ifying the game. The exponent 3 remains one power above the exponent-2 obstruction of Kempe and Regev [KR10], leaving open whether the bound is optimal. Table 1: Parallel-repetition decay rates for general finite two-player games. Write ϵ := 1 − ω∗(G) in the quantum rows and ϵ := 1 − ω(G) in the classical rows, and ℓ := log( |A|| B|). Raz [Raz98] states his bound with an unspecified constant depending only on the value; the exponent 32 is implicit in his proof and was extracted by Holenstein [Hol09]. Year Authors Reference Statement ID Bound Q/C 1998 Raz [Raz98] Main theorem exp( −Ω( ϵ32 n/ℓ )) Classical 2009 Holenstein [Hol09] Theorem 2.5 exp( −Ω( ϵ3n/ (1 + ℓ))) Classical 2026 OpenAI [Ope26] Theorem 1.1 exp( −Ω( ϵ13 n/ (ϵ + ℓ))) Quantum 2026 This paper This paper Theorem 1.1 exp( −Ω( ϵ3n/ (ϵ + ℓ))) Quantum 22 Technique Overview 
+
+2.1 Summary of the OpenAI Chapter 6 approach 
+
+OpenAI’s proof follows the conditioning-and-sampleability framework of Yuen [Yue16], together with Holenstein’s classical correlated-sampling method [Hol09] and quantum correlated sampling [Ope26, Chapter 6]. Begin with a strategy for G⊗n whose probability of winning every coordinate is larger than the proposed exponential bound. A greedy conditioning argument selects a small set D ⊊ [n] of coordinates. If p := Pr[ WD] is the probability of winning the coordinates in D,
+
+m := n − | D|, and q is the average probability of winning a uniformly chosen coordinate outside 
+
+D conditioned on WD, then q is close to one. The information cost per remaining coordinate is 
+
+η := log(1 /p )+ |D|ℓm , ℓ := log( |A|| B|). The greedy choice of D guarantees that η is small whenever the all-coordinate winning probability is too large. Conditioning on WD produces an ideal one-coordinate experiment, but this experiment is not immediately a legal strategy for G. Its question distribution is a posterior distribution rather than 
+
+μ, its revealed history is not supplied by the referee, and its shared state depends jointly on Alice’s and Bob’s questions. The postselected state-alignment and history-sampleability lemma resolves these three defects. It constructs locally generated histories that are close to the ideal posterior distribution in total variation and two locally available state descriptions |ΨA⟩ and |ΨB ⟩ satisfying 
+
+E[∥| ΨA⟩ − | ΨB ⟩∥ 2] = O(η). The report’s new sampleability estimate is proved through a purified positive-operator martingale. Its one-step entropy gap is an operator Bregman divergence in the sense of Petz, with related resolvent estimates due to Kim [Pet07, Kim14]. Classical correlated sampling synchronizes the histories. The quantum correlated-sampling lemma of Dinur, Steurer, and Vidick [DSV15] then turns the two nearby state descriptions into an actual shared state. For description distance t := ∥| ΨA⟩ − | ΨB ⟩∥ , that lemma incurs vector error O(t1/6), apart from an arbitrarily small finite-catalyst error. Averaging and applying Jensen’s inequality to the mean squared bound on t therefore gives the postselection-stable rounding estimate ω∗(G) ≥ q −O(η1/12 ).
+
+The exponent 13 comes from the final parameter choice. If the proposed decay rate is exp( −γn ), greedy conditioning gives η = O(γ(1 + ℓ/ϵ )) . To make the rounding loss O(η1/12 ) smaller than the original gap ϵ := 1 − ω∗(G), one needs η = O(ϵ12 ). Thus one sets γ = Θ( ϵ13 /(ϵ + ℓ)). The rounded single-game strategy then wins with probability strictly larger than ω∗(G), which is the desired contradiction. This proves exponential decay for the unchanged game, but the hard-bin quantum sampler and the subsequent Jensen step are quantitatively expensive. 
+
+2.2 Summary of our approach 
+
+We retain the conditioning, history-sampling, and state-alignment parts of Chapter 6. The im-provement is concentrated in two places: a smoother quantum correlated-sampling primitive and a near-perfect measurement estimate. For a finite distribution of state-description pairs, write 
+
+D := E[∥| ψz ⟩ − | φz ⟩∥ 2]. Instead of assigning each Schmidt coefficient [NC10] to a randomly shifted hard logarithmic bin, Lemma 4.1 assigns it a two-bin raised-cosine label. Nearby logarithmic co-efficients then have quadratically close labels. A diagonal filter whose weights vary exponentially across the labels approximately restores the Schmidt coefficients, while the exact synchronization identity controls the probability that Alice and Bob keep different trials. The construction separates into weight approximation and synchronization. If sλ := − log( λ)/h 
+
+and |gλ⟩ is the corresponding raised-cosine label, then the diagonal label operator T satisfies 
+
+∥(T − λI )|gλ⟩∥ ≤ Chλ, λμ (1 − |⟨ gλ|gμ⟩| 2) ≤ C(λ − μ)2/h 2.
+
+3The first estimate says that filtering approximately reconstructs the target Schmidt weight. The second makes the overlap loss quadratic in the coefficient difference. Together with the Schmidt-transport inequality, it bounds both the synchronization defect and the squared error of the syn-chronized output by C(h2 + ∆ /h 2) for a pair at squared distance ∆ := ∥| ψ⟩ − | φ⟩∥ 2. The parties implement the filters on independent finite-dimensional shared trials and retain their first local successes. A disagreement between the two first-success times is charged as an error, whereas a common first-success time produces the synchronized output. The shared resource is fixed for the entire finite family before z is known; only each party’s local channel depends on its own description. For smoothing width h, the construction gives the average infidelity bound 
+
+E[1 − ⟨ ψz |ρz |ψz ⟩] ≤ Csm (h2 + D/h 2 + D) + ζ. 
+
+The important feature is that the bound is linear in the squared description distance before av-eraging. Choosing h := D1/4 yields average infidelity O(D1/2) and average trace-distance error 
+
+O(D1/4). Since the postselected state-alignment lemma gives D = O(η), Lemma 4.4 yields the generic postselection-stable rounding estimate ω∗(G) ≥ q − B4η1/4. Thus the generic rounding loss becomes O(η1/4) rather than O(η1/12 ). This estimate alone would lead to gap exponent 5. To reach exponent 3, Lemma 4.5 uses that the ideal conditioned coordinate already wins with probability q
+
+close to one. If the ideal pure state has rejection probability α and the prepared state has infidelity 
+
+f , then the rejection probability after preparation is at most α + O(√αf + f ). Here α := 1 − q and 
+
+f = O(η1/2), so the loss is O((1 − q)1/2η1/4 + η1/2). This improvement comes from retaining the losing effect rather than first converting the prepared state to trace distance. If L is the losing effect, the ideal state is rejected with probability α, and the prepared state has infidelity f , Uhlmann’s theorem [Uhl76, NC10] and the contraction √L give 
+
+pTr[ Lρ ] ≤ √α + p2f , Tr[ Lρ ] ≤ α + Cpαf + Cf. 
+
+The estimate is then averaged under the locally generated history distribution. The total-variation change and the probability of mismatching histories cost O(κ), where κ := p3η/ 2. If A and 
+
+R′ are the resulting mean ideal rejection and mean prepared-state infidelity, respectively, then 
+
+A ≤ 1 − q + O(η1/2) and R′ ≤ O(η1/2) + 2 ζ. Cauchy–Schwarz bounds the averaged cross term by √AR ′, producing exactly the loss in Lemma 4.5 after ζ → 0. In the contradiction argument 1 − q = O(ϵ) and it is enough to take η = O(ϵ2). Finally, 
+
+η = O(γ(1 + ℓ/ϵ )) allows γ = Θ( ϵ3/(ϵ + ℓ)) . The smooth sampler changes the required information-cost scale from η = O(ϵ12 ) to η = O(ϵ4), and the near-perfect estimate relaxes it further to 
+
+η = O(ϵ2). Substituting this value of γ into the contradiction argument gives Theorem 4.6. 
+
+# 3 Preliminaries and Notation 
+
+All logarithms are natural. For an integer n ≥ 1, write [ n] := {1, . . . , n }. For a finite set S,
+
+|S| denotes its cardinality, and D0 ⊊ [n] means that D0 is a proper subset. Probabilities and expectations are denoted by Pr[ ·] and E[·]; subscripts specify the underlying random variable or distribution. The symbols O(·), Ω( ·), and Θ( ·) hide universal positive constants unless a dependence is stated explicitly. Symbols such as C, c, Csm , B4, Bnp , and c3 denote positive universal constants. 
+
+3.1 Games and parallel repetition 
+
+A finite two-player one-round game is a tuple G := ( X, Y, A, B, μ, V ), where X, Y are the question sets, A, B are the nonempty answer alphabets, μ is a probability distribution on X × Y , and 4V : X × Y × A × B → { 0, 1} is the acceptance predicate. The referee samples ( x, y ) ∼ μ, sends x
+
+to Alice and y to Bob, and receives answers a ∈ A and b ∈ B.A POVM is a finite family of positive semidefinite operators summing to the identity. Afinite-dimensional entangled strategy consists of a unit vector |ψ⟩ ∈ H A ⊗ H B and local POVMs 
+
+{Eax : a ∈ A} and {F by : b ∈ B}. Thus Eax , F by ⪰ 0 and P 
+
+> a
+
+Eax = IHA , P 
+
+> b
+
+F by = IHB . Its winning probability is X
+
+> x,y
+
+μ(x, y ) X
+
+> a,b
+
+V (x, y, a, b )⟨ψ|Eax ⊗ F by |ψ⟩.
+
+The entangled value ω∗(G) is the supremum of this probability over all finite-dimensional tensor-product strategies. We use 
+
+ϵ := 1 − ω∗(G), ℓ := log( |A|| B|)for the soundness gap and the logarithmic answer-alphabet size. The game G⊗n consists of n independently sampled question pairs, and the verifier accepts only if every coordinate is won. A repeated strategy may nevertheless correlate its answers across coordinates. For i ∈ [n], let Wi be the event that coordinate i is won, and for S ⊆ [n] put 
+
+WS := T 
+
+> i∈S
+
+Wi. Thus W[n] is the all-coordinate winning event and ω∗(G⊗n) is the supremum of its probability. 
+
+3.2 States and operator norms 
+
+The space Cd is equipped with its Euclidean norm, denoted ∥ · ∥ . Kets |u⟩ are vectors, bras ⟨u| are their adjoints, and |u⟩⟨ u| is the rank-one projector associated with a unit vector. A mixed state 
+
+ρ is a positive semidefinite operator with Tr[ ρ] = 1. The identity on Cd is Id, tensor products are denoted by ⊗, and M ∗ is the adjoint of an operator M .For an operator M ,
+
+∥M ∥1 := Tr[ √M ∗M ], ∥M ∥F := pTr[ M ∗M ]are the trace and Frobenius norms. We call ∥ρ − σ∥1 the trace-norm distance; the corresponding operational trace distance is one half of this quantity. For a unit vector |ψ⟩ and a state ρ, 1 −⟨ ψ|ρ|ψ⟩
+
+is their infidelity. The bar in P denotes entrywise conjugation in the fixed maximally entangled basis. A channel is a completely positive trace-preserving map, and an isometry preserves inner products. 
+
+3.3 Tools from previous work 
+
+We use three results from Chapter 6 of the OpenAI report as black boxes [Ope26]. The first input is the quantitative greedy-conditioning lemma [Ope26, Chapter 6, Lemma 3.1]. 
+
+Lemma 3.1 (Greedy conditioning) . Suppose a finite-dimensional strategy for G⊗n wins all coordi-nates with probability ϑ > 0. If 0 < δ < 1 and log(1 /ϑ )/δ < n , then there is a proper set D0 ⊊ [n]
+
+such that, with m := n − | D0|,
+
+|D0| ≤ log(1 /ϑ )
+
+δ , p := Pr[ WD0 ] ≥ ϑ, q := 1
+
+m
+
+X
+
+> i∈[n]\D0
+
+Pr[ Wi | WD0 ] ≥ 1 − δ. 
+
+5For the remaining two statements, fix a finite-dimensional strategy for G⊗n and a proper subset 
+
+D0 ⊊ [n] with Pr[ WD0 ] > 0, and use the associated parameters p, m, q, η from Definition 4.3 below. Following Chapter 6, Section 3.2, let Q denote the ideal posterior distribution. A sample from Q
+
+is written ( i, R, X i, Y i), where i is uniform in [ n] \ D0, R is the conditioned history, and ( Xi, Y i)are the live questions. We write ( i, r, x, y ) for a realization and |Ψr,x,y ⟩ for the corresponding ideal state. The second input identifies local measurements on the ideal state [Ope26, Chapter 6, Lemma 3.2]. 
+
+Lemma 3.2 (Ideal state simulates the remaining coordinate) . For every (i, r, x, y ) in the support of Q, there are local POVMs {M ar,x : a ∈ A} and {N br,y : b ∈ B}, determined by (r, x ) and (r, y ),respectively, such that 
+
+⟨Ψr,x,y |M ar,x ⊗ N br,y |Ψr,x,y ⟩ = Q(Ai = a, B i = b | R = r, X i = x, Y i = y).
+
+Consequently, the ideal experiment has average winning probability 
+
+E(i,r,x,y )∼Q[X
+
+> a,b
+
+V (x, y, a, b )⟨Ψr,x,y |M ar,x ⊗ N br,y |Ψr,x,y ⟩] = q. 
+
+The third input makes the histories and state descriptions locally available [Ope26, Chapter 6, Lemma 3.3]. 
+
+Lemma 3.3 (Postselected state alignment and history sampleability) . Let JA and JB be the tuple distributions obtained when Alice and Bob generate the history from their own questions. There are locally describable states |ΨAr,x ⟩ and |ΨBr,y ⟩ satisfying 
+
+E(i,r,x,y )∼Q[∥| ΨAr,x ⟩ − | Ψr,x,y ⟩∥ 2] ≤ 8η, 
+
+E(i,r,x,y )∼Q[∥| ΨBr,y ⟩ − | Ψr,x,y ⟩∥ 2] ≤ 8η. (1) 
+
+Moreover, for κ := p3η/ 2,
+
+dTV (Q, JA) ≤ κ, dTV (Q, JB ) ≤ κ. 
+
+There is finite shared randomness such that, on fresh questions (x, y ) ∼ μ, Alice and Bob sample a common uniform i ∈ [n] \ D0 and histories rA, r B with tuple laws JA, JB and Pr[ rA̸ = rB ] ≤ 4κ.
+
+Consequently, 
+
+E(i,r,x,y )∼Q[∥| ΨAr,x ⟩ − | ΨBr,y ⟩∥ 2] ≤ 32 η. (2) 
+
+# 4 Proof of the improved exponent 
+
+The proof has three stages. First, smooth correlated sampling converts a mean squared discrepancy between local state descriptions into a controlled state-preparation error. Second, postselection-stable rounding converts this error into a single-game strategy. Third, greedy conditioning and near-perfect rounding give the parallel-repetition contradiction. We use the trace norm ∥M ∥1 := Tr[ √M ∗M ]. For unit vectors |u⟩ and |v⟩ we repeatedly use 
+
+∥| u⟩⟨ u| − | v⟩⟨ v|∥ 1 ≤ 2∥| u⟩ − | v⟩∥ .
+
+6Table 2: State-preparation and rounding losses for quantum correlated sampling. Write t := 
+
+∥| ψ⟩ − | φ⟩∥ , D := E[t2], and η for the information cost in the conditioned single-game experiment. Arbitrarily small finite-resource accuracy terms are suppressed. The 2019 result is an operational promised-distance statement and does not by itself give a uniform Chapter 6 rounding bound. Year Authors Reference Statement ID Sampler error Rounding loss 2015 Dinur–Steurer–Vidick [DSV15] Lemma 17 O(t1/6) O(η1/12 )2019 Lasecki [Las19] Theorem 3.1.1 O(t1/5) promised distance 2026 This paper This paper Lemma 4.1 O(D1/4) O(η1/4)
+
+4.1 Smooth operational correlated sampling 
+
+The rounding argument supplies a distribution of pairs of state descriptions together with an upper bound on their mean squared distance. The construction below bounds the output infidelity pointwise by a quantity linear in the squared description distance. Averaging over the distribution therefore incurs no Jensen loss, removing the square-root losses of the earlier argument. 
+
+Lemma 4.1 (Smooth operational correlated sampling) . There is a universal constant Csm ≥ 1
+
+with the following property. Let Z be finite, let ν be a probability distribution on Z, and for every 
+
+z ∈ Z let |ψz ⟩, |φz ⟩ ∈ Cd ⊗ Cd be unit vectors. Set 
+
+D := Ez∼ν [∥| ψz ⟩ − | φz ⟩∥ 2].
+
+For every h ∈ (0 , 1/2) and ζ > 0 there are a finite-dimensional shared state Ω, which may depend on the finite family, ν, h, and ζ but not on the realized z, and families of local channels {A ψ}
+
+and {B φ} indexed separately by Alice’s and Bob’s local state descriptions. Their joint output ρz := (Aψz ⊗ B φz )(Ω) satisfies 
+
+Ez∼ν [1 − ⟨ ψz |ρz |ψz ⟩] ≤ Csm (h
+
+<note>Content truncated. Call the fetch tool with a start_index of 20000 to get more content.</note>

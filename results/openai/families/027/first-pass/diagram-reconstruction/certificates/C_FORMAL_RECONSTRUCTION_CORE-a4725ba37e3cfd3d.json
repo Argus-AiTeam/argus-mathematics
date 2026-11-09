@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FORMAL_RECONSTRUCTION_CORE-06be68c8cff5",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/027/first-pass/diagram-reconstruction/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/027/first-pass/diagram-reconstruction/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15015,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/027/first-pass/diagram-reconstruction/Main.lean",
+    "source_sha256": "b1fb688ba6c9c6e4cdde4391920b5d0a003ea6d6296d269c9a82822348249655",
+    "statement_fidelity": "families/027/first-pass/diagram-reconstruction/statement_fidelity.md",
+    "statement_fidelity_sha256": "068b5810df1adc28bf6ae0971aa97e0748e73991741451ea4d3ce909d42f5d87",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/027/first-pass/diagram-reconstruction/Main.lean:23:0: warning: automatically included section variable(s) unused in theorem `DiskReconstruction.swap_ip`:\n  [AddCommGroup A]\n  [AddCommGroup B]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [AddCommGroup A] [AddCommGroup B] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/027/first-pass/diagram-reconstruction/Main.lean:27:0: warning: automatically included section variable(s) unused in theorem `DiskReconstruction.swap_rp`:\n  [AddCommGroup A]\n  [AddCommGroup B]\n  [AddCommGroup H]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [AddCommGroup A] [AddCommGroup B] [AddCommGroup H] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/027/first-pass/diagram-reconstruction/Main.lean:31:0: warning: automatically included section variable(s) unused in theorem `DiskReconstruction.swap_is`:\n  [AddCommGroup X]\n  [AddCommGroup Y]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [AddCommGroup X] [AddCommGroup Y] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/027/first-pass/diagram-reconstruction/Main.lean:45:23: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/diagram-reconstruction/Main.lean",
+    "text": "import Mathlib\n\nnamespace DiskReconstruction\n\nsection Swap\n\nvariable {A B H X Y : Type*}\nvariable [AddCommGroup A] [AddCommGroup B] [AddCommGroup H]\nvariable [AddCommGroup X] [AddCommGroup Y]\n\ndef swapP (u : A × B × H) : (A × H × X) × (B × H × Y) :=\n  ((u.1, u.2.2, 0), (u.2.1, u.2.2, 0))\n\ndef swapI (z : (A × H × X) × (B × H × Y)) : H × X × Y :=\n  (z.1.2.1 - z.2.2.1, z.1.2.2, z.2.2.2)\n\ndef swapR (z : (A × H × X) × (B × H × Y)) : A × B × H :=\n  (z.1.1, z.2.1, z.2.2.1)\n\ndef swapS (q : H × X × Y) : (A × H × X) × (B × H × Y) :=\n  ((0, q.1, q.2.1), (0, 0, q.2.2))\n\ntheorem swap_ip (u : A × B × H) :\n    swapI (swapP (X := X) (Y := Y) u) = 0 := by\n  ext <;> simp [swapI, swapP]\n\ntheorem swap_rp (u : A × B × H) :\n    swapR (swapP (X := X) (Y := Y) u) = u := by\n  rfl\n\ntheorem swap_is (q : H × X × Y) :\n    swapI (swapS (A := A) (B := B) q) = q := by\n  ext <;> simp [swapI, swapS]\n\ntheorem swap_contraction (z : (A × H × X) × (B × H × Y)) :\n    swapP (swapR z) + swapS (swapI z) = z := by\n  ext <;> simp [swapP, swapR, swapS, swapI]\n\ntheorem swap_p_add (u v : A × B × H) :\n    swapP (X := X) (Y := Y) (u + v) = swapP u + swapP v := by\n  ext <;> simp [swapP]\n\ntheorem swap_i_add (z t : (A × H × X) × (B × H × Y)) :\n    swapI (z + t) = swapI z + swapI t := by\n  ext <;> simp [swapI] <;> abel\n\ntheorem swap_p_injective :\n    Function.Injective (swapP (A := A) (B := B) (H := H) (X := X) (Y := Y)) := by\n  intro u v huv\n  have hr := congrArg (swapR (A := A) (B := B) (H := H) (X := X) (Y := Y)) huv\n  simpa only [swap_rp] using hr\n\ntheorem swap_i_surjective :\n    Function.Surjective (swapI (A := A) (B := B) (H := H) (X := X) (Y := Y)) := by\n  intro q\n  exact ⟨swapS q, swap_is q⟩\n\ntheorem swap_exact (z : (A × H × X) × (B × H × Y)) :\n    swapI z = 0 ↔ ∃ u : A × B × H, swapP u = z := by\n  constructor\n  · intro hz\n    refine ⟨swapR z, ?_⟩\n    have hs : swapS (A := A) (B := B) (0 : H × X × Y) = 0 := rfl\n    have hc := swap_contraction z\n    rw [hz, hs, add_zero] at hc\n    exact hc\n  · rintro ⟨u, rfl⟩\n    exact swap_ip u\n\nend Swap\n\nsection Closure\n\nuniverse u v\n\nvariable {X : ℕ → Type u} {E : ℕ → Type v}\nvariable (incoming : (i : ℕ) → E i → X i)\nvariable (outgoing : (i : ℕ) → E i → X (i + 1))\n\ninductive LiftPath :\n    (n : ℕ) → X 0 → X n → Prop\n  | nil (x : X 0) : LiftPath 0 x x\n  | step {n : ℕ} {start : X 0} {last : X n}\n      (path : LiftPath n start last) (e : E n)\n      (compatible : incoming n e = last) :\n      LiftPath (n + 1) start (outgoing n e)\n\ntheorem path_exists (n : ℕ) :\n    (∀ i, i < n → Function.Surjective (incoming i)) →\n    ∀ start : X 0, ∃ last : X n, LiftPath incoming outgoing n start last := by\n  induction n with\n  | zero =>\n      intro _ start\n      exact ⟨start, LiftPath.nil start⟩\n  | succ n ih =>\n      intro surj start\n      obtain ⟨last, path⟩ :=\n        ih (fun i hi => surj i (Nat.lt_trans hi (Nat.lt_succ_self n))) start\n      obtain ⟨e, he⟩ := surj n (Nat.lt_succ_self n) last\n      exact ⟨outgoing n e, LiftPath.step path e he⟩\n\ntheorem anchored_closure (n : ℕ)\n    (surj : ∀ i, i < n → Function.Surjective (incoming i))\n    (start : X 0) (close : X n → X 0) [Subsingleton (X 0)] :\n    ∃ last : X n,\n      LiftPath incoming outgoing n start last ∧ close last = start := by\n  obtain ⟨last, path⟩ := path_exists incoming outgoing n surj start\n  exact ⟨last, path, Subsingleton.elim _ _⟩\n\nend Closure\n\nend DiskReconstruction\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/diagram-reconstruction/statement_fidelity.md",
+    "text": "# Formal statement fidelity\n\nThis source certifies two algebraic cores, not the entire surface-diagram\ntheorem. The ledger claim is `C_FORMAL_RECONSTRUCTION_CORE`.\n\n## Complementary swap\n\n`DiskReconstruction.swapP`, `swapI`, `swapR`, and `swapS` are the following\nmaps, universally quantified over five arbitrary additive commutative groups\n`A`, `B`, `H`, `X`, and `Y`:\n\n```\nU = A x B x H\nM = (A x H x X) x (B x H x Y)\nQ = H x X x Y\nP(a,b,h) = ((a,h,0),(b,h,0))\nI((a,hA,x),(b,hB,y)) = (hA-hB,x,y)\nR((a,hA,x),(b,hB,y)) = (a,b,hB)\nS(h,x,y) = ((0,h,x),(0,0,y))\n```\n\n`swap_ip`, `swap_rp`, `swap_is`, and `swap_contraction` assert respectively\n`I P = 0`, `R P = id`, `I S = id`, and `P R + S I = id`.\n`swap_p_add` and `swap_i_add` assert additivity. `swap_p_injective`,\n`swap_i_surjective`, and `swap_exact` assert injectivity, surjectivity,\nand `I(z)=0` if and only if `z=P(u)` for some `u`.\nThere is no nonzero-rank assumption, field assumption, division by 2, or\nfinite-cardinality assumption. These statements therefore apply to the\nunderlying additive groups of modules over every commutative ring, including\nzero modules and characteristic 2. They check the manuscript's displayed\nswap exact sequence in its stated split coordinates.\n\nThe source does NOT prove that arbitrary lower-diagram data admit these\ncoordinates. That normalization, its preservation of the identified\nquotients, and the two different restriction stabilizers are proved in\n`report.md`, not inferred from `swap_exact`.\n\n## Finite propagation and closure\n\nFor arbitrary type families `X : Nat -> Type` and `E : Nat -> Type`,\n`incoming i : E i -> X i` and `outgoing i : E i -> X (i+1)` are arbitrary\nfunctions. `LiftPath` records actual event choices with the incoming\ncompatibility equation at every step. `path_exists` says that for every\nnatural number `n`, surjectivity of `incoming i` for every `i<n` extends\nevery starting state to such a path of length `n`.\n\n`anchored_closure` additionally assumes that `X 0` is a subsingleton and\nis given a function `close : X n -> X 0`. Its conclusion includes\n`close last = start` for the reached terminal state. The length may be\nzero. The function `close` is essential: it is NOT silently inferred\nfrom an equality of dimensions or from merely isomorphic endpoints.\nFor the disk application, parallel transport back to the starting interval\nsupplies this function and the prefix lift makes `X 0` a singleton.\n\nThe source does NOT prove the geometric event surjectivity, the prefix\nsingleton property, scalar cancellation in `Hom(Q,U)`, or the existence\nof the endpoint transport. The report proves these separate hypotheses\nfor the manuscript construction. No two interval lifts are prescribed\nindependently, and no theorem about the entire integral-density claim\nis encoded here.\n"
+  },
+  "subject": {
+    "content_hash": "6e6b14ff14e1ae986312ddf698002cbddca800738f591b24b9f38ee77147011b",
+    "kind": "claim",
+    "subject_id": "C_FORMAL_RECONSTRUCTION_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

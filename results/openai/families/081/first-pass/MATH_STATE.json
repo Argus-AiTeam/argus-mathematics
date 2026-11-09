@@ -1,0 +1,1264 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX9000081",
+      "version": 1,
+      "statement": "OpenAI Math Audit #081: Riesz transforms and rectifiability in higher codimension.",
+      "definitions": {
+        "openai_family": "081"
+      },
+      "content_hash": "789e8d17e6479df041ae8bcf94aaff4b35e82adc46ba30e8c11b2d22150a3154"
+    },
+    {
+      "context_id": "CTX_NHB",
+      "version": 1,
+      "statement": "Decide the staged September 24 2026 manuscript Proposition prop:height-equation from its exact hypotheses and the two Section 04 lemmas; audit only the normalized-height bridge, not the remaining main-theorem argument.",
+      "definitions": {
+        "mu_j": "Radon measures on R^d with common upper n-growth and support-centered lower n-growth at admissible radii, diverging support diameter, and compact-test limit nu=q H^n restricted to a linear n-plane with q>0",
+        "heights": "u_j affine, gradient norm at most one, bounded unnormalized origin value; w_j=u_j/delta_j with delta_j>0 tending to zero",
+        "horizon": "K_j tending to infinity, moments integral_B(0,2^k) u_j^2 dmu_j <= M delta_j^2 2^((n+2+2gamma)k) for 0<=k<=K_j, 0<gamma<1, and delta_j^-1 2^-K_j tending to zero",
+        "oscillation": "all compact ambient Lipschitz tests of zero current-measure mean in B(0,A_j), A_j tending to infinity, have vector Riesz pairing bounded cubically in delta_j as stated in the source",
+        "v": "the common signed-and-squared-moment limit along the single subsequence from lem:moving-compactness",
+        "L": "the symmetric order-one fractional operator with kernel |x-y|^(-n-1) and factor one half",
+        "scope": "research_target_level publishable; math_objective_mode exploratory; independent Reviewer required; elementary integration and real analysis are foundational, not an imported PDE regularity theorem"
+      },
+      "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+    },
+    {
+      "context_id": "CTX_NHB_QUADRATIC",
+      "version": 1,
+      "statement": "All geometric, affine, moment, and horizon hypotheses of the staged normalized-height bridge, but replace cubic small oscillation by a fixed quadratic bound D delta_j^2 (Lip xi+1) for every compact zero-current-measure-mean Lipschitz test in B(0,A_j).",
+      "definitions": {
+        "geometry": "1<=n<d; common global upper n-growth and lower n-growth at every support point and admissible radius; zero in every support; diverging diameters; compact-test limit nu=q H^n restricted to a linear n-plane with q>0",
+        "height": "u_j affine with gradient norm at most one and bounded unnormalized origin value; delta_j>0 tends to zero; w_j=u_j/delta_j",
+        "moments": "0<gamma<1; fixed M; integral_B(0,2^k) u_j^2 dmu_j <= M delta_j^2 2^((n+2+2gamma)k) for 0<=k<=K_j; K_j tends to infinity and delta_j^-1 2^-K_j tends to zero",
+        "oscillation": "A_j tends to infinity; D is fixed and finite; abs(R_mu_j(xi)) <= D delta_j^2 (Lip xi+1) for every real compact Lipschitz xi of zero mu_j mean supported in B(0,A_j)"
+      },
+      "content_hash": "702182746183356dd2422406ba35527a2fd5989edd04a20e396c0dcf84d21b45"
+    },
+    {
+      "context_id": "CTX_NHB_TWO_SHEETS",
+      "version": 1,
+      "statement": "Test whether the support-centered lower bound can be removed from moving-measure fractional compactness; this is a weaker statement than the manuscript, not its hypotheses.",
+      "definitions": {
+        "measures": "For n>=1 in R^(n+1), L0=R^n times {0}, L1=R^n times {1}, 0<t_j<=1 tending to zero, mu_j=H^n|L0+t_j^2 H^n|L1",
+        "functions": "w_j is zero on L0 and equals t_j^-1 on L1; values elsewhere are irrelevant"
+      },
+      "content_hash": "6ebd57f4012c6b5ba91a57415af2004761522f7fc731b25b313e292be375b415"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C9000081",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000081",
+        "content_hash": "789e8d17e6479df041ae8bcf94aaff4b35e82adc46ba30e8c11b2d22150a3154"
+      },
+      "natural_statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 081 (Riesz transforms and rectifiability in higher codimension.; papers: Riesz transforms and uniform rectifiability in higher codimension; Lean status: Partially/Comparator formalized (lean/docs/081.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "84ad70b722b22b622632fdf6cfbbd4b0c565fa26de65fbd6377ea7715a3f9372"
+    },
+    {
+      "claim_id": "NHB_GOAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Proposition prop:height-equation follows from its stated hypotheses, with the same height and subsequence, without graph, density-regularity, or convergence-rate assumptions.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "3d91a50b9665633faf7eab80f9d703dd23a8b06b6a5e1e6cf8c79ce8240dc785"
+    },
+    {
+      "claim_id": "NHB_PAIRINGS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Upper n-growth gives absolutely convergent Lipschitz-cancelled mean-zero Riesz pairings and an exterior error O(T^-1), as in lem:pairings.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "01ec2561e5cb9b921ad7a171361e64fa74815aca31267d6e7cfc9498690595a7"
+    },
+    {
+      "claim_id": "NHB_WEAK",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "The uniform support-centered lower bound and weak plane limit imply qualitative local support tubes and convergence on bounded continuity regions.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "90f0f6f457afa081c1922af506b101c4d0785e4b118478e673d746fdc92548d8"
+    },
+    {
+      "claim_id": "NHB_ALGEBRA",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "The cutoff square identity and the finite weighted pairwise-variance identity hold with the stated signs and factors.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "af4904d39b8e86623cdace499144b96974ce73fd308dab6ae764edef64a26ea3"
+    },
+    {
+      "claim_id": "NHB_HORIZON",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "For delta_j=2^-j and K_j=2j+3, delta_j^-1 2^-K_j=2^(-j-3); delta_j 2^(gamma K_j) tends to zero for 0<gamma<1/2.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "885c3e44773021993a091100041c9fefcab6d2eaf24796ee3117d27192e95b7c"
+    },
+    {
+      "claim_id": "NHB_ENERGY",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Lemma lem:height-energy: the centered unnormalized-height test gives uniform local L2 and fractional energy for u_j/delta_j.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "3e418909debb2cf1ac1a1ee9bf5812247b07f9cd7c368ef69d27ed90688a5556"
+    },
+    {
+      "claim_id": "NHB_COMPACT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Lemma lem:moving-compactness: finite projection partitions give convergence of ordinary, signed, and squared measures on one subsequence.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "815d526beb3f98b153b8104e34a25258fc8efd9bb6de3da044999d107cbb0489"
+    },
+    {
+      "claim_id": "NHB_DIAGONAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Capped product kernels pass to the same height, and the uncapping error is uniformly O(h^(1/2)) by bounded energy.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d75545243ee2199e75220c94aaf4edbed47fe481529528668e68fd6d07523300"
+    },
+    {
+      "claim_id": "NHB_TAIL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "The normalized exterior is bounded by C(T^-1+T^(gamma-1)+delta_j^-1 2^-K_j), and the limiting weighted tail is integrable.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "4008478f00b33909b22de70e4b19c7b23452758df173720044ba524846e70139"
+    },
+    {
+      "claim_id": "NHB_MEAN",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "With one localization and one subtraction point, the nonzero-mean bump pairing converges and c_j tending to zero suffices; no rate or bound on w_j(0) is used.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "1fb80fcb70c874ef58f1f7284cdc9c0b20f003e3d7ee0856f73f6e20fc5055ee"
+    },
+    {
+      "claim_id": "NHB_FRACTIONAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "The limiting renormalized pairing is the absolutely convergent integral of v times Lg for every compact smooth mean-zero intrinsic test.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "ce2e44424608158df72115c65627252c2de6c88684d2d0c98a4150c5da9bf2fa"
+    },
+    {
+      "claim_id": "NHB_FORMAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Universal cutoff and finite-variance algebra, rate-free normalized mean correction, and two-stage vanishing-error convergence; not a formalization of the measure-theoretic bridge.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "9da57c4b8c47403747b9e1322115a099145c719f309b9fc6d31ad590e826421e"
+    },
+    {
+      "claim_id": "NHB_LIT_DSV",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Primary-source comparison only: arXiv:1610.04663v1 Definition 1.1 and Theorem 1.6 use a weighted tail and a cutoff equation modulo polynomials; their stability hypotheses are not the moving-measure hypotheses.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a75d4d6ef889fb6f9e5d059233fc21c4dd490f40c0d2e53b84a578eac69bd3e2"
+    },
+    {
+      "claim_id": "NHB_LIT_REL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Primary-source comparison only: arXiv:1104.4345v3 Section 7 proves fixed-domain fractional compactness, not by itself the moving-measure squared-moment conclusion.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f3424c8541c0ab7a491f4fd43f8ff4ccb524ca0edd2f5011710ac28513e16454"
+    },
+    {
+      "claim_id": "NHB_PLANE_MOMENTS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Lemmas lem:plane-comparison and lem:fixed-plane-moments give a single affine reference plane over the finite horizon.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f86c27dcb35fee0acd5ac82227af38f389558305b51c14d68384da91162323c5"
+    },
+    {
+      "claim_id": "NHB_WEIGHTED_RIGIDITY",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Lemma lem:fractional-rigidity: the measurable mean-zero fractional weak equation and weight (1+|x|)^(-n-2) force an affine function.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "8ecb3cccc70ff69ad6ce8ff24238d97fecf1379102c10112092759b1fafc7f2f"
+    },
+    {
+      "claim_id": "NHB_PLANAR_RIGIDITY",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Lemma lem:planar-rigidity identifies full support and constant positive planar density.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "520be818a2f933bb7dcb08be570d32338c93627ac6b4e97889711cbcd3e079b8"
+    },
+    {
+      "claim_id": "NHB_FLAT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Proposition prop:flat-limit supplies the constant-density full-plane limit and compatible affine normal coordinates.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "ac9b4fce973bb48c280005b7c90c6ee8c00c5902920912aa2961ede2065c3e96"
+    },
+    {
+      "claim_id": "NHB_POLARIZATION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Lemmas lem:affine-polarization and lem:normal-affine-planes turn the same limiting affine heights into genuine approximating planes.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "8455dcce0b408497efdfa7868521d1ecce9b279f4f5cc882fef738d3df0a82e8"
+    },
+    {
+      "claim_id": "NHB_NORMALIZED_EXCESS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Proposition prop:normalized-excess-limit gives vanishing relative excess and bilateral flatness on the common subsequence.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d6bd2a39f47592fd9e6a447121c8bda998f6e9463b6d1a264288f973b44babd8"
+    },
+    {
+      "claim_id": "NHB_PROPAGATION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Theorem thm:excess-propagation is the uniform relative-excess implication used by the packing proof.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a768abaea366709b294e1560179236ca6a87e092ef3d45bad7b38f60f2943060"
+    },
+    {
+      "claim_id": "NHB_OSC_PACKING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Proposition prop:oscillation-packing supplies Carleson control of oscillation-bad cells; not audited in this mission.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "9aae3a1a7429d0ec3da920dba017d2f0c302d9424841ce21cf6cc03351f99ecb"
+    },
+    {
+      "claim_id": "NHB_FLAT_SEEDS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Proposition prop:flat-seeds supplies flat descendants outside a Carleson family; not audited in this mission.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "333161f249a1aa6c61d945e7bf4900ea32d2529596033495c7a369e0bb605ada"
+    },
+    {
+      "claim_id": "NHB_BETA_PACKING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Lemma lem:seed-charging and Proposition prop:beta-packing convert propagation and flat seeds to bilateral geometric packing; not audited in this mission.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "02a113b65b02ad1c649846d1aed87fd7bd5c431935c78b8ae190df42d14de7f2"
+    },
+    {
+      "claim_id": "NHB_BWGL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "The stated David-Semmes BWGL endpoint converts bilateral geometric packing to the specified ball-map uniform rectifiability; not audited or imported here.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d57e47d8d15c61f90bf939e6257098eb0d7242a55e8e1fa7dea8df82f2b98031"
+    },
+    {
+      "claim_id": "NHB_MAIN",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000081",
+        "content_hash": "789e8d17e6479df041ae8bcf94aaff4b35e82adc46ba30e8c11b2d22150a3154"
+      },
+      "natural_statement": "Theorem thm:main: uniform hard Riesz-truncation L2 boundedness implies quantitative uniform n-rectifiability for integers 2<=n<=d-2.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "8d9043da4e39b65543406652d400366eb0d1c9982d47d55f0363f4366c4ee401"
+    },
+    {
+      "claim_id": "NHB_FORMAL",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB",
+        "content_hash": "08a3297c94b803faf013f8927e92ffb44028b4c742ec8a05c7dff61f7da8e8ef"
+      },
+      "natural_statement": "Universal cutoff and finite-variance algebra, rate-free normalized mean correction, and two-stage vanishing-error convergence; not a formalization of the measure-theoretic bridge.",
+      "formal_statement": "import Mathlib\n\nopen Filter\nopen scoped Topology\n\nnamespace NormalizedHeightBridge\n\ntheorem cutoff_identity (U V a b : Real) :\n    (U - V) * (a ^ 2 * U - b ^ 2 * V) =\n      (a * U - b * V) ^ 2 - U * V * (a - b) ^ 2 := by\n  ring\n\ntheorem cutoff_error_bound (U V a b : Real) :\n    abs (U * V) * (a - b) ^ 2 <=\n      ((U ^ 2 + V ^ 2) / 2) * (a - b) ^ 2 := by\n  have h : abs (U * V) <= (U ^ 2 + V ^ 2) / 2 := by\n    apply abs_le.mpr\n    constructor\n    · nlinarith [sq_nonneg (U + V)]\n    · nlinarith [sq_nonneg (U - V)]\n  exact mul_le_mul_of_nonneg_right h (sq_nonneg (a - b))\n\ntheorem pairwise_variance {I : Type*} [Fintype I] (p x : I -> Real) :\n    (Finset.univ.sum fun i =>\n      Finset.univ.sum fun j => p i * p j * (x i - x j) ^ 2) =\n    2 * ((Finset.univ.sum p) *\n      (Finset.univ.sum fun i => p i * x i ^ 2) -\n      (Finset.univ.sum fun i => p i * x i) ^ 2) := by\n  calc\n    _ = (Finset.univ.sum fun i =>\n        Finset.univ.sum fun j =>\n          (p i * x i ^ 2) * p j + p i * (p j * x j ^ 2) -\n            (2 * (p i * x i)) * (p j * x j)) := by\n      apply Finset.sum_congr rfl\n      intro i hi\n      apply Finset.sum_congr rfl\n      intro j hj\n      ring\n    _ = _ := by\n      simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib,\n        <- Finset.mul_sum, <- Finset.sum_mul]\n      ring\n\ntheorem mean_correction_limit {I : Type*} {l : Filter I}\n    {a b c : I -> Real} {a0 b0 : Real}\n    (ha : Tendsto a l (nhds a0))\n    (hb : Tendsto b l (nhds b0))\n    (hc : Tendsto c l (nhds 0)) :\n    Tendsto (fun j => a j - c j * b j) l (nhds a0) := by\n  simpa using ha.sub (hc.mul hb)\n\ntheorem two_stage_vanishing {f a b : Nat -> Real}\n    (hf : forall j, 0 <= f j)\n    (ha : Tendsto a atTop (nhds 0))\n    (hb : Tendsto b atTop (nhds 0))\n    (hbound : forall m, Filter.Eventually (fun j => f j <= a m + b j) atTop) :\n    Tendsto f atTop (nhds 0) := by\n  apply tendsto_order.2\n  constructor\n  · intro r hr\n    exact Filter.Eventually.of_forall fun j => lt_of_lt_of_le hr (hf j)\n  · intro r hr\n    have hhalf : (0 : Real) < r / 2 := by linarith\n    obtain ⟨m, hm⟩ := ((tendsto_order.1 ha).2 (r / 2) hhalf).exists\n    have hb' := (tendsto_order.1 hb).2 (r / 2) hhalf\n    filter_upwards [hbound m, hb'] with j hj hjb\n    linarith\n\nend NormalizedHeightBridge\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "7cef33fd97a2abece8e91a6d5e25ef2d6ea27f863af6269be85dab426ad73b8e"
+    },
+    {
+      "claim_id": "NHB_QUADRATIC",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB_QUADRATIC",
+        "content_hash": "702182746183356dd2422406ba35527a2fd5989edd04a20e396c0dcf84d21b45"
+      },
+      "natural_statement": "Under CTX_NHB_QUADRATIC, w_j has uniformly bounded local L2 norm and order-one fractional energy. A common subsequence has convergence of ordinary, signed, and squared measures to nu, v nu, and v^2 nu on the source continuity regions. The same v has weighted integrability integral |v|(1+|x|)^(-n-2) < infinity and satisfies integral v Lg=0 for every compact smooth intrinsic mean-zero complex test. No graph, source-density regularity, or convergence rate is assumed. Proof: research/normalized_height_bridge/bridge.md Sections 1-6.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "54ae69665a6f5571b81a7f5e0b68c72a0413c77f80c53a1d88b4b3465ae698f2"
+    },
+    {
+      "claim_id": "NHB_LOWER_NECESSARY",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_NHB_TWO_SHEETS",
+        "content_hash": "6ebd57f4012c6b5ba91a57415af2004761522f7fc731b25b313e292be375b415"
+      },
+      "natural_statement": "These measures have common global upper n-growth, zero in their supports, infinite diameter, weak limit H^n|L0, and uniformly bounded local L2 norms and fractional energies of w_j, but w_j mu_j tends to zero while w_j^2 mu_j equals H^n|L1. The source compactness conclusion fails without its explicit support-centered lower bound; no manuscript assertion is refuted. Proof: research/normalized_height_bridge/bridge.md Section 2.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "2e53413b8ab15a225eda33b241050a8e501e7a30be8eab549221e3ad71f25d67"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-NHB_FORMAL-792ce5e855cb",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_FORMAL",
+        "content_hash": "7cef33fd97a2abece8e91a6d5e25ef2d6ea27f863af6269be85dab426ad73b8e"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/normalized_height_bridge/certificates/NHB_FORMAL-a113f3927ca2ba7e.json"
+    },
+    {
+      "evidence_id": "judgement-NHB_PAIRINGS-f38dc1b5b51d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_PAIRINGS",
+        "content_hash": "01ec2561e5cb9b921ad7a171361e64fa74815aca31267d6e7cfc9498690595a7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_WEAK-1d589293a9b7",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_WEAK",
+        "content_hash": "90f0f6f457afa081c1922af506b101c4d0785e4b118478e673d746fdc92548d8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_ALGEBRA-a3fbcb346fa8",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_ALGEBRA",
+        "content_hash": "af4904d39b8e86623cdace499144b96974ce73fd308dab6ae764edef64a26ea3"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_HORIZON-9f61f3d24eb7",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_HORIZON",
+        "content_hash": "885c3e44773021993a091100041c9fefcab6d2eaf24796ee3117d27192e95b7c"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_ENERGY-03b803ae7e27",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_ENERGY",
+        "content_hash": "3e418909debb2cf1ac1a1ee9bf5812247b07f9cd7c368ef69d27ed90688a5556"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_COMPACT-14e1804f8380",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_COMPACT",
+        "content_hash": "815d526beb3f98b153b8104e34a25258fc8efd9bb6de3da044999d107cbb0489"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_DIAGONAL-75e49ea5e173",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_DIAGONAL",
+        "content_hash": "d75545243ee2199e75220c94aaf4edbed47fe481529528668e68fd6d07523300"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_TAIL-85807989bfcc",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_TAIL",
+        "content_hash": "4008478f00b33909b22de70e4b19c7b23452758df173720044ba524846e70139"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_MEAN-3e02f444416b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_MEAN",
+        "content_hash": "1fb80fcb70c874ef58f1f7284cdc9c0b20f003e3d7ee0856f73f6e20fc5055ee"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_FRACTIONAL-497e0e69cba6",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_FRACTIONAL",
+        "content_hash": "ce2e44424608158df72115c65627252c2de6c88684d2d0c98a4150c5da9bf2fa"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_GOAL-7ac866f63f4a",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_GOAL",
+        "content_hash": "3d91a50b9665633faf7eab80f9d703dd23a8b06b6a5e1e6cf8c79ce8240dc785"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_QUADRATIC-3e9c2c12d8d2",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_QUADRATIC",
+        "content_hash": "54ae69665a6f5571b81a7f5e0b68c72a0413c77f80c53a1d88b4b3465ae698f2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_LOWER_NECESSARY-abca2da7e3ba",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_LOWER_NECESSARY",
+        "content_hash": "2e53413b8ab15a225eda33b241050a8e501e7a30be8eab549221e3ad71f25d67"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_LIT_DSV-67af0ecdf9a7",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_LIT_DSV",
+        "content_hash": "a75d4d6ef889fb6f9e5d059233fc21c4dd490f40c0d2e53b84a578eac69bd3e2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_LIT_REL-59db167a27ee",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_LIT_REL",
+        "content_hash": "f3424c8541c0ab7a491f4fd43f8ff4ccb524ca0edd2f5011710ac28513e16454"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_FORMAL-77ab74c8c5de",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_FORMAL",
+        "content_hash": "7cef33fd97a2abece8e91a6d5e25ef2d6ea27f863af6269be85dab426ad73b8e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/normalized_height_bridge/certificates/NHB_FORMAL-a113f3927ca2ba7e.json"
+    },
+    {
+      "evidence_id": "judgement-NHB_PAIRINGS-593e6c53ca8e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_PAIRINGS",
+        "content_hash": "01ec2561e5cb9b921ad7a171361e64fa74815aca31267d6e7cfc9498690595a7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_WEAK-d44281d3fd6b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_WEAK",
+        "content_hash": "90f0f6f457afa081c1922af506b101c4d0785e4b118478e673d746fdc92548d8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_ALGEBRA-b3b5e3218c7e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_ALGEBRA",
+        "content_hash": "af4904d39b8e86623cdace499144b96974ce73fd308dab6ae764edef64a26ea3"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_HORIZON-4784f40f29bd",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_HORIZON",
+        "content_hash": "885c3e44773021993a091100041c9fefcab6d2eaf24796ee3117d27192e95b7c"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_ENERGY-87e98480dd7e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_ENERGY",
+        "content_hash": "3e418909debb2cf1ac1a1ee9bf5812247b07f9cd7c368ef69d27ed90688a5556"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_COMPACT-4af94c90305f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_COMPACT",
+        "content_hash": "815d526beb3f98b153b8104e34a25258fc8efd9bb6de3da044999d107cbb0489"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_DIAGONAL-51c3276ad3d3",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_DIAGONAL",
+        "content_hash": "d75545243ee2199e75220c94aaf4edbed47fe481529528668e68fd6d07523300"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_TAIL-86e6d48f9218",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_TAIL",
+        "content_hash": "4008478f00b33909b22de70e4b19c7b23452758df173720044ba524846e70139"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_MEAN-3ec7e69a8608",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_MEAN",
+        "content_hash": "1fb80fcb70c874ef58f1f7284cdc9c0b20f003e3d7ee0856f73f6e20fc5055ee"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_FRACTIONAL-fbb9d374da8b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_FRACTIONAL",
+        "content_hash": "ce2e44424608158df72115c65627252c2de6c88684d2d0c98a4150c5da9bf2fa"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_QUADRATIC-80f01ea8b874",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_QUADRATIC",
+        "content_hash": "54ae69665a6f5571b81a7f5e0b68c72a0413c77f80c53a1d88b4b3465ae698f2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_LOWER_NECESSARY-00b552c5e211",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_LOWER_NECESSARY",
+        "content_hash": "2e53413b8ab15a225eda33b241050a8e501e7a30be8eab549221e3ad71f25d67"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_LIT_DSV-f5a8452ae6bd",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_LIT_DSV",
+        "content_hash": "a75d4d6ef889fb6f9e5d059233fc21c4dd490f40c0d2e53b84a578eac69bd3e2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_LIT_REL-a72d8f958f14",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_LIT_REL",
+        "content_hash": "f3424c8541c0ab7a491f4fd43f8ff4ccb524ca0edd2f5011710ac28513e16454"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_GOAL-8e0f725e192c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_GOAL",
+        "content_hash": "3d91a50b9665633faf7eab80f9d703dd23a8b06b6a5e1e6cf8c79ce8240dc785"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/bridge.md"
+    },
+    {
+      "evidence_id": "judgement-NHB_FORMAL-014ef98eaa1e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "NHB_FORMAL",
+        "content_hash": "7cef33fd97a2abece8e91a6d5e25ef2d6ea27f863af6269be85dab426ad73b8e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent-copilot",
+      "artifact": "research/normalized_height_bridge/certificates/NHB_FORMAL-a113f3927ca2ba7e.json"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_C9000081",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C9000081",
+        "content_hash": "84ad70b722b22b622632fdf6cfbbd4b0c565fa26de65fbd6377ea7715a3f9372"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_GOAL",
+          "content_hash": "3d91a50b9665633faf7eab80f9d703dd23a8b06b6a5e1e6cf8c79ce8240dc785"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_GOAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_GOAL",
+        "content_hash": "3d91a50b9665633faf7eab80f9d703dd23a8b06b6a5e1e6cf8c79ce8240dc785"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_ENERGY",
+          "content_hash": "3e418909debb2cf1ac1a1ee9bf5812247b07f9cd7c368ef69d27ed90688a5556"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_COMPACT",
+          "content_hash": "815d526beb3f98b153b8104e34a25258fc8efd9bb6de3da044999d107cbb0489"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_DIAGONAL",
+          "content_hash": "d75545243ee2199e75220c94aaf4edbed47fe481529528668e68fd6d07523300"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_TAIL",
+          "content_hash": "4008478f00b33909b22de70e4b19c7b23452758df173720044ba524846e70139"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_MEAN",
+          "content_hash": "1fb80fcb70c874ef58f1f7284cdc9c0b20f003e3d7ee0856f73f6e20fc5055ee"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_FRACTIONAL",
+          "content_hash": "ce2e44424608158df72115c65627252c2de6c88684d2d0c98a4150c5da9bf2fa"
+        }
+      ],
+      "retired_because": "This duplicated the identical obligations in R_NHB_FULL during seed expansion; it is not an independent mathematical attack. R_NHB_FULL is the retained route."
+    },
+    {
+      "route_id": "R_NHB_ENERGY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_ENERGY",
+        "content_hash": "3e418909debb2cf1ac1a1ee9bf5812247b07f9cd7c368ef69d27ed90688a5556"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_PAIRINGS",
+          "content_hash": "01ec2561e5cb9b921ad7a171361e64fa74815aca31267d6e7cfc9498690595a7"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_ALGEBRA",
+          "content_hash": "af4904d39b8e86623cdace499144b96974ce73fd308dab6ae764edef64a26ea3"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_COMPACT",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_COMPACT",
+        "content_hash": "815d526beb3f98b153b8104e34a25258fc8efd9bb6de3da044999d107cbb0489"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_WEAK",
+          "content_hash": "90f0f6f457afa081c1922af506b101c4d0785e4b118478e673d746fdc92548d8"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_ALGEBRA",
+          "content_hash": "af4904d39b8e86623cdace499144b96974ce73fd308dab6ae764edef64a26ea3"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_DIAGONAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_DIAGONAL",
+        "content_hash": "d75545243ee2199e75220c94aaf4edbed47fe481529528668e68fd6d07523300"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_ENERGY",
+          "content_hash": "3e418909debb2cf1ac1a1ee9bf5812247b07f9cd7c368ef69d27ed90688a5556"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_COMPACT",
+          "content_hash": "815d526beb3f98b153b8104e34a25258fc8efd9bb6de3da044999d107cbb0489"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_TAIL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_TAIL",
+        "content_hash": "4008478f00b33909b22de70e4b19c7b23452758df173720044ba524846e70139"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_COMPACT",
+          "content_hash": "815d526beb3f98b153b8104e34a25258fc8efd9bb6de3da044999d107cbb0489"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_MEAN",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_MEAN",
+        "content_hash": "1fb80fcb70c874ef58f1f7284cdc9c0b20f003e3d7ee0856f73f6e20fc5055ee"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_DIAGONAL",
+          "content_hash": "d75545243ee2199e75220c94aaf4edbed47fe481529528668e68fd6d07523300"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_TAIL",
+          "content_hash": "4008478f00b33909b22de70e4b19c7b23452758df173720044ba524846e70139"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_FRACTIONAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_FRACTIONAL",
+        "content_hash": "ce2e44424608158df72115c65627252c2de6c88684d2d0c98a4150c5da9bf2fa"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_DIAGONAL",
+          "content_hash": "d75545243ee2199e75220c94aaf4edbed47fe481529528668e68fd6d07523300"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_TAIL",
+          "content_hash": "4008478f00b33909b22de70e4b19c7b23452758df173720044ba524846e70139"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_MEAN",
+          "content_hash": "1fb80fcb70c874ef58f1f7284cdc9c0b20f003e3d7ee0856f73f6e20fc5055ee"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_PLANAR_RIGIDITY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_PLANAR_RIGIDITY",
+        "content_hash": "520be818a2f933bb7dcb08be570d32338c93627ac6b4e97889711cbcd3e079b8"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_PAIRINGS",
+          "content_hash": "01ec2561e5cb9b921ad7a171361e64fa74815aca31267d6e7cfc9498690595a7"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_WEIGHTED_RIGIDITY",
+          "content_hash": "8ecb3cccc70ff69ad6ce8ff24238d97fecf1379102c10112092759b1fafc7f2f"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_FLAT",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_FLAT",
+        "content_hash": "ac9b4fce973bb48c280005b7c90c6ee8c00c5902920912aa2961ede2065c3e96"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_PLANE_MOMENTS",
+          "content_hash": "f86c27dcb35fee0acd5ac82227af38f389558305b51c14d68384da91162323c5"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_PLANAR_RIGIDITY",
+          "content_hash": "520be818a2f933bb7dcb08be570d32338c93627ac6b4e97889711cbcd3e079b8"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_WEAK",
+          "content_hash": "90f0f6f457afa081c1922af506b101c4d0785e4b118478e673d746fdc92548d8"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_PAIRINGS",
+          "content_hash": "01ec2561e5cb9b921ad7a171361e64fa74815aca31267d6e7cfc9498690595a7"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_NORMALIZED_EXCESS",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_NORMALIZED_EXCESS",
+        "content_hash": "d6bd2a39f47592fd9e6a447121c8bda998f6e9463b6d1a264288f973b44babd8"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_FLAT",
+          "content_hash": "ac9b4fce973bb48c280005b7c90c6ee8c00c5902920912aa2961ede2065c3e96"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_GOAL",
+          "content_hash": "3d91a50b9665633faf7eab80f9d703dd23a8b06b6a5e1e6cf8c79ce8240dc785"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_WEIGHTED_RIGIDITY",
+          "content_hash": "8ecb3cccc70ff69ad6ce8ff24238d97fecf1379102c10112092759b1fafc7f2f"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_POLARIZATION",
+          "content_hash": "8455dcce0b408497efdfa7868521d1ecce9b279f4f5cc882fef738d3df0a82e8"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_PROPAGATION",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_PROPAGATION",
+        "content_hash": "a768abaea366709b294e1560179236ca6a87e092ef3d45bad7b38f60f2943060"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_NORMALIZED_EXCESS",
+          "content_hash": "d6bd2a39f47592fd9e6a447121c8bda998f6e9463b6d1a264288f973b44babd8"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_HORIZON",
+          "content_hash": "885c3e44773021993a091100041c9fefcab6d2eaf24796ee3117d27192e95b7c"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_BETA_PACKING",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_BETA_PACKING",
+        "content_hash": "02a113b65b02ad1c649846d1aed87fd7bd5c431935c78b8ae190df42d14de7f2"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_PROPAGATION",
+          "content_hash": "a768abaea366709b294e1560179236ca6a87e092ef3d45bad7b38f60f2943060"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_OSC_PACKING",
+          "content_hash": "9aae3a1a7429d0ec3da920dba017d2f0c302d9424841ce21cf6cc03351f99ecb"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_FLAT_SEEDS",
+          "content_hash": "333161f249a1aa6c61d945e7bf4900ea32d2529596033495c7a369e0bb605ada"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_MAIN",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_MAIN",
+        "content_hash": "8d9043da4e39b65543406652d400366eb0d1c9982d47d55f0363f4366c4ee401"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_BETA_PACKING",
+          "content_hash": "02a113b65b02ad1c649846d1aed87fd7bd5c431935c78b8ae190df42d14de7f2"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_BWGL",
+          "content_hash": "d57e47d8d15c61f90bf939e6257098eb0d7242a55e8e1fa7dea8df82f2b98031"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_FULL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_GOAL",
+        "content_hash": "3d91a50b9665633faf7eab80f9d703dd23a8b06b6a5e1e6cf8c79ce8240dc785"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_ENERGY",
+          "content_hash": "3e418909debb2cf1ac1a1ee9bf5812247b07f9cd7c368ef69d27ed90688a5556"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_COMPACT",
+          "content_hash": "815d526beb3f98b153b8104e34a25258fc8efd9bb6de3da044999d107cbb0489"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_DIAGONAL",
+          "content_hash": "d75545243ee2199e75220c94aaf4edbed47fe481529528668e68fd6d07523300"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_TAIL",
+          "content_hash": "4008478f00b33909b22de70e4b19c7b23452758df173720044ba524846e70139"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_MEAN",
+          "content_hash": "1fb80fcb70c874ef58f1f7284cdc9c0b20f003e3d7ee0856f73f6e20fc5055ee"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "NHB_FRACTIONAL",
+          "content_hash": "ce2e44424608158df72115c65627252c2de6c88684d2d0c98a4150c5da9bf2fa"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_NHB_IMPORT_DSV",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "NHB_GOAL",
+        "content_hash": "3d91a50b9665633faf7eab80f9d703dd23a8b06b6a5e1e6cf8c79ce8240dc785"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "NHB_LIT_DSV",
+          "content_hash": "a75d4d6ef889fb6f9e5d059233fc21c4dd490f40c0d2e53b84a578eac69bd3e2"
+        }
+      ],
+      "retired_because": "Dipierro-Savin-Valdinoci arXiv:1610.04663v1 Theorem 1.6 requires continuous functions on a fixed Euclidean domain, locally uniform convergence, and viscosity equations. Moving normalized heights supply none of these identifications. It is not invoked by the manuscript; its comparison citation is not a flaw."
+    }
+  ]
+}

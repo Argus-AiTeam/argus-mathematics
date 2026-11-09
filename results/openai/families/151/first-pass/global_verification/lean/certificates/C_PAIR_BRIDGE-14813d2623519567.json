@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_PAIR_BRIDGE-4a38dc830d9c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/151/first-pass/global_verification/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/151/first-pass/global_verification/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15132,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/151/first-pass/global_verification/lean/Main.lean",
+    "source_sha256": "50767caf8716b31e25be0b0b51e240ef00f4fd686bbe9740436f95ebe04f9fce",
+    "statement_fidelity": "families/151/first-pass/global_verification/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "bba5400e12bc7f888657c6a53e61b810eee300be6614254837a73eca1a50e3af",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/151/first-pass/global_verification/lean/Main.lean:50:71: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n'GlobalSpectralBridge.real_pair_iff_complex_eigen' depends on axioms: [propext, Classical.choice, Quot.sound]\n'GlobalSpectralBridge.paired_modulus' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/global_verification/lean/Main.lean",
+    "text": "import Mathlib\n\nnoncomputable section\n\nopen scoped BigOperators\n\nnamespace GlobalSpectralBridge\n\nvariable {ι : Type*}\n\ndef combine (u v : ι → ℝ) : ι → ℂ :=\n  fun i => (u i : ℂ) + (v i : ℂ) * Complex.I\n\ndef complexMatrix (A : Matrix ι ι ℝ) : Matrix ι ι ℂ :=\n  fun i j => (A i j : ℂ)\n\nlemma combine_injective {u v u' v' : ι → ℝ} :\n    combine u v = combine u' v' ↔ u = u' ∧ v = v' := by\n  constructor\n  · intro h\n    constructor\n    · have h' := congrArg (fun w : ι → ℂ => fun i => (w i).re) h\n      simpa [combine] using h'\n    · have h' := congrArg (fun w : ι → ℂ => fun i => (w i).im) h\n      simpa [combine] using h'\n  · rintro ⟨rfl, rfl⟩\n    rfl\n\nlemma combine_ne_zero (u v : ι → ℝ) :\n    combine u v ≠ 0 ↔ u ≠ 0 ∨ v ≠ 0 := by\n  have hz : combine (0 : ι → ℝ) 0 = 0 := by\n    ext i\n    simp [combine]\n  simp only [ne_eq, ← hz, combine_injective]\n  tauto\n\nlemma mulVec_combine [Fintype ι] (A : Matrix ι ι ℝ) (u v : ι → ℝ) :\n    (complexMatrix A).mulVec (combine u v) =\n      combine (A.mulVec u) (A.mulVec v) := by\n  funext i\n  apply Complex.ext <;>\n    simp [Matrix.mulVec, dotProduct, complexMatrix, combine,\n      Complex.mul_re, Complex.mul_im]\n\nlemma mul_combine (a b : ℝ) (u v : ι → ℝ) :\n    (fun i => ((a : ℂ) + (b : ℂ) * Complex.I) * combine u v i) =\n      combine (fun i => a * u i - b * v i)\n        (fun i => b * u i + a * v i) := by\n  funext i\n  apply Complex.ext <;> simp [combine, Complex.mul_re, Complex.mul_im] <;> ring\n\ntheorem real_pair_iff_complex_eigen [Fintype ι]\n    (A : Matrix ι ι ℝ) (a b : ℝ) (u v : ι → ℝ) :\n    ((u ≠ 0 ∨ v ≠ 0) ∧\n      A.mulVec u = (fun i => a * u i - b * v i) ∧\n      A.mulVec v = (fun i => b * u i + a * v i)) ↔\n    (combine u v ≠ 0 ∧\n      (complexMatrix A).mulVec (combine u v) =\n        (fun i => ((a : ℂ) + (b : ℂ) * Complex.I) * combine u v i)) := by\n  rw [combine_ne_zero, mulVec_combine, mul_combine, combine_injective]\n\ntheorem paired_modulus (a b : ℝ) :\n    ‖((a : ℂ) + (b : ℂ) * Complex.I)‖ = Real.sqrt (a ^ 2 + b ^ 2) := by\n  rw [Complex.norm_def]\n  simp [Complex.normSq_apply, pow_two]\n\nend GlobalSpectralBridge\n\n#print axioms GlobalSpectralBridge.real_pair_iff_complex_eigen\n#print axioms GlobalSpectralBridge.paired_modulus\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/global_verification/lean/statement_fidelity.md",
+    "text": "# Exact scope of the real-pair spectral bridge\n\nThis document describes only claim `C_PAIR_BRIDGE`, not the complete\nentropy-counterexample theorem.\n\n`GlobalSpectralBridge.real_pair_iff_complex_eigen` quantifies over every\nfinite index type, every square matrix `A` over the real numbers, every\nreal `a,b`, and every pair of real coordinate vectors `u,v`. Empty index\ntypes are allowed; both sides then exclude the zero vector.\n\n`complexMatrix A` applies the actual embedding of the real numbers into\nthe complex numbers entrywise. `combine u v` is the vector `u + i v`.\nThe theorem equates exactly:\n\n* `(u != 0 or v != 0)`, `Au = au - bv`, and `Av = bu + av`;\n* a nonzero vector `u + iv` satisfying\n  `A_C (u + iv) = (a + ib)(u + iv)`.\n\nThe sign in the eigenvalue is **plus**. The second displayed paired\nequation is exactly the one in the frozen OpenAI\n`Definitions.totalRealHomologySpectralRadius`. No independence of `u`\nand `v` is assumed, so real eigenvalues and degenerate real pairs are\nincluded, not discarded.\n\n`GlobalSpectralBridge.paired_modulus` quantifies over all real `a,b` and\nidentifies the ordinary complex norm of `a+ib` with the nonnegative\nsquare root of `a^2+b^2`, including zero.\n\nThese are universal finite-dimensional algebraic identities, not finite\nexperiments. Passing from one coordinate matrix to a finite-dimensional\nreal linear map is a choice of basis. Passing from the union over\nhomological degrees to the total spectral radius additionally uses\nfinite-dimensionality and vanishing above the manifold dimension;\nthose topological facts and the finite-union argument are proved or\nexplicitly cited in `report.md`, not asserted to be formalized here.\nThe source does not prove regularity, entropy, homology comparison, a\nspecific characteristic polynomial, novelty, or independent acceptance.\n"
+  },
+  "subject": {
+    "content_hash": "75bcdef0249376d9998ffe1d4ef9d2da3aba765f487223646377eee29972742b",
+    "kind": "claim",
+    "subject_id": "C_PAIR_BRIDGE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

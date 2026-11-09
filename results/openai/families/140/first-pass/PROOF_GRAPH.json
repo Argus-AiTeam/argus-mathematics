@@ -1,0 +1,114 @@
+{
+  "goal": "C9000140",
+  "routes": [
+    {
+      "name": "R_GC_DIRECT: direct normalized Gaussian integration",
+      "status": "current",
+      "evidence": "research/gaussian_collision/Main.lean"
+    },
+    {
+      "name": "R_GC_MOMENT_EXACT: Tonelli expansion and finite ordinary moments",
+      "status": "current",
+      "evidence": "research/gaussian_collision/Main.lean"
+    },
+    {
+      "name": "R_GC_VERIFY: stochastic difference-law formalization",
+      "status": "parked",
+      "evidence": "research/MATH_STATE.json: retired because direct integration bypasses this route, not because the law is false"
+    },
+    {
+      "name": "R_GC_DENSITY_CONDITIONAL: ambient Gram bound and compact-test duality",
+      "status": "parked",
+      "evidence": "research/gaussian_collision/report.md: separate unformalized dependencies"
+    }
+  ],
+  "scope_note": "The bounded exact-Gaussian-collision mission is developed here. All reviewer_confirmed flags remain false until host-invoked independent review. The full memory-sample lower bound and publication novelty are not certified.",
+  "nodes": {
+    "C9000140": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 140 (Memory–sample lower bounds for noiseless Gaussian regression.; papers: Memory and precision in noiseless Gaussian regression; Posterior replicas and conditional information in Gaussian regression; Localization costs and information growth for exact Gaussian observations; Projection moments, positive cap domination, and Riesz estimates on the sphere; Replacing Gaussian observations in memory-constrained inference; Subsphere methods for memory-sample lower bounds in noiseless Gaussian regression; Lean status: Partially/Comparator formalized (lean/docs/140.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["GC_EXACT_VERIFICATION", "GC_FINITE_DENSITY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/gaussian_collision/report.md"
+      ]
+    },
+    "GC_EXACT_VERIFICATION": {
+      "statement": "The actual Gaussian collision identity, its coincident normalization, and the finite-measure ordinary smoothing moment identity and finite-mass bound hold for all stated parameters without tuple-rank assumptions.",
+      "status": "in_progress",
+      "depends_on": ["GC_IDENTITY", "GC_MOMENT", "GC_SHARP_BOUND"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/gaussian_collision/Main.lean",
+        "research/gaussian_collision/statement_fidelity.md",
+        "research/gaussian_collision/lean_check.json",
+        "research/gaussian_collision/exact_certificate.json"
+      ]
+    },
+    "GC_GAUSSIAN_INTEGRAL": {
+      "statement": "For every positive-definite real Q, the actual Gaussian integral is (2*pi)^(d/2)/sqrt(det Q); the product of scalar N(0,1) laws has its normalized joint density.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/gaussian_collision/Main.lean: gaussian_integral and gaussianPi_density_formula"]
+    },
+    "GC_DETERMINANT": {
+      "statement": "For every rectangular D and v>0, C=D^T D+v(I+11^T) is positive definite and det C=v^q(q+1)det(I+D(I-11^T/(q+1))D^T/v).",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/gaussian_collision/Main.lean: covariance_posDef and determinant_relation"]
+    },
+    "GC_IDENTITY": {
+      "statement": "For every tuple, including repeated points and q>d, the actual Gaussian expectation of the label collision integral equals (2*pi)^(-m*q/2)det C^(-m/2).",
+      "status": "in_progress",
+      "depends_on": ["GC_GAUSSIAN_INTEGRAL", "GC_DETERMINANT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/gaussian_collision/Main.lean: manuscript_gaussian_identity"]
+    },
+    "GC_TONELLI": {
+      "statement": "For arbitrary finite nonnegative mu, the nonnegative smoothing pth moment expands against the actual unnormalized product measure mu^p.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/gaussian_collision/Main.lean: smoothing_power_expansion and smoothing_moment"]
+    },
+    "GC_SHARP_BOUND": {
+      "statement": "The collision kernel is bounded by the coincident value, giving the finite moment bound p^(-m/2)(2*pi*delta^2)^(-m*(p-1)/2)mu(univ)^p with the exact full mass factor.",
+      "status": "in_progress",
+      "depends_on": ["GC_GAUSSIAN_INTEGRAL", "GC_DETERMINANT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/gaussian_collision/Main.lean: kernel_le_coincident, coincident_collision_rpow and smoothing_mass_bound"]
+    },
+    "GC_MOMENT": {
+      "statement": "For every finite nonnegative mu, the ordinary integrable smoothing pth moment equals the exact collision kernel integrated against mu^p.",
+      "status": "in_progress",
+      "depends_on": ["GC_IDENTITY", "GC_TONELLI", "GC_SHARP_BOUND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/gaussian_collision/Main.lean: integrable_smoothing_power and smoothing_moment_rpow"]
+    },
+    "GC_FINITE_DENSITY": {
+      "statement": "The exact-label density conclusion follows conditionally from the uniform smoothing bound supplied by the ambient Gram estimate, compact-test convergence, and Lp duality.",
+      "status": "open",
+      "depends_on": ["GC_MOMENT", "A_AMBIENT_GRAM", "A_COMPACT_TEST_DUALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/gaussian_collision/report.md"]
+    },
+    "A_AMBIENT_GRAM": {
+      "statement": "Under the manuscript ambient-growth assumptions, tuples have full column rank almost everywhere and their inverse Gram determinant satisfies h:dv:gram-product; if p-1>d then mu=0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Memory-and-precision-in-noiseless-Gaussian-regression-September-27-2026/build/sections/projection.tex: h:dv:ambient-gram"]
+    },
+    "A_COMPACT_TEST_DUALITY": {
+      "statement": "For locally finite sigma-finite Borel lambda on Euclidean space and finite nonnegative eta, the C_c dual bound in h:proj:density-by-tests gives a nonnegative Lp density of the asserted norm.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Memory-and-precision-in-noiseless-Gaussian-regression-September-27-2026/build/sections/projection.tex: h:proj:density-by-tests"]
+    }
+  }
+}

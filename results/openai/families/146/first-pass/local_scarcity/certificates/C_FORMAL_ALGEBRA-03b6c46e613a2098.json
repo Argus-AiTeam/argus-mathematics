@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FORMAL_ALGEBRA-80b5f01a1c13",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/146/first-pass/local_scarcity/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/146/first-pass/local_scarcity/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 19511,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/146/first-pass/local_scarcity/Main.lean",
+    "source_sha256": "4ed1cbdc012c79e99385aff8b99680f85efb0acaf2f0bcf65d6995da51efd95c",
+    "statement_fidelity": "families/146/first-pass/local_scarcity/statement_fidelity.md",
+    "statement_fidelity_sha256": "8af8cde1bffe7d01a38646ec3839a79d6a97cf43cb448f0119ff7eb1697bb4a2",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/local_scarcity/Main.lean",
+    "text": "import Mathlib\n\nnamespace LocalScarcity\n\ndef total8 (x0 x1 x2 x3 x4 x5 x6 x7 : ℝ) : ℝ :=\n  x0 + x1 + x2 + x3 + x4 + x5 + x6 + x7\n\ndef minEdges (x0 x1 x2 x3 x4 x5 x6 x7 : ℝ) : ℝ :=\n  min x0 x1 + min x1 x2 + min x2 x3 + min x3 x4 +\n    min x4 x5 + min x5 x6 + min x6 x7\n\ndef maxEdges (x0 x1 x2 x3 x4 x5 x6 x7 : ℝ) : ℝ :=\n  max x0 x1 + max x1 x2 + max x2 x3 + max x3 x4 +\n    max x4 x5 + max x5 x6 + max x6 x7\n\ntheorem eighth_chain_exponent\n    (x0 x1 x2 x3 x4 x5 x6 x7 c : ℝ)\n    (h0 : 1 ≤ x0) (h1 : 1 ≤ x1) (h2 : 1 ≤ x2) (h3 : 1 ≤ x3)\n    (h4 : 1 ≤ x4) (h5 : 1 ≤ x5) (h6 : 1 ≤ x6) (h7 : 1 ≤ x7)\n    (hc : (2 : ℝ) / 3 ≤ c) :\n    -1 + x0 + x7 + minEdges x0 x1 x2 x3 x4 x5 x6 x7\n      - c * maxEdges x0 x1 x2 x3 x4 x5 x6 x7\n      - c * total8 x0 x1 x2 x3 x4 x5 x6 x7\n      ≤ 8 - 15 * c - (total8 x0 x1 x2 x3 x4 x5 x6 x7 - 8) / 8 := by\n  let A := minEdges x0 x1 x2 x3 x4 x5 x6 x7\n  let V := maxEdges x0 x1 x2 x3 x4 x5 x6 x7\n  let T := total8 x0 x1 x2 x3 x4 x5 x6 x7\n  have e0 : 8 * min x0 x1 ≤ x0 + 7 * x1 := by\n    linarith [min_le_left x0 x1, min_le_right x0 x1]\n  have e1 : 8 * min x1 x2 ≤ 2 * x1 + 6 * x2 := by\n    linarith [min_le_left x1 x2, min_le_right x1 x2]\n  have e2 : 8 * min x2 x3 ≤ 3 * x2 + 5 * x3 := by\n    linarith [min_le_left x2 x3, min_le_right x2 x3]\n  have e3 : 8 * min x3 x4 ≤ 4 * x3 + 4 * x4 := by\n    linarith [min_le_left x3 x4, min_le_right x3 x4]\n  have e4 : 8 * min x4 x5 ≤ 5 * x4 + 3 * x5 := by\n    linarith [min_le_left x4 x5, min_le_right x4 x5]\n  have e5 : 8 * min x5 x6 ≤ 6 * x5 + 2 * x6 := by\n    linarith [min_le_left x5 x6, min_le_right x5 x6]\n  have e6 : 8 * min x6 x7 ≤ 7 * x6 + x7 := by\n    linarith [min_le_left x6 x7, min_le_right x6 x7]\n  have hmin : 8 * A ≤ x0 + x7 + 9 * (x1 + x2 + x3 + x4 + x5 + x6) := by\n    dsimp [A, minEdges]\n    linarith\n  have htotal : T = x0 + x1 + x2 + x3 + x4 + x5 + x6 + x7 := rfl\n  have hidentity : A + V = 2 * T - x0 - x7 := by\n    dsimp [A, V, T, minEdges, maxEdges, total8]\n    linarith [min_add_max x0 x1, min_add_max x1 x2, min_add_max x2 x3,\n      min_add_max x3 x4, min_add_max x4 x5, min_add_max x5 x6,\n      min_add_max x6 x7]\n  have hsum : 8 ≤ T := by\n    linarith\n  have hmax : 7 ≤ V := by\n    dsimp [V, maxEdges]\n    linarith [le_max_left x0 x1, le_max_left x1 x2, le_max_left x2 x3,\n      le_max_left x3 x4, le_max_left x4 x5, le_max_left x5 x6,\n      le_max_left x6 x7]\n  have hcritical : x0 + x7 + A - ((2 : ℝ) / 3) * (V + T) ≤ -T / 8 := by\n    linarith\n  have hproduct : 0 ≤ (c - (2 : ℝ) / 3) * (V + T - 15) :=\n    mul_nonneg (sub_nonneg.mpr hc) (by linarith)\n  change -1 + x0 + x7 + A - c * V - c * T ≤ 8 - 15 * c - (T - 8) / 8\n  nlinarith\n\ntheorem alternating_quadratic\n    (a b c d : ℝ)\n    (h0 : c + d = 0)\n    (h1 : a + b + c - d = 0)\n    (h2 : 4 * a + 2 * b + c + d = 0)\n    (h3 : 9 * a + 3 * b + c - d = 0) :\n    a = 0 ∧ b = 0 ∧ c = 0 ∧ d = 0 := by\n  constructor\n  · linarith\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem uniform_error_margins\n    (c alpha : ℝ) (hc : (2 : ℝ) / 3 < c) (ha : 2 * alpha < 3 * c - 1) :\n    10 - 15 * c < 0 ∧ 2 - 3 * c < 0 ∧ 1 - 3 * c + 2 * alpha < 0 := by\n  constructor\n  · linarith\n  constructor <;> linarith\n\ntheorem degree_seven_cannot_be_eighth_power\n    (P : Polynomial ℝ) (hP : P.natDegree ≤ 7) :\n    P ≠ Polynomial.X ^ 8 := by\n  intro h\n  subst P\n  norm_num at hP\n\nend LocalScarcity\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/local_scarcity/statement_fidelity.md",
+    "text": "# Statement fidelity: C_FORMAL_ALGEBRA\n\nThe source `Main.lean` uses Mathlib over the real numbers and proves four\nalgebraic obligations of the analytic proof in `proof.md`. It does not encode\nthe standard map, an orbit, an analytic limiting argument, or a measure bound.\nNo compiler verdict on this file is a verdict on C_SCARCITY_EXT or\nC_LOCAL_SCARCITY in their entirety. All declarations are in the namespace\nLocalScarcity. The helper definitions `total8`, `minEdges`, and `maxEdges`\nare respectively the sum of eight real arguments, the sum of their seven\nadjacent minima, and the sum of their seven adjacent maxima.\n\n`eighth_chain_exponent` quantifies over nine unrestricted real\nnumbers x0,...,x7,c. Each depth has the explicit hypothesis xi>=1, and c>=2/3.\nThere is no upper bound on the depths and no upper bound on c in this formal\nstatement. With A=sum of the seven adjacent minima, V=sum of adjacent maxima,\nand T=sum of the eight depths, it proves\n\n    -1+x0+x7+A-c*V-c*T <= 8-15*c-(T-8)/8.\n\nThese are exactly the exponent and bound for an expanded eighth-order Green\ninverse chain whose eight derivative weights are all one. Section 2 of\n`proof.md` proves the separate compression step: repeating depth d_i p_i times\nincreases the exponent by (1-c) sum((p_i-1)d_i) when c<1. That translation from\narbitrary positive weights summing to eight is not formalized here. Nor does\nthis declaration formalize Green functions, the inverse-derivative formula,\nor the infinite geometric sums over sites. Its inequality is nevertheless\nuniform over all real depths, not a finite-depth enumeration.\n\n`alternating_quadratic` quantifies over arbitrary real a,b,c,d.\nThe four explicit homogeneous equations are the values of a quadratic\na*n^2+b*n+c plus alternating d at n=0,1,2,3. The conclusion sets all four\nunknowns to zero. In Section 5 these are the values at four consecutive zeros\nof the limiting cosine, after an invertible affine change of variable and a\nnonzero scalar rescaling. That trigonometric and analytic translation is\nproved in prose, not in this Lean declaration.\n\n`uniform_error_margins` quantifies over real c and alpha, assuming\nc>2/3 and 2*alpha<3*c-1. It proves that the three explicit error exponents\n10-15*c, 2-3*c, and 1-3*c+2*alpha are negative. These are the normalized eighth\nboundary remainder, normalized good-solution error in the opposite-cosine\ncase, and the general matched-scale success error, respectively. It does not\nformalize estimates with unspecified constants or limits.\n\n`degree_seven_cannot_be_eighth_power` quantifies over a polynomial\nP over the reals. If its natural degree is at most seven, it is not the\npolynomial X^8. This is the exact polynomial contradiction in the unbounded\neighth-order slow-remainder case; the passage from equality on positive measure\nto polynomial equality is outside this formalization.\n\nAll definitions, hypotheses, and conclusions above are intended literally.\nThe compiler checks their proofs; the correspondence to the analytic argument\nand this document's reading require independent human review.\n"
+  },
+  "subject": {
+    "content_hash": "3243a155632dfc3d1d10d33407cee03b74da031ff3a27f062d3723579a8bf16c",
+    "kind": "claim",
+    "subject_id": "C_FORMAL_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

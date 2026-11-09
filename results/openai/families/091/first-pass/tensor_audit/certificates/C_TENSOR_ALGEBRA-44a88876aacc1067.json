@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_TENSOR_ALGEBRA-242b8b92f730",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/091/first-pass/tensor_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/091/first-pass/tensor_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16231,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/091/first-pass/tensor_audit/Main.lean",
+    "source_sha256": "1e9405f6f89723a8533104a2db10ea16441b86174c5c02ce6b663d301ba87c1e",
+    "statement_fidelity": "families/091/first-pass/tensor_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "2af3a0aeaabdf030c573189a2b5d0f74e4a9a4120cdd333e6279e709e5c7a169",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/tensor_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace TensorAudit\n\nnoncomputable section\n\nvariable {ι : Type*} [Fintype ι]\n\nabbrev Tensor (ι : Type*) := ι → ι → ι → ℝ\n\ndef total (F : Tensor ι) : ℝ := ∑ i, ∑ j, ∑ k, F i j k\n\ndef normSq (F : Tensor ι) : ℝ := total fun i j k => F i j k ^ 2\n\ndef pairing (F G : Tensor ι) : ℝ := total fun i j k => F i j k * G i j k\n\ndef swap12 (F : Tensor ι) : Tensor ι := fun i j k => F j i k\n\ndef cycle (F : Tensor ι) : Tensor ι := fun i j k => F k i j\n\ndef sym (F : Tensor ι) : Tensor ι :=\n  fun i j k => (F i j k + F j i k + F k i j) / 3\n\ndef fullSym (F : Tensor ι) : Tensor ι :=\n  fun i j k =>\n    (F i j k + F i k j + F j i k + F j k i + F k i j + F k j i) / 6\n\ndef kernelTensor (S J : Tensor ι) : Tensor ι :=\n  fun i j k => S i j k + J j i k\n\ndef symmetric3 (S : Tensor ι) : Prop :=\n  (∀ i j k, S i j k = S j i k) ∧ (∀ i j k, S i j k = S i k j)\n\ndef lastSymmetric (J : Tensor ι) : Prop := ∀ i j k, J i j k = J i k j\n\ndef defect (S J : Tensor ι) : ℝ :=\n  total fun i j k =>\n    2 * S i j k ^ 2 + 4 * (S i j k * J i j k) +\n      J i j k ^ 2 + J i j k * J j i k\n\ntheorem total_swap12 (F : Tensor ι) :\n    total (fun i j k => F j i k) = total F := by\n  unfold total\n  exact Finset.sum_comm\n\ntheorem total_swap23 (F : Tensor ι) :\n    total (fun i j k => F i k j) = total F := by\n  unfold total\n  apply Finset.sum_congr rfl\n  intro i _\n  exact Finset.sum_comm\n\ntheorem total_cycle (F : Tensor ι) :\n    total (fun i j k => F k i j) = total F := by\n  unfold total\n  calc\n    (∑ i, ∑ j, ∑ k, F k i j) = ∑ i, ∑ k, ∑ j, F k i j := by\n      apply Finset.sum_congr rfl\n      intro i _\n      exact Finset.sum_comm\n    _ = ∑ k, ∑ i, ∑ j, F k i j := Finset.sum_comm\n\ntheorem norm_swap12 (J : Tensor ι) : normSq (swap12 J) = normSq J :=\n  total_swap12 fun i j k => J i j k ^ 2\n\ntheorem norm_cycle (J : Tensor ι) : normSq (cycle J) = normSq J :=\n  total_cycle fun i j k => J i j k ^ 2\n\ntheorem pairing_swap12 (S J : Tensor ι) (hS : symmetric3 S) :\n    pairing S (swap12 J) = pairing S J := by\n  calc\n    pairing S (swap12 J) =\n        total (fun i j k => S j i k * J j i k) := by\n      apply congrArg total\n      funext i j k\n      exact congrArg (fun s => s * J j i k) (hS.1 i j k)\n    _ = pairing S J := total_swap12 fun i j k => S i j k * J i j k\n\ntheorem pairing_cycle (S J : Tensor ι) (hS : symmetric3 S) :\n    pairing S (cycle J) = pairing S J := by\n  calc\n    pairing S (cycle J) =\n        total (fun i j k => S k i j * J k i j) := by\n      apply congrArg total\n      funext i j k\n      have hs : S i j k = S k i j := (hS.2 i j k).trans (hS.1 i k j)\n      exact congrArg (fun s => s * J k i j) hs\n    _ = pairing S J := total_cycle fun i j k => S i j k * J i j k\n\ntheorem pairing_J_cycle (J : Tensor ι) (hJ : lastSymmetric J) :\n    pairing J (cycle J) = pairing J (swap12 J) := by\n  calc\n    pairing J (cycle J) =\n        total (fun i j k => J i k j * J j i k) :=\n      (total_swap23 fun i j k => J i j k * J k i j).symm\n    _ = pairing J (swap12 J) := by\n      apply congrArg total\n      funext i j k\n      exact congrArg (fun a => a * J j i k) (hJ i k j)\n\ntheorem pairing_swap_cycle (J : Tensor ι) (hJ : lastSymmetric J) :\n    pairing (swap12 J) (cycle J) = pairing J (swap12 J) := by\n  calc\n    pairing (swap12 J) (cycle J) =\n        total (fun i j k => J i j k * J k j i) :=\n      (total_swap12 fun i j k => J j i k * J k i j).symm\n    _ = pairing J (cycle J) := by\n      apply congrArg total\n      funext i j k\n      exact congrArg (fun a => J i j k * a) (hJ k j i)\n    _ = pairing J (swap12 J) := pairing_J_cycle J hJ\n\ntheorem norm_add (F G : Tensor ι) :\n    normSq (fun i j k => F i j k + G i j k) =\n      normSq F + 2 * pairing F G + normSq G := by\n  simp only [normSq, pairing, total, add_sq, mul_assoc,\n    Finset.sum_add_distrib, Finset.mul_sum]\n\ntheorem norm_sub (F G : Tensor ι) :\n    normSq (fun i j k => F i j k - G i j k) =\n      normSq F - 2 * pairing F G + normSq G := by\n  simp only [normSq, pairing, total, sub_sq, mul_assoc,\n    Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.mul_sum]\n\ntheorem pairing_sym (S J : Tensor ι) (hS : symmetric3 S) :\n    pairing S (sym J) = pairing S J := by\n  have scalar (a b c d : ℝ) :\n      a * ((b + c + d) / 3) = (a * b + a * c + a * d) / 3 := by ring\n  have expand : pairing S (sym J) =\n      (pairing S J + pairing S (swap12 J) + pairing S (cycle J)) / 3 := by\n    simp only [pairing, sym, swap12, cycle, scalar, total,\n      ← Finset.sum_div, Finset.sum_add_distrib]\n  rw [expand, pairing_swap12 S J hS, pairing_cycle S J hS]\n  ring\n\ntheorem norm_sym (J : Tensor ι) (hJ : lastSymmetric J) :\n    normSq (sym J) = (normSq J + 2 * pairing J (swap12 J)) / 3 := by\n  have scalar (a b c : ℝ) :\n      ((a + b + c) / 3) ^ 2 =\n        (a ^ 2 + b ^ 2 + c ^ 2 + 2 * (a * b) +\n          2 * (a * c) + 2 * (b * c)) / 9 := by ring\n  have expand : normSq (sym J) =\n      (normSq J + normSq (swap12 J) + normSq (cycle J) +\n        2 * pairing J (swap12 J) + 2 * pairing J (cycle J) +\n        2 * pairing (swap12 J) (cycle J)) / 9 := by\n    simp only [normSq, sym, swap12, cycle, pairing, scalar, total,\n      ← Finset.sum_div, Finset.sum_add_distrib, Finset.mul_sum]\n  rw [expand, norm_swap12, norm_cycle, pairing_J_cycle J hJ,\n    pairing_swap_cycle J hJ]\n  ring\n\nomit [Fintype ι] in\ntheorem fullSym_kernel (S J : Tensor ι)\n    (hS : symmetric3 S) (hJ : lastSymmetric J) :\n    fullSym (kernelTensor S J) = fun i j k => S i j k + sym J i j k := by\n  funext i j k\n  have hs1 : S i k j = S i j k := hS.2 i k j\n  have hs2 : S j i k = S i j k := hS.1 j i k\n  have hs3 : S j k i = S i j k := (hS.2 j k i).trans hs2\n  have hs4 : S k i j = S i j k := (hS.1 k i j).trans hs1\n  have hs5 : S k j i = S i j k := (hS.2 k j i).trans hs4\n  have hj1 : J i k j = J i j k := hJ i k j\n  have hj2 : J j k i = J j i k := hJ j k i\n  have hj3 : J k j i = J k i j := hJ k j i\n  simp only [fullSym, kernelTensor, sym, hs1, hs2, hs3, hs4, hs5, hj1, hj2, hj3]\n  ring\n\ntheorem defect_expand (S J : Tensor ι) :\n    defect S J =\n      2 * normSq S + 4 * pairing S J + normSq J + pairing J (swap12 J) := by\n  simp only [defect, normSq, pairing, swap12, total,\n    Finset.sum_add_distrib, Finset.mul_sum]\n\ntheorem tensor_squares (S J : Tensor ι)\n    (hS : symmetric3 S) (hJ : lastSymmetric J) :\n    defect S J =\n      2 * normSq (fun i j k => S i j k + sym J i j k) +\n        normSq (fun i j k => J i j k - swap12 J i j k) / 6 := by\n  rw [defect_expand, norm_add, norm_sub, pairing_sym S J hS,\n    norm_sym J hJ, norm_swap12]\n  ring\n\ntheorem invariant_derivative_form (S J : Tensor ι)\n    (hS : symmetric3 S) (hJ : lastSymmetric J) :\n    defect S J =\n      normSq (kernelTensor S J) / 2 +\n        3 * normSq (fullSym (kernelTensor S J)) / 2 := by\n  rw [fullSym_kernel S J hS hJ, defect_expand]\n  change _ = normSq (fun i j k => S i j k + swap12 J i j k) / 2 +\n    3 * normSq (fun i j k => S i j k + sym J i j k) / 2\n  rw [norm_add, norm_add, pairing_swap12 S J hS, norm_swap12,\n    pairing_sym S J hS, norm_sym J hJ]\n  ring\n\ntheorem normSq_nonnegative (F : Tensor ι) : 0 ≤ normSq F := by\n  unfold normSq total\n  exact Finset.sum_nonneg fun i _ =>\n    Finset.sum_nonneg fun j _ => Finset.sum_nonneg fun k _ => sq_nonneg (F i j k)\n\ntheorem derivative_lower_bound (S J : Tensor ι)\n    (hS : symmetric3 S) (hJ : lastSymmetric J) :\n    normSq (kernelTensor S J) / 2 ≤ defect S J := by\n  rw [invariant_derivative_form S J hS hJ]\n  have h := normSq_nonnegative (fullSym (kernelTensor S J))\n  linarith\n\ntheorem defect_nonnegative (S J : Tensor ι)\n    (hS : symmetric3 S) (hJ : lastSymmetric J) : 0 ≤ defect S J := by\n  have h := derivative_lower_bound S J hS hJ\n  have hk := normSq_nonnegative (kernelTensor S J)\n  linarith\n\nend\n\nend TensorAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/tensor_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: universal finite-index tensor algebra\n\nThe declarations are in namespace `TensorAudit` in `Main.lean`.\nThe index type `iota` is arbitrary and has only a `Fintype` instance;\nin particular there is no fixed dimension and no positive-dimension\nrestriction. An empty index type gives the trivial zero-sum instance.\nA tensor is a real function of three indices. Every `normSq` is the\nunweighted sum of squares over all ordered triples, and `pairing` is\nthe corresponding real bilinear sum.\n\nThe hypotheses are `symmetric3 S` (invariance under transpositions\n(12) and (23), hence all permutations) and `lastSymmetric J`\n(invariance under (23) only). They do not assert that J is fully\nsymmetric. `swap12 J` is J with its first two slots interchanged.\nUnder the last-slot symmetry, `sym J = (J_ijk+J_jik+J_kij)/3`\nis full symmetrization. `fullSym` is explicitly the average over\nall six permutations, without symmetry assumptions.\n\n`defect S J` is exactly the ordered-triple sum of\n`2 S_ijk^2 + 4 S_ijk J_ijk + J_ijk^2 + J_ijk J_jik`.\n`tensor_squares` identifies this with\n`2 normSq(S+sym J) + normSq(J-swap12 J)/6`.\nThis is the arbitrary-dimension algebra of manuscript\n`eq:tensor-squares`, not just a scalar identity for one triple.\nThe preceding lemmas prove the required sum reindexings and the\nsymmetrization norm and pairing formulas.\n\n`kernelTensor S J` is `K_ijk=S_ijk+J_jik`.\n`fullSym_kernel` proves that its six-permutation symmetrization is\n`S+sym J`. `invariant_derivative_form` proves the second exact\nidentity\n`defect S J = normSq K/2 + 3 normSq(fullSym K)/2`.\n`derivative_lower_bound` proves `normSq K/2 <= defect S J`;\n`defect_nonnegative` proves `0 <= defect S J`.\nThese declarations together formalize exactly claim `C_TENSOR_ALGEBRA`.\n\nIn the manuscript frame with tau equal to the identity, the inputs\nare `S_ijk=f_xixjxk`, `J_ijk=h_ia C_ajk`, and\n`K_akl=partial_z_l P_ak`. The equality of this actual K with\n`kernelTensor S J` is derived in `report.md` and checked by the\nsymbolic contraction verifier. It is not a hypothesis secretly\nencoded as a conclusion of this Lean source.\n\nThis formal source does not encode measures, smooth functions,\nHessians, inverses, changes of variables, integrations by parts,\nor compact support. Thus a successful compiler run establishes the\nfinite-index algebra for `C_TENSOR_ALGEBRA`, not analytic claims\n`C_TENSOR`, `C_TENSOR_CALCULUS`, or `C_TENSOR_DEFECT`.\nThe latter have the independent mathematical proof in `report.md`\nand await the Host's independent Reviewer. The compiler does not\nestablish novelty, publishability, or any global Brunn-Minkowski result.\n"
+  },
+  "subject": {
+    "content_hash": "4875ed7bf50cfb14b32fb3e66a72a359bf54031d961047c5416b626af7e5e8a2",
+    "kind": "claim",
+    "subject_id": "C_TENSOR_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

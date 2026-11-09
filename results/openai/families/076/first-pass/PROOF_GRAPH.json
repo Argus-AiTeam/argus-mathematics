@@ -1,0 +1,121 @@
+{
+  "goal": "C9000076",
+  "routes": {
+    "dependent-form-packing": {
+      "goal": "C_PACKING",
+      "obligations": [
+        "C_PACK_COUNT",
+        "C_PACK_MOMENTS",
+        "C_PACK_MATCH",
+        "C_PACK_GEOMETRY"
+      ]
+    }
+  },
+  "nodes": {
+    "C9000076": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 076 (Real ultraflat Littlewood polynomials and unbounded binary merit factors.; papers: Ultraflat real Littlewood polynomials; Nearly minimal maxima and positive minima of Littlewood polynomials; Asymptotically minimal maxima of real Littlewood polynomials; Lean status: Partially/Comparator formalized (lean/docs/076.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_PACKING",
+        "P_MINIMAL_MAIN",
+        "P_LOWER_MAIN",
+        "P_ULTRA_MAIN"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PACKING": {
+      "statement": "Signed interval packing for arbitrary pairwise nonparallel integer forms and positive widths with 2 sum w_i < 1.",
+      "status": "open",
+      "depends_on": ["C_PACK_MOMENTS", "C_PACK_MATCH", "C_PACK_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md", "research/packing-audit/exact_certificate.json", "research/packing-audit/verify.py"],
+      "remaining_obligation": "Independent mathematical review of the moment-to-packing proof and its exposed matching input."
+    },
+    "C_PACK_COUNT": {
+      "statement": "On any finite-field affine fiber, a functional nonzero on the constraint kernel has exactly uniform values; nonproportional scalar forms satisfy this hypothesis, while proportional forms are constant.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/formal/Main.lean", "research/packing-audit/formal/statement_fidelity.md", "research/packing-audit/formal/certificates/C_PACK_COUNT-0dd7e477d502abfe.json"],
+      "remaining_obligation": "The general formal statement compiled; independent statement-fidelity review remains."
+    },
+    "C_PACK_MOMENTS": {
+      "statement": "The explicit conditional raw-moment bound holds for every positive integer u, with the manuscript's E_i, tau_q and positive-probability conditioning, including boundary centers and higher form dependencies.",
+      "status": "open",
+      "depends_on": ["C_PACK_COUNT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md", "research/packing-audit/exact_certificate.json"],
+      "remaining_obligation": "Independent review of the universal good-tuple and conditional-expectation argument; finite checks are not a substitute."
+    },
+    "C_PACK_MATCH": {
+      "statement": "The first two moment bounds and the cited edge-coloring theorem give deletion of at most q^(7/8) vertices and a matching H=(1+o(1))q/(2L).",
+      "status": "open",
+      "depends_on": ["C_PACK_MOMENTS", "A_PS_EDGE_COLORING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md"],
+      "remaining_obligation": "Independent review of deletion, codegree multiplicity and the external edge-coloring application."
+    },
+    "A_PS_EDGE_COLORING": {
+      "statement": "Pippenger-Spencer in Alon-Yuster (2005), Lemma 2.1: nearly regular fixed-uniformity hypergraphs with small relative codegrees have an edge partition into at most (1+gamma)D matchings.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/literature/alon-yuster-lemma-2.1.md"],
+      "remaining_obligation": "Primary source was independently read; official citation archive is outside mission-owned paths and has not been written."
+    },
+    "C_PACK_GEOMETRY": {
+      "statement": "Strict width slack makes closed desired arcs lie in the open interiors of the distinct matched slots and reflections, including at the half-circle boundary.",
+      "status": "open",
+      "depends_on": ["C_PACK_MATCH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md", "research/packing-audit/exact_certificate.json"],
+      "remaining_obligation": "Independent review of strict open-container containment for the desired closed arcs."
+    },
+    "P_MINIMAL_MAIN": {
+      "statement": "September manuscript thm:main claims maximum at most (1+eta)sqrt(N) for a real-sign polynomial at every sufficiently large integer length N.",
+      "status": "open",
+      "depends_on": ["C_PACKING", "P_MINIMAL_ANALYSIS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md"]
+    },
+    "P_MINIMAL_ANALYSIS": {
+      "statement": "September auxiliary construction, quadratic sampling, almost-signs proposition and rounding; not verified by the packing mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md"]
+    },
+    "P_LOWER_MAIN": {
+      "statement": "Lower-envelope thm:main claims sqrt(N)/16 <= |P| <= (1+eta)sqrt(N) on the whole circle at every sufficiently large length.",
+      "status": "open",
+      "depends_on": ["C_PACKING", "P_LOWER_ANALYSIS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md"]
+    },
+    "P_LOWER_ANALYSIS": {
+      "statement": "Lower-envelope prop:starting, prop:correction and completion estimates; not verified by the packing mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md"]
+    },
+    "P_ULTRA_MAIN": {
+      "statement": "Ultraflat manuscript thm:main depends on the inherited signed packing through prop:waves and completion; its main assertion is not certified here.",
+      "status": "open",
+      "depends_on": ["C_PACKING", "P_ULTRA_ANALYSIS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md"]
+    },
+    "P_ULTRA_ANALYSIS": {
+      "statement": "Ultraflat balanced construction, inverse-curvature waves, gap joins, exterior coefficient tails and rounding; not verified by the packing mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/packing-audit/report.md"]
+    }
+  }
+}

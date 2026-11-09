@@ -1,0 +1,65 @@
+{
+  "evidence_id": "lean-GL-FORMAL9000201-4c094bbd6400",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "$WORKSPACE/.local/state/argus-skill/lean-runs/20261105T110206-74e1cf6a/Main.lean"
+    ],
+    "compiled_copy": "$WORKSPACE/.local/state/argus-skill/lean-runs/20261105T110206-74e1cf6a/Main.lean",
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6587,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/201/first-pass/global_relations/lean/Main.lean",
+    "source_sha256": "3176a915e297d56ba85b5f79870b2f2ef633cb5fa57a70a77235e9eb71b860e5",
+    "statement_fidelity": "families/201/first-pass/global_relations/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "fadf3a90e79c65c80ac8308a73220cb32c4ecb3ff6514448587e8a3d92ea0076",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "$WORKSPACE/.local/state/argus-skill/lean-runs/20261105T110206-74e1cf6a/Main.lean:26:4: error: Type mismatch: After simplification, term\n  hderiv γ j hj\n has type\n  ↑(β j) * c (Function.update γ j (β j)) = 0\nbut is expected to have type\n  ↑(β j) * c β = 0\n$WORKSPACE/.local/state/argus-skill/lean-runs/20261105T110206-74e1cf6a/Main.lean:24:15: warning: This simp argument is unused:\n  Function.update_of_ne hi\n\nHint: Omit it from the simp argument list.\n  s̵i̵m̵p̵ ̵[̵γ̵,̵ ̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵o̵f̵_̵n̵e̵ ̵h̵i̵,̵ ̵h̵i̵]̵s̲i̲m̲p̲ ̲[̲γ̲,̲ ̲h̲i̲]̲\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n$WORKSPACE/.local/state/argus-skill/lean-runs/20261105T110206-74e1cf6a/Main.lean:47:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'AddMonoidAlgebra.commSemiring', which is 'noncomputable'\n$WORKSPACE/.local/state/argus-skill/lean-runs/20261105T110206-74e1cf6a/Main.lean:108:37: error: Application type mismatch: The argument\n  hrelation v\nhas type\n  DFunLike.coe.{max (u_3 + 1) (u_5 + 1), u_3 + 1, u_5 + 1} βP (left v) + βQ (right v) = 0\nbut is expected to have type\n  DFunLike.coe.{max (u_4 + 1) (u_5 + 1), u_4 + 1, u_5 + 1} βQ (right v) + βP (left v) = 0\nin the application\n  eq_neg_of_add_eq_zero_left (hrelation v)\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/global_relations/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace GlobalRelations\n\nsection Coefficients\n\nvariable {K : Type*} [Field K] [CharZero K]\nvariable {ι : Type*} [DecidableEq ι]\n\ntheorem coefficient_zero_of_vertical_derivative\n    (c : (ι → ℕ) → K) (vertical : Set ι)\n    (hderiv : ∀ (β : ι → ℕ) (j : ι), j ∈ vertical →\n      ((β j + 1 : ℕ) : K) * c (Function.update β j (β j + 1)) = 0)\n    (β : ι → ℕ) (j : ι) (hj : j ∈ vertical) (hpos : β j ≠ 0) :\n    c β = 0 := by\n  let γ := Function.update β j (β j - 1)\n  have hnat : β j - 1 + 1 = β j := by omega\n  have hγ : γ j + 1 = β j := by simp [γ, hnat]\n  have hu : Function.update γ j (γ j + 1) = β := by\n    funext i\n    by_cases hi : i = j\n    · subst i\n      simp [hγ]\n    · simp [γ, Function.update_of_ne hi, hi]\n  have hz : (β j : K) * c β = 0 := by\n    simpa only [hγ, hu] using hderiv γ j hj\n  have hn : (β j : K) ≠ 0 := by exact_mod_cast hpos\n  exact (mul_eq_zero.mp hz).resolve_left hn\n\ntheorem coefficients_supported_on_horizontal_coordinates\n    (c : (ι → ℕ) → K) (vertical : Set ι)\n    (hderiv : ∀ (β : ι → ℕ) (j : ι), j ∈ vertical →\n      ((β j + 1 : ℕ) : K) * c (Function.update β j (β j + 1)) = 0)\n    (β : ι → ℕ) (hnonzero : c β ≠ 0) :\n    ∀ j ∈ vertical, β j = 0 := by\n  intro j hj\n  by_contra hp\n  exact hnonzero\n    (coefficient_zero_of_vertical_derivative c vertical hderiv β j hj hp)\n\nend Coefficients\n\nsection Translation\n\nvariable {K : Type*} [CommRing K] {σ : Type*}\n\ndef translate (a : σ → K) : MvPolynomial σ K →+* MvPolynomial σ K :=\n  MvPolynomial.eval₂Hom MvPolynomial.C\n    (fun i => MvPolynomial.X i + MvPolynomial.C (a i))\n\ntheorem translate_C (a : σ → K) (r : K) :\n    translate a (MvPolynomial.C r) = MvPolynomial.C r := by\n  simp [translate]\n\ntheorem translate_X (a : σ → K) (i : σ) :\n    translate a (MvPolynomial.X i) =\n      MvPolynomial.X i + MvPolynomial.C (a i) := by\n  simp [translate]\n\ntheorem translate_inverse (a : σ → K) (p : MvPolynomial σ K) :\n    translate (fun i => -a i) (translate a p) = p := by\n  induction p using MvPolynomial.induction_on with\n  | C r => simp [translate_C]\n  | add p q hp hq => simp only [map_add, hp, hq]\n  | mul_X p i hp =>\n    simp only [map_mul, translate_X, map_add, translate_C, hp]\n    simp\n\ntheorem translate_zero_iff (a : σ → K) (p : MvPolynomial σ K) :\n    translate a p = 0 ↔ p = 0 := by\n  constructor\n  · intro h\n    have hi := translate_inverse a p\n    rw [h, map_zero] at hi\n    exact hi.symm\n  · intro h\n    simp [h]\n\ntheorem polynomial_identity_at_every_array\n    (a : σ → K) (p : MvPolynomial σ K)\n    (h : translate a p = 0) (v : σ → K) :\n    MvPolynomial.eval v p = 0 := by\n  have hp := (translate_zero_iff a p).mp h\n  simp [hp]\n\nend Translation\n\nsection PairGraph\n\nvariable {K : Type*} [Field K]\nvariable {V P Q C : Type*}\nvariable [AddCommGroup V] [Module K V]\nvariable [AddCommGroup P] [Module K P]\nvariable [AddCommGroup Q] [Module K Q]\nvariable [AddCommGroup C] [Module K C]\n\ntheorem exact_negative_pair_graph\n    (left : V →ₗ[K] P) (right : V →ₗ[K] Q)\n    (βP : P ≃ₗ[K] C) (βQ : Q ≃ₗ[K] C)\n    (honto : Function.Surjective left)\n    (hrelation : ∀ v, βP (left v) + βQ (right v) = 0) :\n    ∀ p q, (∃ v, left v = p ∧ right v = q) ↔\n      q = -βQ.symm (βP p) := by\n  have hright : ∀ v, right v = -βQ.symm (βP (left v)) := by\n    intro v\n    apply βQ.injective\n    simp only [map_neg, LinearEquiv.apply_symm_apply]\n    exact eq_neg_of_add_eq_zero_left (hrelation v)\n  intro p q\n  constructor\n  · rintro ⟨v, hp, hq⟩\n    rw [← hq, hright, hp]\n  · intro hq\n    obtain ⟨v, hv⟩ := honto p\n    refine ⟨v, hv, ?_⟩\n    rw [hright, hv, ← hq]\n\ntheorem other_endpoint_surjective\n    (left : V →ₗ[K] P) (right : V →ₗ[K] Q)\n    (βP : P ≃ₗ[K] C) (βQ : Q ≃ₗ[K] C)\n    (honto : Function.Surjective left)\n    (hrelation : ∀ v, βP (left v) + βQ (right v) = 0) :\n    Function.Surjective right := by\n  intro q\n  let p := βP.symm (-βQ q)\n  have heq : q = -βQ.symm (βP p) := by simp [p]\n  obtain ⟨v, _, hv⟩ :=\n    (exact_negative_pair_graph left right βP βQ honto hrelation p q).mpr heq\n  exact ⟨v, hv⟩\n\nend PairGraph\n\nend GlobalRelations\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/global_relations/lean/statement_fidelity.md",
+    "text": "# Statement fidelity for GL-FORMAL9000201\n\nThe declarations in `Main.lean` certify three algebraic steps, not the entire\nmanuscript or the entire GLOBAL9000201 theorem. They have no `sorry`, custom\naxioms, or imported manuscript hypotheses. Standard Mathlib definitions and\ntheorems are used.\n\n## Characteristic-zero coefficient step\n\n`GlobalRelations.coefficient_zero_of_vertical_derivative` quantifies over a\ncharacteristic-zero field K, an index type with decidable equality, an arbitrary\ncoefficient function c from exponent arrays to K, a set of vertical indices,\nan exponent array beta, and a vertical index j with beta(j) nonzero.\n\nIts hypothesis is the exact coefficient formula for a zero partial derivative:\nfor every exponent array gamma and vertical j,\n\n    (gamma(j)+1) c(update gamma j (gamma(j)+1)) = 0.\n\nIts conclusion is c(beta)=0. The companion\n`coefficients_supported_on_horizontal_coordinates` says that every nonzero\ncoefficient has exponent zero at every vertical index. For a finite index type\nthis is precisely the coefficientwise step from G_z=0 to G=G(y) in report\nSection 8. The formal statement does not construct a power-series ring, a\nformal coordinate inverse, a Jacobian, or a scalar eigenvalue branch. Those\nidentifications and the derivation of the zero partials are proved in prose.\nUsing arbitrary arrays does not add a hidden support or convergence assumption;\nthe formal assertion is algebraic, and the application uses finite coordinates.\n\n## Polynomial translation step\n\n`GlobalRelations.translate` is the polynomial substitution X_i -> X_i+a_i\nover an arbitrary commutative ring. `translate_inverse` proves that translating\nby -a after translating by a recovers every multivariate polynomial.\n`translate_zero_iff` proves that a translated polynomial is zero exactly when\nthe original polynomial is zero. `polynomial_identity_at_every_array` says that\nsuch a polynomial identity then evaluates to zero at every array of ring\nelements.\n\nIn report Section 8 the ring is the field E(U), a is the generic upper-arrow\narray U, and p is one covector applied to one column of J(V). The formal theorem\njustifies polynomial descent by S=V-U; it is not a theorem permitting arbitrary\nsubstitution into an infinite Taylor series. It does not prove that the\nmanuscript's Jacobian is polynomial, that formal-series embedding is injective,\nor that coefficient-matrix rank is preserved by scalar extension. Those are\nseparate steps in the universal prose proof.\n\n## Exact response graph\n\n`GlobalRelations.exact_negative_pair_graph` quantifies over a field K and\narbitrary K-modules V, P, Q, C, two K-linear maps from V to the endpoint spaces,\nand linear equivalences betaP:P->C and betaQ:Q->C. It assumes that the left\nendpoint map is onto and that betaP(left(v))+betaQ(right(v))=0 for every v.\nIt proves that the joint image consists exactly of\n\n    (p, -betaQ^{-1}(betaP(p))).\n\n`other_endpoint_surjective` derives that the right endpoint is onto as well.\nNeither finite dimension nor a positive dimension is required. Zero modules\nare included, which covers the g=0 graph case.\n\nIn report Section 9 the common module C is G_I^*, the equivalences are the\nduals of compatible covector projections, and V is the reverse-arrow\nparameter space after quotienting the loop images. The common space,\nequivalences, and endpoint onto-ness are established in Sections 5--9, not\nassumed as the conclusion of GLOBAL9000201. The compiler checks the resulting\nlinear-algebra implication; the universal manuscript-to-module translation\nand the independent mathematical review remain outside its verdict.\n"
+  },
+  "subject": {
+    "content_hash": "d999ae134b1ef2862b01a15b3797693a28ff32fc75251310bf3a4b5457146151",
+    "kind": "claim",
+    "subject_id": "GL-FORMAL9000201"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

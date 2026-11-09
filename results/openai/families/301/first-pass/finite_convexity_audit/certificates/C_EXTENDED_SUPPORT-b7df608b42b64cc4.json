@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_EXTENDED_SUPPORT-0dbdb3b50c28",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/301/first-pass/finite_convexity_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 2916,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/301/first-pass/finite_convexity_audit/Main.lean",
+    "source_sha256": "c8d2ec009f525ecafa5c02dd08b8532a435deb292d9449f36165b7335c07d36f",
+    "statement_fidelity": "families/301/first-pass/finite_convexity_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "ec2a4911b29dc7c3a7dc8fd324d43f38bf8a386659b2bd419665c838649586e3",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/301/first-pass/finite_convexity_audit/Main.lean:9:28: error: expected token\nfamilies/301/first-pass/finite_convexity_audit/Main.lean:26:28: error: expected token\nfamilies/301/first-pass/finite_convexity_audit/Main.lean:36:28: error: expected token\nfamilies/301/first-pass/finite_convexity_audit/Main.lean:52:28: error: expected token\nfamilies/301/first-pass/finite_convexity_audit/Main.lean:61:15: error: expected token\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/finite_convexity_audit/Main.lean",
+    "text": "import Mathlib.Data.ENNReal.BigOperators\n\nopen scoped BigOperators\n\nnamespace FiniteConvexity\n\ntheorem sector_rank_bound\n    {E : Type*} (s : Finset E) (active : E → Prop) [DecidablePred active]\n    (N : E → ℕ) (r : E → ℝ≥0∞) (b : ℝ≥0∞)\n    (hzero : ∀ e ∈ s, ¬active e → r e = 0)\n    (hbound : ∀ e ∈ s, active e → r e ≤ (N e : ℝ≥0∞) * b) :\n    (∑ e ∈ s, r e) ≤\n      ((∑ e ∈ s, if active e then N e else 0 : ℕ) : ℝ≥0∞) * b := by\n  calc\n    (∑ e ∈ s, r e) ≤\n        ∑ e ∈ s, ((if active e then N e else 0 : ℕ) : ℝ≥0∞) * b := by\n      apply Finset.sum_le_sum\n      intro e he\n      by_cases h : active e\n      · simpa only [if_pos h] using hbound e he h\n      · simp only [if_neg h, Nat.cast_zero, zero_mul, hzero e he h, le_refl]\n    _ = _ := by rw [← Finset.sum_mul, Nat.cast_sum]\n\ntheorem zero_controller_rank\n    {E : Type*} (s : Finset E) (active : E → Prop) [DecidablePred active]\n    (N : E → ℕ) (r : E → ℝ≥0∞)\n    (hzero : ∀ e ∈ s, ¬active e → r e = 0)\n    (hbound : ∀ e ∈ s, active e → r e ≤ (N e : ℝ≥0∞) * 0) :\n    (∑ e ∈ s, r e) = 0 := by\n  apply le_antisymm\n  · simpa only [mul_zero] using sector_rank_bound s active N r 0 hzero hbound\n  · exact zero_le _\n\ntheorem cap_rank_bound\n    {E : Type*} (s : Finset E) (active : E → Prop) [DecidablePred active]\n    (N : E → ℕ) (r : E → ℝ≥0∞) (b : ℝ≥0∞)\n    (hzero : ∀ e ∈ s, ¬active e → r e = 0)\n    (hbound : ∀ e ∈ s, active e → r e ≤ (N e : ℝ≥0∞) * b)\n    (hb : b ≤ 1) :\n    (∑ e ∈ s, r e) ≤\n      ((∑ e ∈ s, if active e then N e else 0 : ℕ) : ℝ≥0∞) := by\n  calc\n    (∑ e ∈ s, r e) ≤\n        ((∑ e ∈ s, if active e then N e else 0 : ℕ) : ℝ≥0∞) * b :=\n      sector_rank_bound s active N r b hzero hbound\n    _ ≤ ((∑ e ∈ s, if active e then N e else 0 : ℕ) : ℝ≥0∞) * 1 :=\n      mul_le_mul_left' hb _\n    _ = _ := mul_one _\n\ntheorem cap_rank_finite\n    {E : Type*} (s : Finset E) (active : E → Prop) [DecidablePred active]\n    (N : E → ℕ) (r : E → ℝ≥0∞) (b : ℝ≥0∞)\n    (hzero : ∀ e ∈ s, ¬active e → r e = 0)\n    (hbound : ∀ e ∈ s, active e → r e ≤ (N e : ℝ≥0∞) * b)\n    (hb : b ≤ 1) :\n    (∑ e ∈ s, r e) < ⊤ :=\n  lt_of_le_of_lt (cap_rank_bound s active N r b hzero hbound hb)\n    (ENNReal.natCast_lt_top _)\n\ntheorem inactive_zero_cannot_be_omitted :\n    ¬ ((1 : ℝ≥0∞) ≤ (0 : ℝ≥0∞) * 0) := by\n  simp\n\nend FiniteConvexity\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/finite_convexity_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: extended-rank sector transfer\n\nThe declaration `FiniteConvexity.sector_rank_bound` quantifies over an\narbitrary type of sectors, an arbitrary finite subset `s`, a decidable\nactive-sector predicate, arbitrary natural-number multiplicities `N`,\narbitrary extended nonnegative ranks `r`, and an arbitrary extended\nnonnegative controller rank `b`. Its hypotheses require exact zero rank\nin every inactive sector of `s`, and `r e <= N e * b` in every active\nsector of `s`. Its conclusion bounds the unnormalized sum of sector\nranks by the sum of the active natural multiplicities times `b`.\n\nThe type `ENNReal` includes infinity and has the convention `0 * infinity\n= 0`. In particular, the theorem does not assume that `b` is positive\nor finite and does not divide or cancel an extended rank.\n`zero_controller_rank` specializes the conclusion to controller rank\nzero. `cap_rank_bound` and `cap_rank_finite` specialize to `b <= 1`,\ngiving respectively the finite natural-number bound and strict\nfiniteness. `inactive_zero_cannot_be_omitted` checks the scalar witness\n`1 <= 0 * 0` is false; it is not a counterexample to the manuscript.\n\nFor Proposition `tc:finite-convexity`, fix a test index `i` and a trace\n`tau`. The sectors are subsets `E` of the finite test set; a sector is\nactive when `i` belongs to `E`. Substitute\n`r E = d_tau(H_E(s_i))` (or `d_tau(H_E(s_i^2))`),\n`b = d_tau(b_i)`, and `N E = N_{E,i}`. Exact source-quotient\nvanishing supplies `hzero`; the fixed hereditary support supplies\n`hbound`. Thus the formal theorem checks precisely the extended-rank\nsummation step, including the zero-controller and infinite-controller\ncases.\n\nThe compiler does not construct the completely positive maps, prove the\nCuntz comparisons, identify ranks of operators with these scalars,\nconstruct measurable fields, establish trace continuity, or apply\nHahn--Banach. Those analytic and statement-interpretation obligations\nare proved in `proof.md` and remain subject to independent review.\nThis source is not a formalization of the entire proposition or of the\nclassification theorem.\n"
+  },
+  "subject": {
+    "content_hash": "5551a09b4a4be8b71c819d5f3b8fa2afad454cdb1fd14d17fb2ce738caa85d6f",
+    "kind": "claim",
+    "subject_id": "C_EXTENDED_SUPPORT"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,238 @@
+{
+  "goal": "C9000274",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "dependency_semantics": "Conditional induction nodes state the full previous-depth theorem as a premise. They are implication schemata, not edges assuming the same-depth conclusion. Open means independent mathematical review is still pending, even when engineer evidence or a compiler result is present.",
+  "routes": [
+    {
+      "name": "Dimension-uniform operator localization",
+      "status": "current",
+      "evidence": "research/exact_certificate.json"
+    },
+    {
+      "name": "Scalar independence on higher-rank zero sectors",
+      "status": "ruled_out",
+      "retired_because": "A vector in a higher-rank product subspace may be entangled across counted sites. Binary mismatch outcomes are then not independent; the replacement route uses an operator inequality.",
+      "evidence": "research/dimension_uniform_localization.md"
+    }
+  ],
+  "nodes": {
+    "C9000274": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 274 (Parity is not in QAC<sup>0</sup>.; papers: Product-projection localization and the QAC0 parity lower bound; Regular trajectories, pruning and quantum parity; Lean status: Partially/Comparator formalized (lean/docs/274.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_DIM_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "S_SCOPE": {
+      "statement": "The staged papers prove different qubit/rank-one dependency chains; neither asserts the dimension- and rank-uniform extension.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/dimension_uniform_localization.md"]
+    },
+    "S_POLY": {
+      "statement": "First manuscript, lem:polynomial: an integer zero filter has degree and weighted coefficient logarithm below N^u for u>(a+b)/2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Product-projection-localization-and-the-QAC0-parity-lower-bound-September-24-2026/build/sections/polynomial.tex"]
+    },
+    "S_BASE": {
+      "statement": "First manuscript, lem:base: rank-one product factors give a depth-zero squared transition bound 2^(-r).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Product-projection-localization-and-the-QAC0-parity-lower-bound-September-24-2026/build/sections/depth_reduction.tex"]
+    },
+    "S_LOW": {
+      "statement": "First manuscript, lem:propagation: previous-depth localization extends from a zero pattern to all low-count patterns.",
+      "status": "open",
+      "depends_on": ["S_BASE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Product-projection-localization-and-the-QAC0-parity-lower-bound-September-24-2026/build/sections/depth_reduction.tex"]
+    },
+    "S_SMALL": {
+      "statement": "First manuscript, lem:small-support: ordered reflection expansion costs at most 9^k and reduces a k-site projection by one depth.",
+      "status": "open",
+      "depends_on": ["S_LOW"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Product-projection-localization-and-the-QAC0-parity-lower-bound-September-24-2026/build/sections/depth_reduction.tex"]
+    },
+    "S_BACK": {
+      "statement": "First manuscript, lem:backward: under the previous-depth hypothesis, B_d(t,b) implies B_d(s,t) whenever s<t<b<2t-s.",
+      "status": "open",
+      "depends_on": ["S_POLY", "S_SMALL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Product-projection-localization-and-the-QAC0-parity-lower-bound-September-24-2026/build/sections/bootstrap.tex"]
+    },
+    "S_LOC": {
+      "statement": "First manuscript, thm:localization: uniform qubit product-projection localization at every fixed depth and exponent pair.",
+      "status": "open",
+      "depends_on": ["S_BASE", "S_BACK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Product-projection-localization-and-the-QAC0-parity-lower-bound-September-24-2026/build/sections/localization.tex", "research/openai_manuscript/Product-projection-localization-and-the-QAC0-parity-lower-bound-September-24-2026/build/sections/bootstrap.tex"]
+    },
+    "S_PARITY_LOC": {
+      "statement": "First manuscript, thm:parity: complementary Hadamard matrix entries and character orthogonality convert localization to a measured-output parity lower bound.",
+      "status": "open",
+      "depends_on": ["S_LOC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Product-projection-localization-and-the-QAC0-parity-lower-bound-September-24-2026/build/sections/parity.tex"]
+    },
+    "T_DEGREE": {
+      "statement": "Second manuscript, lem:degree-shift: operator degree bounds excitation shifts.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Regular-trajectories-pruning-and-quantum-parity-September-24-2026/build/sections/02-framework.tex"]
+    },
+    "T_FILTERS": {
+      "statement": "Second manuscript, lem:zero-filter and lem:tail-filter: integer zero approximation and a globally nonnegative tail polynomial with global growth control.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Regular-trajectories-pruning-and-quantum-parity-September-24-2026/build/sections/03-filters.tex"]
+    },
+    "T_PROP": {
+      "statement": "Second manuscript, prop:propagation: low-degree perturbations propagate along an assumed regular trajectory, using a qubit Pauli coefficient bound.",
+      "status": "open",
+      "depends_on": ["T_DEGREE", "T_FILTERS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Regular-trajectories-pruning-and-quantum-parity-September-24-2026/build/sections/04-propagation.tex"]
+    },
+    "T_TRANSPORT": {
+      "statement": "Second manuscript, lem:tail-transport: two already regular trajectories linked by an endpoint projection transfer excitation tails.",
+      "status": "open",
+      "depends_on": ["T_PROP", "T_FILTERS", "T_DEGREE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Regular-trajectories-pruning-and-quantum-parity-September-24-2026/build/sections/05-transport.tex"]
+    },
+    "T_INSERT": {
+      "statement": "Second manuscript, prop:projection-insertion: backward suffix induction preserves regularity after an endpoint product projection.",
+      "status": "open",
+      "depends_on": ["T_TRANSPORT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Regular-trajectories-pruning-and-quantum-parity-September-24-2026/build/sections/06-pruning.tex"]
+    },
+    "T_OVERLAP": {
+      "statement": "Second manuscript, cor:product-tail and cor:overlap-tail: for a regular product-input trajectory the output tail is multiplied by the projection probability, not its square root.",
+      "status": "open",
+      "depends_on": ["T_TRANSPORT", "T_INSERT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Regular-trajectories-pruning-and-quantum-parity-September-24-2026/build/sections/06-pruning.tex"]
+    },
+    "T_RETAIN": {
+      "statement": "Second manuscript, lem:retained-layer: mean counts, binary low-weight atom counting, and recentering make gates with probability at least m^(-6) regular.",
+      "status": "open",
+      "depends_on": ["T_OVERLAP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Regular-trajectories-pruning-and-quantum-parity-September-24-2026/build/sections/06-pruning.tex"]
+    },
+    "T_PRUNE": {
+      "statement": "Second manuscript, prop:pruning: prefix induction yields a regular pruned circuit within vector distance 2t m^(-2) on the specified product input.",
+      "status": "open",
+      "depends_on": ["T_RETAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Regular-trajectories-pruning-and-quantum-parity-September-24-2026/build/sections/06-pruning.tex"]
+    },
+    "T_PARITY": {
+      "statement": "Second manuscript, thm:parity: reference copies, pruning, and the product-input tail contradict fixed measured-output parity advantage.",
+      "status": "open",
+      "depends_on": ["T_PRUNE", "T_OVERLAP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Regular-trajectories-pruning-and-quantum-parity-September-24-2026/build/sections/07-parity.tex"]
+    },
+    "C_SOS": {
+      "statement": "For arbitrary idempotents P,Q in a unital ring, P-PQ(2-P)QP=(P-PQP)^2; for orthogonal projections the right side is a positive square.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/exact_certificate.json", "research/Main.lean"]
+    },
+    "C_BASE_GENERAL": {
+      "statement": "For arbitrary local orthogonal projections and r>=0, the squared product-projection transition from the zero count is at most 2^(-r), including entangled zero-sector inputs.",
+      "status": "open",
+      "depends_on": ["C_DIM_CORE"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/dimension_uniform_localization.md", "research/exact_certificate.json"]
+    },
+    "C_DIM_CORE": {
+      "statement": "For arbitrary finite complex matrices representing orthogonal projections P,Q, B=PQ(2I-P)QP and P-B are positive semidefinite with explicit Gram identities; positive tensor-order composition and the nonnegative-scalar compressed-tail implication hold for arbitrary finite matrix sizes.",
+      "status": "open",
+      "depends_on": ["C_SOS"],
+      "reviewer_confirmed": false,
+      "kernel_status": "closed_kernel",
+      "evidence": ["research/Main.lean", "research/statement_fidelity.md", "research/certificates/C_DIM_CORE-226cb13096ae45f7.json"]
+    },
+    "C_PATTERN_GENERAL": {
+      "statement": "Assuming all dimension-uniform depth-(d-1) localization pairs, binary subspace patterns give ||[M>=N^beta]B[M<N^alpha]||<=exp(-N^sigma) for beta>max(alpha,sigma), with a threshold depending only on depth and the exponents.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/dimension_uniform_localization.md", "research/exact_certificate.json"]
+    },
+    "C_SMALL_GENERAL": {
+      "statement": "Assuming all dimension-uniform depth-(d-1) localization pairs, depth-d conjugation of product projections on at most N^u sites has transition at most exp(-N^w) to count N^t for t>max(u,w); the reflection expansion costs at most 9^k.",
+      "status": "open",
+      "depends_on": ["C_PATTERN_GENERAL"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/dimension_uniform_localization.md", "research/exact_certificate.json"]
+    },
+    "C_POLY_GENERAL": {
+      "statement": "For fixed 0<a<b and u>(a+b)/2, the explicit root-Chebyshev polynomial has p(0)=1, degree and log weighted coefficient norm at most N^u, and integer error at most exp(-N^a) through ceil(N^b), with no b<=1 restriction.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/dimension_uniform_localization.md", "research/exact_certificate.json"]
+    },
+    "C_BACKWARD_GENERAL": {
+      "statement": "Assuming all dimension-uniform depth-(d-1) pairs and the universal same-depth pair B_d(t,b), one-sided polynomial substitution after squaring and exact inverse count exchange prove B_d(s,t) whenever 0<=s<t<b<2t-s.",
+      "status": "open",
+      "depends_on": ["C_SMALL_GENERAL", "C_POLY_GENERAL"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/dimension_uniform_localization.md", "research/exact_certificate.json"]
+    },
+    "C_SCALE_GENERAL": {
+      "statement": "For every 0<=s<t<=1 the recurrence with eta=(t-s)^2/100 reaches a tail exponent greater than one within ceil(2/(t-s)) steps, keeping t_i<t_(i+1)<2t_i-s_i; hence the conditional backward implication yields all depth-d pairs from the previous-depth theorem.",
+      "status": "open",
+      "depends_on": ["C_BACKWARD_GENERAL"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/dimension_uniform_localization.md", "research/exact_certificate.json"]
+    },
+    "C_TRANSFER": {
+      "statement": "Under the full dimension-uniform previous-depth hypothesis, binary subspace patterns, ordered reflection expansion, coefficient-controlled polynomials, inverse count exchange, and the finite scale induction prove every depth-d localization pair with dimension-free thresholds.",
+      "status": "open",
+      "depends_on": ["C_SCALE_GENERAL"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/dimension_uniform_localization.md", "research/exact_certificate.json"]
+    },
+    "C_DIM_UNIFORM": {
+      "statement": "For every fixed d and 0<=s<t there exists N0(d,s,t) such that arbitrary finite local dimensions, arbitrary-rank product-reflection circuits at depth d, and arbitrary local-projection counts M,D satisfy ||[M>=N^t]U[D=0]U*[M=0]||<=exp(-N^s) for N>=N0.",
+      "status": "open",
+      "depends_on": ["C_BASE_GENERAL", "C_TRANSFER"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/dimension_uniform_localization.md", "research/verify.py", "research/exact_certificate.json"]
+    },
+    "C_SCALAR_INDEP": {
+      "statement": "For arbitrary higher-rank local projections, a normalized product projection applied to every vector in a product zero-count subspace produces independent binary mismatch outcomes on the counted sites.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "refutes",
+      "evidence": ["research/exact_certificate.json", "research/dimension_uniform_localization.md"]
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "goal": "C9000132",
+  "routes": [
+    {
+      "name": "four-profile quantitative extension",
+      "status": "current",
+      "evidence": "research/quantitative_profile/REPORT.md"
+    }
+  ],
+  "nodes": {
+    "C9000132": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 132 (A superquadratic separation of sensitivity and block sensitivity.; papers: A superquadratic separation between sensitivity and block sensitivity; Lean status: Partially/Comparator formalized (lean/docs/132.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PROFILE_EXTENSION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PROFILE_EXTENSION": {
+      "statement": "Uniform even-depth improvement with M=16*3^d and an actual infinite ordinary-sensitivity separation family of exponent 161/80.",
+      "status": "open",
+      "depends_on": ["C_UNIFORM_PROFILE", "C_SEED20", "C_POWER161", "C_PRIOR_COMPARE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean", "research/quantitative_profile/STATEMENT_FIDELITY.md", "research/quantitative_profile/lean/lean_check.json"]
+    },
+    "C_LABEL_EXISTENCE": {
+      "statement": "For every M>=3, a regular tournament with k=2M^2+1 and r=ceil(sqrt M) has labels excluding destination-constant 16-sets.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean"]
+    },
+    "C_INITIAL_PROFILES": {
+      "statement": "The separated Hamming-ball initial predicates satisfy S00<=L, S01<=LM, J00=J01=0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean", "research/quantitative_profile/exact_certificate.json"]
+    },
+    "C_FOUR_TRANSFER": {
+      "statement": "At every input the nested-tournament raw-bit ordinary and joint profiles are bounded by R=[[16,1,0,3],[M^2,r,0,0],[16,0,0,3],[0,r,M^2,0]].",
+      "status": "open",
+      "depends_on": ["C_LABEL_EXISTENCE", "C_INITIAL_PROFILES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean", "research/quantitative_profile/exact_certificate.json"]
+    },
+    "C_COMMON_BLOCKS": {
+      "statement": "At level ell all predicates vanish at zero and admit Mk^ell disjoint nonempty common sensitive blocks of size Lr^ell.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean"]
+    },
+    "C_UNIFORM_PROFILE": {
+      "statement": "For every even d>=2, M=16*3^d and r=4*3^(d/2), S_(ell,b)<=2(d+2)M^(ell+b) for ell<=d.",
+      "status": "open",
+      "depends_on": ["C_FOUR_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean", "research/quantitative_profile/exact_certificate.json"]
+    },
+    "C_OR_BALANCE": {
+      "statement": "OR of M disjoint top-level predicates has sensitivity <=max(M S_d0,S_d1), value zero at zero, and at least M^2 k^d disjoint zero-sensitive blocks.",
+      "status": "open",
+      "depends_on": ["C_COMMON_BLOCKS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean"]
+    },
+    "C_SEED20": {
+      "statement": "An actual Boolean seed exists at d=20, M=16*3^20 with s<=A=36M^21 and bs(0)>=B=M^2(2M^2+1)^20; B^80>=A^161.",
+      "status": "open",
+      "depends_on": ["C_FOUR_TRANSFER", "C_INITIAL_PROFILES", "C_OR_BALANCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean", "research/quantitative_profile/exact_certificate.json"]
+    },
+    "C_COMPOSITION": {
+      "statement": "Disjoint Boolean composition multiplies sensitivity upper bounds and, when the inner function is zero at zero, zero-input block-sensitivity lower bounds.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean"]
+    },
+    "C_POWER161": {
+      "statement": "The iterated d=20 seed gives total nonconstant Boolean functions with bs(F_m,0)>=s(F_m)^(161/80), and bs(F_m,0) tends to infinity.",
+      "status": "open",
+      "depends_on": ["C_SEED20", "C_COMPOSITION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/Main.lean", "research/quantitative_profile/exact_certificate.json"]
+    },
+    "C_PRIOR_COMPARE": {
+      "statement": "The target exponent exceeds every exponent furnished by the manuscript's full explicit A=2(d+2)M^(d+1), B=M^2(2M^2+1)^d guarantee for M>=9^(d+1).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quantitative_profile/REPORT.md", "research/quantitative_profile/exact_certificate.json"]
+    }
+  }
+}

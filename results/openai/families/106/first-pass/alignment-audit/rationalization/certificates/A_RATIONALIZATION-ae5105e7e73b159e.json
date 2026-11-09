@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-A_RATIONALIZATION-953d98186664",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/106/first-pass/alignment-audit/rationalization/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/106/first-pass/alignment-audit/rationalization/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15893,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/106/first-pass/alignment-audit/rationalization/Main.lean",
+    "source_sha256": "51e17aee2929789446bd0a87867b43b227c320db2bd306fdcd9b7dcb90da0d2b",
+    "statement_fidelity": "families/106/first-pass/alignment-audit/rationalization/statement_fidelity.md",
+    "statement_fidelity_sha256": "7b550b943a9d800c819d99788feadfa119d03aa4da85cef38bc2ad4d0086860c",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/alignment-audit/rationalization/Main.lean",
+    "text": "import Mathlib\n\nopen Finset\n\nnamespace AlignmentRationalization\n\nuniverse u\n\ntheorem rational_below {x δ : ℝ} (hx : 0 ≤ x) (hδ : 0 < δ) :\n    ∃ q : ℚ, 0 ≤ (q : ℝ) ∧ (q : ℝ) ≤ x ∧ x - q < δ := by\n  by_cases hzero : x = 0\n  · exact ⟨0, by simp [hzero, hδ]⟩\n  · have hpos : 0 < x := lt_of_le_of_ne hx (Ne.symm hzero)\n    have hlow : max 0 (x - δ) < x := by\n      rw [max_lt_iff]\n      exact ⟨hpos, by linarith⟩\n    obtain ⟨q, hqlo, hqhi⟩ := exists_rat_btwn hlow\n    refine ⟨q, (le_max_left _ _).trans hqlo.le, hqhi.le, ?_⟩\n    have := (le_max_right 0 (x - δ)).trans_lt hqlo\n    linarith\n\ntheorem finite_rational_l1_approximation {α : Type u} [Fintype α] [Nonempty α]\n    (w : α → ℝ) (hw : ∀ i, 0 ≤ w i) (hsum : ∑ i, w i = 1)\n    {ε : ℝ} (hε : 0 < ε) :\n    ∃ q : α → ℚ, (∀ i, 0 ≤ q i) ∧ (∑ i, q i = 1) ∧\n      ∑ i, |(q i : ℝ) - w i| < ε := by\n  classical\n  let c : ℝ := Fintype.card α\n  have hc : 0 < c := by dsimp [c]; exact_mod_cast Fintype.card_pos\n  let δ : ℝ := ε / (4 * c)\n  have hδ : 0 < δ := by dsimp [δ]; positivity\n  have hbelow : ∀ i, ∃ q : ℚ, 0 ≤ (q : ℝ) ∧ (q : ℝ) ≤ w i ∧ w i - q < δ :=\n    fun i => rational_below (hw i) hδ\n  choose v hv using hbelow\n  let a : α := Classical.choice inferInstance\n  let S : ℚ := ∑ i, v i\n  have hSreal : (S : ℝ) ≤ 1 := by\n    calc\n      (S : ℝ) = ∑ i, (v i : ℝ) := by simp [S]\n      _ ≤ ∑ i, w i := Finset.sum_le_sum fun i _ => (hv i).2.1\n      _ = 1 := hsum\n  have hS : S ≤ 1 := by exact_mod_cast hSreal\n  let q : α → ℚ := fun i => v i + if i = a then 1 - S else 0\n  have hqnonneg : ∀ i, 0 ≤ q i := by\n    intro i\n    have hvnonneg : 0 ≤ v i := by exact_mod_cast (hv i).1\n    dsimp [q]\n    split_ifs <;> linarith\n  have hqsum : ∑ i, q i = 1 := by\n    simp [q, Finset.sum_add_distrib, S]\n  let R : ℝ := 1 - S\n  have hR : 0 ≤ R := sub_nonneg.mpr hSreal\n  have hRsum : R = ∑ i, (w i - (v i : ℝ)) := by\n    simp [R, S, Finset.sum_sub_distrib, hsum]\n  have hpoint : ∀ i, |(q i : ℝ) - w i| ≤\n      (w i - (v i : ℝ)) + if i = a then R else 0 := by\n    intro i\n    have hvle : (v i : ℝ) - w i ≤ 0 := sub_nonpos.mpr (hv i).2.1\n    by_cases hi : i = a\n    · have hdiff : (q i : ℝ) - w i = (v i : ℝ) - w i + R := by\n        simp [q, hi, R]\n        ring\n      rw [hdiff]\n      calc\n        _ ≤ |(v i : ℝ) - w i| + |R| := abs_add_le _ _\n        _ = (w i - (v i : ℝ)) + if i = a then R else 0 := by\n          rw [abs_of_nonpos hvle, abs_of_nonneg hR]\n          simp only [hi, ite_true]\n          ring\n    · simp [q, hi, abs_of_nonpos hvle]\n  have herrors : ∑ i, (w i - (v i : ℝ)) ≤ c * δ := by\n    calc\n      _ ≤ ∑ _i : α, δ := Finset.sum_le_sum fun i _ => (hv i).2.2.le\n      _ = c * δ := by simp [c]\n  have hbudget : 2 * c * δ < ε := by\n    have heq : 2 * c * δ = ε / 2 := by\n      dsimp [δ]\n      field_simp\n      ring\n    rw [heq]\n    linarith\n  refine ⟨q, hqnonneg, hqsum, ?_⟩\n  calc\n    ∑ i, |(q i : ℝ) - w i| ≤\n        ∑ i, ((w i - (v i : ℝ)) + if i = a then R else 0) :=\n      Finset.sum_le_sum fun i _ => hpoint i\n    _ = (∑ i, (w i - (v i : ℝ))) + R := by simp [Finset.sum_add_distrib]\n    _ = 2 * (∑ i, (w i - (v i : ℝ))) := by rw [hRsum]; ring\n    _ ≤ 2 * (c * δ) := by gcongr\n    _ < ε := by nlinarith [hbudget]\n\ntheorem rationalize_uniformly {α : Type u} [Fintype α] [Nonempty α]\n    (w : α → ℝ) (hw : ∀ i, 0 ≤ w i) (hsum : ∑ i, w i = 1)\n    {ξ η : ℝ} (hmargin : ξ < η) :\n    ∃ q : α → ℚ, (∀ i, 0 ≤ q i) ∧ (∑ i, q i = 1) ∧\n      ∀ b : α → ℝ, (∀ i, 0 ≤ b i ∧ b i ≤ 1) →\n        (∑ i, w i * b i) ≤ ξ → (∑ i, (q i : ℝ) * b i) < η := by\n  obtain ⟨q, hqnonneg, hqsum, hdist⟩ :=\n    finite_rational_l1_approximation w hw hsum (sub_pos.mpr hmargin)\n  refine ⟨q, hqnonneg, hqsum, ?_⟩\n  intro b hb hwb\n  have heq : (∑ i, (q i : ℝ) * b i) - (∑ i, w i * b i) =\n      ∑ i, (((q i : ℝ) - w i) * b i) := by\n    rw [← Finset.sum_sub_distrib]\n    apply Finset.sum_congr rfl\n    intro i _\n    ring\n  have hdiff : |(∑ i, (q i : ℝ) * b i) - (∑ i, w i * b i)| < η - ξ := by\n    rw [heq]\n    calc\n      _ ≤ ∑ i, |((q i : ℝ) - w i) * b i| := Finset.abs_sum_le_sum_abs _ _\n      _ ≤ ∑ i, |(q i : ℝ) - w i| := by\n        apply Finset.sum_le_sum\n        intro i _\n        rw [abs_mul, abs_of_nonneg (hb i).1]\n        exact mul_le_of_le_one_right (abs_nonneg _) (hb i).2\n      _ < η - ξ := hdist\n  have hupper := (abs_lt.mp hdiff).2\n  linarith\n\nend AlignmentRationalization\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/alignment-audit/rationalization/statement_fidelity.md",
+    "text": "# Fidelity of the rationalization formalization\n\nThe ledger claim is `A_RATIONALIZATION`. The formal source is this\ndirectory's `Main.lean`. Unlike the three-layer source in the parent\ndirectory, this result is not restricted to any value of `s` or `d`.\n\nThe outcome type `alpha : Type u` is arbitrary, finite, and nonempty.\nFor alignment it is the finite nonempty set of `s`-subsets of `[r]`,\nwith `r >= s`. The input `w : alpha -> Real` is any nonnegative real\nprobability law; `hsum` states its sum is exactly one.\n\n`rational_below` proves that a nonnegative real number admits a\nnonnegative rational approximation from below with any strictly\npositive absolute tolerance. The zero case is included.\n\n`finite_rational_l1_approximation` quantifies over every positive real\n`epsilon` and produces `q : alpha -> Rat` with all coordinates\nnonnegative, total mass exactly one, and\n\n    sum i, abs ((q i : Real) - w i) < epsilon.\n\nThe proof approximates each weight from below and puts the rational\nresidual mass at one distinguished outcome. Normalization and\nnonnegativity are conclusions, not assumptions about a proposed\napproximation.\n\nThe principal declaration `rationalize_uniformly` assumes only\n`xi < eta`. It produces the single rational probability law `q`\nbefore universally quantifying over the test function `b`. For every\n`b : alpha -> Real` satisfying `0 <= b i <= 1`, it proves\n\n    sum i, w i * b i <= xi\n       -> sum i, (q i : Real) * b i < eta.\n\nBad-set indicators are special cases of these test functions. Thus\nthe same `q` works for every allowed pattern and every label universe,\nwithout enumerating or bounding those families. The strict tolerance\nmargin is preserved exactly.\n\nThere are no project axioms or manuscript results among the\nhypotheses. The proof uses Mathlib's rational density, finite sums,\nabsolute-value inequalities, and rational/real field arithmetic.\nIt does not prove that the real sampler `w` exists. In particular it\ndoes not certify `A_ALIGNMENT`, minimax, Ramsey homogenization, or\nthe invariant-cut step.\n"
+  },
+  "subject": {
+    "content_hash": "a298fd959217893235bdde06b0e4532539d70df47c4ad403a4c9b977dec3e799",
+    "kind": "claim",
+    "subject_id": "A_RATIONALIZATION"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

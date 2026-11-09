@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-L026_EULER_CORE-8ec601c95bd2",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/026/first-pass/audit026/moments/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6111,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/026/first-pass/audit026/moments/Main.lean",
+    "source_sha256": "66d5041e818f2378abd19b9c32deaa3975ba5eec1d61a8ff5e7a038da28caf5d",
+    "statement_fidelity": "families/026/first-pass/audit026/moments/statement_fidelity.md",
+    "statement_fidelity_sha256": "6c7744c615aeb605cc3ffd87d209540efbd9fe465157e25538623207be3d4981",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/026/first-pass/audit026/moments/Main.lean:18:60: error: unsolved goals\nα : Type u_1\ninst✝ : DecidableEq α\ns : Finset α\nx : α → ℚ\nh : ∏ i ∈ s, (1 - x i) = ∑ x_1 ∈ s.powerset, (-1) ^ x_1.card * ∏ i ∈ x_1, x i\n⊢ ?m.85 ⊆ s\nfamilies/026/first-pass/audit026/moments/Main.lean:19:2: error: `simp` made no progress\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/audit026/moments/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace Audit026\n\nvariable {α β : Type*} [DecidableEq α]\n\ndef signedNonempty (s : Finset α) : ℚ :=\n  ∑ u ∈ s.powerset.erase ∅, (-1 : ℚ) ^ u.card\n\ntheorem nonempty_subset_product (s : Finset α) (x : α → ℚ) :\n    (∑ u ∈ s.powerset.erase ∅, (-1 : ℚ) ^ u.card * ∏ a ∈ u, x a) =\n      (∏ a ∈ s, (1 - x a)) - 1 := by\n  have h := Finset.prod_sub (fun _ : α => (1 : ℚ)) x s\n  simp only [Finset.prod_const_one, mul_one] at h\n  rw [← Finset.sum_erase_add s.powerset\n    (fun u : Finset α => (-1 : ℚ) ^ u.card * ∏ a ∈ u, x a) (by simp)] at h\n  simp only [Finset.card_empty, pow_zero, Finset.prod_empty, mul_one] at h\n  linarith\n\ntheorem fiber_sign (s : Finset α) (hs : s.Nonempty) :\n    signedNonempty s = -1 := by\n  have h := nonempty_subset_product s (fun _ => (1 : ℚ))\n  have hc : s.card ≠ 0 := Nat.ne_of_gt (Finset.card_pos.mpr hs)\n  simpa [signedNonempty, Finset.prod_const, hc] using h\n\ntheorem fiber_sign_sum (c : Finset β) (f : β → Finset α)\n    (hf : ∀ i ∈ c, (f i).Nonempty) :\n    (∑ i ∈ c, signedNonempty (f i)) = -(c.card : ℚ) := by\n  calc\n    (∑ i ∈ c, signedNonempty (f i)) = ∑ _i ∈ c, (-1 : ℚ) :=\n      Finset.sum_congr rfl (fun i hi => fiber_sign (f i) (hf i hi))\n    _ = -(c.card : ℚ) := by simp\n\ntheorem occupied_local_density (c : Finset β) (f : β → Finset α)\n    (hf : ∀ i ∈ c, (f i).Nonempty) (p d : ℚ) :\n    1 + (∑ i ∈ c, signedNonempty (f i)) / (p - d) =\n      1 - (c.card : ℚ) / (p - d) := by\n  rw [fiber_sign_sum c f hf]\n  ring\n\ntheorem marked_normalization (p nu : ℚ) (t : ℕ)\n    (hp : p ≠ 0) (hp1 : p ≠ 1) :\n    (1 - (nu - 1) / (p - 1)) / (1 - 1 / p) ^ t =\n      (1 - nu / p) / (1 - 1 / p) ^ (t + 1) := by\n  have hpm : p - 1 ≠ 0 := sub_ne_zero.mpr hp1\n  have hb : 1 - 1 / p ≠ 0 := by\n    intro h\n    have hdiv : (1 : ℚ) / p = 1 := (sub_eq_zero.mp h).symm\n    exact hp1 ((div_eq_one_iff_eq hp).mp hdiv).symm\n  have hstep :\n      (1 - (nu - 1) / (p - 1)) * (1 - 1 / p) = 1 - nu / p := by\n    field_simp\n    ring\n  rw [pow_succ, ← hstep]\n  exact (mul_div_mul_right _ _ hb).symm\n\ntheorem marked_collision_normalization (c : Finset β) (f : β → Finset α)\n    (hf : ∀ i ∈ c, (f i).Nonempty) (p : ℚ) (t : ℕ)\n    (hp : p ≠ 0) (hp1 : p ≠ 1) :\n    (1 + (∑ i ∈ c, signedNonempty (f i)) / (p - 1)) /\n        (1 - 1 / p) ^ t =\n      (1 - ((c.card : ℚ) + 1) / p) / (1 - 1 / p) ^ (t + 1) := by\n  rw [occupied_local_density c f hf p 1]\n  simpa using marked_normalization p ((c.card : ℚ) + 1) t hp hp1\n\ntheorem marked_zero_factor (p : ℚ) (t : ℕ) (hp : p ≠ 0) (hp1 : p ≠ 1) :\n    (1 - (p - 1) / (p - 1)) / (1 - 1 / p) ^ t = 0 := by\n  rw [marked_normalization p p t hp hp1]\n  simp [hp]\n\nend Audit026\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/audit026/moments/statement_fidelity.md",
+    "text": "# Statement fidelity: universal local Euler algebra\n\nThe claim is `L026_EULER_CORE`. The namespace is `Audit026`.\n\n`nonempty_subset_product` quantifies over every finite set `s` of a type\nwith decidable equality and every rational assignment `x`. It proves\n\n    sum_{empty != u subset s} (-1)^|u| product_{a in u} x(a)\n      = product_{a in s} (1-x(a)) - 1.\n\nThe summation includes all nonempty subsets, not only singleton subsets.\nThere is no bound on the size of `s`. This is the inclusion-exclusion\nidentity used within an occupied residue class.\n\n`signedNonempty` specializes the summand to `(-1)^|u|`.\n`fiber_sign` says that this sum is -1 when `s` is nonempty.\n`fiber_sign_sum` quantifies over every finite family `c` of nonempty\nfinite fibers `f(i)` and says that the total is `-|c|`. The family need\nnot have disjoint fibers for this double-sum identity; the application\nto Euler factors separately proves that actual residue fibers are\ndisjoint and represent the allowed subsets exactly once. Applying the\nsame identity to the exact equality fibers gives the net zeta exponent\n`-t`. That analytic interpretation is not a Lean conclusion.\n\n`occupied_local_density` translates that finite sign sum into the\nrational expression `1-|c|/(p-d)`. This polynomial/division identity is\nvalid even at a zero denominator under Lean's totalized rational\ndivision; its arithmetic application only uses primes `p>=2` and\n`d=0` or `d=1`, so no denominator is zero.\n\n`marked_normalization` quantifies over every rational `p` different\nfrom 0 and 1, every rational `nu`, and every natural number `t`. It proves\n\n    (1-(nu-1)/(p-1))/(1-1/p)^t\n      = (1-nu/p)/(1-1/p)^(t+1).\n\nThere is deliberately NO hypothesis `nu != p`. In particular, both\nsides are zero when `nu=p`. `marked_collision_normalization` combines\nthis formula with a family of allowed residue fibers: `nu=|c|+1`\nincludes the occupied residue of the prime mark, whereas `c` excludes\nthat residue. `marked_zero_factor` explicitly specializes to `nu=p`.\n\nAll coefficients and identities in this file live in the rational\nnumbers. The file neither represents complex Fourier variables nor\nproves that a prime factorization exists, that its infinite product\nconverges, or that its value approximates a prime-weighted average.\nThose analytic, number-theoretic, and statement-translation steps are\nproved in `verification.md` and require independent mathematical\nreview. In particular this source does NOT formalize\n`C026_UNIFORM_MOMENTS` or `C026_WEIGHT_MOMENTS`.\n\nThe only proof axioms permitted are Lean/Mathlib's ordinary foundational\naxioms; the source introduces no axioms, placeholders, or additional\nnumber-theoretic assumptions. A real Lean 4.31.0 compiler result is\nrequired separately. Compilation establishes the displayed rational\nidentities, not this document's interpretation of them.\n"
+  },
+  "subject": {
+    "content_hash": "3db62931a4e3df4766d7f55abb48fdbfe35165edc571f51b0f78f8b2ed9846b0",
+    "kind": "claim",
+    "subject_id": "L026_EULER_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

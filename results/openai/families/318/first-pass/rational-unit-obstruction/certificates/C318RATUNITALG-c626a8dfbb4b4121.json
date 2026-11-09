@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C318RATUNITALG-4fad36621769",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/318/first-pass/rational-unit-obstruction/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/318/first-pass/rational-unit-obstruction/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 4267,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/318/first-pass/rational-unit-obstruction/Main.lean",
+    "source_sha256": "f70f13323061b5a5ee4cec84f412de9aff728cd502751ccd95f6a282ff797d1a",
+    "statement_fidelity": "families/318/first-pass/rational-unit-obstruction/statement_fidelity.md",
+    "statement_fidelity_sha256": "acd791bcc1f326ca09e10fb9305b436f20487bfa2b1159af2bdc580df335447d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/rational-unit-obstruction/Main.lean",
+    "text": "namespace RationalUnitObstruction\n\ntheorem unitFirstDetection\n    {B T : Type} (b0 : B) (t0 : T)\n    (r : B × T → B)\n    (unitFirst : ∀ b, r (b, t0) = b)\n    (x : B × T)\n    (secondVanishes : x.2 = t0)\n    (naturality : r x = b0) :\n    x = (b0, t0) := by\n  have hx : x = (x.1, t0) := Prod.ext rfl secondVanishes\n  have hfirst : x.1 = b0 := by\n    calc\n      x.1 = r (x.1, t0) := (unitFirst x.1).symm\n      _ = r x := congrArg r hx.symm\n      _ = b0 := naturality\n  exact Prod.ext hfirst secondVanishes\n\ntheorem excludesEveryRetraction\n    {B T : Type} (b0 : B) (t0 : T)\n    (x : B × T)\n    (secondVanishes : x.2 = t0)\n    (nonzero : x ≠ (b0, t0)) :\n    ¬ ∃ r : B × T → B,\n      (∀ b, r (b, t0) = b) ∧ r x = b0 := by\n  intro h\n  obtain ⟨r, unitFirst, naturality⟩ := h\n  exact nonzero\n    (unitFirstDetection b0 t0 r unitFirst x secondVanishes naturality)\n\ntheorem cancelDetector\n    {Y Z : Type} (d : Y → Z)\n    (injective : ∀ a b, d a = d b → a = b)\n    (y y0 : Y) (vanishes : d y = d y0) :\n    y = y0 :=\n  injective y y0 vanishes\n\nend RationalUnitObstruction\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/rational-unit-obstruction/statement_fidelity.md",
+    "text": "# Statement fidelity: the unrestricted retraction obstruction\n\nThe declarations in namespace `RationalUnitObstruction` use only Lean's\ncore theory of types, functions, products and equality.\n\n`unitFirstDetection` quantifies over all types B,T, chosen points b0,t0,\nall functions r:B x T -> B with r(b,t0)=b for every b, and every x\nwhose second coordinate is t0. If r(x)=b0, it concludes x=(b0,t0).\nIt places no restriction on r away from the first summand.\n\n`excludesEveryRetraction` adds x!=(b0,t0) and concludes that no such\nr with r(x)=b0 exists. In the application, B is the degree-minus-three\nrational homotopy of the K(2)-local sphere, T is that of its minus-one\nshift (the zero vector space), and x is the image of a proposed\ndetected class. The points are zero. Naturality and the vanishing\ndegree-minus-three group of L_0 A give r(x)=0. The accepted unit-first\nbasis supplies r(b,0)=b. No module-linearity or chosen attachment is\nencoded or needed for this implication.\n\n`cancelDetector` states cancellation only under an explicit injectivity\nhypothesis. It does not assert that a vanishing composite has vanishing\nfirst factor in the absence of that hypothesis.\n\nThe compiler does not verify the rational homotopy calculations,\nlocalization or completion identities, the existence of the stated\nbasis, a map of spectra, solid descent, a primitive transport\ncalculation, or nonvanishing of the actual canonical map. Those\napplication hypotheses are not hidden axioms of the Lean source.\nIn particular this certificate cannot close the live detector premise.\n"
+  },
+  "subject": {
+    "content_hash": "8b9833d9bd3ec91e0829afd81fb8964bfbc3a331ce606745878664f2af436ea9",
+    "kind": "claim",
+    "subject_id": "C318RATUNITALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

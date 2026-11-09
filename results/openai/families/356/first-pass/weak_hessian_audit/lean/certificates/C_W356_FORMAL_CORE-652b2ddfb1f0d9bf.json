@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_W356_FORMAL_CORE-26f21c37cc1b",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/356/first-pass/weak_hessian_audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6194,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/356/first-pass/weak_hessian_audit/lean/Main.lean",
+    "source_sha256": "9731960e65988b408f1e745e3d00974d4c4777f161653a316642aea57d99aa60",
+    "statement_fidelity": "families/356/first-pass/weak_hessian_audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "21193da15a717a1f86b6ad7f840ca9c265fac376715f215a0b2329bfc645f744",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/356/first-pass/weak_hessian_audit/lean/Main.lean:30:47: error: Application type mismatch: The argument\n  hn\nhas type\n  ∀ (n : ℕ), 0 ≤ graphForm A B C (xn n) (yn n)\nbut is expected to have type\n  ∀ (x_1 : ?m.117), ?m.111 x_1 ≤ graphForm A B C x y\nin the application\n  Eventually.of_forall hn\nfamilies/356/first-pass/weak_hessian_audit/lean/Main.lean:42:4: error: Type mismatch: After simplification, term\n  hr\n has type\n  Tendsto ((fun x => √x) ∘ fun n => ‖dn n‖ ^ 2) atTop (nhds 0)\nbut is expected to have type\n  Tendsto (fun n => ‖dn n‖) atTop (nhds 0)\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/weak_hessian_audit/lean/Main.lean",
+    "text": "import Mathlib\n\nopen Filter\n\nnoncomputable section\n\nnamespace WeakHessianAudit\n\nvariable {H E : Type*}\nvariable [NormedAddCommGroup H] [InnerProductSpace ℝ H]\nvariable [NormedAddCommGroup E] [InnerProductSpace ℝ E]\n\ndef graphForm (A : H →L[ℝ] H) (B : H →L[ℝ] E) (C : E →L[ℝ] E)\n    (x : H) (y : E) : ℝ :=\n  (1 / 2 : ℝ) * inner ℝ (A x) x + inner ℝ y (B x) + inner ℝ (C y) y\n\ntheorem graphForm_continuous (A : H →L[ℝ] H) (B : H →L[ℝ] E)\n    (C : E →L[ℝ] E) :\n    Continuous (fun p : H × E => graphForm A B C p.1 p.2) := by\n  unfold graphForm\n  fun_prop\n\ntheorem graphForm_nonneg_of_tendsto (A : H →L[ℝ] H) (B : H →L[ℝ] E)\n    (C : E →L[ℝ] E) {xn : ℕ → H} {yn : ℕ → E} {x : H} {y : E}\n    (hx : Tendsto xn atTop (nhds x)) (hy : Tendsto yn atTop (nhds y))\n    (hn : ∀ n, 0 ≤ graphForm A B C (xn n) (yn n)) :\n    0 ≤ graphForm A B C x y := by\n  have ht := ((graphForm_continuous A B C).tendsto (x, y)).comp\n    (hx.prodMk_nhds hy)\n  exact le_of_tendsto ht (Eventually.of_forall hn)\n\ntheorem energy_graph_tendsto {un ln : ℕ → E} {dn : ℕ → H}\n    (hu : Tendsto un atTop (nhds 0)) (hl : Tendsto ln atTop (nhds 0))\n    (he : ∀ n, ‖dn n‖ ^ 2 ≤ ‖un n‖ * ‖ln n‖) :\n    Tendsto dn atTop (nhds 0) := by\n  have hp : Tendsto (fun n => ‖un n‖ * ‖ln n‖) atTop (nhds (0 : ℝ)) := by\n    simpa using hu.norm.mul hl.norm\n  have hs : Tendsto (fun n => ‖dn n‖ ^ 2) atTop (nhds (0 : ℝ)) :=\n    squeeze_zero (fun n => sq_nonneg ‖dn n‖) he hp\n  have hr := (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hs\n  have hn : Tendsto (fun n => ‖dn n‖) atTop (nhds (0 : ℝ)) := by\n    simpa only [Real.sqrt_sq (norm_nonneg _), Real.sqrt_zero] using hr\n  exact tendsto_zero_iff_norm_tendsto_zero.mpr hn\n\ntheorem bochner_cancellation (xi d b c r u : ℝ) :\n    (-u + (xi * (d + b) + c) * (d + b)) -\n      (-u - xi * r + (xi * d + c + xi * b) * d) =\n      xi * r + b * (c + xi * (d + b)) := by\n  ring\n\ntheorem entropy_residual_identity\n    (lam At A0 A1 Et E0 E1 K C D t : ℝ) :\n    lam * (At - ((1 - t) * A0 + t * A1) + D) -\n        (Et - ((1 - t) * E0 + t * E1) + K * C) =\n      -(Et - lam * At -\n        ((1 - t) * (E0 - lam * A0) + t * (E1 - lam * A1) - K * C + lam * D)) := by\n  ring\n\ntheorem resolvent_contraction_arithmetic (alpha zeta : ℝ)\n    (ha : alpha ≤ 1 / 8) (hz : zeta ≤ 1 / 4) :\n    2 * alpha + zeta ≤ 1 / 2 := by\n  linarith\n\nend WeakHessianAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/weak_hessian_audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: weighted Bochner graph closure\n\nThis document describes precisely the declarations in `Main.lean`,\nnamespace `WeakHessianAudit`. It does not claim that Lean has formalized\nProposition `weight:variable-cd` or Theorem `weight:every-geodesic`.\n\n## Functional-analytic declarations\n\n`graphForm` has arbitrary real inner-product spaces H and E, arbitrary\nbounded linear operators A:H->H, B:H->E, C:E->E, and vectors x:H, y:E.\nIt is\n\n    (1/2)<Ax,x> + <y,Bx> + <Cy,y>.\n\n`graphForm_continuous` proves continuity on H times E. No positivity,\nsymmetry, finite-dimensionality or completeness hypothesis is assumed.\n`graphForm_nonneg_of_tendsto` quantifies over arbitrary sequences\nx_n in H and y_n in E and limits x,y. Strong convergence of each\nsequence and nonnegativity of the displayed form for every n imply\nnonnegativity at the limits.\n\nFor the analytic application in report section 5, H is the real L2\ntangent module, E is scalar L2(m_V), x=grad g, y=Lg. A is multiplication\nby Lxi-2k xi, B maps x to its pairing with grad xi, and C is\nmultiplication by xi. The boundedness of these multipliers, existence\nof these spaces/operators, the graph core and its relation to the\nmanuscript are established in prose, not in this Lean file. The form\nis then exactly Q(g)-integral k xi Gamma(g) dm_V.\n\n`energy_graph_tendsto` quantifies over arbitrary sequences u_n,l_n in E\nconverging strongly to zero and d_n in H, with\nnorm(d_n)^2 <= norm(u_n) norm(l_n) for every n. It proves d_n converges\nstrongly to zero. In the application these are g_n-g, L(g_n-g),\nand grad(g_n-g). The identification uses the weighted energy identity,\nwhich is not formalized here.\n\n## Scalar declarations\n\n`bochner_cancellation` is an identity for all real xi,d,b,c,r,u.\nAfter the common factor exp(V) is removed, u=Gamma(xi,Gamma(g)/2),\nd=Delta g, b=Gamma(V,g), c=Gamma(xi,g), and\nr=Gamma(V,Gamma(g)/2). It verifies the expanded difference of the\nweighted and unweighted Bochner integrands. It does not establish\nintegrability, the weak Hessian formula, or a curvature inequality.\n\n`entropy_residual_identity` is an identity for all real\nlam,At,A0,A1,Et,E0,E1,K,C,D,t. It verifies the sign reversal between\nthe weighted entropy residual and the rearranged F inequality after\nmultiplication by lam. Positivity of lam is required in the prose\nwhen this identity is used to divide an inequality; it is not needed\nfor the polynomial identity itself.\n\n`resolvent_contraction_arithmetic` proves 2 alpha+zeta<=1/2\nassuming only alpha<=1/8 and zeta<=1/4. The application uses\nalpha=B/sqrt(a), zeta=B sqrt(max(-K,0))/a. The heat estimates,\nparameter bounds, Banach fixed-point argument and regularity\nconclusion are not Lean declarations in this file.\n\nThe formal result is a load-bearing abstract closure lemma with\nsupporting scalar identities, not a formalization of RCD calculus,\nthe AGS/BHS equivalences, nonbranching, or entropy localization.\n"
+  },
+  "subject": {
+    "content_hash": "52929cf761f35d88a5ce8fe9819316d115f4e397b7d642d27b9b74087a847041",
+    "kind": "claim",
+    "subject_id": "C_W356_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

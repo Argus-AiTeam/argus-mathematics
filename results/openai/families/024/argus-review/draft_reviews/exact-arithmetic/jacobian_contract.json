@@ -1,0 +1,137 @@
+{
+  "protocol_version": "2025-11-25",
+  "request": {
+    "request": {
+      "op": "inspect",
+      "operation_id": "integer.compute.prime_factorization"
+    }
+  },
+  "result": {
+    "kind": "operation",
+    "operation": {
+      "description": "Factor an integer into prime powers and return the complete prime-power factorization, or UNKNOWN when the bounded worker cannot establish it.",
+      "examples": [
+        {
+          "description": "Factor 360 into prime powers.",
+          "input": {
+            "value": "360"
+          },
+          "name": "prime_factorization_360"
+        }
+      ],
+      "input_schema": {
+        "additionalProperties": false,
+        "description": "One nonzero integer with a finite divisor and prime-factorization set.",
+        "properties": {
+          "value": {
+            "maxLength": 20,
+            "pattern": "^-?(?:0|[1-9][0-9]*)$",
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "title": "NonzeroFactorizationRequest",
+        "type": "object"
+      },
+      "operation_id": "integer.compute.prime_factorization",
+      "output_schema": {
+        "$defs": {
+          "PrimePower": {
+            "additionalProperties": false,
+            "description": "One prime base and its exponent in a prime factorization.",
+            "properties": {
+              "power": {
+                "maximum": 10000,
+                "minimum": 1,
+                "title": "Power",
+                "type": "integer"
+              },
+              "prime": {
+                "maxLength": 256,
+                "pattern": "^-?(?:0|[1-9][0-9]*)$",
+                "title": "Prime",
+                "type": "string"
+              }
+            },
+            "required": [
+              "prime",
+              "power"
+            ],
+            "title": "PrimePower",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "description": "The complete prime-power factorization of one nonzero integer.\n\nRetains the canonical source integer. Structural validation checks the\ncoordinate form; the explicit owner verifier establishes primality and\ncompleteness.\nThe factor list may be empty: ``\u00b11`` has no prime factors.  Zero remains\nnot-applicable (handled at the operation layer).",
+        "properties": {
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Detail"
+          },
+          "factors": {
+            "items": {
+              "$ref": "#/$defs/PrimePower"
+            },
+            "maxItems": 256,
+            "minItems": 0,
+            "title": "Factors",
+            "type": "array"
+          },
+          "status": {
+            "default": "COMPLETE",
+            "enum": [
+              "COMPLETE",
+              "UNKNOWN"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "value": {
+            "maxLength": 20,
+            "pattern": "^-?(?:0|[1-9][0-9]*)$",
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "factors"
+        ],
+        "title": "PrimeFactorizationResult",
+        "type": "object"
+      },
+      "read_only": true,
+      "tags": [
+        "number-theory",
+        "factorization"
+      ],
+      "title": "Factor an integer"
+    }
+  },
+  "schema_version": 1,
+  "server": {
+    "description": "Search and run atomic, composable Jacobian tools for higher mathematics.",
+    "icons": null,
+    "name": "jacobian",
+    "title": "Jacobian Mathematical Workbench",
+    "version": "0.14.0",
+    "websiteUrl": null
+  },
+  "tool": "math.find",
+  "tools": [
+    "math.find",
+    "math.run"
+  ],
+  "transport": "mcp-stdio"
+}

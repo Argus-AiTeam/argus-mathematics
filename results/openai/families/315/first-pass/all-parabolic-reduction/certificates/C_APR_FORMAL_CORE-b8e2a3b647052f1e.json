@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_APR_FORMAL_CORE-f28bc3df75c2",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/315/first-pass/all-parabolic-reduction/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/315/first-pass/all-parabolic-reduction/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15624,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/315/first-pass/all-parabolic-reduction/Main.lean",
+    "source_sha256": "ec43a2bed12eb1b4f1545473e2253c730c463d416017949ea00e54c65878ed04",
+    "statement_fidelity": "families/315/first-pass/all-parabolic-reduction/statement_fidelity.md",
+    "statement_fidelity_sha256": "33c742e40657d355903bc6c9cdf59bc3390e2bd9f02f37f5328caaebb93a20dc",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/all-parabolic-reduction/Main.lean",
+    "text": "import Mathlib\n\nnamespace AllParabolicReduction\n\ndef orbit {T : Type*} (f : T → T) (x : T) : ℕ → T\n  | 0 => x\n  | n + 1 => f (orbit f x n)\n\ndef SequentialChainComplete (T : Type*) [Preorder T] : Prop :=\n  ∀ c : ℕ → T, Monotone c → ∃ z, IsLUB (Set.range c) z\n\ndef SemilinearBelow (T : Type*) [Preorder T] : Prop :=\n  ∀ a b c : T, a ≤ c → b ≤ c → a ≤ b ∨ b ≤ a\n\ntheorem increasing_orbit_fixed\n    {T : Type*} [PartialOrder T]\n    (complete : SequentialChainComplete T)\n    (f : T ≃o T) (x : T) (up : x ≤ f x) :\n    ∃ z, x ≤ z ∧ f z = z := by\n  have step : ∀ n, orbit f x n ≤ orbit f x (n + 1) := by\n    intro n\n    induction n with\n    | zero => exact up\n    | succ n ih => exact f.monotone ih\n  have mono : Monotone (orbit f x) := monotone_nat_of_le_succ step\n  obtain ⟨z, upper, least⟩ := complete (orbit f x) mono\n  have xz : x ≤ z := upper ⟨0, rfl⟩\n  have zpre : z ≤ f.symm z := by\n    apply least\n    rintro _ ⟨n, rfl⟩\n    have hn : f (orbit f x n) ≤ z := upper ⟨n + 1, rfl⟩\n    simpa only [OrderIso.symm_apply_apply] using f.symm.monotone hn\n  have fz : f z ≤ z := by\n    simpa only [OrderIso.apply_symm_apply] using f.monotone zpre\n  have zf : z ≤ f z := by\n    apply least\n    rintro _ ⟨n, rfl⟩\n    cases n with\n    | zero => exact up.trans (f.monotone xz)\n    | succ n => exact f.monotone (upper ⟨n, rfl⟩)\n  exact ⟨z, xz, le_antisymm fz zf⟩\n\ntheorem fixed_above_meet\n    {T : Type*} [SemilatticeInf T]\n    (semilinear : SemilinearBelow T)\n    (complete : SequentialChainComplete T)\n    (f : T ≃o T) (y : T) :\n    ∃ z, y ⊓ f y ≤ z ∧ f z = z := by\n  let x := y ⊓ f y\n  have left : x ≤ f y := inf_le_right\n  have right : f x ≤ f y := f.monotone inf_le_left\n  rcases semilinear x (f x) (f y) left right with up | down\n  · exact increasing_orbit_fixed complete f x up\n  · have up : x ≤ f.symm x := by\n      simpa only [OrderIso.symm_apply_apply] using f.symm.monotone down\n    obtain ⟨z, xz, hz⟩ := increasing_orbit_fixed complete f.symm x up\n    have fz : f z = z := by\n      have h := congrArg f hz\n      simpa only [OrderIso.apply_symm_apply] using h.symm\n    exact ⟨z, xz, fz⟩\n\ntheorem second_fixed_point_outside\n    {T : Type*} [SemilatticeInf T]\n    (semilinear : SemilinearBelow T)\n    (complete : SequentialChainComplete T)\n    (f : T ≃o T) (U V : Set T)\n    (nonempty : U.Nonempty)\n    (forward : ∀ y ∈ U, f y ∈ U)\n    (meet_closed : ∀ a ∈ U, ∀ b ∈ U, a ⊓ b ∈ U)\n    (disjoint : Disjoint U V)\n    (lower : ∀ a b, a ≤ b → b ∈ V → a ∈ V) :\n    ∃ z, z ∉ V ∧ f z = z := by\n  obtain ⟨y, hy⟩ := nonempty\n  have hm : y ⊓ f y ∈ U := meet_closed y hy (f y) (forward y hy)\n  obtain ⟨z, hz, fixed⟩ := fixed_above_meet semilinear complete f y\n  refine ⟨z, ?_, fixed⟩\n  intro zv\n  exact Set.disjoint_left.mp disjoint hm (lower _ _ hz zv)\n\ntheorem facing_terminal_class_singleton\n    {T : Type*} (interval : T → T → Set T)\n    (U V : Set T) (p : T)\n    (nonempty : U.Nonempty)\n    (disjoint : Disjoint U V)\n    (hp : p ∈ V)\n    (facing : ∀ u ∈ U, ∀ v ∈ V, p ∈ interval u v)\n    (terminal : ∀ a b, p ∈ interval a b → p = a ∨ p = b) :\n    V = {p} := by\n  obtain ⟨u, hu⟩ := nonempty\n  have pne : p ≠ u := by\n    intro h\n    exact Set.disjoint_left.mp disjoint hu (h ▸ hp)\n  ext v\n  constructor\n  · intro hv\n    rcases terminal u v (facing u hu v hv) with bad | good\n    · exact (pne bad).elim\n    · simpa only [Set.mem_singleton_iff] using good.symm\n  · intro hv\n    simp only [Set.mem_singleton_iff] at hv\n    simpa only [hv] using hp\n\ntheorem finite_eventual_stage\n    {I A : Type*} [LinearOrder I]\n    (limit : I) (items : Finset A) (E : I → A → Prop)\n    (below : ∃ i, i < limit)\n    (persistent : ∀ i j, i ≤ j → ∀ a, E i a → E j a)\n    (eventual : ∀ a ∈ items, ∃ i, i < limit ∧ E i a) :\n    ∃ i, i < limit ∧ ∀ a ∈ items, E i a := by\n  classical\n  induction items using Finset.induction_on with\n  | empty =>\n      obtain ⟨i, hi⟩ := below\n      exact ⟨i, hi, by simp⟩\n  | @insert a items not_mem ih =>\n      have old : ∀ b ∈ items, ∃ i, i < limit ∧ E i b := by\n        intro b hb\n        exact eventual b (Finset.mem_insert_of_mem hb)\n      obtain ⟨i, hi, all_old⟩ := ih old\n      obtain ⟨j, hj, new⟩ := eventual a (Finset.mem_insert_self a items)\n      refine ⟨max i j, max_lt hi hj, ?_⟩\n      intro b hb\n      rcases Finset.mem_insert.mp hb with rfl | hb\n      · exact persistent j (max i j) (le_max_right _ _) b new\n      · exact persistent i (max i j) (le_max_left _ _) b (all_old b hb)\n\ndef relationStabilizer\n    {G T : Type*} [Group G] [MulAction G T]\n    (R : T → T → Prop) (equiv : Equivalence R)\n    (invariant : ∀ (g : G) (a b : T), R a b → R (g • a) (g • b))\n    (x : T) : Subgroup G where\n  carrier := {g | R x (g • x)}\n  one_mem' := by\n    change R x ((1 : G) • x)\n    simpa only [one_smul] using equiv.refl x\n  mul_mem' := by\n    intro g h hg hh\n    exact equiv.trans hg (by simpa only [mul_smul] using invariant g x (h • x) hh)\n  inv_mem' := by\n    intro g hg\n    have h := invariant g⁻¹ x (g • x) hg\n    have hi : R (g⁻¹ • x) x := by simpa only [inv_smul_smul] using h\n    exact equiv.symm hi\n\ntheorem generators_fix_class\n    {G T : Type*} [Group G] [MulAction G T]\n    (R : T → T → Prop) (equiv : Equivalence R)\n    (invariant : ∀ (g : G) (a b : T), R a b → R (g • a) (g • b))\n    (x : T) (S : Set G) (generates : Subgroup.closure S = ⊤)\n    (fixes : ∀ g ∈ S, R x (g • x)) :\n    ∀ g : G, R x (g • x) := by\n  let H := relationStabilizer R equiv invariant x\n  have contained : S ⊆ H := fixes\n  have closed : Subgroup.closure S ≤ H := (Subgroup.closure_le H).mpr contained\n  have all : (⊤ : Subgroup G) ≤ H := by simpa only [generates] using closed\n  intro g\n  exact all (by trivial)\n\ntheorem no_first_fixed_at_limit\n    {I G T : Type*} [LinearOrder I] [Group G] [MulAction G T]\n    (limit : I) (R : I → T → T → Prop)\n    (equiv : ∀ i, Equivalence (R i))\n    (invariant : ∀ (i : I) (g : G) (a b : T), R i a b → R i (g • a) (g • b))\n    (persistent : ∀ i j, i ≤ j → ∀ a b, R i a b → R j a b)\n    (x : T) (S : Finset G)\n    (generates : Subgroup.closure (↑S : Set G) = ⊤)\n    (below : ∃ i, i < limit)\n    (eventual : ∀ g ∈ S, ∃ i, i < limit ∧ R i x (g • x)) :\n    ∃ i, i < limit ∧ ∀ g : G, R i x (g • x) := by\n  obtain ⟨i, hi, hS⟩ := finite_eventual_stage limit S\n    (fun i g => R i x (g • x)) below\n    (fun i j hij g h => persistent i j hij x (g • x) h) eventual\n  exact ⟨i, hi, generators_fix_class (R i) (equiv i) (invariant i) x\n    (↑S : Set G) generates hS⟩\n\ntheorem doubling_fixed_iff (x : ℚ) : 2 * x = x ↔ x = 0 := by\n  constructor\n  · intro h\n    linarith\n  · rintro rfl\n    norm_num\n\nend AllParabolicReduction\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/all-parabolic-reduction/statement_fidelity.md",
+    "text": "# Statement fidelity: the all-parabolic reduction\n\n## What is formally asserted\n\nThe namespace is `AllParabolicReduction`. All type parameters are arbitrary\nand may be infinite. There is no finite enumeration assumption.\n\n`SequentialChainComplete T` says that every monotone sequence indexed by\nall natural numbers has a least upper bound in T. It does not merely say\nthat a bounded sequence has one. `SemilinearBelow T` says that any two\npoints with a common upper bound are comparable. The order is partial,\nnot assumed linear or a complete lattice.\n\n`increasing_orbit_fixed` takes a partial order, this countable-chain\ncompleteness, an order automorphism f, and x <= f(x). It proves the\nexistence of z >= x with f(z)=z, by taking a least upper bound of the\nentire infinite orbit.\n\n`fixed_above_meet` takes a meet semilattice, semilinearity below points,\nthe same completeness, an arbitrary order automorphism f and arbitrary y.\nIt proves that some fixed z lies above y meet f(y). Either f or its\ninverse supplies the increasing orbit. Fixed-point existence is a\nconclusion, not a hypothesis.\n\n`second_fixed_point_outside` adds nonempty subsets U,V, forward invariance\nof U, closure of U under meets, disjointness of U,V, and downward closure\nof V. It proves that f has a fixed point outside V. It does not assume\nthat U is itself complete or that an infinite orbit has an endpoint in U.\nNor does it assert that the resulting fixed point belongs to U.\n\nFor the manuscript application, root Phi at its fixed facing point p:\na <= b means a belongs to [p,b], and a meet b is med(p,a,b).\nAn automorphism fixing p is an order automorphism. Fullness of U makes\nit meet-closed; fullness of V and p in V make V downward closed.\nCompleteness and medianity of Phi imply the countable-chain condition\nand semilinearity. The mathematical report proves this translation.\nThe compiler checks the intrinsic order theorem; it does not check\nthe construction of Bowditch's Phi from a topological continuum.\n\n`facing_terminal_class_singleton` takes any set-valued interval operation,\ndisjoint U,V with U nonempty, p in V, p on every U-to-V interval, and\nthe explicit terminality property that membership of p in an interval\nforces p to equal an endpoint. It proves V={p}. Terminality is a\nhypothesis of this small theorem: in the manuscript application it must\nbe supplied separately by convergence dynamics after the two fixed\npoints are shown to be infinitely separated.\n\n`finite_eventual_stage` has an arbitrary linearly ordered index set,\nan index called limit, a finite family of obligations, monotonicity of\neach obligation in the index, and a witness below limit for each\nobligation. It proves that all obligations hold at one index below\nlimit. A separate hypothesis supplies at least one index below limit,\nso even an empty generating family is handled without an illicit\nmaximum of the empty set.\n\n`relationStabilizer` and `generators_fix_class` use an arbitrary group\nacting on a type and an invariant equivalence relation R. They prove\nthat the elements carrying x into its R-class form a subgroup, and\nthat containing a generating set forces that subgroup to be the\nwhole group.\n\n`no_first_fixed_at_limit` combines the preceding results. For an\narbitrary linearly indexed increasing family of invariant equivalence\nrelations, a finite generating set, and generator-wise witnesses below\nlimit, it gives one index below limit at which the whole group preserves\nthe class of x. In application the index order is the ordinals, and\nthe witnesses come from the union definition at a nonzero limit.\nNo regularity or countable-cofinality assumption on that ordinal is made.\n\n`doubling_fixed_iff` proves, for every rational x, that 2*x=x exactly\nwhen x=0. It is the algebraic part of the incomplete-ray boundary\nexample, not a refutation of the complete-pretree statement.\n\n## What is not formally asserted\n\nThis file does not formalize the topological construction of Phi,\nfull-equivalence quotient construction, the convergence-action\nclassification, one-ended groups' tree fixed-point theorem, or the\nwhole ordinal induction and subsequent simplicial-tree construction.\nThose are given a separate source-faithful mathematical proof and\nremain subject to independent review. This formalization cannot by\nitself certify the Singer conjecture, novelty, or publication significance.\n"
+  },
+  "subject": {
+    "content_hash": "3415944ce8e4ee69e0765330884117a63a2eba733645e5bf2b982ea6de00b58b",
+    "kind": "claim",
+    "subject_id": "C_APR_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

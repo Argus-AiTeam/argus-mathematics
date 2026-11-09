@@ -1,0 +1,772 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX_OLD_DRAFT_REVIEW",
+      "version": 1,
+      "statement": "Exploratory review of all family 023 drafts in PRIOR_DRAFTS.json under OBJECTIVE.md; mathematical support, statement fidelity and independent acceptance are distinct.",
+      "definitions": {
+        "lengths": "Finite nonnegative real a_i with sum one; zero entries allowed",
+        "values": "Real v_i, possibly negative; second endpoint additionally v_i<=a_i",
+        "multiplicity": "Arbitrary fixed vector of nonnegative integers; weighted length sum k_i*a_i",
+        "conditional_analytic_support": "Analytic conclusion relies on explicitly recorded classical imports and assessed prose bridges, not on Lean compilation alone"
+      },
+      "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C_EXPONENTS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "The abstract finite two-endpoint systems in first_endpoint_universal and second_endpoint_universal are inconsistent under their explicit hypotheses; interval coverage, the conditional affine 1/30 gap and dominant-full numerical bounds also hold as declared in the copied Main.lean. These are not proofs of the analytic input inequalities.",
+      "formal_statement": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace ExceptionalMoments\n\nvariable {I : Type*} [Fintype I] [DecidableEq I]\n\ndef weight (k : I → ℕ) (x : I → ℝ) : ℝ :=\n  ∑ i, (k i : ℝ) * x i\n\nlemma weight_one (x : I → ℝ) : weight (fun _ => 1) x = ∑ i, x i := by\n  simp [weight]\n\nlemma weight_add (k l : I → ℕ) (x : I → ℝ) :\n    weight (fun i => k i + l i) x = weight k x + weight l x := by\n  simp [weight, Nat.cast_add, add_mul, Finset.sum_add_distrib]\n\nlemma weight_single (i : I) (k : ℕ) (x : I → ℝ) :\n    weight (fun j => if j = i then k else 0) x = (k : ℝ) * x i := by\n  classical\n  simp [weight, ite_mul]\n\nlemma weight_drop (i : I) (x : I → ℝ) :\n    weight (fun j => if j = i then 0 else 1) x = (∑ j, x j) - x i := by\n  classical\n  calc\n    _ = ∑ j, (x j - if j = i then x i else 0) := by\n      apply Finset.sum_congr rfl\n      intro j _\n      by_cases h : j = i <;> simp [h]\n    _ = _ := by simp [Finset.sum_sub_distrib]\n\nlemma weight_defect (k : I → ℕ) (a v : I → ℝ) :\n    weight k (fun i => v i - (5 / 6 : ℝ) * a i) =\n      weight k v - (5 / 6 : ℝ) * weight k a := by\n  unfold weight\n  simp_rw [mul_sub]\n  rw [Finset.sum_sub_distrib, Finset.mul_sum]\n  congr 1\n  apply Finset.sum_congr rfl\n  intro i _\n  ring\n\nlemma nonpos_sum_zero (d : I → ℝ) (hd : ∀ i, d i ≤ 0)\n    (hs : ∑ i, d i = 0) : ∀ i, d i = 0 := by\n  intro i\n  have hi := Finset.single_le_sum\n    (fun j (_ : j ∈ (Finset.univ : Finset I)) => neg_nonneg.mpr (hd j))\n    (Finset.mem_univ i)\n  rw [Finset.sum_neg_distrib, hs, neg_zero] at hi\n  exact le_antisymm (hd i) (by linarith)\n\nlemma positive_short (a : I → ℝ) (ha : ∀ i, 0 ≤ a i)\n    (hs : ∑ i, a i = 1) (hlt : ∀ i, a i < 1) :\n    ∃ i, 0 < a i ∧ a i ≤ 1 / 2 := by\n  have hex : ∃ i, 0 < a i := by\n    by_contra! h\n    have hn := Finset.sum_nonpos (fun i (_ : i ∈ (Finset.univ : Finset I)) => h i)\n    linarith\n  obtain ⟨i, hi⟩ := hex\n  by_cases hsmall : a i ≤ 1 / 2\n  · exact ⟨i, hi, hsmall⟩\n  have hlarge : 1 / 2 < a i := lt_of_not_ge hsmall\n  have herase := Finset.sum_erase_add (Finset.univ : Finset I) a (Finset.mem_univ i)\n  have hrest : 0 < ∑ j ∈ (Finset.univ : Finset I).erase i, a j := by\n    linarith [hlt i]\n  have hexrest : ∃ j ∈ (Finset.univ : Finset I).erase i, 0 < a j := by\n    by_contra! h\n    have hn := Finset.sum_nonpos h\n    linarith\n  obtain ⟨j, hj, hjpos⟩ := hexrest\n  have hjle := Finset.single_le_sum\n    (fun k (_ : k ∈ (Finset.univ : Finset I).erase i) => ha k) hj\n  exact ⟨j, hjpos, by linarith⟩\n\ntheorem multiple_in_uniform_interval (a : ℝ) (ha : 0 < a) (hshort : a ≤ 1 / 2) :\n    ∃ k : ℕ, (7 / 5 : ℝ) ≤ (k : ℝ) * a ∧ (k : ℝ) * a < 19 / 10 := by\n  let k := ⌈(7 / 5 : ℝ) / a⌉₊\n  have hlo : (7 / 5 : ℝ) / a ≤ (k : ℝ) := Nat.le_ceil _\n  have hhi : (k : ℝ) < (7 / 5 : ℝ) / a + 1 :=\n    Nat.ceil_lt_add_one (by positivity)\n  have hlo' := (div_le_iff₀ ha).mp hlo\n  have hhi' := mul_lt_mul_of_pos_right hhi ha\n  rw [add_mul, div_mul_cancel₀ _ (ne_of_gt ha), one_mul] at hhi'\n  exact ⟨k, hlo', by linarith⟩\n\ntheorem uniform_gram_gap (z : ℝ) (hzlo : 7 / 5 ≤ z) (hzhi : z ≤ 19 / 10) :\n    max (z - 2 / 3)\n      ((z + max 1 (2 - 2 * z / 3) - 2 / 3) / 2) ≤\n      2 * z / 3 - 1 / 30 := by\n  apply max_le\n  · linarith\n  · by_cases h : z ≤ 3 / 2\n    · rw [max_eq_right (by linarith : (1 : ℝ) ≤ 2 - 2 * z / 3)]\n      linarith\n    · rw [max_eq_left (by linarith : 2 - 2 * z / 3 ≤ (1 : ℝ))]\n      linarith\n\ntheorem interval_gap_optimal (l u g : ℝ)\n    (hwidth : 1 / 2 ≤ u - l)\n    (hdiag : u + 3 * g ≤ 2) (hoff : -3 * l + 6 * g ≤ -4) :\n    g ≤ 1 / 30 := by\n  linarith\n\ndef MultiplicityBounds (a d : I → ℝ) (r : ℝ) : Prop :=\n  ∀ k : I → ℕ, 1 / 2 ≤ weight k a → weight k a ≤ 2 →\n    r ≤ 2 / 3 - 2 * weight k d\n\ntheorem extremal_forcing (a d : I → ℝ) (r : ℝ)\n    (ha : ∀ i, 0 ≤ a i) (hs : ∑ i, a i = 1) (hlt : ∀ i, a i < 1)\n    (hlower : 2 / 3 - 2 * (∑ i, d i) ≤ r)\n    (hm : MultiplicityBounds a d r) :\n    (∀ i, d i = 0) ∧ r = 2 / 3 := by\n  have hnonpos (i : I) : d i ≤ 0 := by\n    let k : I → ℕ := fun j => 1 + if j = i then 1 else 0\n    have hka : weight k a = 1 + a i := by\n      simp [k, weight_add, weight_one, weight_single, hs]\n    have hkd : weight k d = (∑ j, d j) + d i := by\n      simp [k, weight_add, weight_one, weight_single]\n    have h := hm k (by rw [hka]; linarith [ha i])\n      (by rw [hka]; linarith [hlt i])\n    rw [hkd] at h\n    linarith\n  have hshortzero (i : I) (hi : a i ≤ 1 / 2) : d i = 0 := by\n    let k : I → ℕ := fun j => if j = i then 0 else 1\n    have hka : weight k a = 1 - a i := by rw [weight_drop, hs]\n    have hkd : weight k d = (∑ j, d j) - d i := weight_drop i d\n    have h := hm k (by rw [hka]; linarith)\n      (by rw [hka]; linarith [ha i])\n    rw [hkd] at h\n    exact le_antisymm (hnonpos i) (by linarith)\n  obtain ⟨i, hipos, hishort⟩ := positive_short a ha hs hlt\n  obtain ⟨k, hklo, hkhi⟩ := multiple_in_uniform_interval (a i) hipos hishort\n  have hka : weight (fun j => if j = i then k else 0) a = (k : ℝ) * a i :=\n    weight_single i k a\n  have hkd : weight (fun j => if j = i then k else 0) d = 0 := by\n    rw [weight_single, hshortzero i hishort, mul_zero]\n  have hrle := hm (fun j => if j = i then k else 0)\n    (by rw [hka]; linarith) (by rw [hka]; linarith)\n  rw [hkd] at hrle\n  have hsle : (∑ i, d i) ≤ 0 :=\n    Finset.sum_nonpos (fun i _ => hnonpos i)\n  have hszero : ∑ i, d i = 0 := by linarith\n  exact ⟨nonpos_sum_zero d hnonpos hszero, by linarith⟩\n\ntheorem first_endpoint_impossible (a v : I → ℝ) (r : ℝ)\n    (ha : ∀ i, 0 ≤ a i) (hs : ∑ i, a i = 1) (hlt : ∀ i, a i < 1)\n    (hlarge : 7 / 3 - 2 * (∑ i, v i) ≤ r)\n    (hcubic : ∀ k : I → ℕ, 1 / 2 ≤ weight k a → weight k a ≤ 2 →\n      r + 2 * weight k v ≤ 2 / 3 + (5 / 3 : ℝ) * weight k a)\n    (hgram : ∀ (i : I) (k : ℕ),\n      7 / 5 ≤ (k : ℝ) * a i → (k : ℝ) * a i ≤ 19 / 10 →\n      2 * ((k : ℝ) * v i) - (k : ℝ) * a i ≤\n        max ((k : ℝ) * a i - r)\n          (((k : ℝ) * a i +\n            max 1 (2 - 2 * ((k : ℝ) * a i) / 3) - r) / 2)) : False := by\n  let d : I → ℝ := fun i => v i - (5 / 6 : ℝ) * a i\n  have hdsum : (∑ i, d i) = (∑ i, v i) - 5 / 6 := by\n    simp [d, Finset.sum_sub_distrib, ← Finset.mul_sum, hs]\n  have hm : MultiplicityBounds a d r := by\n    intro k hklo hkhi\n    have h := hcubic k hklo hkhi\n    rw [show weight k d = weight k v - (5 / 6 : ℝ) * weight k a from\n      weight_defect k a v]\n    linarith\n  have hlower : 2 / 3 - 2 * (∑ i, d i) ≤ r := by\n    rw [hdsum]\n    linarith\n  obtain ⟨hd, hr⟩ := extremal_forcing a d r ha hs hlt hlower hm\n  obtain ⟨i, hipos, hishort⟩ := positive_short a ha hs hlt\n  obtain ⟨k, hklo, hkhi⟩ := multiple_in_uniform_interval (a i) hipos hishort\n  have hvi : v i = (5 / 6 : ℝ) * a i := by\n    have h := hd i\n    dsimp [d] at h\n    linarith\n  have hval : (k : ℝ) * v i = (5 / 6 : ℝ) * ((k : ℝ) * a i) := by\n    rw [hvi]\n    ring\n  have hg := hgram i k hklo (le_of_lt hkhi)\n  rw [hr, hval] at hg\n  have hgap := uniform_gram_gap ((k : ℝ) * a i) hklo (le_of_lt hkhi)\n  linarith\n\ntheorem second_endpoint_forcing (r v : ℝ)\n    (hlarge : 7 / 3 - 2 * v ≤ r) (hcard : r ≤ 2 / 3)\n    (hfourth : r + 4 * v ≤ 4) : r = 2 / 3 ∧ v = 5 / 6 := by\n  constructor <;> linarith\n\nlemma exists_high_value (a v : I → ℝ) (ha : ∀ i, 0 ≤ a i)\n    (hs : ∑ i, a i = 1) (hv : ∀ i, v i ≤ a i)\n    (hvsum : ∑ i, v i = 5 / 6) :\n    ∃ i, 0 < a i ∧ (5 / 6 : ℝ) * a i ≤ v i := by\n  by_contra! h\n  let d : I → ℝ := fun i => v i - (5 / 6 : ℝ) * a i\n  have hd (i : I) : d i ≤ 0 := by\n    by_cases hi : 0 < a i\n    · have hlt := h i hi\n      dsimp [d]\n      linarith\n    · have hz : a i = 0 := by linarith [ha i]\n      dsimp [d]\n      rw [hz]\n      simpa [hz] using hv i\n  have hdsum : ∑ i, d i = 0 := by\n    simp [d, Finset.sum_sub_distrib, ← Finset.mul_sum, hs, hvsum]\n  have hdzero := nonpos_sum_zero d hd hdsum\n  have hex : ∃ i, 0 < a i := by\n    by_contra! hn\n    have hsum := Finset.sum_nonpos\n      (fun i (_ : i ∈ (Finset.univ : Finset I)) => hn i)\n    linarith\n  obtain ⟨i, hi⟩ := hex\n  have hlt := h i hi\n  have hz := hdzero i\n  dsimp [d] at hz\n  linarith\n\ntheorem ordinary_interior_gap (z : ℝ) (hlo : 1 < z) (hhi : z < 2) :\n    max (4 / 3) z - 2 * z / 3 < 2 / 3 := by\n  by_cases h : z ≤ 4 / 3\n  · rw [max_eq_left h]\n    linarith\n  · rw [max_eq_right (le_of_not_ge h)]\n    linarith\n\ntheorem second_endpoint_impossible (a v : I → ℝ) (r : ℝ)\n    (ha : ∀ i, 0 ≤ a i) (hs : ∑ i, a i = 1) (hlt : ∀ i, a i < 1)\n    (hv : ∀ i, v i ≤ a i)\n    (hlarge : 7 / 3 - 2 * (∑ i, v i) ≤ r)\n    (hcard : r ≤ 2 / 3) (hfourth : r + 4 * (∑ i, v i) ≤ 4)\n    (hrepeat : ∀ i, 0 < a i →\n      r + 2 * ((∑ j, v j) + v i) ≤\n        (1 + a i) + max (4 / 3) (1 + a i)) : False := by\n  obtain ⟨hr, hvsum⟩ := second_endpoint_forcing r (∑ i, v i) hlarge hcard hfourth\n  obtain ⟨i, hipos, hiv⟩ := exists_high_value a v ha hs hv hvsum\n  have h := hrepeat i hipos\n  rw [hr, hvsum] at h\n  have hgap := ordinary_interior_gap (1 + a i) (by linarith) (by linarith [hlt i])\n  linarith\n\nnoncomputable def firstFullUpper (a : ℝ) : ℝ :=\n  2 - a + max 1 (max (87 / 50 - a) ((2 / 3) * (1 + (87 / 50 - a))))\n\nnoncomputable def secondFullUpper (a : ℝ) : ℝ :=\n  4 / 3 + 37 / 50 + 2 * (1 - a)\n\ntheorem dominant_full_first (a : ℝ) (hlo : 19 / 20 ≤ a) (hhi : a ≤ 1) :\n    firstFullUpper a ≤ 7 / 3 - 9 / 100 := by\n  unfold firstFullUpper\n  rw [max_eq_right (by linarith :\n    87 / 50 - a ≤ (2 / 3 : ℝ) * (1 + (87 / 50 - a)))]\n  rw [max_eq_right (by linarith :\n    (1 : ℝ) ≤ (2 / 3 : ℝ) * (1 + (87 / 50 - a)))]\n  linarith\n\ntheorem dominant_full_second (a : ℝ) (hlo : 19 / 20 ≤ a) :\n    secondFullUpper a ≤ 7 / 3 - 4 / 25 := by\n  unfold secondFullUpper\n  linarith\n\ntheorem first_endpoint_universal (a v : I → ℝ) (r : ℝ)\n    (ha : ∀ i, 0 ≤ a i) (hs : ∑ i, a i = 1)\n    (hlarge : 7 / 3 - 2 * (∑ i, v i) ≤ r)\n    (hfull : ∀ i, a i = 1 → 7 / 3 ≤ firstFullUpper (a i))\n    (hcubic : ∀ k : I → ℕ, 1 / 2 ≤ weight k a → weight k a ≤ 2 →\n      r + 2 * weight k v ≤ 2 / 3 + (5 / 3 : ℝ) * weight k a)\n    (hgram : ∀ (i : I) (k : ℕ),\n      7 / 5 ≤ (k : ℝ) * a i → (k : ℝ) * a i ≤ 19 / 10 →\n      2 * ((k : ℝ) * v i) - (k : ℝ) * a i ≤\n        max ((k : ℝ) * a i - r)\n          (((k : ℝ) * a i +\n            max 1 (2 - 2 * ((k : ℝ) * a i) / 3) - r) / 2)) : False := by\n  have hlt (i : I) : a i < 1 := by\n    have hle := Finset.single_le_sum\n      (fun j (_ : j ∈ (Finset.univ : Finset I)) => ha j) (Finset.mem_univ i)\n    rw [hs] at hle\n    by_contra h\n    have heq : a i = 1 := le_antisymm hle (le_of_not_gt h)\n    have hf := hfull i heq\n    have hg := dominant_full_first (a i) (by rw [heq]; norm_num) hle\n    linarith\n  exact first_endpoint_impossible a v r ha hs hlt hlarge hcubic hgram\n\ntheorem second_endpoint_universal (a v : I → ℝ) (r : ℝ)\n    (ha : ∀ i, 0 ≤ a i) (hs : ∑ i, a i = 1) (hv : ∀ i, v i ≤ a i)\n    (hlarge : 7 / 3 - 2 * (∑ i, v i) ≤ r)\n    (hfull : ∀ i, a i = 1 → 7 / 3 ≤ secondFullUpper (a i))\n    (hcard : r ≤ 2 / 3) (hfourth : r + 4 * (∑ i, v i) ≤ 4)\n    (hrepeat : ∀ i, 0 < a i →\n      r + 2 * ((∑ j, v j) + v i) ≤\n        (1 + a i) + max (4 / 3) (1 + a i)) : False := by\n  have hlt (i : I) : a i < 1 := by\n    have hle := Finset.single_le_sum\n      (fun j (_ : j ∈ (Finset.univ : Finset I)) => ha j) (Finset.mem_univ i)\n    rw [hs] at hle\n    by_contra h\n    have heq : a i = 1 := le_antisymm hle (le_of_not_gt h)\n    have hf := hfull i heq\n    have hg := dominant_full_second (a i) (by rw [heq]; norm_num)\n    linarith\n  exact second_endpoint_impossible a v r ha hs hlt hv hlarge hcard hfourth hrepeat\n\nend ExceptionalMoments\n\n#print axioms ExceptionalMoments.first_endpoint_universal\n#print axioms ExceptionalMoments.second_endpoint_universal\n#print axioms ExceptionalMoments.uniform_gram_gap\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "bc6a93a52a5ac9d19946d145f32a9b5d79573e7a55c1bf57b30eaace716dd668"
+    },
+    {
+      "claim_id": "C_INTERVAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "Every real 0<a<=1/2 has a natural multiple in [7/5,19/10); on [7/5,19/10] the stated diagonal and off-diagonal exponent gaps are at least 1/30. The value 1/30 is optimal under interval width>=1/2 and the encoded affine endpoint constraints, not necessarily among all intervals covering all a or among analytic methods.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "342038dca18001162e382d8ddab383a197d5410d4c40135b807c1632f11ff7be"
+    },
+    {
+      "claim_id": "C_FINITE_DEGREE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "For integer M>=1 and at most M nonnegative lengths summing to one, either a length is at least 19/20, or a positive length in [1/(20M),1/2] exists. Its ceiling multiplicity ceil((7/5)/a) is at most 28M, so the first-endpoint abstract obstruction can use finitely many multiplicities for fixed M once the dominant-full analytic alternative is valid.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "def81a67d46f9b1388ab20576dfc65635333e56636be26b3bb5dc9ae84b9655f"
+    },
+    {
+      "claim_id": "C_ANALYTIC_DUAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "Conditional on the recorded classical inputs and the assessed bridges, prop:dual of the referenced September 25 2026 manuscript is supported for its exact independent smooth prime convolutions, fixed c and k0 and derivative/support bounds, some uniform delta,eta>0, N(v),N(e)<=Y^delta, 1+|u|<=Y^0.36, and the two stated exceptional neighborhoods; neither the full prime asymptotic nor the angular theorem is established here.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+    },
+    {
+      "claim_id": "C_GENERIC_ENDPOINT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "The two available unstructured endpoint sieve upper exponents equal 7/3, and these estimates alone do not prove a positive power saving; this is a failed generic-only argument, not a refutation of prop:dual.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d268066e81d7a21f705d76ee242dbdcd2f14a1490d9d957ee4ceb330da96e8be"
+    },
+    {
+      "claim_id": "C_ANALYTIC_DUAL",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "Conditional on the recorded classical inputs and the assessed bridges, prop:dual of the referenced September 25 2026 manuscript is supported for its exact independent smooth prime convolutions, fixed c and k0 and derivative/support bounds, some uniform delta,eta>0, N(v),N(e)<=Y^delta, 1+|u|<=Y^0.36, and the two stated exceptional neighborhoods; neither the full prime asymptotic nor the angular theorem is established here.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "DR_HB_REPRODUCTION",
+          "statement": "Squarefree primary variables satisfy the cubic large sieve (AB)^epsilon*(A+B+(AB)^(2/3))*sum|beta|^2, as explicitly reproduced, not as inspection of the original HB article.",
+          "source": "Dunn--Radziwill, Bias in cubic Gauss sums: Pattersons conjecture, version 3; old full text and analytic-dual/report.md Section 3.1 actually inspected.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.4, equation (1.11), page 6",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+    },
+    {
+      "claim_id": "C_ANALYTIC_DUAL",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "Conditional on the recorded classical inputs and the assessed bridges, prop:dual of the referenced September 25 2026 manuscript is supported for its exact independent smooth prime convolutions, fixed c and k0 and derivative/support bounds, some uniform delta,eta>0, N(v),N(e)<=Y^delta, 1+|u|<=Y^0.36, and the two stated exceptional neighborhoods; neither the full prime asymptotic nor the angular theorem is established here.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "DR_HB_REPRODUCTION",
+          "statement": "Squarefree primary variables satisfy the cubic large sieve (AB)^epsilon*(A+B+(AB)^(2/3))*sum|beta|^2, as explicitly reproduced, not as inspection of the original HB article.",
+          "source": "Dunn--Radziwill, Bias in cubic Gauss sums: Pattersons conjecture, version 3; old full text and analytic-dual/report.md Section 3.1 actually inspected.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.4, equation (1.11), page 6",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+        },
+        {
+          "assumption_id": "DR_CUBIC_LAWS",
+          "statement": "Primary cubic reciprocity, supplementary laws modulo 9, and the single-symbol squarefree cubic Gauss evaluation hold in the stated Eisenstein conventions.",
+          "source": "Dunn--Radziwill version 3; full-text passages assessed by analytic-draft-audit.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.2, (1.4)-(1.5), and Section 2, (2.1)-(2.2)",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "9bd4cad1826154fdd01f00207dd0c03f35cafa60f3d1e61c894bcd467957389d"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+    },
+    {
+      "claim_id": "C_ANALYTIC_DUAL",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "Conditional on the recorded classical inputs and the assessed bridges, prop:dual of the referenced September 25 2026 manuscript is supported for its exact independent smooth prime convolutions, fixed c and k0 and derivative/support bounds, some uniform delta,eta>0, N(v),N(e)<=Y^delta, 1+|u|<=Y^0.36, and the two stated exceptional neighborhoods; neither the full prime asymptotic nor the angular theorem is established here.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "DR_CUBIC_LAWS",
+          "statement": "Primary cubic reciprocity, supplementary laws modulo 9, and the single-symbol squarefree cubic Gauss evaluation hold in the stated Eisenstein conventions.",
+          "source": "Dunn--Radziwill version 3; full-text passages assessed by analytic-draft-audit.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.2, (1.4)-(1.5), and Section 2, (2.1)-(2.2)",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "9bd4cad1826154fdd01f00207dd0c03f35cafa60f3d1e61c894bcd467957389d"
+        },
+        {
+          "assumption_id": "DR_HB_REPRODUCTION",
+          "statement": "Squarefree primary variables satisfy the cubic large sieve (AB)^epsilon*(A+B+(AB)^(2/3))*sum|beta|^2, as explicitly reproduced, not as inspection of the original HB article.",
+          "source": "Dunn--Radziwill, Bias in cubic Gauss sums: Pattersons conjecture, version 3; old full text and analytic-dual/report.md Section 3.1 actually inspected.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.4, equation (1.11), page 6",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+        },
+        {
+          "assumption_id": "WATKINS_PRIMITIVE_FE",
+          "statement": "Primitive finite-order Hecke characters with trivial infinity parameter over Q(omega) have completion 2*(sqrt(3D)/(2*pi))^s*Gamma(s)*L(s,chi) and the conjugate-character functional equation with unit-modulus root number.",
+          "source": "Watkins, Computing with Hecke Grossencharacters (2011); full-text passage read, factor of two retained before specialization.",
+          "source_id": "doi:10.5802/pmb.a-138",
+          "locator": "Section 3.6, page 123",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "b1716952c397a40320f46c6e6426fe814996408b908cda48172e9010174c56a3"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+    },
+    {
+      "claim_id": "C_ANALYTIC_DUAL",
+      "version": 5,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "Conditional on the recorded classical inputs and the assessed bridges, prop:dual of the referenced September 25 2026 manuscript is supported for its exact independent smooth prime convolutions, fixed c and k0 and derivative/support bounds, some uniform delta,eta>0, N(v),N(e)<=Y^delta, 1+|u|<=Y^0.36, and the two stated exceptional neighborhoods; neither the full prime asymptotic nor the angular theorem is established here.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "DR_CUBIC_LAWS",
+          "statement": "Primary cubic reciprocity, supplementary laws modulo 9, and the single-symbol squarefree cubic Gauss evaluation hold in the stated Eisenstein conventions.",
+          "source": "Dunn--Radziwill version 3; full-text passages assessed by analytic-draft-audit.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.2, (1.4)-(1.5), and Section 2, (2.1)-(2.2)",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "9bd4cad1826154fdd01f00207dd0c03f35cafa60f3d1e61c894bcd467957389d"
+        },
+        {
+          "assumption_id": "DR_HB_REPRODUCTION",
+          "statement": "Squarefree primary variables satisfy the cubic large sieve (AB)^epsilon*(A+B+(AB)^(2/3))*sum|beta|^2, as explicitly reproduced, not as inspection of the original HB article.",
+          "source": "Dunn--Radziwill, Bias in cubic Gauss sums: Pattersons conjecture, version 3; old full text and analytic-dual/report.md Section 3.1 actually inspected.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.4, equation (1.11), page 6",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+        },
+        {
+          "assumption_id": "WATKINS_PRIMITIVE_FE",
+          "statement": "Primitive finite-order Hecke characters with trivial infinity parameter over Q(omega) have completion 2*(sqrt(3D)/(2*pi))^s*Gamma(s)*L(s,chi) and the conjugate-character functional equation with unit-modulus root number.",
+          "source": "Watkins, Computing with Hecke Grossencharacters (2011); full-text passage read, factor of two retained before specialization.",
+          "source_id": "doi:10.5802/pmb.a-138",
+          "locator": "Section 3.6, page 123",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "b1716952c397a40320f46c6e6426fe814996408b908cda48172e9010174c56a3"
+        },
+        {
+          "assumption_id": "TZ_COMPLETED_ENTIRE",
+          "statement": "For nontrivial primitive finite-order Hecke characters realized by an abelian extension, completed xi is entire of order one; delta(chi)=0 so no s(1-s) pole-removing factor is present.",
+          "source": "Thorner--Zaman (2019), full text read with its abelian-extension hypothesis.",
+          "source_id": "doi:10.2140/ant.2019.13.1039",
+          "locator": "Section 2C, (2-14)-(2-15) and following paragraph, page 1049",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "4f823787daa9a83112203f1d0574359cf983ca54f4d5cefcc4e984285957763a"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+    },
+    {
+      "claim_id": "C_ANALYTIC_DUAL",
+      "version": 6,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "Conditional on the recorded classical inputs and the assessed bridges, prop:dual of the referenced September 25 2026 manuscript is supported for its exact independent smooth prime convolutions, fixed c and k0 and derivative/support bounds, some uniform delta,eta>0, N(v),N(e)<=Y^delta, 1+|u|<=Y^0.36, and the two stated exceptional neighborhoods; neither the full prime asymptotic nor the angular theorem is established here.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "DR_CUBIC_LAWS",
+          "statement": "Primary cubic reciprocity, supplementary laws modulo 9, and the single-symbol squarefree cubic Gauss evaluation hold in the stated Eisenstein conventions.",
+          "source": "Dunn--Radziwill version 3; full-text passages assessed by analytic-draft-audit.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.2, (1.4)-(1.5), and Section 2, (2.1)-(2.2)",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "9bd4cad1826154fdd01f00207dd0c03f35cafa60f3d1e61c894bcd467957389d"
+        },
+        {
+          "assumption_id": "DR_HB_REPRODUCTION",
+          "statement": "Squarefree primary variables satisfy the cubic large sieve (AB)^epsilon*(A+B+(AB)^(2/3))*sum|beta|^2, as explicitly reproduced, not as inspection of the original HB article.",
+          "source": "Dunn--Radziwill, Bias in cubic Gauss sums: Pattersons conjecture, version 3; old full text and analytic-dual/report.md Section 3.1 actually inspected.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.4, equation (1.11), page 6",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+        },
+        {
+          "assumption_id": "TZ_COMPLETED_ENTIRE",
+          "statement": "For nontrivial primitive finite-order Hecke characters realized by an abelian extension, completed xi is entire of order one; delta(chi)=0 so no s(1-s) pole-removing factor is present.",
+          "source": "Thorner--Zaman (2019), full text read with its abelian-extension hypothesis.",
+          "source_id": "doi:10.2140/ant.2019.13.1039",
+          "locator": "Section 2C, (2-14)-(2-15) and following paragraph, page 1049",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "4f823787daa9a83112203f1d0574359cf983ca54f4d5cefcc4e984285957763a"
+        },
+        {
+          "assumption_id": "WATKINS_PRIMITIVE_FE",
+          "statement": "Primitive finite-order Hecke characters with trivial infinity parameter over Q(omega) have completion 2*(sqrt(3D)/(2*pi))^s*Gamma(s)*L(s,chi) and the conjugate-character functional equation with unit-modulus root number.",
+          "source": "Watkins, Computing with Hecke Grossencharacters (2011); full-text passage read, factor of two retained before specialization.",
+          "source_id": "doi:10.5802/pmb.a-138",
+          "locator": "Section 3.6, page 123",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "b1716952c397a40320f46c6e6426fe814996408b908cda48172e9010174c56a3"
+        },
+        {
+          "assumption_id": "DR_EISENSTEIN_POISSON",
+          "statement": "Poisson summation on Z[omega] for a nonzero modulus, periodic function and Schwartz weight has the stated trace-dual lattice and covolume normalization; reversing both Fourier signs is equivalent.",
+          "source": "Dunn--Radziwill version 3, full-text Lemma 4.2 read.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 4, Lemma 4.2, page 12",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "b38aae0e4996cb2756b74ab9a65820db0f12e568ed543a3b52a73eb0e2b066cc"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+    },
+    {
+      "claim_id": "C_ANALYTIC_DUAL",
+      "version": 7,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_DRAFT_REVIEW",
+        "content_hash": "12ec02a961ace7d1a809a5ab35b48797ad81e41ef87cd04b6986c4ef213088e7"
+      },
+      "natural_statement": "Conditional on the recorded classical inputs and the assessed bridges, prop:dual of the referenced September 25 2026 manuscript is supported for its exact independent smooth prime convolutions, fixed c and k0 and derivative/support bounds, some uniform delta,eta>0, N(v),N(e)<=Y^delta, 1+|u|<=Y^0.36, and the two stated exceptional neighborhoods; neither the full prime asymptotic nor the angular theorem is established here.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "DR_CUBIC_LAWS",
+          "statement": "Primary cubic reciprocity, supplementary laws modulo 9, and the single-symbol squarefree cubic Gauss evaluation hold in the stated Eisenstein conventions.",
+          "source": "Dunn--Radziwill version 3; full-text passages assessed by analytic-draft-audit.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.2, (1.4)-(1.5), and Section 2, (2.1)-(2.2)",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "9bd4cad1826154fdd01f00207dd0c03f35cafa60f3d1e61c894bcd467957389d"
+        },
+        {
+          "assumption_id": "DR_EISENSTEIN_POISSON",
+          "statement": "Poisson summation on Z[omega] for a nonzero modulus, periodic function and Schwartz weight has the stated trace-dual lattice and covolume normalization; reversing both Fourier signs is equivalent.",
+          "source": "Dunn--Radziwill version 3, full-text Lemma 4.2 read.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 4, Lemma 4.2, page 12",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "b38aae0e4996cb2756b74ab9a65820db0f12e568ed543a3b52a73eb0e2b066cc"
+        },
+        {
+          "assumption_id": "DR_HB_REPRODUCTION",
+          "statement": "Squarefree primary variables satisfy the cubic large sieve (AB)^epsilon*(A+B+(AB)^(2/3))*sum|beta|^2, as explicitly reproduced, not as inspection of the original HB article.",
+          "source": "Dunn--Radziwill, Bias in cubic Gauss sums: Pattersons conjecture, version 3; old full text and analytic-dual/report.md Section 3.1 actually inspected.",
+          "source_id": "arxiv:2109.07463v3",
+          "locator": "Section 1.4, equation (1.11), page 6",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+        },
+        {
+          "assumption_id": "TZ_COMPLETED_ENTIRE",
+          "statement": "For nontrivial primitive finite-order Hecke characters realized by an abelian extension, completed xi is entire of order one; delta(chi)=0 so no s(1-s) pole-removing factor is present.",
+          "source": "Thorner--Zaman (2019), full text read with its abelian-extension hypothesis.",
+          "source_id": "doi:10.2140/ant.2019.13.1039",
+          "locator": "Section 2C, (2-14)-(2-15) and following paragraph, page 1049",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "4f823787daa9a83112203f1d0574359cf983ca54f4d5cefcc4e984285957763a"
+        },
+        {
+          "assumption_id": "WATKINS_PRIMITIVE_FE",
+          "statement": "Primitive finite-order Hecke characters with trivial infinity parameter over Q(omega) have completion 2*(sqrt(3D)/(2*pi))^s*Gamma(s)*L(s,chi) and the conjugate-character functional equation with unit-modulus root number.",
+          "source": "Watkins, Computing with Hecke Grossencharacters (2011); full-text passage read, factor of two retained before specialization.",
+          "source_id": "doi:10.5802/pmb.a-138",
+          "locator": "Section 3.6, page 123",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "b1716952c397a40320f46c6e6426fe814996408b908cda48172e9010174c56a3"
+        },
+        {
+          "assumption_id": "RAY_CHARACTER_CLASS_FIELD",
+          "statement": "Finite-order ray characters of Q(omega) have the abelian realization required to apply the cited completed-entireness statement.",
+          "source": "Standard class field theory; explicit unproved dependency noted by the analytic audit worker, no particular proposition source inspected.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:family-023-scope",
+          "content_hash": "b4d2627ef9985cdd40f8931fff18ddc188e12219dc3bed876800c2146be887db"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-C_EXPONENTS-03e4d880ac61",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_EXPONENTS",
+        "content_hash": "bc6a93a52a5ac9d19946d145f32a9b5d79573e7a55c1bf57b30eaace716dd668"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/draft_reviews/certificates/C_EXPONENTS-17c57f67c7fcda79.json"
+    },
+    {
+      "evidence_id": "judgement-DR_HB_REPRODUCTION-7ee7e1104f72",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_HB_REPRODUCTION",
+        "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "judgement-DR_CUBIC_LAWS-8090942f63ab",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_CUBIC_LAWS",
+        "content_hash": "9bd4cad1826154fdd01f00207dd0c03f35cafa60f3d1e61c894bcd467957389d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "judgement-WATKINS_PRIMITIVE_FE-9fb11fcd6973",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "WATKINS_PRIMITIVE_FE",
+        "content_hash": "b1716952c397a40320f46c6e6426fe814996408b908cda48172e9010174c56a3"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "judgement-TZ_COMPLETED_ENTIRE-b6e751e77f42",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "TZ_COMPLETED_ENTIRE",
+        "content_hash": "4f823787daa9a83112203f1d0574359cf983ca54f4d5cefcc4e984285957763a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "judgement-DR_EISENSTEIN_POISSON-1ec1c7189a9c",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_EISENSTEIN_POISSON",
+        "content_hash": "b38aae0e4996cb2756b74ab9a65820db0f12e568ed543a3b52a73eb0e2b066cc"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_EXPONENTS-0b55d6f54c4b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_EXPONENTS",
+        "content_hash": "bc6a93a52a5ac9d19946d145f32a9b5d79573e7a55c1bf57b30eaace716dd668"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:family-023-scope",
+      "artifact": "research/draft_reviews/certificates/C_EXPONENTS-17c57f67c7fcda79.json"
+    },
+    {
+      "evidence_id": "judgement-C_INTERVAL-f045d5ae8176",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_INTERVAL",
+        "content_hash": "342038dca18001162e382d8ddab383a197d5410d4c40135b807c1632f11ff7be"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:family-023-scope",
+      "artifact": "research/draft_reviews/interval-gap/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_FINITE_DEGREE-23f84090dd5f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FINITE_DEGREE",
+        "content_hash": "def81a67d46f9b1388ab20576dfc65635333e56636be26b3bb5dc9ae84b9655f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:family-023-scope",
+      "artifact": "research/draft_reviews/finite-degree/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_ANALYTIC_DUAL-40c0573956c8",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ANALYTIC_DUAL",
+        "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_GENERIC_ENDPOINT-302006a714e1",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_GENERIC_ENDPOINT",
+        "content_hash": "d268066e81d7a21f705d76ee242dbdcd2f14a1490d9d957ee4ceb330da96e8be"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_EXPONENTS-25b0cfb68dd0",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_EXPONENTS",
+        "content_hash": "bc6a93a52a5ac9d19946d145f32a9b5d79573e7a55c1bf57b30eaace716dd668"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "research/draft_reviews/certificates/C_EXPONENTS-17c57f67c7fcda79.json"
+    },
+    {
+      "evidence_id": "judgement-C_INTERVAL-12a964b93a5e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_INTERVAL",
+        "content_hash": "342038dca18001162e382d8ddab383a197d5410d4c40135b807c1632f11ff7be"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "research/draft_reviews/interval-gap/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_FINITE_DEGREE-7400fb8ea919",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FINITE_DEGREE",
+        "content_hash": "def81a67d46f9b1388ab20576dfc65635333e56636be26b3bb5dc9ae84b9655f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "research/draft_reviews/finite-degree/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_ANALYTIC_DUAL-915640c6b981",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ANALYTIC_DUAL",
+        "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_GENERIC_ENDPOINT-f15fdd8fa154",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_GENERIC_ENDPOINT",
+        "content_hash": "d268066e81d7a21f705d76ee242dbdcd2f14a1490d9d957ee4ceb330da96e8be"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "judgement-DR_HB_REPRODUCTION-cd00129aa809",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_HB_REPRODUCTION",
+        "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "families/023/first-pass/exceptional_moments/sources/dunn_radziwill_v3.txt"
+    },
+    {
+      "evidence_id": "judgement-DR_CUBIC_LAWS-f49d03906b54",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_CUBIC_LAWS",
+        "content_hash": "9bd4cad1826154fdd01f00207dd0c03f35cafa60f3d1e61c894bcd467957389d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "families/023/first-pass/exceptional_moments/sources/dunn_radziwill_v3.txt"
+    },
+    {
+      "evidence_id": "judgement-DR_EISENSTEIN_POISSON-838c9783c1fd",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_EISENSTEIN_POISSON",
+        "content_hash": "b38aae0e4996cb2756b74ab9a65820db0f12e568ed543a3b52a73eb0e2b066cc"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "families/023/first-pass/exceptional_moments/sources/dunn_radziwill_v3.txt"
+    },
+    {
+      "evidence_id": "judgement-WATKINS_PRIMITIVE_FE-026f7e35df2d",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "WATKINS_PRIMITIVE_FE",
+        "content_hash": "b1716952c397a40320f46c6e6426fe814996408b908cda48172e9010174c56a3"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "families/023/first-pass/exceptional_moments/sources/watkins_2011.txt"
+    },
+    {
+      "evidence_id": "judgement-TZ_COMPLETED_ENTIRE-48fbe41f4495",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "TZ_COMPLETED_ENTIRE",
+        "content_hash": "4f823787daa9a83112203f1d0574359cf983ca54f4d5cefcc4e984285957763a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "families/023/first-pass/exceptional_moments/sources/thorner_zaman_2019.txt"
+    },
+    {
+      "evidence_id": "judgement-RAY_CHARACTER_CLASS_FIELD-8965a3e0f2fb",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "RAY_CHARACTER_CLASS_FIELD",
+        "content_hash": "b4d2627ef9985cdd40f8931fff18ddc188e12219dc3bed876800c2146be887db"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:old-draft-review",
+      "artifact": "research/draft_reviews/analytic-dual/report.md"
+    },
+    {
+      "evidence_id": "citation-DR_CUBIC_LAWS-170ec317a2d0",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_CUBIC_LAWS",
+        "content_hash": "9bd4cad1826154fdd01f00207dd0c03f35cafa60f3d1e61c894bcd467957389d"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/literature/ddd032c494679ea5df5bf25d0373a0c9.json"
+    },
+    {
+      "evidence_id": "citation-DR_EISENSTEIN_POISSON-2796afb5b60c",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_EISENSTEIN_POISSON",
+        "content_hash": "b38aae0e4996cb2756b74ab9a65820db0f12e568ed543a3b52a73eb0e2b066cc"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/literature/19755b403f2e9f5f29695ad5272ee2df.json"
+    },
+    {
+      "evidence_id": "citation-DR_HB_REPRODUCTION-4b06a678154f",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_HB_REPRODUCTION",
+        "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/literature/7c49f32440cef59e6d973388ab73ca23.json"
+    },
+    {
+      "evidence_id": "citation-TZ_COMPLETED_ENTIRE-f12519137952",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "TZ_COMPLETED_ENTIRE",
+        "content_hash": "4f823787daa9a83112203f1d0574359cf983ca54f4d5cefcc4e984285957763a"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/literature/bdb13c6c29d448662da9a9b3783aaed4.json"
+    },
+    {
+      "evidence_id": "citation-WATKINS_PRIMITIVE_FE-851a03aaccb0",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "WATKINS_PRIMITIVE_FE",
+        "content_hash": "b1716952c397a40320f46c6e6426fe814996408b908cda48172e9010174c56a3"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "audit-worker:analytic-draft-audit",
+      "artifact": "research/literature/18b451219aa47a1782428cea34238930.json"
+    },
+    {
+      "evidence_id": "citation-DR_CUBIC_LAWS-8599fd92d7da",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_CUBIC_LAWS",
+        "content_hash": "9bd4cad1826154fdd01f00207dd0c03f35cafa60f3d1e61c894bcd467957389d"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:analytic-dual-citation-review",
+      "artifact": "research/literature/1d727448584fcf43c613dd8c37fae4c7.json"
+    },
+    {
+      "evidence_id": "citation-DR_EISENSTEIN_POISSON-81a9f1a267f6",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_EISENSTEIN_POISSON",
+        "content_hash": "b38aae0e4996cb2756b74ab9a65820db0f12e568ed543a3b52a73eb0e2b066cc"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:analytic-dual-citation-review",
+      "artifact": "research/literature/f469724a85ecbfd9d81ff994bdd9927d.json"
+    },
+    {
+      "evidence_id": "citation-DR_HB_REPRODUCTION-b5d2ce002262",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "DR_HB_REPRODUCTION",
+        "content_hash": "3e243179752eb8d52e2d872885b00264aed34b219385f8bccb4d34abfe6ffce2"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:analytic-dual-citation-review",
+      "artifact": "research/literature/e5b8dab88ff89e1cdd7ad789cb780d77.json"
+    },
+    {
+      "evidence_id": "citation-TZ_COMPLETED_ENTIRE-ebc68d8a1c14",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "TZ_COMPLETED_ENTIRE",
+        "content_hash": "4f823787daa9a83112203f1d0574359cf983ca54f4d5cefcc4e984285957763a"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:analytic-dual-citation-review",
+      "artifact": "research/literature/47004d1868dc91e6e527505b57b422e2.json"
+    },
+    {
+      "evidence_id": "citation-WATKINS_PRIMITIVE_FE-132f5639af82",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "WATKINS_PRIMITIVE_FE",
+        "content_hash": "b1716952c397a40320f46c6e6426fe814996408b908cda48172e9010174c56a3"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:analytic-dual-citation-review",
+      "artifact": "research/literature/bfe5ded22d4245f4005085deb301dc31.json"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_GENERIC_ONLY_INHERITED",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_ANALYTIC_DUAL",
+        "content_hash": "4e1fe5b37284329f9f48c0a945418271d9c9d39ad3b150c3ed3b0434976c48d2"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_GENERIC_ENDPOINT",
+          "content_hash": "d268066e81d7a21f705d76ee242dbdcd2f14a1490d9d957ee4ceb330da96e8be"
+        }
+      ],
+      "retired_because": "Inherited unstructured cubic/ordinary sieve bounds both stop at exponent 7/3. Finite exponent samples do not supply a universal saving or contradict the structured proposition."
+    }
+  ]
+}

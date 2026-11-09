@@ -1,0 +1,162 @@
+{
+  "goal": "C9000270",
+  "routes": [
+    {
+      "name": "R_LIFT_270: audit the original moment-free corrected lifts",
+      "status": "current",
+      "evidence": "research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/05-lifts.tex"
+    }
+  ],
+  "nodes": {
+    "C9000270": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 270 (Threshold and positive-energy bound states of the BFSS matrix model.; papers: The unique threshold bound state of the SU(N) BFSS model; Positive eigenvalues of the relative SU(2) BFSS Hamiltonian; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_LIFT_RESOLUTION_270"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_LIFT_RESOLUTION_270": {
+      "statement": "Independently prove the original corrected-lift assertion or certify an obstruction to a literal load-bearing step; do not identify failure of a proof with falsity of the proposition.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_LIFT_270", "C_LIFT_ALGEBRA_270"],
+      "evidence": ["research/cluster_lift_audit/report.md", "research/cluster_lift_audit/exact_certificate.json"]
+    },
+    "C_LIFT_ALGEBRA_270": {
+      "statement": "Exact Clifford/Fierz coefficient identities for every real spinor, the undeformed and neutral squares, general trace cancellation, and the actual graded inverse support the full analytic proof; finite SU(3) probes are not its generalization argument.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/cluster_lift_audit/verify.py", "research/cluster_lift_audit/exact_certificate.json", "research/cluster_lift_audit/report.md"]
+    },
+    "C_SLICE_270": {
+      "statement": "lem:slice: exact spectral slice, j=|det ad(b_e)| and D=sqrt(h)E+D^s+R with the displayed gauge-spin and density terms.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/04-fast-analysis.tex", "research/cluster_lift_audit/report.md"]
+    },
+    "C_NEUTRAL_270": {
+      "statement": "fast:one-plane-square and fast:neutral-square: central-torus neutrality yields a v-independent scalar-center square and unique even vacuum.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SLICE_270", "C_LIFT_ALGEBRA_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/04-fast-analysis.tex", "research/cluster_lift_audit/report.md", "research/cluster_lift_audit/exact_certificate.json"]
+    },
+    "C_FAST_LINE_270": {
+      "statement": "lem:fast-line: nearby noncommuting blocks retain a rank-one neutral even kernel, uniform gap and prescribed finite oscillator-Sobolev derivative estimates.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_NEUTRAL_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/04-fast-analysis.tex"]
+    },
+    "C_COMPRESSION_270": {
+      "statement": "lem:diagonal-compression: zero Berry form and exact gauge-spin/density cancellation at scalar blocks, including every internal slow color.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SLICE_270", "C_FAST_LINE_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/04-fast-analysis.tex"]
+    },
+    "C_MOMENT_FREE_270": {
+      "statement": "lift:separate-energy implies eq:kernel-scaled-estimate for actual internal L2 kernels with bounded physical cutoffs and no global moment assumptions.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_LIFT_ALGEBRA_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/05-lifts.tex", "research/cluster_lift_audit/report.md"]
+    },
+    "C_CORRECTION_270": {
+      "statement": "lift:correction and lift:matrix-stability cancel the perpendicular residual with the actual graded inverse and leave vanishing correction outputs.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_FAST_LINE_270", "C_COMPRESSION_270", "C_MOMENT_FREE_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/05-lifts.tex", "research/cluster_lift_audit/report.md"]
+    },
+    "C_COMPATIBILITY_270": {
+      "statement": "lem:chart-compatibility glues both limits and transports with no extra scalar character.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_FAST_LINE_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/05-lifts.tex"]
+    },
+    "C_LIFT_270": {
+      "statement": "prop:test-lifts with its original quantifiers: fixed m>=0, every unit spinor, every proper partition, compact collision-free center tests and arbitrary actual internal L2 kernels; both L2 limits and all stated finite-family and symmetry conclusions.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SLICE_270", "C_NEUTRAL_270", "C_FAST_LINE_270", "C_COMPRESSION_270", "C_MOMENT_FREE_270", "C_CORRECTION_270", "C_COMPATIBILITY_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/05-lifts.tex"]
+    },
+    "TH_INDEX_270": {
+      "statement": "prop:massive-index: the massive Fredholm index is p(N), using normal oscillators, slice compactness and vacuum recovery.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/03-massive-index.tex"]
+    },
+    "TH_PROFILES_270": {
+      "statement": "prop:profile-compactness and prop:profile-liminf identify proper-stratum profiles and the limiting center-charge lower bound.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_LIFT_270", "C_FAST_LINE_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/06-profiles.tex"]
+    },
+    "TH_EXTERIOR_270": {
+      "statement": "prop:exterior-estimate and prof:full-exhaustion control escape and exhaust tight limiting norm.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["TH_PROFILES_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/06-profiles.tex"]
+    },
+    "TH_COUNT_270": {
+      "statement": "prop:massive-tightness, count:center-confinement, lem:large-coupling-gap and proper/full recovery combine index and profile counts, with smaller-block induction.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["TH_INDEX_270", "TH_EXTERIOR_270", "C_LIFT_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/07-counting.tex"]
+    },
+    "TH_MAIN_270": {
+      "statement": "thm:main: the relative SU(N) BFSS L2 zero-energy kernel has dimension one.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["TH_COUNT_270"],
+      "evidence": ["research/openai_manuscript/The-unique-threshold-bound-state-of-the-SU-N-BFSS-model-September-24-2026/build/manuscript/sections/07-counting.tex"]
+    },
+    "POS_FORM_270": {
+      "statement": "lem:form and lem:rotations: the closed physical form is one-half kinetic plus quartic V plus a fermion matrix bounded by C|x|; rotation sectors reduce H.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Positive-eigenvalues-of-the-relative-SU-2-BFSS-Hamiltonian-October-5-2026/build/positive-eigenvalues-relative-su2-bfss.tex"]
+    },
+    "POS_BRANCH_270": {
+      "statement": "lem:branching, lem:slice and lem:oscillator exclude transverse levels n<=m when lambda_2>m+M.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["POS_FORM_270"],
+      "evidence": ["research/openai_manuscript/Positive-eigenvalues-of-the-relative-SU-2-BFSS-Hamiltonian-October-5-2026/build/positive-eigenvalues-relative-su2-bfss.tex"]
+    },
+    "POS_CONFINEMENT_270": {
+      "statement": "prop:confinement gives compact resolvent and zero kernel in sufficiently high second-weight physical rotation sectors.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["POS_BRANCH_270", "POS_FORM_270"],
+      "evidence": ["research/openai_manuscript/Positive-eigenvalues-of-the-relative-SU-2-BFSS-Hamiltonian-October-5-2026/build/positive-eigenvalues-relative-su2-bfss.tex"]
+    },
+    "POS_SECTORS_270": {
+      "statement": "lem:fermion-invariant and lem:large-sectors construct nonzero infinite-dimensional physical sectors with lambda_2 tending to infinity.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Positive-eigenvalues-of-the-relative-SU-2-BFSS-Hamiltonian-October-5-2026/build/positive-eigenvalues-relative-su2-bfss.tex"]
+    },
+    "POS_MAIN_270": {
+      "statement": "thm:main: the specified physical relative SU(2) Hamiltonian has an orthonormal sequence of positive-energy L2 eigenvectors with energies tending to infinity.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["POS_CONFINEMENT_270", "POS_SECTORS_270"],
+      "evidence": ["research/openai_manuscript/Positive-eigenvalues-of-the-relative-SU-2-BFSS-Hamiltonian-October-5-2026/build/positive-eigenvalues-relative-su2-bfss.tex"]
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "operation_id": "prime_field.matrix.rank.compute",
+  "server_name": "jacobian",
+  "server_version": "0.14.0",
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "inspected_before_run": true,
+  "discovered_candidates": [
+    "matrix.symbolic.rank.compute",
+    "matrix.rank.compute",
+    "finite_geometry.subspace.intersection.compute",
+    "prime_field.matrix.rank.compute",
+    "matrix.symbolic.determinant.compute"
+  ],
+  "selection_reason": "The prime-field rank postcondition matches the diagnostic matrix over F2; rational and rational-function ranks do not. This operation is not claimed to prove the universal comparison theorem.",
+  "input_contract": {
+    "additionalProperties": false,
+    "required": ["matrix"],
+    "matrix": {
+      "required": ["prime", "entries", "columns"],
+      "prime_minimum": 2,
+      "prime_maximum": 2147483647,
+      "prime_required": true,
+      "maximum_rows": 256,
+      "minimum_columns": 1,
+      "maximum_columns": 256,
+      "entries": "canonical residues in [0, prime)",
+      "shape": "each row has the explicitly declared number of columns; zero rows permitted"
+    }
+  },
+  "output_contract": {
+    "additionalProperties": false,
+    "required": ["prime", "source", "rank"],
+    "prime": "integer greater than 1 and at most 2147483647",
+    "rank": "nonnegative integer",
+    "source": "the exact PrimeFieldMatrixRequest supplied"
+  },
+  "error_policy": "Timeout, transport failure, incomplete output and UNKNOWN are non-conclusions."
+}

@@ -1,0 +1,1481 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX_REVIEW46",
+      "version": 1,
+      "statement": "Review existing family-046 drafts under OBJECTIVE.md at exploratory scope; statements below retain their exact conditional mathematical scope and do not confer native independent acceptance.",
+      "definitions": {
+        "n": "2^r with integer r>=2",
+        "geometric_input": "Y smooth connected projective complex surface; U=Y minus an SNC divisor D; g:Y->C a proper map to a smooth projective curve; rho:pi1(U)->Q with Q infinite profinite and dense punctured smooth fiber image; every D-component meridian has finite image; distinguished fiber D* is an unmarked main P1 with k=3n^2/2 disjoint two-marked rational tails, trivial vertical meridians and killed pair products",
+        "large": "Every positive-dimensional closed irreducible subvariety has infinite image of the fundamental group of its normalization in the ambient variety"
+      },
+      "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "S_QUOTIENT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "For every n=2^r with r>=2, the accepted actual paired elliptic sphere-family construction gives an infinite pro-2 quotient Q with dense punctured fiber image, finite images of all boundary meridians, trivial distinguished vertical meridians, and a finite parameter cover of distinguished ramification index exactly two.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f00707cdc82c58d34fa6173bc56a810ae862079405282c69f47fe0b739db1de3"
+    },
+    {
+      "claim_id": "S_MERIDIAN_KERNEL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "For arbitrary groups G,Q,P and homomorphisms rho:G->Q and p:Q->P, if p is injective on every subgroup A_i, every s in S has rho(s) conjugate to an element of some A_i, and p(rho(s))=1, then normalClosure(S) lies in ker(rho) and rho descends to G/normalClosure(S). For any f:G->Q with image in a detected A_i, ker(p composed with f)=ker(f).",
+      "formal_statement": "import Mathlib.GroupTheory.QuotientGroup.Basic\n\nnamespace SurfaceGeometry\n\nuniverse u v w z\n\nvariable {G : Type u} {Q : Type v} {P : Type w} {I : Type z}\nvariable [Group G] [Group Q] [Group P]\n\ntheorem local_kernel_agreement\n    (f : G →* Q) (p : Q →* P) (A : Subgroup Q)\n    (himage : ∀ g, f g ∈ A)\n    (hdetect : Set.InjOn p (A : Set Q)) :\n    (p.comp f).ker = f.ker := by\n  ext g\n  change p (f g) = 1 ↔ f g = 1\n  constructor\n  · intro h\n    exact hdetect (himage g) A.one_mem (by simpa using h)\n  · intro h\n    simp [h]\n\ntheorem conjugate_kernel_trivial\n    (p : Q →* P) (A : Subgroup Q)\n    (hdetect : Set.InjOn p (A : Set Q))\n    {a : Q} (ha : a ∈ A) (g : Q)\n    (h : p (g * a * g⁻¹) = 1) :\n    g * a * g⁻¹ = 1 := by\n  have hp : p a = 1 := by\n    have h' := congrArg (fun t : P => (p g)⁻¹ * t * p g) h\n    simpa [map_mul, map_inv, mul_assoc] using h'\n  have haone : a = 1 :=\n    hdetect ha A.one_mem (by simpa using hp)\n  simp [haone]\n\ntheorem normal_closure_killed\n    (rho : G →* Q) (p : Q →* P) (A : I → Subgroup Q)\n    (S : Set G)\n    (hdetect : ∀ i, Set.InjOn p (A i : Set Q))\n    (hlocal : ∀ s ∈ S, ∃ i a g, a ∈ A i ∧ rho s = g * a * g⁻¹)\n    (hfinite : ∀ s ∈ S, p (rho s) = 1) :\n    Subgroup.normalClosure S ≤ rho.ker := by\n  apply Subgroup.normalClosure_le_normal\n  intro s hs\n  change rho s = 1\n  rcases hlocal s hs with ⟨i, a, g, ha, heq⟩\n  rw [heq]\n  apply conjugate_kernel_trivial p (A i) (hdetect i) ha g\n  rw [← heq]\n  exact hfinite s hs\n\ntheorem descent_exists\n    (rho : G →* Q) (p : Q →* P) (A : I → Subgroup Q)\n    (S : Set G)\n    (hdetect : ∀ i, Set.InjOn p (A i : Set Q))\n    (hlocal : ∀ s ∈ S, ∃ i a g, a ∈ A i ∧ rho s = g * a * g⁻¹)\n    (hfinite : ∀ s ∈ S, p (rho s) = 1) :\n    ∃ descended : G ⧸ Subgroup.normalClosure S →* Q,\n      ∀ g, descended (QuotientGroup.mk g) = rho g := by\n  have hker := normal_closure_killed rho p A S hdetect hlocal hfinite\n  refine ⟨QuotientGroup.lift (Subgroup.normalClosure S) rho hker, ?_⟩\n  intro g\n  rfl\n\nend SurfaceGeometry\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "2ec96a675eb5ec610bd974b93b3d26833c5b8f6a195f5da060d2d24ca795dc4e"
+    },
+    {
+      "claim_id": "S_LOCAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given the geometric_input, a finite quotient of Q injective on every whole local boundary-image group yields a connected finite Galois cover of U whose rho descends across a smooth projective SNC compactification, including every exceptional meridian, while preserving the already smooth SNC locus of its normalization.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+    },
+    {
+      "claim_id": "S_RATIONAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Under geometric_input and S_LOCAL, the actual normalized inverse image of the distinguished fiber is already smooth SNC locally with maps (u,w)->(u,w^e) at horizontal intersections; prescribed-open resolution leaves it unchanged, and its reduced components are smooth rational curves meeting only in nodes.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+    },
+    {
+      "claim_id": "S_SPECIAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Under geometric_input and the cover in S_LOCAL, a connected component of the distinguished reduced compact rational fiber has infinite image in pi1 of the final projective surface, by dense intersection with an open infinite subgroup and proper specialization through a compatible-triangulation neighborhood retraction.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "713c33f5e4488e02cb6ccfc73578606a8053da60af8f29d4aa63a054e21d5c1b"
+    },
+    {
+      "claim_id": "S_HULL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "If a compact connected nodal curve of smooth rational components in a complex manifold has infinite fundamental-group image, each connected pullback to the universal cover is a closed noncompact locally finite rational string; every ambient holomorphic function is constant on it, so the hull of each of its points is noncompact.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "304840e26ea83af24b435e8d538c6ee3f6a61e75781b410c4cb3cbc6bc761261"
+    },
+    {
+      "claim_id": "S_DUAL_GRAPH",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "For the actual star fiber under S_RATIONAL and finite Galois group P, with k tails and marking images a_j of orders e_j, the graph has main vertices P, tail vertices P/<a_j>, and edges (p,j) from p to p<a_j>. With H=<a_j> it has [P:H] components and total first Betti number |P|(k-1)-sum_j |P|/e_j+[P:H]; accepted pair factorization makes H=P.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "8b1433b9387857606888402eda1cf9602a010afb16ce1737e745de839438eb14"
+    },
+    {
+      "claim_id": "S_SURFACE_DYADIC",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "For every reviewed n=2^r with r>=2, the actual quotient and geometric_input yield a smooth connected projective complex surface containing a connected rational nodal curve of infinite fundamental-group image with the stated coset graph; its universal cover is not holomorphically convex. This is the geometric implication conditional on the accepted quotient, not whole-theorem Lean verification.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "859ea7a63948abb9a7657292c71e2d8be632e4dfc7271b20b75e76fd103c03f9"
+    },
+    {
+      "claim_id": "CYCLIC_ONLY_FAILURE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "On Y=P1 x P1 with coordinate boundary and U=(C*)^2, the map rho:Z^2->C2 x C2 given by coordinate parities followed by addition to C2 detects each component cyclic subgroup but not the full crossing group; the normalization z^2=uv has a resolution exceptional meridian (1,1) with nontrivial rho-image, so rho does not descend.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "ea3d9712ca313ab4a859bbaa2b348e9badedaf2abd9fef9c9812191ca2d53ce5"
+    },
+    {
+      "claim_id": "S_QUOTIENT",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "For every n=2^r with r>=2, the accepted actual paired elliptic sphere-family construction gives an infinite pro-2 quotient Q with dense punctured fiber image, finite images of all boundary meridians, trivial distinguished vertical meridians, and a finite parameter cover of distinguished ramification index exactly two.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "ACCEPTED_QUOTIENT",
+          "statement": "For every n=2^r with r>=2, the accepted actual paired elliptic sphere-family construction gives an infinite pro-2 quotient Q with dense punctured fiber image, finite images of all boundary meridians, trivial distinguished vertical meridians, and a finite parameter cover of distinguished ramification index exactly two.",
+          "source": "Native independent Reviewer acceptance, mission 84ee177ee388 round-0001, actual-family quotient and based monodromy invariance only; unchanged old surface_weighted_audit/REPORT.md sections 8-9. Private project evidence at $WORKSPACE/.argus-campaign-9000046/projects/87e68093bad5/handoffs/84ee177ee388/round-0001.json; not a bibliographic publication or a kernel proof.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "807f25245eb69f009978f8dfa0c57f953226a1f3f18c1afbd36287ceea62fe55"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "f00707cdc82c58d34fa6173bc56a810ae862079405282c69f47fe0b739db1de3"
+    },
+    {
+      "claim_id": "S_LOCAL",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given the geometric_input, a finite quotient of Q injective on every whole local boundary-image group yields a connected finite Galois cover of U whose rho descends across a smooth projective SNC compactification, including every exceptional meridian, while preserving the already smooth SNC locus of its normalization.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_RET",
+          "statement": "Finite etale algebraic covers of a locally finite type complex scheme are equivalent to its finite etale analytic covers, with no properness hypothesis.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Theoreme 5.1",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "87f56e2c733e78507ae10e06fb336b9b76caf4b4e16cd81c58399c57370a0dbc"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+    },
+    {
+      "claim_id": "S_LOCAL",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given the geometric_input, a finite quotient of Q injective on every whole local boundary-image group yields a connected finite Galois cover of U whose rho descends across a smooth projective SNC compactification, including every exceptional meridian, while preserving the already smooth SNC locus of its normalization.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_RET",
+          "statement": "Finite etale algebraic covers of a locally finite type complex scheme are equivalent to its finite etale analytic covers, with no properness hypothesis.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Theoreme 5.1",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "87f56e2c733e78507ae10e06fb336b9b76caf4b4e16cd81c58399c57370a0dbc"
+        },
+        {
+          "assumption_id": "STACKS_NAGATA",
+          "statement": "Any scheme locally of finite type over a field is Nagata.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/035B",
+          "locator": "Lemma 29.18.2(1), historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "86a355a82260c9068b13854b9fa7f3a0ca9698914fe021236ce3aa6c14e27923"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+    },
+    {
+      "claim_id": "S_LOCAL",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given the geometric_input, a finite quotient of Q injective on every whole local boundary-image group yields a connected finite Galois cover of U whose rho descends across a smooth projective SNC compactification, including every exceptional meridian, while preserving the already smooth SNC locus of its normalization.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_RET",
+          "statement": "Finite etale algebraic covers of a locally finite type complex scheme are equivalent to its finite etale analytic covers, with no properness hypothesis.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Theoreme 5.1",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "87f56e2c733e78507ae10e06fb336b9b76caf4b4e16cd81c58399c57370a0dbc"
+        },
+        {
+          "assumption_id": "STACKS_NAGATA",
+          "statement": "Any scheme locally of finite type over a field is Nagata.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/035B",
+          "locator": "Lemma 29.18.2(1), historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "86a355a82260c9068b13854b9fa7f3a0ca9698914fe021236ce3aa6c14e27923"
+        },
+        {
+          "assumption_id": "STACKS_03GR",
+          "statement": "If S is Nagata, f:X->S is finite type and X reduced, the normalization of S in X is finite.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/03GR",
+          "locator": "Lemma 29.54.15, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "c83c650613f4aec47c3244ba039b646f5cb8b6cbcc89b1931d385436a55fb146"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+    },
+    {
+      "claim_id": "S_LOCAL",
+      "version": 5,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given the geometric_input, a finite quotient of Q injective on every whole local boundary-image group yields a connected finite Galois cover of U whose rho descends across a smooth projective SNC compactification, including every exceptional meridian, while preserving the already smooth SNC locus of its normalization.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_RET",
+          "statement": "Finite etale algebraic covers of a locally finite type complex scheme are equivalent to its finite etale analytic covers, with no properness hypothesis.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Theoreme 5.1",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "87f56e2c733e78507ae10e06fb336b9b76caf4b4e16cd81c58399c57370a0dbc"
+        },
+        {
+          "assumption_id": "STACKS_03GR",
+          "statement": "If S is Nagata, f:X->S is finite type and X reduced, the normalization of S in X is finite.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/03GR",
+          "locator": "Lemma 29.54.15, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "c83c650613f4aec47c3244ba039b646f5cb8b6cbcc89b1931d385436a55fb146"
+        },
+        {
+          "assumption_id": "STACKS_NAGATA",
+          "statement": "Any scheme locally of finite type over a field is Nagata.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/035B",
+          "locator": "Lemma 29.18.2(1), historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "86a355a82260c9068b13854b9fa7f3a0ca9698914fe021236ce3aa6c14e27923"
+        },
+        {
+          "assumption_id": "STACKS_0B3I",
+          "statement": "A finite morphism is projective.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0B3I",
+          "locator": "Lemma 29.45.16, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "a250d793ad2f32c4be039240ae344cd8000780f0c6b83ff6a7b184de21dacc2e"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+    },
+    {
+      "claim_id": "S_LOCAL",
+      "version": 6,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given the geometric_input, a finite quotient of Q injective on every whole local boundary-image group yields a connected finite Galois cover of U whose rho descends across a smooth projective SNC compactification, including every exceptional meridian, while preserving the already smooth SNC locus of its normalization.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_RET",
+          "statement": "Finite etale algebraic covers of a locally finite type complex scheme are equivalent to its finite etale analytic covers, with no properness hypothesis.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Theoreme 5.1",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "87f56e2c733e78507ae10e06fb336b9b76caf4b4e16cd81c58399c57370a0dbc"
+        },
+        {
+          "assumption_id": "STACKS_03GR",
+          "statement": "If S is Nagata, f:X->S is finite type and X reduced, the normalization of S in X is finite.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/03GR",
+          "locator": "Lemma 29.54.15, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "c83c650613f4aec47c3244ba039b646f5cb8b6cbcc89b1931d385436a55fb146"
+        },
+        {
+          "assumption_id": "STACKS_0B3I",
+          "statement": "A finite morphism is projective.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0B3I",
+          "locator": "Lemma 29.45.16, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "a250d793ad2f32c4be039240ae344cd8000780f0c6b83ff6a7b184de21dacc2e"
+        },
+        {
+          "assumption_id": "STACKS_NAGATA",
+          "statement": "Any scheme locally of finite type over a field is Nagata.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/035B",
+          "locator": "Lemma 29.18.2(1), historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "86a355a82260c9068b13854b9fa7f3a0ca9698914fe021236ce3aa6c14e27923"
+        },
+        {
+          "assumption_id": "STACKS_0BI4",
+          "statement": "For an integral Noetherian curve, finite normalization is equivalent to resolution by finitely many point blowups.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0BI4",
+          "locator": "Lemma 54.15.1, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "66c953344ae0f6426da53a6e4fe431769ac3b6d3e473e8dbcc034fc3e6eb4a77"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+    },
+    {
+      "claim_id": "S_LOCAL",
+      "version": 7,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given the geometric_input, a finite quotient of Q injective on every whole local boundary-image group yields a connected finite Galois cover of U whose rho descends across a smooth projective SNC compactification, including every exceptional meridian, while preserving the already smooth SNC locus of its normalization.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_RET",
+          "statement": "Finite etale algebraic covers of a locally finite type complex scheme are equivalent to its finite etale analytic covers, with no properness hypothesis.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Theoreme 5.1",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "87f56e2c733e78507ae10e06fb336b9b76caf4b4e16cd81c58399c57370a0dbc"
+        },
+        {
+          "assumption_id": "STACKS_03GR",
+          "statement": "If S is Nagata, f:X->S is finite type and X reduced, the normalization of S in X is finite.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/03GR",
+          "locator": "Lemma 29.54.15, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "c83c650613f4aec47c3244ba039b646f5cb8b6cbcc89b1931d385436a55fb146"
+        },
+        {
+          "assumption_id": "STACKS_0B3I",
+          "statement": "A finite morphism is projective.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0B3I",
+          "locator": "Lemma 29.45.16, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "a250d793ad2f32c4be039240ae344cd8000780f0c6b83ff6a7b184de21dacc2e"
+        },
+        {
+          "assumption_id": "STACKS_0BI4",
+          "statement": "For an integral Noetherian curve, finite normalization is equivalent to resolution by finitely many point blowups.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0BI4",
+          "locator": "Lemma 54.15.1, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "66c953344ae0f6426da53a6e4fe431769ac3b6d3e473e8dbcc034fc3e6eb4a77"
+        },
+        {
+          "assumption_id": "STACKS_NAGATA",
+          "statement": "Any scheme locally of finite type over a field is Nagata.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/035B",
+          "locator": "Lemma 29.18.2(1), historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "86a355a82260c9068b13854b9fa7f3a0ca9698914fe021236ce3aa6c14e27923"
+        },
+        {
+          "assumption_id": "STACKS_0BIC",
+          "statement": "A proper boundary on a regular dimension-two scheme with finite normalizations of curve components can be resolved to support an SNC divisor by point blowups; the proof allows avoiding an already smooth SNC open locus.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0BIC",
+          "locator": "Lemma 54.15.6 and proof, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "359b269a1676e1676022f0b6223d63211b08033c602a931d7f04fbcdfd950d89"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+    },
+    {
+      "claim_id": "S_LOCAL",
+      "version": 8,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given the geometric_input, a finite quotient of Q injective on every whole local boundary-image group yields a connected finite Galois cover of U whose rho descends across a smooth projective SNC compactification, including every exceptional meridian, while preserving the already smooth SNC locus of its normalization.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_RET",
+          "statement": "Finite etale algebraic covers of a locally finite type complex scheme are equivalent to its finite etale analytic covers, with no properness hypothesis.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Theoreme 5.1",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "87f56e2c733e78507ae10e06fb336b9b76caf4b4e16cd81c58399c57370a0dbc"
+        },
+        {
+          "assumption_id": "STACKS_03GR",
+          "statement": "If S is Nagata, f:X->S is finite type and X reduced, the normalization of S in X is finite.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/03GR",
+          "locator": "Lemma 29.54.15, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "c83c650613f4aec47c3244ba039b646f5cb8b6cbcc89b1931d385436a55fb146"
+        },
+        {
+          "assumption_id": "STACKS_0B3I",
+          "statement": "A finite morphism is projective.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0B3I",
+          "locator": "Lemma 29.45.16, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "a250d793ad2f32c4be039240ae344cd8000780f0c6b83ff6a7b184de21dacc2e"
+        },
+        {
+          "assumption_id": "STACKS_0BI4",
+          "statement": "For an integral Noetherian curve, finite normalization is equivalent to resolution by finitely many point blowups.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0BI4",
+          "locator": "Lemma 54.15.1, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "66c953344ae0f6426da53a6e4fe431769ac3b6d3e473e8dbcc034fc3e6eb4a77"
+        },
+        {
+          "assumption_id": "STACKS_0BIC",
+          "statement": "A proper boundary on a regular dimension-two scheme with finite normalizations of curve components can be resolved to support an SNC divisor by point blowups; the proof allows avoiding an already smooth SNC open locus.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/0BIC",
+          "locator": "Lemma 54.15.6 and proof, historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "359b269a1676e1676022f0b6223d63211b08033c602a931d7f04fbcdfd950d89"
+        },
+        {
+          "assumption_id": "STACKS_NAGATA",
+          "statement": "Any scheme locally of finite type over a field is Nagata.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://stacks.math.columbia.edu/tag/035B",
+          "locator": "Lemma 29.18.2(1), historical reading 2026-11-05",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "86a355a82260c9068b13854b9fa7f3a0ca9698914fe021236ce3aa6c14e27923"
+        },
+        {
+          "assumption_id": "PRESCRIBED_OPEN_RESOLUTION",
+          "statement": "A reduced finite-type characteristic-zero scheme embedded in a regular ambient scheme has a strong resolution by blowups in regular centers; its resolved strict transform is regular and unchanged outside its singular locus; resolution commutes with open immersions.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "doi:10.1007/PL00012443",
+          "locator": "The result, pp. 822-823, Explicitness, Embeddedness and Equivariance",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "1138b5ab730b56192b6a5e1ac9772a827e77febfd6d99c3e4cc8b122372c6a7e"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+    },
+    {
+      "claim_id": "S_RATIONAL",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Under geometric_input and S_LOCAL, the actual normalized inverse image of the distinguished fiber is already smooth SNC locally with maps (u,w)->(u,w^e) at horizontal intersections; prescribed-open resolution leaves it unchanged, and its reduced components are smooth rational curves meeting only in nodes.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_ANALYTIC_NORMAL",
+          "statement": "Regularity and normality of locally finite type complex schemes are equivalent to the corresponding analytic properties.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Proposition 2.1(iv),(vi)",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "86f85e1566b7b02e2806a12c7a4bb1a035fa7a121f527f7952fd413f1539bf2b"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+    },
+    {
+      "claim_id": "S_RATIONAL",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Under geometric_input and S_LOCAL, the actual normalized inverse image of the distinguished fiber is already smooth SNC locally with maps (u,w)->(u,w^e) at horizontal intersections; prescribed-open resolution leaves it unchanged, and its reduced components are smooth rational curves meeting only in nodes.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_ANALYTIC_NORMAL",
+          "statement": "Regularity and normality of locally finite type complex schemes are equivalent to the corresponding analytic properties.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Proposition 2.1(iv),(vi)",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "86f85e1566b7b02e2806a12c7a4bb1a035fa7a121f527f7952fd413f1539bf2b"
+        },
+        {
+          "assumption_id": "SGA1_ANALYTIC_FINITE",
+          "statement": "For finite-type morphisms between locally finite type complex schemes, algebraic and analytic finiteness are equivalent.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Proposition 3.2(vi)",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "acde6f26d9c6bd652a942663ffd9c3dfc0048a9e56fa13e2b63e145bbaf5dc1a"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+    },
+    {
+      "claim_id": "S_RATIONAL",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Under geometric_input and S_LOCAL, the actual normalized inverse image of the distinguished fiber is already smooth SNC locally with maps (u,w)->(u,w^e) at horizontal intersections; prescribed-open resolution leaves it unchanged, and its reduced components are smooth rational curves meeting only in nodes.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "SGA1_ANALYTIC_FINITE",
+          "statement": "For finite-type morphisms between locally finite type complex schemes, algebraic and analytic finiteness are equivalent.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Proposition 3.2(vi)",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "acde6f26d9c6bd652a942663ffd9c3dfc0048a9e56fa13e2b63e145bbaf5dc1a"
+        },
+        {
+          "assumption_id": "SGA1_ANALYTIC_NORMAL",
+          "statement": "Regularity and normality of locally finite type complex schemes are equivalent to the corresponding analytic properties.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Proposition 2.1(iv),(vi)",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "86f85e1566b7b02e2806a12c7a4bb1a035fa7a121f527f7952fd413f1539bf2b"
+        },
+        {
+          "assumption_id": "SGA1_NORMAL_UNIQUENESS",
+          "statement": "Over a normal analytic base with dense complement to a closed analytic subset, restriction of finite normal covers whose components dominate the base is fully faithful.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "arxiv:math/0206203v2",
+          "locator": "Expose XII, Proposition 5.3 with Definition 5.0",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "f385f16ec1817dde6b2cfd5d96a7926bfe964c719917dd7cfd1040c62f6f6196"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+    },
+    {
+      "claim_id": "S_SPECIAL",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Under geometric_input and the cover in S_LOCAL, a connected component of the distinguished reduced compact rational fiber has infinite image in pi1 of the final projective surface, by dense intersection with an open infinite subgroup and proper specialization through a compatible-triangulation neighborhood retraction.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "COMPATIBLE_TRIANGULATION",
+          "statement": "A locally finite collection of semianalytic subsets of a countable real analytic manifold admits a compatible locally finite triangulation; each open simplex is contained in or disjoint from each subset.",
+          "source": "Primary proposition and hypotheses read in the old surface_geometry_audit/sources/primary-propositions.txt and reviewer_primary_excerpts.txt; historical independent source verdicts are crosswalked in DRAFT_REVIEW_INDEX.json. Current native review has not been impersonated.",
+          "source_id": "https://numdam.org/item/ASNSP_1964_3_18_4_449_0/",
+          "locator": "Section 3, Theorem 2, printed p. 464, and preceding property (c)",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "b5784dbad2677b3e1474d221bd30905f1476236adea623514774405391a908cb"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "713c33f5e4488e02cb6ccfc73578606a8053da60af8f29d4aa63a054e21d5c1b"
+    },
+    {
+      "claim_id": "F_COMPACT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "For a smooth connected projective complex variety, largeness as defined using subvariety normalizations is equivalent to absence of positive-dimensional compact analytic subvarieties in its universal cover, under the explicitly recorded proper-mapping and Chow inputs; the normal-space finite-index argument is the one given in the reference proof.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "3048755f848c8b4468f9dfde1c6d87c7b5ae27e331baa22ae1ec0e0de71aeb66"
+    },
+    {
+      "claim_id": "F_LARGE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given a closed embedding of a simple abelian surface into a smooth connected projective variety with infinite cyclic fundamental-group image, the reference high-power complete-intersection reduction yields a smooth connected projective fourfold with large fundamental group and non-Stein universal cover, conditional on the explicitly recorded standard generation, Bertini, Lefschetz, torus-lattice and Stein inputs. This does not establish existence of the premise embedding.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d7aa929c909b9e6e762513d016df7fa9f0507543533944bd3d809a23603bd3bf"
+    },
+    {
+      "claim_id": "F_MAIN",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "The original fourfold manuscript asserts existence of a smooth connected projective complex fourfold containing a simple abelian surface of infinite cyclic fundamental-group image, with large fundamental group, no positive-dimensional compact analytic subvariety in its universal cover, and a non-Stein universal cover. The inventoried old Argus work does not establish its construction chain.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "1d0dfdc0072139b66bf40eae64da6fc9418b6013c2b7e96df8fe3a6e9d2cf51a"
+    },
+    {
+      "claim_id": "F_COMPACT",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "For a smooth connected projective complex variety, largeness as defined using subvariety normalizations is equivalent to absence of positive-dimensional compact analytic subvarieties in its universal cover, under the explicitly recorded proper-mapping and Chow inputs; the normal-space finite-index argument is the one given in the reference proof.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "PROPER_MAPPING",
+          "statement": "A proper holomorphic map of complex analytic spaces has analytic image; the image of a compact source is compact.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "336f8ca1fa1921347f12bf6abf9d733024675ac133c12689ac7d61f19c63b996"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "3048755f848c8b4468f9dfde1c6d87c7b5ae27e331baa22ae1ec0e0de71aeb66"
+    },
+    {
+      "claim_id": "F_COMPACT",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "For a smooth connected projective complex variety, largeness as defined using subvariety normalizations is equivalent to absence of positive-dimensional compact analytic subvarieties in its universal cover, under the explicitly recorded proper-mapping and Chow inputs; the normal-space finite-index argument is the one given in the reference proof.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "PROPER_MAPPING",
+          "statement": "A proper holomorphic map of complex analytic spaces has analytic image; the image of a compact source is compact.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "336f8ca1fa1921347f12bf6abf9d733024675ac133c12689ac7d61f19c63b996"
+        },
+        {
+          "assumption_id": "CHOW",
+          "statement": "A closed complex analytic subvariety of complex projective space is algebraic; hence the same holds inside a projective variety.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "cad29e88a19471174dd500c9295ab023851f67ac6b93e2db1062fd92fa82d9b7"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "3048755f848c8b4468f9dfde1c6d87c7b5ae27e331baa22ae1ec0e0de71aeb66"
+    },
+    {
+      "claim_id": "F_LARGE",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given a closed embedding of a simple abelian surface into a smooth connected projective variety with infinite cyclic fundamental-group image, the reference high-power complete-intersection reduction yields a smooth connected projective fourfold with large fundamental group and non-Stein universal cover, conditional on the explicitly recorded standard generation, Bertini, Lefschetz, torus-lattice and Stein inputs. This does not establish existence of the premise embedding.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "GENERATION_BERTINI_LEFSCHETZ",
+          "statement": "On a smooth projective variety, sufficiently high powers of a very ample line bundle generate the fixed-subscheme ideal and conormal derivatives; general such hypersurfaces are smooth off the base locus, and successive smooth ample hypersurfaces of dimensions at least three induce the Lefschetz fundamental-group isomorphisms used in the reduction.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "f6e53bbbbca633e8741c1b09b3f25d1bae70ed9983718c1bc397275a3e28a728"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "d7aa929c909b9e6e762513d016df7fa9f0507543533944bd3d809a23603bd3bf"
+    },
+    {
+      "claim_id": "F_LARGE",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given a closed embedding of a simple abelian surface into a smooth connected projective variety with infinite cyclic fundamental-group image, the reference high-power complete-intersection reduction yields a smooth connected projective fourfold with large fundamental group and non-Stein universal cover, conditional on the explicitly recorded standard generation, Bertini, Lefschetz, torus-lattice and Stein inputs. This does not establish existence of the premise embedding.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "GENERATION_BERTINI_LEFSCHETZ",
+          "statement": "On a smooth projective variety, sufficiently high powers of a very ample line bundle generate the fixed-subscheme ideal and conormal derivatives; general such hypersurfaces are smooth off the base locus, and successive smooth ample hypersurfaces of dimensions at least three induce the Lefschetz fundamental-group isomorphisms used in the reduction.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "f6e53bbbbca633e8741c1b09b3f25d1bae70ed9983718c1bc397275a3e28a728"
+        },
+        {
+          "assumption_id": "TORUS_LATTICES",
+          "statement": "A nonconstant map from a smooth projective curve to a simple abelian surface induces a surjective Jacobian homomorphism; a surjective homomorphism of complex tori has finite-index integral-lattice image.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "fe2a96e9dff1bfff8e1bc0b79fb313e38bcb1fa26ae5925dabd4a24ad0abf6cc"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "d7aa929c909b9e6e762513d016df7fa9f0507543533944bd3d809a23603bd3bf"
+    },
+    {
+      "claim_id": "F_LARGE",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given a closed embedding of a simple abelian surface into a smooth connected projective variety with infinite cyclic fundamental-group image, the reference high-power complete-intersection reduction yields a smooth connected projective fourfold with large fundamental group and non-Stein universal cover, conditional on the explicitly recorded standard generation, Bertini, Lefschetz, torus-lattice and Stein inputs. This does not establish existence of the premise embedding.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "GENERATION_BERTINI_LEFSCHETZ",
+          "statement": "On a smooth projective variety, sufficiently high powers of a very ample line bundle generate the fixed-subscheme ideal and conormal derivatives; general such hypersurfaces are smooth off the base locus, and successive smooth ample hypersurfaces of dimensions at least three induce the Lefschetz fundamental-group isomorphisms used in the reduction.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "f6e53bbbbca633e8741c1b09b3f25d1bae70ed9983718c1bc397275a3e28a728"
+        },
+        {
+          "assumption_id": "TORUS_LATTICES",
+          "statement": "A nonconstant map from a smooth projective curve to a simple abelian surface induces a surjective Jacobian homomorphism; a surjective homomorphism of complex tori has finite-index integral-lattice image.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "fe2a96e9dff1bfff8e1bc0b79fb313e38bcb1fa26ae5925dabd4a24ad0abf6cc"
+        },
+        {
+          "assumption_id": "STEIN_MORSE",
+          "statement": "A Stein manifold of complex dimension two has the homotopy type of a CW complex of real dimension at most two, and therefore has zero third integral homology.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "9aaf3790cfb524ac8d3a68566e3a012af22743c86a2ae33f00c0c6da1226eb2b"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "d7aa929c909b9e6e762513d016df7fa9f0507543533944bd3d809a23603bd3bf"
+    },
+    {
+      "claim_id": "F_LARGE",
+      "version": 5,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_REVIEW46",
+        "content_hash": "425193ea7f3d4ec5692a7b0701014d2bcf645e93e3cd08de92736659281188d6"
+      },
+      "natural_statement": "Given a closed embedding of a simple abelian surface into a smooth connected projective variety with infinite cyclic fundamental-group image, the reference high-power complete-intersection reduction yields a smooth connected projective fourfold with large fundamental group and non-Stein universal cover, conditional on the explicitly recorded standard generation, Bertini, Lefschetz, torus-lattice and Stein inputs. This does not establish existence of the premise embedding.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "GENERATION_BERTINI_LEFSCHETZ",
+          "statement": "On a smooth projective variety, sufficiently high powers of a very ample line bundle generate the fixed-subscheme ideal and conormal derivatives; general such hypersurfaces are smooth off the base locus, and successive smooth ample hypersurfaces of dimensions at least three induce the Lefschetz fundamental-group isomorphisms used in the reduction.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "f6e53bbbbca633e8741c1b09b3f25d1bae70ed9983718c1bc397275a3e28a728"
+        },
+        {
+          "assumption_id": "STEIN_MORSE",
+          "statement": "A Stein manifold of complex dimension two has the homotopy type of a CW complex of real dimension at most two, and therefore has zero third integral homology.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "9aaf3790cfb524ac8d3a68566e3a012af22743c86a2ae33f00c0c6da1226eb2b"
+        },
+        {
+          "assumption_id": "TORUS_LATTICES",
+          "statement": "A nonconstant map from a smooth projective curve to a simple abelian surface induces a surjective Jacobian homomorphism; a surjective homomorphism of complex tori has finite-index integral-lattice image.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "fe2a96e9dff1bfff8e1bc0b79fb313e38bcb1fa26ae5925dabd4a24ad0abf6cc"
+        },
+        {
+          "assumption_id": "STEIN_CLOSED_SUBMANIFOLD",
+          "statement": "A closed complex submanifold of a Stein manifold is Stein.",
+          "source": "The exact bounded reading is the original OpenAI fourfold manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/02-reduction.tex. It names these standard inputs but no independently read primary proposition extracts are in the old inventory; current review makes no bibliographic attribution verdict. These assumptions are deliberately uncited, not given invented source ids.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:old-draft-review-9200046",
+          "content_hash": "4c466b2ebf562097d9dc667a33cd4ab93f7a2781e9d1366f534016950fe1f25e"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "d7aa929c909b9e6e762513d016df7fa9f0507543533944bd3d809a23603bd3bf"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-S_MERIDIAN_KERNEL-52193f293894",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_MERIDIAN_KERNEL",
+        "content_hash": "2ec96a675eb5ec610bd974b93b3d26833c5b8f6a195f5da060d2d24ca795dc4e"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/draft_reviews/surface-geometry/replay/certificates/S_MERIDIAN_KERNEL-a1a3cb0cd97147e1.json"
+    },
+    {
+      "evidence_id": "judgement-S_QUOTIENT-b6bddc56ded5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_QUOTIENT",
+        "content_hash": "f00707cdc82c58d34fa6173bc56a810ae862079405282c69f47fe0b739db1de3"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/weighted-quotient/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_LOCAL-4de4630dc34a",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_LOCAL",
+        "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_RATIONAL-c7319f6f9bf6",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_RATIONAL",
+        "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_SPECIAL-8fef3b83184d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_SPECIAL",
+        "content_hash": "713c33f5e4488e02cb6ccfc73578606a8053da60af8f29d4aa63a054e21d5c1b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_HULL-3cbb62327259",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_HULL",
+        "content_hash": "304840e26ea83af24b435e8d538c6ee3f6a61e75781b410c4cb3cbc6bc761261"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_DUAL_GRAPH-3b1eed8b278e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_DUAL_GRAPH",
+        "content_hash": "8b1433b9387857606888402eda1cf9602a010afb16ce1737e745de839438eb14"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_SURFACE_DYADIC-6805a25fbcbb",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_SURFACE_DYADIC",
+        "content_hash": "859ea7a63948abb9a7657292c71e2d8be632e4dfc7271b20b75e76fd103c03f9"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-CYCLIC_ONLY_FAILURE-90e37a1823ae",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "CYCLIC_ONLY_FAILURE",
+        "content_hash": "ea3d9712ca313ab4a859bbaa2b348e9badedaf2abd9fef9c9812191ca2d53ce5"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_MERIDIAN_KERNEL-ddd36e9d3271",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_MERIDIAN_KERNEL",
+        "content_hash": "2ec96a675eb5ec610bd974b93b3d26833c5b8f6a195f5da060d2d24ca795dc4e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/surface-geometry/replay/certificates/S_MERIDIAN_KERNEL-a1a3cb0cd97147e1.json"
+    },
+    {
+      "evidence_id": "judgement-F_COMPACT-9c2c09f7ae01",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "F_COMPACT",
+        "content_hash": "3048755f848c8b4468f9dfde1c6d87c7b5ae27e331baa22ae1ec0e0de71aeb66"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/fourfold-ledger/report.md"
+    },
+    {
+      "evidence_id": "judgement-F_LARGE-052fab89e6c2",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "F_LARGE",
+        "content_hash": "d7aa929c909b9e6e762513d016df7fa9f0507543533944bd3d809a23603bd3bf"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/fourfold-ledger/report.md"
+    },
+    {
+      "evidence_id": "judgement-F_MAIN-458301ae623d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "F_MAIN",
+        "content_hash": "1d0dfdc0072139b66bf40eae64da6fc9418b6013c2b7e96df8fe3a6e9d2cf51a"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "engineer:old-draft-review-9200046",
+      "artifact": "research/draft_reviews/fourfold-ledger/report.md"
+    },
+    {
+      "evidence_id": "citation-SGA1_RET-d49cd91c7abd",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SGA1_RET",
+        "content_hash": "87f56e2c733e78507ae10e06fb336b9b76caf4b4e16cd81c58399c57370a0dbc"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/6deac7219066a8b1c49337e584aa0f29.json"
+    },
+    {
+      "evidence_id": "citation-STACKS_NAGATA-3438efe7b5d4",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "STACKS_NAGATA",
+        "content_hash": "86a355a82260c9068b13854b9fa7f3a0ca9698914fe021236ce3aa6c14e27923"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/e8ba7c50ac04252bc46ec072db22d9b1.json"
+    },
+    {
+      "evidence_id": "citation-STACKS_03GR-3e0d009c963d",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "STACKS_03GR",
+        "content_hash": "c83c650613f4aec47c3244ba039b646f5cb8b6cbcc89b1931d385436a55fb146"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/28f08b708d42f1c2b889bade1eef4ac8.json"
+    },
+    {
+      "evidence_id": "citation-STACKS_0B3I-99c9cefb9b94",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "STACKS_0B3I",
+        "content_hash": "a250d793ad2f32c4be039240ae344cd8000780f0c6b83ff6a7b184de21dacc2e"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/92bccdfa4137423927204a9499dec1e7.json"
+    },
+    {
+      "evidence_id": "citation-STACKS_0BI4-e0fadf61ddf5",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "STACKS_0BI4",
+        "content_hash": "66c953344ae0f6426da53a6e4fe431769ac3b6d3e473e8dbcc034fc3e6eb4a77"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/54e185f7eda91fb477805fb8f886a292.json"
+    },
+    {
+      "evidence_id": "citation-STACKS_0BIC-c863cf733872",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "STACKS_0BIC",
+        "content_hash": "359b269a1676e1676022f0b6223d63211b08033c602a931d7f04fbcdfd950d89"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/0a4a5fb7023f438dd0070c5ece014cbd.json"
+    },
+    {
+      "evidence_id": "citation-PRESCRIBED_OPEN_RESOLUTION-514faef7ab6c",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "PRESCRIBED_OPEN_RESOLUTION",
+        "content_hash": "1138b5ab730b56192b6a5e1ac9772a827e77febfd6d99c3e4cc8b122372c6a7e"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/c3e591de476bcd46a9320b2a2ac78dd6.json"
+    },
+    {
+      "evidence_id": "citation-SGA1_ANALYTIC_NORMAL-158bfe98d2a8",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SGA1_ANALYTIC_NORMAL",
+        "content_hash": "86f85e1566b7b02e2806a12c7a4bb1a035fa7a121f527f7952fd413f1539bf2b"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/b229d7b20926b65c8fe598cf8adaeba3.json"
+    },
+    {
+      "evidence_id": "citation-SGA1_ANALYTIC_FINITE-1cbfd1885acd",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SGA1_ANALYTIC_FINITE",
+        "content_hash": "acde6f26d9c6bd652a942663ffd9c3dfc0048a9e56fa13e2b63e145bbaf5dc1a"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/e760e9b306487e880e11698b2ea726b0.json"
+    },
+    {
+      "evidence_id": "citation-SGA1_NORMAL_UNIQUENESS-10c5d29f22c0",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "SGA1_NORMAL_UNIQUENESS",
+        "content_hash": "f385f16ec1817dde6b2cfd5d96a7926bfe964c719917dd7cfd1040c62f6f6196"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/2f643f5827fe4e41100ae90f2a1e112b.json"
+    },
+    {
+      "evidence_id": "citation-COMPATIBLE_TRIANGULATION-898b91e10ede",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "COMPATIBLE_TRIANGULATION",
+        "content_hash": "b5784dbad2677b3e1474d221bd30905f1476236adea623514774405391a908cb"
+      },
+      "tier": "literature",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/literature/a220aceba401253345b9a91cea74128b.json"
+    },
+    {
+      "evidence_id": "judgement-S_MERIDIAN_KERNEL-e8ca07068dca",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_MERIDIAN_KERNEL",
+        "content_hash": "2ec96a675eb5ec610bd974b93b3d26833c5b8f6a195f5da060d2d24ca795dc4e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/surface-geometry/replay/certificates/S_MERIDIAN_KERNEL-a1a3cb0cd97147e1.json"
+    },
+    {
+      "evidence_id": "judgement-S_QUOTIENT-31c5210e03c1",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_QUOTIENT",
+        "content_hash": "f00707cdc82c58d34fa6173bc56a810ae862079405282c69f47fe0b739db1de3"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/weighted-quotient/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_LOCAL-01f78137b5cc",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_LOCAL",
+        "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_RATIONAL-76898887856a",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_RATIONAL",
+        "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_SPECIAL-c16b76238812",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_SPECIAL",
+        "content_hash": "713c33f5e4488e02cb6ccfc73578606a8053da60af8f29d4aa63a054e21d5c1b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_HULL-94f3b0113fe2",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_HULL",
+        "content_hash": "304840e26ea83af24b435e8d538c6ee3f6a61e75781b410c4cb3cbc6bc761261"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_DUAL_GRAPH-f21d5da7cb3b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_DUAL_GRAPH",
+        "content_hash": "8b1433b9387857606888402eda1cf9602a010afb16ce1737e745de839438eb14"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_SURFACE_DYADIC-7de575da6d71",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_SURFACE_DYADIC",
+        "content_hash": "859ea7a63948abb9a7657292c71e2d8be632e4dfc7271b20b75e76fd103c03f9"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-CYCLIC_ONLY_FAILURE-a4325971a072",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "CYCLIC_ONLY_FAILURE",
+        "content_hash": "ea3d9712ca313ab4a859bbaa2b348e9badedaf2abd9fef9c9812191ca2d53ce5"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/surface-geometry/report.md"
+    },
+    {
+      "evidence_id": "judgement-F_COMPACT-12c86f89a55f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "F_COMPACT",
+        "content_hash": "3048755f848c8b4468f9dfde1c6d87c7b5ae27e331baa22ae1ec0e0de71aeb66"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/fourfold-ledger/report.md"
+    },
+    {
+      "evidence_id": "judgement-F_LARGE-6035cb1ea37d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "F_LARGE",
+        "content_hash": "d7aa929c909b9e6e762513d016df7fa9f0507543533944bd3d809a23603bd3bf"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/fourfold-ledger/report.md"
+    },
+    {
+      "evidence_id": "judgement-F_MAIN-462cf7abcceb",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "F_MAIN",
+        "content_hash": "1d0dfdc0072139b66bf40eae64da6fc9418b6013c2b7e96df8fe3a6e9d2cf51a"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:native-9200046-round1",
+      "artifact": "research/draft_reviews/fourfold-ledger/report.md"
+    },
+    {
+      "evidence_id": "judgement-S_MERIDIAN_KERNEL-242b6c2a35d7",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "S_MERIDIAN_KERNEL",
+        "content_hash": "2ec96a675eb5ec610bd974b93b3d26833c5b8f6a195f5da060d2d24ca795dc4e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:8ce99ae408f6",
+      "artifact": "research/draft_reviews/surface-geometry/replay/certificates/S_MERIDIAN_KERNEL-a1a3cb0cd97147e1.json"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_LOCAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "S_LOCAL",
+        "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "S_QUOTIENT",
+          "content_hash": "f00707cdc82c58d34fa6173bc56a810ae862079405282c69f47fe0b739db1de3"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "S_MERIDIAN_KERNEL",
+          "content_hash": "2ec96a675eb5ec610bd974b93b3d26833c5b8f6a195f5da060d2d24ca795dc4e"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_RATIONAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "S_RATIONAL",
+        "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "S_LOCAL",
+          "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_SPECIAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "S_SPECIAL",
+        "content_hash": "713c33f5e4488e02cb6ccfc73578606a8053da60af8f29d4aa63a054e21d5c1b"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "S_LOCAL",
+          "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "S_RATIONAL",
+          "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "S_QUOTIENT",
+          "content_hash": "f00707cdc82c58d34fa6173bc56a810ae862079405282c69f47fe0b739db1de3"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_GRAPH",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "S_DUAL_GRAPH",
+        "content_hash": "8b1433b9387857606888402eda1cf9602a010afb16ce1737e745de839438eb14"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "S_RATIONAL",
+          "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_SURFACE",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "S_SURFACE_DYADIC",
+        "content_hash": "859ea7a63948abb9a7657292c71e2d8be632e4dfc7271b20b75e76fd103c03f9"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "S_QUOTIENT",
+          "content_hash": "f00707cdc82c58d34fa6173bc56a810ae862079405282c69f47fe0b739db1de3"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "S_LOCAL",
+          "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "S_RATIONAL",
+          "content_hash": "fdc63fc219a8e8cff5f92c5bf6c1316fd24379c349f8cf9d2c2a1e8448823c0b"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "S_SPECIAL",
+          "content_hash": "713c33f5e4488e02cb6ccfc73578606a8053da60af8f29d4aa63a054e21d5c1b"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "S_HULL",
+          "content_hash": "304840e26ea83af24b435e8d538c6ee3f6a61e75781b410c4cb3cbc6bc761261"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "S_DUAL_GRAPH",
+          "content_hash": "8b1433b9387857606888402eda1cf9602a010afb16ce1737e745de839438eb14"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_CYCLIC_ONLY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "S_LOCAL",
+        "content_hash": "21958c23ca88011a63299db47bfaea1c86319cf9c201500fc90fdc93b902a803"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "S_QUOTIENT",
+          "content_hash": "f00707cdc82c58d34fa6173bc56a810ae862079405282c69f47fe0b739db1de3"
+        }
+      ],
+      "retired_because": "Already-refuted weaker route: separate cyclic detection misses the mixed crossing image (1,1) in C2 x C2; the full local-group detection route is unaffected. Old geometric report section 3 supplies the exact countermodel."
+    }
+  ]
+}

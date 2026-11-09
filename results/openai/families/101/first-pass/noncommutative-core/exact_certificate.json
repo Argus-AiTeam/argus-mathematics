@@ -1,0 +1,94 @@
+{
+  "claim_id": "C9000101_NC",
+  "result_class": "exact_verification_theorem",
+  "statement": "Lemma mat:commutator holds for arbitrary finite real matrix dimension and arbitrary finite family size, with symmetric X_r and b and unrestricted w_r.",
+  "parameters": {
+    "alpha": "3/40",
+    "s": "40/37",
+    "h": "5/37",
+    "constant": "42/37"
+  },
+  "residual_polynomial": {
+    "variables": ["u", "v"],
+    "terms": [
+      {"exponents": [2, 1], "coefficient": "1"},
+      {"exponents": [1, 2], "coefficient": "1"},
+      {"exponents": [1, 1], "coefficient": "-3/4"},
+      {"exponents": [0, 0], "coefficient": "1/64"}
+    ]
+  },
+  "positivity_certificate": {
+    "domain": ["u >= 0", "v >= 0"],
+    "low_region": "u+v <= 3/4",
+    "low_identity": "G=(u+v-1/2)^2*((u+v)/4+1/16)+(u-v)^2*(3/4-u-v)/4",
+    "high_region": "u+v >= 3/4",
+    "high_identity": "G=u*v*(u+v-3/4)+1/64",
+    "alternative_identity": "G(a^2,b^2)=(a*b-1/4)^2*(2*a*b+1/4)+(a*b)^2*(a-b)^2"
+  },
+  "matrix_reduction": {
+    "C": "S*b-b*S",
+    "D": "S+(5/37)*I",
+    "E_r": "w_r-X_r*C*D^(-1)",
+    "deficit": "P+2*tr(C*F)+sum_r tr(w_r^T*w_r*D)",
+    "completion": "deficit=sum_r tr(E_r^T*E_r*D)+P-tr(C^T*B*C*D^(-1))",
+    "pair_coefficient": "K_ij=(40/3)/(sigma_i*sigma_j)-beta_i/(sigma_j+5/37)-beta_j/(sigma_i+5/37)",
+    "pair_identity": "K_ij=(64000/4107)*G(37*sigma_i/40,37*sigma_j/40)/(sigma_i*sigma_j*(sigma_i+5/37)*(sigma_j+5/37))",
+    "spectral_reduction": "Constructed inside the full Lean theorem; not an additional hypothesis."
+  },
+  "formal_certificate": {
+    "source": "formal/Main.lean",
+    "statement_fidelity": "formal/statement_fidelity.md",
+    "compiler_record": "formal/lean_check.json",
+    "archive": "formal/certificates/C9000101_NC-708ad59885bf1d98.json",
+    "declaration": "Commutator9000101.real_matrix_commutator_inequality",
+    "lean_version": "4.31.0",
+    "required_exit_code": 0,
+    "required_proof_holes": []
+  },
+  "falsification_probes": {
+    "classification": "finite experiment, not the universal proof",
+    "seed": 9000101,
+    "dimensions": [1, 2, 3],
+    "cases_per_dimension": 16,
+    "arithmetic": "exact rationals",
+    "required_violations": 0
+  },
+  "near_saturation_case": {
+    "x": "152/25",
+    "y": "609/100",
+    "X_1": "diag(x,y)",
+    "X_2": "0",
+    "b_off_diagonal": "100",
+    "b_diagonal": "0",
+    "w_1": "[[0,1],[-1,0]]",
+    "w_2": "0",
+    "ratio": "155571470991/137051070991"
+  },
+  "sharpness": {
+    "classification": "exact two-dimensional family and a prose continuity argument; no novelty claim",
+    "family": "X_1=diag(x,y), X_2=0, b=[[0,1/(y-x)],[1/(y-x),0]], w_1=[[0,1],[-1,0]], w_2=0; x!=y",
+    "ratio": "1+40*(3*x*y-37)/((37+3*x^2)*(37+3*y^2))",
+    "gap_identity": "42/37-ratio=5*(9*(x*y-37)^2+111*(x-y)^2)/(37*(37+3*x^2)*(37+3*y^2))",
+    "limit": "x,y tend to sqrt(37) with x!=y",
+    "formalized_limit": false
+  },
+  "scope": {
+    "independent_review": "pending",
+    "novelty": "not_claimed",
+    "manuscript_entropy_theorem": "not_established",
+    "external_unproved_assumptions_of_matrix_theorem": []
+  },
+  "jacobian": {
+    "operation_id": "polynomial.sos.gram.check",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "transport": "mcp-stdio",
+    "adapter_exit_code": 0,
+    "adapter_error": null,
+    "timeout": false,
+    "payload": "jacobian_payload.json",
+    "typed_result": "jacobian_result.json",
+    "role": "Supplementary exact check of 2*z^2-z+1/8; not a full matrix-inequality decision.",
+    "capability_limit": "The inspected Gram contract accepts at most 8 commutative variables and a supplied rational Gram matrix. It does not construct an arbitrary-dimensional noncommutative trace proof; that reduction is supplied by the report, universal trace identities, and full Lean theorem."
+  }
+}

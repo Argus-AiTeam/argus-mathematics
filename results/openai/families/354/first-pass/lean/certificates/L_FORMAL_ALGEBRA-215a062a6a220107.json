@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-L_FORMAL_ALGEBRA-eae053571d96",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/354/first-pass/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/354/first-pass/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 27140,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/354/first-pass/lean/Main.lean",
+    "source_sha256": "449485f3ed1ea411df8289738465af79d52168943ab9732f735c68991c5d9a6f",
+    "statement_fidelity": "families/354/first-pass/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "a146f286d6b1ad930bee78b90b5bb9123044bf51e787338a572346e8b37a6890",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace NestingAudit\n\ndef cubicCost (a C P w : ℝ) : ℝ :=\n  a * (P - w) ^ 2 + C * w ^ 3\n\ndef cappedCost (a C P d w : ℝ) : ℝ :=\n  a * (P - w) ^ 2 + C * (min d (max w 0)) ^ 3\n\ntheorem cubic_tangent_factor (a C P q w : ℝ)\n    (hcrit : 3 * C * q ^ 2 = 2 * a * (P - q)) :\n    cubicCost a C P w - cubicCost a C P q =\n      (w - q) ^ 2 * (a + C * (w + 2 * q)) := by\n  unfold cubicCost\n  calc\n    _ = (w - q) ^ 2 * (a + C * (w + 2 * q)) +\n        (w - q) * (3 * C * q ^ 2 - 2 * a * (P - q)) := by ring\n    _ = _ := by rw [sub_eq_zero.mpr hcrit]; ring\n\ntheorem cubic_stationary_minimum (a C P q w : ℝ)\n    (ha : 0 ≤ a) (hC : 0 ≤ C) (hq : 0 ≤ q) (hw : 0 ≤ w)\n    (hcrit : 3 * C * q ^ 2 = 2 * a * (P - q)) :\n    cubicCost a C P q ≤ cubicCost a C P w := by\n  have hfactor := cubic_tangent_factor a C P q w hcrit\n  have hn : 0 ≤ (w - q) ^ 2 * (a + C * (w + 2 * q)) := by positivity\n  linarith\n\ntheorem capped_global_minimum (a C P d q : ℝ)\n    (ha : 0 < a) (hC : 0 < C) (hP : 0 < P) (hd : 0 < d)\n    (hq : 0 ≤ q) (hqP : q ≤ P)\n    (hcrit : 3 * C * q ^ 2 = 2 * a * (P - q)) :\n    (∀ w : ℝ, w ≤ P →\n      min (C * d ^ 3) (cubicCost a C P q) ≤ cappedCost a C P d w) ∧\n    (∃ w : ℝ, w ≤ P ∧\n      cappedCost a C P d w = min (C * d ^ 3) (cubicCost a C P q)) := by\n  have hmin (w : ℝ) (hw : 0 ≤ w) :=\n    cubic_stationary_minimum a C P q w ha.le hC.le hq hw hcrit\n  constructor\n  · intro w _\n    by_cases hw : w ≤ 0\n    · have hzero := hmin 0 le_rfl\n      have hzero' : cubicCost a C P q ≤ a * P ^ 2 := by\n        simpa [cubicCost] using hzero\n      have hsquare : P ^ 2 ≤ (P - w) ^ 2 := by nlinarith\n      have hscaled := mul_le_mul_of_nonneg_left hsquare ha.le\n      have hcap : cappedCost a C P d w = a * (P - w) ^ 2 := by\n        simp [cappedCost, max_eq_right hw, min_eq_right hd.le]\n      rw [hcap]\n      exact le_trans (min_le_right _ _) (le_trans hzero' hscaled)\n    · have hw0 : 0 ≤ w := le_of_lt (lt_of_not_ge hw)\n      by_cases hwd : d ≤ w\n      · have hnonneg : 0 ≤ a * (P - w) ^ 2 := by positivity\n        have hcap : cappedCost a C P d w =\n            a * (P - w) ^ 2 + C * d ^ 3 := by\n          simp [cappedCost, max_eq_left hw0, min_eq_left hwd]\n        rw [hcap]\n        exact le_trans (min_le_left _ _) (by linarith)\n      · have hwd' : w ≤ d := le_of_lt (lt_of_not_ge hwd)\n        have hcap : cappedCost a C P d w = cubicCost a C P w := by\n          simp [cappedCost, cubicCost, max_eq_left hw0, min_eq_right hwd']\n        rw [hcap]\n        exact le_trans (min_le_right _ _) (hmin w hw0)\n  · by_cases hcase : C * d ^ 3 ≤ cubicCost a C P q\n    · have hdP : d ≤ P := by\n        by_contra hn\n        have hPd : P < d := lt_of_not_ge hn\n        have hcube : C * P ^ 3 < C * d ^ 3 := by gcongr\n        have hpmin := hmin P hP.le\n        simp only [cubicCost, sub_self, zero_pow (by decide : 2 ≠ 0),\n          mul_zero, zero_add] at hpmin\n        have hcase_expanded : C * d ^ 3 ≤ a * (P - q) ^ 2 + C * q ^ 3 := hcase\n        linarith\n      refine ⟨P, le_rfl, ?_⟩\n      simp [cappedCost, max_eq_left hP.le, min_eq_left hdP,\n        min_eq_left hcase]\n    · have hcase' : cubicCost a C P q ≤ C * d ^ 3 :=\n        le_of_lt (lt_of_not_ge hcase)\n      have hqd : q ≤ d := by\n        by_contra hn\n        have hdq : d < q := lt_of_not_ge hn\n        have hcube : C * d ^ 3 < C * q ^ 3 := by gcongr\n        have hnonneg : 0 ≤ a * (P - q) ^ 2 := by positivity\n        unfold cubicCost at hcase'\n        linarith\n      refine ⟨q, hqP, ?_⟩\n      rw [min_eq_right hcase']\n      simp [cappedCost, cubicCost, max_eq_left hq, min_eq_right hqd]\n\ntheorem semiconcave_uniform_bound (f : ℝ → ℝ) (a b x K : ℝ)\n    (hab : a < b) (hax : a ≤ x) (hxb : x ≤ b) (hK : 0 ≤ K)\n    (hf : ConcaveOn ℝ (Set.Icc a b) (fun z => f z - K * z ^ 2 / 2)) :\n    min (f a) (f b) - K * (b - a) ^ 2 / 8 ≤ f x := by\n  let l : ℝ := (b - x) / (b - a)\n  let r : ℝ := (x - a) / (b - a)\n  have hba : 0 < b - a := sub_pos.mpr hab\n  have hne : b - a ≠ 0 := ne_of_gt hba\n  have hl : 0 ≤ l := div_nonneg (sub_nonneg.mpr hxb) hba.le\n  have hr : 0 ≤ r := div_nonneg (sub_nonneg.mpr hax) hba.le\n  have hsum : l + r = 1 := by dsimp [l, r]; field_simp [hne]; ring\n  have hcombo : l * a + r * b = x := by dsimp [l, r]; field_simp [hne]; ring\n  have hc := hf.2 (show a ∈ Set.Icc a b from ⟨le_rfl, hab.le⟩)\n    (show b ∈ Set.Icc a b from ⟨hab.le, le_rfl⟩) hl hr hsum\n  simp only [smul_eq_mul] at hc\n  rw [hcombo] at hc\n  have hm := add_le_add\n    (mul_le_mul_of_nonneg_left (min_le_left (f a) (f b)) hl)\n    (mul_le_mul_of_nonneg_left (min_le_right (f a) (f b)) hr)\n  rw [← add_mul, hsum, one_mul] at hm\n  have hloss :\n      l * (K * a ^ 2 / 2) + r * (K * b ^ 2 / 2) - K * x ^ 2 / 2 =\n        K / 2 * ((x - a) * (b - x)) := by\n    dsimp [l, r]\n    field_simp [hne]\n    ring\n  have hchord :\n      min (f a) (f b) - K / 2 * ((x - a) * (b - x)) ≤ f x := by\n    nlinarith [hc, hm, hloss]\n  have hproduct : (x - a) * (b - x) ≤ (b - a) ^ 2 / 4 := by\n    nlinarith [sq_nonneg (2 * x - a - b)]\n  have herror := mul_le_mul_of_nonneg_left hproduct (show 0 ≤ K / 2 by positivity)\n  nlinarith [hchord, herror]\n\nend NestingAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: exact cap minimization and semiconcave interpolation\n\n`Main.lean` imports the host's Lean 4.31.0 Mathlib workspace. It proves the\nfollowing assertions over the real numbers; it does not encode surfaces.\n\n## Definitions and declarations\n\n`NestingAudit.cubicCost a C P w` is\n`a * (P - w)^2 + C * w^3`.\n`NestingAudit.cappedCost a C P d w` is\n`a * (P - w)^2 + C * (min d (max w 0))^3`.\n\n`cubic_tangent_factor` quantifies over all real `a,C,P,q,w`. Under the\nstationarity equation `3*C*q^2 = 2*a*(P-q)` it proves the exact difference\nfactorization\n`cubicCost w - cubicCost q = (w-q)^2 * (a+C*(w+2*q))`.\nNo sign hypothesis is used in this identity.\n\n`cubic_stationary_minimum` adds `a>=0`, `C>=0`, `q>=0`, `w>=0` and proves\nthat the stationary value at `q` is no larger than the value at `w`.\n\n`capped_global_minimum` assumes real `a,C,P,d` are strictly positive,\n`0<=q<=P`, and the same stationarity equation. It proves BOTH:\n\n1. For every real `w<=P`, the capped cost is at least\n   `min (C*d^3) (cubicCost a C P q)`.\n2. There exists a real `w<=P` at which that lower bound is attained.\n\nThus it proves a global minimum including the cases `P<d`, `q>d`, and\nthe equalities at the thresholds; it does not assume either displayed\ncandidate is feasible. To apply it to the manuscript, substitute\n`a=ell/Q^2`, `C=C0(h)`, `P=P(h)`, `d=.21`, and `w=P-Q*y`.\nFor `Q>0`, the constraint `w<=P` is exactly `y>=0`, and the quadratic\nterm is `ell*y^2`. The positive radical expression for `q_*` satisfies\nthe stationarity equation and `0<q_*<P` by the separate analytic\ncalculation in `research/nesting_obstruction.md`. That radical\ncalculation is NOT claimed to be a declaration in this source.\n\n`semiconcave_uniform_bound` quantifies over an arbitrary real function\n`f`, real `a,b,x,K`, with `a<b`, `a<=x<=b`, and `K>=0`. Its explicit\nhypothesis is `ConcaveOn` the closed interval `[a,b]` for\n`z |-> f z - K*z^2/2`. It concludes\n`min (f a) (f b) - K*(b-a)^2/8 <= f x`.\nThis is the actual closed-interval interpolation rule, not a sampled\nderivative test and not an assertion that `B` or `S` satisfies its\nconcavity hypothesis.\n\n## Limits of this formal evidence\n\nThe source contains no definition of pi, `B`, `S`, a nested slice,\nperimeter, flux, Jensen integration, curvature, or a torus minimizer.\nIt does NOT prove geometric containment, the upper second derivative\nbounds for `B` and `S`, the 24 arithmetic knot enclosures, or the main\nisoperimetric classification. Those have different, expressly named\nevidence or remain separate obligations in `research/PROOF_GRAPH.json`.\nIts compiler certificate is mechanical evidence only for\n`L_FORMAL_ALGEBRA`, the algebra/interpolation subclaim.\n\nThe mathematical reading and its application are Engineer assertions\npending independent Reviewer inspection. A zero-hole compiler run\nchecks the encoded statements, not this document's interpretation.\n"
+  },
+  "subject": {
+    "content_hash": "868cc8f2aa9c9d44926038f9b1edad6a30d5faa9109d6ce28b13d74fd7f92a21",
+    "kind": "claim",
+    "subject_id": "L_FORMAL_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

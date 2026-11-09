@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-PC_FORMAL_CORE-c741aa4cd76d",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/170/first-pass/poisson_core/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 5950,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/170/first-pass/poisson_core/Main.lean",
+    "source_sha256": "b909a308e55b251d199e4240921a9e4695e18590aae02ba3c00392dcb41dc69a",
+    "statement_fidelity": "families/170/first-pass/poisson_core/statement_fidelity.md",
+    "statement_fidelity_sha256": "2056b24d087defdd280668f2ea6bfd28b66abbd0847dfd061d364a57166506cd",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/170/first-pass/poisson_core/Main.lean:73:43: error: unsolved goals\nα : Type u_1\nβ : Type u_3\ninst✝¹ : DecidableEq α\ns : Finset α\nt : Finset β\nw : α → ℝ\nv : β → ℝ\nkeep : α → β → Prop\ninst✝ : DecidableRel keep\nhw : ∀ i ∈ s, 0 ≤ w i\nhv : ∀ j ∈ t, 0 ≤ v j\n⊢ ∑ i ∈ s, ∑ j ∈ t, w i * v j = ∑ x ∈ t, ∑ i ∈ s, w i * v x\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/poisson_core/Main.lean",
+    "text": "import Mathlib\n\nnamespace PoissonCore\n\nvariable {α Ω β : Type*} [DecidableEq α]\n\nnoncomputable def vacant (u hits : Finset α) : ℝ :=\n  if Disjoint u hits then 1 else 0\n\ntheorem vacant_empty (hits : Finset α) : vacant ∅ hits = 1 := by\n  simp [vacant]\n\ntheorem vacant_union (u v hits : Finset α) :\n    vacant (u ∪ v) hits = vacant u hits * vacant v hits := by\n  classical\n  by_cases hu : Disjoint u hits <;> by_cases hv : Disjoint v hits <;>\n    simp [vacant, Finset.disjoint_union_left, hu, hv]\n\nnoncomputable def mixed (b : ℝ) (z : Finset α → ℝ) :\n    List (Finset α) → Finset α → ℝ\n  | [], u => z u\n  | h :: hs, u => mixed b z hs (u ∪ h) - b * mixed b z hs u\n\ntheorem mixed_atom (b : ℝ) (hits : Finset α) (hs : List (Finset α))\n    (u : Finset α) :\n    mixed b (fun v => vacant v hits) hs u =\n      vacant u hits * (hs.map (fun h => vacant h hits - b)).prod := by\n  induction hs generalizing u with\n  | nil => simp [mixed]\n  | cons h hs ih =>\n      simp only [mixed, ih, vacant_union, List.map_cons, List.prod_cons]\n      ring\n\ntheorem mixed_sum (b : ℝ) (sample : Finset Ω) (w : Ω → ℝ)\n    (z : Ω → Finset α → ℝ) (hs : List (Finset α)) (u : Finset α) :\n    mixed b (fun v => ∑ ω ∈ sample, w ω * z ω v) hs u =\n      ∑ ω ∈ sample, w ω * mixed b (z ω) hs u := by\n  induction hs generalizing u with\n  | nil => simp [mixed]\n  | cons h hs ih =>\n      simp only [mixed, ih]\n      rw [Finset.mul_sum, ← Finset.sum_sub_distrib]\n      apply Finset.sum_congr rfl\n      intro ω hω\n      ring\n\ntheorem exact_centered_mixed_moment (b : ℝ) (sample : Finset Ω)\n    (w : Ω → ℝ) (hits : Ω → Finset α) (hs : List (Finset α)) :\n    mixed b (fun u => ∑ ω ∈ sample, w ω * vacant u (hits ω)) hs ∅ =\n      ∑ ω ∈ sample, w ω *\n        (hs.map (fun h => vacant h (hits ω) - b)).prod := by\n  rw [mixed_sum]\n  apply Finset.sum_congr rfl\n  intro ω hω\n  rw [mixed_atom, vacant_empty, one_mul]\n\ntheorem restricted_pair_sum_le_product (s : Finset α) (t : Finset β)\n    (w : α → ℝ) (v : β → ℝ) (keep : α → β → Prop) [DecidableRel keep]\n    (hw : ∀ i ∈ s, 0 ≤ w i) (hv : ∀ j ∈ t, 0 ≤ v j) :\n    (∑ i ∈ s, ∑ j ∈ t, if keep i j then w i * v j else 0) ≤\n      (∑ i ∈ s, w i) * (∑ j ∈ t, v j) := by\n  classical\n  calc\n    (∑ i ∈ s, ∑ j ∈ t, if keep i j then w i * v j else 0) ≤\n        ∑ i ∈ s, ∑ j ∈ t, w i * v j := by\n      apply Finset.sum_le_sum\n      intro i hi\n      apply Finset.sum_le_sum\n      intro j hj\n      split_ifs\n      · exact le_rfl\n      · exact mul_nonneg (hw i hi) (hv j hj)\n    _ = (∑ i ∈ s, w i) * (∑ j ∈ t, v j) := by\n      simp only [Finset.sum_mul, Finset.mul_sum]\n\ntheorem root_exponent (h r : ℤ) (hr : 10 * r ≤ h) :\n    5 * (2 * r - h) ≤ -4 * h := by\n  omega\n\ntheorem nonsimple_margin (k : ℚ) (hk : 2 ≤ k) :\n    (17 / 50 : ℚ) * k ≤ 17 / 25 + (k - 2) := by\n  linarith\n\ntheorem final_exponent_margin (z overhead : ℝ) (hz : 0 ≤ z)\n    (ho : overhead ≤ z / 10) :\n    -(17 / 50 : ℝ) * z + overhead ≤ -(1 / 10 : ℝ) * z := by\n  linarith\n\nend PoissonCore\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/poisson_core/statement_fidelity.md",
+    "text": "# Statement fidelity: exact finite mixed-moment and counting core\n\n`Main.lean` uses Lean 4.31.0 with Mathlib. The attached ledger claim is\n`PC_FORMAL_CORE`, not `PC_HM`.\n\n`PoissonCore.vacant` is the real-valued zero-one indicator that a finite\natom set is disjoint from a finite hit set. `vacant_union` proves the\nindicator multiplication law for ordinary set union. No disjointness\nbetween the two tested sets is assumed.\n\n`mixed` recursively expands a centered product by replacing the first\nfactor with its union contribution minus its centering contribution.\n`exact_centered_mixed_moment` quantifies over an arbitrary atom type with\ndecidable equality, arbitrary finite weighted sample set, arbitrary real\nweights and center, arbitrary hit sets, and an arbitrary **list** of\ntested finite sets. Lists may repeat sets in any positions. It equates\nthe recursion applied to the weighted vacancy function with the weighted\nsum of the original centered products. It needs no probability or\npositivity assumptions: consequently it also applies to every finite\nprobability law on hit patterns induced by independent Poisson counts.\nThe identification of that vacancy function with\n`exp(-L * mass(union))` is proved from the Poisson law in the report,\nnot encoded in this declaration.\n\n`restricted_pair_sum_le_product` quantifies over arbitrary two finite\nchoice sets, nonnegative real weights on those sets, and any binary\ncompatibility predicate. It bounds the restricted weighted pair sum\nby the product of the unrestricted marginal sums. In the static count,\nthe predicate must still enforce distinct directions and compatibility\nwith the uniquely determined block before this enlargement. The theorem\ndoes not manufacture that uniqueness.\n\n`root_exponent` proves, for arbitrary integer root and vertex counts,\nthat `10*r <= h` implies `5*(2*r-h) <= -4*h`.\n`nonsimple_margin` proves the affine attenuation inequality for every\nrational component size at least two.\n`final_exponent_margin` proves the final exponent comparison for\narbitrary nonnegative real total scale and overhead at most one tenth\nof that scale.\n\nThese are universal, hole-free algebraic statements, not sampled tests.\nThey do **not** formalize the root-selection existence argument,\nPoisson independence, geometric preparation, the complete static\ncertificate enumeration, its polynomial overhead, the analytic\nhigh-moment theorem, novelty, or any Ramsey bound. Those parts require\nindependent reading of `report.md`; a compiler success on\n`PC_FORMAL_CORE` must not close `PC_HM`.\n"
+  },
+  "subject": {
+    "content_hash": "6be813c6dc41392a5be3a5b640ffcb8a4faa270bb49d007156448da4672cde0f",
+    "kind": "claim",
+    "subject_id": "PC_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

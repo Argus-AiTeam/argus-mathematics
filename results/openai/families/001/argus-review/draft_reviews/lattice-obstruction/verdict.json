@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "unit_id": "lattice-obstruction",
+  "assessment": {
+    "status": "supported_in_exact_stated_scope",
+    "summary": "For every s in Z_2 the chosen lattice is preserved invertibly, but the specified invariant rational projector is not integral. The standard lattice works.",
+    "mathematical_defect_found": false,
+    "manuscript_counterexample": false,
+    "existential_realization_counterexample": false
+  },
+  "result_class": "counterexample_to_arbitrary_stable_lattice_shortcut",
+  "source": {
+    "input_root": "campaigns/9000001",
+    "attribution": "Historical Argus local lattice obstruction; current contribution reproduces and scopes it.",
+    "claim_id": "PF-LATTICE-OBSTRUCTION",
+    "claim_version": 1,
+    "claim_content_hash": "27c5d9457f1ec998cdf64b99b397bcf7645cd2107d3deab4c2662764f4da5087",
+    "source_sha256": "28d352ec78c988c0fe315bc809b531e1f10e66fc4ae22c1f496150bb60b9ba28",
+    "exact_certificate_sha256": "1bffa67f2097d014cdb2fec54f524dcf03479f21a7e6db8061d4e32a137a881f"
+  },
+  "claims": [
+    {
+      "id": "PF-LATTICE-OBSTRUCTION",
+      "hypotheses": [
+        "V=Q_2^2 and Lambda=L*Z_2^2 with column basis L=[[1,0],[1,2]].",
+        "For every s in Z_2, D_s=diag(1,1+2*s).",
+        "The specified rational projector tensor is e=diag(1,0), not a rescaling of e."
+      ],
+      "conclusion": "Every D_s preserves Lambda as a lattice, but e is not in End_Z_2(Lambda).",
+      "reason": [
+        "L^-1*D_s*L=[[1,0],[s,1+2*s]] has Z_2 entries and odd determinant 1+2*s for every s in Z_2.",
+        "e commutes with every D_s and e^2=e.",
+        "L^-1*e*L=[[1,0],[-1/2,0]] has a coefficient of 2-adic valuation -1."
+      ]
+    },
+    {
+      "id": "standard-lattice-control",
+      "hypotheses": ["Use Lambda_0=Z_2^2 with the same D_s and e."],
+      "conclusion": "All D_s preserve Lambda_0 and e is integral on Lambda_0.",
+      "reason": "The original diagonal action has unit determinant and the original projector has integral entries."
+    }
+  ],
+  "supported_scope": [
+    "Universal stability under all s in Z_2, not just finite integer samples.",
+    "Failure of automatic integrality of a specified invariant rational projector on an arbitrary stable lattice.",
+    "A genuine counterexample to the arbitrary-stable-lattice proof shortcut only.",
+    "An explicit standard-lattice control showing no obstruction to existence of some suitable lattice."
+  ],
+  "limitations": [
+    "No counterexample to PF-REALIZATION, existential abelian realization or the manuscript.",
+    "No abelian variety, polarization, local Shimura point, admissible filtration or marking realizing a prohibited geometric configuration is supplied.",
+    "The argument concerns the specified projector tensor; changing the tensor changes the claim.",
+    "The four historical Lean declarations do not formalize this lattice calculation.",
+    "The shared exact checker receipt is one computation, not independent duplication across units."
+  ],
+  "evidence": [
+    {
+      "path": "research/prescribed-filtration-audit/exact_certificate.json",
+      "role": "Historical integral_shortcut_obstruction parameters and explicit exclusion of PF-REALIZATION as a counterexample target."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/verify.py",
+      "role": "Historical verify_integral_obstruction, replayed from a byte-identical local copy."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/realization_proof.md",
+      "role": "Historical mathematical argument and standard-lattice control, lines 334-351."
+    },
+    {
+      "path": "research/MATH_STATE.json",
+      "role": "Read-only exact PF-LATTICE-OBSTRUCTION v1 statement and attribution context."
+    }
+  ],
+  "replay": {
+    "status": "PASS",
+    "receipt": "research/draft_reviews/lattice-obstruction/replay.json",
+    "shared_exact_receipt": "research/draft_reviews/symbolic-frobenius/exact-replay.json",
+    "command": "PYTHONDONTWRITEBYTECODE=1 $WORKSPACE/miniconda3/bin/python -B research/draft_reviews/symbolic-frobenius/replay.py check",
+    "historical_checker_command": [
+      "$WORKSPACE/miniconda3/bin/python",
+      "-B",
+      "research/draft_reviews/symbolic-frobenius/historical-replay/verify.py"
+    ],
+    "historical_checker_exit_code": 0,
+    "historical_checker_stderr": "",
+    "historical_checker_duration_seconds": 0.302,
+    "exact_stdout_conclusion": "REFUTED; not a manuscript counterexample",
+    "versions": {
+      "python": "3.13.5, Anaconda build, GCC 11.2.0",
+      "python_executable": "$WORKSPACE/miniconda3/bin/python",
+      "sympy": "1.14.0"
+    },
+    "universal_determinant_mod_2": 1,
+    "nonintegral_projector_entry": "-1/2",
+    "nonintegral_entry_valuation": -1,
+    "standard_lattice_works": true,
+    "historical_inputs_unchanged": true,
+    "old_pycache_created": false,
+    "dependencies_installed": false,
+    "geometry_checked": false
+  },
+  "contribution_type": {
+    "historical": "Local counterexample invalidating a proof shortcut, not an attack refuting the manuscript.",
+    "current": "Exact reproduction and quantifier/scope assessment; no new result claimed."
+  },
+  "novelty_status": "not assessed/not claimed",
+  "independent_review": "pending_native_reviewer"
+}

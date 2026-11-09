@@ -1,0 +1,38 @@
+{
+  "operation_id": "matrix.symbolic.determinant.compute",
+  "adapter_interpreter": "$WORKSPACE/argus-live-update/.venv/bin/python",
+  "adapter_module": "argus_skill.tools.jacobian",
+  "server_name": "jacobian",
+  "server_version": "0.14.0",
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "discovery": {
+    "query": "exact symbolic algebra identity verification",
+    "candidate_operations": [
+      "matrix.symbolic.eigenvalues.compute",
+      "matrix.symbolic.characteristic_polynomial.compute",
+      "matrix.symbolic.determinant.compute",
+      "matrix.symbolic.multiply.compute",
+      "matrix.symbolic.rank.compute"
+    ],
+    "selection_reason": "The ordinary-coordinate wedge is exactly a two-by-two determinant; unrelated rank or spectral operations are not applied to geometry."
+  },
+  "contract_inspected_before_run": {
+    "operation_id": "matrix.symbolic.determinant.compute",
+    "input_type": "SymbolicDeterminantRequest",
+    "output_type": "SymbolicDeterminantResult",
+    "admission": "Square matrix, canonical sparse QQ rational-function entries with one ordered variable list; dimension at most eight, polynomial entries for dimension greater than one and bounded expansion.",
+    "method": "SYMPY_BAREISS",
+    "read_only": true
+  },
+  "exact_payload_file": "research/draft_reviews/analytic-realization/jacobian_payload.json",
+  "complete_typed_response_file": "research/draft_reviews/analytic-realization/jacobian_output.json",
+  "adapter_exit_code": 0,
+  "adapter_error": null,
+  "structured_error": null,
+  "timed_out": false,
+  "output_complete": true,
+  "runtime_ms": 34,
+  "interpreted_identity": "det([[t^2*A1,t^2*A2],[t*B1,t*B2]]) = t^3*(A1*B2-A2*B1)",
+  "scope": "A bounded exact polynomial identity supporting the ordinary versus logarithmic wedge convention; not geometric existence, analytic lifting, external-theorem validation or kernel closure."
+}

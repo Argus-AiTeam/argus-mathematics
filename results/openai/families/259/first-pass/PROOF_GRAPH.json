@@ -1,0 +1,167 @@
+{
+  "goal": "C9000259",
+  "routes": [
+    {
+      "name": "Coefficient-preserving verification",
+      "status": "current",
+      "evidence": "research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/planar.tex"
+    },
+    {
+      "name": "Counterexample satisfying coefficient-group injectivity",
+      "status": "parked",
+      "evidence": "research/planar-audit/theorem.md"
+    }
+  ],
+  "nodes": {
+    "C9000259": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 259 (A group without fixed price.; papers: A group without fixed price; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PLANAR_RESOLUTION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PLANAR_RESOLUTION": {
+      "statement": "Resolve the complete coefficient-sensitive statement planar:main, not only its exterior-letter projection.",
+      "status": "open",
+      "depends_on": ["C_PLANAR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/planar.tex", "research/planar-audit/theorem.md", "research/planar-audit/exact_certificate.json"]
+    },
+    "C_PLANAR": {
+      "statement": "Lemma planar:main: for m(r)>=7, a cyclically H-reduced null word has a full cyclic coefficient-preserving match or two exterior-disjoint coefficient-preserving matches of lengths at least m(r)-3.",
+      "status": "open",
+      "depends_on": ["C_PLANAR_STRONG"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/planar.tex", "research/planar-audit/theorem.md"]
+    },
+    "C_PLANAR_STRONG": {
+      "statement": "Under the same coefficient-group injectivity, positivity, uniqueness and overlap hypotheses, m(r)>=4 suffices and the two matching intervals have at least m(r)-2 exterior occurrences.",
+      "status": "open",
+      "depends_on": ["C_PLANAR_UNCONDITIONAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/planar-audit/theorem.md"]
+    },
+    "C_PLANAR_UNCONDITIONAL": {
+      "statement": "For arbitrary H and exterior alphabet, the relator hypotheses with m>=4 imply coefficient-group injectivity and the full matching dichotomy with loss two, without assuming injectivity.",
+      "status": "open",
+      "depends_on": ["C_PLANAR_EMBEDDING", "C_PLANAR_BRIDGE", "C_PLANAR_FINITE", "C_PLANAR_MATCH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/planar-audit/theorem.md"]
+    },
+    "C_PLANAR_EMBEDDING": {
+      "statement": "Positive relators with no repeated exterior generator, pairwise exterior-generator overlap at most one, and m>=4 preserve an arbitrary coefficient group in the quotient.",
+      "status": "open",
+      "depends_on": ["C_PLANAR_FILLING", "C_PLANAR_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/planar-audit/theorem.md"]
+    },
+    "C_PLANAR_BRIDGE": {
+      "statement": "For a cyclically H-reduced null word W with an exterior occurrence and m>=4, a least-relator filling over arbitrary H yields a connected sphere band graph with simple bipartite inner graph, the prescribed inner degrees, no monogons, and exact coefficient face equations, without assuming coefficient-group injectivity.",
+      "status": "open",
+      "depends_on": ["C_PLANAR_FILLING", "C_PLANAR_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/planar-audit/theorem.md"]
+    },
+    "C_PLANAR_FILLING": {
+      "statement": "Finite normal-form fillings over arbitrary H give constant exterior tracks. Minimality removes same-relator dipoles; positivity, uniqueness and pairwise overlap imply the inner graph is simple bipartite with prescribed degrees. Neither connectedness nor injectivity is assumed in this construction.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/planar-audit/theorem.md"]
+    },
+    "C_PLANAR_FINITE": {
+      "statement": "For a finite connected sphere band graph with a distinguished outside vertex, no monogon faces and a simple bipartite inner graph of minimum degree four, the corner-and-cyclic-gap argument gives a full bigon cycle or two distinct inner vertices with consecutive bigon strings using all but at most two incidences and disjoint outside endpoints.",
+      "status": "open",
+      "depends_on": ["C_PLANAR_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/planar-audit/theorem.md", "research/planar-audit/Main.lean"]
+    },
+    "C_PLANAR_KERNEL": {
+      "statement": "The normalized finite band argument proves the closed-component obstruction and, with exact group-valued bigon equations, injective incidence maps, degree at least four, corner partition, face bounds and sphere Euler equation, a full bigon cycle or two ordered coefficient-equal disjoint intervals missing at most two relator occurrences.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/planar-audit/Main.lean", "research/planar-audit/statement_fidelity.md", "research/planar-audit/lean-evidence/certificates/C_PLANAR_KERNEL-e7a6cb44e7435fac.json"]
+    },
+    "C_PLANAR_SHARP": {
+      "statement": "The strengthened bound m(r)-2 is optimal for each common length m>=4; permitting lengths three and four invalidates the dichotomy, and permitting length three invalidates automatic coefficient-group injectivity.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/planar-audit/theorem.md", "research/planar-audit/verify.py", "research/planar-audit/exact_certificate.json", "research/planar-audit/jacobian_payload.json", "research/planar-audit/jacobian_result.json"]
+    },
+    "C_PLANAR_MATCH": {
+      "statement": "Constant exterior bands and complementary-region equations give equality of every intervening H coefficient, not conjugacy; intervals at distinct inner vertices use disjoint outer occurrences.",
+      "status": "open",
+      "depends_on": ["C_PLANAR_BRIDGE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/planar-audit/theorem.md", "research/planar-audit/Main.lean"]
+    },
+    "C_PLANAR_REFUTATION": {
+      "statement": "There exists a counterexample to planar:main satisfying every stated hypothesis, including injectivity of H into D.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_RANK_MAIN": {
+      "statement": "rank:main: n positive length-100 rows with expansion |N(T)|>96|T| for 1<=|T|<=alpha*n, 100*b<=alpha*n and alpha*n>=1 present a group of rank greater than alpha*n/100.",
+      "status": "open",
+      "depends_on": ["C_PLANAR", "C_RANK_SURGERY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/rank-surgery.tex"]
+    },
+    "C_RANK_SURGERY": {
+      "statement": "The saturation and marked-graph shortening steps needed after planar:main establish rank:main.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/rank-surgery.tex"]
+    },
+    "C_MODELS_TRANSFER": {
+      "statement": "models:transfer: relative J-to-A cost in the Bernoulli action is at least limsup rank(D_Vk)/|Vk| for asymptotically free finite exact right A-models.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/finite-models.tex"]
+    },
+    "C_MODELS_SEQUENCE": {
+      "statement": "models:sequence: the required asymptotically free permutation models exist with small-set expansion greater than 96 and o(n) bad rows.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/finite-models.tex"]
+    },
+    "C_COMPRESSION_MAIN": {
+      "statement": "compression:main: deployment/compression bounds the Bernoulli Gamma-cost below by one plus the relative J-to-A cost.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/compression.tex", "research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/deployment.tex"]
+    },
+    "C_BERNOULLI_LOWER": {
+      "statement": "The Bernoulli action in intro:main has cost at least 1+alpha/100.",
+      "status": "open",
+      "depends_on": ["C_RANK_MAIN", "C_MODELS_TRANSFER", "C_MODELS_SEQUENCE", "C_COMPRESSION_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/introduction.tex"]
+    },
+    "C_ACTIONS_LOW": {
+      "statement": "actions:low: the finite-height action Y_M has cost at most 1+99/M for M>100.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/group-actions.tex"]
+    },
+    "C_MAIN": {
+      "statement": "intro:main: the displayed rank-100 amalgam has Bernoulli cost at least 1+alpha/100 and finite-height cost at most 1+99/M, hence does not have fixed price.",
+      "status": "open",
+      "depends_on": ["C_BERNOULLI_LOWER", "C_ACTIONS_LOW"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-group-without-fixed-price-October-5-2026/build/introduction.tex"]
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CUBIC_CORE-d338f4492084",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/367/first-pass/universal_tensor_audit/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/367/first-pass/universal_tensor_audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 72905,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/367/first-pass/universal_tensor_audit/lean/Main.lean",
+    "source_sha256": "262e1c4ead659248760a164ad5257392f267be0084f5341e1b0907a1f2bb166e",
+    "statement_fidelity": "families/367/first-pass/universal_tensor_audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "5eb6ae3799990f0e62c9fad2d238227ed0f7734faa24cfe4a62b83f2eae3e29f",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/367/first-pass/universal_tensor_audit/lean/Main.lean:44:6: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/367/first-pass/universal_tensor_audit/lean/Main.lean:44:6: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/367/first-pass/universal_tensor_audit/lean/Main.lean:57:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n'UniversalTensorAudit.universal_stf_quartic' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/universal_tensor_audit/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nset_option autoImplicit false\nset_option maxHeartbeats 0\nset_option maxRecDepth 8192\n\nnamespace UniversalTensorAudit\n\ndef shape (a : Fin 14 → ℝ) : Fin 5 → Fin 5 → ℝ :=\n  ![![a 0, a 1, a 2, a 3, a 4],\n    ![a 1, a 5, a 6, a 7, a 8],\n    ![a 2, a 6, a 9, a 10, a 11],\n    ![a 3, a 7, a 10, a 12, a 13],\n    ![a 4, a 8, a 11, a 13, -(a 0 + a 5 + a 9 + a 12)]]\n\ndef matVec (a : Fin 14 → ℝ) (v : Fin 5 → ℝ) (i : Fin 5) : ℝ :=\n  ∑ j : Fin 5, shape a i j * v j\n\ndef stfNumerator (a : Fin 14 → ℝ) (v : Fin 5 → ℝ)\n    (i j k : Fin 5) : ℝ :=\n  7 * (v i * shape a j k + v j * shape a i k + v k * shape a i j) -\n    2 * ((if i = j then matVec a v k else 0) +\n      (if i = k then matVec a v j else 0) +\n      (if j = k then matVec a v i else 0))\n\ndef vectorNormSq (v : Fin 5 → ℝ) : ℝ :=\n  ∑ i : Fin 5, (v i) ^ 2\n\ndef shapeNormSq (a : Fin 14 → ℝ) : ℝ :=\n  ∑ i : Fin 5, ∑ j : Fin 5, (shape a i j) ^ 2\n\ndef cubicNormSq (a : Fin 14 → ℝ) (v : Fin 5 → ℝ) : ℝ :=\n  ∑ i : Fin 5, ∑ j : Fin 5, ∑ k : Fin 5, (stfNumerator a v i j k) ^ 2\n\ntheorem shape_symmetric (a : Fin 14 → ℝ) (i j : Fin 5) :\n    shape a i j = shape a j i := by\n  fin_cases i <;> fin_cases j <;> rfl\n\ntheorem shape_trace_zero (a : Fin 14 → ℝ) :\n    (∑ i : Fin 5, shape a i i) = 0 := by\n  simp [shape, Fin.sum_univ_succ]\n  <;> ring\n\ntheorem stfNumerator_trace_zero (a : Fin 14 → ℝ) (v : Fin 5 → ℝ) (k : Fin 5) :\n    (∑ i : Fin 5, stfNumerator a v i i k) = 0 := by\n  fin_cases k <;>\n    simp [stfNumerator, matVec, shape, Fin.sum_univ_succ] <;> ring\n\ntheorem universal_stf_quartic (a : Fin 14 → ℝ) (v : Fin 5 → ℝ) :\n    cubicNormSq a v =\n      147 * shapeNormSq a * vectorNormSq v +\n      210 * vectorNormSq (matVec a v) := by\n  simp [cubicNormSq, shapeNormSq, vectorNormSq, stfNumerator, matVec, shape,\n    Fin.sum_univ_succ]\n  <;> ring\n\n#print axioms universal_stf_quartic\n\nend UniversalTensorAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/universal_tensor_audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: the universal cubic contraction core\n\nThe claim is `C_CUBIC_CORE`, not `C_UNIVERSAL`. The principal declaration\nis `UniversalTensorAudit.universal_stf_quartic` in `Main.lean`.\nThis document describes that declaration and the three auxiliary theorems\n`shape_symmetric`, `shape_trace_zero`, and `stfNumerator_trace_zero`.\n\nThe scalar field is the real numbers. Coordinate indices run over `Fin 5`.\nThe universally quantified function `a : Fin 14 -> R` supplies fourteen\narbitrary real numbers, and `v : Fin 5 -> R` supplies five arbitrary real\nnumbers. There are no sign, nonvanishing, eigenvalue, or norm hypotheses.\n\n`shape a` is a five-by-five symmetric matrix. Its upper-triangular entries,\nin row order, are `a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13`,\nfollowed by the final diagonal entry `-(a0+a5+a9+a12)`. The lower-triangular\nentries are their symmetric counterparts. Thus every real symmetric\ntrace-free five-by-five matrix has exactly one such representation.\n`shape_symmetric` and `shape_trace_zero` verify these two structural\nproperties. The parameterization's coverage follows directly by choosing\nthe fourteen indicated entries of a given symmetric trace-free matrix;\nthe file does not separately formalize this coverage statement.\n\n`matVec a v` is ordinary matrix-vector multiplication by `shape a`.\nWriting `A=shape a`, `B_ijk=v_i A_jk+v_j A_ik+v_k A_ij`, and\n`(J u)_ijk=delta_ij u_k+delta_ik u_j+delta_jk u_i`,\n`stfNumerator a v` is exactly `T=7B-2J(Av)`, with no averaging of `B`.\n`stfNumerator_trace_zero` proves the trace over its first two slots\nvanishes for every remaining index.\n\n`vectorNormSq`, `shapeNormSq`, and `cubicNormSq` are sums of squares over\nall ordered component indices. Off-diagonal matrix entries and repeated\nsymmetric tensor components carry their full multiplicities. The principal\ntheorem states exactly\n\n    |7B-2J(Av)|^2 = 147 |A|^2 |v|^2 + 210 |Av|^2.\n\nEquivalently, the symmetric trace-free projection of `B/3` has squared\nnorm `|A|^2 |v|^2/3 + 10 |Av|^2/21`. This is the algebraic identity used\nin the proof of the `5/7` bound for contraction of an arbitrary symmetric\ntrace-free cubic tensor with a unit symmetric trace-free matrix.\n\nThe Lean file does not prove the `5/7` inequality by itself: the operator\nnorm estimate for a unit trace-free matrix and tensor Cauchy--Schwarz are\nthe separate arguments in `../report.md`. It does not encode the printed\nTable I or Table II, their remainder identities, the full universal\ninterior or boundary proposition, or any geometric realizability or\nminimizing-cone theorem. Those distinctions are essential: the formal\nquartic identity is one load-bearing part of the complete exact\nverification in `../verify.py`, not a formalization of the entire result.\n"
+  },
+  "subject": {
+    "content_hash": "88a982484a4227b0bab0649729581e1ba25b05e6838fc086dbc4bd69427611ed",
+    "kind": "claim",
+    "subject_id": "C_CUBIC_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

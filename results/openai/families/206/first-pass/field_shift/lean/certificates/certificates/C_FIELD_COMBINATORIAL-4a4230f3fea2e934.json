@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FIELD_COMBINATORIAL-ced7e3c8a257",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/206/first-pass/field_shift/lean/certificates/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/206/first-pass/field_shift/lean/certificates/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14694,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/206/first-pass/field_shift/lean/certificates/Main.lean",
+    "source_sha256": "ae13debb594ade7fef288b6ae40d25d8ea6117086f14095403461587b8a1888a",
+    "statement_fidelity": "families/206/first-pass/field_shift/lean/certificates/statement_fidelity.md",
+    "statement_fidelity_sha256": "8cf592318f4b571f4b1be1da19e755ef01fde8ea96c2369ee4613dbf9a320004",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/field_shift/lean/certificates/Main.lean",
+    "text": "import Mathlib\n\nnamespace FieldShift\n\ntheorem shift_divisible_of_residue_support\n    (E : Set ℤ) (h r c k : ℤ)\n    (hne : E.Nonempty)\n    (hperiod : h ∣ r)\n    (hresidue : ∀ x ∈ E, h ∣ x - c)\n    (htranslate : ∀ x ∈ E, ∃ y ∈ E, r ∣ x + k - y) :\n    h ∣ k := by\n  obtain ⟨x, hx⟩ := hne\n  obtain ⟨y, hy, hxy⟩ := htranslate x hx\n  have hwrap : h ∣ x + k - y := dvd_trans hperiod hxy\n  have hsum : h ∣ (x + k - y) + (y - c) - (x - c) :=\n    dvd_sub (dvd_add hwrap (hresidue y hy)) (hresidue x hx)\n  have heq : (x + k - y) + (y - c) - (x - c) = k := by ring\n  rwa [heq] at hsum\n\ntheorem progression_residue\n    (h t r t0 j q : ℤ) (ht : h ∣ t) (hr : h ∣ r) :\n    h ∣ (t0 + j * t - q * r) - t0 := by\n  have hmultiple : h ∣ j * t - q * r :=\n    dvd_sub (dvd_mul_of_dvd_right ht j) (dvd_mul_of_dvd_right hr q)\n  have heq : (t0 + j * t - q * r) - t0 = j * t - q * r := by ring\n  rwa [heq]\n\ntheorem progression_no_wrap\n    (b t j : ℤ) (ht : 0 < t) (hj0 : 0 ≤ j) (hjb : j < b) :\n    0 ≤ j * t ∧ j * t < b * t := by\n  exact ⟨mul_nonneg hj0 ht.le, mul_lt_mul_of_pos_right hjb ht⟩\n\ntheorem progression_mod_representative\n    (b t j : ℤ) (ht : 0 < t) (hj0 : 0 ≤ j) (hjb : j < b) :\n    (j * t) % (b * t) = j * t := by\n  exact Int.emod_eq_of_lt (progression_no_wrap b t j ht hj0 hjb).1\n    (progression_no_wrap b t j ht hj0 hjb).2\n\ntheorem progression_distinct_mod\n    (b t i j : ℤ) (ht : t ≠ 0)\n    (hi : i ∈ Set.Ico 0 b) (hj : j ∈ Set.Ico 0 b) :\n    Int.ModEq (b * t) (i * t) (j * t) ↔ i = j := by\n  constructor\n  · intro hmod\n    have hindices := Int.ModEq.mul_right_cancel' ht hmod\n    change i % b = j % b at hindices\n    simpa only [Int.emod_eq_of_lt hi.1 hi.2, Int.emod_eq_of_lt hj.1 hj.2] using hindices\n  · rintro rfl\n    exact Int.ModEq.rfl\n\ntheorem odd_doubling_modEq_iff\n    (b : ℕ) (hb : Odd b) (i j : ℕ) :\n    Nat.ModEq b (2 * i) (2 * j) ↔ Nat.ModEq b i j := by\n  constructor\n  · intro hmod\n    exact hmod.cancel_left_of_coprime hb.coprime_two_right\n  · intro hmod\n    exact hmod.mul_left 2\n\ntheorem odd_doubling_distinct_mod\n    (b : ℕ) (hb : Odd b) (i j : ℕ) (hi : i < b) (hj : j < b) :\n    Nat.ModEq b (2 * i) (2 * j) ↔ i = j := by\n  rw [odd_doubling_modEq_iff b hb i j]\n  exact ⟨fun hmod => hmod.eq_of_lt_of_lt hi hj, fun h => h ▸ Nat.ModEq.rfl⟩\n\ntheorem synchronized_differences_add\n    (h a a1 s : ℤ) (hfirst : h ∣ a1 - a) (hsecond : h ∣ s - a1) :\n    h ∣ s - a := by\n  have hsum : h ∣ (a1 - a) + (s - a1) := dvd_add hfirst hsecond\n  have heq : (a1 - a) + (s - a1) = s - a := by ring\n  rwa [heq] at hsum\n\ntheorem commuting_pair_integer_normal_form\n    {G : Type*} [Group G] (g d : G) (hcommute : Commute g d)\n    {x : G} (hx : x ∈ Subgroup.closure ({g, d} : Set G)) :\n    ∃ m n : ℤ, g ^ m * d ^ n = x := by\n  induction hx using Subgroup.closure_induction with\n  | mem x hx =>\n    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx\n    rcases hx with rfl | rfl\n    · exact ⟨1, 0, by simp⟩\n    · exact ⟨0, 1, by simp⟩\n  | one => exact ⟨0, 0, by simp⟩\n  | mul x y hx hy ihx ihy =>\n    obtain ⟨m, n, rfl⟩ := ihx\n    obtain ⟨p, q, rfl⟩ := ihy\n    refine ⟨m + p, n + q, ?_⟩\n    rw [zpow_add, zpow_add]\n    exact (hcommute.zpow_zpow p n).mul_mul_mul_comm (g ^ m) (d ^ q)\n  | inv x hx ih =>\n    obtain ⟨m, n, rfl⟩ := ih\n    refine ⟨-m, -n, ?_⟩\n    simpa only [zpow_neg, mul_inv_rev] using (hcommute.zpow_zpow m n).inv_inv.eq\n\ntheorem commuting_pair_card_le\n    {G : Type*} [Group G] [Finite G] (g d : G) (hcommute : Commute g d) :\n    Nat.card (Subgroup.closure ({g, d} : Set G)) ≤ orderOf g * orderOf d := by\n  let H := Subgroup.closure ({g, d} : Set G)\n  have hg : g ∈ H := Subgroup.subset_closure (by simp)\n  have hd : d ∈ H := Subgroup.subset_closure (by simp)\n  have hgz : Subgroup.zpowers g ≤ H := by\n    rw [Subgroup.zpowers_eq_closure]\n    exact (Subgroup.closure_le H).mpr (Set.singleton_subset_iff.mpr hg)\n  have hdz : Subgroup.zpowers d ≤ H := by\n    rw [Subgroup.zpowers_eq_closure]\n    exact (Subgroup.closure_le H).mpr (Set.singleton_subset_iff.mpr hd)\n  let f : Subgroup.zpowers g × Subgroup.zpowers d → H :=\n    fun p => ⟨p.1.1 * p.2.1, H.mul_mem (hgz p.1.2) (hdz p.2.2)⟩\n  have hsurjective : Function.Surjective f := by\n    intro x\n    obtain ⟨m, n, heq⟩ := commuting_pair_integer_normal_form g d hcommute x.property\n    refine ⟨(⟨g ^ m, Subgroup.zpow_mem_zpowers g m⟩,\n      ⟨d ^ n, Subgroup.zpow_mem_zpowers d n⟩), ?_⟩\n    exact Subtype.ext heq\n  calc\n    Nat.card H ≤ Nat.card (Subgroup.zpowers g × Subgroup.zpowers d) :=\n      Nat.card_le_card_of_surjective f hsurjective\n    _ = orderOf g * orderOf d := by\n      rw [Nat.card_prod, Nat.card_zpowers, Nat.card_zpowers]\n\ntheorem closure_pair_eq_zpowers_of_power\n    {G : Type*} [Group G] (g d : G) (v : ℕ) (hpower : g ^ v = d) :\n    Subgroup.closure ({g, d} : Set G) = Subgroup.zpowers g := by\n  apply le_antisymm\n  · refine (Subgroup.closure_le _).mpr ?_\n    intro x hx\n    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx\n    rcases hx with hx | hx\n    · rw [hx]\n      exact Subgroup.mem_zpowers g\n    · rw [hx, ← hpower]\n      exact Subgroup.npow_mem_zpowers g v\n  · rw [Subgroup.zpowers_eq_closure]\n    apply Subgroup.closure_mono\n    exact Set.singleton_subset_iff.mpr (by simp)\n\ntheorem field_diagram_group_card_bound\n    {G : Type*} [Group G] [Finite G] (g d : G) (v : ℕ)\n    (hcommute : Commute g d) (hd : d ^ 2 = 1) (hv : 0 < v)\n    (hpower : g ^ v = 1 ∨ g ^ v = d) :\n    Nat.card (Subgroup.closure ({g, d} : Set G)) ≤ 2 * v := by\n  rcases hpower with hpower | hpower\n  · calc\n      Nat.card (Subgroup.closure ({g, d} : Set G)) ≤ orderOf g * orderOf d :=\n        commuting_pair_card_le g d hcommute\n      _ ≤ v * 2 :=\n        Nat.mul_le_mul (orderOf_le_of_pow_eq_one hv hpower)\n          (orderOf_le_of_pow_eq_one (by decide : 0 < 2) hd)\n      _ = 2 * v := Nat.mul_comm v 2\n  · have hdouble : g ^ (2 * v) = 1 := by\n      calc\n        g ^ (2 * v) = (g ^ v) ^ 2 := by rw [← pow_mul, Nat.mul_comm]\n        _ = 1 := by rw [hpower, hd]\n    rw [closure_pair_eq_zpowers_of_power g d v hpower]\n    rw [Nat.card_zpowers]\n    exact orderOf_le_of_pow_eq_one (by omega : 0 < 2 * v) hdouble\n\nend FieldShift\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/field_shift/lean/certificates/statement_fidelity.md",
+    "text": "# Statement fidelity: field-shift synchronization combinatorial core\n\nThis file documents `Main.lean` for claim `C_FIELD_COMBINATORIAL` in context\n`CTX_FIELD_SHIFT`. Every declaration is in namespace `FieldShift`.\n\n## Exact scope\n\nThis is the **combinatorial core only**. It is not a Lean formalization of finite\nChevalley-group restriction theory, actual edge module constructions, arbitrary\nnormalizer realizability, or any manuscript main theorem. Separate\nrepresentation-theoretic proofs supplied by the parent audit must justify\napplying these arithmetic and abstract finite-group results to actual retained\nedges and normalizers. No such application is an assumption or a conclusion of\nthis Lean source. No novelty or independent review is asserted.\n\n## Arithmetic declarations\n\n* `shift_divisible_of_residue_support`: for every set `E` of integers and all\n  integers `h,r,c,k`, if `E` is nonempty, `h` divides `r`, every `x` in `E`\n  satisfies `h | x-c`, and for every `x` in `E` there exists `y` in `E` with\n  `r | x+k-y`, then `h | k`. This includes arbitrary wraparound representatives,\n  arbitrary periods (including zero and negative periods), and arbitrary\n  integer shifts. Finiteness of `E` and positivity of `h` are not needed.\n  Translation containment suffices; equality of translated supports is stronger.\n* `progression_residue`: if `h | t` and `h | r`, then every integer position\n  `t0+j*t-q*r` differs from `t0` by a multiple of `h`, for all integers `j,q`.\n* `progression_no_wrap`: if `t>0` and `0<=j<b`, then\n  `0<=j*t<b*t`. The index hypotheses already force `b>0`.\n* `progression_mod_representative`: under those same hypotheses,\n  `(j*t) % (b*t) = j*t`. Thus these selected progression positions do not wrap\n  before reduction modulo the full period.\n* `progression_distinct_mod`: for all integers `b,t,i,j`, if `t` is nonzero and\n  `0<=i,j<b`, then `i*t` and `j*t` are congruent modulo `b*t` if and only if\n  `i=j`. In particular this covers all positive integer `b,t`. Together with\n  the preceding two declarations, this is the support noncollision/no-carry\n  statement: assigning one digit to each selected position never assigns two\n  digits to the same position. It does not assert a representation-theoretic\n  tensor-factor decomposition or a theorem about arbitrary overlapping sums.\n* `odd_doubling_modEq_iff`: for every odd natural `b` and all natural `i,j`,\n  congruence of `2*i` and `2*j` modulo `b` is equivalent to congruence of `i`\n  and `j` modulo `b`. This is a universal cancellation statement, not an\n  enumeration of tested moduli.\n* `odd_doubling_distinct_mod`: consequently, for all `i,j<b`, congruence of\n  their doubled indices modulo odd `b` is equivalent to `i=j`. This includes\n  `b=1` and supplies the odd unitary doubling noncollision property.\n* `synchronized_differences_add`: for all integers `h,a,a1,s`, the hypotheses\n  `h | a1-a` and `h | s-a1` imply `h | s-a`. Identifying one common\n  intermediate exponent in the actual representations is outside this source.\n\n## Abstract group declarations and the proved normal form\n\n* `commuting_pair_integer_normal_form`: in any group, if `g,d` commute, every\n  element of `Subgroup.closure {g,d}` is `g^m*d^n` for some integers `m,n`.\n  This existence is **proved by subgroup-closure induction**, including the\n  product and inverse cases. It is not an input hypothesis.\n* `commuting_pair_card_le`: in any finite group, commuting `g,d` generate a\n  subgroup of cardinality at most `orderOf g * orderOf d`. The proved integer\n  normal form supplies a surjection from the product of their cyclic subgroups.\n  Mathlib's kernel-checked cyclic-subgroup cardinality theorem then counts\n  those subgroups. No bounded normal form is assumed.\n* `closure_pair_eq_zpowers_of_power`: in any group, `g^v=d` implies that\n  `Subgroup.closure {g,d}` is exactly the cyclic subgroup generated by `g`.\n* `field_diagram_group_card_bound`: for every finite group `G`, all `g,d` in\n  `G`, and every positive natural `v`, if `g,d` commute, `d^2=1`, and\n  `g^v=1` or `g^v=d`, then\n  `Nat.card (Subgroup.closure {g,d}) <= 2*v`. In the first branch the preceding\n  surjection is counted using `orderOf g<=v` and `orderOf d<=2`. In the second\n  branch the subgroup is cyclic and `g^(2*v)=1`. Neither commutativity of the\n  ambient group nor faithfulness of an action is required.\n\nThe source imports the prebuilt Mathlib workspace for Lean 4.31.0 and adds no\naxioms, proof holes, unsafe computation, or external decision procedures.\nStandard Lean/Mathlib logical foundations are the only background assumptions.\n"
+  },
+  "subject": {
+    "content_hash": "d9125884e3741b93bc5910aab86808cb946651c2b629166f9c81b20240aa584a",
+    "kind": "claim",
+    "subject_id": "C_FIELD_COMBINATORIAL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

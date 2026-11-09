@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_EXACT_ALGEBRA-b43c7bab222d",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/368/first-pass/cubical_cutoff/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/368/first-pass/cubical_cutoff/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14764,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/368/first-pass/cubical_cutoff/Main.lean",
+    "source_sha256": "6eb27b67f1f833152520d8068fceb47a438ad0c02a55a6d2ef0bba7bb449b641",
+    "statement_fidelity": "families/368/first-pass/cubical_cutoff/statement_fidelity.md",
+    "statement_fidelity_sha256": "e6921433828d3730a06644f8e693db782e79fa3bec8ae0a8cc8abc6195aa6f48",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/368/first-pass/cubical_cutoff/Main.lean:9:2: warning: try 'simp' instead of 'simpa'\n\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/cubical_cutoff/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace CubicalCutoff\n\ntheorem scalar_determinant (q : ℝ) (A : Matrix (Fin 3) (Fin 3) ℝ) :\n    Matrix.det (q • A) = q ^ 3 * Matrix.det A := by\n  simpa using Matrix.det_smul A q\n\nset_option maxHeartbeats 1000000 in\nprivate theorem rank_one_determinant\n    (d u0 u1 u2 w0 w1 w2 : ℝ) :\n    Matrix.det\n      !![d + u0 * w0, u0 * w1, u0 * w2;\n         u1 * w0, d + u1 * w1, u1 * w2;\n         u2 * w0, u2 * w1, d + u2 * w2] =\n      d ^ 3 + d ^ 2 * (u0 * w0 + u1 * w1 + u2 * w2) := by\n  rw [Matrix.det_fin_three]\n  change\n    (d + u0 * w0) * (d + u1 * w1) * (d + u2 * w2) -\n        (d + u0 * w0) * (u1 * w2) * (u2 * w1) -\n        (u0 * w1) * (u1 * w0) * (d + u2 * w2) +\n        (u0 * w1) * (u1 * w2) * (u2 * w0) +\n        (u0 * w2) * (u1 * w0) * (u2 * w1) -\n        (u0 * w2) * (d + u1 * w1) * (u2 * w0) =\n      d ^ 3 + d ^ 2 * (u0 * w0 + u1 * w1 + u2 * w2)\n  ring\n\ntheorem frame_transport_determinant\n    (v0 v1 v2 w0 w1 w2 : ℝ) :\n    let d := w0 ^ 2 + w1 ^ 2 + w2 ^ 2\n    Matrix.det\n      !![d + (v0 - w0) * w0, (v0 - w0) * w1, (v0 - w0) * w2;\n         (v1 - w1) * w0, d + (v1 - w1) * w1, (v1 - w1) * w2;\n         (v2 - w2) * w0, (v2 - w2) * w1, d + (v2 - w2) * w2] =\n      d ^ 2 * (v0 * w0 + v1 * w1 + v2 * w2) := by\n  dsimp only\n  rw [rank_one_determinant]\n  have hdot :\n      (v0 - w0) * w0 + (v1 - w1) * w1 + (v2 - w2) * w2 =\n        (v0 * w0 + v1 * w1 + v2 * w2) - (w0 ^ 2 + w1 ^ 2 + w2 ^ 2) := by\n    ring\n  rw [hdot]\n  generalize w0 ^ 2 + w1 ^ 2 + w2 ^ 2 = d\n  ring\n\ntheorem dyadic_sum_identity (N : ℕ) :\n    (∑ k ∈ Finset.range N, (1 / 2 : ℝ) ^ k) +\n      2 * (1 / 2 : ℝ) ^ N = 2 := by\n  induction N with\n  | zero => norm_num\n  | succ N ih =>\n      rw [Finset.sum_range_succ, pow_succ]\n      linarith\n\ntheorem dyadic_sum_bound (N : ℕ) :\n    (∑ k ∈ Finset.range N, (1 / 2 : ℝ) ^ k) ≤ 2 := by\n  have h := dyadic_sum_identity N\n  have htail : 0 ≤ 2 * (1 / 2 : ℝ) ^ N := by positivity\n  linarith\n\ntheorem weighted_overlap_bound\n    (K : ℝ) (hK : 0 ≤ K) (w : ℕ → ℝ)\n    (hw : ∀ k, w k ≤ K * (4 : ℝ) ^ k) (N : ℕ) :\n    (∑ k ∈ Finset.range N, w k / (8 : ℝ) ^ k) ≤ 2 * K := by\n  have hterm (k : ℕ) :\n      w k / (8 : ℝ) ^ k ≤ K * (1 / 2 : ℝ) ^ k := by\n    calc\n      w k / (8 : ℝ) ^ k ≤ (K * (4 : ℝ) ^ k) / (8 : ℝ) ^ k :=\n        (div_le_div_iff_of_pos_right (by positivity)).mpr (hw k)\n      _ = K * (1 / 2 : ℝ) ^ k := by\n        rw [mul_div_assoc, ← div_pow]\n        norm_num\n  calc\n    (∑ k ∈ Finset.range N, w k / (8 : ℝ) ^ k) ≤\n        ∑ k ∈ Finset.range N, K * (1 / 2 : ℝ) ^ k :=\n      Finset.sum_le_sum (fun k _ => hterm k)\n    _ = K * ∑ k ∈ Finset.range N, (1 / 2 : ℝ) ^ k := by\n      rw [Finset.mul_sum]\n    _ ≤ K * 2 := mul_le_mul_of_nonneg_left (dyadic_sum_bound N) hK\n    _ = 2 * K := by ring\n\nend CubicalCutoff\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/cubical_cutoff/statement_fidelity.md",
+    "text": "# Statement fidelity: algebra used by the cubical cutoff\n\nThis file describes `research/cubical_cutoff/Main.lean` and claim\n`C_EXACT_ALGEBRA`. It does not interpret the source as a formalization of\n`C_CUTOFF`, `C_IMMERSION`, either main approximation theorem, a covering\nargument, or a literature theorem.\n\nAll coefficients and matrix entries are real numbers. Matrices have rows\nand columns indexed by `Fin 3`. All depth indices are natural numbers.\n\n- `scalar_determinant` (qualified as `CubicalCutoff.scalar_determinant`)\n  quantifies over every real `q` and\n  every real 3-by-3 matrix `A`. It proves\n  `det(q A) = q^3 det(A)`, including `q=0`.\n- `frame_transport_determinant`\n  (qualified as `CubicalCutoff.frame_transport_determinant`) quantifies over all six real\n  coordinates of vectors `v,w`. With `d=w dot w`, it proves\n  `det(d Id + (v-w) w^T) = d^2 (v dot w)`. This is a polynomial identity;\n  it does not assume `w` is nonzero and does not itself assert positivity\n  or the existence of a frame homotopy. The prose proof divides by `d`\n  only when `w` is nonzero and uses positivity only when `v dot w>0`.\n- `dyadic_sum_identity` (qualified as `CubicalCutoff.dyadic_sum_identity`)\n  proves, for every natural `N`,\n  `sum_{k<N} (1/2)^k + 2(1/2)^N = 2`. The sum is finite; `N=0`\n  is included.\n- `dyadic_sum_bound` (qualified as `CubicalCutoff.dyadic_sum_bound`)\n  proves the resulting upper bound `2`\n  for every natural `N`.\n- `weighted_overlap_bound` (qualified as `CubicalCutoff.weighted_overlap_bound`)\n  quantifies over every real\n  `K>=0`, every real sequence `w`, and every natural `N`. Its sole\n  hypothesis on the sequence is `w(k)<=K*4^k` for every `k`. It proves\n  `sum_{k<N} w(k)/8^k <= 2K`. The entries need not be integers or\n  nonnegative; applying this to nonnegative simplex counts is a special\n  case, not an extra formal hypothesis.\n\nThe last theorem corresponds exactly to multiplying three-dimensional\ninverse-Jacobian weights `2^(-3k)` by a scale-wise overlap bound\n`K*2^(2k)`. Passing from all finite depths to an infinite nonnegative\nsum, geometric packing, chain rules, positive-codimension immersion,\nSchoenflies, fixed-image filling, and Sobolev gluing are arguments in\n`proof.md`, not kernel-checked declarations in this source.\n\nNo manuscript claim is refuted by these declarations. No external\ntopological or analytic theorem is encoded as an axiom.\n"
+  },
+  "subject": {
+    "content_hash": "a167b6feaf758b54c585d5b04b839281cd458f67a1ac2ba4abe7ada799352101",
+    "kind": "claim",
+    "subject_id": "C_EXACT_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

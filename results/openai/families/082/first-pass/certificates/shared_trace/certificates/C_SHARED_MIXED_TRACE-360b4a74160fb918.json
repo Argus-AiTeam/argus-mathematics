@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_SHARED_MIXED_TRACE-89b0df8a3b8b",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/082/first-pass/certificates/shared_trace/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/082/first-pass/certificates/shared_trace/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15310,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/082/first-pass/certificates/shared_trace/Main.lean",
+    "source_sha256": "7aca6b715b59940b5e36cfb9910a718b041e2ec29a2023236b7d768e74053859",
+    "statement_fidelity": "families/082/first-pass/certificates/shared_trace/statement_fidelity.md",
+    "statement_fidelity_sha256": "992525b3e2ce8f4a8b4558421f089134948880b7da3b4bd371aad4108f4fe7a8",
+    "status": "success",
+    "stderr": "",
+    "stdout": "SharedTrace.mixed_trace_estimate.{u_1, u_2, u_3} {n0 : Type u_1} {n1 : Type u_2} {n2 : Type u_3} [Fintype n0]\n  [Fintype n1] [Fintype n2] [DecidableEq n0] [DecidableEq n1] [DecidableEq n2] (W0 : Matrix n0 n1 ℂ)\n  (W1 : Matrix n1 n2 ℂ) (W2 : Matrix n2 n0 ℂ) (D0 : Matrix n0 n0 ℂ) (D1 : Matrix n1 n1 ℂ) (D2 : Matrix n2 n2 ℂ)\n  (h0 : D0.IsHermitian) (h1 : D1.IsHermitian) (h2 : D2.IsHermitian) :\n  have R0 := W0.fromCols W2ᴴ;\n  have R1 := W1.fromCols W0ᴴ;\n  have R2 := W2.fromCols W1ᴴ;\n  ‖(D0 * W0 * D1 * W1 * D2 * W2).trace‖ ≤\n    5 / 3 * max ‖toEuclideanCLM D0‖ (max ‖toEuclideanCLM D1‖ ‖toEuclideanCLM D2‖) *\n      (SharedTraceHessian.b ⋯ (R0ᴴ * D0 * R0) + SharedTraceHessian.b ⋯ (R1ᴴ * D1 * R1) +\n        SharedTraceHessian.b ⋯ (R2ᴴ * D2 * R2))\n'SharedTrace.mixed_trace_estimate' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/certificates/shared_trace/Main.lean",
+    "text": "import SpectralCubic\nimport Hessian\nimport Trace\nimport Phase\nimport Projections\n\n/-!\n# Mixed trace estimate on three independently sized complex spaces\n\nAll operator norms below are explicitly norms of `Matrix.toEuclideanCLM`.\nThe supported Hessian is the actual `SharedTraceHessian.b`, including its singular\npositive-spectrum convention. The assembly proves the arbitrary-spectrum cubic\nestimate, the concrete rectangular zero-padding identifications, and the phase\ninvariance used to recover the full complex modulus.\n-/\n\nopen scoped ComplexConjugate Matrix MatrixOrder ComplexOrder\nopen Matrix Finset\n\nnoncomputable section\n\nnamespace SharedTrace\n\nopen SharedTraceAssembly\n\nvariable {n0 n1 n2 : Type*} [Fintype n0] [Fintype n1] [Fintype n2]\n  [DecidableEq n0] [DecidableEq n1] [DecidableEq n2]\n\nlemma rowCost_supported_nonneg {α β : Type*} [Fintype α] [Fintype β]\n    [DecidableEq α] [DecidableEq β] (R : Matrix α β ℂ) (D : Matrix α α ℂ) :\n    0 ≤ rowCost R D := by\n  rw [rowCost_spectral_positive]\n  apply mul_nonneg (by norm_num)\n  apply Finset.sum_nonneg\n  intro i hi\n  apply Finset.sum_nonneg\n  intro j hj\n  exact div_nonneg (Complex.normSq_nonneg _)\n    (add_nonneg (Real.sqrt_nonneg _) (Real.sqrt_nonneg _))\n\nlemma energy_nonneg (W0 : Matrix n0 n1 ℂ) (W1 : Matrix n1 n2 ℂ)\n    (W2 : Matrix n2 n0 ℂ) (D0 : Matrix n0 n0 ℂ) (D1 : Matrix n1 n1 ℂ)\n    (D2 : Matrix n2 n2 ℂ) : 0 ≤ energy W0 W1 W2 D0 D1 D2 :=\n  add_nonneg (add_nonneg (rowCost_supported_nonneg _ _) (rowCost_supported_nonneg _ _))\n    (rowCost_supported_nonneg _ _)\n\nomit [DecidableEq n0] [DecidableEq n1] [DecidableEq n2] in\nlemma tau_phase (W0 : Matrix n0 n1 ℂ) (W1 : Matrix n1 n2 ℂ)\n    (W2 : Matrix n2 n0 ℂ) (D0 : Matrix n0 n0 ℂ) (D1 : Matrix n1 n1 ℂ)\n    (D2 : Matrix n2 n2 ℂ) (z : ℂ) :\n    tau (z • W0) W1 W2 D0 D1 D2 = z * tau W0 W1 W2 D0 D1 D2 := by\n  simp [tau, Matrix.mul_smul, Matrix.smul_mul, smul_eq_mul]\n\nlemma energy_phase (W0 : Matrix n0 n1 ℂ) (W1 : Matrix n1 n2 ℂ)\n    (W2 : Matrix n2 n0 ℂ) (D0 : Matrix n0 n0 ℂ) (D1 : Matrix n1 n1 ℂ)\n    (D2 : Matrix n2 n2 ℂ) (z : ℂ) (hz : ‖z‖ = 1) :\n    energy (z • W0) W1 W2 D0 D1 D2 = energy W0 W1 W2 D0 D1 D2 := by\n  have h0 : rowCost (fromCols (z • W0) W2ᴴ) D0 =\n      rowCost (fromCols W0 W2ᴴ) D0 := by\n    simpa using rowCost_fromCols_phase W0 W2ᴴ D0 z 1 hz norm_one\n  have h1 : rowCost (fromCols W1 (z • W0)ᴴ) D1 =\n      rowCost (fromCols W1 W0ᴴ) D1 := by\n    simpa [Matrix.conjTranspose_smul] using\n      rowCost_fromCols_phase W1 W0ᴴ D1 1 (star z) norm_one (by simpa using hz)\n  simp only [energy, h0, h1]\n\n/-- The complete mixed trace estimate. No dimension equality, nonemptiness,\ninvertibility, sign, diagonal-coordinate, or phase hypothesis is imposed. -/\ntheorem mixed_trace_estimate\n    (W0 : Matrix n0 n1 ℂ) (W1 : Matrix n1 n2 ℂ) (W2 : Matrix n2 n0 ℂ)\n    (D0 : Matrix n0 n0 ℂ) (D1 : Matrix n1 n1 ℂ) (D2 : Matrix n2 n2 ℂ)\n    (h0 : D0.IsHermitian) (h1 : D1.IsHermitian) (h2 : D2.IsHermitian) :\n    let R0 := Matrix.fromCols W0 W2ᴴ\n    let R1 := Matrix.fromCols W1 W0ᴴ\n    let R2 := Matrix.fromCols W2 W1ᴴ\n    ‖Matrix.trace (D0 * W0 * D1 * W1 * D2 * W2)‖ ≤\n      (5 / 3 : ℝ) *\n        max ‖Matrix.toEuclideanCLM (n := n0) (𝕜 := ℂ) D0‖\n          (max ‖Matrix.toEuclideanCLM (n := n1) (𝕜 := ℂ) D1‖\n            ‖Matrix.toEuclideanCLM (n := n2) (𝕜 := ℂ) D2‖) *\n        (SharedTraceHessian.b (Matrix.posSemidef_conjTranspose_mul_self R0) (R0ᴴ * D0 * R0) +\n          SharedTraceHessian.b (Matrix.posSemidef_conjTranspose_mul_self R1) (R1ᴴ * D1 * R1) +\n          SharedTraceHessian.b (Matrix.posSemidef_conjTranspose_mul_self R2) (R2ᴴ * D2 * R2)) := by\n  change ‖tau W0 W1 W2 D0 D1 D2‖ ≤\n    (5 / 3 : ℝ) * Dstar D0 D1 D2 * energy W0 W1 W2 D0 D1 D2\n  by_cases ht : tau W0 W1 W2 D0 D1 D2 = 0\n  · rw [ht, norm_zero]\n    have hd : 0 ≤ Dstar D0 D1 D2 :=\n      (norm_nonneg (Matrix.toEuclideanCLM (n := n0) (𝕜 := ℂ) D0)).trans (le_max_left _ _)\n    exact mul_nonneg (mul_nonneg (by norm_num) hd) (energy_nonneg W0 W1 W2 D0 D1 D2)\n  · obtain ⟨z, hz, hzt⟩ := exists_aligning_phase (tau W0 W1 W2 D0 D1 D2) ht\n    have h := real_trace_bound (z • W0) W1 W2 D0 D1 D2 h0 h1 h2\n    rw [energy_phase W0 W1 W2 D0 D1 D2 z hz, tau_phase, hzt, Complex.ofReal_re] at h\n    exact h\n\nend SharedTrace\n\n#check SharedTrace.mixed_trace_estimate\n#print axioms SharedTrace.mixed_trace_estimate\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/certificates/shared_trace/statement_fidelity.md",
+    "text": "# Statement fidelity: the complete shared mixed-trace inequality\n\nThe declaration described here is `SharedTrace.mixed_trace_estimate` in\n`Main.lean`. Its conclusion is the full complex absolute-value inequality\nlabelled `lem:mixed-trace` in the maximal and annular manuscripts. The dyadic\nmanuscript's `prop:trace` is the real symmetric contraction specialization.\nThis document does not identify a proof of the matrix assertion with a proof\nof any triangular Hilbert transform estimate.\n\n## Objects and quantifiers\n\nThe theorem quantifies over three independently arbitrary types `n0`, `n1`,\nand `n2`, each with `Fintype` and `DecidableEq`, and over\n\n- `W0 : Matrix n0 n1 Complex`, `W1 : Matrix n1 n2 Complex`,\n  `W2 : Matrix n2 n0 Complex`;\n- square matrices `D0`, `D1`, `D2` on their respective vertex types;\n- exactly the three hypotheses `D0.IsHermitian`, `D1.IsHermitian`,\n  and `D2.IsHermitian`.\n\nThere is no assumption of equal cardinalities, nonempty index types,\ninvertibility, positive eigenvalues, diagonal insertions, real entries,\npositive insertions, or a prescribed complex phase. A rectangular matrix\nrepresents the map from its column space to its row space. Choosing\northonormal coordinates identifies these objects with the finite-dimensional\ncomplex Hilbert spaces and maps in the manuscripts. The formal theorem is\nstated in coordinates, not using an additional quantifier over abstract\nHilbert spaces.\n\nThe three `let` bindings in the conclusion are exactly\n\n\\[\n R_0=[W_0,W_2^*],\\qquad R_1=[W_1,W_0^*],\\qquad R_2=[W_2,W_1^*].\n\\]\n\nTheir column types are respectively `n1 + n2`, `n2 + n0`, and `n0 + n1`\n(disjoint sums of types). No padding or dimension identification is a\nhypothesis of the theorem.\n\n## Norm, cost, and conclusion\n\nThe left side is\n`norm (Matrix.trace (D0 * W0 * D1 * W1 * D2 * W2))`.\nFor a complex scalar this norm is its modulus, not its real part.\n\nEvery operator norm on the right is explicitly the norm of\n`Matrix.toEuclideanCLM Dv`, the induced norm on complex Euclidean space.\nThe default entrywise matrix norm is not substituted for it. The nested\n`max` is precisely \\(D_*=\\max_v\\|D_v\\|_{\\mathrm{op}}\\).\n\nFor \\(P=R^*R\\), `SharedTraceHessian.b` is defined by a canonical\northonormal spectral decomposition of \\(P\\):\n\n\\[\n b_P(K)=\\frac32\\sum_{i,j}\n \\frac{|(U^*KU)_{ij}|^2}{\\sqrt{p_i}+\\sqrt{p_j}}.\n\\]\n\nReal division by zero in this initial definition is zero.\nThis convention alone is **not** being used to reinterpret the manuscript's\nsupported Hessian. `SharedTraceHessian.supported_gram` proves that both\n\\(R^*DR\\) and its adjoint annihilate \\(\\ker(R^*R)\\), even for a\nnon-Hermitian \\(D\\). `SharedTraceHessian.b_spectral_positive` then proves\nthat, on these supported directions, the displayed sum equals exactly\nthe sum restricted to \\(p_i>0,p_j>0\\). In particular all entries touching\nthe kernel vanish, and \\(b_0(0)=0\\).\n`SharedTraceAssembly.rowCost_spectral_positive` specializes this equality\nto every term in the final theorem. Thus the costs are exactly the\nmanuscript's costs, not regularized or alternative quadratic forms.\n\nThe coefficient in the conclusion is the real number \\(5/3\\).\nThe complete right side is\n\\[\n \\frac53D_*\\left[\n b_{R_0^*R_0}(R_0^*D_0R_0)+\n b_{R_1^*R_1}(R_1^*D_1R_1)+\n b_{R_2^*R_2}(R_2^*D_2R_2)\\right].\n\\]\n\n## Load-bearing declarations actually proved\n\n`SharedTraceHessian.sqrt_mono` proves finite-dimensional square-root order,\nincluding singular endpoints. `b_antitone` proves order comparison for\narbitrary supported complex directions; `b_three` proves the three-vector\nquadratic inequality. `common_metric_three` combines them.\n`b_isometry` and `rowCost_isometry` prove the rectangular padding\nidentifications, which `triangle_common_metric` applies to the actual stars.\n\n`SharedTraceAssembly.cubicSum_bound_unsorted` uses finite-set induction\nchoosing a largest absolute eigenvalue. It has no sorted-spectrum hypothesis.\n`b_diagonal_square`, `hermitian_cubic_bound`, and\n`hermitian_cubic_rowCost` supply the complete arbitrary-spectrum cubic bound.\nThey do not assume the disputed common-metric comparison.\n\n`triangle_trace_cube` proves that the two orientations give\n\\(6\\operatorname{Re}\\tau\\), where\n\\(\\tau=\\operatorname{tr}(D_0W_0D_1W_1D_2W_2)\\).\n`rowCost_fromCols_phase`, `exists_aligning_phase`, `tau_phase`, and\n`energy_phase` prove the one-edge phase argument used by the final theorem.\nThe theorem does not assume \\(\\tau\\) is real.\n\nThe local source dependencies, rebuilt by `verify.py`, are\n`cubic/SpectralCubic.lean`, `hessian/Hessian.lean`,\n`assembly/General.lean`, `assembly/Blocks.lean`, `assembly/Trace.lean`,\n`assembly/Phase.lean`, and `assembly/Projections.lean`.\nThe final declaration's transitive axiom report must contain only\n`propext`, `Classical.choice`, and `Quot.sound`.\n\n## Limits of the certification\n\nThe compiler checks the encoded theorem and its proof, not this document's\ninterpretation. An independent Reviewer must check this interpretation.\nThe formalization does not prove that the algebraically defined cost is the\nsecond derivative of \\(\\operatorname{tr}(P^{3/2})\\) in an analytic calculus;\nthe manuscript defines the same cost by its spectral/inverse-Lyapunov formula.\nIt does not prove heat identities, mask bounds, dyadic conditional averaging,\nfrequency-block estimates, density statements, maximal estimates, or\nannular variation bounds. It neither refutes the manuscripts nor establishes\nnovelty of their mathematical inequality or optimality of the constant.\nThe exact finite fixtures in `verify.py` are calibration checks, not the\nuniversal proof.\n"
+  },
+  "subject": {
+    "content_hash": "0bda42c473e39f14d9f76c0c79fd602db950136e90e36816157c66cd0425f0f4",
+    "kind": "claim",
+    "subject_id": "C_SHARED_MIXED_TRACE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

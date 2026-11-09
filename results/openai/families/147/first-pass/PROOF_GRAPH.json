@@ -1,0 +1,131 @@
+{
+  "goal": "C9000147",
+  "routes": [
+    {
+      "name": "R147_ENDPOINT_CORE",
+      "status": "current",
+      "evidence": "research/finite_chain_audit/report.md"
+    },
+    {
+      "name": "R147_MODEL_REDUCTION",
+      "status": "current",
+      "evidence": "research/finite_chain_audit/exact_certificate.json"
+    },
+    {
+      "name": "R147_LIMIT_ONLY",
+      "status": "ruled_out",
+      "reason": "Limiting power sums alone do not establish convergence, continuation to the common-coordinate edge, or function-field specialization.",
+      "evidence": "research/finite_chain_audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000147": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 147 (The near-boundary Birkhoff conjecture.; papers: Continuous Phase Foliations Create Analytic Caustic Collars; Rigidity of Smooth Billiards with a Continuous Caustic Collar; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C147_MAIN_RIGIDITY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C147_MAIN_RIGIDITY": {
+      "statement": "A smooth positively curved planar billiard with the manuscript's continuous caustic collar is an ellipse.",
+      "status": "open",
+      "depends_on": ["C147_ANALYTIC_COLLAR", "C147_NO_PATCH", "C147_GLOBAL_WALL_EXCLUSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rigidity-of-Smooth-Billiards-with-a-Continuous-Caustic-Collar-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "C147_ANALYTIC_COLLAR": {
+      "statement": "The collar hypotheses give the real-symmetric jointly holomorphic glancing parametrization and area coefficient asserted in Sections 2 and 3.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rigidity-of-Smooth-Billiards-with-a-Continuous-Caustic-Collar-September-24-2026/build/sections/03-joint.tex"]
+    },
+    "C147_NO_PATCH": {
+      "statement": "A finite first meromorphic continuation wall has no joint patch, as asserted in thm:no-patch.",
+      "status": "open",
+      "depends_on": ["C147_LENS_COROLLARY", "C147_WIDTH_MONODROMY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rigidity-of-Smooth-Billiards-with-a-Continuous-Caustic-Collar-September-24-2026/build/sections/04-continuation.tex"]
+    },
+    "C147_WIDTH_MONODROMY": {
+      "statement": "The product-continuation, width-comparison and monodromy arguments after endpoint determination are valid with their stated hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rigidity-of-Smooth-Billiards-with-a-Continuous-Caustic-Collar-September-24-2026/build/sections/04-continuation.tex"]
+    },
+    "C147_GLOBAL_WALL_EXCLUSION": {
+      "statement": "The shape, growth, probability and sign arguments in Sections 5 through 11 exclude the remaining nonelliptic alternatives.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rigidity-of-Smooth-Billiards-with-a-Continuous-Caustic-Collar-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "C147_LENS_COROLLARY": {
+      "statement": "Under the jointly analytic glancing hypotheses, thm:lens-lines and thm:lens-points follow from finite-chain core isolation and the endpoint momentum identities.",
+      "status": "open",
+      "depends_on": ["C147_ANALYTIC_COLLAR", "C147_FC_ISOLATION", "C147_POINT_DATA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/finite_chain_audit/report.md"]
+    },
+    "C147_FC_ISOLATION": {
+      "statement": "For every fixed k>=2, the positive coalescing stationary branch of a local analytic strictly curved billiard has an isolated finite mirror core under the specified line or mixed point critical-action jet data, even against complex formal profile deformations; the core is algebraic over the data field.",
+      "status": "open",
+      "depends_on": ["C147_FINITE_JETS", "C147_WEB_EDGE", "C147_SCALED_OBSTRUCTION", "C147_FIELD_LIFT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/finite_chain_audit/report.md", "research/finite_chain_audit/exact_certificate.json"]
+    },
+    "C147_FINITE_JETS": {
+      "statement": "Vandermonde elimination and fixed nonzero denominators reduce the infinite matching equations to a finite localized algebraic core, without assuming convergence of the perturbed profiles.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/finite_chain_audit/report.md", "research/finite_chain_audit/exact_certificate.json", "research/finite_chain_audit/literature/stacks_noetherian.txt"]
+    },
+    "C147_WEB_EDGE": {
+      "statement": "The weighted finite-web system makes every formal variation coefficient analytic on the positive rectangle and extendible to the common-coordinate edge; no full deformation-series convergence is assumed.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/finite_chain_audit/report.md"]
+    },
+    "C147_SCALED_OBSTRUCTION": {
+      "statement": "The coefficientwise scaled line and point stationary limits exclude every nonzero complex leading profile variation for arbitrary k, not merely real directions or bounded examples.",
+      "status": "open",
+      "depends_on": ["C147_WEB_EDGE", "C147_SHARP_MODEL_OBSTRUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/finite_chain_audit/report.md", "research/finite_chain_audit/exact_certificate.json"]
+    },
+    "C147_FIELD_LIFT": {
+      "statement": "An injective evaluation of a countable field containing both endpoint data and actual core lifts isolated scalar algebraicity to algebraicity of meromorphic germs; separability handles derivatives.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/finite_chain_audit/report.md", "research/finite_chain_audit/literature/stacks_nullstellensatz.txt", "research/finite_chain_audit/literature/stacks_normalization.txt"]
+    },
+    "C147_SHARP_MODEL_OBSTRUCTION": {
+      "statement": "For each k>=2 the scaled line stationary model is forced to have zero profile variation by vanishing value coefficients of degrees 1 through k, and the point model by vanishing coefficients of degrees 2 through k; complex roots-of-unity directions make degree k sharp in both models.",
+      "status": "open",
+      "depends_on": ["C147_MODEL_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/finite_chain_audit/report.md", "research/finite_chain_audit/exact_certificate.json", "research/finite_chain_audit/verify.py"]
+    },
+    "C147_MODEL_REDUCTION": {
+      "statement": "For every k>=2 and nonzero r, the formal stationary value of the scaled point action with f_0=f_k=0 equals that of the scaled line cubic action with parameter R=r^2 and k coefficients c_j=-r*f_j (0<=j<k); its point steps are the cyclic adjacent averages of the line steps. No invertibility of the averaging map on arbitrary steps is assumed.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/finite_chain_audit/report.md", "research/finite_chain_audit/exact_certificate.json", "research/finite_chain_audit/verify.py"]
+    },
+    "C147_POINT_DATA": {
+      "statement": "With the manuscript's line normal convention, the mixed length derivative has the stated sign and equals the pulled-back line area form, including its half-shift; endpoint positions plus A(t) recover the required mixed data.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/finite_chain_audit/report.md", "research/finite_chain_audit/exact_certificate.json"]
+    }
+  }
+}

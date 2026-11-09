@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_UCR_CORE-270c6ba3448f",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/275/first-pass/unit_charge_replacement/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/275/first-pass/unit_charge_replacement/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15808,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/275/first-pass/unit_charge_replacement/lean/Main.lean",
+    "source_sha256": "223ded121b31ab60e4ae0cf472a806920a18147150c082d731c3f34f75fd03d9",
+    "statement_fidelity": "families/275/first-pass/unit_charge_replacement/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "dd6c9f56ddba26328b7fe86230e04e4e3ba78dd1f76242798f4d10ae2f57524d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'UnitChargeReplacement.tensor_cubic_exact' depends on axioms: [propext, Classical.choice, Quot.sound]\n'UnitChargeReplacement.normalized_complement_bound' depends on axioms: [propext, Classical.choice, Quot.sound]\n'UnitChargeReplacement.rounding_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/unit_charge_replacement/lean/Main.lean",
+    "text": "import Mathlib\n\nnoncomputable section\n\nnamespace UnitChargeReplacement\n\ndef intervalMoment (p : ℕ) : ℝ :=\n  if p % 2 = 0 then 1 / (p + 1 : ℝ) else 0\n\ndef twoPointMoment (t : ℝ) (p : ℕ) : ℝ :=\n  (t ^ p + (-t) ^ p) / 2\n\ntheorem twoPoint_exact (t : ℝ) (ht : t ^ 2 = (1 : ℝ) / 3)\n    (p : ℕ) (hp : p ≤ 3) :\n    twoPointMoment t p = intervalMoment p := by\n  interval_cases p <;> norm_num [twoPointMoment, intervalMoment] <;> nlinarith [ht]\n\ndef tensorRule (t : ℝ) (a b c : ℕ) : ℝ :=\n  (t ^ a * t ^ b * t ^ c\n    + t ^ a * t ^ b * (-t) ^ c\n    + t ^ a * (-t) ^ b * t ^ c\n    + t ^ a * (-t) ^ b * (-t) ^ c\n    + (-t) ^ a * t ^ b * t ^ c\n    + (-t) ^ a * t ^ b * (-t) ^ c\n    + (-t) ^ a * (-t) ^ b * t ^ c\n    + (-t) ^ a * (-t) ^ b * (-t) ^ c) / 8\n\ntheorem tensor_factorization (t : ℝ) (a b c : ℕ) :\n    tensorRule t a b c =\n      twoPointMoment t a * twoPointMoment t b * twoPointMoment t c := by\n  unfold tensorRule twoPointMoment\n  ring\n\ntheorem tensor_cubic_exact (t : ℝ) (ht : t ^ 2 = (1 : ℝ) / 3)\n    (a b c : ℕ) (ha : a ≤ 3) (hb : b ≤ 3) (hc : c ≤ 3) :\n    tensorRule t a b c = intervalMoment a * intervalMoment b * intervalMoment c := by\n  rw [tensor_factorization, twoPoint_exact t ht a ha,\n    twoPoint_exact t ht b hb, twoPoint_exact t ht c hc]\n\ntheorem square_completion_identity (alpha beta x y : ℝ) (ha : 0 < alpha) :\n    alpha * y ^ 2 - 2 * beta * x * y + beta ^ 2 / alpha * x ^ 2 =\n      (alpha * y - beta * x) ^ 2 / alpha := by\n  field_simp [ne_of_gt ha]\n  ring\n\ntheorem normalized_complement_bound (alpha beta x y energy : ℝ)\n    (ha : 0 < alpha) (hx : x ^ 2 ≤ 1)\n    (he : alpha * y ^ 2 - 2 * beta * x * y ≤ energy) :\n    -(beta ^ 2 / alpha) ≤ energy := by\n  have hsq : 0 ≤ (alpha * y - beta * x) ^ 2 / alpha :=\n    div_nonneg (sq_nonneg _) (le_of_lt ha)\n  rw [← square_completion_identity alpha beta x y ha] at hsq\n  have hcoef : 0 ≤ beta ^ 2 / alpha :=\n    div_nonneg (sq_nonneg _) (le_of_lt ha)\n  have hscale : 0 ≤ beta ^ 2 / alpha * (1 - x ^ 2) :=\n    mul_nonneg hcoef (sub_nonneg.mpr hx)\n  nlinarith only [he, hsq, hscale]\n\ntheorem rounding_denominator (H S : ℝ) (hH : 0 ≤ H) (hS : 0 ≤ S) :\n    H ^ 3 * S ^ 2 ≤ (1 + H) ^ 3 * (1 + S) ^ 2 := by\n  have hcube : H ^ 3 ≤ (1 + H) ^ 3 := by\n    gcongr\n    linarith\n  have hsquare : S ^ 2 ≤ (1 + S) ^ 2 := by\n    nlinarith\n  exact mul_le_mul hcube hsquare (sq_nonneg S) (by positivity)\n\ntheorem rounding_ratio (H S : ℝ) (hH : 0 < H) (hS : 0 < S) :\n    H ^ 2 * S / ((1 + H) ^ 3 * (1 + S) ^ 2) ≤ 1 / (H * S) := by\n  apply (div_le_div_iff₀ (by positivity) (by positivity)).2\n  calc\n    H ^ 2 * S * (H * S) = H ^ 3 * S ^ 2 := by ring\n    _ ≤ (1 + H) ^ 3 * (1 + S) ^ 2 :=\n      rounding_denominator H S (le_of_lt hH) (le_of_lt hS)\n    _ = 1 * ((1 + H) ^ 3 * (1 + S) ^ 2) := (one_mul _).symm\n\n#print axioms tensor_cubic_exact\n#print axioms normalized_complement_bound\n#print axioms rounding_ratio\n\nend UnitChargeReplacement\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/unit_charge_replacement/lean/statement_fidelity.md",
+    "text": "# Statement fidelity for C_UCR_CORE\n\nThe declarations are in namespace `UnitChargeReplacement` in `Main.lean`.\nThey formalize exact algebraic components, not the analytic Coulomb theorem.\n\n`twoPoint_exact` quantifies over every real `t` with `t^2 = 1/3` and\nevery natural `p <= 3`. The average of the powers at `t` and `-t`\nequals `intervalMoment p`, which is defined as zero for odd powers and\n`1/(p+1)` for even powers. These are the normalized Lebesgue moments\nof `[-1,1]`; identifying them with integrals is a mathematical reading,\nnot a measure-theory theorem in this file. Either sign of `t` gives\nthe same two nodes; zero cannot satisfy the hypothesis.\n\n`tensorRule` explicitly lists all eight triples of these two nodes,\neach with weight `1/8`. `tensor_factorization` is its exact product\nfactorization. `tensor_cubic_exact` quantifies over all natural\n`a,b,c <= 3` individually and all such real `t`. Its conclusion equates\nthe eight-node monomial average to the product of the interval moments.\nThis includes every monomial of total degree at most three and also\nsome higher-total-degree monomials. Affine change to a grid cube,\nTaylor's theorem, and the transported integrand are not formalized.\n\n`square_completion_identity` quantifies over arbitrary real\n`alpha,beta,x,y` with `alpha > 0`. Its conclusion is the exact identity\nused in (K) of `proof.md`. `normalized_complement_bound` additionally\nquantifies over an arbitrary real `energy`, assumes `x^2 <= 1` and\n`alpha*y^2 - 2*beta*x*y <= energy`, and concludes\n`-(beta^2/alpha) <= energy`. No sign condition on `beta,x,y` is needed;\nthe intended norms are a special case. Neither a Hilbert-space\ndecomposition nor the analytic block estimates are assumptions smuggled\ninto the formal statement: they are absent from this algebraic theorem\nand must be proved separately before it is applicable.\n\n`rounding_denominator` quantifies over all nonnegative real `H,S` and\nproves `H^3*S^2 <= (1+H)^3*(1+S)^2`.\n`rounding_ratio` assumes both are strictly positive and proves\n`H^2*S/((1+H)^3*(1+S)^2) <= 1/(H*S)`. This is the denominator\ninequality in (H). The factors `8*rho/lambda^3`, the ceiling\n`H=ceil(lambda^5)`, `S>=1`, and the Coulomb/Hardy rounding bound\nare not formalized.\n\nThere are no analytic claims, QMA-hardness claims, new axioms, `sorry`,\nor `admit` in the formal source. A successful compiler run certifies\nC_UCR_CORE alone. The field differentiation, uniform sums, Sobolev\narguments, flow construction, and upstream inputs (6) and (M) remain\noutside the formalization and require independent mathematical review.\n"
+  },
+  "subject": {
+    "content_hash": "131ba1165d36cb75ce1e6b4457d84f28f29e0ab4e781734fb08cbc4a91c1a195",
+    "kind": "claim",
+    "subject_id": "C_UCR_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-CORE074-c942b86fdf78",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/074/first-pass/two_color_matching/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15822,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/074/first-pass/two_color_matching/lean/Main.lean",
+    "source_sha256": "06c2f639d9bbed2ccf1e7806c6f4343f9540d2310bf0cbdc75648963bbc3f812",
+    "statement_fidelity": "families/074/first-pass/two_color_matching/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "cf0899804c20dafb99344a416c6c06a7f7fb42880c65f6cba7aabd8ed1a5357a",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/074/first-pass/two_color_matching/lean/Main.lean:28:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (Matrix.transpose ?M).det\nin the target expression\n  (∏ i, (↑(↑i).factorial)⁻¹) * ((∏ i, -g i) * Matrix.det fun j p => x p ^ ↑j) =\n    ((∏ j, (↑(↑j).factorial)⁻¹) * ∏ p, -g p) * ∏ i, ∏ j ∈ Finset.Ioi i, (x j - x i)\n\nm : ℕ\ng x : Fin m → ℝ\nB : Matrix (Fin m) (Fin m) ℝ := Matrix.of fun j p => -g p * (Matrix.vandermonde x).transpose j p\nh : ascendingJacobian m g x = Matrix.of fun j p => (↑(↑j).factorial)⁻¹ * B j p\n⊢ (∏ i, (↑(↑i).factorial)⁻¹) * ((∏ i, -g i) * Matrix.det fun j p => x p ^ ↑j) =\n    ((∏ j, (↑(↑j).factorial)⁻¹) * ∏ p, -g p) * ∏ i, ∏ j ∈ Finset.Ioi i, (x j - x i)\n\nNote: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    fun j p => x p ^ ↑j\n  has type\n    Fin m → Fin m → ℝ\n  but is expected to have type\n    Matrix (Fin m) (Fin m) ℝ\n  in the application\n    Matrix.det fun j p => x p ^ ↑j\nfamilies/074/first-pass/two_color_matching/lean/Main.lean:25:58: warning: This simp argument is unused:\n  mul_left_comm\n\nHint: Omit it from the simp argument list.\n  simp [ascendingJacobian, B, div_eq_mul_inv, mul_comm,̵ ̵m̵u̵l̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nfamilies/074/first-pass/two_color_matching/lean/Main.lean:69:42: warning: `mul_le_mul_right'` has been deprecated: Use `mul_le_mul_left` instead\nfamilies/074/first-pass/two_color_matching/lean/Main.lean:84:46: warning: `mul_le_mul_left'` has been deprecated: Use `mul_le_mul_right` instead\nfamilies/074/first-pass/two_color_matching/lean/Main.lean:88:10: error: Type mismatch\n  hdom h ?m.144\nhas type\n  ∑ a, q h a * ?m.144 (project a) ≤ ∑ b, w b * ?m.144 b\nbut is expected to have type\n  ∑ a, q h a * referenceIntegral w test n (List.map project h ++ [project a]) ≤\n    ∑ b, w b * referenceIntegral w test n (List.map project h ++ [b])\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/two_color_matching/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace TwoColorMatching\n\nnoncomputable section\n\ndef ascendingJacobian (m : Nat) (g x : Fin m → ℝ) : Matrix (Fin m) (Fin m) ℝ :=\n  fun j p => -(g p) * x p ^ j.val / (j.val.factorial : ℝ)\n\ndef endpointJacobian (m : Nat) (g x : Fin m → ℝ) : Matrix (Fin m) (Fin m) ℝ :=\n  (ascendingJacobian m g x).submatrix Fin.rev id\n\ntheorem ascending_det (m : Nat) (g x : Fin m → ℝ) :\n    (ascendingJacobian m g x).det =\n      (∏ j : Fin m, (j.val.factorial : ℝ)⁻¹) *\n      (∏ p : Fin m, -(g p)) *\n      (∏ i : Fin m, ∏ j ∈ Finset.Ioi i, (x j - x i)) := by\n  let B : Matrix (Fin m) (Fin m) ℝ :=\n    Matrix.of fun j p => -(g p) * (Matrix.vandermonde x).transpose j p\n  have h : ascendingJacobian m g x =\n      Matrix.of (fun j p => (j.val.factorial : ℝ)⁻¹ * B j p) := by\n    ext j p\n    simp [ascendingJacobian, B, div_eq_mul_inv, mul_comm, mul_left_comm]\n  rw [h, Matrix.det_mul_column]\n  dsimp [B]\n  rw [Matrix.det_mul_row, Matrix.det_transpose, Matrix.det_vandermonde]\n  ring\n\ntheorem endpoint_abs_det (m : Nat) (g x : Fin m → ℝ) :\n    |(endpointJacobian m g x).det| =\n      (∏ j : Fin m, (j.val.factorial : ℝ)⁻¹) *\n      (∏ p : Fin m, |g p|) *\n      (∏ i : Fin m, ∏ j ∈ Finset.Ioi i, |x j - x i|) := by\n  have h :\n      |(endpointJacobian m g x).det| = |(ascendingJacobian m g x).det| := by\n    exact Matrix.abs_det_submatrix_equiv_equiv\n      Fin.revPerm (Equiv.refl (Fin m)) (ascendingJacobian m g x)\n  rw [h, ascending_det]\n  simp only [abs_mul, Finset.abs_prod, abs_inv, abs_neg, Nat.abs_cast]\n\nvariable {A B : Type*} [Fintype A] [Fintype B] [DecidableEq B]\n\ndef hiddenIntegral (q : List A → A → NNReal) (project : A → B)\n    (test : List B → NNReal) : Nat → List A → NNReal\n  | 0, h => test (h.map project)\n  | n + 1, h => ∑ a : A, q h a * hiddenIntegral q project test n (h ++ [a])\n\ndef referenceIntegral (w : B → NNReal) (test : List B → NNReal) :\n    Nat → List B → NNReal\n  | 0, h => test h\n  | n + 1, h => ∑ b : B, w b * referenceIntegral w test n (h ++ [b])\n\ntheorem fiber_implies_test (q : A → NNReal) (project : A → B) (w : B → NNReal)\n    (hdom : ∀ b, (∑ a : A, if project a = b then q a else 0) ≤ w b)\n    (test : B → NNReal) :\n    (∑ a : A, q a * test (project a)) ≤ ∑ b : B, w b * test b := by\n  classical\n  calc\n    (∑ a : A, q a * test (project a)) =\n        ∑ b : B, (∑ a : A, if project a = b then q a else 0) * test b := by\n      simp only [Finset.sum_mul]\n      rw [Finset.sum_comm]\n      apply Finset.sum_congr rfl\n      intro a _\n      simp [ite_mul]\n    _ ≤ ∑ b : B, w b * test b := by\n      exact Finset.sum_le_sum (fun b _ => mul_le_mul_right' (hdom b) (test b))\n\ntheorem adaptive_domination\n    (q : List A → A → NNReal) (project : A → B) (w : B → NNReal)\n    (hdom : ∀ h (test : B → NNReal),\n      (∑ a : A, q h a * test (project a)) ≤ ∑ b : B, w b * test b)\n    (test : List B → NNReal) (n : Nat) (h : List A) :\n    hiddenIntegral q project test n h ≤ referenceIntegral w test n (h.map project) := by\n  induction n generalizing h with\n  | zero => exact le_rfl\n  | succ n ih =>\n      simp only [hiddenIntegral, referenceIntegral]\n      calc\n        (∑ a : A, q h a * hiddenIntegral q project test n (h ++ [a])) ≤\n            ∑ a : A, q h a * referenceIntegral w test n ((h ++ [a]).map project) := by\n          exact Finset.sum_le_sum (fun a _ => mul_le_mul_left' (ih (h ++ [a])) (q h a))\n        _ = ∑ a : A, q h a * referenceIntegral w test n (h.map project ++ [project a]) := by\n          simp only [List.map_append, List.map_cons, List.map_nil]\n        _ ≤ ∑ b : B, w b * referenceIntegral w test n (h.map project ++ [b]) :=\n          hdom h _\n\ntheorem adaptive_domination_from_fibers\n    (q : List A → A → NNReal) (project : A → B) (w : B → NNReal)\n    (hdom : ∀ h b, (∑ a : A, if project a = b then q h a else 0) ≤ w b)\n    (test : List B → NNReal) (n : Nat) (h : List A) :\n    hiddenIntegral q project test n h ≤ referenceIntegral w test n (h.map project) := by\n  apply adaptive_domination q project w _ test n h\n  intro past f\n  exact fiber_implies_test (q past) project w (hdom past) f\n\nend\n\nend TwoColorMatching\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/two_color_matching/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: finite and algebraic core of two-color matching\n\n`TwoColorMatching.endpoint_abs_det` is universally quantified over every\nnatural number `m` and arbitrary real vectors `g,x : Fin m -> Real`. Its\nmatrix has entry\n\n    -g[p] * x[p]^(m-1-j) / (m-1-j)!\n\nin row `j`, column `p`; row reversal is `Fin.rev`. The theorem states the\nexact absolute determinant, not merely its nonvanishing:\n\n    product_j (j!)^(-1) * product_p |g[p]|\n      * product_(i<j) |x[j]-x[i]|.\n\nFor the manuscript's internal switching variables (numbered from one),\nset `g[p]=U[p+1]-U[p]` and `x[p]=s-s[p]`. Then\n`x[j]-x[i]=s[i]-s[j]`. Adjoining the final-time coordinate adds a unit\nblock and leaves this absolute determinant unchanged. No ordering of the\nswitching times is assumed. The zero-dimensional case also compiles.\n`ascending_det` supplies the signed identity before row reversal.\n\n`TwoColorMatching.adaptive_domination_from_fibers` is a separate finite\nhidden-history theorem. `A` is any finite hidden-outcome type and `B` any\nfinite displayed-outcome type. The kernel `q` can depend on the complete\nlist of past hidden outcomes. It need not have total mass one, so killed\nor subprobability kernels are included. `project : A -> B` reveals only\nthe displayed data. The same nonnegative reference weight `w` is used at\nevery history. The hypothesis bounds the total `q`-weight in each fiber\nof `project` by `w[b]`. For every natural path length, every initial\nhidden history, and every nonnegative test of the displayed history, the\ntheorem bounds the actual recursive hidden integral by the recursive\nproduct-reference integral. There is no conditioning on final survival\nand no independence hypothesis on `q`.\n\n`fiber_implies_test` and `adaptive_domination` give the fiber-to-test\ntranslation and the backward-iteration proof. Nonnegative reals are\nused so the kernel/test positivity hypotheses are intrinsic.\n\nThese are precisely algebraic and finite-kernel components of\n`a02:endpoint-jacobian` and the backward iteration following\n`a02:full-past-kernel`, respectively. The compiler does **not** verify the\nexistence of the common control measure in the manuscript's continuous\nexperiment, Taylor errors, entropy selection, successful-path mass,\nchange of variables, target volumes, the scale limits, or the Kakeya\ntheorems. Those are proved in `../report.md` and require independent\nmathematical review. In particular this source must not be recorded as\na formal proof of the complete matching lemma.\n"
+  },
+  "subject": {
+    "content_hash": "6ea267ca29eb9561130dbfb245c360c1d5cf375851a82f7c2754d3bdc129f7f7",
+    "kind": "claim",
+    "subject_id": "CORE074"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

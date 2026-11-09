@@ -1,0 +1,151 @@
+{
+  "goal": "C9000356",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "routes": [
+    {
+      "name": "weak-hessian-reweighting",
+      "status": "current",
+      "evidence": "research/weak_hessian_audit/report.md"
+    },
+    {
+      "name": "identify-original-and-weighted-test-classes",
+      "status": "ruled_out",
+      "reason": "The admissible bounded Lipschitz F=-abs(x)/(1+abs(x)) gives an original smooth compact test with a weighted generator jump, so the weighted test domain cannot be identified with the original one.",
+      "evidence": "research/weak_hessian_audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000356": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 356 (Gigli’s characterization of Alexandrov curvature.; papers: Gigli’s distributional curvature characterization of Alexandrov spaces; Weak Hessian bounds along every geodesic in RCD spaces; Lean status: Partially/Comparator formalized (lean/docs/356.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_W356_EVERY_GEODESIC"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_W356_ORIGINAL_CORE": {
+      "statement": "Original compact test core, heat regularization, and Lipschitz-multiplier Bochner calculus.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/weak_hessian_audit/report.md"]
+    },
+    "C_W356_GENERATOR": {
+      "statement": "Bounded Lipschitz reweighting preserves D(Delta) and its graph topology, with L=Delta+Gamma(V,.).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/weak_hessian_audit/report.md"]
+    },
+    "C_W356_RESOLVENT": {
+      "statement": "A bounded member of D(L) with bounded L is globally Lipschitz, using only the original heat resolvent.",
+      "status": "open",
+      "depends_on": ["C_W356_GENERATOR", "C_W356_ORIGINAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/weak_hessian_audit/report.md"]
+    },
+    "C_W356_CORE_BE": {
+      "statement": "The distributional Hessian hypothesis gives the correctly signed weighted core Bochner inequality.",
+      "status": "open",
+      "depends_on": ["C_W356_ORIGINAL_CORE", "C_W356_RESOLVENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/weak_hessian_audit/report.md"]
+    },
+    "C_W356_GRAPH_CLOSURE": {
+      "statement": "The three-term graph form extends continuously to D(L) and then to the full AGS BE domain.",
+      "status": "open",
+      "depends_on": ["C_W356_CORE_BE", "C_W356_GENERATOR", "C_W356_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/weak_hessian_audit/report.md"]
+    },
+    "C_W356_CONSTANT_RCD": {
+      "statement": "AGS Theorems 3.9, 3.14 and 4.17 yield the weighted RCD(inf k,infinity) bootstrap with the same metric.",
+      "status": "open",
+      "depends_on": ["C_W356_GRAPH_CLOSURE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/weak_hessian_audit/report.md"]
+    },
+    "C_W356_VARIABLE_CD": {
+      "statement": "Proposition weight:variable-cd: exp(lambda F)m satisfies CD(K-lambda G,infinity) for every lambda>0.",
+      "status": "open",
+      "depends_on": ["C_W356_CONSTANT_RCD", "C_W356_GRAPH_CLOSURE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/weak_hessian_audit/report.md"]
+    },
+    "C_W356_LOCALIZATION": {
+      "statement": "Shrinking endpoint balls and the large-lambda entropy inequality recover every prescribed strict interior subsegment.",
+      "status": "open",
+      "depends_on": ["C_W356_VARIABLE_CD"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/weak_hessian_audit/report.md"]
+    },
+    "C_W356_EVERY_GEODESIC": {
+      "statement": "Theorem weight:every-geodesic: (F o sigma)'' <= length(sigma)^2 G o sigma in distributions for every minimizing sigma.",
+      "status": "open",
+      "depends_on": ["C_W356_LOCALIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/weak_hessian_audit/report.md"]
+    },
+    "C_W356_FORMAL_CORE": {
+      "statement": "Abstract real inner-product-space Bochner graph-form closure and the energy-to-gradient convergence estimate, with exact scalar cancellations; not the full RCD theorem.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/weak_hessian_audit/lean/Main.lean",
+        "research/weak_hessian_audit/lean/statement_fidelity.md",
+        "research/weak_hessian_audit/lean/certificates/C_W356_FORMAL_CORE-8ac378dde3cdece8.json"
+      ]
+    },
+    "C_W356_CLASS_OBSTRUCTION": {
+      "statement": "An admissible bounded Lipschitz, non-L2 F on the infinite-measure line can satisfy the weak Hessian hypothesis while an original compact test function has a non-Sobolev weighted Laplacian. This confirms the manuscript warning, not a manuscript refutation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/weak_hessian_audit/report.md",
+        "research/weak_hessian_audit/exact_certificate.json"
+      ]
+    },
+    "C_G356_FORWARD": {
+      "statement": "Main-manuscript Alexandrov-to-distributional-curvature implication; outside this bounded analytic mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Giglis-distributional-curvature-characterization-of-Alexandrov-spaces-September-24-2026/build/sections/introduction.tex"]
+    },
+    "C_G356_INDEX": {
+      "statement": "Main-manuscript heat:index and its heat-regularized index estimates; outside this bounded analytic mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Giglis-distributional-curvature-characterization-of-Alexandrov-spaces-September-24-2026/build/sections/introduction.tex"]
+    },
+    "C_G356_HESSIAN": {
+      "statement": "Main-manuscript frames:hessian and pathwise-frame arguments; outside this bounded analytic mission.",
+      "status": "open",
+      "depends_on": ["C_G356_INDEX"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Giglis-distributional-curvature-characterization-of-Alexandrov-spaces-September-24-2026/build/sections/introduction.tex"]
+    },
+    "C_G356_COMPARISON": {
+      "statement": "Modified-distance functions and local-to-global comparison finish the main-manuscript reverse implication.",
+      "status": "open",
+      "depends_on": ["C_G356_HESSIAN", "C_W356_EVERY_GEODESIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Giglis-distributional-curvature-characterization-of-Alexandrov-spaces-September-24-2026/build/sections/comparison.tex"]
+    },
+    "C_G356_CHARACTERIZATION": {
+      "statement": "Main equivalence with exact H^n and the original global test classes; not certified by the companion bridge alone.",
+      "status": "open",
+      "depends_on": ["C_G356_FORWARD", "C_G356_COMPARISON"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Giglis-distributional-curvature-characterization-of-Alexandrov-spaces-September-24-2026/build/sections/introduction.tex"]
+    }
+  }
+}

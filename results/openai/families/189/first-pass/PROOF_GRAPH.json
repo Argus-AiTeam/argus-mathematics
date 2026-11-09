@@ -1,0 +1,164 @@
+{
+  "goal": "C9000189",
+  "routes": [],
+  "nodes": {
+    "C9000189": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 189 (Cycle–clique Ramsey numbers.; papers: Cycle--clique Ramsey numbers; Lean status: Partially/Comparator formalized (lean/docs/189.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C189_EXACT_VERIFICATION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "exact_certificate.json",
+        "research/verification_189/report.md"
+      ]
+    },
+    "C189_EXACT_VERIFICATION": {
+      "statement": "For every pair of integers m >= n >= 3, the least order forcing a non-induced m-cycle or a complementary n-clique is (m-1)(n-1)+1, except that R(C3,K3)=6; the statement bridge and complete transitive proof closure must be checked.",
+      "status": "open",
+      "depends_on": ["C189_STATEMENT_FIDELITY", "C189_KERNEL_CLOSURE", "C189_LOWER_BOUND", "C189_EXCEPTION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/01-introduction.tex",
+        "research/verification_189/Main.lean",
+        "research/verification_189/statement_fidelity.md",
+        "research/verification_189/certificates/C189_EXACT_VERIFICATION-efab6f0e0cf3837d.json",
+        "exact_certificate.json"
+      ]
+    },
+    "C189_STATEMENT_FIDELITY": {
+      "statement": "Injective edge-preserving cycle maps describe exact-length non-induced cycles; independent n-sets correspond to n-cliques in the complement; the formal Ramsey number is the least forcing order.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/verification_189/Main.lean",
+        "research/verification_189/statement_fidelity.md",
+        "research/verification_189/lean_check.json"
+      ]
+    },
+    "C189_KERNEL_CLOSURE": {
+      "statement": "The actual pinned upstream solution and independent statement bridge have zero-hole Lean 4.31.0 proofs with transitive axioms contained in propext, Quot.sound, and Classical.choice.",
+      "status": "open",
+      "depends_on": ["C189_COMPATIBILITY", "C189_EXPANSION", "C189_CLIQUE", "C189_SMALL", "C189_PATH_SYSTEMS", "C189_TERMINAL", "C189_FINITE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/verification_189/upstream_manifest.json",
+        "research/verification_189/build_records.json",
+        "research/verification_189/build_result.json",
+        "research/verification_189/lean_check.json",
+        "exact_certificate.json"
+      ]
+    },
+    "C189_COMPATIBILITY": {
+      "statement": "The missing newer library interfaces used by the frozen Ramsey proof are derivable in Lean 4.31.0, without new axioms or changed graph definitions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/verification_189/compatibility/Main.lean",
+        "research/verification_189/compatibility/statement_fidelity.md",
+        "research/verification_189/compatibility/lean_check.json",
+        "research/verification_189/compatibility/certificates/C189_COMPATIBILITY-a204bd712bc18ce5.json",
+        "research/verification_189/unmodified_build_result.json"
+      ]
+    },
+    "C189_LOWER_BOUND": {
+      "statement": "The disjoint union of n-1 cliques of order m-1 gives the nonexceptional lower bound; least-order minimality, not merely a forcing upper bound, must be proved.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/verification_189/.work/sources/openai-math/OAI/Combinatorics/Ramsey/CycleClique/LowerBound.lean",
+        "research/verification_189/Main.lean",
+        "exact_certificate.json"
+      ]
+    },
+    "C189_EXCEPTION": {
+      "statement": "The triangle Ramsey number is exactly six; a five-cycle witnesses the lower bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/verification_189/.work/sources/openai-math/OAI/Combinatorics/Ramsey/CycleClique/Exceptional.lean",
+        "research/verification_189/jacobian_input.json",
+        "research/verification_189/jacobian_output.json",
+        "research/verification_189/boundary_checks.json",
+        "exact_certificate.json"
+      ]
+    },
+    "C189_EXPANSION": {
+      "statement": "A minimal counterexample of order ka+1 has |N[I]| >= k|I|+1 for every nonempty independent I, where k=m-1 and a=n-1.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/02-reduction.tex",
+        "research/verification_189/.work/sources/openai-math/OAI/Combinatorics/Ramsey/CycleClique/Minimality.lean",
+        "exact_certificate.json"
+      ]
+    },
+    "C189_CLIQUE": {
+      "statement": "The reduced counterexample contains a maximum clique of order t >= max(3,floor(k/2)), with t <= k.",
+      "status": "open",
+      "depends_on": ["C189_EXPANSION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/03-clique-layers.tex",
+        "research/verification_189/.work/sources/openai-math/OAI/Combinatorics/Ramsey/CycleClique/DenseCycles.lean",
+        "exact_certificate.json"
+      ]
+    },
+    "C189_SMALL": {
+      "statement": "The reduced counterexamples for k=3 and k=4 are excluded.",
+      "status": "open",
+      "depends_on": ["C189_EXPANSION", "C189_CLIQUE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/04-small.tex",
+        "research/verification_189/.work/sources/openai-math/OAI/Combinatorics/Ramsey/CycleClique/StructuralReduction.lean",
+        "exact_certificate.json"
+      ]
+    },
+    "C189_PATH_SYSTEMS": {
+      "statement": "Optimal weighted linear path systems on the maximum clique satisfy the outside-path interval, optimality, separation, and singleton rules.",
+      "status": "open",
+      "depends_on": ["C189_EXPANSION", "C189_CLIQUE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/06-paths.tex",
+        "research/verification_189/.work/sources/openai-math/OAI/Combinatorics/Ramsey/CycleClique/OptimalSystems.lean",
+        "research/verification_189/upstream_manifest.json",
+        "exact_certificate.json"
+      ]
+    },
+    "C189_TERMINAL": {
+      "statement": "For t>=9 the terminal classification and independent-ball weights exclude all optimal path systems.",
+      "status": "open",
+      "depends_on": ["C189_PATH_SYSTEMS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/08-terminal.tex",
+        "research/verification_189/.work/sources/openai-math/OAI/Combinatorics/Ramsey/CycleClique/LargeSystems.lean",
+        "research/verification_189/.work/sources/openai-math/OAI/Combinatorics/Ramsey/CycleClique/StructuralReduction.lean",
+        "exact_certificate.json"
+      ]
+    },
+    "C189_FINITE": {
+      "statement": "For 5<=k<=17 and max(3,floor(k/2))<=t<=min(8,k), complete pattern coverage and sound deduction rules exclude all 3099 reported patterns; matching their count alone is insufficient.",
+      "status": "open",
+      "depends_on": ["C189_PATH_SYSTEMS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/09-finite-patterns.tex",
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/09-finite-rules.tex",
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/09-finite-packing.tex",
+        "research/openai_manuscript/Cycle-clique-Ramsey-numbers-September-25-2026/build/sections/09-finite-results.tex",
+        "research/verification_189/.work/sources/openai-math/OAI/Combinatorics/Ramsey/CycleClique/FiniteRange.lean",
+        "research/verification_189/upstream_manifest.json",
+        "exact_certificate.json"
+      ]
+    }
+  }
+}

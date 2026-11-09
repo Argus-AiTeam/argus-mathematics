@@ -1,0 +1,150 @@
+{
+  "goal": "C9000005",
+  "routes": [
+    {
+      "name": "Support-only universal arithmetic verification",
+      "status": "current",
+      "evidence": "research/odd-prime-bound/report.md"
+    },
+    {
+      "name": "Manuscript contradiction under rationality of G",
+      "status": "untried",
+      "evidence": "research/openai_manuscript/Catalans-constant-is-irrational-September-24-2026/build/main.tex"
+    }
+  ],
+  "nodes": {
+    "C9000005": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 005 (Irrationality of Catalan’s constant.; papers: Catalan's constant is irrational; Lean status: Partially/Comparator formalized (lean/docs/005.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_ODD_UNIVERSAL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_RATIONAL": {
+      "statement": "Taylor contact cancels zeta(2) and gives the rational raw-entry formula.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Catalans-constant-is-irrational-September-24-2026/build/sections/foundations.tex"]
+    },
+    "C_TWO_ADIC": {
+      "statement": "The two-adic determinant bound in Proposition prop:two-adic.",
+      "status": "open",
+      "depends_on": ["C_RATIONAL"],
+      "reviewer_confirmed": false
+    },
+    "C_ODD_DIGIT": {
+      "statement": "Digit reductions eq:digit-layers, including reduced row index -1.",
+      "status": "open",
+      "depends_on": ["C_SUPPORT_DIGIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/odd-prime-bound/report.md"]
+    },
+    "C_ODD_CENTRAL": {
+      "statement": "Central scaled residues are eq:central-layer.",
+      "status": "open",
+      "depends_on": ["C_SUPPORT_CENTRAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/odd-prime-bound/report.md"]
+    },
+    "C_ODD_PAIR": {
+      "statement": "The lower-range full-minor inequality eq:odd-lower-pair-range.",
+      "status": "open",
+      "depends_on": ["C_ODD_DIGIT", "C_ODD_CORE", "C_RATIONAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/odd-prime-bound/report.md"]
+    },
+    "C_ODD_BOUND": {
+      "statement": "The upper-range full-minor inequality eq:odd-two-layer-bound, retaining the secondary denominator terms.",
+      "status": "open",
+      "depends_on": ["C_ODD_CENTRAL", "C_ODD_DIGIT", "C_ODD_CORE", "C_RATIONAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/odd-prime-bound/report.md"]
+    },
+    "C_FINITE": {
+      "statement": "The finite-place asymptotic lower bound prop:finite-lower.",
+      "status": "open",
+      "depends_on": ["C_TWO_ADIC", "C_ODD_PAIR", "C_ODD_BOUND"],
+      "reviewer_confirmed": false
+    },
+    "C_NONVANISH": {
+      "statement": "The prescribed determinants are nonzero along the required prime scales.",
+      "status": "open",
+      "depends_on": ["C_RATIONAL", "C_FIXED_MATRICES"],
+      "reviewer_confirmed": false
+    },
+    "C_REAL": {
+      "statement": "Proposition prop:real-upper gives the strict asymptotic upper bound -2.290939875.",
+      "status": "open",
+      "depends_on": ["C_ENERGY", "C_BARRIER"],
+      "reviewer_confirmed": false
+    },
+    "C_ODD_CORE": {
+      "statement": "Source-bound Lean 4.31.0 proof of the decisive algebraic core; independent statement-fidelity review is pending.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/odd-prime-bound/certificates/C_ODD_CORE-bae38c384ecd4b48.json"]
+    },
+    "C_ODD_UNIVERSAL": {
+      "statement": "The support-only theorem proves both valuation bounds for arbitrary admissible parameters, locally integral polynomial rows, and locally integral filters.",
+      "status": "open",
+      "depends_on": ["C_SUPPORT_DIGIT", "C_SUPPORT_CENTRAL", "C_ODD_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/odd-prime-bound/report.md", "research/odd-prime-bound/exact_certificate.json"]
+    },
+    "C_SUPPORT_DIGIT": {
+      "statement": "The general rational arrays satisfy the digit reductions, proved from the recurrences and complete carry blocks, including the reduced index -1.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/odd-prime-bound/report.md"]
+    },
+    "C_SUPPORT_CENTRAL": {
+      "statement": "For arbitrary supported polynomial rows the central congruence follows directly from the exact recurrences and harmonic sums.",
+      "status": "open",
+      "depends_on": ["C_SUPPORT_DIGIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/odd-prime-bound/report.md"]
+    },
+    "C_MAIN_IRRATIONAL": {
+      "statement": "Literal main theorem thm:main: Catalan's constant G is irrational.",
+      "status": "open",
+      "depends_on": ["C_RATIONAL", "C_FINITE", "C_NONVANISH", "C_REAL"],
+      "reviewer_confirmed": false
+    },
+    "C_FIXED_MATRICES": {
+      "statement": "The three fixed 48-by-48 matrices in the nonvanishing reduction have the asserted nonzero determinants.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_FIRST_SHEET": {
+      "statement": "Proposition prop:first-sheet-bound supplies the case-conditioned interpolation estimate.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_SECOND_SHEET": {
+      "statement": "Proposition prop:second-sheet-bound supplies the second interpolation estimate.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_ENERGY": {
+      "statement": "Proposition prop:energy-reduction converts admissible trial sequences into the real-place energy bound.",
+      "status": "open",
+      "depends_on": ["C_FIRST_SHEET", "C_SECOND_SHEET"],
+      "reviewer_confirmed": false
+    },
+    "C_BARRIER": {
+      "statement": "The rational barrier certificate supplies admissible trials with the two asserted numerical bounds.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    }
+  }
+}

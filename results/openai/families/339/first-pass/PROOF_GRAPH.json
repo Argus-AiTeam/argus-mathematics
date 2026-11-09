@@ -1,0 +1,199 @@
+{
+  "goal": "C9000339",
+  "routes": [
+    {
+      "name": "R_RJD_VERIFY",
+      "status": "current",
+      "goal": "C_RJD_BRIDGE",
+      "obligations": ["C_RJD_GOOD_POINTS", "C_RJD_NAIVE", "C_RJD_SAMPLING", "C_RJD_DECAY", "C_RJD_ACTUALIZATION"],
+      "evidence": "research/recurrent_jet_decay/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000339": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 339 (Katok's entropy rigidity conjecture.; papers: Entropy equality and local symmetry in negative curvature; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_RJD_BRIDGE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_RJD_BRIDGE": {
+      "statement": "Under the manuscript's stated smooth hyperbolic geometry, whole-axis holonomic equivariant formal-germ data, and local product measure hypotheses, every real c with 0<c<b_u satisfies ||D_s^j G_{n,k}|| <= C_{c,j,k} exp(-c k n) for all fixed natural j>=0 and k>=1. Finite truncations have a single smooth, cutoff-independent, frame-intrinsic, equivariant unstable-leaf limit with the prescribed formal Taylor series and arbitrarily fast fixed-order forward and backward approximation, as in real:actualization.",
+      "status": "in_progress",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_RJD_DECAY", "C_RJD_ACTUALIZATION"],
+      "evidence": ["research/recurrent_jet_decay/report.md", "research/recurrent_jet_decay/exact_certificate.json"]
+    },
+    "C_MAIN_RIGIDITY": {
+      "statement": "For a closed connected smooth negatively curved Riemannian manifold of dimension at least three, Liouville entropy equals topological entropy if and only if the metric is locally symmetric.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_ENTROPY_FORMS", "C_HULL_MAIN", "C_SYMMETRY", "C_ALG_DICHOTOMY", "C_INFINITE_EXCLUDED", "C_SMOOTH_SPLITTING", "C_CLASSICAL_RIGIDITY", "C_SYMMETRIC_CONVERSE"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/main.tex:95-106,348-383"]
+    },
+    "C_ENTROPY_FORMS": {
+      "statement": "Entropy equality supplies the two equivariant conormal volume forms used as initial data for the formal hulls (pre:entropy-forms).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/main.tex:164-176,350-352"]
+    },
+    "C_NORMAL_FORMS": {
+      "statement": "The finite-weight normal-form construction supplies compatible polynomial coordinates and finite jet arrays (nf:normalization, nf:finite-weight).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_ENTROPY_FORMS"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/02-normal-forms.tex:274-338,519-581"]
+    },
+    "C_HULL_MAIN": {
+      "statement": "The coherent formal affine hull fields with nonzero cross-pairing, finite-order measurable bounds, and dynamics/section/flip equivariance exist on a common conull invariant set (hull:main).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_NORMAL_FORMS", "C_HULL_COHERENCE", "C_HULL_MEASURABILITY"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/03-hulls.tex:33-55,978-984"]
+    },
+    "C_HULL_COHERENCE": {
+      "statement": "Full ambient formal hull jets are smooth and holonomic along entire typical strong axes and their weak flow transports, with the required recentering compatibility (hull:coherence).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_NORMAL_FORMS"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/03-hulls.tex:845-913"]
+    },
+    "C_HULL_MEASURABILITY": {
+      "statement": "Finite-order whole-plaque jet norms and admissible radii are measurable and finite almost everywhere (hull:measurability).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_NORMAL_FORMS"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/03-hulls.tex:915-976"]
+    },
+    "C_SYMMETRY": {
+      "statement": "The formal symmetry algebra is effective and transitive and has the invariant homogeneous fields required by the algebraic alternative (sym:effective, sym:homogeneous-fields).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_HULL_MAIN"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/04-symmetries.tex:445-544"]
+    },
+    "C_AXIS_COHERENCE": {
+      "statement": "The algebraically defined planes and invariant homogeneous fields have smooth holonomic ambient jets along entire typical axes; in the infinite case the sign planes have positive equal rank (alg:axis-coherence).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SYMMETRY", "C_HULL_COHERENCE", "C_HULL_MEASURABILITY"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/05-algebra.tex:729-833"]
+    },
+    "C_ALG_DICHOTOMY": {
+      "statement": "Exactly one finite-dimensional or infinite-dimensional formal symmetry alternative occurs almost everywhere, with the indicated sign fields and coisotropic characteristic data (alg:dichotomy).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SYMMETRY", "C_AXIS_COHERENCE"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/05-algebra.tex:835-864"]
+    },
+    "C_CHARACTERISTIC_AFFINE": {
+      "statement": "The characteristic formal exponential is flat, sign-parallel and equivariant, with smooth holonomic finite coefficient fields on entire typical axes; its first parameter derivative is the initial-vector inclusion (real:formal-affine).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_ALG_DICHOTOMY", "C_AXIS_COHERENCE"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/06-realization.tex:60-143"]
+    },
+    "C_RJD_GEOMETRY": {
+      "statement": "Smooth compact hyperbolic geometry supplies uniformly bounded fixed-order forward stable-plaque derivatives, exponentially bounded fixed-order ambient iterates in either direction, and uniform interior room on pulled-back nested stable patches.",
+      "status": "in_progress",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/recurrent_jet_decay/report.md"]
+    },
+    "C_RJD_GOOD_POINTS": {
+      "statement": "For every fixed finite jet order and fixed small radius there is one finite bound such that every disk of that radius in every retained entire stable leaf contains an agreeing regular center with those parameter jets bounded; this holds simultaneously at integer translates.",
+      "status": "in_progress",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_CHARACTERISTIC_AFFINE", "C_HULL_COHERENCE", "C_HULL_MEASURABILITY", "C_LOCAL_PRODUCT"],
+      "evidence": ["research/recurrent_jet_decay/report.md"]
+    },
+    "C_LOCAL_PRODUCT": {
+      "statement": "The strong stable and weak unstable foliations of the compact negatively curved geodesic-flow setting have complementary local product boxes with product-equivalent measure classes, and absolute continuity permits conull whole-stable-leaf refinements.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/06-realization.tex:434-473"]
+    },
+    "C_RJD_NAIVE": {
+      "statement": "For each fixed parameter degree k the pulled-back coefficient has ||D_s^j G_{n,k}|| <= C_{j,k} exp(A_k n), with one finite A_k independent of the arbitrary fixed stable derivative order j.",
+      "status": "in_progress",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_RJD_GEOMETRY", "C_CHARACTERISTIC_AFFINE"],
+      "evidence": ["research/recurrent_jet_decay/report.md"]
+    },
+    "C_RJD_SAMPLING": {
+      "statement": "Values bounded on exponentially dense point nets, together with a derivative-order-independent exponential growth exponent at every fixed order, give the arbitrary-order Taylor-stencil and interior-interpolation estimates used to transfer degree-proportional decay from samples to all fixed derivatives.",
+      "status": "in_progress",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/recurrent_jet_decay/report.md"]
+    },
+    "C_RJD_DECAY": {
+      "statement": "Under the scoped inputs, for every real c with 0<c<b_u and every fixed natural j>=0 and k>=1, ||D_s^j G_{n,k}|| <= C_{c,j,k} exp(-c k n) on the inner moving patch for all natural n.",
+      "status": "in_progress",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_RJD_GOOD_POINTS", "C_RJD_NAIVE", "C_RJD_SAMPLING", "C_RJD_FORMAL"],
+      "evidence": ["research/recurrent_jet_decay/report.md", "research/recurrent_jet_decay/exact_certificate.json"]
+    },
+    "C_RJD_ACTUALIZATION": {
+      "statement": "Degree-weighted exponential decay and formal one-step equivariance yield a common smooth finite-truncation limit F with all properties of real:actualization, including arbitrarily fast fixed-order forward and backward approximation, all finite parameters, unstable-leaf membership, and chart/frame/overlap/dynamical compatibility.",
+      "status": "in_progress",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_RJD_DECAY", "C_RJD_GEOMETRY", "C_CHARACTERISTIC_AFFINE"],
+      "evidence": ["research/recurrent_jet_decay/report.md", "research/recurrent_jet_decay/exact_certificate.json"]
+    },
+    "C_RJD_FORMAL": {
+      "statement": "For all positive real stable and unstable rates, every nonnegative fixed-degree growth and transport exponent, every real loss in (0,1), and all natural k>=1,j>=0, positive sampling scales and finite integer Taylor/interpolation orders meet the degree-proportional decay inequalities; finite products add parameter-degree exponential weights and every fixed-order actualization error budget admits an arbitrarily high fixed cutoff.",
+      "status": "in_progress",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/recurrent_jet_decay/Main.lean", "research/recurrent_jet_decay/statement_fidelity.md", "research/recurrent_jet_decay/certificates/C_RJD_FORMAL-7000895d2800cf58.json"]
+    },
+    "C_PROPER_RAY": {
+      "statement": "The actual restricted stable affine exponential is complete and proper at typical centers and gives a proper affine ray for each nonzero initial stable vector (real:proper-exponential).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_CHARACTERISTIC_AFFINE", "C_RJD_GEOMETRY"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/06-realization.tex:145-318"]
+    },
+    "C_STABLE_TANGENCY": {
+      "statement": "Parallel unstable inputs over characteristic stable slices make the actualized translated paths tangent to the actual stable distribution (real:stable-tangency).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_RJD_ACTUALIZATION", "C_RJD_DECAY", "C_CHARACTERISTIC_AFFINE"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/06-realization.tex:782-942"]
+    },
+    "C_INFINITE_EXCLUDED": {
+      "statement": "The actual mixed stable/unstable rectangle along a proper ray contradicts ideal-boundary geometry and excludes the infinite-dimensional alternative (real:infinite-excluded).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_PROPER_RAY", "C_RJD_ACTUALIZATION", "C_STABLE_TANGENCY"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/06-realization.tex:944-1052"]
+    },
+    "C_SMOOTH_SPLITTING": {
+      "statement": "In the finite-dimensional alternative the full stable and unstable distributions are globally smooth, using propagation of formal label jets and the positive holonomy-volume bound (smooth:splitting).",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_ALG_DICHOTOMY", "C_AXIS_COHERENCE", "C_HULL_MAIN", "C_RJD_GEOMETRY", "C_RJD_SAMPLING"],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/07-smoothness.tex:265-451,461-562"]
+    },
+    "C_CLASSICAL_RIGIDITY": {
+      "statement": "Global smoothness of the invariant splitting implies local symmetry in the stated geodesic setting (pre:smooth-rigidity), via the manuscript's classical rigidity reduction.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/sections/01-preliminaries.tex:273-276", "research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/main.tex:254-345"]
+    },
+    "C_SYMMETRIC_CONVERSE": {
+      "statement": "Local symmetry in strict negative curvature makes the unstable Riccati trace constant and implies equality of Liouville and topological entropy.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Entropy-equality-and-local-symmetry-in-negative-curvature-September-23-2026/build/main.tex:362-383"]
+    }
+  }
+}

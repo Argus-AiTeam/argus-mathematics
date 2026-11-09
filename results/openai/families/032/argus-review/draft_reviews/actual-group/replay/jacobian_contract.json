@@ -1,0 +1,48 @@
+{
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "discovery_queries": [
+    "classify connected reductive subgroups of classical groups in dimension at most six and compute exact Lie algebra commutants",
+    "exact rational matrix nullspace and rank"
+  ],
+  "classification_query_candidates": [
+    "lie_algebra.homology.compute",
+    "lie_algebra.chevalley_eilenberg.complex.compute",
+    "algebra.center.compute"
+  ],
+  "linear_algebra_query_candidates": [
+    "matrix.rank.compute",
+    "matrix.symbolic.rank.compute",
+    "matrix.nullspace.compute"
+  ],
+  "inspected_operation_id": "matrix.nullspace.compute",
+  "inspected_title": "Compute a canonical exact nullspace or relation basis",
+  "input_contract": {
+    "request_keys": ["matrix"],
+    "matrix_keys": ["domain", "entries"],
+    "domain": "QQ",
+    "max_rows": 64,
+    "max_columns_from_output_contract": 32,
+    "entry_keys": ["num", "den"],
+    "entry_encoding": "Reduced canonical decimal integer strings; denominator positive; zero encoded as 0/1.",
+    "additional_properties": false
+  },
+  "output_contract": {
+    "required_keys": ["matrix", "ambient_dimension", "rank", "nullity", "basis_vectors", "free_columns"],
+    "convention": "RREF_FUNDAMENTAL_BASIS",
+    "ambient_dimension_max": 32,
+    "basis_vector_count_max": 32
+  },
+  "bounded_use": "Compute invariant bilinear forms on the four-dimensional tensor product of two standard SL2 modules.",
+  "capability_limit": "The inspected contract certifies a rational matrix kernel, not rational Hodge-group minimality, Albert realizability, or universal independence. The first discovery returned finite-field homology/center operations, which were not forced onto this question. No claim is made that the entire catalog was exhaustively searched.",
+  "inspection_error": null,
+  "observed_runtime_constraint": {
+    "rows_and_columns_max": 32,
+    "discrepancy": "The inspected JSON schema allowed 64 entry rows, but the operation rejected the 48-by-16 request with matrix.budget_exceeded and a 32-row/column limit.",
+    "first_adapter_exit_code": 2,
+    "first_result_is_a_mathematical_verdict": false,
+    "correction": "Replace the 48 equations by their exact 15-row RREF basis; preserve the original request and structured error, and prove row-space equivalence in verify.py.",
+    "corrected_adapter_exit_code": 0
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_DIM_CORE-25a267016722",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/274/first-pass/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 5972,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/274/first-pass/Main.lean",
+    "source_sha256": "2248a23a2068380355460bd10020f0cba336c3e17e03b80837b4e6c20dc49e1a",
+    "statement_fidelity": "families/274/first-pass/statement_fidelity.md",
+    "statement_fidelity_sha256": "3bc9e4ee4fcec877e957b6bb9c6d2ece32ae9499113df8a08cd6ffb575168ff6",
+    "status": "syntax_error",
+    "stderr": "",
+    "stdout": "families/274/first-pass/Main.lean:23:12: error: unexpected token 'ᴴ'; expected ')'\nfamilies/274/first-pass/Main.lean:33:12: error: unexpected token 'ᴴ'; expected ')'\nfamilies/274/first-pass/Main.lean:39:29: error: unexpected token 'ᴴ'; expected ')'\nfamilies/274/first-pass/Main.lean:50:29: error: unexpected token 'ᴴ'; expected ')'\nfamilies/274/first-pass/Main.lean:57:29: error: unexpected token 'ᴴ'; expected ')'\nTry this:\n  [apply] ring_nf\n  \n  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.\n    \n  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.\nfamilies/274/first-pass/Main.lean:65:37: error: unsolved goals\nn : Type u_1\nm : Type u_2\ninst✝³ : Fintype n\ninst✝² : Fintype m\ninst✝¹ : DecidableEq n\ninst✝ : DecidableEq m\nA B : Matrix n n ℂ\nC D : Matrix m m ℂ\nhA : A.PosSemidef\nhD : D.PosSemidef\nhBA : (B - A).PosSemidef\nhDC : (D - C).PosSemidef\ni j : n × m\n⊢ Matrix.kroneckerMap (fun x1 x2 => x1 * x2) B D i j - Matrix.kroneckerMap (fun x1 x2 => x1 * x2) A C i j =\n    Matrix.kroneckerMap (fun x1 x2 => x1 * x2) (B - A) D i j + Matrix.kroneckerMap (fun x1 x2 => x1 * x2) A (D - C) i j\nfamilies/274/first-pass/Main.lean:67:51: warning: This simp argument is unused:\n  Matrix.kronecker_apply\n\nHint: Omit it from the simp argument list.\n  simp only [Matrix.sub_apply, Matrix.add_apply,̵ ̵M̵a̵t̵r̵i̵x̵.̵k̵r̵o̵n̵e̵c̵k̵e̵r̵_̵a̵p̵p̵l̵y̵]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nfamilies/274/first-pass/Main.lean:74:16: error: unexpected token 'ᴴ'; expected ')', ',' or ':'\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/Main.lean",
+    "text": "import Mathlib\n\nopen scoped Kronecker ComplexOrder\n\nnamespace DimensionUniform\n\ntheorem projection_defect {R : Type*} [Ring R] (P Q : R)\n    (hP : P * P = P) (hQ : Q * Q = Q) :\n    P - P * Q * (2 - P) * Q * P =\n      (P - P * Q * P) * (P - P * Q * P) := by\n  have hPP (X : R) : P * (P * X) = P * X := by\n    rw [← mul_assoc, hP]\n  have hQQ (X : R) : Q * (Q * X) = Q * X := by\n    rw [← mul_assoc, hQ]\n  noncomm_ring [hP, hQ, hPP, hQQ]\n\nsection Matrices\n\nvariable {n m : Type*} [Fintype n] [Fintype m] [DecidableEq n] [DecidableEq m]\n\ntheorem projection_defect_gram (P Q : Matrix n n ℂ)\n    (hP : P * P = P) (hQ : Q * Q = Q)\n    (hPs : Pᴴ = P) (hQs : Qᴴ = Q) :\n    P - P * Q * (2 - P) * Q * P =\n      (P - P * Q * P)ᴴ * (P - P * Q * P) := by\n  have hs : (P - P * Q * P)ᴴ = P - P * Q * P := by\n    simp only [Matrix.conjTranspose_sub, Matrix.conjTranspose_mul, hPs, hQs, mul_assoc]\n  rw [hs]\n  exact projection_defect P Q hP hQ\n\ntheorem weighted_projection_contraction (P Q : Matrix n n ℂ)\n    (hP : P * P = P) (hQ : Q * Q = Q)\n    (hPs : Pᴴ = P) (hQs : Qᴴ = Q) :\n    (P - P * Q * (2 - P) * Q * P).PosSemidef := by\n  rw [projection_defect_gram P Q hP hQ hPs hQs]\n  exact Matrix.posSemidef_conjTranspose_mul_self _\n\ntheorem weighted_projection_gram (P Q : Matrix n n ℂ)\n    (hP : P * P = P) (hPs : Pᴴ = P) (hQs : Qᴴ = Q) :\n    P * Q * (2 - P) * Q * P =\n      (Q * P)ᴴ * (Q * P) +\n        ((1 - P) * Q * P)ᴴ * ((1 - P) * Q * P) := by\n  have hPP (X : Matrix n n ℂ) : P * (P * X) = P * X := by\n    rw [← mul_assoc, hP]\n  simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_sub,\n    Matrix.conjTranspose_one, hPs, hQs]\n  noncomm_ring [hP, hPP]\n\ntheorem weighted_projection_positive (P Q : Matrix n n ℂ)\n    (hP : P * P = P) (hPs : Pᴴ = P) (hQs : Qᴴ = Q) :\n    (P * Q * (2 - P) * Q * P).PosSemidef := by\n  rw [weighted_projection_gram P Q hP hPs hQs]\n  exact (Matrix.posSemidef_conjTranspose_mul_self _).add\n    (Matrix.posSemidef_conjTranspose_mul_self _)\n\ntheorem projection_positive (P : Matrix n n ℂ)\n    (hP : P * P = P) (hPs : Pᴴ = P) : P.PosSemidef := by\n  simpa only [hPs, hP] using Matrix.posSemidef_conjTranspose_mul_self P\n\ntheorem tensor_order_step (A B : Matrix n n ℂ) (C D : Matrix m m ℂ)\n    (hA : A.PosSemidef) (hD : D.PosSemidef)\n    (hBA : (B - A).PosSemidef) (hDC : (D - C).PosSemidef) :\n    (B ⊗ₖ D - A ⊗ₖ C).PosSemidef := by\n  have hid : B ⊗ₖ D - A ⊗ₖ C =\n      (B - A) ⊗ₖ D + A ⊗ₖ (D - C) := by\n    ext i j\n    simp only [Matrix.sub_apply, Matrix.add_apply, Matrix.kronecker_apply]\n    ring\n  rw [hid]\n  exact (hBA.kronecker hD).add (hA.kronecker hDC)\n\ntheorem compressed_tail (K P W H : Matrix n n ℂ) (c : ℝ)\n    (hc : 0 ≤ c)\n    (hW : (P - Kᴴ * W * K).PosSemidef)\n    (hH : (c • W - H).PosSemidef) :\n    (c • P - Kᴴ * H * K).PosSemidef := by\n  have hid : c • P - Kᴴ * H * K =\n      c • (P - Kᴴ * W * K) + Kᴴ * (c • W - H) * K := by\n    simp only [smul_sub, mul_sub, sub_mul, mul_smul_comm, smul_mul_assoc]\n    abel\n  rw [hid]\n  exact (hW.smul hc).add (hH.conjTranspose_mul_mul_same K)\n\nend Matrices\n\nend DimensionUniform\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/statement_fidelity.md",
+    "text": "# Statement fidelity: arbitrary-rank weighted projection core\n\nClaim `C_DIM_CORE` refers to the declarations in namespace `DimensionUniform`\nin `research/Main.lean`.\n\n`projection_defect` quantifies over every unital, not necessarily commutative\nring and every two idempotents `P,Q`. It proves\n`P-PQ(2-P)QP=(P-PQP)(P-PQP)`. The numeral `2` means twice the ring identity.\nNo commutation hypothesis is present. Self-adjointness is unnecessary for\nthis algebraic identity.\n\nThe matrix declarations quantify over an arbitrary finite index type `n`\nand complex square matrices on it. The hypotheses `P*P=P`, `Q*Q=Q`,\n`P.conjTranspose=P`, and `Q.conjTranspose=Q` express precisely orthogonal\nprojections. There is no assumption on either rank, their intersection,\nthe local dimension, or their commutator. Empty index types are permitted.\n\n`projection_defect_gram` identifies the same defect with `X.conjTranspose*X`\nfor `X=P-PQP`. `weighted_projection_contraction` proves that this defect is\npositive semidefinite, that is, `PQ(2I-P)QP <= P` in Loewner order.\n`weighted_projection_gram` and `weighted_projection_positive` prove\n`PQ(2I-P)QP >= 0` by two Gram terms. For these latter two statements `Q`\nneed only be Hermitian; they do not require its idempotence.\n`projection_positive` proves positivity of a Hermitian idempotent.\n`Matrix.PosSemidef` includes Hermitian symmetry and nonnegativity against\nevery complex vector, not just product vectors.\n\n`tensor_order_step` quantifies over two arbitrary and independently sized\nfinite index types `n,m`, and four complex square matrices `A,B,C,D` of the\nindicated sizes. Its explicit hypotheses are positivity of `A,D,B-A,D-C`.\nIt proves positivity of `B tensor D - A tensor C`. The proof uses\n`(B-A) tensor D + A tensor (D-C)` and never commutes matrices within a\nfactor. Repeated application gives tensor monotonicity for any finite list\nof independently sized positive local pairs. The Lean declaration is this\nuniversal induction step, not a separately encoded dependent-list theorem.\n\n`compressed_tail` quantifies over arbitrary same-size complex matrices\n`K,P,W,H` and a nonnegative real `c`. Assuming positivity of\n`P-K.conjTranspose*W*K` and `c*W-H`, it proves positivity of\n`c*P-K.conjTranspose*H*K`. Scalar multiplication here is real scalar\nmultiplication of complex matrices. This is the general quadratic\nimplication used after the tensor bound and scalar spectral Markov bound.\nIt contains no hypothesis asserting the desired localization conclusion.\n\nFor the depth-zero application in the mathematical report, take each\n`P_i` to be a counted zero-subspace projection, `Q_i` a factor of the\ntested product projection, `W=2^M`, `K=A P_zero`, `H=[M>=r]`, and\n`c=2^(-r)`. The operator core is kernel-checked; the identification of count\nspectra, iteration over all sites, norm conversion, polynomial approximation,\nand full finite depth/scale induction are proved in prose in\n`research/dimension_uniform_localization.md`. Those analytic conclusions\nare not claimed to be formalized by this file. Compiler success alone does\nnot verify that application or the theorem's publication novelty.\n"
+  },
+  "subject": {
+    "content_hash": "b71e8c4237bd3dfe3e7bb277de48868ff14a40fcf87e0ea6485d15f95be354d3",
+    "kind": "claim",
+    "subject_id": "C_DIM_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

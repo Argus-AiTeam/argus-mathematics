@@ -1,0 +1,291 @@
+{
+  "goal": "C9000068",
+  "routes": [
+    {
+      "name": "Bounded mission: verify the full toroidal volume theorem under its stated hypotheses",
+      "status": "current",
+      "evidence": "research/openai_manuscript/Metric-descent-and-rank-preserving-contractions-September-26-2026/build/source/sections/toroidal-volume.tex",
+      "goal": "C_TV_AUDIT",
+      "obligations": ["C_G_SUBKLT", "C_G_POSITIVITY", "C_G_EXTENSION", "C_G_STRICTNESS"]
+    },
+    {
+      "name": "Bounded mission alternative: an exact counterexample satisfying all hypotheses of a literal assertion",
+      "status": "untried",
+      "evidence": "OBJECTIVE.md",
+      "goal": "C_TV_AUDIT",
+      "obligations": ["C_TV_COUNTEREXAMPLE"]
+    },
+    {
+      "name": "Independent family route: finite volume, invariant orbit transfer, and compact-monodromy descent",
+      "status": "untried",
+      "evidence": "research/openai_manuscript/Anticanonical-nonvanishing-from-smooth-semipositivity-September-26-2026/build/source/sections/introduction.tex",
+      "goal": "C_H_MAIN",
+      "obligations": ["C_H_FINITE_VOLUME", "C_H_INVARIANT", "C_H_STRUCTURE", "C_H_NORM"]
+    },
+    {
+      "name": "Independent family route: bounded-metric klt criterion and stable torus quotient",
+      "status": "untried",
+      "evidence": "research/openai_manuscript/Bounded-anticanonical-metrics-on-klt-pairs-and-torus-quotients-September-26-2026/build/source/sections/introduction.tex",
+      "goal": "C_H_MAIN",
+      "obligations": ["C_B_KLT", "C_B_INVARIANT", "C_H_STRUCTURE", "C_H_NORM"]
+    },
+    {
+      "name": "Independent family route: invariant index, character-sensitive fixed-error transfer, and descent",
+      "status": "untried",
+      "evidence": "research/openai_manuscript/Cohomological-transfer-and-equivariant-anticanonical-sections-September-26-2026/build/source/sections/introduction.tex",
+      "goal": "C_H_MAIN",
+      "obligations": ["C_I_INDEX", "C_C_TRANSFER", "C_H_STRUCTURE", "C_H_NORM"]
+    },
+    {
+      "name": "Volume-dependent family route: exact orders via null-polar field and correction rings",
+      "status": "untried",
+      "evidence": "research/openai_manuscript/Exact-orders-and-invariant-anticanonical-linear-systems-September-26-2026/build/source/sections/introduction.tex",
+      "goal": "C_V_EXACT",
+      "obligations": ["C_V_NULL_FIELD", "C_G_VOLUME", "C_E_RING", "C_V_ENDPOINT"]
+    },
+    {
+      "name": "Direct invocation of a canonical-bundle-formula theorem without establishing its extra hypotheses",
+      "status": "ruled_out",
+      "evidence": "research/toroidal_volume_audit/report.md",
+      "goal": "C_G_VOLUME",
+      "obligations": ["C_TV_KIM_PREMISES"],
+      "retired_because": "Kim arXiv:1910.06917v5 requires the Kawamata/log-Calabi-Yau and divisor-metric setup, with a horizontal correction distinction; these premises and the metric identification were not established from the present full-rank-one data. The direct proof in report.md is used instead. This is not a refutation of Kim or of the manuscript."
+    }
+  ],
+  "nodes": {
+    "C9000068": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 068 (Anticanonical nonvanishing in every dimension.; papers: Anticanonical nonvanishing from smooth semipositivity; Invariant anticanonical indices and conversion of twisted differentials; Bounded anticanonical metrics on klt pairs and torus quotients; Cohomological transfer and equivariant anticanonical sections; Metric descent and rank-preserving contractions; Integrable metrics and effectivity with controlled boundary; Exact orders and invariant anticanonical linear systems; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_TV_AUDIT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_TV_AUDIT": {
+      "statement": "Decide the complete toroidal volume metric theorem (g:toroidal-volume), including all-valuation integrability, boundary extension, and conditional local strictness; a refutation must satisfy every hypothesis.",
+      "status": "in_progress",
+      "depends_on": ["C_G_VOLUME", "C_TV_SHARP_CHAMBER", "C_TV_KLT_TYPE"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md", "research/toroidal_volume_audit/report.md", "research/toroidal_volume_audit/exact_certificate.json"]
+    },
+    "C_TV_COUNTEREXAMPLE": {
+      "statement": "An explicit geometric counterexample to a literal toroidal-volume assertion satisfies all hypotheses of that assertion. This is a research obligation, not an assertion that a witness exists.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md"]
+    },
+    "C_H_MAIN": {
+      "statement": "For every smooth connected projective complex variety X whose anticanonical bundle admits a smooth semipositive Hermitian metric, H^0(X,-mK_X) is nonzero for some integer m>0 (H, thm:headline). Alternative proofs are recorded as separate routes, not simultaneous prerequisites.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Anticanonical-nonvanishing-from-smooth-semipositivity-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_H_FINITE_VOLUME": {
+      "statement": "If Z is smooth connected projective with H^0(Z,Omega_Z^q)=0 for all q>0, D is effective integral, -K_Z+D has a semipositive singular metric with finite canonical-section measure, and L has locally bounded semipositive weights, then H^0(Z,aL+bD) is nonzero for some integers a>0,b>=0 (H, thm:finite-volume).",
+      "status": "open",
+      "depends_on": ["C_H_SLOPE", "C_G_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Anticanonical-nonvanishing-from-smooth-semipositivity-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_H_SLOPE": {
+      "statement": "The finite-adjoint-volume slope estimate used in H controls cotangent determinants on a supporting movable class and permits the dimension induction; this is a source-specific audit obligation, not an assumed consequence of nefness.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Anticanonical-nonvanishing-from-smooth-semipositivity-September-26-2026/build/source/sections/slope.tex"]
+    },
+    "C_H_INVARIANT": {
+      "statement": "The H orbit-transfer argument produces a naturally torus-invariant section of a positive anticanonical multiple on its smooth no-positive-forms factor, using invariant adjoint ranks and compact averaging rather than the full-rank volume theorem.",
+      "status": "open",
+      "depends_on": ["C_H_FINITE_VOLUME"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Anticanonical-nonvanishing-from-smooth-semipositivity-September-26-2026/build/source/sections/torus.tex"]
+    },
+    "C_H_STRUCTURE": {
+      "statement": "The finite-cover compact-torus-monodromy structure in H retains the deck action on the universal-cover factors; it is not a global-product assertion for a finite cover.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Anticanonical-nonvanishing-from-smooth-semipositivity-September-26-2026/build/source/sections/cover.tex"]
+    },
+    "C_H_NORM": {
+      "statement": "A nonzero section of a positive tensor power of a pulled-back line on a finite etale cover gives a nonzero section of a positive tensor power on the base by the finite etale norm.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Anticanonical-nonvanishing-from-smooth-semipositivity-September-26-2026/build/source/sections/cover.tex"]
+    },
+    "C_I_INDEX": {
+      "statement": "For a holomorphic action of a compact real torus T on a compact complex manifold F and the natural anticanonical linearization, I_T(m)=sum_q(-1)^q dim H^q(F,(-K_F)^m)^T agrees with a rational polynomial P at every positive multiple of some a>0, and P(0)=I_T(0); no positivity, Kahlerness, or projectivity is assumed (I, thm:index).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Invariant-anticanonical-indices-and-conversion-of-twisted-differentials-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_I_CONVERSION": {
+      "statement": "If S is smooth connected projective, L=-K_S is smoothly semipositive, D is a fixed pseudoeffective Cartier divisor, and H^0(S,m_jL-D) is nonzero along a strictly increasing positive sequence, then H^0(S,kL) is nonzero for some k>0 (I, thm:conversion).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Invariant-anticanonical-indices-and-conversion-of-twisted-differentials-September-26-2026/build/source/sections/conversion.tex"]
+    },
+    "C_B_KLT": {
+      "statement": "For a projective Q-factorial klt pair (W,D) with effective rational boundary, nef P=-(K_W+D), and a smooth projective resolution rho on which rho^*P has locally bounded semipositive weights and chi(O) is nonzero, a positive Cartier multiple of P has a nonzero section (B, thm:klt).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-anticanonical-metrics-on-klt-pairs-and-torus-quotients-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_B_INVARIANT": {
+      "statement": "If Z is smooth rationally connected projective and -K_Z is smoothly semipositive, every algebraic torus acting on Z has a naturally invariant section of some positive anticanonical multiple (B, thm:equivariant). Its stable-quotient metric and extension are separate obligations from toroidal volume.",
+      "status": "open",
+      "depends_on": ["C_B_KLT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-anticanonical-metrics-on-klt-pairs-and-torus-quotients-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_C_TRANSFER": {
+      "statement": "For smooth connected projective X with smoothly semipositive L=-K_X and an algebraic torus action, let P=L as ordinary lines with any linearization and let M be linearized with -M pseudoeffective. Nonzero invariant sections of M+iP for an unbounded positive set of i imply a nonzero invariant section of mP for some m>0 (C, inj:transfer).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Cohomological-transfer-and-equivariant-anticanonical-sections-September-26-2026/build/source/sections/transfer.tex"]
+    },
+    "C_C_HARMONIC": {
+      "statement": "For the C harmonic mechanism, f:V->Y is a surjective morphism of smooth projective varieties, D_V has a smooth semipositive metric whose null directions are vertical on a nonempty submersion open, and Q has a continuous semipositive metric on Y. Then H^p(Y,R^q f_*(K_V+D_V) tensor Q^k)=0 for p>0 and q,k>=0. This is an alternative mechanism, not an input to g:toroidal-volume.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Cohomological-transfer-and-equivariant-anticanonical-sections-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_G_VOLUME": {
+      "statement": "Let X,Y be smooth connected projective complex varieties with dim Y>0, L=-K_X smoothly semipositive, p:W->X projective birational, and f:W->Y projective surjective equidimensional toroidal for strict embeddings, with W normal integral. For a smooth resolution rho:Z->W, pi=p rho, g=f rho, E_Z=K_{Z/X}, assume rank g_*O_Z(E_Z)=1. Set a_Q=max(0,min_{E->Q}((1+ord_E K_{W/X})/ord_E f^*Q-1)), A_0=sum a_Q Q. Then A_0 is finite effective rational, f^*A_0 is p-exceptional, and -K_Y+A_0 has a semipositive singular metric with unweighted locally integrable squared frame norms, smooth on a nonempty Zariski open. If pi^*alpha>=c g^*omega_Y on a nonempty ordinary patch in the smooth base-change locus away from E_Z, the constructed metric is strictly positive on a nonempty ordinary base open (G, g:toroidal-volume).",
+      "status": "in_progress",
+      "depends_on": ["C_G_SUBKLT", "C_G_POSITIVITY", "C_G_EXTENSION", "C_G_STRICTNESS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Metric-descent-and-rank-preserving-contractions-September-26-2026/build/source/sections/toroidal-volume.tex", "research/toroidal_volume_audit/report.md", "research/toroidal_volume_audit/exact_certificate.json"]
+    },
+    "C_G_SUBKLT": {
+      "statement": "Under the morphism and model hypotheses of g:toroidal-volume, but without a metric or rank assumption, Theta=-K_{W/X}+f^*A_0 is nonpositive, (W,Theta) is sub-klt, and f^*A_0 is p-exceptional. Every prime F on every smooth model tau:Z'->W has coeff_F(K_{Z'/X}-(f tau)^*A_0)>-1 (G, g:volume-subklt).",
+      "status": "in_progress",
+      "depends_on": ["C_TV_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Metric-descent-and-rank-preserving-contractions-September-26-2026/build/source/sections/toroidal-volume.tex", "research/toroidal_volume_audit/report.md"]
+    },
+    "C_G_POSITIVITY": {
+      "statement": "With the full generic adjoint rank at exponent zero equal to one, the Jacobian section identifies the entire smooth adjoint direct image with -K_Y on a smaller base-change open, and its L2 frame norm equals the pushed-forward smooth anticanonical volume density. Smooth direct-image positivity makes the negative logarithm psh; no arbitrary subline restriction is used.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Metric-descent-and-rank-preserving-contractions-September-26-2026/build/source/sections/toroidal-volume.tex", "research/toroidal_volume_audit/report.md", "research/toroidal_volume_audit/literature/berndtsson_excerpt.md"]
+    },
+    "C_G_EXTENSION": {
+      "statement": "The corrected weight Phi=-log H+sum a_Q log|t_Q|^2 extends psh across every omitted divisor using the minimizing transverse branch, then across codimension at least two by Hartogs removability; projection of the corrected upstairs measure and g:volume-subklt prove unweighted local integrability.",
+      "status": "in_progress",
+      "depends_on": ["C_G_SUBKLT", "C_G_POSITIVITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Metric-descent-and-rank-preserving-contractions-September-26-2026/build/source/sections/toroidal-volume.tex", "research/toroidal_volume_audit/report.md"]
+    },
+    "C_G_STRICTNESS": {
+      "statement": "In g:toroidal-volume the single horizontal-curvature patch away from E_Z implies positive definite curvature of the smooth density metric on a nonempty ordinary base open, via the primitive-representative curvature formula, including the relative-dimension-zero case.",
+      "status": "in_progress",
+      "depends_on": ["C_G_POSITIVITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Metric-descent-and-rank-preserving-contractions-September-26-2026/build/source/sections/toroidal-volume.tex", "research/toroidal_volume_audit/report.md", "research/toroidal_volume_audit/literature/berndtsson_excerpt.md"]
+    },
+    "C_G_TRANSFER": {
+      "statement": "For g:transfer, two semipositive metrics, finite canonical-section volume, a rational relative section without horizontal poles on a normal equidimensional model, and the two explicitly assumed psh fiber functions produce a bounded base line metric and an integral controlled-pole adjoint measure. Full-rank-one and invariant-quotient sufficient conditions must not be conflated.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Metric-descent-and-rank-preserving-contractions-September-26-2026/build/source/sections/analytic-input.tex"]
+    },
+    "C_G_CONTRACTION": {
+      "statement": "For smooth connected projective no-positive-forms X with smoothly semipositive -K_X and a torus, a T-invariant rational fibration with relatively algebraically closed base field, a generic positive anticanonical invariant section, and invariant generic adjoint rank one at all positive multiples of one integer either gives a global invariant section or contracts through a strictly smaller smooth projective base retaining both conditions and relative algebraic closedness (G, g:cf:contraction-theorem).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Metric-descent-and-rank-preserving-contractions-September-26-2026/build/source/sections/contraction.tex"]
+    },
+    "C_E_BOUNDARY": {
+      "statement": "If Y is smooth projective of positive dimension, C>=0 is integral, and -K_Y+C has a singular metric with curvature dominating a Kahler form and multiplier ideal containing O_Y(-C), then every pseudoeffective rational divisor M becomes rationally effective after adding an effective rational divisor supported on C (E, thm:controlled-boundary).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integrable-metrics-and-effectivity-with-controlled-boundary-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_E_RING": {
+      "statement": "If -K_Y+A_0 on smooth positive-dimensional projective Y has a semipositive singular metric with unweighted integrable squared frame norms, smooth and strictly positive on a nonempty ordinary open, then for any finite list of rational divisors P_i some common rational epsilon>0 and k_0>0 give Cartier B_i=k_0(A_0+epsilon P_i) whose actual multigraded section ring is finitely generated (E, thm:correction-ring).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integrable-metrics-and-effectivity-with-controlled-boundary-September-26-2026/build/source/sections/correction-ring.tex"]
+    },
+    "C_E_CONVERSION": {
+      "statement": "E obtains ordinary fixed-pseudoeffective-error conversion for smoothly semipositive -K_X. Its main singular globally-strict metric route and its smooth toroidal/unweighted route are alternatives; failure of g:toroidal-volume alone does not refute the main conversion or headline nonvanishing.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Integrable-metrics-and-effectivity-with-controlled-boundary-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_V_EXACT": {
+      "statement": "For smooth connected positive-dimensional projective X with smoothly semipositive L=-K_X of maximum curvature rank nu and ample G_0, put ell(D)=D.L^nu.G_0^(n-nu-1) when nu<n and ell=0 otherwise. For any fixed line M, any centered discrete valuation v of C(X) or v=0, and effective integral N_j~m_j L+M with m_j->infinity, ell(N_j)=0 and v(N_j)/m_j->0, there is effective rational N~_Q L with v(N)=0 (V, V:exact).",
+      "status": "open",
+      "depends_on": ["C_V_NULL_FIELD", "C_G_VOLUME", "C_E_RING", "C_V_ENDPOINT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Exact-orders-and-invariant-anticanonical-linear-systems-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_V_NULL_FIELD": {
+      "statement": "The V null-polar-field construction supplies a normal equidimensional toroidal model with full generic adjoint rank one at exponent zero and a patch of horizontal curvature domination, as required by g:toroidal-volume. This application interface remains a separate obligation from that theorem.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Exact-orders-and-invariant-anticanonical-linear-systems-September-26-2026/build/source/sections/null-field.tex"]
+    },
+    "C_V_ENDPOINT": {
+      "statement": "The V finite-generated-ring endpoint argument attains zero valuation in an actual rational-linear anticanonical representative after removing the exceptional correction; numerical limiting effectivity and a bounded finite search are not substitutes.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Exact-orders-and-invariant-anticanonical-linear-systems-September-26-2026/build/source/sections/endpoint.tex"]
+    },
+    "C_V_INVARIANT": {
+      "statement": "If X is smooth connected projective, -K_X is smoothly semipositive, and H^i(X,O_X)=0 for all i>0, then every algebraic torus action has a nonzero naturally invariant section of a positive anticanonical multiple (V, V:invariant-main).",
+      "status": "open",
+      "depends_on": ["C_V_EXACT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Exact-orders-and-invariant-anticanonical-linear-systems-September-26-2026/build/source/sections/introduction.tex"]
+    },
+    "C_TV_SHARP_CHAMBER": {
+      "statement": "Under the full toroidal-volume hypotheses, let S be any finite set of toroidal base-boundary primes whose entire pullbacks are p-exceptional. Put lambda_Q=min_{E->Q}(1+a_E)/e_E, a_Q=max(0,lambda_Q-1). For rational b_Q>=0, the density metric on -K_Y+A_0+sum b_Q Q extends semipositively and retains the original smoothness and conditional local strictness. Its squared frame norms are locally integrable on all of Y if and only if b_Q<min(lambda_Q,1) for every Q in S. In this range the corrected pair is sub-klt at every divisorial valuation. Endpoints already fail at a prime on W. This is a proposed independently proved structural refinement; novelty and publication-level significance remain unverified.",
+      "status": "in_progress",
+      "depends_on": ["C_G_VOLUME", "C_TV_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/toroidal_volume_audit/report.md", "research/toroidal_volume_audit/exact_certificate.json"]
+    },
+    "C_TV_FORMAL_CORE": {
+      "statement": "Universal algebraic core of the toroidal-volume audit: in every finite matrix dimension a single logarithmic polar row gives at most a simple determinant pole; for arbitrary nonnegative discrepancies and multiplicities at least one, the clipped-minimum correction is nonpositive as a boundary and vanishes on a nonexceptional branch; for any attained minimum, strict codimension-one integrability is equivalent to the sharp correction interval; a log-canonical discrepancy plus a nonnegative full-support Cartier contribution, or a klt discrepancy plus any nonnegative Cartier contribution, is strictly positive on every valuation. This claim does not itself formalize complex varieties, measures, direct images, or analytic extension.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/toroidal_volume_audit/Main.lean", "research/toroidal_volume_audit/statement_fidelity.md", "research/toroidal_volume_audit/certificates/C_TV_FORMAL_CORE-65971c48af507c01.json"]
+    },
+    "C_TV_KLT_TYPE": {
+      "statement": "The complete toroidal-volume metric conclusion, with its same correction formula, full generic adjoint-rank-one premise and conditional local strictness, holds for every projective equidimensional surjective f:W->Y and projective birational p:W->smooth X when W is normal integral and locally of klt type; no toroidal structure on f is required. Locally of klt type means that every point has a neighborhood with an effective rational boundary Delta such that K_W+Delta is rationally Cartier and (W,Delta) is klt. In particular any normal Q-Gorenstein klt W is allowed. This is a structural extension with a prose proof and a separately formalized algebraic core, not a fully Lean-formalized analytic theorem; novelty remains unverified.",
+      "status": "in_progress",
+      "depends_on": ["C_G_POSITIVITY", "C_G_STRICTNESS", "C_TV_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/toroidal_volume_audit/report.md", "research/toroidal_volume_audit/exact_certificate.json"]
+    },
+    "C_TV_KIM_PREMISES": {
+      "statement": "A direct canonical-bundle-formula route would require constructing divisor and line-bundle data satisfying every premise of Kim arXiv:1910.06917v5 Theorems 1.1-1.2 and identifying its integral metric with the present H. This is an unproved applicability obligation on a retired shortcut, not an accepted implication of generic rank one.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/toroidal_volume_audit/report.md", "research/toroidal_volume_audit/literature/kim1910.06917v5.html"]
+    }
+  }
+}

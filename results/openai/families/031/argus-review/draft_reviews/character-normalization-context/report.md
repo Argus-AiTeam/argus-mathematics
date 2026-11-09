@@ -1,0 +1,28 @@
+# Character theory and normalization: the upstream boundary
+
+**Assessment: the old bridge does not certify these four manuscript claims.** They are reference-context obligations, not four additional Argus proofs or four refutations. Their exact statements are present in the reference manuscript, but neither a symbolic replay nor the old bridge judgements provides their mathematical verification.
+
+## Source, attribution and exact assertions
+
+All four old claim versions are version 1. Their source is **OpenAI**, *Open Homomorphisms of Global Solvably Closed Galois Groups*, **October 5, 2026**, revision `4eaee87548250b2682affda7d05d947c05554bae`. All eight source files match the existing `MANUSCRIPTS.json` records; the index distinguishes them from the five preserved snapshot members. The old graph locates these claims in `build/sections/characters.tex` and `generation.tex`.
+
+| Old claim | Exact manuscript content | Concrete obligation not discharged by the bridge |
+|---|---|---|
+| `C_LOG_RANK@v1` | `lem:log-rank`, characters.tex line 38: \(E\) is a number field embedded in a finite \(L/\mathbb Q_\ell\); \(u_i\in(E^\times)^n\) have algebraic-integer coordinates that are local units. For every nonzero \(a\in\mathbb Z^m\), the coordinates of \(\prod_i u_i^{a_i}\) are multiplicatively independent modulo roots of unity. If \(m>n(n-1)\), the logarithm vectors span \(L^n\). `prop:character-detection` gives its Frobenius consequences. | Justify the rank assertion for the **actual local logarithm image** and the deductions for characters. Bass's rational S-unit representation is not a substitute for this assertion. The bridge explicitly avoids making that substitution. |
+| `C_SIGNED_REPRESENTATION@v1` | `prop:signed-representation`, characters.tex line 366: for finite totally imaginary Galois \(M/\mathbb Q\), \(R=\operatorname{Gal}(M/\mathbb Q)\), complex conjugation \(c\), and every rational \(\ell\), there are \(R\)-equivariant embeddings \(\operatorname{Ind}_{\langle c\rangle}^R(\mathrm{sign})\hookrightarrow\mathcal X_\ell(M)\hookrightarrow\mathbb Q_\ell[R]\), and the action on \(\mathcal X_\ell(M)\) is faithful. | Verify that these are embeddings into and out of the manuscript's additive Galois-character space, including faithfulness; an S-unit eigenspace computation checks a different representation. |
+| `C_AMPLIFICATION@v1` | generation.tex: starting from open \(\alpha_0:G_F\to P\), choose open normal \(U\triangleleft G_{\mathbb Q}\) contained in \(G_F\), put \(A=\alpha_0(U)\), \(N=\ker(\alpha_0|_U)\), \(T=N_{G_{\mathbb Q}}(N)=G_k\), and extend to \(\beta:T\to P\). The later quotient-amplification and Frobenius-generation constructions assert specific separating-character and generation properties for the conjugates of \(N\). | Verify the normalizer extension using isomorphism rigidity/centralizer uniqueness, then the finite-group actions and Frobenius-generation argument. None is encoded by the saved matrix multiplication. |
+| `C_NORMALIZED@v1` | `thm:normalized-map`, generation.tex line 368: the constructed \(\beta:G_k\to P\) is surjective; \(\mathcal L\) is the infinite set of odd primes congruent to 1 modulo \([k:\mathbb Q]!\); for every \(\ell\in\mathcal L\), \(\log\chi_\ell\circ\beta=\log\chi_{k,\ell}\). | Prove surjectivity and all the displayed logarithmic identities for that construction. They are hypotheses of the reviewed bridge, not consequences of the missed-prime bound. |
+
+For completeness, `prop:character-detection` has three distinct quantifier patterns: an additive character vanishing at infinitely many degree-one Frobenius elements is zero; for Galois \(M/\mathbb Q\), vanishing at infinitely many unramified primes with fixed Frobenius \(\delta\) implies \(E_{\langle\delta\rangle}x=0\); and nonzero corestriction to \(\mathbb Q\) permits only finitely many Frobenius zeros without a residue-degree restriction. The old bound does not establish any of these assertions.
+
+## Evidence reconciliation and dependencies
+
+The old graph dependencies are recorded exactly in `DRAFT_REVIEW_INDEX.json`: normalization depends on amplification, log rank and the norm identity; amplification depends on character results and the external anabelian inputs. All four nodes are open, with no ledger supports judgement or mechanical evidence for these versions. In contrast, the five bridge/lemma claims do have later reviewer-tagged supports judgements. These are different evidentiary situations, not a reason to erase all old support or mark the entire manuscript proved.
+
+The supplied checker never represents these algebraic numbers, local logarithm vectors, quotient actions or Frobenius characters. Its finite averaging calculation is compatible with a standard subargument but cannot discharge the character-detection theorem or normalization. The seven boundary fields are not examples of constructed \(\beta\)'s.
+
+## Scoped conclusion
+
+The concrete gap in promoting the old result to the manuscript is **establishing the constructed map's surjectivity and logarithmic compatibility by the actual character/generation arguments**, not an execution failure or missing manuscript access. The source is available and the assertions have been identified; this review deliberately does not initiate a new audit of their proofs. No mathematical invalidity, correction or new theorem is claimed for them.
+
+There is no relevant Lean source/certificate, so neither compiler success nor theorem fidelity has been demonstrated for these statements. The current ledger records the limited fact that the old bridge does not certify them; it does not enter these unaudited propositions as trusted external theorems.

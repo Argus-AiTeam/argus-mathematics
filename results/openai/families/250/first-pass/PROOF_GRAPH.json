@@ -1,0 +1,162 @@
+{
+  "goal": "C9000250",
+  "routes": {
+    "R_COMPILER_CONTEXT": {
+      "name": "Verify arbitrary-sector preprocessing and bounded raw-run composition",
+      "status": "retired",
+      "retired_because": "The original obligation references predated the formal subclaim revisions. Superseded by R_COMPILER_SOURCE_VERIFICATION with current statements and the source-specific composition proof.",
+      "evidence": "research/compiler_context/compiler_theorem.md"
+    },
+    "R_COMPILER_WORD_BRIDGE": {
+      "name": "Combine primitive preprocessing, internal components, and the successful-exit bridge",
+      "status": "retired",
+      "retired_because": "The first word-bridge plan did not contain the execution theorem or the explicit source scan/component proof and carried stale subclaim references. Replaced by R_COMPILER_WORD_SOURCE.",
+      "evidence": "research/compiler_context/compiler_theorem.md"
+    },
+    "R_COMPILER_SOURCE_VERIFICATION": {
+      "name": "Compose exact scan invariants, arbitrary-table pipeline, components and original-word equations",
+      "status": "in_progress",
+      "evidence": "research/compiler_context/compiler_theorem.md"
+    },
+    "R_COMPILER_WORD_SOURCE": {
+      "name": "Instantiate the bounded arbitrary-word transport theorem for every source equation family",
+      "status": "in_progress",
+      "evidence": "research/compiler_context/compiler_theorem.md"
+    }
+  },
+  "nodes": {
+    "C9000250": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 250 (Boone–Higman embeddings with higher finiteness.; papers: Finite algebraic envelopes and the Boone–Higman conjecture; Simple F∞ overgroups of groups with decidable word problem; A universal group of type F∞; Lean status: Partially/Comparator formalized (lean/docs/250.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_COMPILER_CONTEXT"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_COMPILER_CONTEXT": {
+      "statement": "The specified compiler evaluator satisfies Lemma lem:compiler on all presentation words under its exact bounded totality and contextual hypotheses.",
+      "status": "open",
+      "depends_on": [
+        "C_COMPILER_VALIDATOR",
+        "C_COMPILER_SIMULATION",
+        "C_COMPILER_COMPONENTS",
+        "C_COMPILER_EXECUTION_THEOREMS",
+        "C_COMPILER_RUN_ALGEBRA",
+        "C_COMPILER_WORD_BRIDGE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Finite-algebraic-envelopes-and-the-Boone-Higman-conjecture-September-23-2026/build/bootstrap.tex",
+        "research/openai_manuscript/Finite-algebraic-envelopes-and-the-Boone-Higman-conjecture-September-23-2026/build/compiler.tex",
+        "research/compiler_context/compiler_theorem.md",
+        "research/compiler_context/exact_certificate.json"
+      ]
+    },
+    "C_COMPILER_VALIDATOR": {
+      "statement": "From an arbitrary entry, the validator reaches q_start exactly for the full, entirely clean entry language stated in eq:compiler-clean-entry; its validator predecessors are unique.",
+      "status": "open",
+      "depends_on": [
+        "C_COMPILER_EXECUTION_THEOREMS"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Finite-algebraic-envelopes-and-the-Boone-Higman-conjecture-September-23-2026/build/compiler.tex",
+        "research/compiler_context/compiler_theorem.md"
+      ]
+    },
+    "C_COMPILER_SIMULATION": {
+      "statement": "The expanded scan program realizes the supplied deterministic machine on every passing entry, and every halting length-nonincreasing computation succeeds with some finite workspace quota.",
+      "status": "open",
+      "depends_on": [
+        "C_COMPILER_EXECUTION_THEOREMS"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Finite-algebraic-envelopes-and-the-Boone-Higman-conjecture-September-23-2026/build/compiler.tex",
+        "research/compiler_context/compiler_theorem.md",
+        "research/compiler_context/scan_runtime.py"
+      ]
+    },
+    "C_COMPILER_COMPONENTS": {
+      "statement": "Every internal weak component has at most one entry and at most one terminal q_ok sector; if both exist, the entry reaches that terminal genuinely.",
+      "status": "open",
+      "depends_on": [
+        "C_COMPILER_VALIDATOR",
+        "C_COMPILER_SIMULATION",
+        "C_COMPILER_EXECUTION_THEOREMS"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Finite-algebraic-envelopes-and-the-Boone-Higman-conjecture-September-23-2026/build/compiler.tex",
+        "research/compiler_context/compiler_theorem.md"
+      ]
+    },
+    "C_COMPILER_RUN_ALGEBRA": {
+      "statement": "For every alphabet, arbitrary barrier set, budget m and length-nonincreasing contextual map f through m, raw-run normalization fixes singletons and is invariant under every bounded contextual adjacent-raw contraction.",
+      "status": "proved",
+      "depends_on": [],
+      "reviewer_confirmed": true,
+      "evidence": [
+        "research/compiler_context/Main.lean",
+        "research/compiler_context/statement_fidelity.md",
+        "research/compiler_context/lean_evidence/certificates/C_COMPILER_RUN_ALGEBRA-c5a1bfa7b06ae406.json"
+      ]
+    },
+    "C_COMPILER_WORD_BRIDGE": {
+      "statement": "On arbitrary quiver paths, every contextual compiler equation gives identical entry-priority preprocessing except the successful-exit case, which gives one bounded adjacent-raw contraction; all preprocessing derivations stay within the original grade.",
+      "status": "open",
+      "depends_on": [
+        "C_COMPILER_PRIMITIVE_PREPROCESS",
+        "C_COMPILER_COMPONENTS",
+        "C_COMPILER_EXIT_BRIDGE",
+        "C_COMPILER_EXECUTION_THEOREMS",
+        "C_COMPILER_RUN_ALGEBRA"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Finite-algebraic-envelopes-and-the-Boone-Higman-conjecture-September-23-2026/build/compiler.tex",
+        "research/compiler_context/normalization.md",
+        "research/compiler_context/compiler_theorem.md"
+      ]
+    },
+    "C_COMPILER_PRIMITIVE_PREPROCESS": {
+      "statement": "For arbitrary tags, cell contexts, and optional boundaries, primitive raw/quota/cleanup preprocessing preserves all raw-slide, quota, merge, and cleanup equations and never raises grade. Internal machine equations and successful exit are excluded.",
+      "status": "proved",
+      "depends_on": [],
+      "reviewer_confirmed": true,
+      "evidence": [
+        "research/compiler_context/Preprocess.lean",
+        "research/compiler_context/preprocess_fidelity.md",
+        "research/compiler_context/preprocess_evidence/certificates/C_COMPILER_PRIMITIVE_PREPROCESS-a194d103e9ad447c.json"
+      ]
+    },
+    "C_COMPILER_EXIT_BRIDGE": {
+      "statement": "For every internal component of the actually compiled scan machine, q_ok omega = Z omega gives either identical preprocessing or exactly one bounded adjacent-raw contraction, including arbitrary raw neighbors.",
+      "status": "open",
+      "depends_on": [
+        "C_COMPILER_COMPONENTS",
+        "C_COMPILER_RUN_ALGEBRA"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Finite-algebraic-envelopes-and-the-Boone-Higman-conjecture-September-23-2026/build/compiler.tex",
+        "research/compiler_context/compiler_theorem.md"
+      ]
+    },
+    "C_COMPILER_EXECUTION_THEOREMS": {
+      "statement": "The explicit validator, arbitrary-list scans, copy/output array loops, arbitrary-table bounded pipelines, entry-component criterion and original-word contextual transport satisfy their universally quantified formal specifications. The full literal compiler's source-specific instantiation is a separate ordinary proof.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/compiler_context/CompilerProof.lean",
+        "research/compiler_context/execution_fidelity.md",
+        "research/compiler_context/execution_evidence/certificates/C_COMPILER_EXECUTION_THEOREMS-5806e763c285a2d3.json"
+      ]
+    }
+  }
+}

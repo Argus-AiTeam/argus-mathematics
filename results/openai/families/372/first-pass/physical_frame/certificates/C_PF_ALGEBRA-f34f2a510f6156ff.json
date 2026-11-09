@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_PF_ALGEBRA-21c0b3499d9f",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/372/first-pass/physical_frame/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 26676,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/372/first-pass/physical_frame/Main.lean",
+    "source_sha256": "015c948b4cca0c3d36e853283f83e93becbe8e41c2fd7b6e57bcd246fcc610a8",
+    "statement_fidelity": "families/372/first-pass/physical_frame/statement_fidelity.md",
+    "statement_fidelity_sha256": "a331bc8042d1b64950014e20f3c96c0407bd0a968eba285ec5e4b14d8b08fc47",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/372/first-pass/physical_frame/Main.lean:67:20: error(lean.invalidField): Invalid field `normal_source_of_leading`: The environment does not contain `PhysicalFrame.CompatibilityData.normal_source_of_leading`, so it is not possible to project the field `normal_source_of_leading` from an expression\n  C\nof type `CompatibilityData A V W`\nfamilies/372/first-pass/physical_frame/Main.lean:68:22: error(lean.invalidField): Invalid field `normal_source_of_step`: The environment does not contain `PhysicalFrame.CompatibilityData.normal_source_of_step`, so it is not possible to project the field `normal_source_of_step` from an expression\n  C\nof type `CompatibilityData A V W`\n'PhysicalFrame.normal_source_all_orders' depends on axioms: [propext, sorryAx]\n'PhysicalFrame.vector_telescope' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PhysicalFrame.divergence_telescope' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/physical_frame/Main.lean",
+    "text": "import Mathlib\n\nnamespace PhysicalFrame\n\nstructure CompatibilityData (A V W : Type*) [AddCommGroup A]\n    [AddCommGroup V] [AddCommGroup W] where\n  R : A →+ V\n  Rlead : A →+ V\n  S : A →+ W\n  Slead : A →+ W\n  divV : V →+ W\n  normalV : V →+ W\n  normalA : A →+ W\n  defect : A →+ W\n  P : W →+ W\n  Plead : W →+ W\n  augmented : ∀ u, divV (R u) - S u = P (defect u)\n  compatibility : ∀ u, divV (Rlead u) + normalV (R u) - Slead u =\n    P (normalA u) + Plead (defect u)\n  leading_normal : ∀ u, normalV (Rlead u) = Plead (normalA u)\n\nsection Compatibility\n\nvariable {A V W : Type*} [AddCommGroup A] [AddCommGroup V] [AddCommGroup W]\nvariable (C : CompatibilityData A V W)\n\ntheorem normal_source_of_leading (u : A)\n    (hR : C.Rlead u = 0) (hS : C.Slead u = 0) (hN : C.normalA u = 0) :\n    C.normalV (C.R u) = C.Plead (C.defect u) := by\n  simpa [hR, hS, hN] using C.compatibility u\n\ntheorem normal_source_of_step (previous current : A)\n    (hR : C.Rlead current = -C.R previous)\n    (hS : C.Slead current = -C.S previous)\n    (hN : C.normalA current = -C.defect previous) :\n    C.normalV (C.R current) = C.Plead (C.defect current) := by\n  have balance : C.divV (C.Rlead current) - C.Slead current =\n      C.P (C.normalA current) := by\n    calc\n      C.divV (C.Rlead current) - C.Slead current =\n          -(C.divV (C.R previous) - C.S previous) := by\n        rw [hR, hS, map_neg]\n        abel\n      _ = -C.P (C.defect previous) := by rw [C.augmented previous]\n      _ = C.P (C.normalA current) := by rw [hN, map_neg]\n  have combined : (C.divV (C.Rlead current) - C.Slead current) +\n      C.normalV (C.R current) =\n      C.P (C.normalA current) + C.Plead (C.defect current) := by\n    calc\n      (C.divV (C.Rlead current) - C.Slead current) + C.normalV (C.R current) =\n          C.divV (C.Rlead current) + C.normalV (C.R current) - C.Slead current := by\n        abel\n      _ = C.P (C.normalA current) + C.Plead (C.defect current) :=\n        C.compatibility current\n  rw [balance] at combined\n  exact add_left_cancel combined\n\ntheorem normal_source_all_orders (u : ℕ → A)\n    (hR0 : C.Rlead (u 0) = 0) (hS0 : C.Slead (u 0) = 0)\n    (hN0 : C.normalA (u 0) = 0)\n    (hR : ∀ j, C.Rlead (u (j + 1)) = -C.R (u j))\n    (hS : ∀ j, C.Slead (u (j + 1)) = -C.S (u j))\n    (hN : ∀ j, C.normalA (u (j + 1)) = -C.defect (u j)) :\n    ∀ j, C.normalV (C.R (u j)) = C.Plead (C.defect (u j)) := by\n  intro j\n  cases j with\n  | zero => exact C.normal_source_of_leading (u 0) hR0 hS0 hN0\n  | succ j => exact C.normal_source_of_step (u j) (u (j + 1)) (hR j) (hS j) (hN j)\n\ntheorem particular_source_tangent (u particular : A)\n    (compatible : C.normalV (C.R u) = C.Plead (C.defect u))\n    (normal_prescribed : C.normalA particular = -C.defect u) :\n    C.normalV (-C.R u - C.Rlead particular) = 0 := by\n  rw [map_sub, map_neg, C.leading_normal particular, normal_prescribed, map_neg,\n    compatible]\n  abel\n\nend Compatibility\n\nsection Telescoping\n\nvariable {K V A : Type*} [CommRing K] [AddCommGroup V] [Module K V]\nvariable [AddCommGroup A] [Module K A]\n\ntheorem residual_sum_telescope (h : K) (r t : ℕ → V)\n    (initial : t 0 = 0) (recursion : ∀ j, t (j + 1) = -r j) (N : ℕ) :\n    (∑ j ∈ Finset.range (N + 1), (h ^ (j + 1) • r j + h ^ j • t j)) =\n      h ^ (N + 1) • r N := by\n  induction N with\n  | zero => simp [initial]\n  | succ N ih =>\n    rw [Finset.sum_range_succ, ih, recursion N]\n    simp only [smul_neg]\n    abel\n\ntheorem normal_sum_telescope (h : K) (q n : ℕ → V)\n    (initial : n 0 = 0) (recursion : ∀ j, n (j + 1) = -q j) (N : ℕ) :\n    (∑ j ∈ Finset.range (N + 1), (h ^ j • n j + h ^ (j + 1) • q j)) =\n      h ^ (N + 1) • q N := by\n  calc\n    (∑ j ∈ Finset.range (N + 1), (h ^ j • n j + h ^ (j + 1) • q j)) =\n        ∑ j ∈ Finset.range (N + 1), (h ^ (j + 1) • q j + h ^ j • n j) := by\n      apply Finset.sum_congr rfl\n      intro j _\n      exact add_comm _ _\n    _ = h ^ (N + 1) • q N := residual_sum_telescope h q n initial recursion N\n\ndef truncated (h : K) (u : ℕ → A) (N : ℕ) : A :=\n  ∑ j ∈ Finset.range (N + 1), h ^ j • u j\n\ntheorem vector_telescope (h : K) (R Rt : A →ₗ[K] V) (u : ℕ → A)\n    (initial : Rt (u 0) = 0) (recursion : ∀ j, Rt (u (j + 1)) = -R (u j))\n    (N : ℕ) :\n    h • R (truncated h u N) + Rt (truncated h u N) =\n      h ^ (N + 1) • R (u N) := by\n  calc\n    h • R (truncated h u N) + Rt (truncated h u N) =\n        ∑ j ∈ Finset.range (N + 1),\n          (h ^ (j + 1) • R (u j) + h ^ j • Rt (u j)) := by\n      simp only [truncated, map_sum, map_smul, Finset.smul_sum, smul_smul,\n        Finset.sum_add_distrib, pow_succ']\n    _ = h ^ (N + 1) • R (u N) :=\n      residual_sum_telescope h (fun j => R (u j)) (fun j => Rt (u j))\n        initial recursion N\n\ntheorem divergence_telescope (h : K) (q n : A →ₗ[K] V) (u : ℕ → A)\n    (initial : n (u 0) = 0) (recursion : ∀ j, n (u (j + 1)) = -q (u j))\n    (N : ℕ) :\n    n (truncated h u N) + h • q (truncated h u N) =\n      h ^ (N + 1) • q (u N) := by\n  calc\n    n (truncated h u N) + h • q (truncated h u N) =\n        ∑ j ∈ Finset.range (N + 1),\n          (h ^ j • n (u j) + h ^ (j + 1) • q (u j)) := by\n      simp only [truncated, map_sum, map_smul, Finset.smul_sum, smul_smul,\n        Finset.sum_add_distrib, pow_succ']\n    _ = h ^ (N + 1) • q (u N) :=\n      normal_sum_telescope h (fun j => q (u j)) (fun j => n (u j))\n        initial recursion N\n\nend Telescoping\n\n#print axioms normal_source_all_orders\n#print axioms vector_telescope\n#print axioms divergence_telescope\n\nend PhysicalFrame\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/physical_frame/statement_fidelity.md",
+    "text": "# Statement fidelity: the compatible recursion algebra\n\nThe formal claim is `C_PF_ALGEBRA`, not analytic existence of elasticity\nsolutions and not global inverse uniqueness. `Main.lean` has two independent\nfamilies of universally quantified algebraic theorems.\n\n`CompatibilityData A V W` contains arbitrary additive commutative groups of\namplitude pairs, vectors, and scalars. All operator fields are additive maps.\nIts three laws are explicit hypotheses, not axioms asserted about elasticity:\n\n1. `augmented` is div(R U) - S U = P(q U).\n2. `compatibility` is div(Rlead U) + normal(R U) - Slead U\n   = P(normalA U) + Plead(q U).\n3. `leading_normal` is normal(Rlead U) = Plead(normalA U).\n\nFor the application, U=(a,b), q U=div(a)-b, normalA U=theta dot a,\nnormal V=theta dot V, Rlead=R^theta, Slead=S^theta, and\nPlead=2m D+(Dm). These are complex-linear, hence additive, operators\non smooth functions on the cylinder. The first law is the manuscript's\n`eq:augmented-identity`, the second `eq:transport-compatibility`, and\nthe third `eq:normal-transport-component`. The universal smooth-jet\nidentities establishing these hypotheses are checked separately by\n`verify.py`; Lean does not encode differentiation of smooth functions.\n\n`normal_source_of_leading` proves the base compatibility for every amplitude\nannihilated by Rlead, Slead, and normalA. `normal_source_of_step` proves\ncompatibility for a current amplitude from the three previous-step equations.\n`normal_source_all_orders` quantifies over every natural-number-indexed\namplitude sequence satisfying those equations; there is no truncation bound.\n`particular_source_tangent` proves that subtracting a particular amplitude\nwith normalA=-q leaves a vector source with zero normal component. It does\nnot assert the existence of that particular amplitude or solve a PDE.\n\nThe telescoping declarations quantify over every commutative ring K, every\nK-module, every scalar h, and every natural number N, including h=0 and N=0.\n`residual_sum_telescope` and `normal_sum_telescope` prove the finite sum\nidentities under the displayed consecutive-term recursion.\n`vector_telescope` proves\n\n    h R(sum_(j=0)^N h^j U_j) + Rlead(sum_(j=0)^N h^j U_j)\n      = h^(N+1) R(U_N).\n\n`divergence_telescope` proves\n\n    normalA(sum_(j=0)^N h^j U_j) + h q(sum_(j=0)^N h^j U_j)\n      = h^(N+1) q(U_N).\n\nTheir application to the manuscript uses K=C and h=1/tau>0.\nDividing these equations by h gives respectively the conjugated vector\nresidual and the actual-divergence defect. Division is only part of that\napplication; the formal sum identities require no nonzero hypothesis.\n\nNo Carleman estimate, planar frame, support property, coefficient positivity,\nSobolev estimate, Borel summation, physical right inverse, or novelty claim\nis formalized here. These are treated, with their actual assumptions, in\n`verification.md`. The compiler certifies the conditional algebra just\ndescribed; applying it to elasticity and reading the complete analytic proof\nremain independent-review obligations.\n"
+  },
+  "subject": {
+    "content_hash": "b88c55a5b6e00de5442f4e324e8716f7ebfb1fab1957369c22f88e32b23e8815",
+    "kind": "claim",
+    "subject_id": "C_PF_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

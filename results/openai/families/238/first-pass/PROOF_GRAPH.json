@@ -1,0 +1,122 @@
+{
+  "goal": "C9000238",
+  "routes": {},
+  "nodes": {
+    "C9000238": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 238 (Optimal logarithmic mixing of the Thorp shuffle.; papers: Optimal-order mixing of the Thorp shuffle; Random coordinate frames and partial permutation laws; From partial permutation information to Fourier bounds; Conditional information under deterministic coordinate sweeps; Conditional permutations in a revealed switching environment; Routing densities and representation contraction for Thorp sweeps; Row&#8211;column symmetry and contraction of coordinate sweeps; Random-subspace tests and trace smoothing for coordinate sweeps; Compatibility entropy and the spectrum of a Thorp sweep; Signed tensor densities and diagram budgets for the Thorp shuffle; Conditional coordinate sweeps and analytic transfer; A strict four-row permanent inequality and permutation moments; Lean status: Partially/Comparator formalized (lean/docs/238.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C238_CORE", "C238_GENERAL_ENERGY", "C238_COMPONENT", "C238_PUBLICATION_GATE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ],
+      "scope": "Current verification route only: the new structural extensions still require independent novelty/significance review. A failed novelty gate must not be reported as campaign completion; refutation remains an alternative campaign route."
+    },
+    "C238_PATH": {
+      "statement": "For every feasible exposed labeled path specification, its switch-coin event is a cylinder. Unvisited time-edge coins remain independent and fair; future exposed paths do not change the earlier tagged-card law.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/thorp_energy/report.md", "research/thorp_energy/exact_certificate.json"]
+    },
+    "C238_NOISE": {
+      "statement": "The adapted centered flow has independent fair-sign dipole noise on one-free edges, conditionally centered on F_s; martingale cancellation must be derived from this product law.",
+      "status": "open",
+      "depends_on": ["C238_PATH", "C238_FINITE_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/thorp_energy/report.md", "research/thorp_energy/exact_certificate.json"]
+    },
+    "C238_SPREAD": {
+      "statement": "Distinct coordinate averages spread a dipole over disjoint subcubes with exact squared norm 2^(-|S|-1) times its amplitude squared; averaging its own coordinate kills it.",
+      "status": "open",
+      "depends_on": ["C238_FINITE_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/thorp_energy/report.md", "research/thorp_energy/Main.lean"]
+    },
+    "C238_COMPONENT": {
+      "statement": "Conditionally on F_a, different components of the future deterministic coordinate word have independent (free set, centered flow) pairs; single-position availability is the initial component density.",
+      "status": "open",
+      "depends_on": ["C238_PATH", "C238_FINITE_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/thorp_energy/report.md", "research/thorp_energy/exact_certificate.json"]
+    },
+    "C238_GENERAL_ENERGY": {
+      "statement": "For an arbitrary deterministic coordinate word, conditional energy equals the projected initial energy plus one weighted noise term for each coordinate's last occurrence.",
+      "status": "open",
+      "depends_on": ["C238_PATH", "C238_NOISE", "C238_SPREAD", "C238_FINITE_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/thorp_energy/report.md", "research/thorp_energy/exact_certificate.json"]
+    },
+    "C238_ENERGY": {
+      "statement": "For every fixed independent distinct list and t>=d, E_t=sum_(j=1)^d 2^(-j)b_(t-j), including d=1, ell=0 and m=1. A conditional-on-F_(t-d) version is proposed.",
+      "status": "open",
+      "depends_on": ["C238_GENERAL_ENERGY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/thorp_energy/report.md", "research/thorp_energy/exact_certificate.json"]
+    },
+    "C238_HALF": {
+      "statement": "For s>=d-1, a=s-d+1 and either i_s-half, eq:h-3 holds on every feasible F_a atom; it uses opposite future arrays, not independence within a half.",
+      "status": "open",
+      "depends_on": ["C238_PATH", "C238_COMPONENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/thorp_energy/report.md", "research/thorp_energy/exact_certificate.json"]
+    },
+    "C238_CORE": {
+      "statement": "Parameter-uniform certification of lem:path-cylinder, eq:h-2 and eq:h-3 with the manuscript's actual fixed-list and conditional quantifiers.",
+      "status": "open",
+      "depends_on": ["C238_PATH", "C238_ENERGY", "C238_HALF"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/thorp_energy/report.md", "research/thorp_energy/exact_certificate.json"],
+      "scope": "Engineer proof supplied; status remains open until independent Reviewer confirmation."
+    },
+    "C238_AVERAGED": {
+      "statement": "At T=200d, uniform independent ordered lists of k<=7n/8 labels have the averaged total-variation bound of prop:averaged-marginal. Random-list concentration and sequential comparison remain separate obligations.",
+      "status": "open",
+      "depends_on": ["C238_CORE", "C238_MARGINAL_REMAINDER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Optimal-order-mixing-of-the-Thorp-shuffle-September-26-2026/build/main.tex"],
+      "scope": "Downstream claim; conditional core alone does not establish it."
+    },
+    "C238_MIXING": {
+      "statement": "TV(q_d^(1600d),U_n) tends to zero as d tends to infinity, where each q_d step is a physical shuffle, not a d-layer sweep.",
+      "status": "open",
+      "depends_on": ["C238_AVERAGED", "C238_GROUP_REMAINDER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Optimal-order-mixing-of-the-Thorp-shuffle-September-26-2026/build/main.tex"],
+      "scope": "The common trimming, reciprocal-degree, eight-block Fourier-transfer and final-comparison arguments are additional unresolved dependencies, outside this mission. Companion proofs are not dependencies."
+    },
+    "C238_FINITE_KERNEL": {
+      "statement": "Universal finite real-vector martingale cancellation, deterministic-matrix preservation of centering, product factorization, and the two-subcube dipole norm coefficient.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/thorp_energy/Main.lean", "research/thorp_energy/statement_fidelity.md", "research/thorp_energy/certificates/C238_FINITE_KERNEL-cf9d415852637732.json"],
+      "scope": "Lean 4.31.0 exit_code=0, proof_holes=[], audit_exit_code=0. Formal algebraic core only; the full shuffle interpretation and statement fidelity await independent review."
+    },
+    "C238_MARGINAL_REMAINDER": {
+      "statement": "Unconditional uniform-list concentration, the scalar energy inequality, sequential total-variation comparison and Cauchy-Schwarz give the averaged marginal estimate from the conditional core.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Optimal-order-mixing-of-the-Thorp-shuffle-September-26-2026/build/main.tex"],
+      "scope": "Grouped unresolved downstream obligation, not an assumption of the conditional-core proof."
+    },
+    "C238_GROUP_REMAINDER": {
+      "statement": "The eight-block partition, common trimming, reciprocal-degree estimates, arbitrary-multiplicity orbit lift and final convolution/Fourier/parity comparison establish the full-law upper bound from averaged marginals.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Optimal-order-mixing-of-the-Thorp-shuffle-September-26-2026/build/main.tex"],
+      "scope": "Grouped unresolved downstream obligation; companion proofs are not dependencies."
+    },
+    "C238_PUBLICATION_GATE": {
+      "statement": "Independent review establishes that a certified refutation or structural verification theorem is genuinely new and publishable, rather than a finite exclusion, known reconstruction or wording erratum.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md", "research/thorp_energy/report.md"],
+      "scope": "Not established by the current bounded mission. No verified_new or publishable status is asserted."
+    }
+  }
+}

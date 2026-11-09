@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "server": {"name":"jacobian","version":"0.14.0"},
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "tool": "math.find",
+  "request": {"request":{"op":"inspect","operation_id":"arithmetic_dynamics.finite_field.functional_graph.compute"}},
+  "result": {
+    "kind":"operation",
+    "operation":{
+      "operation_id":"arithmetic_dynamics.finite_field.functional_graph.compute",
+      "title":"Compute functional graph of a polynomial map over GF(p)",
+      "description":"Compute the complete functional graph of a polynomial map over a finite field, including cycles, tail lengths, and all edges.",
+      "read_only":true,
+      "tags":["arithmetic-dynamics","finite-field","exact"],
+      "examples":[{"name":"x2_mod_5","description":"Functional graph of x^2 over GF(5); prime must be a prime number.","input":{"coefficients":["0","0","1"],"prime":5}}],
+      "input_schema":{
+        "additionalProperties":false,
+        "description":"A canonical polynomial map over the prime field GF(p).",
+        "properties":{
+          "coefficients":{"items":{"type":"string"},"maxItems":31,"minItems":1,"title":"Coefficients","type":"array"},
+          "prime":{"maximum":10000,"minimum":2,"title":"Prime","type":"integer"}
+        },
+        "required":["prime","coefficients"],
+        "title":"FiniteFieldMapRequest",
+        "type":"object"
+      },
+      "output_schema":{
+        "additionalProperties":false,
+        "properties":{
+          "coefficients":{"items":{"type":"string"},"maxItems":31,"minItems":1,"title":"Coefficients","type":"array"},
+          "complete":{"const":true,"default":true,"title":"Complete","type":"boolean"},
+          "cycles":{"items":{"items":{"type":"integer"},"type":"array"},"title":"Cycles","type":"array"},
+          "edges":{"items":{"maxItems":2,"minItems":2,"prefixItems":[{"type":"integer"},{"type":"integer"}],"type":"array"},"title":"Edges","type":"array"},
+          "method":{"const":"COMPLETE_FUNCTIONAL_GRAPH_ENUMERATION","default":"COMPLETE_FUNCTIONAL_GRAPH_ENUMERATION","title":"Method","type":"string"},
+          "prime":{"maximum":10000,"minimum":2,"title":"Prime","type":"integer"},
+          "tail_lengths":{"items":{"type":"integer"},"title":"Tail Lengths","type":"array"}
+        },
+        "required":["prime","coefficients","edges","cycles","tail_lengths"],
+        "title":"FiniteFieldMapResult",
+        "type":"object"
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-RR_LEAN_CORE-6b23fdb58590",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/192/first-pass/verification/refined_report/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/192/first-pass/verification/refined_report/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15261,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/192/first-pass/verification/refined_report/Main.lean",
+    "source_sha256": "a91446617e18163f4f21df4b1fad2eb46639a7cd469ab39b60bc18bc6bdbd5d9",
+    "statement_fidelity": "families/192/first-pass/verification/refined_report/statement_fidelity.md",
+    "statement_fidelity_sha256": "40474b0a48d50f651d9547b5387a3c89e24465589b1ba35cfe5e20c1266206b0",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/192/first-pass/verification/refined_report/Main.lean:45:52: warning: This simp argument is unused:\n  hp\n\nHint: Omit it from the simp argument list.\n  simp [bit, hp̵,̵ ̵h̵b]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/verification/refined_report/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nset_option exponentiation.threshold 3000\n\nnamespace RefinedReport\n\nnoncomputable def bit (p : Prop) : ℝ := by\n  classical\n  exact if p then 1 else 0\n\ntheorem prod_bits {ι : Type*} (s : Finset ι) (p : ι → Prop) :\n    (∏ j ∈ s, bit (p j)) = bit (∀ j ∈ s, p j) := by\n  classical\n  induction s using Finset.induction_on with\n  | empty => simp [bit]\n  | @insert a s ha ih =>\n      rw [Finset.prod_insert ha, ih]\n      by_cases hp : p a <;> simp [bit, hp]\n\ntheorem reporting_cancellation {U Z : Type*} {m : ℕ}\n    (selector : U → Fin m) (tests : Fin m → Z → Prop)\n    (u : U) (z : Fin m → Z) :\n    bit ((∀ j, j ≠ selector u → tests j (z j)) ∧\n      ¬ (∀ j, tests j (z j))) =\n    (∑ i : Fin m, bit (selector u = i) *\n      ∏ j ∈ Finset.univ.erase i, bit (tests j (z j))) -\n      ∏ j : Fin m, bit (tests j (z j)) := by\n  classical\n  simp_rw [prod_bits]\n  simp only [Finset.mem_erase, Finset.mem_univ, and_true, true_implies]\n  have hsum :\n      (∑ i : Fin m, bit (selector u = i) *\n        bit (∀ j, j ≠ i → tests j (z j))) =\n      bit (∀ j, j ≠ selector u → tests j (z j)) := by\n    rw [Finset.sum_eq_single (selector u)]\n    · simp [bit]\n    · intro j _ hj\n      have hne : selector u ≠ j := Ne.symm hj\n      simp [bit, hne]\n    · simp\n  rw [hsum]\n  by_cases hp : ∀ j, j ≠ selector u → tests j (z j)\n  · by_cases hb : ∀ j, tests j (z j) <;> simp [bit, hp, hb]\n  · have hb : ¬ (∀ j, tests j (z j)) := by\n      intro h\n      exact hp (fun j _ => h j)\n    simp [bit, hp, hb]\n\ntheorem cylinder_invariance {U Z : Type*} {m : ℕ}\n    (selector : U → Fin m) (tests : Fin m → Z → Prop)\n    (u : U) (i : Fin m) (z z' : Fin m → Z)\n    (h : ∀ j, j ≠ i → z j = z' j) :\n    bit (selector u = i) *\n        (∏ j ∈ Finset.univ.erase i, bit (tests j (z j))) =\n      bit (selector u = i) *\n        (∏ j ∈ Finset.univ.erase i, bit (tests j (z' j))) := by\n  classical\n  have hp :\n      (∏ j ∈ Finset.univ.erase i, bit (tests j (z j))) =\n        ∏ j ∈ Finset.univ.erase i, bit (tests j (z' j)) := by\n    apply Finset.prod_congr rfl\n    intro j hj\n    rw [h j (Finset.mem_erase.mp hj).1]\n  rw [hp]\n\ntheorem ordinary_cell {U Z : Type*} {m : ℕ}\n    (selector : U → Fin m) (tests : Fin m → Z → Prop)\n    (u₀ : U) (i : Fin m) (w : Fin m → Z)\n    (hsel : selector u₀ = i)\n    (hfail : ¬ (∀ j, j ≠ i → tests j (w j)))\n    (u : U) (z : Fin m → Z) :\n    (u = u₀ ∧ selector u = i ∧\n      (∀ j, j ≠ i → z j = w j) ∧\n      ¬ (∀ j, j ≠ i → tests j (z j))) ↔\n      (u = u₀ ∧ ∀ j, j ≠ i → z j = w j) := by\n  constructor\n  · rintro ⟨hu, _, hz, _⟩\n    exact ⟨hu, hz⟩\n  · rintro ⟨rfl, hz⟩\n    refine ⟨rfl, hsel, hz, ?_⟩\n    intro hp\n    apply hfail\n    intro j hj\n    rw [← hz j hj]\n    exact hp j hj\n\ntheorem gaussian_deficit_identity (p S J : ℝ) :\n    (-p * J) - (-p * (1 + S)) = p * (1 + S - J) := by\n  ring\n\ntheorem explicit_error_budget :\n    (3576000 : ℝ) / 2 ^ 124 + 4704 / 2 ^ 2560 < 1 / 2 ^ 101 := by\n  norm_num\n\ntheorem strict_gaussian_margin (p S J : ℝ)\n    (hp : 0 < p) (hS : 0 ≤ S)\n    (hJ : J ≤ 3576000 / (2 : ℝ) ^ 124 + 4704 / (2 : ℝ) ^ 2560) :\n    (3 / 4 : ℝ) * p < (-p * J) - (-p * (1 + S)) := by\n  rw [gaussian_deficit_identity]\n  have hb : (3576000 : ℝ) / 2 ^ 124 + 4704 / 2 ^ 2560 < 1 / 4 := by\n    exact lt_trans explicit_error_budget (by norm_num)\n  have hj : J < 1 / 4 := lt_of_le_of_lt hJ hb\n  nlinarith\n\ntheorem bernoulli (a : ℝ) (ha : 0 ≤ a) (k : ℕ) :\n    1 + (k : ℝ) * a ≤ (1 + a) ^ k := by\n  induction k with\n  | zero => simp\n  | succ k ih =>\n      rw [pow_succ]\n      have hm := mul_le_mul_of_nonneg_right ih (show 0 ≤ 1 + a by linarith)\n      have ht : 0 ≤ (k : ℝ) * a ^ 2 :=\n        mul_nonneg (Nat.cast_nonneg k) (sq_nonneg a)\n      norm_num only [Nat.cast_add, Nat.cast_one]\n      nlinarith\n\ntheorem finite_amplification (a target : ℝ) (ha : 0 < a) :\n    ∃ k : ℕ, target < (1 + a) ^ k := by\n  obtain ⟨k, hk⟩ := exists_nat_gt ((target - 1) / a)\n  have hk' : target - 1 < (k : ℝ) * a := (div_lt_iff₀ ha).mp hk\n  exact ⟨k, lt_of_lt_of_le (by linarith) (bernoulli a ha.le k)⟩\n\nend RefinedReport\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/verification/refined_report/statement_fidelity.md",
+    "text": "# Statement fidelity: RefinedReport\n\n`Main.lean` formalizes the pointwise cancellation and cylinder structure,\nthe exact arithmetic error budget, its algebraic implication for the\nGaussian deficit, and the Archimedean finite-iteration step. It does not\nformalize Gaussian integration, weak convergence, conditional expectation,\nFourier degree, or the final Boolean existence theorem.\n\nThe declarations described below have the unqualified names `bit`,\n`prod_bits`, `reporting_cancellation`, `cylinder_invariance`, `ordinary_cell`,\n`gaussian_deficit_identity`, `explicit_error_budget`,\n`strict_gaussian_margin`, `bernoulli`, and `finite_amplification`, all\ninside the namespace `RefinedReport`.\n\n`RefinedReport.bit` is the real-valued indicator of an arbitrary proposition.\n`RefinedReport.prod_bits` identifies a finite product of these indicators\nwith the indicator of their conjunction.\n\n`RefinedReport.reporting_cancellation` quantifies over arbitrary types `U`\nand `Z`, any natural number `m`, any total selector `U -> Fin m`, arbitrary\ncoordinate tests `Fin m -> Z -> Prop`, and every input `(u,z)`. Its left\nside is exactly the indicator of \"every unselected leaf passes, but not\nevery leaf passes.\" Its right side is the sum of the selected-index\nindicators times the products of the unselected-leaf indicators, minus\nthe product of all leaf indicators. No independence, continuity,\nnon-atomicity, finite-alphabet, or generic-position hypothesis is assumed.\nAlthough a common type `Z` is used, heterogeneous finite alphabets embed\nin their disjoint union; the theorem restricts to every such product.\n\n`RefinedReport.cylinder_invariance` proves that the term indexed by `i`\nis unchanged when only leaf `i` changes. It may depend on the center\nand the other `m-1` leaves. The all-leaf product in the cancellation\nidentity omits the center. This is the coordinate-saving algebra, not\na theorem about ignoring a single fixed coordinate for the entire report.\n\n`RefinedReport.ordinary_cell` describes an attained `P^c` report. The\nfixed center selects `i` and the fixed unselected leaves include a\nfailed test. Under these explicit hypotheses, the cell imposes no\ncondition on leaf `i`. The theorem proves equivalence of the report's\nfull predicate with equality of just its `m` reported coordinates.\n\n`RefinedReport.gaussian_deficit_identity` is the polynomial subtraction\n`(-p*J)-(-p*(1+S)) = p*(1+S-J)` for all real `p,S,J`.\n`RefinedReport.explicit_error_budget` proves the unconditional exact\nnumerical inequality\n`3576000/2^124 + 4704/2^2560 < 1/2^101`.\n`RefinedReport.strict_gaussian_margin` derives a deficit greater than\n`3p/4` from `p>0`, `S>=0`, and `J` at most that explicit budget. It does\nnot assume the gain it proves. The interpretation of `p,S,J` as the\nGaussian quantities and the analytic bound on `J` are proved in\n`report.md`, not in Lean.\n\n`RefinedReport.bernoulli` proves `(1+a)^k >= 1+k*a` for every real\n`a>=0` and natural `k`. `RefinedReport.finite_amplification` consequently\nproves that, for every real `a>0` and every real target, some finite\nnatural exponent has `(1+a)^k` above that target. It does not assert\nthe existence of the finite observations used to realize those factors.\n\nThere are no project axioms or proof placeholders. Mathlib and Lean's\nordinary foundational axioms are the formal dependencies. The compiler\nchecks the declarations above; the correspondence to the reporting\nconstruction and the remaining analytic/probabilistic proof require\nindependent mathematical review.\n"
+  },
+  "subject": {
+    "content_hash": "227cfe231eff3a48e09bb52e7624d511fc2b09bb040abd773ae0cca798560092",
+    "kind": "claim",
+    "subject_id": "RR_LEAN_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

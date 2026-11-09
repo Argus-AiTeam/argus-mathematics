@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-QC_ALGEBRA-12075e5744b7",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/234/first-pass/quadratic_cavity/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/234/first-pass/quadratic_cavity/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14309,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/234/first-pass/quadratic_cavity/Main.lean",
+    "source_sha256": "7d007a695996c02a428a71fb5446f5e19a4f36e4b1f378066eb4a0d205426360",
+    "statement_fidelity": "families/234/first-pass/quadratic_cavity/statement_fidelity.md",
+    "statement_fidelity_sha256": "fc0605314a331a5c511a67c2a385aa010ccb59883a1ef23b4fb53769fd955abc",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/234/first-pass/quadratic_cavity/Main.lean:74:0: warning: automatically included section variable(s) unused in theorem `QuadraticCavity.innovation_covariance`:\n  [DecidableEq n]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq n] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/quadratic_cavity/Main.lean",
+    "text": "import Mathlib\n\nnamespace QuadraticCavity\n\nsection RingIdentities\n\nvariable {R : Type*} [Ring R]\n\ntheorem ordered_factor (B C K J : R)\n    (hC : (1 - C * K) * J = 1) :\n    1 - (B - C) * (K * J) = (1 - B * K) * J := by\n  calc\n    1 - (B - C) * (K * J) =\n        (1 - C * K) * J - (B - C) * (K * J) := by rw [hC]\n    _ = (1 - B * K) * J := by noncomm_ring\n\ntheorem ordered_intertwining (B C K JB JC T : R)\n    (hB : JB * (1 - B * K) = 1)\n    (hC : (1 - C * K) * JC = 1)\n    (hT : (1 - (B - C) * (K * JC)) * T = 1) :\n    JC * T = JB := by\n  have hCT : ((1 - B * K) * JC) * T = 1 := by\n    rw [← ordered_factor B C K JC hC]\n    exact hT\n  calc\n    JC * T = (JB * (1 - B * K)) * (JC * T) := by rw [hB, one_mul]\n    _ = JB * (((1 - B * K) * JC) * T) := by simp only [mul_assoc]\n    _ = JB := by rw [hCT, mul_one]\n\ntheorem left_right_resolvent (C K JC LC : R)\n    (hJC : JC * (1 - C * K) = 1)\n    (hLC : (1 - K * C) * LC = 1) :\n    JC * C = C * LC := by\n  calc\n    JC * C = JC * C * ((1 - K * C) * LC) := by rw [hLC, mul_one]\n    _ = (JC * (1 - C * K)) * C * LC := by noncomm_ring\n    _ = C * LC := by rw [hJC, one_mul]\n\ntheorem ordered_resolvent_difference (B C K JB JC LC : R)\n    (hB : JB * (1 - B * K) = 1)\n    (hJC : JC * (1 - C * K) = 1)\n    (hLC : (1 - K * C) * LC = 1) :\n    JB * B - JC * C = JB * (B - C) * LC := by\n  rw [left_right_resolvent C K JC LC hJC hLC]\n  calc\n    JB * B - C * LC =\n        JB * B * ((1 - K * C) * LC) -\n          (JB * (1 - B * K)) * C * LC := by\n      rw [hB, hLC, mul_one, one_mul]\n    _ = JB * (B - C) * LC := by noncomm_ring\n\nend RingIdentities\n\nsection MatrixIdentities\n\nvariable {n : Type*} [Fintype n] [DecidableEq n]\n\ntheorem transpose_right_inverse (C K J : Matrix n n ℝ)\n    (hC : C.transpose = C) (hK : K.transpose = K)\n    (hJ : J * (1 - C * K) = 1) :\n    (1 - K * C) * J.transpose = 1 := by\n  have h := congrArg Matrix.transpose hJ\n  simpa only [Matrix.transpose_mul, Matrix.transpose_sub,\n    Matrix.transpose_one, hC, hK] using h\n\ntheorem matrix_resolvent_difference (B C K JB JC : Matrix n n ℝ)\n    (hC : C.transpose = C) (hK : K.transpose = K)\n    (hJB : JB * (1 - B * K) = 1)\n    (hJC : JC * (1 - C * K) = 1) :\n    JB * B - JC * C = JB * (B - C) * JC.transpose := by\n  exact ordered_resolvent_difference B C K JB JC JC.transpose hJB hJC\n    (transpose_right_inverse C K JC hC hK hJC)\n\ntheorem innovation_covariance (JB JC T S : Matrix n n ℝ)\n    (hJT : JC * T = JB) :\n    JC * (T * S) * JC.transpose = JB * S * JC.transpose := by\n  calc\n    JC * (T * S) * JC.transpose =\n        (JC * T) * S * JC.transpose := by simp only [mul_assoc]\n    _ = JB * S * JC.transpose := by rw [hJT]\n\ntheorem scaled_covariance_difference (B C K JB JC S : Matrix n n ℝ)\n    (a : ℝ)\n    (hC : C.transpose = C) (hK : K.transpose = K)\n    (hJB : JB * (1 - B * K) = 1)\n    (hJC : JC * (1 - C * K) = 1)\n    (hDelta : B - C = a • S) :\n    JB * B - JC * C = a • (JB * S * JC.transpose) := by\n  calc\n    JB * B - JC * C = JB * (B - C) * JC.transpose :=\n      matrix_resolvent_difference B C K JB JC hC hK hJB hJC\n    _ = JB * (a • S) * JC.transpose := by rw [hDelta]\n    _ = a • (JB * S * JC.transpose) := by\n      simp only [mul_smul_comm, smul_mul_assoc]\n\nend MatrixIdentities\n\nend QuadraticCavity\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/quadratic_cavity/statement_fidelity.md",
+    "text": "# Fidelity of the formal algebraic core\n\nThe source `Main.lean` formalizes claim `QC_ALGEBRA`. It does not formalize\nthe whole quadratic-cascade lemma or the pressure theorem. All declarations\nare in namespace `QuadraticCavity`.\n\nThe four declarations `ordered_factor`, `ordered_intertwining`,\n`left_right_resolvent`, and `ordered_resolvent_difference` quantify over\nevery type with a ring structure, with no commutativity assumption.\n`B,C,K,JB,JC,LC,T` are arbitrary ring elements. A displayed inverse\nidentity is an explicit hypothesis, not a conclusion about when an\ninverse exists. The letter `C` here denotes the second resolvent\nargument, not the cavity block named `C` in the manuscript.\n\n`ordered_factor` proves\n`1-(B-C)(KJ)=(1-BK)J` assuming `(1-CK)J=1`.\nIt is `cav:q-factor` with `B=H_{i-1}`, `C=H_i`, `J=J_i`.\n`ordered_intertwining` additionally takes a left inverse `JB` for\n`1-BK` and a right inverse `T` for `1-(B-C)(KJC)`, and proves\n`JC*T=JB`, the rescaling identity used in `cav:q-kernels`.\n`left_right_resolvent` proves `JC*C=C*LC` from the indicated left\nand right inverse identities. `ordered_resolvent_difference` proves\n`JB*B-JC*C=JB*(B-C)*LC`; it preserves the multiplication order.\n\nThe remaining declarations quantify over every finite index type with\ndecidable equality and over real square matrices of that index type.\nThis includes the empty index type (dimension zero).\n`transpose_right_inverse` assumes that `C` and `K` are symmetric and\nthat `J*(1-CK)=1`, and proves `(1-KC)J.transpose=1`.\n`matrix_resolvent_difference` specializes the ring identity to obtain\n`JB*B-JC*C=JB*(B-C)*JC.transpose`. It requires the stated symmetry\nand left inverse hypotheses; no commutation hypothesis is present.\n\n`innovation_covariance` is the purely algebraic equality\n`JC*(T*S)*JC.transpose=JB*S*JC.transpose` under `JC*T=JB`.\nIt identifies the covariance after rescaling a Gaussian transition,\nonce the transition covariance `T*S` has been established analytically.\n`scaled_covariance_difference` also assumes `B-C=a*S`, for an\narbitrary real `a`, and proves\n`JB*B-JC*C=a*(JB*S*JC.transpose)`.\nIn the cascade application `a=zeta_i>0`; the formal statement does\nnot divide by `a` and therefore does not need its positivity.\n\nThe actual Gaussian precision positivity, existence of these matrix\ninverses under spectral bounds, Gaussian integration, Poisson mapping,\nquenched-root convention, independent per-visit residuals, determinant\nlogarithms, and all-depth probabilistic induction are proved in\n`report.md`, not encoded here. A successful Lean compilation establishes\nonly the quantified ordered algebra just described. It must not be used\nto label those analytic or probabilistic assertions `closed_kernel`.\n"
+  },
+  "subject": {
+    "content_hash": "56664b33b36f08a17b06259b8976204f5da6cca99a32f87ac7e52169eec98718",
+    "kind": "claim",
+    "subject_id": "QC_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

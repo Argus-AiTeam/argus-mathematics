@@ -1,0 +1,167 @@
+{
+  "goal": "C9000210",
+  "routes": [
+    {
+      "name": "R_SQUARE",
+      "status": "current",
+      "evidence": "research/square_stabilization/report.md"
+    },
+    {
+      "name": "R_MANUSCRIPT_SIXTH",
+      "status": "untried",
+      "evidence": "research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/introduction.tex"
+    }
+  ],
+  "nodes": {
+    "C9000210": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 210 (Foulkes' conjecture for sixth powers and quadratic stabilization.; papers: Foulkes' conjecture for the sixth symmetric power; Quadratic stabilization of the canonical Foulkes--Howe map; Lean status: Partially/Comparator formalized (lean/docs/210.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_SQUARE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "M_MAP": {
+      "statement": "For the normalized multiplication map, surjectivity is equivalent to vanishing of every symmetric a-linear form on Sym^b V whose diagonal vanishes on products of b vectors.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quadratic-Stabilization-of-the-Canonical-Foulkes-Howe-Map-September-25-2026/build/paper.tex"]
+    },
+    "M_SHIFT": {
+      "statement": "One shared-vector derivative is injective on bidegree (p,q) when p>q, with arbitrary spectator variables.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quadratic-Stabilization-of-the-Canonical-Foulkes-Howe-Map-September-25-2026/build/paper.tex"]
+    },
+    "M_ORIGINAL_VAN": {
+      "statement": "The manuscript's four-step vanishing induction applies for b>=a(a-1).",
+      "status": "open",
+      "depends_on": ["M_SHIFT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quadratic-Stabilization-of-the-Canonical-Foulkes-Howe-Map-September-25-2026/build/paper.tex"]
+    },
+    "M_QUADRATIC": {
+      "statement": "The staged normalized canonical map is surjective in all finite dimensions for a>=2 and b>=a(a-1).",
+      "status": "open",
+      "depends_on": ["M_MAP", "M_ORIGINAL_VAN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quadratic-Stabilization-of-the-Canonical-Foulkes-Howe-Map-September-25-2026/build/paper.tex"]
+    },
+    "M_POLARIZATION": {
+      "statement": "The sixth-power manuscript proves the joint shared-vector polarization span in multidegree j whenever j>=aL, using full powers of sl2 lowering operators.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/reduction.tex"]
+    },
+    "M_FINITE": {
+      "statement": "The manuscript's exact finite comparisons cover every source partition for 6<=b<=25.",
+      "status": "open",
+      "depends_on": ["M_STRIP_UPPER", "M_RECURRENCES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/verification.tex"]
+    },
+    "M_BAND": {
+      "statement": "The manuscript's rectangular reduction and exact band comparisons finish the degrees 26<=b<=29.",
+      "status": "open",
+      "depends_on": ["M_RECTANGLES", "M_CERT_COVER", "M_BAND_FORMULA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/verification.tex"]
+    },
+    "M_SIXTH": {
+      "statement": "The sixth-power manuscript claims abstract equivariant comparison for every b>=6, using finite comparisons below 30 and canonical surjectivity from 30.",
+      "status": "open",
+      "depends_on": ["M_QUADRATIC", "M_FINITE", "M_BAND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/introduction.tex"]
+    },
+    "C_POWER": {
+      "statement": "In a characteristic-zero sl2 operator module, D^L is injective on weight w>=L on vectors locally nilpotent for E.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/square_stabilization/report.md", "research/square_stabilization/certificates/C_POWER-8a8a3aff2ac03190.json"]
+    },
+    "C_DET": {
+      "statement": "For j<rL, det(x_1,...,x_r)^j in dimension r is nonzero and is annihilated by the joint shared-vector derivative product D_i^L.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/square_stabilization/report.md", "research/square_stabilization/exact_certificate.json"]
+    },
+    "C_JOINT": {
+      "statement": "For r,L>=1 and j>=0, the product of shared-vector derivatives D_i^L is injective on multidegree (j,...,j), initially independent of y, in every finite dimension if and only if j>=rL.",
+      "status": "open",
+      "depends_on": ["C_POWER", "C_DET"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/square_stabilization/report.md", "research/square_stabilization/exact_certificate.json"]
+    },
+    "C_SQUARE_VAN": {
+      "statement": "For a>=2 and b>=(a-1)^2, symmetric a-linear forms on Sym^b V vanishing diagonally on all products vanish identically, including a=2,b=1 and V=0.",
+      "status": "open",
+      "depends_on": ["C_JOINT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/square_stabilization/report.md"]
+    },
+    "C_SQUARE": {
+      "statement": "The precisely normalized canonical map Sym^b(Sym^a V) -> Sym^a(Sym^b V) is surjective for all finite-dimensional complex V, a>=2, b>=(a-1)^2.",
+      "status": "open",
+      "depends_on": ["M_MAP", "C_SQUARE_VAN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/square_stabilization/report.md", "research/square_stabilization/exact_certificate.json"]
+    },
+    "M_STRIP_UPPER": {
+      "statement": "The signed-strip coefficient is 0 or +/-1 with the stated containment/interlacing conditions; its cycle-removal bound U is gap-monotone and bounds the sixth-power source multiplicity F.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/upper.tex"]
+    },
+    "M_RECURRENCES": {
+      "statement": "Schur alternants and Newton identities give the exact target recurrence targetrec and signed-strip source recurrence sourcerec, with tail-preserving previous target lookups.",
+      "status": "open",
+      "depends_on": ["M_STRIP_UPPER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/upper.tex"]
+    },
+    "M_POWER_LOWER": {
+      "statement": "The finite sumset bound f(C,h,k) and distinct leading monomials imply Q(kx)>=f(C,z,k) with z=min(18,min{h:binom(d0+h,h)>=C}) when Q(x)>=C>0 and w(x)=6d0>0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/lower.tex"]
+    },
+    "M_RECTANGLES": {
+      "statement": "Highest-weight multiplication gives Q(d+c)>=Q(d) when Q(c)>0; the six rectangular occurrences give Q(d+6e_i)>=Q(d) and F(d+6e_6)=F(d).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/reduction.tex"]
+    },
+    "M_CERT_COVER": {
+      "statement": "The certificate program's exhaustive residue/mode classification clears each pair by bounds or the chart, or flags it with t2<=27; the retained range is 26<=b<=149.",
+      "status": "open",
+      "depends_on": ["M_RECURRENCES", "M_STRIP_UPPER", "M_POWER_LOWER", "M_RECTANGLES", "M_CHART"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/certificates.tex"]
+    },
+    "M_BAND_FORMULA": {
+      "statement": "The seven rational numerator rows give exactly 720(Q-F) by finalinteger; the Laurent window retains all coefficients requested in the tail-degree<=27 band.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/band.tex"]
+    },
+    "M_CHART": {
+      "statement": "The chart factor-length lemma, module generation below a, and shared-vector polarization imply the manuscript's independent canonical-surjectivity bound b>=a(a-1)^2.",
+      "status": "open",
+      "depends_on": ["M_POLARIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Foulkes-Conjecture-for-the-Sixth-Symmetric-Power-September-25-2026/build/sections/reduction.tex"]
+    }
+  }
+}

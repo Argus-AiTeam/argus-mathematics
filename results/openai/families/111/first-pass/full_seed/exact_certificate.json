@@ -1,0 +1,111 @@
+{
+  "result_kind": "source-faithful universal formal verification",
+  "claim_id": "V_ONE_SAMPLE_ALMIGHTY",
+  "upstream_commit": "4eaee87548250b2682affda7d05d947c05554bae",
+  "project_root": "campaigns/9000111",
+  "statement": {
+    "fixed_vector": "Every size, finite labeled matroid, nonnegative real vector: expected minimum over all orders >= 2^-293 OPT.",
+    "one_sample": "For mutually independent nonnegative sample/value coordinates with matching laws and finite expected optimum, the concrete exactly-one-sample simulation with an independent complete seed guarantees 2^-293, hence 2^-310, against every measurable complete-information order.",
+    "correspondence": "Rank-one testing against previously accepted layer labels equals the implementation's closure test against all prior eligible layer labels."
+  },
+  "formal_source": "research/full_seed/Main.lean",
+  "formal_source_sha256": "467f264157032256ea1b69ed3007a6caa162bcff84c7e86c0ce4df1c4dc1e789",
+  "statement_fidelity": "research/full_seed/statement_fidelity.md",
+  "statement_fidelity_sha256": "9fd3ee4bab1bebf915458e7447299ef8e10890f57e4976fec9a21770bf2d81c3",
+  "definitions": {
+    "fixed_vector_rule": "OAI.MatroidProphet.completeHiddenRule",
+    "one_sample_rule": "OAI.MatroidProphet.sampleSimulation (completeHiddenRule M hE)",
+    "complete_seed_law": "OAI.MatroidProphet.sourceSeedLaw n",
+    "dependency_graph": "research/full_seed/upstream/import_closure.json",
+    "compatibility_translation": "research/full_seed/build_compat.py"
+  },
+  "oai_dependency_modules": 125,
+  "compiler_exit_code": 0,
+  "lean_version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)",
+  "proof_holes": [],
+  "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "mechanical_evidence": {
+    "recorded": {
+      "evidence_id": "lean-V_ONE_SAMPLE_ALMIGHTY-641d4e7c298e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_ONE_SAMPLE_ALMIGHTY",
+        "content_hash": "c78ca53734078f691712fd28630e2dd6362badcd5754d6997af55d79079d5e9f"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/full_seed/certificates/V_ONE_SAMPLE_ALMIGHTY-a12b28434690e741.json"
+    },
+    "changed": true,
+    "refusals": [],
+    "statement_fidelity": {
+      "document": "research/full_seed/statement_fidelity.md",
+      "verified_by": null,
+      "note": "a proof kernel established the formal statement recorded on this claim; nothing has checked that the formal statement says what the natural statement says, and no tier in this schema encodes that it has"
+    }
+  },
+  "campaign_local_checks": [
+    {
+      "command": [
+        "$WORKSPACE/argus-live-update/.venv/bin/python",
+        "-m",
+        "argus_skill.verticals.math.math_state",
+        "check",
+        "--project-root",
+        "campaigns/9000111"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"issues\": []\n}\n"
+    },
+    {
+      "command": [
+        "$WORKSPACE/argus-live-update/.venv/bin/python",
+        "-m",
+        "argus_skill.verticals.math.proof_graph_check",
+        "check",
+        "--project-root",
+        "campaigns/9000111"
+      ],
+      "exit_code": 0,
+      "stdout": "proof graph valid: 11 node(s)\n"
+    }
+  ],
+  "supporting_exact_checks": {
+    "fixed_vector_ratio": "1/15914343565113172548972231940698266883214596825515126958094847260581103904401068017057792",
+    "public_ratio": "1/2085924839766513752338888384931203236916703635113918720651407820138886450957656787131798913024",
+    "weighted_error": "16744703/140189871636480",
+    "boundary_matroid": {
+      "rank": 2,
+      "loops": [
+        0
+      ],
+      "parallel_class": [
+        1,
+        2
+      ],
+      "independent_sets": 6,
+      "submodular_pairs": 256
+    },
+    "jacobian": {
+      "operation_id": "matrix.rank.compute",
+      "protocol_version": "2025-11-25",
+      "server_version": "0.14.0",
+      "adapter_status": "success",
+      "payload": "research/full_seed/jacobian_payload.json",
+      "typed_output": "research/full_seed/jacobian_output.json"
+    }
+  },
+  "independent_review": "pending Host-invoked Reviewer",
+  "novelty_status": "not_assessed",
+  "significance_status": "not_assessed",
+  "limitations": [
+    "The compiler does not verify the interpretation of LaTeX or novelty.",
+    "Transport from arbitrary finite ordered label sets to Fin n is justified in prose.",
+    "The exact finite boundary calculation is supporting evidence, not the universal theorem."
+  ]
+}

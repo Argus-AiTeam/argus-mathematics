@@ -1,0 +1,132 @@
+{
+  "format": "cone-drop-exact-v1",
+  "claim": "C_CONE_GENERAL",
+  "result_kind": "mathematical_verification_and_extension_with_formal_support",
+  "statement": {
+    "matrix_size": "Every integer d>=2",
+    "ambient_algebra": "Every nonzero unital complex C*-algebra P",
+    "input": "A unital *-homomorphism from the unitized Md cone with full first rank-one corner",
+    "parameters": "Some delta in (0,1),N>=1; every L>=1 with d^L>=N; k=N^L,m=k+L",
+    "conclusion": "d exactly equivalent orthogonal positive contractions in P tensor_max m, with unit defect Cuntz below (b1-lambda)+ for every lambda in (0,1)",
+    "original_specialization": "d=2, lambda=1/2",
+    "proof": "report.md"
+  },
+  "commutative_identities": [
+    {
+      "id": "plus_idempotent",
+      "left": "((1+f)/2)**2",
+      "right": "(1+f)/2",
+      "ideal": [{"generator":"f*f-1","multiplier":"1/4"}]
+    },
+    {
+      "id": "minus_idempotent",
+      "left": "((1-f)/2)**2",
+      "right": "(1-f)/2",
+      "ideal": [{"generator":"f*f-1","multiplier":"1/4"}]
+    },
+    {
+      "id": "spectral_orthogonality",
+      "left": "((1+f)/2)*((1-f)/2)",
+      "right": "0",
+      "ideal": [{"generator":"f*f-1","multiplier":"-1/4"}]
+    },
+    {
+      "id": "spectral_complement",
+      "left": "(1+f)/2+(1-f)/2",
+      "right": "1",
+      "ideal": []
+    },
+    {
+      "id": "partial_flip_unitarity",
+      "left": "((1+f+w*(1-f))/2)*((1+f+z*(1-f))/2)",
+      "right": "1",
+      "ideal": [
+        {"generator":"f*f-1","multiplier":"(2-z-w)/4"},
+        {"generator":"z*w-1","multiplier":"(1-f)**2/4"}
+      ]
+    },
+    {
+      "id": "initial_endpoint",
+      "left": "(1+f)/2+(1-f)/2",
+      "right": "1",
+      "ideal": []
+    },
+    {
+      "id": "terminal_endpoint",
+      "left": "(1+f)/2-(1-f)/2",
+      "right": "f",
+      "ideal": []
+    },
+    {
+      "id": "uniform_terminal_difference",
+      "left": "(1+f)/2+z*(1-f)/2-f",
+      "right": "(z+1)*(1-f)/2",
+      "ideal": []
+    },
+    {
+      "id": "cutoff_rescaling",
+      "left": "(1-l)*r*y",
+      "right": "y",
+      "ideal": [{"generator":"(1-l)*r-1","multiplier":"y"}]
+    },
+    {
+      "id": "product_defect_recursion",
+      "left": "1-a*p",
+      "right": "(1-a)+a*(1-p)",
+      "ideal": []
+    },
+    {
+      "id": "product_defect_nonnegative_remainder",
+      "left": "(1-a)+(1-p)-(1-a*p)",
+      "right": "(1-a)*(1-p)",
+      "ideal": []
+    }
+  ],
+  "noncommutative_identities": [
+    {
+      "id": "conjugation_multiplication",
+      "mode": "unitary",
+      "left": "(u*a*v)*(u*b*v)",
+      "right": "u*(a*b)*v"
+    },
+    {
+      "id": "conjugation_unital",
+      "mode": "unitary",
+      "left": "u*1*v",
+      "right": "1"
+    },
+    {
+      "id": "uniform_norm_expansion",
+      "mode": "free",
+      "left": "u*a*v-f*a*w",
+      "right": "(u-f)*a*v+f*a*(v-w)"
+    }
+  ],
+  "jacobian": {
+    "operation_id": "matrix.polynomial.evaluate.compute",
+    "payload": "jacobian/flip_payload.json",
+    "typed_result": "jacobian/flip_result.json",
+    "adapter_status": "jacobian/adapter_status.json"
+  },
+  "lean": {
+    "claim": "C_CONE_FORMAL",
+    "source": "Main.lean",
+    "statement_fidelity": "statement_fidelity.md",
+    "certificate": "lean/certificates/C_CONE_FORMAL-57b853c481c8bb7e.json",
+    "scope": "Universal supporting identities, scalar geometry, actual flip path, endpoint estimate, and ordered bilinear tensor implication; not arbitrary C*-algebras"
+  },
+  "finite_boundary_experiments": {
+    "cube_dimensions": [1,2,3,7,17,64],
+    "deltas": ["1/4","1/2","2/3"],
+    "matrix_sizes": [2,3,4,5],
+    "maximum_N": 32,
+    "scope": "Explicit finite supplements only; universality is supplied by the proof and named Lean theorems"
+  },
+  "not_claimed": [
+    "A full Lean formalization of prop:cone-drop or of arbitrary C*-algebras",
+    "Verification of the upstream full-cone construction or the main theorems",
+    "A refutation of a literal manuscript assertion",
+    "Independent Reviewer acceptance",
+    "Verified novelty or publishability"
+  ]
+}

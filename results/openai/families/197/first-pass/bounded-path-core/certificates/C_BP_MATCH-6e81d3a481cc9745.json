@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_BP_MATCH-0eab57f4cfc0",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/197/first-pass/bounded-path-core/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/197/first-pass/bounded-path-core/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15742,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/197/first-pass/bounded-path-core/Main.lean",
+    "source_sha256": "de93908a2cb094084b7b4c6a137878f98d0e007365726a5c5bc33e550acf5528",
+    "statement_fidelity": "families/197/first-pass/bounded-path-core/statement_fidelity.md",
+    "statement_fidelity_sha256": "c37c50d7f38673619fa564ccbe0d965c6027a32d67b64a46d371b2dbf4345d14",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/bounded-path-core/Main.lean",
+    "text": "import Mathlib\n\nnamespace BoundedPathCore\n\nopen Finset\n\ntheorem occurrence_multiplicity_bound\n    {O B : Type*} [Fintype O] [DecidableEq O] [DecidableEq B]\n    (block : O → B) (mate : O → O)\n    (hinv : Function.Involutive mate)\n    (hnoself : ∀ x, mate x ≠ x → block (mate x) ≠ block x)\n    (b : B) :\n    2 * (univ.filter (fun x => block x = b)).card ≤\n      Fintype.card O + (univ.filter (fun x => mate x = x)).card := by\n  classical\n  let A := univ.filter (fun x => block x = b)\n  let P := A.filter (fun x => mate x ≠ x)\n  let F := A.filter (fun x => mate x = x)\n  have hdis : Disjoint P F := by\n    apply Finset.disjoint_left.mpr\n    intro x hx hy\n    exact (mem_filter.mp hx).2 (mem_filter.mp hy).2\n  have hcup : P ∪ F = A := by\n    ext x\n    simp only [P, F, mem_union, mem_filter]\n    tauto\n  have hcards : P.card + F.card = A.card := by\n    rw [← card_union_of_disjoint hdis, hcup]\n  have hsub : P.image mate ⊆ univ \\ A := by\n    intro y hy\n    obtain ⟨x, hx, rfl⟩ := mem_image.mp hy\n    have hxA : block x = b := (mem_filter.mp (mem_filter.mp hx).1).2\n    have hxM : mate x ≠ x := (mem_filter.mp hx).2\n    have hne : block (mate x) ≠ b := by\n      simpa only [hxA] using hnoself x hxM\n    simp only [mem_sdiff, mem_univ, true_and]\n    intro hyA\n    exact hne (mem_filter.mp hyA).2\n  have hpc : P.card ≤ Fintype.card O - A.card := by\n    have hh := card_le_card hsub\n    rw [card_image_of_injective P hinv.injective] at hh\n    simpa only [card_sdiff, inter_univ, card_univ] using hh\n  have hfixed : F.card ≤ (univ.filter (fun x => mate x = x)).card := by\n    apply card_le_card\n    intro x hx\n    exact mem_filter.mpr ⟨mem_univ x, (mem_filter.mp hx).2⟩\n  have hsize : A.card ≤ Fintype.card O := card_le_univ A\n  change 2 * A.card ≤ _\n  omega\n\ntheorem stage_coarea\n    {E : Type*} [Fintype E]\n    (m : E → ℕ) (M : ℕ) (hm : ∀ e, m e ≤ M) :\n    (∑ j ∈ range M, (univ.filter (fun e => j < m e)).card) =\n      ∑ e, m e := by\n  classical\n  calc\n    _ = ∑ j ∈ range M, ∑ e, if j < m e then (1 : ℕ) else 0 := by\n      apply sum_congr rfl\n      intro j hj\n      simp only [card_eq_sum_ones, sum_filter]\n    _ = ∑ e, ∑ j ∈ range M, if j < m e then (1 : ℕ) else 0 := by\n      rw [sum_comm]\n    _ = ∑ e, m e := by\n      apply sum_congr rfl\n      intro e he\n      have hh : (range M).filter (fun j => j < m e) = range (m e) := by\n        ext j\n        simp only [mem_filter, mem_range]\n        have hme := hm e\n        omega\n      calc\n        _ = ((range M).filter (fun j => j < m e)).card := by\n          simp only [card_eq_sum_ones, sum_filter]\n        _ = m e := by rw [hh, card_range]\n\ntheorem component_budget_bound\n    (s tau A c S z b d : ℝ)\n    (hs : 0 ≤ s) (hA : tau ≤ A) (hc : 0 ≤ c) (hb : 0 ≤ b)\n    (hmatch : 2 * z ≤ S + b)\n    (hlo : tau * s - c ≤ d) (hhi : d ≤ A * s) :\n    z * (2 * d - 2 * tau * s + 2 * c) - S * d ≤\n      -tau * s * S + (A - tau) * s * b + c * (S + b) := by\n  let B := (A - tau) * s + c\n  let D := d - tau * s + c\n  have hB : 0 ≤ B := by\n    dsimp [B]\n    exact add_nonneg (mul_nonneg (sub_nonneg.mpr hA) hs) hc\n  have hD : 0 ≤ D := by dsimp [D]; linarith\n  have hDB : D ≤ B := by dsimp [D, B]; nlinarith\n  by_cases ht : 2 * z - S ≤ 0\n  · have h1 := mul_nonneg (show 0 ≤ S - 2 * z by linarith) hD\n    have h2 := mul_nonneg hb hB\n    dsimp [D, B] at h1 h2\n    nlinarith\n  · have h1 := mul_nonneg hB (show 0 ≤ b - (2 * z - S) by linarith)\n    have h2 := mul_nonneg (show 0 ≤ 2 * z - S by linarith)\n      (sub_nonneg.mpr hDB)\n    dsimp [B, D] at h1 h2\n    nlinarith\n\ndef weightLambda : ℚ := 71589573988 / 72026254783\n\ntheorem weight_contraction :\n    0 < weightLambda ∧ weightLambda < 1 ∧\n    ((16534 : ℚ) * (129 / 16513) ^ 2 + 3 / 2) / 4 ≤ weightLambda ∧\n    (16533 : ℚ) / 16641 + 7 * (129 / 16513) ^ 2 = weightLambda ∧\n    (16530 : ℚ) / 16641 + 7 * (129 / 16513) ^ 2 ≤ weightLambda := by\n  norm_num [weightLambda]\n\nend BoundedPathCore\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/bounded-path-core/statement_fidelity.md",
+    "text": "# Statement fidelity\n\n`BoundedPathCore.occurrence_multiplicity_bound` quantifies over every finite\noccurrence type `O`, every block type `B`, every assignment `block : O -> B`,\nand every involutive map `mate : O -> O`. Fixed points of `mate` are unmatched\noccurrences. Its hypothesis `hnoself` excludes a matched pair on the same\nunderlying block. For every block, the conclusion is twice its number of\noccurrences at most all occurrences plus all unmatched occurrences. Applied to\none link component, this is precisely the no-self-link multiplicity inequality.\nApplied to incidences at a vertex and their actual path-turn pairing, with\nhalf-edges as blocks, it is the local inequality used in the stage incidence\nproof. These applications and their translation from graph paths are explained\nin `theorem.md`; Lean does not encode paths or perform that translation.\n\n`BoundedPathCore.stage_coarea` quantifies over every finite edge type, every\nnatural multiplicity function, and every natural upper bound on it. It equates\nthe sum of stage sizes (stage `j` in the formal statement means manuscript\nstage `j+1`) with total multiplicity. Zero multiplicities and an empty edge type\nare allowed. This is an identity, not an independence or probability assertion.\nThe same theorem applies to vertices with their maximum incident multiplicity.\n\n`BoundedPathCore.component_budget_bound` is a universal real inequality.\nIts hypotheses are exactly the nonnegative scale, upper weight bound, bin\nerror, and unmatched count, together with `2*z <= S+b` and the lower/upper bin\nbounds. Its conclusion is the component estimate with finite bin error\n`c*(S+b)`. No integer, maximum, or counting hypotheses are silently encoded:\nthose are supplied by the preceding mathematical construction.\n\n`BoundedPathCore.weight_contraction` checks the three rational class-row\nestimates for the actual `q=128` squared-turn transfer, against\n`weightLambda = 71589573988/72026254783`. The identification of the three\nclasses with the manuscript alphabet, and the induction from a positive-vector\nbound to word-mass decay, are proved in prose and replayed arithmetically by\n`verify.py`, not formalized here.\n\nThe Lean source does **not** formalize the random-matching model, conditioning,\ngrid construction, word-extension counts, probability bounds, or the whole\nbounded-path theorem. A successful compiler run certifies the four stated\nfinite/universal cores only; it is not kernel certification of\n`C_BP_QUANT`, the main group-algebra theorem, or novelty.\n"
+  },
+  "subject": {
+    "content_hash": "aef051b44e18e4a44972d9b85532f46d8f1c9e2b1fc4463c9d9be7fd8e7e1ba5",
+    "kind": "claim",
+    "subject_id": "C_BP_MATCH"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

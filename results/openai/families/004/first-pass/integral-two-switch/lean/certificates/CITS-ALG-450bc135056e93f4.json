@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-CITS-ALG-8da3be14aa40",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/004/first-pass/integral-two-switch/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/004/first-pass/integral-two-switch/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14838,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/004/first-pass/integral-two-switch/lean/Main.lean",
+    "source_sha256": "212573b249326c857b55326f8c11d679f49d08f71cf52d1bb30ae51e1cad09a3",
+    "statement_fidelity": "families/004/first-pass/integral-two-switch/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "9fef1fcdbb2740391996fc2b5496c4f2d46046c14df802d7ff8549cdd8e8820d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/004/first-pass/integral-two-switch/lean/Main.lean:132:22: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/integral-two-switch/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace IntegralTwoSwitch\n\nsection Cyclic\n\nvariable {R : Type*} [CommRing R]\n\ndef cyclicDerivative (s : R) (n : ℕ) : R :=\n  ∑ i ∈ Finset.range n, (i : R) * s ^ i\n\ndef cyclicNorm (s : R) (n : ℕ) : R :=\n  ∑ i ∈ Finset.range n, s ^ i\n\ntheorem derivative_telescoping (s : R) (n : ℕ) :\n    (s - 1) * cyclicDerivative s n + cyclicNorm s n - (n : R) =\n      ((n : R) - 1) * (s ^ n - 1) := by\n  induction n with\n  | zero => simp [cyclicDerivative, cyclicNorm]\n  | succ n ih =>\n      simp only [cyclicDerivative, cyclicNorm, Finset.sum_range_succ,\n        Nat.cast_add, Nat.cast_one, pow_succ] at *\n      linear_combination ih\n\ntheorem cyclic_derivative_identity (s : R) (n : ℕ) (hs : s ^ n = 1) :\n    (s - 1) * cyclicDerivative s n = (n : R) - cyclicNorm s n := by\n  have h := derivative_telescoping s n\n  rw [hs] at h\n  linear_combination h\n\ntheorem exact_frobenius (f a ell : R) (hf : f * f - a * f + ell = 0) :\n    (f - a) * (a * f - (ell + 1)) = a - (ell + 1) * f := by\n  linear_combination a * hf\n\ntheorem two_by_two_volume\n    (a b c d v₁ v₂ x₁ x₂ : R) :\n    (a * v₁ + b * v₂) * (c * x₁ + d * x₂) -\n        (c * v₁ + d * v₂) * (a * x₁ + b * x₂) =\n      (a * d - b * c) * (v₁ * x₂ - v₂ * x₁) := by\n  ring\n\nend Cyclic\n\nsection Descent\n\nvariable {A B A' B' : Type*}\nvariable [AddCommGroup A] [AddCommGroup B]\nvariable [AddCommGroup A'] [AddCommGroup B']\n\ntheorem cleared_lifts_agree (r : A →+ B) (h : ℕ)\n    (hker : ∀ a, r a = 0 → h • a = 0)\n    {x y : A} (hxy : r x = r y) :\n    h • x = h • y := by\n  have hz : r (x - y) = 0 := by rw [map_sub, hxy, sub_self]\n  have hk := hker (x - y) hz\n  exact sub_eq_zero.mp (by simpa only [nsmul_sub] using hk)\n\nnoncomputable def clearedDescent (r : A →+ B) (h : ℕ)\n    (hex : ∀ b, ∃ a, r a = h • b) (b : B) : A :=\n  h • Classical.choose (hex b)\n\ntheorem clearedDescent_restrict (r : A →+ B) (h : ℕ)\n    (hex : ∀ b, ∃ a, r a = h • b) (b : B) :\n    r (clearedDescent r h hex b) = (h * h) • b := by\n  simp only [clearedDescent, map_nsmul, Classical.choose_spec (hex b), mul_nsmul]\n\ntheorem clearedDescent_eq (r : A →+ B) (h : ℕ)\n    (hex : ∀ b, ∃ a, r a = h • b)\n    (hker : ∀ a, r a = 0 → h • a = 0)\n    (b : B) (a : A) (ha : r a = h • b) :\n    clearedDescent r h hex b = h • a := by\n  unfold clearedDescent\n  apply cleared_lifts_agree r h hker\n  rw [Classical.choose_spec (hex b), ha]\n\ntheorem clearedDescent_add (r : A →+ B) (h : ℕ)\n    (hex : ∀ b, ∃ a, r a = h • b)\n    (hker : ∀ a, r a = 0 → h • a = 0)\n    (b c : B) :\n    clearedDescent r h hex (b + c) =\n      clearedDescent r h hex b + clearedDescent r h hex c := by\n  unfold clearedDescent\n  rw [← nsmul_add]\n  apply cleared_lifts_agree r h hker\n  rw [Classical.choose_spec (hex (b + c)), map_add,\n    Classical.choose_spec (hex b), Classical.choose_spec (hex c), nsmul_add]\n\ntheorem clearedDescent_natural\n    (r : A →+ B) (r' : A' →+ B') (h : ℕ)\n    (hex : ∀ b, ∃ a, r a = h • b)\n    (hex' : ∀ b, ∃ a, r' a = h • b)\n    (hker' : ∀ a, r' a = 0 → h • a = 0)\n    (alpha : A →+ A') (beta : B →+ B')\n    (hsquare : ∀ a, r' (alpha a) = beta (r a)) (b : B) :\n    alpha (clearedDescent r h hex b) =\n      clearedDescent r' h hex' (beta b) := by\n  unfold clearedDescent\n  rw [map_nsmul]\n  symm\n  apply cleared_lifts_agree r' h hker'\n  rw [Classical.choose_spec (hex' (beta b)), hsquare,\n    Classical.choose_spec (hex b), map_nsmul]\n\nend Descent\n\nsection Boundaries\n\nvariable {D₀ D₁ E₀ E₁ C₁ : Type*}\nvariable [AddCommGroup D₀] [AddCommGroup D₁]\nvariable [AddCommGroup E₀] [AddCommGroup E₁] [AddCommGroup C₁]\n\ntheorem transferred_boundary\n    (d : D₀ →+ D₁) (d' : E₀ →+ E₁)\n    (f₀ : D₀ →+ E₀) (f₁ : D₁ →+ E₁)\n    (i : C₁ →+ D₁) (p : D₁ →+ C₁) (h : D₁ →+ D₀)\n    (hsquare : ∀ x, f₁ (d x) = d' (f₀ x))\n    (z : D₁) (hz : z - i (p z) = d (h z)) :\n    f₁ z - f₁ (i (p z)) = d' (f₀ (h z)) := by\n  rw [← map_sub, hz, hsquare]\n\nend Boundaries\n\nsection Volumes\n\nvariable {K : Type*} [Field K]\n\ntheorem nonprimitive_volume (p a b r s : K) (hp : p ≠ 0)\n    (hbezout : a * r + b * s = 1) :\n    (p * a) * (r / p) - (p * b) * (-s / p) = 1 := by\n  calc\n    (p * a) * (r / p) - (p * b) * (-s / p) = a * r + b * s := by\n      field_simp [hp] <;> ring\n    _ = 1 := hbezout\n\nend Volumes\n\nsection Iteration\n\nvariable {R G : Type*} [Monoid R] [AddCommMonoid G]\n\ntheorem unit_product_no_loss (v : R → G)\n    (hmul : ∀ x y, v (x * y) = v x + v y) (hone : v 1 = 0)\n    (units : List R) (hu : ∀ u ∈ units, v u = 0) :\n    v units.prod = 0 := by\n  induction units with\n  | nil => simpa only [List.prod_nil] using hone\n  | cons u us ih =>\n      rw [List.prod_cons, hmul, hu u (by simp)]\n      have hus : ∀ w ∈ us, v w = 0 := by\n        intro w hw\n        exact hu w (by simp [hw])\n      rw [ih hus, add_zero]\n\ntheorem arbitrary_switch_count (v : R → G)\n    (hmul : ∀ x y, v (x * y) = v x + v y) (hone : v 1 = 0)\n    (initial : R) (units : List R) (hu : ∀ u ∈ units, v u = 0) :\n    v (initial * units.prod) = v initial := by\n  rw [hmul, unit_product_no_loss v hmul hone units hu, add_zero]\n\nend Iteration\n\nend IntegralTwoSwitch\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/integral-two-switch/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: IntegralTwoSwitch\n\n`Main.lean` formalizes the following algebraic parts of the integral\ntwo-switch verification theorem. All declarations are in namespace\n`IntegralTwoSwitch`. They use the displayed hypotheses and no axioms\nbeyond Lean and Mathlib's ordinary mathematical foundations.\n\n- `derivative_telescoping` is the group-ring polynomial identity for\n  every natural number n and every element s of any commutative ring.\n  `cyclicDerivative` is the sum of i*s^i for 0 <= i < n and\n  `cyclicNorm` is the sum of s^i over the same range.\n  `cyclic_derivative_identity` specializes it under s^n=1. Applied to\n  the commutative cyclic group algebra, n=ell+1 gives the manuscript's\n  `rd:derivative-identity`. This is induction for arbitrary n, not a\n  bounded test of cyclic orders.\n- `exact_frobenius` proves the manuscript's `rd:exact-frobenius` in any\n  commutative ring from f^2-a*f+ell=0. For a Frobenius endomorphism it\n  is applied inside the commutative subalgebra generated by that\n  endomorphism and the scalars. It is not a theorem about several\n  arbitrary noncommuting endomorphisms.\n- `cleared_lifts_agree`, `clearedDescent_restrict`,\n  `clearedDescent_eq`, `clearedDescent_add`, and\n  `clearedDescent_natural` prove simultaneous bounded-ambiguity\n  descent for arbitrary additive abelian groups. Given a homomorphism\n  r:A->B, a natural number h killing ker(r), and an h-multiple lift\n  of every b, `clearedDescent` multiplies any such lift by h. The\n  result is independent of the lift, is additive, restricts to\n  h^2*b, and is natural in commuting squares with the stated\n  hypotheses. No bound on a group order or number of primes occurs.\n  These theorems do not assert that restriction in a particular\n  Galois-cohomology problem has those hypotheses: that application\n  is proved separately in the report using inflation-restriction\n  and the bounded torsion coefficient module.\n- `transferred_boundary` is the exact additive comparison identity\n  for a specified cycle-contraction witness and a commuting square.\n  It proves the retained boundary formula, not existence of a\n  contraction of arbitrary Galois cochains.\n- `two_by_two_volume` proves the determinant formula for the action\n  of an arbitrary 2-by-2 matrix on two vectors over any commutative\n  ring. `nonprimitive_volume` proves that v=p*(a,b) has volume one\n  with x=(-s/p,r/p), for every nonzero p in any field, provided\n  a*r+b*s=1. Over a DVR this applies to arbitrary localization\n  divisibility p, with no bound on its valuation.\n- `unit_product_no_loss` and `arbitrary_switch_count` prove\n  conservation for an arbitrary finite list of zero-valuation\n  factors, for any multiplicatively additive valuation map to an\n  additive commutative monoid. The name `units` denotes that list;\n  invertibility is not an implicit Lean hypothesis. In the\n  application its entries are actual integral units, whose\n  valuations are zero.\n\nThe compiler does not verify the report's derived determinant-functor\nargument, the concrete coherent diamond matrices checked by `verify.py`,\nthe Tate-image scalar theorem, the existence of the Heegner points and\ntheir trace/reduction relations, the local unramified descent theorem,\nor the arithmetic realization and compatibility of every global\nSelmer diagram. Those are explicitly separated in the report. In\nparticular, this formalization is not a formal proof of the companion's\npointwise converse, of the rational manuscript's undecidability theorem,\nor of arithmetic applicability without the listed hypotheses.\n"
+  },
+  "subject": {
+    "content_hash": "26a52e595f4e247baed4b4e764b5d3930961448374ca26206258c64813ac74e3",
+    "kind": "claim",
+    "subject_id": "CITS-ALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

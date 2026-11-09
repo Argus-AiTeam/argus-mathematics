@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "task": "Complete review of the existing family-017 mathematical dossier; not a new manuscript-error search",
+  "inventory": "PRIOR_DRAFTS.json",
+  "objective": "OBJECTIVE.md",
+  "old_workspace": "campaigns/9000017",
+  "old_inputs_read_only": true,
+  "expected_artifact_entries": 29,
+  "expected_reference_roots": 1,
+  "source_version": {
+    "manuscript": "The-irrationality-exponent-of-pi-is-2-September-24-2026",
+    "attribution": "OpenAI, September 24, 2026",
+    "revision": "4eaee87548250b2682affda7d05d947c05554bae",
+    "reference_manifest": "campaigns/9100017/MANUSCRIPTS.json",
+    "primary_source": "openai-math/preprints/The-irrationality-exponent-of-pi-is-2-September-24-2026/build/sections/interpolation.tex",
+    "interpolation_sha256_from_existing_manifest": "44cfa0481fce5da64a64b83347513db707257a33cd9cb4af8e5fde84b05a3fc2"
+  },
+  "preserved_snapshot": {
+    "manifest": "$WORKSPACE/.copilot/session-state/<id>/files/openai-audit-drafts-20261106T1020Z-manifest.json",
+    "family_entry_count": 10,
+    "covered_artifacts": ["A01", "A03", "A04", "A05", "A09", "A10", "A11", "A13", "A15", "A29"],
+    "policy": "Reuse this existing manifest. Snapshot members and live old-workspace copies represent the same draft units, not extra results. Other listed support files are assessed from the supplied old workspace; do not pretend the snapshot contains them."
+  },
+  "units": [
+    {
+      "id": "weighted-multiplicity",
+      "report": "research/draft_reviews/weighted-multiplicity/report.md",
+      "verdict": "research/draft_reviews/weighted-multiplicity/verdict.json",
+      "claims": ["C_GEOM_MULTIPLICITY", "geom:multiplicity", "geom:persistent-derivatives", "geom:multiplicity-comparison", "geom:local-length-lower", "geom:weighted-bezout"],
+      "argument": "REPORT.md section 2; original interpolation.tex lines 46-166",
+      "classification": "Original-claim verification and a non-novel constant sharpening",
+      "dependencies": ["Mondal isolated-zero Bezout with local quotient lengths"]
+    },
+    {
+      "id": "normal-basis-geometry",
+      "report": "research/draft_reviews/normal-basis-geometry/report.md",
+      "verdict": "research/draft_reviews/normal-basis-geometry/verdict.json",
+      "claims": ["C_GEOM_BASES", "geom:constant", "geom:separation", "geom:all-bases", "geom:log-differential"],
+      "argument": "REPORT.md section 3",
+      "classification": "Nonformal geometric argument, with a separately assessed algebraic core",
+      "dependencies": ["weighted-multiplicity", "lean-algebraic-core", "Complete smooth curve models and logarithmic residues in characteristic zero"]
+    },
+    {
+      "id": "original-curve-inequality",
+      "report": "research/draft_reviews/original-curve-inequality/report.md",
+      "verdict": "research/draft_reviews/original-curve-inequality/verdict.json",
+      "claims": ["C_GEOM_CURVE", "geom:sigma", "geom:curve-degree", "geom:branch-contact", "geom:curve-inequality", "geom:curve-bound", "geom:frame", "geom:derivatives-on-curve"],
+      "argument": "REPORT.md section 4; original interpolation.tex lines 169-474",
+      "classification": "Verification of the literal original curve claim, not of the final paper",
+      "dependencies": ["weighted-multiplicity", "normal-basis-geometry", "Complete smooth models and zero-pole degree equality"]
+    },
+    {
+      "id": "curve-to-jet",
+      "report": "research/draft_reviews/curve-to-jet/report.md",
+      "verdict": "research/draft_reviews/curve-to-jet/verdict.json",
+      "claims": ["C_GEOM_JET_BRIDGE", "geom:projective-degree", "geom:ideal-valuation", "geom:nef-class"],
+      "argument": "REPORT.md section 6; original interpolation.tex curve-to-jet proof",
+      "classification": "Scheme-theoretic bridge, not covered by the Lean certificate",
+      "dependencies": ["original-curve-inequality or flat-density curve inequality", "Ordinary blowup", "Ample plus nef", "Eventual ordinary Rees powers", "Serre vanishing"]
+    },
+    {
+      "id": "original-interpolation",
+      "report": "research/draft_reviews/original-interpolation/report.md",
+      "verdict": "research/draft_reviews/original-interpolation/verdict.json",
+      "claims": ["C_GEOM_INTERPOLATION", "geom:interpolation", "geom:volume-hypotheses", "geom:jet-map"],
+      "argument": "REPORT.md sections 1, 4 and 6",
+      "classification": "Original theorem verification by synthesis; not an additional independent proof",
+      "dependencies": ["original-curve-inequality", "curve-to-jet"]
+    },
+    {
+      "id": "flat-density",
+      "report": "research/draft_reviews/flat-density/report.md",
+      "verdict": "research/draft_reviews/flat-density/verdict.json",
+      "claims": ["C_K1_FLAT_DENSITY"],
+      "subclaims": ["Center-independent successive weight choice", "Sufficiency by decreasing free-coordinate sets", "Overcrowded-flat eventual dimension obstruction", "No equality-case assertion"],
+      "argument": "REPORT.md sections 1 and 5",
+      "classification": "Proposed strengthening; novelty unverified",
+      "dependencies": ["weighted-multiplicity", "normal-basis-geometry", "curve-to-jet"]
+    },
+    {
+      "id": "exact-examples",
+      "report": "research/draft_reviews/exact-examples/report.md",
+      "verdict": "research/draft_reviews/exact-examples/verdict.json",
+      "claims": ["Six oriented subset separations", "Nodal normalization and all three center branches", "Logarithmic osculation orders and all poles", "Four-point grid occupancy", "Mixed-Y-fiber occupancy", "Symbolic rank-two specialization identity", "Finite regression bounds"],
+      "argument": "REPORT.md section 7 and final Jacobian discussion; exact_certificate.json; verify.py",
+      "classification": "Exact examples, bounded computations and illustrations; not universal theorem certificates",
+      "dependencies": []
+    },
+    {
+      "id": "failed-attacks",
+      "report": "research/draft_reviews/failed-attacks/report.md",
+      "verdict": "research/draft_reviews/failed-attacks/verdict.json",
+      "claims": ["Inadmissible equal-coordinate pair has eventual restricted rank defect", "Carella comparator sign objection does not refute this manuscript", "Finite-rank-only route cannot settle eventual surjectivity"],
+      "old_routes": ["R_K1_CARELLA_COMPARATOR", "R_K1_BOUNDED_RANK_ONLY"],
+      "argument": "REPORT.md section 7; complete old route ledger",
+      "classification": "Failed attacks and scope exclusions, not manuscript counterexamples",
+      "dependencies": ["exact-examples", "Original coordinatewise-distinctness hypothesis"]
+    },
+    {
+      "id": "lean-algebraic-core",
+      "report": "research/draft_reviews/lean-algebraic-core/report.md",
+      "verdict": "research/draft_reviews/lean-algebraic-core/verdict.json",
+      "claims": ["C_K1_NORMAL_HYPERPLANE_CORE", "Hyperplane implication", "Logarithmic shear and exact inverse", "Maximal-positive-index contradiction", "Unique positive-index basis family"],
+      "argument": "lean/Main.lean and lean/statement_fidelity.md",
+      "classification": "Formal local linear/combinatorial algebra only; compilation and statement fidelity assessed separately",
+      "dependencies": ["Lean and Mathlib toolchain"]
+    },
+    {
+      "id": "prior-art-boundary",
+      "report": "research/draft_reviews/prior-art-boundary/report.md",
+      "verdict": "research/draft_reviews/prior-art-boundary/verdict.json",
+      "claims": ["C_K1_PRIOR_ART", "Philippon derivative-persistence precedent", "Farhi separated-degree product obstruction precedent", "Bounded negative exact-criterion lookup", "Unavailable and unused Demailly source"],
+      "argument": "REPORT.md section 8 and complete old assumption/evidence ledger",
+      "classification": "Attribution and bounded literature assessment; neither novelty proof nor a new mathematical theorem",
+      "dependencies": ["Named primary-source propositions"]
+    },
+    {
+      "id": "unproved-downstream",
+      "report": "research/draft_reviews/unproved-downstream/report.md",
+      "verdict": "research/draft_reviews/unproved-downstream/verdict.json",
+      "claims": ["C_MAIN_017", "C_PARAMETERS_017", "C_DET_ARITHMETIC", "C_DET_TRANSLATION", "C_DET_COLLISION", "C_DET_COMPARISON"],
+      "argument": "Old ledger claim statements and dependency graph; no supporting old proof in the listed dossier",
+      "classification": "Explicitly unproved downstream claims; reference manuscript is not an Argus verification",
+      "dependencies": ["original-interpolation", "Unassessed determinant estimates and parameter selection"]
+    }
+  ],
+  "artifacts": [
+    {"id":"A01","path":"research/MATH_STATE.json","inventory_bytes":58529,"role":"Full versioned mathematical ledger; all claims, assumptions, judgements and failed routes, not just status","units":["weighted-multiplicity","normal-basis-geometry","original-curve-inequality","curve-to-jet","original-interpolation","flat-density","failed-attacks","lean-algebraic-core","prior-art-boundary","unproved-downstream"]},
+    {"id":"A02","path":"research/MATH_STATE.json.lock","inventory_bytes":0,"role":"Lock file, no mathematical content","units":[],"exclusion":"Operational support only; not a draft"},
+    {"id":"A03","path":"research/PROOF_GRAPH.json","inventory_bytes":8260,"role":"Dependency graph and scope map, not mathematical evidence by itself","units":["original-interpolation","flat-density","lean-algebraic-core","unproved-downstream"]},
+    {"id":"A04","path":"research/interpolation-audit/REPORT.md","inventory_bytes":26605,"role":"Single written dossier, decomposed by mathematical assertions, not by physical copies","units":["weighted-multiplicity","normal-basis-geometry","original-curve-inequality","curve-to-jet","original-interpolation","flat-density","exact-examples","failed-attacks","lean-algebraic-core","prior-art-boundary"]},
+    {"id":"A05","path":"research/interpolation-audit/exact_certificate.json","inventory_bytes":4796,"role":"Inputs and exact outputs for examples; no universal geometric certification","units":["exact-examples","failed-attacks","flat-density"]},
+    {"id":"A06","path":"research/interpolation-audit/jacobian/request.json","inventory_bytes":1965,"role":"Old typed adapter request and contract; same rank example as report, not a separate theorem","units":["exact-examples"]},
+    {"id":"A07","path":"research/interpolation-audit/jacobian/response.json","inventory_bytes":2658,"role":"Old typed adapter response, including protocol/tool boundary","units":["exact-examples"]},
+    {"id":"A08","path":"research/interpolation-audit/lean/.lean-artifacts.lock","inventory_bytes":0,"role":"Lock file, no mathematical content","units":[],"exclusion":"Operational support only; not a draft"},
+    {"id":"A09","path":"research/interpolation-audit/lean/Main.lean","inventory_bytes":5371,"role":"Only listed formal source; local algebraic core","units":["lean-algebraic-core"]},
+    {"id":"A10","path":"research/interpolation-audit/lean/certificates/C_K1_NORMAL_HYPERPLANE_CORE-771db3cefabd4d28.json","inventory_bytes":14031,"role":"Versioned compiler/evidence record for the same algebraic core, not a second result","units":["lean-algebraic-core"]},
+    {"id":"A11","path":"research/interpolation-audit/lean/certificates/C_K1_NORMAL_HYPERPLANE_CORE-e5688bbe37a65274.json","inventory_bytes":14796,"role":"Other versioned compiler/evidence record; assess chronology and source binding, not certificate count","units":["lean-algebraic-core"]},
+    {"id":"A12","path":"research/interpolation-audit/lean/compile.log","inventory_bytes":2411,"role":"Historical compiler output; fresh replay distinguished from this record","units":["lean-algebraic-core"]},
+    {"id":"A13","path":"research/interpolation-audit/lean/lean_check.json","inventory_bytes":3335,"role":"Historical current-source evidence binding, not geometric proof","units":["lean-algebraic-core","exact-examples"]},
+    {"id":"A14","path":"research/interpolation-audit/lean/runner-receipt-v1.json","inventory_bytes":740,"role":"Historical execution receipt, not mathematical result","units":["lean-algebraic-core"]},
+    {"id":"A15","path":"research/interpolation-audit/lean/statement_fidelity.md","inventory_bytes":4372,"role":"Human interpretation and exclusions for formal declarations","units":["lean-algebraic-core","normal-basis-geometry","curve-to-jet"]},
+    {"id":"A16","path":"research/interpolation-audit/literature/lazarsfeld-chapter1.txt","inventory_bytes":312176,"role":"Primary-source support: Corollary 1.4.10, ample plus nef on projective varieties or schemes","units":["curve-to-jet","prior-art-boundary"]},
+    {"id":"A17","path":"research/interpolation-audit/literature/mondal-v5.txt","inventory_bytes":1101835,"role":"Primary-source support: isolated-zero Bezout and local quotient-length multiplicity, arXiv:1806.05346v5","units":["weighted-multiplicity","prior-art-boundary"]},
+    {"id":"A18","path":"research/interpolation-audit/literature/stacks-02ND.html","inventory_bytes":14981,"role":"Ordinary blowup integrality, Stacks Lemma 31.33.9","units":["curve-to-jet","prior-art-boundary"]},
+    {"id":"A19","path":"research/interpolation-audit/literature/stacks-02NS.html","inventory_bytes":14849,"role":"Ordinary blowup projectivity and relative ampleness, Stacks Lemma 31.33.13","units":["curve-to-jet","prior-art-boundary"]},
+    {"id":"A20","path":"research/interpolation-audit/literature/stacks-02OS.html","inventory_bytes":15913,"role":"Effective Cartier exceptional divisor, Stacks Lemma 31.33.4","units":["curve-to-jet","prior-art-boundary"]},
+    {"id":"A21","path":"research/interpolation-audit/literature/stacks-0AG6.html","inventory_bytes":15775,"role":"Graded-module higher-cohomology vanishing, Stacks Lemma 30.14.2","units":["curve-to-jet","prior-art-boundary"]},
+    {"id":"A22","path":"research/interpolation-audit/literature/stacks-0AG7.html","inventory_bytes":22641,"role":"Eventual graded-piece/pushforward identification, Stacks Lemma 30.14.3","units":["curve-to-jet","prior-art-boundary"]},
+    {"id":"A23","path":"research/interpolation-audit/literature/stacks-0AYU.html","inventory_bytes":16977,"role":"Degree under pullback to curve model, Stacks Lemma 33.44.4","units":["original-curve-inequality","curve-to-jet","prior-art-boundary"]},
+    {"id":"A24","path":"research/interpolation-audit/literature/stacks-0AYY.html","inventory_bytes":15324,"role":"Effective divisor degree and local lengths, Stacks Lemma 33.44.9","units":["original-curve-inequality","prior-art-boundary"]},
+    {"id":"A25","path":"research/interpolation-audit/literature/stacks-0B40.html","inventory_bytes":16960,"role":"Nonnegative degree from a nonzero section, Stacks Lemma 33.44.12","units":["original-curve-inequality","prior-art-boundary"]},
+    {"id":"A26","path":"research/interpolation-audit/literature/stacks-0B5U.html","inventory_bytes":16189,"role":"Serre vanishing, Stacks Lemma 30.17.1","units":["curve-to-jet","prior-art-boundary"]},
+    {"id":"A27","path":"research/interpolation-audit/literature/stacks-0BY1.html","inventory_bytes":18142,"role":"Smooth projective curve-model equivalence, Stacks Theorem 53.2.6","units":["normal-basis-geometry","original-curve-inequality","prior-art-boundary"]},
+    {"id":"A28","path":"research/interpolation-audit/literature/stacks-0BY3.html","inventory_bytes":13704,"role":"Smoothness over a perfect field, Stacks Lemma 53.2.8","units":["normal-basis-geometry","original-curve-inequality","prior-art-boundary"]},
+    {"id":"A29","path":"research/interpolation-audit/verify.py","inventory_bytes":16861,"role":"Exact symbolic/example checker plus bounded regressions and historical Lean-binding checks; inspect assertions, not only exit code","units":["exact-examples","failed-attacks","lean-algebraic-core","flat-density"]}
+  ],
+  "reference_roots": [
+    {
+      "path": "research/openai_manuscript",
+      "inventory_kind": "reference_input_or_tooling",
+      "observed_contents": "Empty directory: zero files and zero subdirectories",
+      "disposition": "Accounted for; no hidden old draft. Recover primary reference from the supplied manuscript reference manifest, not from nonexistent contents.",
+      "linked_reference_file_count": 7,
+      "linked_reference_files": {
+        "README.md": "Provenance and attribution, not an Argus draft",
+        "build/main.tex": "Manuscript wrapper, authorship, and acknowledged comparator limitation",
+        "build/references.bib": "External citation identities",
+        "build/sections/interpolation.tex": "Original statements against which the old Argus verification is assessed",
+        "build/sections/determinant.tex": "Reference-only downstream argument; not independently verified by the old interpolation dossier",
+        "build/sections/series.tex": "Reference-only series argument; no separate old Argus draft supplied",
+        "build/sections/conclusion.tex": "Reference-only final implication; not certified by local interpolation evidence"
+      }
+    }
+  ],
+  "nonresult_wrappers": [
+    {"old_id":"C9000017","disposition":"Old campaign objective, not current instructions or a proved mathematical result"},
+    {"old_id":"C_K1_AUDIT","disposition":"Scope/aggregation claim; substantive obligations mapped to original-interpolation and flat-density"},
+    {"old_id":"R_K1_GEOMETRIC","disposition":"Plan decomposition only; obligations mapped to weighted-multiplicity, normal-basis-geometry, original-curve-inequality and curve-to-jet"},
+    {"old_id":"R_K1_FLAT_CRITERION","disposition":"Plan decomposition only; obligations mapped to flat-density and its dependencies"}
+  ],
+  "old_ledger_coverage": {
+    "unique_claims": 16,
+    "claim_versions": 27,
+    "graph_nodes": 15,
+    "routes": 4,
+    "external_assumption_records_across_versions": 17,
+    "distinct_external_input_groups": 9,
+    "evidence_records": 24,
+    "evidence_tiers": {"mechanical":2,"judgement":22},
+    "evidence_subject_kinds": {"claim":17,"assumption":7},
+    "historical_evidence_actors": ["engineer:gpt-6.1-sol","lean_evidence/lean 4.31.0","reviewer:f769251f4ea8"],
+    "version_map": {
+      "C9000017":[1],
+      "C_K1_AUDIT":[1],
+      "C_GEOM_MULTIPLICITY":[1,2],
+      "C_GEOM_BASES":[1],
+      "C_GEOM_CURVE":[1,2,3],
+      "C_GEOM_JET_BRIDGE":[1,2,3,4,5],
+      "C_GEOM_INTERPOLATION":[1],
+      "C_K1_NORMAL_HYPERPLANE_CORE":[1,2,3],
+      "C_K1_FLAT_DENSITY":[1],
+      "C_K1_PRIOR_ART":[1,2,3],
+      "C_MAIN_017":[1],
+      "C_PARAMETERS_017":[1],
+      "C_DET_ARITHMETIC":[1],
+      "C_DET_TRANSLATION":[1],
+      "C_DET_COLLISION":[1],
+      "C_DET_COMPARISON":[1]
+    },
+    "version_changes": {
+      "C_GEOM_MULTIPLICITY":"The external isolated-zero Bezout dependency becomes explicit.",
+      "C_GEOM_CURVE":"Complete curve models and curve-degree facts become explicit external inputs.",
+      "C_GEOM_JET_BRIDGE":"Successive versions expose ordinary blowup, eventual Rees, Serre and ample-plus-nef inputs.",
+      "C_K1_NORMAL_HYPERPLANE_CORE":"The different-source failed elaboration and later successful source-bound compiler result are distinguished, not counted as separate theorems.",
+      "C_K1_PRIOR_ART":"Farhi and Philippon methodological precedents become explicit; the negative lookup never verifies novelty."
+    },
+    "evidence_mapping":"Every old evidence subject is mapped by its claim ID to a unit/nonresult wrapper, or by its assumption ID to inherited_external_inputs and their units. All 22 judgements remain historical opinions, including assumption judgements; the two mechanical records are assessed in lean-algebraic-core, with source/version and failed-versus-successful distinctions.",
+    "unmapped_claims": [],
+    "unmapped_routes": []
+  },
+  "inherited_external_inputs": [
+    {"id":"A_ISOLATED_BEZOUT","source_id":"arxiv:1806.05346v5","locator":"Corollary VIII.3, printed p.144; IV.4.2 equations (38)-(39) and Proposition IV.28(2) for multiplicity/isolation","units":["weighted-multiplicity","prior-art-boundary"],"support_artifacts":["A17"]},
+    {"id":"A_PROJECTIVE_CURVE_MODEL","source_id":"url:https://stacks.math.columbia.edu/tag/0BXX","locator":"Theorem 53.2.6 (0BY1) and Lemma 53.2.8 (0BY3)","units":["normal-basis-geometry","original-curve-inequality","prior-art-boundary"],"support_artifacts":["A27","A28"],"current_record_note":"Explicitly recorded for the normal-basis argument as well as the curve claim"},
+    {"id":"A_CURVE_DEGREES","source_id":"url:https://stacks.math.columbia.edu/tag/0AYQ","locator":"Lemmas 33.44.4 (0AYU), 33.44.9 (0AYY), 33.44.12 (0B40)","units":["original-curve-inequality","curve-to-jet","prior-art-boundary"],"support_artifacts":["A23","A24","A25"]},
+    {"id":"A_BLOWUP","source_id":"url:https://stacks.math.columbia.edu/tag/01OF","locator":"Lemmas 31.33.4 (02OS), 31.33.9 (02ND), 31.33.13 (02NS)","units":["curve-to-jet","prior-art-boundary"],"support_artifacts":["A18","A19","A20"]},
+    {"id":"A_REES_EVENTUAL","source_id":"url:https://stacks.math.columbia.edu/tag/0AG7","locator":"Lemma 30.14.3 (0AG7), with Lemma 30.14.2 (0AG6)","units":["curve-to-jet","prior-art-boundary"],"support_artifacts":["A21","A22"]},
+    {"id":"A_SERRE_VANISHING","source_id":"url:https://stacks.math.columbia.edu/tag/0B5U","locator":"Lemma 30.17.1, implication (1) to (2)","units":["curve-to-jet","prior-art-boundary"],"support_artifacts":["A26"]},
+    {"id":"A_AMPLE_PLUS_NEF","source_id":"doi:10.1007/978-3-642-18808-4","locator":"Corollary 1.4.10, printed p.53","units":["curve-to-jet","prior-art-boundary"],"support_artifacts":["A16"]},
+    {"id":"A_FARHI_PRODUCTS","source_id":"arxiv:math/0603257v1","locator":"Section 5.2, Theorem 5.3; Section 5.2.1, Corollary 5.4","units":["prior-art-boundary"],"support_artifacts":["A01","A04"],"primary_sources":["https://arxiv.org/pdf/math/0603257v1","https://arxiv.org/e-print/math/0603257v1"],"scope_note":"One-point group/product obstruction precedent; literal corollary endpoint is not silently repaired"},
+    {"id":"A_PHILIPPON_PERSISTENCE","source_id":"doi:10.24033/bsmf.2060","locator":"1986 journal version, Theorem 2.1 and Lemma 5.1, pp.357-358 and 380-383","units":["prior-art-boundary"],"support_artifacts":["A01","A04"],"primary_sources":["https://www.numdam.org/item/10.24033/bsmf.2060.pdf"],"scope_note":"Sumset, translated derivatives and subgroup/coset hypotheses, not arbitrary-center interpolation"}
+  ],
+  "current_replays": {
+    "exact_checker":{"unit":"exact-examples","output":"research/draft_reviews/exact-examples/replay.json","interpreter":"$WORKSPACE/argus-latest/.venv/bin/python","exit_code":0,"scope":"Three configurations, two complete curve examples, inadmissible dimension obstruction, 30 regressions, historical formal binding"},
+    "jacobian":{"unit":"exact-examples","operation_id":"matrix.symbolic.rank.compute","payload":"research/draft_reviews/exact-examples/jacobian/payload.json","response":"research/draft_reviews/exact-examples/jacobian/response.json","interpreter":"$WORKSPACE/argus-live-update/.venv/bin/python","adapter_exit_code":0,"timeout":false,"structured_error":null},
+    "lean":{"unit":"lean-algebraic-core","claim":"C_K1_NORMAL_HYPERPLANE_CORE","source":"research/draft_reviews/lean-algebraic-core/replay/Main.lean","fidelity":"research/draft_reviews/lean-algebraic-core/replay/statement_fidelity.md","result":"research/draft_reviews/lean-algebraic-core/replay/lean_check.json","certificate":"research/draft_reviews/lean-algebraic-core/replay/certificates/C_K1_NORMAL_HYPERPLANE_CORE-c2b0f77b9154d779.json","runner_receipt":"research/draft_reviews/lean-algebraic-core/replay/runner-receipt.json","compile_exit_code":0,"audit_exit_code":0,"proof_holes":[],"native_fidelity_approval":"pending"}
+  },
+  "input_reconciliation": {
+    "inventory_paths_and_bytes_matched":29,
+    "reference_roots_accounted":1,
+    "existing_snapshot_entries_verified":10,
+    "manuscript_interpolation_matches_supplied_revision_manifest":true,
+    "new_snapshot_or_manifest_created":false,
+    "other_snapshot_families":"Not in this complete input inventory; excluded from the family-017 review rather than counted as omitted drafts."
+  },
+  "assessment_validation": {
+    "exit_code":0,
+    "status":"passed",
+    "inventory_artifacts":29,
+    "reference_roots":1,
+    "units":11,
+    "assessment_files":22,
+    "summary_units":11,
+    "all_old_claim_versions_mapped":true,
+    "all_old_assumptions_and_evidence_subjects_mapped":true,
+    "all_old_routes_mapped":true,
+    "local_markdown_links":"resolved",
+    "fresh_lean_source_and_fidelity":"match_compiler_record",
+    "jacobian_payload":"matches_exact_typed_response",
+    "native_acceptance":"pending"
+  },
+  "campaign_local_diagnostics": {
+    "project_root":"campaigns/9200017",
+    "interpreter":"$WORKSPACE/argus-latest/.venv/bin/python",
+    "math_state_check":{"exit_code":0,"ok":true,"issues":[],"after":"All current claims, assumptions, real compiler evidence and 11 Engineer judgements were recorded"},
+    "proof_graph_check":{"exit_code":2,"message":"no proof graph at families/017/argus-review/PROOF_GRAPH.json","passing_check_claimed":false},
+    "both_checks_zero":false,
+    "scope_constraint":"The live task is an exploratory old-draft review; no targeted proof graph is commissioned and research/PROOF_GRAPH.json is outside owned writes. No substitute graph, shared-root check or false zero status was used."
+  },
+  "independent_review": {
+    "required":true,
+    "status":"pending",
+    "authority":"native Host-invoked Reviewer",
+    "current_citation_bindings_unchecked":10,
+    "source_propositions_read":true,
+    "citation_archive_constraint":"The required attribute command writes research/literature/, outside this mission's writable paths. No fabricated independent attribution or out-of-scope archive was made.",
+    "graph_diagnostic":"The official proof_graph_check returned exit 2 because no current research/PROOF_GRAPH.json exists. This exploratory old-draft review does not commission a targeted proof graph, and that path is outside owned writes. No passing graph check is claimed; native review must resolve gate applicability if the independent-counterexample gate is applied."
+  },
+  "coverage_policy": {
+    "draft_count_is_not_file_count": true,
+    "duplicate_proofs": "Report, formal certificates, checker, old ledger and snapshot copies are cross-references to these eleven units, not independent mathematical contributions.",
+    "all_claim_versions": "Assess final substantive statements and explain changed assumptions or formal source revisions. Do not silently inherit old supports, open, acceptance or novelty labels.",
+    "exclusions": "Only operational lock files, obsolete objective wrappers, and original-manuscript reference material without a supplied Argus assessment are excluded as standalone drafts; downstream ledger assertions remain explicitly assessed.",
+    "acceptance": "Native Host-invoked independent Reviewer alone decides family completion."
+  }
+}

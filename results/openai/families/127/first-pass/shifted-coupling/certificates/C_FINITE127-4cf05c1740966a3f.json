@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_FINITE127-8e535fbb05d6",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/127/first-pass/shifted-coupling/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6773,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/127/first-pass/shifted-coupling/Main.lean",
+    "source_sha256": "60098e9a936ca0660f4b98988ee722cedbe5050c0f4858e933f3b062ec2244a9",
+    "statement_fidelity": "families/127/first-pass/shifted-coupling/statement_fidelity.md",
+    "statement_fidelity_sha256": "0100f8bbdc439d9947bafac61738fefd3b43c5149d87d4938335c65a4ad87893",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/127/first-pass/shifted-coupling/Main.lean:7:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/127/first-pass/shifted-coupling/Main.lean:9:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Real.instDivInvMonoid', which is 'noncomputable'\nfamilies/127/first-pass/shifted-coupling/Main.lean:12:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'primitive', which is 'noncomputable'\n'ShiftedCoupling.finite_envelope' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ShiftedCoupling.finite_mad' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/shifted-coupling/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace ShiftedCoupling\n\ndef primitive (x : ℝ) : ℝ := x * |x| / 2\n\ndef envelope (a x : ℝ) : ℝ :=\n  4 * (x ^ 2 - (max (|x| - a / 2) 0) ^ 2)\n\ndef potential (a c x : ℝ) : ℝ :=\n  4 * primitive (x - c - a / 2) - 2 * a * (x - c)\n\ntheorem primitive_increment (x y : ℝ) (hxy : x ≤ y) :\n    (y - x) ^ 2 ≤ 4 * (primitive y - primitive x) := by\n  by_cases hx : 0 ≤ x\n  · have hy : 0 ≤ y := le_trans hx hxy\n    simp only [primitive, abs_of_nonneg hx, abs_of_nonneg hy]\n    nlinarith [sq_nonneg (y - x), mul_nonneg (sub_nonneg.mpr hxy) hx]\n  · have hx' : x ≤ 0 := le_of_lt (lt_of_not_ge hx)\n    by_cases hy : y ≤ 0\n    · simp only [primitive, abs_of_nonpos hx', abs_of_nonpos hy]\n      nlinarith [sq_nonneg (y - x),\n        mul_nonpos_of_nonneg_of_nonpos (sub_nonneg.mpr hxy) hy]\n    · have hy' : 0 ≤ y := le_of_lt (lt_of_not_ge hy)\n      simp only [primitive, abs_of_nonpos hx', abs_of_nonneg hy']\n      nlinarith [sq_nonneg (x + y)]\n\ntheorem envelope_primitive (a x : ℝ) (ha : 0 ≤ a) :\n    envelope a x =\n      4 * (primitive (x + a / 2) - primitive (x - a / 2)) - a ^ 2 := by\n  by_cases hx : 0 ≤ x\n  · have hp : 0 ≤ x + a / 2 := by linarith\n    by_cases ht : a / 2 ≤ x\n    · have hm : 0 ≤ x - a / 2 := by linarith\n      simp only [envelope, primitive, abs_of_nonneg hx, abs_of_nonneg hp,\n        abs_of_nonneg hm, max_eq_left hm]\n      ring\n    · have hm : x - a / 2 ≤ 0 := by linarith\n      simp only [envelope, primitive, abs_of_nonneg hx, abs_of_nonneg hp,\n        abs_of_nonpos hm, max_eq_right hm]\n      ring\n  · have hx' : x ≤ 0 := le_of_lt (lt_of_not_ge hx)\n    have hm : x - a / 2 ≤ 0 := by linarith\n    by_cases ht : x ≤ -(a / 2)\n    · have hp : x + a / 2 ≤ 0 := by linarith\n      have ht' : 0 ≤ -x - a / 2 := by linarith\n      simp only [envelope, primitive, abs_of_nonpos hx', abs_of_nonpos hp,\n        abs_of_nonpos hm, max_eq_left ht']\n      ring\n    · have hp : 0 ≤ x + a / 2 := by linarith\n      have ht' : -x - a / 2 ≤ 0 := by linarith\n      simp only [envelope, primitive, abs_of_nonpos hx', abs_of_nonneg hp,\n        abs_of_nonpos hm, max_eq_right ht']\n      ring\n\ntheorem envelope_mad (a x : ℝ) (ha : 0 ≤ a) :\n    envelope a x ≤ 4 * a * |x| := by\n  by_cases h : |x| ≤ a / 2\n  · have hm : |x| - a / 2 ≤ 0 := by linarith\n    simp only [envelope, max_eq_right hm, zero_pow (by decide : 2 ≠ 0), sub_zero]\n    nlinarith [sq_abs x, mul_nonneg (abs_nonneg x)\n      (show 0 ≤ a - |x| by linarith)]\n  · have hm : 0 ≤ |x| - a / 2 := by linarith\n    simp only [envelope, max_eq_left hm]\n    nlinarith [sq_abs x, sq_nonneg a]\n\ntheorem pointwise_dual (a c u v : ℝ) (ha : 0 ≤ a) (hs : v ≤ u + a) :\n    (u - v) ^ 2 ≤ envelope a (u - c) + potential a c u - potential a c v := by\n  have h := primitive_increment (v - c - a / 2) (u - c + a / 2)\n    (by linarith)\n  rw [envelope_primitive a (u - c) ha]\n  unfold potential\n  nlinarith\n\ntheorem finite_envelope {ι : Type*} [Fintype ι]\n    (w : ι → ι → ℝ) (x : ι → ℝ) (a c : ℝ)\n    (ha : 0 ≤ a)\n    (hw : ∀ i j, 0 ≤ w i j)\n    (hmarg : ∀ i, ∑ j, w i j = ∑ j, w j i)\n    (hs : ∀ i j, w i j ≠ 0 → x j ≤ x i + a) :\n    (∑ i, ∑ j, w i j * (x i - x j) ^ 2) ≤\n      ∑ i, (∑ j, w i j) * envelope a (x i - c) := by\n  classical\n  have balance :\n      (∑ i, ∑ j, w i j * potential a c (x i)) =\n        ∑ i, ∑ j, w i j * potential a c (x j) := by\n    calc\n      _ = ∑ i, (∑ j, w i j) * potential a c (x i) := by\n        simp_rw [Finset.sum_mul]\n      _ = ∑ i, (∑ j, w j i) * potential a c (x i) := by\n        simp_rw [hmarg]\n      _ = ∑ i, ∑ j, w j i * potential a c (x i) := by\n        simp_rw [Finset.sum_mul]\n      _ = _ := Finset.sum_comm\n  have bound :\n      (∑ i, ∑ j, w i j * (x i - x j) ^ 2) ≤\n        ∑ i, ∑ j, w i j *\n          (envelope a (x i - c) + potential a c (x i) - potential a c (x j)) := by\n    apply Finset.sum_le_sum\n    intro i _\n    apply Finset.sum_le_sum\n    intro j _\n    by_cases hzero : w i j = 0\n    · simp only [hzero, zero_mul, le_refl]\n    · exact mul_le_mul_of_nonneg_left\n        (pointwise_dual a c (x i) (x j) ha (hs i j hzero)) (hw i j)\n  have cancel :\n      (∑ i, ∑ j, w i j *\n          (envelope a (x i - c) + potential a c (x i) - potential a c (x j))) =\n        ∑ i, (∑ j, w i j) * envelope a (x i - c) := by\n    simp_rw [mul_sub, mul_add, Finset.sum_sub_distrib, Finset.sum_add_distrib]\n    rw [balance]\n    simp only [add_sub_cancel_right]\n    simp_rw [Finset.sum_mul]\n  exact cancel ▸ bound\n\ntheorem finite_mad {ι : Type*} [Fintype ι]\n    (w : ι → ι → ℝ) (x : ι → ℝ) (a c : ℝ)\n    (ha : 0 ≤ a)\n    (hw : ∀ i j, 0 ≤ w i j)\n    (hmarg : ∀ i, ∑ j, w i j = ∑ j, w j i)\n    (hs : ∀ i j, w i j ≠ 0 → x j ≤ x i + a) :\n    (∑ i, ∑ j, w i j * (x i - x j) ^ 2) ≤\n      4 * a * (∑ i, (∑ j, w i j) * |x i - c|) := by\n  classical\n  calc\n    _ ≤ ∑ i, (∑ j, w i j) * envelope a (x i - c) :=\n      finite_envelope w x a c ha hw hmarg hs\n    _ ≤ ∑ i, (∑ j, w i j) * (4 * a * |x i - c|) := by\n      apply Finset.sum_le_sum\n      intro i _\n      exact mul_le_mul_of_nonneg_left (envelope_mad a (x i - c) ha)\n        (Finset.sum_nonneg fun j _ => hw i j)\n    _ = _ := by\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro i _\n      ring\n\n#print axioms finite_envelope\n#print axioms finite_mad\n\nend ShiftedCoupling\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/shifted-coupling/statement_fidelity.md",
+    "text": "# Statement fidelity: finite one-sided equal-marginal coupling\n\nThe claim is `C_FINITE127`. The public declarations are\n`ShiftedCoupling.finite_envelope` and `ShiftedCoupling.finite_mad` in\n`Main.lean`. They quantify over every finite type `iota`, every real\ncoordinate function `x : iota -> R`, every real joint mass\n`w : iota -> iota -> R`, every real `a >= 0`, and every real center `c`.\nThe coordinates need not be distinct and the finite type may be empty.\n\nThe hypotheses are:\n\n- Every `w i j` is nonnegative.\n- For every index `i`, the row sum `sum_j w i j` equals the column sum\n  `sum_j w j i`. This is equality of marginals, not pointwise symmetry\n  of the joint mass.\n- Whenever `w i j != 0`, `x j <= x i + a`. This is precisely the\n  one-sided condition `V-U <= a` on positive mass. No reverse bound\n  or exchangeability is assumed.\n\nNo normalization is needed: the statements are homogeneous in total mass.\nFor total mass one, interpret `w i j` as `P(U=x i,V=x j)` (or as an\nindexed presentation when coordinates repeat). The conclusion of\n`finite_envelope` is\n\n    sum_ij w_ij (x_i-x_j)^2\n      <= sum_i (sum_j w_ij) H_a(x_i-c),\n\nwhere the source definition is exactly\n\n    H_a(z) = 4 [z^2 - max(|z|-a/2,0)^2].\n\nThe conclusion of `finite_mad` is\n\n    sum_ij w_ij (x_i-x_j)^2\n      <= 4 a sum_i (sum_j w_ij) |x_i-c|.\n\n`primitive_increment` proves the univariate quadratic increment inequality\nfor `g(z)=z|z|/2`. `envelope_primitive` proves the identity\n`H_a(z)=4(g(z+a/2)-g(z-a/2))-a^2`. `pointwise_dual` proves the\none-sided pointwise transport inequality whose potential terms cancel\nunder equal marginals. All of these are proved from Mathlib, with no\nadditional axioms or proof holes.\n\nThe formalization does **not** encode arbitrary probability spaces,\nmeasure-theoretic integrability, optimality or construction of the lattice\nand binomial couplings, the limiting sharpness argument, the weighted\ngrading/edge recovery theorem, or sensitivity of polynomial threshold\nfunctions. Those are distinct prose claims in `report.md`; the downstream\noperator result is an explicitly cited assumption. The exact rational\nfixture verifier is separate evidence, not a Lean theorem and not a\nreplacement for the all-parameter construction proof. A successful compiler\nrun certifies only the finite statements above. This document's translation\nof those statements still requires independent human review.\n"
+  },
+  "subject": {
+    "content_hash": "e3363df321608422bcbee4190f56c0cb6c57ab1a472f1cf8fa99b5fc9ba3ace2",
+    "kind": "claim",
+    "subject_id": "C_FINITE127"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

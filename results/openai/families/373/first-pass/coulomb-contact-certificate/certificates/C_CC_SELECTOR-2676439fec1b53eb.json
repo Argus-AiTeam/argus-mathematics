@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CC_SELECTOR-0d5d31d34bcd",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/373/first-pass/coulomb-contact-certificate/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/373/first-pass/coulomb-contact-certificate/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15020,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/373/first-pass/coulomb-contact-certificate/Main.lean",
+    "source_sha256": "767545b25fc8aa7eb3b95a5f9d22b696359593d9f0b28639ca32545ce60d6cd7",
+    "statement_fidelity": "families/373/first-pass/coulomb-contact-certificate/statement_fidelity.md",
+    "statement_fidelity_sha256": "7b1c7a769d28c70649a776d24a88e9300770a420d0fc9729dea70cbf5df2555b",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/coulomb-contact-certificate/Main.lean",
+    "text": "import Mathlib\n\nopen Set MeasureTheory\nopen scoped ENNReal NNReal\n\nnamespace CoulombContact\n\nvariable {α β ι : Type*} [MeasurableSpace α] [MeasurableSpace β]\n  [Fintype ι] [DecidableEq ι]\n\nnoncomputable def weightedMixture (ν : Measure α) (H : ι → α → β)\n    (w : ι → ℝ≥0) : Measure β :=\n  ∑ i, (w i : ℝ≥0∞) • Measure.map (H i) ν\n\nomit [Fintype ι] in\ntheorem component_image_measure (ν : Measure α) (H : ι → α → β)\n    (hH : ∀ i, MeasurableEmbedding (H i))\n    (hdisj : ∀ i j, i ≠ j → Disjoint (range (H i)) (range (H j)))\n    (i j : ι) (s : Set α) (hs : MeasurableSet s) :\n    (Measure.map (H i) ν) (H j '' s) = if i = j then ν s else 0 := by\n  rw [Measure.map_apply (hH i).measurable ((hH j).measurableSet_image.mpr hs)]\n  split_ifs with hij\n  · subst i\n    rw [(hH j).injective.preimage_image]\n  · have hempty : H i ⁻¹' (H j '' s) = ∅ := by\n      apply Set.eq_empty_iff_forall_notMem.mpr\n      intro x hx\n      rcases hx with ⟨y, hy, heq⟩\n      exact Set.disjoint_left.mp (hdisj i j hij) ⟨x, rfl⟩ ⟨y, heq⟩\n    rw [hempty, measure_empty]\n\ntheorem mixture_image_measure (ν : Measure α) (H : ι → α → β)\n    (w : ι → ℝ≥0) (hH : ∀ i, MeasurableEmbedding (H i))\n    (hdisj : ∀ i j, i ≠ j → Disjoint (range (H i)) (range (H j)))\n    (j : ι) (s : Set α) (hs : MeasurableSet s) :\n    weightedMixture ν H w (H j '' s) = (w j : ℝ≥0∞) * ν s := by\n  classical\n  simp only [weightedMixture, Measure.finsetSum_apply, Measure.smul_apply, smul_eq_mul]\n  simp_rw [component_image_measure ν H hH hdisj _ j s hs]\n  simp\n\ntheorem no_weighted_preserving_selector [MeasurableEq β]\n    (ν : Measure α) [IsProbabilityMeasure ν] (H : ι → α → β)\n    (w : ι → ℝ≥0) (i₀ : ι)\n    (hH : ∀ i, MeasurableEmbedding (H i))\n    (hdisj : ∀ i j, i ≠ j → Disjoint (range (H i)) (range (H j)))\n    (hw : ∀ i, i ≠ i₀ → w i < w i₀)\n    (T : β → β) (hT : Measurable T)\n    (hpres : Measure.map T (weightedMixture ν H w) = weightedMixture ν H w)\n    (hselect : ∀ᵐ x ∂ν, ∃ i, i ≠ i₀ ∧ T (H i₀ x) = H i x) : False := by\n  classical\n  let S : ι → Set α := fun i => {x | i ≠ i₀ ∧ T (H i₀ x) = H i x}\n  have hSm : ∀ i, MeasurableSet (S i) := by\n    intro i\n    by_cases hi : i = i₀\n    · simp [S, hi]\n    · simpa [S, hi, Function.comp_def] using\n        measurableSet_eq_fun (hT.comp (hH i₀).measurable) (hH i).measurable\n  have hnull : ∀ i, ν (S i) = 0 := by\n    intro i\n    by_cases hi : i = i₀\n    · simp [S, hi]\n    · have hsub : H i₀ '' S i ⊆ T ⁻¹' (H i '' S i) := by\n        rintro _ ⟨x, hx, rfl⟩\n        exact ⟨x, hx, hx.2.symm⟩\n      have him : MeasurableSet (H i '' S i) := (hH i).measurableSet_image.mpr (hSm i)\n      have hpre :\n          weightedMixture ν H w (T ⁻¹' (H i '' S i)) =\n            weightedMixture ν H w (H i '' S i) := by\n        rw [← Measure.map_apply hT him, hpres]\n      have hle : (w i₀ : ℝ≥0∞) * ν (S i) ≤ (w i : ℝ≥0∞) * ν (S i) := by\n        calc\n          _ = weightedMixture ν H w (H i₀ '' S i) :=\n            (mixture_image_measure ν H w hH hdisj i₀ (S i) (hSm i)).symm\n          _ ≤ weightedMixture ν H w (T ⁻¹' (H i '' S i)) := measure_mono hsub\n          _ = weightedMixture ν H w (H i '' S i) := hpre\n          _ = _ := mixture_image_measure ν H w hH hdisj i (S i) (hSm i)\n      have hfin : (w i : ℝ≥0∞) * ν (S i) ≠ ∞ := by finiteness\n      have hre := ENNReal.toReal_mono hfin hle\n      simp only [ENNReal.toReal_mul, ENNReal.coe_toReal] at hre\n      have hwi : (w i : ℝ) < (w i₀ : ℝ) := by exact_mod_cast hw i hi\n      have hz : (ν (S i)).toReal = 0 := by\n        by_contra hn\n        have hp : 0 < (ν (S i)).toReal :=\n          lt_of_le_of_ne ENNReal.toReal_nonneg (Ne.symm hn)\n        exact (not_lt_of_ge hre) (mul_lt_mul_of_pos_right hwi hp)\n      rcases (ENNReal.toReal_eq_zero_iff _).mp hz with hz | ht\n      · exact hz\n      · exact (measure_ne_top ν (S i) ht).elim\n  have hunion : ν (⋃ i, S i) = 0 := measure_iUnion_null hnull\n  have hcover : ∀ᵐ x ∂ν, x ∈ ⋃ i, S i := by\n    filter_upwards [hselect] with x hx\n    rcases hx with ⟨i, hi, heq⟩\n    exact mem_iUnion.mpr ⟨i, hi, heq⟩\n  have hcompl : ν ((⋃ i, S i)ᶜ) = 0 := ae_iff.mp hcover\n  have htotal := measure_union_le (⋃ i, S i) ((⋃ i, S i)ᶜ) (μ := ν)\n  simp only [union_compl_self, hunion, hcompl, zero_add, measure_univ] at htotal\n  norm_num at htotal\n\nnoncomputable def coulombWeights (i : Fin 5) : ℝ≥0 :=\n  if i = 0 then 1 / 3 else 1 / 6\n\ntheorem no_coulomb_preserving_selector [MeasurableEq β]\n    (ν : Measure α) [IsProbabilityMeasure ν] (H : Fin 5 → α → β)\n    (hH : ∀ i, MeasurableEmbedding (H i))\n    (hdisj : ∀ i j, i ≠ j → Disjoint (range (H i)) (range (H j)))\n    (T : β → β) (hT : Measurable T)\n    (hselect : ∀ᵐ x ∂ν, ∃ i : Fin 5, i ≠ 0 ∧ T (H 0 x) = H i x) :\n    Measure.map T (weightedMixture ν H coulombWeights) ≠\n      weightedMixture ν H coulombWeights := by\n  intro hpres\n  apply no_weighted_preserving_selector ν H coulombWeights 0 hH hdisj ?_ T hT hpres hselect\n  intro i hi\n  norm_num [coulombWeights, hi]\n\nend CoulombContact\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/coulomb-contact-certificate/statement_fidelity.md",
+    "text": "# Statement fidelity: full image-measure selection obstruction\n\nThe declarations are in namespace `CoulombContact` in `Main.lean`.\nThe associated ledger claim is `C_CC_SELECTOR`.\n\n## Objects and quantifiers\n\n`weightedMixture nu H w` is the actual finite sum of measures\n`sum_i (w i) * (H i)#nu`, not an assumed collection of scalar mass\nidentities. The index type is any finite decidable type; the weights\nare finite nonnegative reals. The source and target are arbitrary\nmeasurable spaces. In the two nonexistence theorems, `nu` is a\nprobability measure and the target has measurable equality\n(`MeasurableEq`). The latter holds for the Euclidean Borel space in\nthe application. No nonatomicity of `nu` is assumed.\n\nEach `H i` is a `MeasurableEmbedding`: it is measurable, injective,\nand sends every measurable set to a measurable set. The ranges of\ndistinct embeddings are pairwise disjoint. The distinguished\nembedding `H i0` parametrizes the central component. In the manuscript\napplication, the source is the Borel subtype B, `H 0` is its inclusion\nin R^3, and the other four embeddings are Y_1,W_1,Y_2,W_2.\n\n## Precisely what the compiler proves\n\n`component_image_measure` derives the pushforward mass of `H j '' s`\nfrom injectivity and disjointness: it is `nu s` for the matching\ncomponent and zero for any other component.\n\n`mixture_image_measure` derives the exact image-mass identity\n`weightedMixture nu H w (H j '' s) = w j * nu s` for every measurable\nsource set s. Thus image-mass identities are conclusions, not hidden\nhypotheses.\n\n`no_weighted_preserving_selector` quantifies over every measurable\nmap `T : target -> target`. Suppose every noncentral weight is strictly\nsmaller than the central weight, T preserves the actual mixture\nmeasure, and for nu-almost every source x its output at the central\npoint is one of the noncentral points with the same source x.\nThe conclusion is `False`.\n\nThe proof constructs the coincidence selection sets, proves them\nmeasurable using measurable equality, proves their image/preimage\ninclusion, applies preservation and the derived image-mass identity,\nuses finiteness of nu to deduce each selection set is null, and\ncontradicts their almost-everywhere finite cover. This is the complete\nmeasurable-selection obstruction, not just the scalar inequality\n`t/3 <= t/6 -> t=0`.\n\n`no_coulomb_preserving_selector` specializes to five embeddings and\nweights 1/3 on index 0 and 1/6 on the other four indices. It concludes\nthat T cannot preserve this mixture under the almost-everywhere\nselection condition. The weights sum to one, though their normalization\nis not needed for the nonexistence argument. T is not assumed\ncontinuous, cyclic, injective, differentiable, or to send points outside\nthe central component in any prescribed way.\n\n## What remains outside this formalization\n\nNo declaration in this source asserts the existence of the Coulomb\nbranches, their analytic bounds, the global supporting inequality,\nthe smooth density, optimality, or the full Riesz extension.\nThose analytic assertions are proved in `report.md` using its named\nstandard analytic dependencies and exact rational replay.\n\nIdentifying the source subtype probability with `g^2 dx`, showing that\nthe four smooth diffeomorphisms are measurable embeddings, and extracting\nthe almost-everywhere selection condition from contact-set optimality\nare application steps in the prose proof, not compiler-checked here.\nThey introduce no extra restriction on the Borel maps being excluded.\nThe compiler checks the encoded theorem; independent review must check\nthis reading and these application steps. A successful compiler run\ndoes not certify novelty or independent Reviewer acceptance.\n"
+  },
+  "subject": {
+    "content_hash": "0a53afeef15438a9124ab053892387fcf1ebed8e4cb127ca16f0f7f829792bc3",
+    "kind": "claim",
+    "subject_id": "C_CC_SELECTOR"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

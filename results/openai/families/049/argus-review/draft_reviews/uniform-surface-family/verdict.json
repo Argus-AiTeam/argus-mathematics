@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "unit": "uniform-surface-family",
+  "assessment_kind": "engineering",
+  "claim": {
+    "id": "C_DANIELEWSKI_RESTRICTION",
+    "version": 1,
+    "ledger_content_hash": "c0982a33a213c248653608dece36e9c5a33dcbedf29510b4d28abf08ed2b9ce3",
+    "statement": "Over C, for every polynomial psi, let B=C[x,y,z,u]/(xy-z(z+1)), tpsi=u^2+psi(x), spsi=y-x*tpsi, Jpsi=(tpsi-spsi^2,z-spsi*x). Every nonzero C-linear LND E of B satisfies Jpsi intersect ker(E)=0. The quotient is C[X,R,V]/(RV-psi(X)), and no nonzero LND preserves Jpsi.",
+    "hypotheses": [
+      "Base field is the complex numbers",
+      "psi is any polynomial, including the zero polynomial and repeated-root polynomials",
+      "E is a nonzero complex-linear locally nilpotent derivation of the exact ring B"
+    ],
+    "not_assumed": [
+      "psi is nonzero",
+      "psi is squarefree",
+      "the surface quotient is a domain",
+      "smoothness",
+      "irreducibility",
+      "finite generation of ker(E)"
+    ],
+    "action_conclusion": "No nontrivial algebraic additive-group action on Spec(B) preserves the whole closed subscheme defined by Jpsi"
+  },
+  "verdict": "supported",
+  "verdict_scope": "The strongest mathematical prose theorem is supported by a checked deduction from the stated cores and unconditional lift. Direct formal encoding of the arbitrary family is only partial.",
+  "attribution": {
+    "assessed_work": "Old Argus engineering draft report.md Theorem 3, a prose corollary of OAI/IndependentStableCore ingredients",
+    "comparison": "OpenAI, A stable coordinate that is not a coordinate in four variables, October 5, 2026, sections 04-bundle and 05-rigidity",
+    "comparison_source_revision": "4eaee87548250b2682affda7d05d947c05554bae",
+    "source_verified_difference": "The inspected October statements concern I=J_T and v=a^3b+a^2u^2-d^2. The assessed prose theorem quantifies over all psi and gives the surface quotient and nonstabilization corollary.",
+    "classification": "Strengthening relative to the inspected October statements; global novelty and priority not determined"
+  },
+  "sources": [
+    {
+      "path": "families/049/first-pass/stable_core_certificate/report.md",
+      "locator": "Theorem 3 and its proof, uniform surface-family subsection",
+      "sha256": "68b969f393762d6b834c6b0e03ce5a1eb82a2e8944c97af14313184acecbd875"
+    },
+    {
+      "path": "families/049/first-pass/stable_core_certificate/Main.lean",
+      "locator": "universal_principalization, lower_perturbation_rigidity, and fixed-I unrestricted_invariant_exclusion; eight printed axiom lists",
+      "sha256": "fea7d30d06349b4e15bc63852970443a958b8e4f99e38ac09a8897f7a27bb916"
+    },
+    {
+      "path": "families/049/first-pass/stable_core_certificate/statement_fidelity.md",
+      "sha256": "683a28a67564cb14f2809d0e8844ff0ce781a563c205df47eb2ec7e0d84df0ed"
+    },
+    {
+      "path": "families/049/first-pass/stable_core_certificate/exact_certificate.json",
+      "locator": "Six family_* checks and surface_family scope description",
+      "sha256": "104d3503ab1d34038b0d5a9a2dc633a6a223769866f4107570a3aa51815799c9"
+    },
+    {
+      "path": "families/049/first-pass/stable_core_certificate/verify.py",
+      "locator": "Lines 198-218: formal psiX substitution identities, not an LND enumeration"
+    },
+    {
+      "path": "openai-math/preprints/A-stable-coordinate-that-is-not-a-coordinate-in-four-variables-October-5-2026/build/source/sections/04-bundle.tex",
+      "sha256": "332df2ac44774e20ab0c4b4d988c1274c7579b9ae0f4d1112199b4f50b217414",
+      "manifest_hash_match": true
+    },
+    {
+      "path": "openai-math/preprints/A-stable-coordinate-that-is-not-a-coordinate-in-four-variables-October-5-2026/build/source/sections/05-rigidity.tex",
+      "sha256": "a27d1e5381626ace7c75640598312beb6a44b8f8f5bc183f5b7f2f114c444819",
+      "manifest_hash_match": true
+    }
+  ],
+  "components": [
+    {
+      "id": "all-psi-quotient-isomorphism",
+      "verdict": "supported",
+      "reason": "The explicit two inverse quotient maps recover all generators. The quadric maps to -X^2*(S^2-U^2-psi(X)), but no cancellation of X is used. R=S-U, V=S+U has a polynomial inverse using 1/2."
+    },
+    {
+      "id": "zero-repeated-root-singular-reducible-cases",
+      "verdict": "supported",
+      "reason": "All substitution maps and LND deductions work at psi=0 and repeated roots. For psi nonzero the surface relation is primitive irreducible linear in V; for psi=0, (RV)=(R) intersect (V), so the whole quotient is reduced but reducible.",
+      "reducedness_used_in_core_argument": false,
+      "radicalness_used_in_stable_ideal_argument": false
+    },
+    {
+      "id": "uniform-principalization-and-degree-bound",
+      "verdict": "supported",
+      "reason": "Theorem 1 at t=u^2+psi(ab) gives Jpsi*C=(vpsi). In Wpsi=a^2*psi(ab), the monomial a^(n+2)*b^n has auxiliary degree -n<=0, including the constant and zero cases."
+    },
+    {
+      "id": "nonzero-invariant-lift-and-factorial-closure",
+      "verdict": "supported",
+      "reason": "Use the unconditional exists_weight_preserving_lnd_lift, not the I-specific lift_invariant. Injectivity keeps the lifted derivation and h nonzero. The factorization iota(h)=vpsi*q has both factors nonzero in the fixed characteristic-zero domain C, where factorial closure applies."
+    },
+    {
+      "id": "invariant-restriction-injectivity-and-dominance",
+      "verdict": "supported",
+      "reason": "Lower-perturbation rigidity contradicts any such nonzero lifted invariant. The restriction kernel is exactly Jpsi intersect ker(E); the corresponding morphism to Spec(ker(E)) is dominant without a finite-generation assumption."
+    },
+    {
+      "id": "no-stable-ideal-and-no-preserving-action",
+      "verdict": "supported",
+      "reason": "gpsi is nonzero since it evaluates to -1 at the actual B-point (0,0,-1,0). If E(Jpsi) is contained in Jpsi, the last nonzero iterate of gpsi is a nonzero invariant in Jpsi. The characteristic-zero action/LND dictionary gives the action statement."
+    },
+    {
+      "id": "direct-family-kernel-encoding",
+      "verdict": "partial",
+      "reason": "The two general algebraic cores and unconditional lift are encoded, but no one of the eight printed declarations quantifies over psi or asserts the family quotient, invariant restriction, or nonstabilization."
+    },
+    {
+      "id": "global-novelty",
+      "verdict": "unresolved",
+      "reason": "Source comparison establishes a precise scope extension relative to the inspected October statements, not global novelty."
+    }
+  ],
+  "dependencies": [
+    {
+      "unit": "universal-principalization",
+      "declaration": "IndependentStableCore.universal_principalization",
+      "role": "Arbitrary t=u^2+psi(ab), giving exact extended-ideal equality"
+    },
+    {
+      "unit": "lower-perturbation-rigidity",
+      "declaration": "IndependentStableCore.lower_perturbation_rigidity",
+      "role": "Applied to Wpsi with actual auxiliary degree at most 0"
+    },
+    {
+      "unit": "october-unrestricted-obstruction",
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/LiftObstruction.lean",
+      "declaration": "OAI.StableCoordinate.Obstruction.exists_weight_preserving_lnd_lift",
+      "role": "Unconditional lift of every base LND, with extension and actual fiber-weight preservation; no I-specific invariant premise"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/BundleCharts.lean and ObstructionPrincipalization.lean",
+      "declarations": [
+        "baseMap_injective",
+        "extension_ne_zero"
+      ],
+      "role": "Nonzero base element and nonzero derivation stay nonzero under extension"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/DeterminantDomain.lean and FactorialClosure.lean",
+      "declarations": [
+        "determinantRing_isDomain",
+        "lnd_factorial_closure",
+        "exists_last_nonzero_iterate"
+      ],
+      "role": "Factorial closure in C and the last-iterate mechanism, not in the surface quotient"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/NormalizedDeterminantLift.lean, FrameLiftCoassoc.lean, DeterminantLiftWeights.lean, DeterminantActionWeights.lean",
+      "declarations": [
+        "NormalizedDeterminantLift.liftHom",
+        "FrameLiftCoassoc.actionOfNormalizedExtension"
+      ],
+      "role": "Constructed normalized lift, proved group law, and fiber-weight compatibility"
+    }
+  ],
+  "formal_evidence": {
+    "type": "archived_source_bound_compiler_record_for_cores_not_a_family_theorem",
+    "record": "families/049/first-pass/stable_core_certificate/lean_verification_result.json",
+    "certificate": "families/049/first-pass/stable_core_certificate/certificates/C_STABLE_CORE_VERIFY-1f2393b585c126fe.json",
+    "certificate_sha256": "f93ec4e9eb00260bdfef04b169e6274fbcc6a60a2025f8813e4f100dc82e979c",
+    "certificate_subject": "C_STABLE_CORE_VERIFY version 3",
+    "lean_version": "4.31.0",
+    "lean_commit": "68218e876d2a38b1985b8590fff244a83c321783",
+    "lake_version": "5.0.0-src+68218e8",
+    "workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "recorded_exit_code": 0,
+    "recorded_proof_holes": [],
+    "recorded_logical_axioms": [
+      "propext",
+      "Classical.choice where used",
+      "Quot.sound"
+    ],
+    "main_hash_matches_record": true,
+    "fidelity_hash_matches_record": true,
+    "embedded_source_and_fidelity_match": true,
+    "family_is_a_printed_lean_declaration": false,
+    "fresh_compile_performed_by_this_assessor": false,
+    "fresh_compile_assignment": "Separate agent under coordinator",
+    "common_exact_replay_performed_by_this_assessor": false,
+    "common_exact_replay_assignment": "Coordinator"
+  },
+  "mathematical_gaps": [],
+  "formal_encoding_gaps": [
+    "No family definitions or quotient equivalences for every psi among the printed declarations",
+    "No family-specific auxiliary-degree lemma or arbitrary-psi substitution in principalization",
+    "No generalized invariant transport for Jpsi; the existing lift_invariant and unrestricted_invariant_exclusion are specialized to I=J_T",
+    "No printed theorem for family restriction injectivity, the nonzero stable-ideal last-iterate corollary, or its geometric action interpretation"
+  ],
+  "verification_performed": [
+    "Read strongest old Theorem 3, Main.lean, fidelity document, exact certificate, ledger claim and dependency graph",
+    "Checked both inverse quotient maps without cancelling X, including psi=0",
+    "Checked reducedness separately for psi nonzero and psi=0, while identifying that it is not needed in the core argument",
+    "Checked all-degree polynomial bound Wpsi=sum lambda_n*a^(n+2)*b^n with auxiliary degrees -n",
+    "Checked unconditional lift, base injection, nonzero factors, and factorial closure in C rather than the surface quotient",
+    "Gave an explicit stable-ideal last-iterate proof using a parameter-independent nonzero generator",
+    "Mapped each missing family-specific kernel assertion rather than treating compilation as statement fidelity",
+    "Matched Main/fidelity source hashes and embedded texts to archived compiler evidence",
+    "Verified cited October source hashes against the existing manuscript manifest"
+  ],
+  "external_assumptions": [
+    "Complex base field, hence characteristic zero and 2 invertible",
+    "Separately proved unconditional LND lift and base-map injection, with all their displayed hypotheses met",
+    "Universal principalization and lower-perturbation rigidity under their exact hypotheses",
+    "Characteristic-zero algebraic additive-action/LND dictionary for the geometric conclusion",
+    "Archived kernel evidence trusts Lean and imported proofs; it does not encode the additional prose family statements"
+  ],
+  "evidence_limits": [
+    "No independent acceptance is granted",
+    "No duplicate common algebra replay or fresh full Main compilation was run by this assessor",
+    "The six family identities do not enumerate LNDs or themselves prove universal invariant exclusion",
+    "The conclusion concerns the whole embedded closed subscheme, not each component separately or intrinsic rigidity of the abstract surface",
+    "No family of new stable noncoordinate four-variable polynomials is asserted",
+    "No global novelty determination is made"
+  ],
+  "novelty": "not_asserted",
+  "independent_review_required": true,
+  "acceptance": "not_granted_engineering_assessment"
+}

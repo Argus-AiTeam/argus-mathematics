@@ -1,0 +1,67 @@
+{
+  "evidence_id": "lean-C_UB_GT2-ed11e0ab38b2",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/008/first-pass/upper_bound_certificate/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+      "families/008/first-pass/upper_bound_certificate/Main.lean"
+    ],
+    "cwd": "families/008/first-pass/upper_bound_certificate",
+    "duration_ms": 15531,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/008/first-pass/upper_bound_certificate/Main.lean",
+    "source_sha256": "736bfcc5f474b1071ed12364a2b82ae8e4467a6de104925845ba5568acad792a",
+    "statement_fidelity": "families/008/first-pass/upper_bound_certificate/statement_fidelity.md",
+    "statement_fidelity_sha256": "79639c3451572f4501518c63e9b68181a9f585cd41e19f53cc0ba9c5b7b5d31e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "Audit9000008.upper_bound_gt_two (n : ℕ) (hn : 2 < n) :\n  Module.finrank ℚ ↥(OAI.DeligneDrinfeld.Wn n) ≤ Module.finrank ℚ ↥(OAI.DeligneDrinfeld.Fn n)\n'Audit9000008.upper_bound_gt_two' depends on axioms: [propext, Classical.choice, Quot.sound]\n@[reducible] def OAI.DeligneDrinfeld.L : Type :=\nFreeLieAlgebra ℚ Bool\n@[reducible] def OAI.DeligneDrinfeld.BraidFree : Type :=\nFreeLieAlgebra ℚ OAI.DeligneDrinfeld.Edge\ndef OAI.DeligneDrinfeld.chord : Fin 4 → Fin 4 → OAI.DeligneDrinfeld.BraidFree :=\nfun i j =>\n  if h : i < j then FreeLieAlgebra.of ℚ ⟨(i, j), h⟩ else if h : j < i then FreeLieAlgebra.of ℚ ⟨(j, i), h⟩ else 0\ndef OAI.DeligneDrinfeld.eval.{u_1} : {M : Type u_1} →\n  [inst : LieRing M] → [inst_1 : LieAlgebra ℚ M] → M → M → OAI.DeligneDrinfeld.L →ₗ⁅ℚ⁆ M :=\nfun {M} [LieRing M] [LieAlgebra ℚ M] a b => (FreeLieAlgebra.lift ℚ) fun i => if i = Bool.true then b else a\ndef OAI.DeligneDrinfeld.IsSolution : OAI.DeligneDrinfeld.L → Prop :=\nfun p =>\n  p + (OAI.DeligneDrinfeld.eval OAI.DeligneDrinfeld.y OAI.DeligneDrinfeld.x) p = 0 ∧\n    p + (OAI.DeligneDrinfeld.eval OAI.DeligneDrinfeld.y (-OAI.DeligneDrinfeld.x - OAI.DeligneDrinfeld.y)) p +\n          (OAI.DeligneDrinfeld.eval (-OAI.DeligneDrinfeld.x - OAI.DeligneDrinfeld.y) OAI.DeligneDrinfeld.x) p =\n        0 ∧\n      (OAI.DeligneDrinfeld.eval (OAI.DeligneDrinfeld.t 0 1) (OAI.DeligneDrinfeld.t 1 2 + OAI.DeligneDrinfeld.t 1 3)) p +\n          (OAI.DeligneDrinfeld.eval (OAI.DeligneDrinfeld.t 0 2 + OAI.DeligneDrinfeld.t 1 2) (OAI.DeligneDrinfeld.t 2 3))\n            p =\n        (OAI.DeligneDrinfeld.eval (OAI.DeligneDrinfeld.t 1 2) (OAI.DeligneDrinfeld.t 2 3)) p +\n            (OAI.DeligneDrinfeld.eval (OAI.DeligneDrinfeld.t 0 1 + OAI.DeligneDrinfeld.t 0 2)\n                (OAI.DeligneDrinfeld.t 1 3 + OAI.DeligneDrinfeld.t 2 3))\n              p +\n          (OAI.DeligneDrinfeld.eval (OAI.DeligneDrinfeld.t 0 1) (OAI.DeligneDrinfeld.t 1 2)) p\ndef OAI.DeligneDrinfeld.W : Submodule ℚ OAI.DeligneDrinfeld.L :=\n{ carrier := {p | OAI.DeligneDrinfeld.IsSolution p}, add_mem' := @OAI.DeligneDrinfeld.W._proof_2,\n  zero_mem' := OAI.DeligneDrinfeld.W._proof_3, smul_mem' := OAI.DeligneDrinfeld.W._proof_4 }\n@[reducible] def OAI.DeligneDrinfeld.Wn : ℕ → Submodule ℚ OAI.DeligneDrinfeld.L :=\nfun n => OAI.DeligneDrinfeld.W ⊓ OAI.DeligneDrinfeld.Ln n\n@[reducible] def OAI.DeligneDrinfeld.Ln : ℕ → Submodule ℚ (FreeLieAlgebra ℚ Bool) :=\nfun n => OAI.DeligneDrinfeld.weightPiece (fun x => 1) n\n@[reducible] def OAI.DeligneDrinfeld.Fn : ℕ → Submodule ℚ (FreeLieAlgebra ℚ ℕ) :=\nfun n => OAI.DeligneDrinfeld.weightPiece OAI.DeligneDrinfeld.oddWeight n\ndef OAI.DeligneDrinfeld.oddWeight : ℕ → ℕ :=\nfun k => 2 * k + 3\ndef OAI.DeligneDrinfeld.weightPiece.{u_1} : {α : Type u_1} → (α → ℕ) → ℕ → Submodule ℚ (FreeLieAlgebra ℚ α) :=\nfun {α} wt n => Submodule.span ℚ {p | OAI.DeligneDrinfeld.WeightedWord wt n p}\ninductive OAI.DeligneDrinfeld.WeightedWord.{u_1} : {α : Type u_1} → (α → ℕ) → ℕ → FreeLieAlgebra ℚ α → Prop\nnumber of parameters: 2\nconstructors:\nOAI.DeligneDrinfeld.WeightedWord.generator : ∀ {α : Type u_1} {wt : α → ℕ} (a : α),\n  OAI.DeligneDrinfeld.WeightedWord wt (wt a) (FreeLieAlgebra.of ℚ a)\nOAI.DeligneDrinfeld.WeightedWord.bracket : ∀ {α : Type u_1} {wt : α → ℕ} {n m : ℕ} {a b : FreeLieAlgebra ℚ α},\n  OAI.DeligneDrinfeld.WeightedWord wt n a →\n    OAI.DeligneDrinfeld.WeightedWord wt m b → OAI.DeligneDrinfeld.WeightedWord wt (n + m) ⁅a, b⁆\ndef OAI.DeligneDrinfeld.braidRelations : Set OAI.DeligneDrinfeld.BraidFree :=\n{z |\n  (∃ i j k l,\n      i ≠ j ∧\n        i ≠ k ∧ i ≠ l ∧ j ≠ k ∧ j ≠ l ∧ k ≠ l ∧ z = ⁅OAI.DeligneDrinfeld.chord i j, OAI.DeligneDrinfeld.chord k l⁆) ∨\n    ∃ i j k,\n      i ≠ j ∧\n        i ≠ k ∧\n          j ≠ k ∧ z = ⁅OAI.DeligneDrinfeld.chord i j, OAI.DeligneDrinfeld.chord i k + OAI.DeligneDrinfeld.chord j k⁆}\ndef OAI.DeligneDrinfeld.braidIdeal : LieIdeal ℚ OAI.DeligneDrinfeld.BraidFree :=\nLieSubmodule.lieSpan ℚ OAI.DeligneDrinfeld.BraidFree OAI.DeligneDrinfeld.braidRelations\n@[reducible] def OAI.DeligneDrinfeld.T4 : Type :=\nOAI.DeligneDrinfeld.BraidFree ⧸ OAI.DeligneDrinfeld.braidIdeal\ndef OAI.DeligneDrinfeld.t : Fin 4 → Fin 4 → OAI.DeligneDrinfeld.T4 :=\nfun i j => LieSubmodule.Quotient.mk (OAI.DeligneDrinfeld.chord i j)\n",
+    "tool": "lean",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake",
+        "version": "Lake version 5.0.0-src+5045d00 (Lean version 4.34.1)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+        "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/upper_bound_certificate/Main.lean",
+    "text": "import OAI.Algebra.Drinfeld.Ihara\n\nnamespace Audit9000008\n\nopen OAI.DeligneDrinfeld\n\ndef manuscriptSolution (p : L) : Prop :=\n  p + eval y x p = 0 ∧\n  p + eval y (-x-y) p + eval (-x-y) x p = 0 ∧\n  eval (t 0 1) (t 1 2 + t 1 3) p + eval (t 0 2 + t 1 2) (t 2 3) p =\n    eval (t 1 2) (t 2 3) p + eval (t 0 1 + t 0 2) (t 1 3 + t 2 3) p +\n      eval (t 0 1) (t 1 2) p\n\ntheorem solution_fidelity (p : L) :\n    manuscriptSolution p ↔ IsSolution p := by\n  rfl\n\ntheorem membership_fidelity (p : L) :\n    p ∈ W ↔ manuscriptSolution p := by\n  rfl\n\ntheorem upper_bound_gt_two (n : ℕ) (hn : 2 < n) :\n    Module.finrank ℚ (Wn n) ≤ Module.finrank ℚ (Fn n) :=\n  RationalBound.finrank_Wn_le n hn\n\nend Audit9000008\n\nset_option pp.fullNames true\n\n#check Audit9000008.upper_bound_gt_two\n#print axioms Audit9000008.upper_bound_gt_two\n#print OAI.DeligneDrinfeld.L\n#print OAI.DeligneDrinfeld.BraidFree\n#print OAI.DeligneDrinfeld.chord\n#print OAI.DeligneDrinfeld.eval\n#print OAI.DeligneDrinfeld.IsSolution\n#print OAI.DeligneDrinfeld.W\n#print OAI.DeligneDrinfeld.Wn\n#print OAI.DeligneDrinfeld.Ln\n#print OAI.DeligneDrinfeld.Fn\n#print OAI.DeligneDrinfeld.oddWeight\n#print OAI.DeligneDrinfeld.weightPiece\n#print OAI.DeligneDrinfeld.WeightedWord\n#print OAI.DeligneDrinfeld.braidRelations\n#print OAI.DeligneDrinfeld.braidIdeal\n#print OAI.DeligneDrinfeld.T4\n#print OAI.DeligneDrinfeld.t\n"
+  },
+  "produced_by": "lean_evidence/lean 4.34.1",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/upper_bound_certificate/statement_fidelity.md",
+    "text": "# Statement fidelity: Audit9000008.upper_bound_gt_two\n\nThe declarations described here are `manuscriptSolution`, `solution_fidelity`,\n`membership_fidelity`, and `upper_bound_gt_two`, all in namespace\n`Audit9000008`.\n\n`Audit9000008.upper_bound_gt_two` quantifies over every natural number n\nand assumes only `2 < n`. Its conclusion is\n\n    Module.finrank Q (OAI.DeligneDrinfeld.Wn n)\n      <= Module.finrank Q (OAI.DeligneDrinfeld.Fn n).\n\nThere is no maximum weight, no bounded search, and no hypothesis providing\na generating family or asserting the desired dimension inequality.\nFinite-dimensionality is supplied by the imported coordinate/graded-piece\nproofs, not an additional mathematical assumption.\n\nThe left object is the weight-n subspace of the full ordinary rational\nfree Lie algebra on two generators satisfying exactly the three staged\nequations. `Audit9000008.manuscriptSolution` writes out antisymmetry, the\nthree-term relation with third argument -x-y, and the five-term pentagon.\nIts strand numbers 0,1,2,3 are the manuscript's 1,2,3,4.\n`Audit9000008.solution_fidelity` identifies this predicate with the\nimplementation's `IsSolution`; `Audit9000008.membership_fidelity` identifies\nit with membership in `W`. Both equalities must be checked by the compiler.\nThe printed definitions of `braidRelations`, `braidIdeal`, `T4`, and `t`\nmake the infinitesimal-braid quotient and the chord conventions inspectable.\nThere is no extra special-identity assumption on the rational solution space.\n\n`Wn n` is `W` intersected with `Ln n`; `Ln n` is the span of ordinary\nbracket monomials with each of the two generators assigned weight one.\nThe right object `Fn n` is the weight-n piece of the ordinary rational\nfree Lie algebra indexed by natural numbers, where the k-th generator\nhas weight `2*k+3`. Thus it is exactly the manuscript's free Lie algebra\non e_3,e_5,e_7,... with those weights. `WeightedWord` uses generator and\nbracket constructors and `weightPiece` takes their linear span.\nLength in the odd generators is not substituted for weight.\n\nThe proof reuses the upstream declaration\n`OAI.DeligneDrinfeld.RationalBound.finrank_Wn_le`; it does not reimplement\nthe proof or admit it as an axiom. A valid certificate requires the actual\ntransitive OAI import closure to have compiled and requires\n`#print axioms Audit9000008.upper_bound_gt_two` to contain no axioms beyond\n`propext`, `Classical.choice`, and `Quot.sound`. No arbitrary characteristic-two\nprimitive is identified with an ordinary Lie element, and no lifting of\narbitrary modular solutions is assumed.\n\nThe staged corollary also includes n=0,1,2. The declaration above DOES NOT\nformalize these three cases or their combination with n>2.\n`verify.py` separately checks the exact degree-one pentagon columns and the\ndegree-two three-term residual; weight zero is empty by the positive-weight\nordinary free-Lie definition. The all-weight result is the combination of\nthat finite base-case proof with this universally quantified n>2 theorem.\nOnly the n>2 claim is eligible for mechanical Lean evidence from this file.\n\nThis document states the intended interpretation. The compiler does not\nverify that interpretation, the provenance of the upstream source revision,\nor the mathematical novelty or publishability of the audit.\n"
+  },
+  "subject": {
+    "content_hash": "8aaddba7672fda4fda068d1b57250fc6ace3e6dfa7538827ebdd248440ed9cbb",
+    "kind": "claim",
+    "subject_id": "C_UB_GT2"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

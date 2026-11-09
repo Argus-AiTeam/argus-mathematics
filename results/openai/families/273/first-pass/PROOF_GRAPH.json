@@ -1,0 +1,149 @@
+{
+  "goal": "C_EPNI",
+  "routes": {
+    "R_ST_EXPLICIT": {
+      "name": "Explicit boundary measure, not an assumption of int:stieltjes",
+      "status": "active",
+      "goal": "C_INT_STIELTJES",
+      "obligations": ["C_ST_MEASURE"],
+      "evidence": "research/stieltjes_certificate/proof.md"
+    },
+    "R_ST_BOUNDARY_CONTOUR": {
+      "name": "One-sheet inverse branch, complete jump reconstruction, and exact boundary algebra",
+      "status": "active",
+      "goal": "C_ST_MEASURE",
+      "obligations": ["C_ST_BRANCH", "C_ST_CONTOUR", "C_ST_ALGEBRA"],
+      "evidence": "research/stieltjes_certificate/proof.md"
+    },
+    "R_ST_FINITE_ONLY": {
+      "name": "Finite sampling or a formalized conditional algebraic identity alone",
+      "status": "retired",
+      "retired_because": "Neither controls the global inverse branch or excludes omitted singular measure. Such checks can supplement, not replace, a universal analytic proof.",
+      "evidence": "OBJECTIVE.md"
+    }
+  },
+  "nodes": {
+    "C9000273": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 273 (The entropy photon-number inequality.; papers: The entropy photon-number inequality; Lean status: Partially/Comparator formalized (lean/docs/273.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": false,
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_EPNI": {
+      "statement": "The literal finite-mode, independent-port, finite-energy entropy photon-number inequality, including internal multimode entanglement.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_REGULARIZED_MINIMUM", "C_STATIONARITY_LIMIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/00-introduction.tex"]
+    },
+    "C_REGULARIZED_MINIMUM": {
+      "statement": "Under a strict EPnI violation, the regularized functional has negative faithful Gibbs minima with the stated seventh moments and logarithm identities.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/03-minimization.tex"]
+    },
+    "C_HESSIAN": {
+      "statement": "At the regularized minima, the centered component maps satisfy the manuscript's logarithmic-mean Hessian contraction.",
+      "status": "open",
+      "depends_on": ["C_REGULARIZED_MINIMUM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/03-minimization.tex"]
+    },
+    "C_INT_STIELTJES": {
+      "statement": "Literal int:stieltjes: B extends holomorphically to the upper half-plane and across the positive axis, is strictly decreasing there, B(1)=1 and B'(1)=-1, and -B' has a positive Stieltjes representation.",
+      "status": "open",
+      "depends_on": ["C_ST_MEASURE"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/stieltjes_certificate/proof.md", "research/stieltjes_certificate/exact_certificate.json"]
+    },
+    "C_ST_MEASURE": {
+      "statement": "Explicit universal measure theorem: c=0, nu({0})=1/2, nu([0,r(q)])=p(q)coth(q)/pi, with positive smooth density on (0,infinity) and no further singular part.",
+      "status": "open",
+      "depends_on": ["C_ST_BRANCH", "C_ST_CONTOUR", "C_ST_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/stieltjes_certificate/proof.md", "research/stieltjes_certificate/exact_certificate.json", "research/stieltjes_certificate/verify.py"]
+    },
+    "C_ST_BRANCH": {
+      "statement": "For p(q) in (pi/2,pi) satisfying p tan p=-q tanh q, sin(u)/u maps 0<Re(u)<p(Im(u)), Im(u)>0 bijectively to the fourth quadrant and selects the required B branch.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/stieltjes_certificate/proof.md", "research/stieltjes_certificate/analytic_sources.md"]
+    },
+    "C_ST_CONTOUR": {
+      "statement": "A subtracted keyhole contour reconstructs B from its entire negative-axis jump; endpoint contributions vanish and integration by parts gives the complete positive measure.",
+      "status": "open",
+      "depends_on": ["C_ST_BRANCH", "C_ST_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "evidence": ["research/stieltjes_certificate/proof.md", "research/stieltjes_certificate/analytic_sources.md"]
+    },
+    "C_ST_ALGEBRA": {
+      "statement": "The exact boundary derivative identities imply strict monotonicity of r(q) and identify the positive density; algebra alone does not establish analytic continuation or the integral representation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports",
+      "mechanical_evidence": "Lean 4.31.0 exit_code=0, proof_holes=[]; algebraic scope only",
+      "evidence": ["research/stieltjes_certificate/Main.lean", "research/stieltjes_certificate/statement_fidelity.md", "research/stieltjes_certificate/certificates/C_ST_ALGEBRA-4e2642c6fb1290ba.json"]
+    },
+    "C_COMPARISON_CALCULUS": {
+      "statement": "Positive sums, the stated source-limit/target-Fatou argument, parallel sums and both logarithmic-mean operations preserve comparison under the invariant finite-parameter test-space hypothesis.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/02-interpolation.tex"]
+    },
+    "C_QUADRATIC_MINIMUM": {
+      "statement": "The manuscript scalar quadratic has the claimed minimum for all real x,y, including x=y, x=-y and x=y=0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/02-interpolation.tex"]
+    },
+    "C_FOUR_COMPARISONS": {
+      "statement": "At the regularized minima, independent-port arithmetic variance and the component contractions supply the four required weight comparisons, on the stated test spaces.",
+      "status": "open",
+      "depends_on": ["C_REGULARIZED_MINIMUM", "C_HESSIAN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/04-metric.tex"]
+    },
+    "C_INTERPOLATION": {
+      "statement": "Four-weight interpolation on the invariant finite-parameter source test space, allowing unrestricted nonnegative target sums.",
+      "status": "open",
+      "depends_on": ["C_INT_STIELTJES", "C_COMPARISON_CALCULUS", "C_QUADRATIC_MINIMUM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/02-interpolation.tex"]
+    },
+    "C_METRIC": {
+      "statement": "At regularized minima, the thermal metric satisfies the comparison and its uniform-in-frequency positive upper and lower bounds.",
+      "status": "open",
+      "depends_on": ["C_INTERPOLATION", "C_FOUR_COMPARISONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/04-metric.tex"]
+    },
+    "C_DEFECT_ESTIMATE": {
+      "statement": "Absolute logarithmic summability, the weak convolution identity and the thermal metric give the stated defect estimate.",
+      "status": "open",
+      "depends_on": ["C_REGULARIZED_MINIMUM", "C_METRIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/04-metric.tex"]
+    },
+    "C_STATIONARITY_LIMIT": {
+      "statement": "The justified generator pairings cancel centered energy, force defects and means to zero, identify the thermal limits, and contradict the negative objective.",
+      "status": "open",
+      "depends_on": ["C_REGULARIZED_MINIMUM", "C_DEFECT_ESTIMATE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-entropy-photon-number-inequality-September-24-2026/build/sections/05-stationarity.tex"]
+    }
+  }
+}

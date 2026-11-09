@@ -1,0 +1,111 @@
+{
+  "goal": "C9000350",
+  "routes": [
+    {
+      "name": "R_CORRUGATION_VERIFICATION",
+      "status": "current",
+      "evidence": "research/corrugation_audit/theorem.md"
+    },
+    {
+      "name": "R_SIMULTANEOUS_CONVEX_ENERGY_EXTENSION",
+      "status": "current",
+      "evidence": "research/corrugation_audit/theorem.md"
+    }
+  ],
+  "nodes": {
+    "C9000350": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 350 (Yau’s nodal bounds: surfaces and higher dimensions.; papers: Sharp nodal length on smooth surfaces; Smooth counterexamples to Yau's nodal upper bound in dimensions three and four; Power-law violations of Yau's nodal upper bound; Lean status: Partially/Comparator formalized (lean/docs/350.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_ENVELOPE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SURFACE": {
+      "statement": "For every fixed smooth closed connected Riemannian surface, all nonzero real eigenfunctions with positive eigenvalue have nodal length at most C times sqrt(lambda).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Sharp-nodal-length-on-smooth-surfaces-September-23-2026/build/introduction.tex"]
+    },
+    "C_QUALITATIVE": {
+      "statement": "The staged qualitative manuscript constructs fixed smooth metrics on S^3 arbitrarily C-infinity close to round and on S^2 times T^2 with eigenfunction sequences having unbounded nodal measure divided by sqrt(lambda).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Smooth-counterexamples-to-Yaus-nodal-upper-bound-in-dimensions-three-and-four-September-23-2026/build/sections/introduction.tex"]
+    },
+    "C_POWER_NODAL": {
+      "statement": "One fixed smooth metric on S^4 times S^1 has eigenfunction nodal measure growing faster than lambda^(1/2+epsilon_0) for a fixed epsilon_0>0.",
+      "status": "open",
+      "depends_on": ["C_ENVELOPE", "C_POWER_DOWNSTREAM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Power-law-violations-of-Yaus-nodal-upper-bound-September-23-2026/build/sections/introduction.tex"]
+    },
+    "C_POWER_DOWNSTREAM": {
+      "statement": "The power-law wave, sign-certificate, exactification, spectral-persistence, limiting-pair and warped-circle arguments preserve a common positive gain exponent.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Power-law-violations-of-Yaus-nodal-upper-bound-September-23-2026/build/sections/framework.tex"]
+    },
+    "C_SEED": {
+      "statement": "Lemma lem:seed supplies a uniform positive-test seed and a nonzero-gradient positive-Hessian initial region for nearby C^1 metrics.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports_pending_independent_review",
+      "evidence": ["research/openai_manuscript/Power-law-violations-of-Yaus-nodal-upper-bound-September-23-2026/build/sections/envelopes.tex", "research/corrugation_audit/theorem.md"]
+    },
+    "C_LOCAL_HESSIAN": {
+      "statement": "The corrugation has a uniform positive Hessian test including zero cutoff/well coefficients and arbitrarily small or large positive parent slopes.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports_pending_independent_review",
+      "evidence": ["research/corrugation_audit/theorem.md", "research/corrugation_audit/exact_certificate.json", "research/corrugation_audit/verify.py"]
+    },
+    "C_MASS_SELECTION": {
+      "statement": "A fixed finite radial-well pattern and closed-child selection yield repeat preparation and selected gradient mass strictly greater than the entire old parent mass.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports_pending_independent_review",
+      "evidence": ["research/corrugation_audit/theorem.md", "research/corrugation_audit/exact_certificate.json", "research/corrugation_audit/verify.py"]
+    },
+    "C_CORRUGATION": {
+      "statement": "Lemma lem:corrugation holds with all stated preparation, support, derivative, metric and order-of-choices quantifiers.",
+      "status": "open",
+      "depends_on": ["C_LOCAL_HESSIAN", "C_MASS_SELECTION"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports_pending_independent_review",
+      "evidence": ["research/corrugation_audit/theorem.md", "research/corrugation_audit/exact_certificate.json", "research/corrugation_audit/verify.py"]
+    },
+    "C_ENVELOPE": {
+      "statement": "Proposition prop:envelope holds with one positive power-gain exponent independent of every later finite approximation order.",
+      "status": "open",
+      "depends_on": ["C_SEED", "C_CORRUGATION", "C_ITERATION"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports_pending_independent_review",
+      "evidence": ["research/corrugation_audit/theorem.md", "research/corrugation_audit/exact_certificate.json", "research/corrugation_audit/verify.py"]
+    },
+    "C_ITERATION": {
+      "statement": "Additive increment estimates give one linear-in-order exponential growth constant, a persistent Hessian margin, and an accuracy-independent positive envelope gain.",
+      "status": "open",
+      "depends_on": ["C_CORRUGATION"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports_pending_independent_review",
+      "evidence": ["research/corrugation_audit/theorem.md", "research/corrugation_audit/exact_certificate.json", "research/corrugation_audit/verify.py"]
+    },
+    "C_CONVEX_AMPLIFICATION": {
+      "statement": "For every fixed base dimension n>=4, one pattern preserves every corrugation condition and selects gradients uniformly larger than the maximum old parent gradient, simultaneously amplifying every real r>=1 moment and every finite nonnegative convex energy Phi with Phi(0)=0; the same logarithmic iteration gives order-independent moment exponents.",
+      "status": "open",
+      "depends_on": ["C_LOCAL_HESSIAN", "C_MASS_SELECTION", "C_ITERATION"],
+      "reviewer_confirmed": false,
+      "engineer_verdict": "supports_pending_independent_review",
+      "evidence": ["research/corrugation_audit/theorem.md", "research/corrugation_audit/exact_certificate.json", "research/corrugation_audit/verify.py"]
+    }
+  }
+}

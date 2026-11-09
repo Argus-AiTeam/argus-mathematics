@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_POWER-c61c4217beb2",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/210/first-pass/square_stabilization/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/210/first-pass/square_stabilization/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 8053,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/210/first-pass/square_stabilization/Main.lean",
+    "source_sha256": "9efdcc81f6223ffe50d90e15213a90d8385cd03d7392f0624fa1bf8ee7e981bb",
+    "statement_fidelity": "families/210/first-pass/square_stabilization/statement_fidelity.md",
+    "statement_fidelity_sha256": "b59bd6e76b902eebd108fa1c121f5f4b1fd303d6ab981326918323afbe650379",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/square_stabilization/Main.lean",
+    "text": "import Mathlib.Algebra.CharZero.Defs\nimport Mathlib.Algebra.Field.Basic\nimport Mathlib.Algebra.Module.LinearMap.End\nimport Mathlib.Tactic.Module\nimport Lean.Elab.Tactic.Omega\n\nnamespace SquareStabilization\n\nvariable {K M : Type*} [Field K] [AddCommGroup M] [Module K M]\n\n/-- Applying the lowering operator `n` times lowers the weight by `2 * n`. -/\ntheorem weight_lowering_power\n    (D H : Module.End K M)\n    (hHD : ∀ u : M, H (D u) = D (H u) - (2 : K) • D u)\n    {v : M} {w : K} (hv : H v = w • v) (n : ℕ) :\n    H ((D ^ n) v) = (w - 2 * (n : K)) • ((D ^ n) v) := by\n  induction n with\n  | zero => simpa using hv\n  | succ n ih =>\n      rw [pow_succ', Module.End.mul_apply, hHD, ih, map_smul]\n      simp only [Nat.cast_succ]\n      module\n\n/-- The exact raising/lowering power identity, for an arbitrary scalar weight. -/\ntheorem raising_lowering_power\n    (D E H : Module.End K M)\n    (hED : ∀ u : M, E (D u) = D (E u) + H u)\n    (hHD : ∀ u : M, H (D u) = D (H u) - (2 : K) • D u)\n    {v : M} {w : K} (hv : H v = w • v) (n : ℕ) :\n    E ((D ^ (n + 1)) v) =\n      (D ^ (n + 1)) (E v) +\n        (((n : K) + 1) * (w - (n : K))) • ((D ^ n) v) := by\n  induction n with\n  | zero => simpa [hv] using hED v\n  | succ n ih =>\n      calc\n        E ((D ^ (n + 1 + 1)) v) =\n            D (E ((D ^ (n + 1)) v)) + H ((D ^ (n + 1)) v) := by\n              rw [pow_succ', Module.End.mul_apply, hED]\n        _ = D ((D ^ (n + 1)) (E v) +\n              (((n : K) + 1) * (w - (n : K))) • ((D ^ n) v)) +\n            (w - 2 * ((n + 1 : ℕ) : K)) • ((D ^ (n + 1)) v) := by\n              rw [ih, weight_lowering_power D H hHD hv (n + 1)]\n        _ = _ := by\n          simp only [map_add, map_smul, pow_succ', Module.End.mul_apply, Nat.cast_succ]\n          module\n\nvariable [CharZero K]\n\n/-- A primitive vector of natural weight `w` is not killed by `D ^ L` for `L ≤ w`,\nunless the vector itself is zero. -/\ntheorem primitive_power_injective\n    (D E H : Module.End K M)\n    (hED : ∀ u : M, E (D u) = D (E u) + H u)\n    (hHD : ∀ u : M, H (D u) = D (H u) - (2 : K) • D u)\n    {v : M} {w : ℕ} (hv : H v = (w : K) • v) (hEv : E v = 0) :\n    ∀ L : ℕ, L ≤ w → (D ^ L) v = 0 → v = 0 := by\n  intro L\n  induction L with\n  | zero =>\n      intro _ hD\n      simpa using hD\n  | succ n ih =>\n      intro hL hD\n      have hscalar : ((n : K) + 1) * ((w : K) - (n : K)) ≠ 0 := by\n        apply mul_ne_zero (Nat.cast_add_one_ne_zero n)\n        apply sub_ne_zero.mpr\n        intro heq\n        have hne : w ≠ n := by omega\n        exact hne (Nat.cast_injective heq)\n      have hstring := raising_lowering_power D E H hED hHD hv n\n      rw [hD, map_zero, hEv, map_zero, zero_add] at hstring\n      have hDn : (D ^ n) v = 0 := by\n        have hcancel := congrArg\n          (fun u : M => ((((n : K) + 1) * ((w : K) - (n : K)))⁻¹) • u)\n          hstring.symm\n        simpa only [smul_smul, inv_mul_cancel₀ hscalar, one_smul, smul_zero] using hcancel\n      exact ih (by omega) hDn\n\n/-- Power-injectivity with an explicit, vector-specific raising-nilpotence bound.\nNo finite-dimensionality or semisimplicity is assumed. -/\ntheorem sl2_power_injective_of_nilpotent_bound\n    (D E H : Module.End K M)\n    (hED : ∀ u : M, E (D u) = D (E u) + H u)\n    (hHD : ∀ u : M, H (D u) = D (H u) - (2 : K) • D u)\n    (hHE : ∀ u : M, H (E u) = E (H u) + (2 : K) • E u)\n    (N : ℕ) :\n    ∀ {v : M} {w L : ℕ},\n      L ≤ w → H v = (w : K) • v →\n      (E ^ N) v = 0 → (D ^ L) v = 0 → v = 0 := by\n  induction N with\n  | zero =>\n      intro v w L _ _ hnil _\n      simpa using hnil\n  | succ N ih =>\n      intro v w L hL hv hnil hD\n      have hEv_weight : H (E v) = ((w + 2 : ℕ) : K) • E v := by\n        rw [hHE, hv, map_smul]\n        simp only [Nat.cast_add, Nat.cast_ofNat]\n        module\n      have hEv_nil : (E ^ N) (E v) = 0 := by\n        simpa only [pow_succ, Module.End.mul_apply] using hnil\n      have hDnext : (D ^ (L + 1)) v = 0 := by\n        rw [pow_succ', Module.End.mul_apply, hD, map_zero]\n      have hEv_D : (D ^ (L + 1)) (E v) = 0 := by\n        have hstring := raising_lowering_power D E H hED hHD hv L\n        rw [hDnext, map_zero, hD, smul_zero, add_zero] at hstring\n        exact hstring.symm\n      have hEv : E v = 0 :=\n        ih (v := E v) (w := w + 2) (L := L + 1)\n          (by omega) hEv_weight hEv_nil hEv_D\n      exact primitive_power_injective D E H hED hHD hv hEv L hL hD\n\n/-- The universal `sl₂` whole-power kernel theorem: local nilpotence is required\nonly at the vector under consideration. -/\ntheorem sl2_power_injective\n    (D E H : Module.End K M)\n    (hED : ∀ u : M, E (D u) = D (E u) + H u)\n    (hHD : ∀ u : M, H (D u) = D (H u) - (2 : K) • D u)\n    (hHE : ∀ u : M, H (E u) = E (H u) + (2 : K) • E u)\n    {v : M} {w L : ℕ}\n    (hL : L ≤ w) (hv : H v = (w : K) • v)\n    (hnil : ∃ N : ℕ, (E ^ N) v = 0) (hD : (D ^ L) v = 0) :\n    v = 0 := by\n  obtain ⟨N, hN⟩ := hnil\n  exact sl2_power_injective_of_nilpotent_bound D E H hED hHD hHE N hL hv hN hD\n\nend SquareStabilization\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/square_stabilization/statement_fidelity.md",
+    "text": "# Statement fidelity: `C_POWER`\n\n## Formal statement and quantifiers\n\n`Main.lean` proves the actual operator theorem\n`SquareStabilization.sl2_power_injective`. Universally quantified are an\narbitrary characteristic-zero field `K`, an arbitrary `K`-vector space `M`\n(`AddCommGroup M`, `Module K M`), and three `K`-linear endomorphisms\n`D E H : Module.End K M`. No finite-dimensionality, semisimplicity, or\ninjectivity hypothesis occurs.\n\nThe three operator hypotheses hold for **every** `u : M`, with this exact\norientation:\n\n1. `E (D u) = D (E u) + H u`;\n2. `H (D u) = D (H u) - (2 : K) • D u`;\n3. `H (E u) = E (H u) + (2 : K) • E u`.\n\nThus `D` lowers the `H`-weight by two and `E` raises it by two.\nFor every `v : M` and natural numbers `w,L`, the remaining assumptions are\n`L ≤ w`, `H v = (w : K) • v`, and the vector-specific local-nilpotence\ncondition `∃ N : ℕ, (E ^ N) v = 0`. The exact conclusion is\n\n> `(D ^ L) v = 0 → v = 0`.\n\nPowers are genuine endomorphism powers under composition; exponent zero\nis the identity. In particular, both `L = 0` and nilpotence bound `N = 0`\nare included. Local nilpotence on every vector of `M` is not assumed.\n\n## Complete declaration inventory\n\nAll five declarations belong to namespace `SquareStabilization`.\n\n- `weight_lowering_power`: for any scalar weight `w : K`, the `H,D`\n  commutator implies\n  `H ((D ^ n) v) = (w - 2 * (n : K)) • ((D ^ n) v)`.\n- `raising_lowering_power`: for any scalar weight `w : K`, the first two\n  commutators imply\n  `E ((D ^ (n+1)) v) = (D ^ (n+1)) (E v) +\n  (((n : K)+1) * (w-(n : K))) • ((D ^ n) v)`.\n  These first two lemmas do not require characteristic zero.\n- `primitive_power_injective`: in characteristic zero, the same kernel\n  conclusion holds when `E v = 0` and `w,L` are natural with `L ≤ w`.\n- `sl2_power_injective_of_nilpotent_bound`: the universal operator kernel\n  theorem with a specified natural bound `N` and assumption `(E ^ N) v = 0`.\n  Its proof inducts on `N`, applies the induction hypothesis to `E v` at\n  weight `w+2` and exponent `L+1`, and then invokes the primitive case.\n- `sl2_power_injective`: the preceding theorem with the existential\n  vector-specific nilpotence assumption stated above.\n\nCharacteristic zero is used to prove that\n`((n : K)+1) * ((w : K)-(n : K))` is nonzero when `n+1 ≤ w`;\nthe field inverse then cancels its action. This is an operator proof,\nnot a theorem about scalar inequalities standing in for injectivity.\n\n## Prose identifications and exact limitation\n\nFor the intended polynomial application, take\n`D = y · ∂/∂x`, `E = x · ∂/∂y`, and\n`H = deg_x - deg_y`, with summation over coordinate pairs for vector\nvariables. On polynomials of bidegree `(d_x,d_y)`, the weight is\n`w = d_x-d_y` when this is a nonnegative integer. The raising operator\n`E` is locally nilpotent because it lowers total `y`-degree.\nThe displayed commutator signs agree with this orientation.\n\nConstructing these polynomial endomorphisms, proving their derivative\nrules and commutators, establishing their degree and nilpotence\nproperties, and identifying the manuscript's shared-vector differential\noperators and their composition with these endomorphism powers remain\n**prose**, not Lean declarations in this file. So do the manuscript's\ninvariant-tensor/symmetric-power identifications, normalization and\nconstruction of the canonical Foulkes--Howe map, and the vanishing\ninduction/application to that map.\n\nThis file supplies the universal whole-power shift core for `C_POWER`.\nIt does **not** formalize the full polynomial calculus, the canonical\nmap, or the whole square-bound canonical-surjectivity theorem. Compiler\nchecking is Engineer implementation evidence, not independent Reviewer\nacceptance or an official `lean_evidence` judgment.\n"
+  },
+  "subject": {
+    "content_hash": "b37b7be839ad279335909044d09d2526159ed74f7903d787a1e27373ec5835f1",
+    "kind": "claim",
+    "subject_id": "C_POWER"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

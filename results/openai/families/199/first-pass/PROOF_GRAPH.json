@@ -1,0 +1,169 @@
+{
+  "goal": "C9000199",
+  "routes": [
+    {
+      "name": "R_VERIFY_LIFT",
+      "status": "current",
+      "evidence": "research/twisted_lift_report.md"
+    },
+    {
+      "name": "R_AR_CONSTRUCTION",
+      "status": "untried",
+      "evidence": "research/twisted_lift_report.md"
+    },
+    {
+      "name": "R_TAC_CONSTRUCTION",
+      "status": "untried",
+      "evidence": "research/twisted_lift_report.md"
+    }
+  ],
+  "nodes": {
+    "C9000199": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 199 (Counterexamples to Auslander–Reiten, Tachikawa and related homological conjectures.; papers: An explicit counterexample to the Auslander-Reiten conjecture; A counterexample to Tachikawa's second conjecture; Lean status: Partially/Comparator formalized (lean/docs/199.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["V_LIFT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "V_LIFT": {
+      "statement": "Literal verification of coc:data and lift:main for every nonzero H and in all degrees, without assuming the remaining counterexample construction.",
+      "status": "open",
+      "depends_on": ["V_FINITE", "V_ALL_DEGREE", "V_NONFACTOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "V_FINITE": {
+      "statement": "Exact coefficientwise verification of the full multiplication, cochain, twisted boundary, cycle, and local Casimir identities.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["verify.py", "exact_certificate.json"]
+    },
+    "V_ALL_DEGREE": {
+      "statement": "Universal B homotopy, inductive G homotopy, tensor-cell cancellation, and stable tail passage.",
+      "status": "open",
+      "depends_on": ["V_FINITE", "V_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "V_NONFACTOR": {
+      "statement": "The evaluated map is H^2(F tensor F), nonzero and zero under no projective factorization.",
+      "status": "open",
+      "depends_on": ["V_FINITE", "V_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "V_FORMAL_CORE": {
+      "statement": "Universal all-degree augmented nullhomotopy using actual module projectivity, and cyclic-trace annihilation of every finite-free factorization into the ideal.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "Main.lean",
+        "research/STATEMENT_FIDELITY.md",
+        "certificates/V_FORMAL_CORE-511d6bce9fe46b99.json"
+      ]
+    },
+    "M_AR_ALGEBRA": {
+      "statement": "AR alg:C and alg:T: the displayed finite algebra, radical, symmetric trace, and dual basis.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_AR_COC": {
+      "statement": "AR coc:data: cocycle, twisted boundary for every H, and nonzero degree-three evaluation.",
+      "status": "open",
+      "depends_on": ["M_AR_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_AR_RESOLUTION": {
+      "statement": "AR res:base, res:polynomial, res:tensor: all-degree polynomial self-extensions.",
+      "status": "open",
+      "depends_on": ["M_AR_ALGEBRA", "M_AR_COC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_AR_CONES": {
+      "statement": "AR cone:finite and cone:profile: finite side-projective cone and complete stable Hom profile.",
+      "status": "open",
+      "depends_on": ["M_AR_RESOLUTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_AR_LIFT": {
+      "statement": "AR lift:main: the nonzero twisted bimodule lift with the specified top projection.",
+      "status": "open",
+      "depends_on": ["V_LIFT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_AR_FIBER": {
+      "statement": "AR branch:finite-fiber, branch:profile, branch:comparison: comparison isomorphisms in every positive degree.",
+      "status": "open",
+      "depends_on": ["M_AR_CONES", "M_AR_LIFT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_AR_CONVERSION": {
+      "statement": "AR conv:proposition: triangular Gorenstein-projective conversion under its comparison hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_AR_MAIN": {
+      "statement": "AR thm:main and its radical and arbitrary-field-extension conclusions.",
+      "status": "open",
+      "depends_on": ["M_AR_FIBER", "M_AR_CONVERSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_TAC_BASE": {
+      "statement": "Tachikawa a:table, a:dual-dimensions, a:resolution.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_TAC_ALL_DEGREES": {
+      "statement": "Tachikawa e:polynomial, e:all-degrees, e:socle, e:twists, including the negative-degree H^(m+2) factor.",
+      "status": "open",
+      "depends_on": ["M_TAC_BASE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_TAC_BIMODULE": {
+      "statement": "Tachikawa b:bimodule, trace obstruction, stable adjunction, and ordinary evaluated lift.",
+      "status": "open",
+      "depends_on": ["M_TAC_BASE", "M_TAC_ALL_DEGREES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_TAC_TRIANGULAR": {
+      "statement": "Tachikawa t:comparison-maps, t:finite-module, t:vanishing: all positive and <=-2 self-Hom groups vanish.",
+      "status": "open",
+      "depends_on": ["M_TAC_BIMODULE", "M_TAC_ALL_DEGREES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_TAC_TRANSFER": {
+      "statement": "Tachikawa tr:transfer: symmetric trivial-extension transfer using both tails, including degree -2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    },
+    "M_TAC_MAIN": {
+      "statement": "Tachikawa thm:main: a symmetric-algebra counterexample over the stated rational-function field.",
+      "status": "open",
+      "depends_on": ["M_TAC_TRIANGULAR", "M_TAC_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/twisted_lift_report.md"]
+    }
+  }
+}

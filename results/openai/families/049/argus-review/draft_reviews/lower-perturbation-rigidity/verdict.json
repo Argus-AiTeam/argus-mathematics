@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "unit": "lower-perturbation-rigidity",
+  "assessment_kind": "engineering",
+  "claim": {
+    "id": "C_PERTURBATION_RIGIDITY",
+    "version": 1,
+    "ledger_content_hash": "c1ed0369088aeb6c3a68a6ad60e91bdfb0606929379b7f21bf5866f06d5dae48",
+    "statement": "Over every characteristic-zero field k, in C=k[a,d,b,c,u]/(ac-bd-1), every fiber-weight-preserving locally nilpotent k-derivation D with D(W+a^2u^2-d^2)=0 is zero whenever all actual auxiliary components of W above degree 1 vanish.",
+    "hypotheses": [
+      "k is a field of characteristic zero",
+      "C is the displayed determinant-one quotient",
+      "D is a k-derivation locally nilpotent on every element",
+      "D preserves each actual fiber-weight space",
+      "W has no auxiliary component in a degree greater than 1",
+      "D(W+a^2*u^2-d^2)=0"
+    ],
+    "fiber_weights_a_d_b_c_u": [1, 1, -1, -1, 0],
+    "auxiliary_degrees_a_d_b_c_u": [0, 1, -1, 0, 1],
+    "not_assumed": [
+      "auxiliary homogeneity of W",
+      "fiber homogeneity of W",
+      "nonnegative leading shift",
+      "a preexisting global shift bound",
+      "a polynomial representative for the vertical coefficient q",
+      "algebraic closure of k"
+    ]
+  },
+  "verdict": "supported",
+  "verdict_scope": "The stated local algebraic rigidity theorem, including arbitrary W and arbitrary integer leading shift.",
+  "attribution": {
+    "assessed_work": "Old Argus engineering draft Theorem 2 and IndependentStableCore.lower_perturbation_rigidity, reusing OAI helper proofs",
+    "comparison": "OpenAI, A stable coordinate that is not a coordinate in four variables, October 5, 2026, prop:rigidity",
+    "comparison_source_revision": "4eaee87548250b2682affda7d05d947c05554bae",
+    "source_verified_difference": "The cited proposition only fixes a^3b+a^2u^2-d^2. The assessed theorem replaces a^3b by any W with auxiliary components at most 1, using the same leading-component mechanism.",
+    "classification": "Strengthening relative to the inspected October statement; no global originality claim"
+  },
+  "sources": [
+    {
+      "path": "families/049/first-pass/stable_core_certificate/report.md",
+      "locator": "Theorem 2, section 2",
+      "sha256": "68b969f393762d6b834c6b0e03ce5a1eb82a2e8944c97af14313184acecbd875"
+    },
+    {
+      "path": "families/049/first-pass/stable_core_certificate/Main.lean",
+      "locator": "IndependentStableCore.lower_perturbation_rigidity and october_rigidity",
+      "sha256": "fea7d30d06349b4e15bc63852970443a958b8e4f99e38ac09a8897f7a27bb916"
+    },
+    {
+      "path": "families/049/first-pass/stable_core_certificate/statement_fidelity.md",
+      "sha256": "683a28a67564cb14f2809d0e8844ff0ce781a563c205df47eb2ec7e0d84df0ed"
+    },
+    {
+      "path": "openai-math/preprints/A-stable-coordinate-that-is-not-a-coordinate-in-four-variables-October-5-2026/build/source/sections/05-rigidity.tex",
+      "locator": "prop:rigidity",
+      "sha256": "a27d1e5381626ace7c75640598312beb6a44b8f8f5bc183f5b7f2f114c444819",
+      "manifest_hash_match": true
+    }
+  ],
+  "components": [
+    {
+      "id": "domain-and-actual-compatible-gradings",
+      "verdict": "supported",
+      "reason": "The primitive linear determinant polynomial is prime over the field-based polynomial UFD. Its ideal is homogeneous for both rows, and coefficientwise projections commute after quotienting."
+    },
+    {
+      "id": "leading-component-including-negative-shift",
+      "verdict": "supported",
+      "reason": "Finite generator supports give an attained maximum m, all higher derivation components vanish globally, and proj_(e+nm)(D^n r)=D_m^n r holds for every integer m."
+    },
+    {
+      "id": "arbitrary-lower-perturbation",
+      "verdict": "supported",
+      "reason": "The actual DegreeLE map bound gives degree(DW)<=m+1, so projection at m+2 isolates D_m(a^2u^2-d^2); no fiber homogeneity of W is used."
+    },
+    {
+      "id": "factorial-closure-and-nonzero-factors",
+      "verdict": "supported",
+      "reason": "Characteristic-zero domain factorial closure applies to the two nonzero difference-of-squares factors and to a*u; actual determinant-point evaluations prove the required nonvanishing."
+    },
+    {
+      "id": "coefficient-regularity",
+      "verdict": "supported",
+      "reason": "q=cD_m(b)-bD_m(c) is initially in C. Localization at invariant denominators and the one-variable LND theorem make q constant in both independent coefficient charts; relatively prime power denominators then place q in k[a,d,u]."
+    },
+    {
+      "id": "negative-fiber-weight-elimination",
+      "verdict": "supported",
+      "reason": "q has actual fiber weight -2 while the polynomial base image has only nonnegative weight support. Directness forces q=0 and hence D_m=0."
+    },
+    {
+      "id": "formal-statement-fidelity",
+      "verdict": "supported",
+      "declaration": "IndependentStableCore.lower_perturbation_rigidity",
+      "reason": "The inspected declaration encodes all W satisfying the actual quotient degree bound over every characteristic-zero field."
+    },
+    {
+      "id": "surrounding-geometric-families",
+      "verdict": "partial",
+      "reason": "This declaration alone does not construct an embedding, lift an arbitrary base LND, or make a four-variable polynomial noncoordinate for every perturbation."
+    },
+    {
+      "id": "global-novelty",
+      "verdict": "unresolved",
+      "reason": "Only the precise strengthening relative to the source-verified October proposition was established."
+    }
+  ],
+  "formal_evidence": {
+    "type": "archived_source_bound_compiler_record",
+    "record": "families/049/first-pass/stable_core_certificate/lean_verification_result.json",
+    "certificate": "families/049/first-pass/stable_core_certificate/certificates/C_STABLE_CORE_VERIFY-1f2393b585c126fe.json",
+    "certificate_subject": "C_STABLE_CORE_VERIFY version 3",
+    "lean_version": "4.31.0",
+    "lean_commit": "68218e876d2a38b1985b8590fff244a83c321783",
+    "lake_version": "5.0.0-src+68218e8",
+    "workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "recorded_exit_code": 0,
+    "recorded_proof_holes": [],
+    "recorded_axioms_for_declaration": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "main_hash_matches_record": true,
+    "fidelity_hash_matches_record": true,
+    "embedded_source_and_fidelity_match": true,
+    "fresh_compile_performed_by_this_assessor": false,
+    "fresh_compile_assignment": "Separate agent under coordinator",
+    "common_exact_replay_performed_by_this_assessor": false,
+    "common_exact_replay_assignment": "Coordinator"
+  },
+  "dependencies": [
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/ObstructionDefinitions.lean and DeterminantGradings.lean",
+      "declarations": [
+        "C",
+        "fiberWeight",
+        "auxiliaryWeight",
+        "auxiliaryGrading",
+        "fiberGrading",
+        "auxiliary_fiber_proj_commute"
+      ],
+      "role": "Exact quotient and compatible integer gradings"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/DeterminantDomain.lean",
+      "declarations": [
+        "determinantRelation_irreducible",
+        "determinantRing_isDomain"
+      ],
+      "role": "Derived domain property"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/DerivationTopShift.lean, LeadingComponent.lean, LeadingLocallyNilpotent.lean",
+      "declarations": [
+        "exists_top_component_and_global_bound",
+        "degreeLE_map",
+        "top_projection_iterate",
+        "locallyNilpotent_component",
+        "component_preserves_compatible_grading",
+        "exists_nonzero_locallyNilpotent_component"
+      ],
+      "role": "Arbitrary-sign leading LND and arbitrary W bound"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/FactorialClosure.lean and DeterminantNonzero.lean",
+      "declarations": [
+        "lnd_factorial_closure",
+        "lnd_fixed_of_difference_of_squares",
+        "au_sub_d_ne_zero",
+        "au_add_d_ne_zero",
+        "cX_a_ne_zero",
+        "cX_u_ne_zero"
+      ],
+      "role": "Nonzero-factor invariant splitting"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/DeterminantCharts.lean, ChartLNDConstant.lean, VerticalLND.lean, DeterminantIntersection.lean, ChartIntersection.lean, LocalizationIntersection.lean",
+      "declarations": [
+        "chartEquivA",
+        "chartEquivD",
+        "baseMap_injective",
+        "chart_coefficient_eq_C",
+        "coefficient_chartA_eq_C",
+        "coefficient_chartD_eq_C",
+        "exists_base_of_constant_charts",
+        "coefficient_mem_baseRange"
+      ],
+      "role": "Independent charts, invariant localization, and proved coefficient polynomiality"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/DeterminantWeights.lean, DeterminantGradedObstruction.lean, DeterminantFinalStep.lean",
+      "declarations": [
+        "eq_zero_of_mem_baseRange_of_negative_weight",
+        "derivation_eq_zero_of_fixed_base_and_coefficient_mem"
+      ],
+      "role": "Actual negative-weight contradiction"
+    }
+  ],
+  "verification_performed": [
+    "Read old theorem, actual Main statement and proof, fidelity document, ledger claim, graph, and relevant formal dependency proofs",
+    "Checked finite global leading-shift bound and iterate identity without a sign assumption",
+    "Checked use of arbitrary W rather than only two homogeneous summands",
+    "Checked nonzero factorial-closure factors at an actual determinant point",
+    "Checked q regularity using both coefficient charts and only invariant denominators",
+    "Checked negative fiber-weight exclusion in the actual quotient grading",
+    "Matched Main/fidelity source hashes and embedded texts to archived compiler evidence",
+    "Verified cited October source hash against the existing manuscript manifest"
+  ],
+  "mathematical_gaps": [],
+  "evidence_limits": [
+    "The 81-check certificate is not an enumeration proof over W or derivations",
+    "No fresh Lean compilation or duplicate common algebra replay was run by this assessor",
+    "Fiber preservation is essential: the LND with delta(b)=a, delta(c)=d and fixed a,d,u kills the high term for W=0 but shifts fiber weight by 2",
+    "No arbitrary-ring or positive-characteristic extension of this rigidity theorem is claimed",
+    "No independent acceptance or global novelty certification is supplied"
+  ],
+  "external_assumptions": [
+    "Exactly the explicit characteristic-zero field, local-nilpotence, grading-preservation, degree-bound, and annihilation hypotheses",
+    "Domain, algebraic independence, the global shift bound, and coefficient regularity are derived, not additional hypotheses",
+    "Archived formal evidence trusts the Lean kernel and imported library proofs, with only the recorded standard logical foundations"
+  ],
+  "novelty": "not_asserted",
+  "independent_review_required": true,
+  "acceptance": "not_granted_engineering_assessment"
+}

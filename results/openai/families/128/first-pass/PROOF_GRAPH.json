@@ -1,0 +1,215 @@
+{
+  "goal": "C9000128",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "routes": [
+    {
+      "name": "Manuscript approximation argument (not independently established)",
+      "status": "untried",
+      "evidence": "OBJECTIVE.md"
+    },
+    {
+      "name": "Universal constructive host-request verification",
+      "status": "current",
+      "evidence": "research/host-request-audit/proof.md"
+    }
+  ],
+  "nodes": {
+    "C9000128": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 128 (A factor-two approximation for shortest common superstring.; papers: A Polynomial-Time 2-Approximation for Shortest Common Superstring; Lean status: Partially/Comparator formalized (lean/docs/128.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["M_MAIN", "H_HOST_VERIFIED"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "M_MAIN": {
+      "statement": "thm:main: deterministic polynomial-time factor-two approximation for explicitly represented ordinary strings; not maximum-overlap Greedy.",
+      "status": "open",
+      "depends_on": ["M_COUNTS", "M_BASE", "M_CONNECTION", "M_ALGORITHM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "M_COUNTS": {
+      "statement": "lem:counts: m(s) is bounded by the occurrence count of s in every common superstring and W=sum_c m(c)<=OPT.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/02-counts.tex"]
+    },
+    "M_BASE": {
+      "statement": "lem:base: nonnegative edge multiplicities give a balanced hierarchical base graph containing the required strings, with W up edges.",
+      "status": "open",
+      "depends_on": ["M_COUNTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/02-counts.tex"]
+    },
+    "M_RECORDED": {
+      "statement": "lem:recorded: closed-walk recorded-occurrence counts equal m(s), with counts modulo walk turn length.",
+      "status": "open",
+      "depends_on": ["M_BASE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/03-layers.tex"]
+    },
+    "M_LAYERS": {
+      "statement": "lem:layers: sorting aligned primitive-text passages preserves edges and produces ordered one-period layers; budgets sum to W.",
+      "status": "open",
+      "depends_on": ["M_BASE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/03-layers.tex"]
+    },
+    "M_MATCHING": {
+      "statement": "lem:matching-window: blocking functional counts blocked records, and unblocked records have actual agreeing layer windows.",
+      "status": "open",
+      "depends_on": ["M_RECORDED", "M_LAYERS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/03-layers.tex"]
+    },
+    "M_AGREEMENT": {
+      "statement": "lem:agreement: distinct aligned period-p and period-q texts agree on fewer than p+q positions; equal-period texts on fewer than p.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/03-layers.tex"]
+    },
+    "M_ROTATION": {
+      "statement": "lem:max-rotation: the stated lexicographic maximal-rotation comparison prevents agreement for q positions with the distinct target.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/03-layers.tex"]
+    },
+    "M_WINDOWS": {
+      "statement": "lem:ordered-windows: ordered valid windows admit a directed hierarchical walk of up cost equal to the end increase, visiting length <=max(0,b-c).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/04-connections.tex"]
+    },
+    "M_BAND": {
+      "statement": "lem:band: an ordered same-text band with top-first minus bottom-last <=h, a nonnegative period multiple, can be joined for cost <=h.",
+      "status": "open",
+      "depends_on": ["M_LAYERS", "M_WINDOWS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/04-connections.tex"]
+    },
+    "M_COLLECTIVE": {
+      "statement": "lem:collective: the three displayed endpoint inequalities give a cost-kp closed link touching k source layers.",
+      "status": "open",
+      "depends_on": ["M_LAYERS", "M_WINDOWS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/04-connections.tex"]
+    },
+    "M_HOST": {
+      "statement": "lem:host: for a nonempty family of pairwise distinct child text groups agreeing on actual host records and requester windows a_i+p_i<e<=b_i-p_i, the host and all requesters can be rooted within q plus all reserved requester budgets.",
+      "status": "open",
+      "depends_on": ["M_AGREEMENT", "M_WINDOWS", "H_HOST_VERIFIED"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/04-connections.tex",
+        "research/host-request-audit/proof.md",
+        "research/host-request-audit/exact_certificate.json"
+      ]
+    },
+    "M_CHOOSE_K": {
+      "statement": "lem:choose-k and chosen-record construction: count and blocking rules supply a suitable band and actual receiving record.",
+      "status": "open",
+      "depends_on": ["M_COUNTS", "M_LAYERS", "M_MATCHING", "M_AGREEMENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/05-processing.tex"]
+    },
+    "M_PARTITION": {
+      "statement": "prop:partition: each layer is rooted or in exactly one outgoing block, with disjoint reserved budgets; requests go to larger periods.",
+      "status": "open",
+      "depends_on": ["M_CHOOSE_K", "M_HOST", "M_COLLECTIVE", "M_BAND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/05-processing.tex"]
+    },
+    "M_FREE": {
+      "statement": "lem:free-period: a k-layer period-p block can be internally joined within (k-1)p, freeing one budget p.",
+      "status": "open",
+      "depends_on": ["M_PARTITION", "M_BAND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/06-cycles.tex"]
+    },
+    "M_CYCLE": {
+      "statement": "lem:cycle-contact: a maximal-rotation cycle link can expose a contact of length at most its target period within its budget.",
+      "status": "open",
+      "depends_on": ["M_ROTATION", "M_AGREEMENT", "M_CHOOSE_K", "M_WINDOWS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/06-cycles.tex"]
+    },
+    "M_CONNECTION": {
+      "statement": "thm:connection: all base components connect to the empty word with added up cost <=W.",
+      "status": "open",
+      "depends_on": ["M_PARTITION", "M_FREE", "M_CYCLE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/06-cycles.tex"]
+    },
+    "M_ALGORITHM": {
+      "statement": "Euler-tour extraction yields a common superstring of length <=2W and all representation, count, sorting, connection, and extraction steps are bit-polynomial.",
+      "status": "open",
+      "depends_on": ["M_COUNTS", "M_BASE", "M_CONNECTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Polynomial-Time-2-Approximation-for-Shortest-Common-Superstring-September-24-2026/build/sections/07-algorithm.tex"]
+    },
+    "H_HOST_VERIFIED": {
+      "statement": "Independent universal constructive verification of lem:host under its original hypotheses, not of the entire approximation theorem.",
+      "status": "open",
+      "depends_on": ["H_CYCLIC", "H_CLIPPING", "H_PATHS", "H_ROOTING"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/host-request-audit/proof.md",
+        "research/host-request-audit/verify.py",
+        "research/host-request-audit/exact_certificate.json",
+        "research/host-request-audit/statement_fidelity.md"
+      ]
+    },
+    "H_CYCLIC": {
+      "statement": "Actual records on a monotone q-periodic host can be normalized and cyclically ordered between a chosen record and its q-translate; transporting each entire child alignment preserves its words and actual windows.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/host-request-audit/proof.md",
+        "research/host-request-audit/Main.lean",
+        "research/host-request-audit/lean/certificates/H_PATHS-688fbc9dd3ac1cc6.json"
+      ]
+    },
+    "H_CLIPPING": {
+      "statement": "Minimum-period selection and strict agreement bounds make all clipped contacts valid, ordered, attachable, and shorter than p_j on the closing transition.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/host-request-audit/proof.md",
+        "research/host-request-audit/Main.lean",
+        "research/host-request-audit/exact_certificate.json"
+      ]
+    },
+    "H_PATHS": {
+      "statement": "Explicit suffix-deletion/prefix-append and gap-letter steps are valid hierarchical-graph paths and have the claimed up cost.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/host-request-audit/Main.lean",
+        "research/host-request-audit/statement_fidelity.md",
+        "research/host-request-audit/lean/certificates/H_PATHS-688fbc9dd3ac1cc6.json"
+      ]
+    },
+    "H_ROOTING": {
+      "statement": "Host excursion, child attachment loops, and one short-contact round trip form a connected balanced support containing the empty word and every participating layer, within q plus the reserved budgets.",
+      "status": "open",
+      "depends_on": ["H_CYCLIC", "H_CLIPPING", "H_PATHS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/host-request-audit/proof.md",
+        "research/host-request-audit/Main.lean",
+        "research/host-request-audit/exact_certificate.json"
+      ]
+    }
+  }
+}

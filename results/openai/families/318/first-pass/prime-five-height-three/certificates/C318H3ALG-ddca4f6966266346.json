@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C318H3ALG-b34a191d6020",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/318/first-pass/prime-five-height-three/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/318/first-pass/prime-five-height-three/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14812,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/318/first-pass/prime-five-height-three/Main.lean",
+    "source_sha256": "2024eff75462b6204dd2d00a92047e9170d1094faf228ca269be86a0da06c659",
+    "statement_fidelity": "families/318/first-pass/prime-five-height-three/statement_fidelity.md",
+    "statement_fidelity_sha256": "b1e8b590a61072844d2ee4e95ea4fa25b5fc23ba2722d8b68cbc5b8918473a86",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/prime-five-height-three/Main.lean",
+    "text": "import Mathlib\n\nnamespace HeightThreeFiltration\n\nsection FilteredComparison\n\nvariable {R V W : Type*} [CommRing R]\n  [AddCommGroup V] [Module R V]\n  [AddCommGroup W] [Module R W]\n\ntheorem filtered_kernel\n    (F : ℕ → Submodule R V) (G : ℕ → Submodule R W)\n    (f : V →ₗ[R] W) (n : ℕ) (hF0 : F 0 = ⊥)\n    (down : ∀ i < n, ∀ v ∈ F (i + 1), f v ∈ G i → v ∈ F i) :\n    ∀ i ≤ n, ∀ v ∈ F i, f v = 0 → v = 0 := by\n  intro i\n  induction i with\n  | zero =>\n      intro _ v hv _\n      simpa [hF0] using hv\n  | succ i ih =>\n      intro hi v hv hz\n      have hin : i < n := by omega\n      have hile : i ≤ n := by omega\n      have hlower : v ∈ F i := down i hin v hv (by\n        rw [hz]\n        exact (G i).zero_mem)\n      exact ih hile v hlower hz\n\ntheorem filtered_lifting\n    (F : ℕ → Submodule R V) (G : ℕ → Submodule R W)\n    (f : V →ₗ[R] W) (n : ℕ) (hG0 : G 0 = ⊥)\n    (monoF : Monotone F)\n    (up : ∀ i < n, ∀ w ∈ G (i + 1),\n      ∃ v ∈ F (i + 1), w - f v ∈ G i) :\n    ∀ i ≤ n, ∀ w ∈ G i, ∃ v ∈ F i, f v = w := by\n  intro i\n  induction i with\n  | zero =>\n      intro _ w hw\n      have hz : w = 0 := by simpa [hG0] using hw\n      subst w\n      exact ⟨0, (F 0).zero_mem, f.map_zero⟩\n  | succ i ih =>\n      intro hi w hw\n      have hin : i < n := by omega\n      have hile : i ≤ n := by omega\n      obtain ⟨v, hv, hrem⟩ := up i hin w hw\n      obtain ⟨a, ha, heq⟩ := ih hile (w - f v) hrem\n      refine ⟨a + v, (F (i + 1)).add_mem\n        (monoF (Nat.le_succ i) ha) hv, ?_⟩\n      rw [map_add, heq]\n      exact sub_add_cancel w (f v)\n\ntheorem finite_filtered_bijective\n    (F : ℕ → Submodule R V) (G : ℕ → Submodule R W)\n    (f : V →ₗ[R] W) (n : ℕ)\n    (hF0 : F 0 = ⊥) (hG0 : G 0 = ⊥)\n    (hFn : F n = ⊤) (hGn : G n = ⊤)\n    (monoF : Monotone F)\n    (down : ∀ i < n, ∀ v ∈ F (i + 1), f v ∈ G i → v ∈ F i)\n    (up : ∀ i < n, ∀ w ∈ G (i + 1),\n      ∃ v ∈ F (i + 1), w - f v ∈ G i) :\n    Function.Bijective f := by\n  constructor\n  · intro v w heq\n    have hmem : v - w ∈ F n := by\n      rw [hFn]\n      exact Submodule.mem_top\n    have hz : f (v - w) = 0 := by\n      rw [map_sub, heq, sub_self]\n    exact sub_eq_zero.mp\n      (filtered_kernel F G f n hF0 down n (le_refl n) (v - w) hmem hz)\n  · intro w\n    have hmem : w ∈ G n := by\n      rw [hGn]\n      exact Submodule.mem_top\n    obtain ⟨v, _, heq⟩ :=\n      filtered_lifting F G f n hG0 monoF up n (le_refl n) w hmem\n    exact ⟨v, heq⟩\n\nend FilteredComparison\n\ntheorem degree_three_differential_window (r : ℕ) (hr : 2 ≤ r) :\n    r - 1 < 7 ∨ 9 < 3 + r := by\n  omega\n\ntheorem degree_three_positive_row_outside\n    (r s : ℕ) (hr : 7 ≤ r) (hs : s = r + 3) : 9 < s := by\n  omega\n\ntheorem degree_one_boundary_is_not_excluded :\n    1 + 8 = (9 : ℕ) ∧ 8 - 1 = (7 : ℕ) := by\n  decide\n\nend HeightThreeFiltration\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/prime-five-height-three/statement_fidelity.md",
+    "text": "# Statement fidelity: C318H3ALG\n\n`Main.lean` formalizes finite filtered comparison and the integer range\ntest used in the special degree-three sphere-lifting argument. It does\nnot formalize spectra or continuous group cohomology.\n\n## Objects and quantifiers\n\n`filtered_kernel`, `filtered_lifting`, and\n`finite_filtered_bijective` quantify over every commutative ring R,\nevery pair of R-modules V,W with additive commutative group structures,\nevery R-linear map f:V->W, every nonnegative integer n, and every\npair of sequences of submodules F_i,G_i. No finite-dimensionality,\nfield hypothesis, topology, spectrum, or characteristic is assumed.\n\nThe combined theorem assumes F_0=G_0=0, F_n=V, G_n=W, and monotonicity\nof F. Its two leading-layer conditions are stated elementwise:\n\n1. For i<n and v in F_(i+1), if f(v) lies in G_i then v lies in F_i.\n2. For i<n and w in G_(i+1), there is v in F_(i+1) such that\n   w-f(v) lies in G_i.\n\nIts conclusion is `Function.Bijective f`, for this same map f, not\nthe existence of another map or an equality of dimensions.\n`filtered_kernel` and `filtered_lifting` prove the respective\ninductive assertions at every i<=n.\n\nFor actual increasing filtrations preserved by f, the two elementwise\nconditions follow from injectivity and surjectivity of the induced\nsuccessive-quotient maps. The formal theorem does not itself construct\nthese quotients or assume unexplained spectral basis maps. Application\nto the decreasing residue filtration reverses a finite range and\napplies this theorem to the underlying coefficient modules. The\nfiltered map, its finite exhaustive range, and its leading quotient\nisomorphisms are proved in prose in `proof.md`, Section 6; the compiler\ndoes not check those application hypotheses.\n\n## Range declarations\n\n`degree_three_differential_window` quantifies over each integer\nr>=2, represented as a natural number, and proves either r-1<7 or\n3+r>9. In the prose application the first alternative uses the\nseparately cited vanishing of the positive sphere stems below seven;\nthe second uses the separately established cohomological bound nine.\nNeither vanishing theorem is encoded as an axiom in this file.\n\n`degree_three_positive_row_outside` proves that r>=7 and s=r+3 imply\ns>9, again purely as natural-number arithmetic.\n`degree_one_boundary_is_not_excluded` records that the potential\ndegree-one differential with r=8 has target cohomological degree nine\nand coefficient degree seven. Thus the range proof does not silently\nassert that every degree-one class lifts. The actual degree-one lift\nis constructed by the divided reduced norm in the prose.\n\n## Not certified by this source\n\nNo construction of Morava E, completed cooperations, ordinary residue\nsmash, spherical representatives, geometric support comparison,\ncoheight-one coefficient theorem, rational local sphere, or eight-stage\nfiltration is formalized here. No spectral equivalence or publication\nnovelty is made a Lean hypothesis. The compiler certifies exactly the\nuniversal algebra and arithmetic declarations described above.\n"
+  },
+  "subject": {
+    "content_hash": "631fb37be46523d91d32f53894d0310f70f3d7ed969f89dd38e84e371599858b",
+    "kind": "claim",
+    "subject_id": "C318H3ALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

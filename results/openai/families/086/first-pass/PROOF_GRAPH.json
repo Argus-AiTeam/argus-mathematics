@@ -1,0 +1,172 @@
+{
+  "goal": "C9000086",
+  "routes": {
+    "R86_EXPLICIT_VERIFICATION": {
+      "goal": "C9000086",
+      "status": "active",
+      "obligations": ["C86_SPARSE_EXPLICIT"],
+      "evidence": "research/openai_manuscript/An-L3-bound-for-the-trilinear-Hilbert-transform-October-5-2026/build/sections/counting.tex"
+    },
+    "R86_SPARSE_PROOF_FINAL": {
+      "goal": "C86_SPARSE_EXPLICIT",
+      "status": "active",
+      "obligations": ["C86_PACKING_CORE", "C86_COMBINATORIAL"],
+      "evidence": "research/sparse_count/proof.md"
+    },
+    "R86_FREQUENCY_ADMISSIBILITY": {
+      "goal": "C86_THIN_INPUTS",
+      "status": "active",
+      "obligations": [
+        "C86_FREQ_HEREDITARY",
+        "C86_FREQ_PAIR",
+        "C86_FREQ_SIDE",
+        "C86_FREQ_RESERVES"
+      ],
+      "evidence": "research/frequency_tests/proof.md"
+    },
+    "R86_THIN_REVIEWED_810": {
+      "goal": "C86_THIN",
+      "status": "active",
+      "obligations": ["C86_THIN_INPUTS", "C86_SPARSE_EXPLICIT"],
+      "evidence": "research/frequency_tests/proof.md"
+    }
+  },
+  "nodes": {
+    "C9000086": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 086 (An <i>L</i><sup>3</sup> bound for the trilinear Hilbert transform.; papers: An <i>L</i><sup>3</sup> bound for the trilinear Hilbert transform; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C86_SPARSE_EXPLICIT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C86_FINITE_STATED": {
+      "statement": "Lemma lem:finite-sparse-count, with all five hypotheses, polynomial dimension reserves, and density exponent 1/2080.",
+      "status": "open",
+      "depends_on": ["C86_SPARSE_EXPLICIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/sparse_count/proof.md"]
+    },
+    "C86_SPARSE_EXPLICIT": {
+      "statement": "The complete finite sparse-count estimate holds with C_res=2^40, C=2^160, and the stronger density exponent 1/810.",
+      "status": "open",
+      "depends_on": ["C86_PACKING_CORE", "C86_COMBINATORIAL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/sparse_count/proof.md",
+        "research/sparse_count/exact_certificate.json",
+        "research/sparse_count/verify.py"
+      ]
+    },
+    "C86_PACKING_CORE": {
+      "statement": "Local anchor-sum packings remove a label-count factor, and annular residual dominance plus the pure-shift gap forbids cross-translation box collisions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/sparse_count/Main.lean",
+        "research/sparse_count/statement_fidelity.md",
+        "research/sparse_count/certificates/C86_PACKING_CORE-b79be8e4fb37b7e6.json"
+      ]
+    },
+    "C86_COMBINATORIAL": {
+      "statement": "The graph, block, minimal-growth, and density-optimization arguments imply the explicit complete bound from the packing core.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/sparse_count/proof.md",
+        "research/sparse_count/exact_certificate.json",
+        "research/sparse_count/verify.py"
+      ]
+    },
+    "C86_THIN_INPUTS": {
+      "statement": "The manuscript frequency tests meet every hypothesis of the finite sparse-count lemma in the application to prop:thin-count.",
+      "status": "open",
+      "depends_on": [
+        "C86_FREQ_HEREDITARY",
+        "C86_FREQ_PAIR",
+        "C86_FREQ_SIDE",
+        "C86_FREQ_RESERVES"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/frequency_tests/proof.md",
+        "research/frequency_tests/exact_certificate.json",
+        "research/frequency_tests/verify.py"
+      ]
+    },
+    "C86_THIN": {
+      "statement": "Proposition prop:thin-count, equation (34), including a scale-summed power below one.",
+      "status": "open",
+      "depends_on": ["C86_SPARSE_EXPLICIT", "C86_THIN_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/frequency_tests/proof.md",
+        "research/frequency_tests/exact_certificate.json"
+      ]
+    },
+    "C86_FREQ_HEREDITARY": {
+      "statement": "The actual inherited representatives obey the larger-scale separation (25), uniformly on a path, using both type coordinates and the primary height-good implication.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/frequency_tests/proof.md"]
+    },
+    "C86_FREQ_PAIR": {
+      "statement": "Two core labels determine the full tested tuple across all scales, and the explicit integer-height-bin bound L0 controls its number of scale occurrences.",
+      "status": "open",
+      "depends_on": ["C86_FREQ_HEREDITARY", "C86_FREQ_RESERVES"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/frequency_tests/proof.md",
+        "research/frequency_tests/exact_certificate.json"
+      ]
+    },
+    "C86_FREQ_SIDE": {
+      "statement": "Whole side Fourier-window sets of distinct triples incident to a fixed core label are disjoint; finite orthogonality with one shared offset gives the exact side square budget.",
+      "status": "open",
+      "depends_on": ["C86_FREQ_HEREDITARY", "C86_FREQ_RESERVES"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/frequency_tests/proof.md",
+        "research/frequency_tests/exact_certificate.json",
+        "research/frequency_tests/jacobian_residual_output.json"
+      ]
+    },
+    "C86_FREQ_RESERVES": {
+      "statement": "All triple annuli, the pure-shift gap, and the reviewed reserves 2^40(d+1)^2 follow with zeta=xi/36, B=4Bprime_h, Q=floor(E_h/6^8), and Sigma=Xi/2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/frequency_tests/proof.md",
+        "research/frequency_tests/exact_certificate.json",
+        "research/frequency_tests/verify.py"
+      ]
+    },
+    "C86_CORE": {
+      "statement": "Proposition prop:core-estimate, equation (37), for the localized terms with at least three core roles.",
+      "status": "open",
+      "depends_on": ["C86_THIN", "C86_OTHER_ANALYTIC_STEPS"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C86_OTHER_ANALYTIC_STEPS": {
+      "statement": "All other analytic, localization, compression, side, and absorption steps needed for prop:core-estimate and thm:main; outside this mission's verification scope.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C86_MAIN": {
+      "statement": "The fixed-slope trilinear Hilbert transform maps L^3 x L^3 x L^3 to L^1, as stated in thm:main.",
+      "status": "open",
+      "depends_on": ["C86_CORE", "C86_OTHER_ANALYTIC_STEPS"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    }
+  }
+}

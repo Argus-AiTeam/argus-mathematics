@@ -1,0 +1,563 @@
+Fin.castLE {n m : ℕ} (h : n ≤ m) (i : Fin n) : Fin m
+Fin.castLE_injective {n m : ℕ} (hmn : m ≤ n) : Function.Injective (Fin.castLE hmn)
+Fin.ext {n : ℕ} {a b : Fin n} (h : ↑a = ↑b) : a = b
+Fin.ext_iff {n : ℕ} {a b : Fin n} : a = b ↔ ↑a = ↑b
+Fin.ofNat (n : ℕ) [NeZero n] (a : ℕ) : Fin n
+Fin.sum_univ_four.{u_2} {M : Type u_2} [AddCommMonoid M] (f : Fin 4 → M) : ∑ i, f i = f 0 + f 1 + f 2 + f 3
+Fin.sum_univ_three.{u_2} {M : Type u_2} [AddCommMonoid M] (f : Fin 3 → M) : ∑ i, f i = f 0 + f 1 + f 2
+Fin.val {n : ℕ} (self : Fin n) : ℕ
+Fin.val_add {n : ℕ} (a b : Fin n) : ↑(a + b) = (↑a + ↑b) % n
+Fin.val_ofNat (n : ℕ) [NeZero n] (a : ℕ) : ↑(Fin.ofNat n a) = a % n
+Fin.val_one' (n : ℕ) [NeZero n] : ↑1 = 1 % n
+Fin.val_zero (n : ℕ) [NeZero n] : ↑0 = 0
+Finset.Icc.{u_1} {α : Type u_1} [Preorder α] [LocallyFiniteOrder α] (a b : α) : Finset α
+Finset.card.{u_1} {α : Type u_1} (s : Finset α) : ℕ
+Finset.card_erase_of_mem.{u_1} {α : Type u_1} {s : Finset α} {a : α} [DecidableEq α] :
+  a ∈ s → (s.erase a).card = s.card - 1
+Finset.card_filter.{u_1} {ι : Type u_1} (p : ι → Prop) [DecidablePred p] (s : Finset ι) :
+  {i ∈ s | p i}.card = ∑ i ∈ s, if p i then 1 else 0
+Finset.card_univ.{u_1} {α : Type u_1} [Fintype α] : Finset.univ.card = Fintype.card α
+Finset.exists_subset_card_eq.{u_1} {α : Type u_1} {s : Finset α} {n : ℕ} (hns : n ≤ s.card) : ∃ t ⊆ s, t.card = n
+Finset.fold_insert.{u_1, u_2} {α : Type u_1} {β : Type u_2} {op : β → β → β} [hc : Std.Commutative op]
+  [ha : Std.Associative op] {f : α → β} {b : β} {s : Finset α} {a : α} [DecidableEq α] (h : a ∉ s) :
+  Finset.fold op b f (insert a s) = op (f a) (Finset.fold op b f s)
+Finset.induction_on.{u_3} {α : Type u_3} {motive : Finset α → Prop} [DecidableEq α] (s : Finset α) (empty : motive ∅)
+  (insert : ∀ (a : α) (s : Finset α), a ∉ s → motive s → motive (insert a s)) : motive s
+Finset.length_toList.{u_1} {α : Type u_1} (s : Finset α) : s.toList.length = s.card
+Finset.mem_Icc.mpr : ?m.4 ≤ ?m.6 ∧ ?m.6 ≤ ?m.5 → ?m.6 ∈ Finset.Icc ?m.4 ?m.5
+Finset.mem_coe.{u_1} {α : Type u_1} {a : α} {s : Finset α} : a ∈ ↑s ↔ a ∈ s
+Finset.mem_erase.{u_1} {α : Type u_1} [DecidableEq α] {a b : α} {s : Finset α} : a ∈ s.erase b ↔ a ≠ b ∧ a ∈ s
+Finset.mem_filter.{u_1} {α : Type u_1} {p : α → Prop} [DecidablePred p] {s : Finset α} {a : α} :
+  a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+Finset.mem_filter.mp : ?m.5 ∈ Finset.filter ?m.2 ?m.4 → ?m.5 ∈ ?m.4 ∧ ?m.2 ?m.5
+Finset.mem_insert.{u_1} {α : Type u_1} [DecidableEq α] {s : Finset α} {a b : α} : a ∈ insert b s ↔ a = b ∨ a ∈ s
+Finset.mem_insert_of_mem.{u_1} {α : Type u_1} [DecidableEq α] {s : Finset α} {a b : α} (h : a ∈ s) : a ∈ insert b s
+Finset.mem_insert_self.{u_1} {α : Type u_1} [DecidableEq α] (a : α) (s : Finset α) : a ∈ insert a s
+Finset.mem_range {n m : ℕ} : m ∈ Finset.range n ↔ m < n
+Finset.mem_range.mp : ?m.2 ∈ Finset.range ?m.1 → ?m.2 < ?m.1
+Finset.mem_range.mpr : ?m.2 < ?m.1 → ?m.2 ∈ Finset.range ?m.1
+Finset.mem_singleton.{u_1} {α : Type u_1} {a b : α} : b ∈ {a} ↔ b = a
+Finset.mem_toList.{u_1} {α : Type u_1} {a : α} {s : Finset α} : a ∈ s.toList ↔ a ∈ s
+Finset.mem_toList.mp : ?m.2 ∈ Finset.toList ?m.3 → ?m.2 ∈ ?m.3
+Finset.mem_univ.{u_1} {α : Type u_1} [Fintype α] (x : α) : x ∈ Finset.univ
+Finset.mul_sum.{u_1, u_4} {ι : Type u_1} {R : Type u_4} [NonUnitalNonAssocSemiring R] (s : Finset ι) (f : ι → R)
+  (a : R) : a * ∑ i ∈ s, f i = ∑ i ∈ s, a * f i
+Finset.nodup_toList.{u_1} {α : Type u_1} (s : Finset α) : s.toList.Nodup
+Finset.range (n : ℕ) : Finset ℕ
+Finset.sum_add_distrib.{u_1, u_4} {ι : Type u_1} {M : Type u_4} {s : Finset ι} [AddCommMonoid M] {f g : ι → M} :
+  ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑ x ∈ s, g x
+Finset.sum_congr.{u_1, u_4} {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [AddCommMonoid M] {f g : ι → M}
+  (h : s₁ = s₂) : (∀ x ∈ s₂, f x = g x) → s₁.sum f = s₂.sum g
+Finset.sum_const.{u_1, u_4} {ι : Type u_1} {M : Type u_4} {s : Finset ι} [AddCommMonoid M] (b : M) :
+  ∑ _x ∈ s, b = s.card • b
+Finset.sum_filter.{u_1, u_4} {ι : Type u_1} {M : Type u_4} {s : Finset ι} [AddCommMonoid M] (p : ι → Prop)
+  [DecidablePred p] (f : ι → M) : ∑ a ∈ s with p a, f a = ∑ a ∈ s, if p a then f a else 0
+Finset.sum_insert.{u_1, u_4} {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} [AddCommMonoid M] {f : ι → M}
+  [DecidableEq ι] : a ∉ s → ∑ x ∈ insert a s, f x = f a + ∑ x ∈ s, f x
+Finset.sum_le_sum.{u_1, u_5} {ι : Type u_1} {N : Type u_5} [AddCommMonoid N] [Preorder N] {f g : ι → N} {s : Finset ι}
+  [AddLeftMono N] (h : ∀ i ∈ s, f i ≤ g i) : ∑ i ∈ s, f i ≤ ∑ i ∈ s, g i
+Finset.sum_lt_sum.{u_1, u_4} {ι : Type u_1} {M : Type u_4} [AddCommMonoid M] [Preorder M] [IsOrderedCancelAddMonoid M]
+  {f g : ι → M} {s : Finset ι} [AddLeftStrictMono M] (hle : ∀ i ∈ s, f i ≤ g i) (hlt : ∃ i ∈ s, f i < g i) :
+  ∑ i ∈ s, f i < ∑ i ∈ s, g i
+Finset.sum_range_succ.{u_4} {M : Type u_4} [AddCommMonoid M] (f : ℕ → M) (n : ℕ) :
+  ∑ x ∈ Finset.range (n + 1), f x = ∑ x ∈ Finset.range n, f x + f n
+Finset.sum_range_succ'.{u_4} {M : Type u_4} [AddCommMonoid M] (f : ℕ → M) (n : ℕ) :
+  ∑ k ∈ Finset.range (n + 1), f k = ∑ k ∈ Finset.range n, f (k + 1) + f 0
+Finset.univ.{u_1} {α : Type u_1} [Fintype α] : Finset α
+Function.Embedding.nonempty_of_card_le.{u_1, u_2} {α : Type u_1} {β : Type u_2} [Fintype α] [Fintype β]
+  (h : Fintype.card α ≤ Fintype.card β) : Nonempty (α ↪ β)
+Function.Injective.{u_1, u_2} {α : Sort u_1} {β : Sort u_2} (f : α → β) : Prop
+Function.comp_apply.{u_1, u_2, u_3} {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f : β → δ} {g : α → β} {x : α} :
+  (f ∘ g) x = f (g x)
+Function.comp_def.{u_1, u_2, u_3} {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β → δ) (g : α → β) :
+  f ∘ g = fun x => f (g x)
+Function.injective_id.{u_1} {α : Sort u_1} : Function.Injective id
+Function.iterate_add_apply.{u} {α : Type u} (f : α → α) (m n : ℕ) (x : α) : f^[m + n] x = f^[m] (f^[n] x)
+Function.iterate_succ_apply'.{u} {α : Type u} (f : α → α) (n : ℕ) (x : α) : f^[n.succ] x = f (f^[n] x)
+List.Forall.{u_1} {α : Type u_1} (p : α → Prop) : List α → Prop
+List.IsChain.append_overlap.{u} {α : Type u} {R : α → α → Prop} {l₁ l₂ l₃ : List α} (h₁ : List.IsChain R (l₁ ++ l₂))
+  (h₂ : List.IsChain R (l₂ ++ l₃)) (hn : l₂ ≠ []) : List.IsChain R (l₁ ++ l₂ ++ l₃)
+List.IsChain.left_of_append.{u} {α : Type u} {R : α → α → Prop} {l₁ l₂ : List α} (h : List.IsChain R (l₁ ++ l₂)) :
+  List.IsChain R l₁
+List.IsChain.right_of_append.{u} {α : Type u} {R : α → α → Prop} {l₁ l₂ : List α} (h : List.IsChain R (l₁ ++ l₂)) :
+  List.IsChain R l₂
+List.IsChain.tail.{u} {α : Type u} {R : α → α → Prop} {l : List α} (h : List.IsChain R l) : List.IsChain R l.tail
+<stdin>:63:7: error(lean.unknownIdentifier): Unknown constant `List.Nodup.getD_inj`
+List.Nodup.head_eq_getLast_iff.{u_1} {α : Type u_1} {l : List α} (hne : l ≠ []) (hnd : l.Nodup) :
+  l.head hne = l.getLast hne ↔ ∃ a, l = [a]
+List.Pairwise.isChain.{u_1} {α✝ : Type u_1} {R : α✝ → α✝ → Prop} {l : List α✝} (p : List.Pairwise R l) :
+  List.IsChain R l
+List.Perm.cons_inv.{u_1} {α : Type u_1} {a : α} {l₁ l₂ : List α} : (a :: l₁).Perm (a :: l₂) → l₁.Perm l₂
+List.Perm.refl.{u_1} {α : Type u_1} (l : List α) : l.Perm l
+List.Perm.trans.{u} {α : Type u} {l₁ l₂ l₃ : List α} : l₁.Perm l₂ → l₂.Perm l₃ → l₁.Perm l₃
+List.Sublist.append.{u_1} {α✝ : Type u_1} {l₁ l₂ r₁ r₂ : List α✝} (hl : l₁.Sublist l₂) (hr : r₁.Sublist r₂) :
+  (l₁ ++ r₁).Sublist (l₂ ++ r₂)
+List.all_eq_true.{u_1} {α : Type u_1} {p : α → Bool} {l : List α} : l.all p = true ↔ ∀ x ∈ l, p x = true
+List.append_assoc.{u} {α : Type u} (as bs cs : List α) : as ++ bs ++ cs = as ++ (bs ++ cs)
+List.append_cons_inj_of_notMem.{u} {α : Type u} {x₁ x₂ z₁ z₂ : List α} {a₁ a₂ : α} (notin_x : a₂ ∉ x₁)
+  (notin_z : a₂ ∉ z₁) : x₁ ++ a₁ :: z₁ = x₂ ++ a₂ :: z₂ ↔ x₁ = x₂ ∧ a₁ = a₂ ∧ z₁ = z₂
+List.append_inj.{u_1} {α : Type u_1} {s₁ s₂ t₁ t₂ : List α} :
+  s₁ ++ t₁ = s₂ ++ t₂ → s₁.length = s₂.length → s₁ = s₂ ∧ t₁ = t₂
+List.append_nil.{u} {α : Type u} (as : List α) : as ++ [] = as
+List.cons.inj.{u} {α : Type u} {head : α} {tail : List α} {head✝ : α} {tail✝ : List α} :
+  head :: tail = head✝ :: tail✝ → head = head✝ ∧ tail = tail✝
+List.cons_append.{u} {α : Type u} {a : α} {as bs : List α} : a :: as ++ bs = a :: (as ++ bs)
+List.cons_ne_nil.{u_1} {α : Type u_1} (a : α) (l : List α) : a :: l ≠ []
+List.countP_append.{u_1} {α : Type u_1} {p : α → Bool} {l₁ l₂ : List α} :
+  List.countP p (l₁ ++ l₂) = List.countP p l₁ + List.countP p l₂
+List.countP_cons.{u_1} {α : Type u_1} {p : α → Bool} {a : α} {l : List α} :
+  List.countP p (a :: l) = List.countP p l + if p a = true then 1 else 0
+List.countP_eq_length_filter.{u_1} {α : Type u_1} {p : α → Bool} {l : List α} :
+  List.countP p l = (List.filter p l).length
+List.countP_eq_zero.mpr : (∀ a ∈ ?m.2, ¬?m.3 a = true) → List.countP ?m.3 ?m.2 = 0
+List.countP_flatten.{u_1} {α : Type u_1} {p : α → Bool} {l : List (List α)} :
+  List.countP p l.flatten = (List.map (List.countP p) l).sum
+List.countP_pos_iff.mpr : (∃ a ∈ ?m.2, ?m.3 a = true) → 0 < List.countP ?m.3 ?m.2
+List.disjoint_left.{u_1} {α✝ : Type u_1} {l₁ l₂ : List α✝} : l₁.Disjoint l₂ ↔ ∀ ⦃a : α✝⦄, a ∈ l₁ → a ∉ l₂
+List.disjoint_left.mp : List.Disjoint ?m.2 ?m.3 → ∀ ⦃a : ?m.1⦄, a ∈ ?m.2 → a ∉ ?m.3
+List.disjoint_left.mpr : (∀ ⦃a : ?m.1⦄, a ∈ ?m.2 → a ∉ ?m.3) → List.Disjoint ?m.2 ?m.3
+List.drop.{u} {α : Type u} (n : ℕ) (xs : List α) : List α
+List.dropLast_concat_getLast.{u_1} {α : Type u_1} {l : List α} (h : l ≠ []) : l.dropLast ++ [l.getLast h] = l
+List.dropLast_cons_cons.{u_1} {α✝ : Type u_1} {x y : α✝} {zs : List α✝} :
+  (x :: y :: zs).dropLast = x :: (y :: zs).dropLast
+List.dropLast_singleton.{u_1} {α✝ : Type u_1} {x : α✝} : [x].dropLast = []
+List.dropLast_sublist.{u_1} {α : Type u_1} (l : List α) : l.dropLast.Sublist l
+List.drop_left.{u_1} {α : Type u_1} {l₁ l₂ : List α} : List.drop l₁.length (l₁ ++ l₂) = l₂
+List.drop_range' {start n step k : ℕ} :
+  List.drop k (List.range' start n step) = List.range' (start + k * step) (n - k) step
+List.drop_succ_cons.{u} {α : Type u} {a : α} {l : List α} {i : ℕ} : List.drop (i + 1) (a :: l) = List.drop i l
+List.erase_of_not_mem.{u_1} {α : Type u_1} [BEq α] [LawfulBEq α] {a : α} {l : List α} : a ∉ l → l.erase a = l
+List.erase_sublist.{u_1} {α : Type u_1} [BEq α] {a : α} {l : List α} : (l.erase a).Sublist l
+List.exists_cons_of_ne_nil.{u_1} {α : Type u_1} {l : List α} : l ≠ [] → ∃ b l', l = b :: l'
+List.exists_mem_of_ne_nil.{u_1} {α : Type u_1} (l : List α) (h : l ≠ []) : ∃ x, x ∈ l
+List.ext_getElem.{u_1} {α : Type u_1} {l₁ l₂ : List α} (hl : l₁.length = l₂.length)
+  (h : ∀ (i : ℕ) (h₁ : i < l₁.length) (h₂ : i < l₂.length), l₁[i] = l₂[i]) : l₁ = l₂
+List.filter_append.{u_1} {α : Type u_1} {p : α → Bool} (l₁ l₂ : List α) :
+  List.filter p (l₁ ++ l₂) = List.filter p l₁ ++ List.filter p l₂
+List.filter_append_perm.{u_1} {α : Type u_1} (p : α → Bool) (l : List α) :
+  (List.filter p l ++ List.filter (fun x => !p x) l).Perm l
+List.filter_cons.{u_1} {α : Type u_1} {x : α} {xs : List α} {p : α → Bool} :
+  List.filter p (x :: xs) = if p x = true then x :: List.filter p xs else List.filter p xs
+List.filter_eq_nil_iff.mpr : (∀ a ∈ ?m.3, ¬?m.2 a = true) → List.filter ?m.2 ?m.3 = []
+List.filter_map.{u_1, u_2} {β : Type u_1} {α : Type u_2} {f : β → α} {p : α → Bool} {l : List β} :
+  List.filter p (List.map f l) = List.map f (List.filter (p ∘ f) l)
+List.filter_sublist.{u_1} {α : Type u_1} {p : α → Bool} {l : List α} : (List.filter p l).Sublist l
+List.Sublist.trans List.filter_sublist : List.Sublist ?m.6 ?m.7 → (List.filter ?m.2 ?m.6).Sublist ?m.7
+List.flatten_append.{u_1} {α : Type u_1} {L₁ L₂ : List (List α)} : (L₁ ++ L₂).flatten = L₁.flatten ++ L₂.flatten
+List.flatten_cons.{u_1} {α✝ : Type u_1} {l : List α✝} {L : List (List α✝)} : (l :: L).flatten = l ++ L.flatten
+List.forall_mem_append.{u_1} {α : Type u_1} {p : α → Prop} {l₁ l₂ : List α} :
+  (∀ x ∈ l₁ ++ l₂, p x) ↔ (∀ x ∈ l₁, p x) ∧ ∀ x ∈ l₂, p x
+List.forall_mem_cons.{u_1} {α : Type u_1} {p : α → Prop} {a : α} {l : List α} : (∀ x ∈ a :: l, p x) ↔ p a ∧ ∀ x ∈ l, p x
+<stdin>:111:7: error(lean.unknownIdentifier): Unknown constant `List.getElem`
+List.getElem_map.{u_1, u_2} {α : Type u_1} {β : Type u_2} (f : α → β) {l : List α} {i : ℕ}
+  {h : i < (List.map f l).length} : (List.map f l)[i] = f l[i]
+List.getElem_mem.{u_1} {α : Type u_1} {l : List α} {n : ℕ} (h : n < l.length) : l[n] ∈ l
+List.getElem_range' {n m step i : ℕ} (H : i < (List.range' n m step).length) : (List.range' n m step)[i] = n + step * i
+List.getLast.{u} {α : Type u} (as : List α) : as ≠ [] → α
+List.getLast_concat.{u_1} {α : Type u_1} {a : α} {l : List α} : (l ++ [a]).getLast ⋯ = a
+List.getLast_flatten_eq_getLast_getLast.{u_1} {α : Type u_1} {l : List (List α)} (hl : l.flatten ≠ [])
+  (hl' : l.getLast ⋯ ≠ []) : l.flatten.getLast hl = (l.getLast ⋯).getLast hl'
+List.getLast_mem.{u_1} {α : Type u_1} {l : List α} (h : l ≠ []) : l.getLast h ∈ l
+List.head.{u} {α : Type u} (as : List α) : as ≠ [] → α
+List.head_flatten_eq_head_head.{u_1} {α : Type u_1} {l : List (List α)} (hl : l.flatten ≠ []) (hl' : l.head ⋯ ≠ []) :
+  l.flatten.head hl = (l.head ⋯).head hl'
+List.head_mem.{u_1} {α : Type u_1} {l : List α} (h : l ≠ []) : l.head h ∈ l
+List.infix_append_iff_ne_nil.mp : ?m.2 <:+: ?m.3 ++ ?m.4 →
+  ?m.2 <:+: ?m.3 ∨ ?m.2 <:+: ?m.4 ∨ ∃ l₁ l₂, l₁ ≠ [] ∧ l₂ ≠ [] ∧ ?m.2 = l₁ ++ l₂ ∧ l₁ <:+ ?m.3 ∧ l₂ <+: ?m.4
+List.isChain_append.mp : List.IsChain ?m.2 (?m.3 ++ ?m.4) →
+  List.IsChain ?m.2 ?m.3 ∧ List.IsChain ?m.2 ?m.4 ∧ ∀ x ∈ List.getLast? ?m.3, ∀ y ∈ List.head? ?m.4, ?m.2 x y
+List.isChain_cons.mpr : (∀ y ∈ List.head? ?m.4, ?m.2 ?m.3 y) ∧ List.IsChain ?m.2 ?m.4 → List.IsChain ?m.2 (?m.3 :: ?m.4)
+List.isChain_cons_cons.{u_1} {α✝ : Type u_1} {R : α✝ → α✝ → Prop} {a b : α✝} {l : List α✝} :
+  List.IsChain R (a :: b :: l) ↔ R a b ∧ List.IsChain R (b :: l)
+List.isChain_cons_cons.mp : List.IsChain ?m.2 (?m.3 :: ?m.4 :: ?m.5) → ?m.2 ?m.3 ?m.4 ∧ List.IsChain ?m.2 (?m.4 :: ?m.5)
+List.isChain_flatten.{u} {α : Type u} {R : α → α → Prop} {L : List (List α)} :
+  [] ∉ L →
+    (List.IsChain R L.flatten ↔
+      (∀ l ∈ L, List.IsChain R l) ∧ List.IsChain (fun l₁ l₂ => ∀ x ∈ l₁.getLast?, ∀ y ∈ l₂.head?, R x y) L)
+List.isChain_map.{u, v} {α : Type u} {β : Type v} {R : α → α → Prop} (f : β → α) {l : List β} :
+  List.IsChain R (List.map f l) ↔ List.IsChain (fun a b => R (f a) (f b)) l
+List.isChain_reverse.mpr : List.IsChain (fun a b => ?m.2 b a) ?m.3 → List.IsChain ?m.2 (List.reverse ?m.3)
+List.isEmpty_eq_false_iff.{u_1} {α : Type u_1} {l : List α} : l.isEmpty = false ↔ l ≠ []
+List.length.{u_1} {α : Type u_1} : List α → ℕ
+List.length_append.{u} {α : Type u} {as bs : List α} : (as ++ bs).length = as.length + bs.length
+List.length_cons.{u} {α : Type u} {a : α} {as : List α} : (a :: as).length = as.length + 1
+List.length_eq_one_iff.mp : List.length ?m.2 = 1 → ∃ a, ?m.2 = [a]
+List.length_eq_zero_iff.mp : List.length ?m.2 = 0 → ?m.2 = []
+List.length_erase_add_one.{u} {α : Type u} [BEq α] [LawfulBEq α] {a : α} {l : List α} (h : a ∈ l) :
+  (l.erase a).length + 1 = l.length
+List.length_filter_le.{u_1} {α : Type u_1} (p : α → Bool) (l : List α) : (List.filter p l).length ≤ l.length
+List.length_flatten.{u_1} {α : Type u_1} {L : List (List α)} : L.flatten.length = (List.map List.length L).sum
+List.length_map.{u_1, u_2} {α : Type u_1} {β : Type u_2} {as : List α} (f : α → β) : (List.map f as).length = as.length
+List.length_nil.{u} {α : Type u} : [].length = 0
+List.length_pos_iff.mp : 0 < List.length ?m.2 → ?m.2 ≠ []
+List.length_pos_iff.mpr : ?m.2 ≠ [] → 0 < List.length ?m.2
+List.length_reverse.{u_1} {α : Type u_1} {as : List α} : as.reverse.length = as.length
+List.length_singleton.{u} {α : Type u} {a : α} : [a].length = 1
+List.length_take.{u_1} {α : Type u_1} {i : ℕ} {l : List α} : (List.take i l).length = min i l.length
+List.map.{u_1, u_2} {α : Type u_1} {β : Type u_2} (f : α → β) (l : List α) : List β
+List.map_append.{u_1, u_2} {α : Type u_1} {β : Type u_2} {f : α → β} {l₁ l₂ : List α} :
+  List.map f (l₁ ++ l₂) = List.map f l₁ ++ List.map f l₂
+List.map_congr_left.{u_1, u_2} {α✝ : Type u_1} {l : List α✝} {α✝¹ : Type u_2} {f g : α✝ → α✝¹}
+  (h : ∀ a ∈ l, f a = g a) : List.map f l = List.map g l
+List.map_cons.{u, v} {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List α} :
+  List.map f (a :: l) = f a :: List.map f l
+List.map_drop.{u_1, u_2} {α : Type u_1} {β : Type u_2} {f : α → β} {l : List α} {i : ℕ} :
+  List.map f (List.drop i l) = List.drop i (List.map f l)
+List.map_flatten.{u_1, u_2} {α : Type u_1} {β : Type u_2} {f : α → β} {L : List (List α)} :
+  List.map f L.flatten = (List.map (List.map f) L).flatten
+List.map_map.{u_1, u_2, u_3} {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ} {f : α → β} {l : List α} :
+  List.map g (List.map f l) = List.map (g ∘ f) l
+List.map_nil.{u, v} {α : Type u} {β : Type v} {f : α → β} : List.map f [] = []
+List.mem_append.{u_1} {α : Type u_1} {a : α} {s t : List α} : a ∈ s ++ t ↔ a ∈ s ∨ a ∈ t
+List.mem_append.mp : ?m.2 ∈ ?m.3 ++ ?m.4 → ?m.2 ∈ ?m.3 ∨ ?m.2 ∈ ?m.4
+List.mem_append_right.{u} {α : Type u} {b : α} (as : List α) {bs : List α} : b ∈ bs → b ∈ as ++ bs
+List.mem_cons.{u_1} {α✝ : Type u_1} {b : α✝} {l : List α✝} {a : α✝} : a ∈ b :: l ↔ a = b ∨ a ∈ l
+List.mem_cons.mp : ?m.4 ∈ ?m.2 :: ?m.3 → ?m.4 = ?m.2 ∨ ?m.4 ∈ ?m.3
+List.mem_cons_of_mem.{u_1} {α : Type u_1} (y : α) {a : α} {l : List α} : a ∈ l → a ∈ y :: l
+List.mem_erase_of_ne.{u_1} {α : Type u_1} [BEq α] [LawfulBEq α] {a b : α} {l : List α} (ab : a ≠ b) :
+  a ∈ l.erase b ↔ a ∈ l
+List.mem_filter.{u_1} {α✝ : Type u_1} {p : α✝ → Bool} {as : List α✝} {x : α✝} :
+  x ∈ List.filter p as ↔ x ∈ as ∧ p x = true
+List.mem_filter.mp : ?m.4 ∈ List.filter ?m.2 ?m.3 → ?m.4 ∈ ?m.3 ∧ ?m.2 ?m.4 = true
+List.mem_filter.mpr : ?m.4 ∈ ?m.3 ∧ ?m.2 ?m.4 = true → ?m.4 ∈ List.filter ?m.2 ?m.3
+List.mem_flatMap.{u_1, u_2} {α : Type u_1} {β : Type u_2} {f : α → List β} {b : β} {l : List α} :
+  b ∈ List.flatMap f l ↔ ∃ a ∈ l, b ∈ f a
+List.mem_flatMap.mp : ?m.4 ∈ List.flatMap ?m.3 ?m.5 → ∃ a ∈ ?m.5, ?m.4 ∈ ?m.3 a
+List.mem_flatMap.mpr : (∃ a ∈ ?m.5, ?m.4 ∈ ?m.3 a) → ?m.4 ∈ List.flatMap ?m.3 ?m.5
+List.mem_flatten.mp : ?m.2 ∈ List.flatten ?m.3 → ∃ l ∈ ?m.3, ?m.2 ∈ l
+List.mem_flatten.mpr : (∃ l ∈ ?m.3, ?m.2 ∈ l) → ?m.2 ∈ List.flatten ?m.3
+List.mem_iff_append.mp : ?m.2 ∈ ?m.3 → ∃ s t, ?m.3 = s ++ ?m.2 :: t
+List.mem_map.{u_1, u_2} {α : Type u_1} {β : Type u_2} {b : β} {f : α → β} {l : List α} :
+  b ∈ List.map f l ↔ ∃ a ∈ l, f a = b
+List.mem_map.mp : ?m.3 ∈ List.map ?m.4 ?m.5 → ∃ a ∈ ?m.5, ?m.4 a = ?m.3
+List.mem_map.mpr : (∃ a ∈ ?m.5, ?m.4 a = ?m.3) → ?m.3 ∈ List.map ?m.4 ?m.5
+List.mem_of_mem_drop.{u_1} {α : Type u_1} {a : α} {i : ℕ} {l : List α} (h : a ∈ List.drop i l) : a ∈ l
+List.mem_of_mem_erase.{u_1} {α : Type u_1} [BEq α] {a b : α} {l : List α} (h : a ∈ l.erase b) : a ∈ l
+List.mem_of_mem_filter.{u} {α : Type u} {p : α → Bool} {a : α} {l : List α} (h : a ∈ List.filter p l) : a ∈ l
+<stdin>:176:7: error(lean.unknownIdentifier): Unknown constant `List.mem_of_mem_getLast`
+<stdin>:177:7: error(lean.unknownIdentifier): Unknown constant `List.mem_of_mem_head`
+List.mem_of_mem_tail.{u_1} {α : Type u_1} {a : α} {l : List α} (h : a ∈ l.tail) : a ∈ l
+List.mem_of_mem_take.{u_1} {α : Type u_1} {i : ℕ} {a : α} {l : List α} (h : a ∈ List.take i l) : a ∈ l
+List.mem_product.mp : (?m.5, ?m.6) ∈ ?m.3 ×ˢ ?m.4 → ?m.5 ∈ ?m.3 ∧ ?m.6 ∈ ?m.4
+List.mem_range' {s step m n : ℕ} : m ∈ List.range' s n step ↔ ∃ i < n, m = s + step * i
+List.mem_range'.mp : ?m.3 ∈ List.range' ?m.1 ?m.4 ?m.2 → ∃ i < ?m.4, ?m.3 = ?m.1 + ?m.2 * i
+List.mem_range.mpr : ?m.1 < ?m.2 → ?m.1 ∈ List.range ?m.2
+List.mem_reverse.{u_1} {α : Type u_1} {x : α} {as : List α} : x ∈ as.reverse ↔ x ∈ as
+List.mem_singleton.{u_1} {α : Type u_1} {a b : α} : a ∈ [b] ↔ a = b
+List.mem_toFinset.{u_1} {α : Type u_1} [DecidableEq α] {l : List α} {a : α} : a ∈ l.toFinset ↔ a ∈ l
+List.mem_toFinset.mp : ?m.4 ∈ List.toFinset ?m.3 → ?m.4 ∈ ?m.3
+List.mem_toFinset.mpr : ?m.4 ∈ ?m.3 → ?m.4 ∈ List.toFinset ?m.3
+List.mergeSort_perm.{u_1} {α : Type u_1} (l : List α) (le : α → α → Bool) : (l.mergeSort le).Perm l
+List.nil_append.{u} {α : Type u} (as : List α) : [] ++ as = as
+List.nodup_append.{u_1} {α : Type u_1} {l₁ l₂ : List α} :
+  (l₁ ++ l₂).Nodup ↔ l₁.Nodup ∧ l₂.Nodup ∧ ∀ a ∈ l₁, ∀ b ∈ l₂, a ≠ b
+List.nodup_append'.{u} {α : Type u} {l₁ l₂ : List α} : (l₁ ++ l₂).Nodup ↔ l₁.Nodup ∧ l₂.Nodup ∧ l₁.Disjoint l₂
+List.nodup_append.mp : (?m.2 ++ ?m.3).Nodup → List.Nodup ?m.2 ∧ List.Nodup ?m.3 ∧ ∀ a ∈ ?m.2, ∀ b ∈ ?m.3, a ≠ b
+List.nodup_append.mpr : (List.Nodup ?m.2 ∧ List.Nodup ?m.3 ∧ ∀ a ∈ ?m.2, ∀ b ∈ ?m.3, a ≠ b) → (?m.2 ++ ?m.3).Nodup
+List.nodup_cons.{u_1} {α : Type u_1} {a : α} {l : List α} : (a :: l).Nodup ↔ a ∉ l ∧ l.Nodup
+List.nodup_cons.mp : (?m.2 :: ?m.3).Nodup → ?m.2 ∉ ?m.3 ∧ List.Nodup ?m.3
+List.nodup_flatten.mp : (List.flatten ?m.2).Nodup → (∀ l ∈ ?m.2, l.Nodup) ∧ List.Pairwise List.Disjoint ?m.2
+List.nodup_reverse.{u} {α : Type u} {l : List α} : l.reverse.Nodup ↔ l.Nodup
+List.nodup_reverse.mpr : List.Nodup ?m.2 → (List.reverse ?m.2).Nodup
+List.not_mem_nil.{u_1} {α : Type u_1} {a : α} : a ∉ []
+List.pairwise_cons.mp : List.Pairwise ?m.2 (?m.3 :: ?m.4) → (∀ a' ∈ ?m.4, ?m.2 ?m.3 a') ∧ List.Pairwise ?m.2 ?m.4
+List.pairwise_iff_getElem.{u_1} {α : Type u_1} {R : α → α → Prop} {l : List α} :
+  List.Pairwise R l ↔ ∀ (i j : ℕ) (_hi : i < l.length) (_hj : j < l.length), i < j → R l[i] l[j]
+List.pairwise_mergeSort.{u_1} {α : Type u_1} {le : α → α → Bool}
+  (trans : ∀ (a b c : α), le a b = true → le b c = true → le a c = true)
+  (total : ∀ (a b : α), (le a b || le b a) = true) (l : List α) :
+  List.Pairwise (fun a b => le a b = true) (l.mergeSort le)
+List.perm_append_comm.{u_1} {α : Type u_1} {l₁ l₂ : List α} : (l₁ ++ l₂).Perm (l₂ ++ l₁)
+<stdin>:205:7: error(lean.unknownIdentifier): Unknown constant `List.perm_comp_forall`
+List.perm_cons_erase.{u_1} {α : Type u_1} [BEq α] [LawfulBEq α] {a : α} {l : List α} (h : a ∈ l) :
+  l.Perm (a :: l.erase a)
+List.range (n : ℕ) : List ℕ
+List.range' (start len : ℕ) (step : ℕ := 1) : List ℕ
+List.range'_append {s m n step : ℕ} :
+  List.range' s m step ++ List.range' (s + step * m) n step = List.range' s (m + n) step
+List.range'_succ {s n step : ℕ} : List.range' s (n + 1) step = s :: List.range' (s + step) n step
+List.rel_append.{u_1, u_2} {α : Type u_1} {β : Type u_2} {R : α → β → Prop} :
+  Relator.LiftFun (List.Forall₂ R) (Relator.LiftFun (List.Forall₂ R) (List.Forall₂ R)) (fun x1 x2 => x1 ++ x2)
+    fun x1 x2 => x1 ++ x2
+List.reverse_append.{u_1} {α : Type u_1} {as bs : List α} : (as ++ bs).reverse = bs.reverse ++ as.reverse
+List.reverse_cons.{u} {α : Type u} {a : α} {as : List α} : (a :: as).reverse = as.reverse ++ [a]
+List.reverse_ne_nil_iff.mpr : ?m.2 ≠ [] → List.reverse ?m.2 ≠ []
+List.reverse_nil.{u} {α : Type u} : [].reverse = []
+List.reverse_perm.{u_1} {α : Type u_1} (l : List α) : l.reverse.Perm l
+List.reverse_reverse.{u_1} {α : Type u_1} (as : List α) : as.reverse.reverse = as
+List.reverse_singleton.{u_1} {α : Type u_1} {a : α} : [a].reverse = [a]
+List.singleton_append.{u_1} {α✝ : Type u_1} {x : α✝} {l : List α✝} : [x] ++ l = x :: l
+List.sublist_cons_iff.mp : List.Sublist ?m.3 (?m.2 :: ?m.4) →
+  List.Sublist ?m.3 ?m.4 ∨ ∃ r, ?m.3 = ?m.2 :: r ∧ r.Sublist ?m.4
+List.sum_append.{u_1} {α : Type u_1} [Add α] [Zero α] [Std.LawfulLeftIdentity (fun x1 x2 => x1 + x2) 0]
+  [Std.Associative fun x1 x2 => x1 + x2] {l₁ l₂ : List α} : (l₁ ++ l₂).sum = l₁.sum + l₂.sum
+List.sum_cons.{u} {α : Type u} [Add α] [Zero α] {a : α} {l : List α} : (a :: l).sum = a + l.sum
+List.sum_le_sum.{u_1, u_3} {ι : Type u_1} {M : Type u_3} [AddMonoid M] [Preorder M] [AddRightMono M] [AddLeftMono M]
+  {l : List ι} {f g : ι → M} (h : ∀ i ∈ l, f i ≤ g i) : (List.map f l).sum ≤ (List.map g l).sum
+List.sum_map_add.{u_1, u_8} {ι : Type u_1} {M : Type u_8} [AddCommMonoid M] {l : List ι} {f g : ι → M} :
+  (List.map (fun i => f i + g i) l).sum = (List.map f l).sum + (List.map g l).sum
+List.sum_map_mul_left.{u_1, u_5} {ι : Type u_1} {R : Type u_5} [NonUnitalNonAssocSemiring R] (l : List ι) (f : ι → R)
+  (r : R) : (List.map (fun b => r * f b) l).sum = r * (List.map f l).sum
+List.sum_nil.{u} {α : Type u} [Add α] [Zero α] : [].sum = 0
+List.tail_cons.{u} {α : Type u} {a : α} {as : List α} : (a :: as).tail = as
+List.tail_sublist.{u_1} {α : Type u_1} (l : List α) : l.tail.Sublist l
+List.take_append_drop.{u_1} {α : Type u_1} (i : ℕ) (l : List α) : List.take i l ++ List.drop i l = l
+List.take_sublist.{u_1} {α : Type u_1} (i : ℕ) (l : List α) : (List.take i l).Sublist l
+List.toFinset_card_of_nodup.{u_1} {α : Type u_1} [DecidableEq α] {l : List α} (h : l.Nodup) : l.toFinset.card = l.length
+List.twoStepInduction.{u_1, u_2} {α : Type u_1} {motive : List α → Sort u_2} (nil : motive [])
+  (singleton : (x : α) → motive [x])
+  (cons_cons : (x y : α) → (xs : List α) → motive xs → ((y : α) → motive (y :: xs)) → motive (x :: y :: xs))
+  (l : List α) : motive l
+Nat.add_assoc (n m k : ℕ) : n + m + k = n + (m + k)
+Nat.add_comm (n m : ℕ) : n + m = m + n
+Nat.add_eq_zero_iff {n m : ℕ} : n + m = 0 ↔ n = 0 ∧ m = 0
+Nat.add_le_add_left {n m : ℕ} (h : n ≤ m) (k : ℕ) : k + n ≤ k + m
+Nat.add_left_comm (n m k : ℕ) : n + (m + k) = m + (n + k)
+Nat.add_sub_cancel (n m : ℕ) : n + m - m = n
+Nat.add_sub_cancel_left (n m : ℕ) : n + m - n = m
+Nat.add_zero (n : ℕ) : n + 0 = n
+Nat.card.{u_3} (α : Type u_3) : ℕ
+Nat.card_coe_set_eq.{u_1} {α : Type u_1} (s : Set α) : Nat.card ↑s = s.ncard
+Nat.card_eq_fintype_card.{u_1} {α : Type u_1} [Fintype α] : Nat.card α = Fintype.card α
+Nat.cast_add.{u_1} {R : Type u_1} [AddMonoidWithOne R] (m n : ℕ) : ↑(m + n) = ↑m + ↑n
+Nat.cast_mul.{u_1} {α : Type u_1} [NonAssocSemiring α] (m n : ℕ) : ↑(m * n) = ↑m * ↑n
+Nat.cast_one.{u_1} {R : Type u_1} [AddMonoidWithOne R] : ↑1 = 1
+Nat.find {p : ℕ → Prop} [DecidablePred p] (H : ∃ n, p n) : ℕ
+Nat.findGreatest (P : ℕ → Prop) [DecidablePred P] : ℕ → ℕ
+Nat.findGreatest_le {P : ℕ → Prop} [DecidablePred P] (n : ℕ) : Nat.findGreatest P n ≤ n
+Nat.findGreatest_spec {m : ℕ} {P : ℕ → Prop} [DecidablePred P] {n : ℕ} (hmb : m ≤ n) (hm : P m) :
+  P (Nat.findGreatest P n)
+Nat.find_min' {p : ℕ → Prop} [DecidablePred p] (H : ∃ n, p n) {m : ℕ} (h : p m) : Nat.find H ≤ m
+Nat.find_spec {p : ℕ → Prop} [DecidablePred p] (H : ∃ n, p n) : p (Nat.find H)
+Nat.le_add_right (n k : ℕ) : n ≤ n + k
+Nat.le_antisymm {n m : ℕ} (h₁ : n ≤ m) (h₂ : m ≤ n) : n = m
+Nat.le_findGreatest {m : ℕ} {P : ℕ → Prop} [DecidablePred P] {n : ℕ} (hmb : m ≤ n) (hm : P m) : m ≤ Nat.findGreatest P n
+Nat.le_induction {m : ℕ} {P : (n : ℕ) → m ≤ n → Prop} (base : P m ⋯)
+  (succ : ∀ (n : ℕ) (hmn : m ≤ n), P n hmn → P (n + 1) ⋯) (n : ℕ) (hmn : m ≤ n) : P n hmn
+Nat.le_of_not_gt {a b : ℕ} : ¬b > a → b ≤ a
+Nat.lor : ℕ → ℕ → ℕ
+Nat.lor_assoc (n m k : ℕ) : n ||| m ||| k = n ||| (m ||| k)
+Nat.lor_comm (n m : ℕ) : n ||| m = m ||| n
+Nat.min_eq_left {a b : ℕ} (h : a ≤ b) : min a b = a
+Nat.min_eq_right {a b : ℕ} (h : b ≤ a) : min a b = b
+Nat.mod_eq_of_lt {a b : ℕ} (h : a < b) : a % b = a
+Nat.mod_eq_sub_mod {a b : ℕ} (h : a ≥ b) : a % b = (a - b) % b
+Nat.mul_add (n m k : ℕ) : n * (m + k) = n * m + n * k
+Nat.mul_comm (n m : ℕ) : n * m = m * n
+Nat.mul_le_mul_left {n m : ℕ} (k : ℕ) (h : n ≤ m) : k * n ≤ k * m
+Nat.mul_one (n : ℕ) : n * 1 = n
+Nat.ne_of_lt {a b : ℕ} (h : a < b) : a ≠ b
+Nat.not_lt.mpr : ?m.2 ≤ ?m.1 → ¬?m.1 < ?m.2
+Nat.not_lt_of_ge {a b : ℕ} : b ≥ a → ¬b < a
+Nat.one_mul (n : ℕ) : 1 * n = n
+Nat.one_ne_zero : 1 ≠ 0
+Nat.pair (a b : ℕ) : ℕ
+Nat.pair_eq_pair {a b c d : ℕ} : Nat.pair a b = Nat.pair c d ↔ a = c ∧ b = d
+Nat.pair_eq_pair.mp : Nat.pair ?m.1 ?m.2 = Nat.pair ?m.3 ?m.4 → ?m.1 = ?m.3 ∧ ?m.2 = ?m.4
+Nat.reduceAdd : Lean.Meta.Simp.DSimproc
+Nat.sInf_le {s : Set ℕ} {m : ℕ} (hm : m ∈ s) : sInf s ≤ m
+Nat.sInf_mem {s : Set ℕ} (h : s.Nonempty) : sInf s ∈ s
+Nat.strong_induction_on {p : ℕ → Prop} (n : ℕ) (h : ∀ (n : ℕ), (∀ m < n, p m) → p n) : p n
+Nat.sub_add_cancel {n m : ℕ} (h : m ≤ n) : n - m + m = n
+Nat.sub_le (n m : ℕ) : n - m ≤ n
+Nat.succ_le_iff.mpr : ?m.1 < ?m.2 → Nat.succ ?m.1 ≤ ?m.2
+Nat.testBit_lor (m n k : ℕ) : (m ||| n).testBit k = (m.testBit k || n.testBit k)
+Nat.testBit_two_pow {n m : ℕ} : (2 ^ n).testBit m = decide (n = m)
+Nat.zero_add (n : ℕ) : 0 + n = n
+Nat.zero_le (n : ℕ) : 0 ≤ n
+Option.all_eq_true.{u_1} {α : Type u_1} (p : α → Bool) (x : Option α) :
+  Option.all p x = true ↔ ∀ (y : α), x = some y → p y = true
+Option.getD_some.{u_1} {α✝ : Type u_1} {a b : α✝} : (some a).getD b = a
+Option.mem_def.{u_1} {α : Type u_1} {a : α} {b : Option α} : a ∈ b ↔ b = some a
+Option.mem_def.mpr : ?m.3 = some ?m.2 → ?m.2 ∈ ?m.3
+Option.mem_map.{u_1, u_2} {α : Type u_1} {β : Type u_2} {f : α → β} {y : β} {o : Option α} :
+  y ∈ Option.map f o ↔ ∃ x ∈ o, f x = y
+Option.some.injEq.{u} {α : Type u} (val val✝ : α) : (some val = some val✝) = (val = val✝)
+Set.Iio.{u_1} {α : Type u_1} [Preorder α] (b : α) : Set α
+Set.InjOn.{u, v} {α : Type u} {β : Type v} (f : α → β) (s : Set α) : Prop
+Set.InjOn.ncard_image.{u_1, u_2} {α : Type u_1} {β : Type u_2} {s : Set α} {f : α → β} (H : Set.InjOn f s) :
+  (f '' s).ncard = s.ncard
+Set.Pairwise.{u_1} {α : Type u_1} (s : Set α) (r : α → α → Prop) : Prop
+Set.Subset.antisymm.{u} {α : Type u} {a b : Set α} (h₁ : a ⊆ b) (h₂ : b ⊆ a) : a = b
+Set.Subset.refl.{u} {α : Type u} (a : Set α) : a ⊆ a
+Set.Subset.rfl.{u} {α : Type u} {s : Set α} : s ⊆ s
+Set.compl_eq_univ_sdiff.{u_1} {α : Type u_1} (s : Set α) : sᶜ = Set.univ \ s
+Set.disjoint_left.mp : Disjoint ?m.2 ?m.3 → ∀ ⦃a : ?m.1⦄, a ∈ ?m.2 → a ∉ ?m.3
+Set.disjoint_left.mpr : (∀ ⦃a : ?m.1⦄, a ∈ ?m.2 → a ∉ ?m.3) → Disjoint ?m.2 ?m.3
+Set.disjoint_singleton.mpr : ?m.2 ≠ ?m.3 → Disjoint {?m.2} {?m.3}
+Set.empty_subset.{u} {α : Type u} (s : Set α) : ∅ ⊆ s
+Set.eq_of_subset_of_ncard_le.{u_1} {α : Type u_1} {s t : Set α} (h : s ⊆ t) (h' : t.ncard ≤ s.ncard)
+  (ht : t.Finite := by toFinite_tac) : s = t
+Set.eq_singleton_iff_unique_mem.mpr : (?m.3 ∈ ?m.2 ∧ ∀ x ∈ ?m.2, x = ?m.3) → ?m.2 = {?m.3}
+Set.eq_univ_of_forall.{u} {α : Type u} {s : Set α} : (∀ (x : α), x ∈ s) → s = Set.univ
+Set.finite_le_nat (n : ℕ) : {i | i ≤ n}.Finite
+Set.iUnion_iUnion_eq_or_left.{u_1, u_2} {α : Type u_1} {β : Type u_2} {b : β} {p : β → Prop}
+  {s : (x : β) → x = b ∨ p x → Set α} : ⋃ x, ⋃ (h : x = b ∨ p x), s x h = s b ⋯ ∪ ⋃ x, ⋃ (h : p x), s x ⋯
+Set.iUnion_true.{u_1} {α : Type u_1} {s : True → Set α} : Set.iUnion s = s trivial
+Set.image_congr.{u_1, u_2} {α : Type u_1} {β : Type u_2} {f g : α → β} {s : Set α} (h : ∀ a ∈ s, f a = g a) :
+  f '' s = g '' s
+Set.image_mono.{u_1, u_2} {α : Type u_1} {β : Type u_2} {f : α → β} {s t : Set α} (h : s ⊆ t) : f '' s ⊆ f '' t
+Set.insert_nonempty.{u_1} {α : Type u_1} (a : α) (s : Set α) : (insert a s).Nonempty
+Set.insert_subset.{u_1} {α : Type u_1} {s t : Set α} {a : α} (ha : a ∈ t) (hs : s ⊆ t) : insert a s ⊆ t
+Set.inter_self.{u} {α : Type u} (a : Set α) : a ∩ a = a
+Set.inter_subset_left.{u} {α : Type u} {s t : Set α} : s ∩ t ⊆ s
+Set.inter_subset_right.{u} {α : Type u} {s t : Set α} : s ∩ t ⊆ t
+Set.mem_iUnion.{u, v} {α : Type u} {ι : Sort v} {x : α} {s : ι → Set α} : x ∈ ⋃ i, s i ↔ ∃ i, x ∈ s i
+Set.mem_iUnion.mp : ?m.3 ∈ ⋃ i, ?m.4 i → ∃ i, ?m.3 ∈ ?m.4 i
+Set.mem_iUnion.mpr : (∃ i, ?m.3 ∈ ?m.4 i) → ?m.3 ∈ ⋃ i, ?m.4 i
+Set.mem_insert_iff.{u_1} {α : Type u_1} {x a : α} {s : Set α} : x ∈ insert a s ↔ x = a ∨ x ∈ s
+Set.mem_insert_iff.mp : ?m.2 ∈ insert ?m.3 ?m.4 → ?m.2 = ?m.3 ∨ ?m.2 ∈ ?m.4
+Set.mem_ofPred_eq.{u_1} {α : Type u_1} {p : α → Prop} {a : α} : a ∈ {x | p x} ↔ p a
+Set.mem_range.{u, u_1} {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α} : x ∈ Set.range f ↔ ∃ y, f y = x
+Set.mem_sdiff.{u} {α : Type u} {s t : Set α} (x : α) : x ∈ s \ t ↔ x ∈ s ∧ x ∉ t
+Set.mem_singleton_iff.{u_1} {α : Type u_1} {a b : α} : a ∈ {b} ↔ a = b
+Set.mem_singleton_iff.mp : ?m.2 ∈ {?m.3} → ?m.2 = ?m.3
+Set.mem_toFinset.{u_1} {α : Type u_1} {s : Set α} [Fintype ↑s] {a : α} : a ∈ s.toFinset ↔ a ∈ s
+Set.mem_toFinset.mp : ?m.4 ∈ Set.toFinset ?m.2 → ?m.4 ∈ ?m.2
+Set.mem_union.{u} {α : Type u} (x : α) (a b : Set α) : x ∈ a ∪ b ↔ x ∈ a ∨ x ∈ b
+Set.mem_univ.{u} {α : Type u} (x : α) : x ∈ Set.univ
+Set.ncard.{u_1} {α : Type u_1} (s : Set α) : ℕ
+Set.ncard_Iio_nat (b : ℕ) : (Set.Iio b).ncard = b
+Set.ncard_add_ncard_compl.{u_1} {α : Type u_1} (s : Set α) (hs : s.Finite := by toFinite_tac)
+  (hsc : sᶜ.Finite := by toFinite_tac) : s.ncard + sᶜ.ncard = Nat.card α
+Set.ncard_coe_finset.{u_1} {α : Type u_1} (s : Finset α) : (↑s).ncard = s.card
+Set.ncard_empty.{u_3} (α : Type u_3) : ∅.ncard = 0
+Set.ncard_eq_toFinset_card'.{u_1} {α : Type u_1} (s : Set α) [Fintype ↑s] : s.ncard = s.toFinset.card
+Set.ncard_eq_two.mp : Set.ncard ?m.2 = 2 → ∃ x y, x ≠ y ∧ ?m.2 = {x, y}
+Set.ncard_eq_zero.{u_1} {α : Type u_1} {s : Set α} (hs : s.Finite := by toFinite_tac) : s.ncard = 0 ↔ s = ∅
+Set.ncard_image_of_injective.{u_1, u_2} {α : Type u_1} {β : Type u_2} {f : α → β} (s : Set α)
+  (H : Function.Injective f) : (f '' s).ncard = s.ncard
+Set.ncard_insert_le.{u_1} {α : Type u_1} (a : α) (s : Set α) : (insert a s).ncard ≤ s.ncard + 1
+Set.ncard_insert_of_notMem.{u_1} {α : Type u_1} {s : Set α} {a : α} (h : a ∉ s) (hs : s.Finite := by toFinite_tac) :
+  (insert a s).ncard = s.ncard + 1
+Set.ncard_le_ncard.{u_1} {α : Type u_1} {s t : Set α} (hst : s ⊆ t) (ht : t.Finite := by toFinite_tac) :
+  s.ncard ≤ t.ncard
+Set.ncard_pair.{u_1} {α : Type u_1} {a b : α} (h : a ≠ b) : {a, b}.ncard = 2
+Set.ncard_pos.{u_1} {α : Type u_1} {s : Set α} (hs : s.Finite := by toFinite_tac) : 0 < s.ncard ↔ s.Nonempty
+Set.ncard_range_of_injective.{u_1, u_2} {α : Type u_1} {β : Type u_2} {f : α → β} (hf : Function.Injective f) :
+  (Set.range f).ncard = Nat.card α
+Set.ncard_sdiff_add_ncard_of_subset.{u_1} {α : Type u_1} {s t : Set α} (h : s ⊆ t) (ht : t.Finite := by toFinite_tac) :
+  (t \ s).ncard + s.ncard = t.ncard
+Set.ncard_sdiff_singleton_of_mem.{u_1} {α : Type u_1} {s : Set α} {a : α} (h : a ∈ s) : (s \ {a}).ncard = s.ncard - 1
+Set.ncard_singleton.{u_1} {α : Type u_1} (a : α) : {a}.ncard = 1
+Set.ncard_union_eq.{u_1} {α : Type u_1} {s t : Set α} (h : Disjoint s t) (hs : s.Finite := by toFinite_tac)
+  (ht : t.Finite := by toFinite_tac) : (s ∪ t).ncard = s.ncard + t.ncard
+Set.ncard_union_le.{u_1} {α : Type u_1} (s t : Set α) : (s ∪ t).ncard ≤ s.ncard + t.ncard
+Set.ncard_univ.{u_3} (α : Type u_3) : Set.univ.ncard = Nat.card α
+Set.nonempty_of_ncard_ne_zero.{u_1} {α : Type u_1} {s : Set α} (hs : s.ncard ≠ 0) : s.Nonempty
+Set.not_nonempty_iff_eq_empty.mp : ¬Set.Nonempty ?m.2 → ?m.2 = ∅
+Set.one_lt_ncard.{u_1} {α : Type u_1} {s : Set α} (hs : s.Finite := by toFinite_tac) :
+  1 < s.ncard ↔ ∃ a ∈ s, ∃ b ∈ s, a ≠ b
+Set.pairwise_singleton.{u_1} {α : Type u_1} (a : α) (r : α → α → Prop) : {a}.Pairwise r
+Set.range.{u, u_1} {α : Type u} {ι : Sort u_1} (f : ι → α) : Set α
+Set.sdiff_eq_empty.mp : ?m.2 \ ?m.3 = ∅ → ?m.2 ⊆ ?m.3
+Set.sdiff_subset.{u_1} {α : Type u_1} {s t : Set α} : s \ t ⊆ s
+HasSubset.Subset.trans Set.sdiff_subset : ?m.8 ⊆ ?m.9 → ?m.8 \ ?m.3 ⊆ ?m.9
+Set.singleton_nonempty.{u_1} {α : Type u_1} (a : α) : {a}.Nonempty
+Set.singleton_subset_iff.mpr : ?m.2 ∈ ?m.3 → {?m.2} ⊆ ?m.3
+Set.subset_union_left.{u} {α : Type u} {s t : Set α} : s ⊆ s ∪ t
+Set.subset_union_right.{u} {α : Type u} {s t : Set α} : t ⊆ s ∪ t
+Set.subset_univ.{u} {α : Type u} (s : Set α) : s ⊆ Set.univ
+Set.union_subset.{u} {α : Type u} {s t r : Set α} (sr : s ⊆ r) (tr : t ⊆ r) : s ∪ t ⊆ r
+Set.univ.{u} {α : Type u} : Set α
+Set.univ_nonempty.{u} {α : Type u} [Nonempty α] : Set.univ.Nonempty
+SimpleGraph.Adj.reachable.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (h : G.Adj u v) : G.Reachable u v
+SimpleGraph.CliqueFree.{u_1} {α : Type u_1} (G : SimpleGraph α) (n : ℕ) : Prop
+SimpleGraph.Coloring.colorClass.{u, u_2} {V : Type u} {G : SimpleGraph V} {α : Type u_2} (C : G.Coloring α) (c : α) :
+  Set V
+SimpleGraph.Coloring.mk.{u, u_2} {V : Type u} {G : SimpleGraph V} {α : Type u_2} (color : V → α)
+  (valid : ∀ {v w : V}, G.Adj v w → color v ≠ color w) : G.Coloring α
+SimpleGraph.Embedding.induce.{u_1} {V : Type u_1} {G : SimpleGraph V} (s : Set V) : SimpleGraph.induce s G ↪g G
+SimpleGraph.IsContained.of_le.{u_1} {V : Type u_1} {G₁ G₂ : SimpleGraph V} (h : G₁ ≤ G₂) : G₁.IsContained G₂
+SimpleGraph.Reachable.refl.{u} {V : Type u} {G : SimpleGraph V} (u : V) : G.Reachable u u
+SimpleGraph.Reachable.rfl.{u} {V : Type u} {G : SimpleGraph V} {u : V} : G.Reachable u u
+<stdin>:378:7: error(lean.unknownIdentifier): Unknown constant `SimpleGraph.Walk.IsPath.map`
+SimpleGraph.Walk.cons.{u} {V : Type u} {G : SimpleGraph V} {u v w : V} (h : G.Adj u v) (p : G.Walk v w) : G.Walk u w
+SimpleGraph.Walk.cons_isPath_iff.{u} {V : Type u} {G : SimpleGraph V} {u v w : V} (h : G.Adj u v) (p : G.Walk v w) :
+  (SimpleGraph.Walk.cons h p).IsPath ↔ p.IsPath ∧ u ∉ p.support
+SimpleGraph.Walk.darts_drop.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (n : ℕ) :
+  (p.drop n).darts = List.drop n p.darts
+SimpleGraph.Walk.drop_support_eq_support_drop_min.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v)
+  (n : ℕ) : (p.drop n).support = List.drop (min n p.length) p.support
+SimpleGraph.Walk.eq_of_length_eq_zero.{u} {V : Type u} {G : SimpleGraph V} {u v : V} {p : G.Walk u v} :
+  p.length = 0 → u = v
+SimpleGraph.Walk.exists_isPath_forall_isPath_length_le_length.{u} {V : Type u} (G : SimpleGraph V) [N : Nonempty V]
+  [Finite ↑G.edgeSet] : ∃ u v p, ∃ (_ : p.IsPath), ∀ (u' v' : V) (p' : G.Walk u' v'), p'.IsPath → p'.length ≤ p.length
+SimpleGraph.Walk.getVert_append'.{u_1} {V : Type u_1} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (q : G.Walk v w)
+  (i : ℕ) : (p.append q).getVert i = if i ≤ p.length then p.getVert i else q.getVert (i - p.length)
+SimpleGraph.Walk.getVert_zero.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (w : G.Walk u v) : w.getVert 0 = u
+SimpleGraph.Walk.isPath_def.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) : p.IsPath ↔ p.support.Nodup
+SimpleGraph.Walk.isPath_iff_nil.mp : SimpleGraph.Walk.IsPath ?m.4 → SimpleGraph.Walk.Nil ?m.4
+SimpleGraph.Walk.length_append.{u} {V : Type u} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (q : G.Walk v w) :
+  (p.append q).length = p.length + q.length
+SimpleGraph.Walk.length_concat.{u} {V : Type u} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (h : G.Adj v w) :
+  (p.concat h).length = p.length + 1
+SimpleGraph.Walk.length_cons.{u} {V : Type u} {G : SimpleGraph V} {u v w : V} (h : G.Adj u v) (p : G.Walk v w) :
+  (SimpleGraph.Walk.cons h p).length = p.length + 1
+SimpleGraph.Walk.length_map.{u, v} {V : Type u} {V' : Type v} {G : SimpleGraph V} {G' : SimpleGraph V'} (f : G →g G')
+  {u v : V} (p : G.Walk u v) : (SimpleGraph.Walk.map f p).length = p.length
+SimpleGraph.Walk.length_mapLe.{u_1} {V : Type u_1} {G H : SimpleGraph V} (h : G ≤ H) {u v : V} (p : G.Walk u v) :
+  (SimpleGraph.Walk.mapLe h p).length = p.length
+SimpleGraph.Walk.length_ofSupport.{u} {V : Type u} {G : SimpleGraph V} {l : List V} (hne : l ≠ [])
+  (hchain : List.IsChain G.Adj l) : (SimpleGraph.Walk.ofSupport l hne hchain).length = l.length - 1
+SimpleGraph.Walk.length_reverse.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) :
+  p.reverse.length = p.length
+SimpleGraph.Walk.length_support.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) :
+  p.support.length = p.length + 1
+SimpleGraph.Walk.length_tail.{u_1} {V : Type u_1} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) :
+  p.tail.length = p.length - 1
+SimpleGraph.Walk.map_snd_darts.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) :
+  List.map (fun x => x.toProd.2) p.darts = p.support.tail
+SimpleGraph.Walk.mem_support_append_iff.{u} {V : Type u} {G : SimpleGraph V} {t u v w : V} (p : G.Walk u v)
+  (p' : G.Walk v w) : t ∈ (p.append p').support ↔ t ∈ p.support ∨ t ∈ p'.support
+SimpleGraph.Walk.mem_support_iff_exists_getVert.mp : ?m.3 ∈ SimpleGraph.Walk.support ?m.6 →
+  ∃ n, SimpleGraph.Walk.getVert ?m.6 n = ?m.3 ∧ n ≤ SimpleGraph.Walk.length ?m.6
+SimpleGraph.Walk.not_nil_iff_lt_length.mp : ¬SimpleGraph.Walk.Nil ?m.5 → 0 < SimpleGraph.Walk.length ?m.5
+SimpleGraph.Walk.ofSupport.{u} {V : Type u} {G : SimpleGraph V} (l : List V) (hne : l ≠ [])
+  (hchain : List.IsChain G.Adj l) : G.Walk (l.head hne) (l.getLast hne)
+SimpleGraph.Walk.support_append.{u} {V : Type u} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (p' : G.Walk v w) :
+  (p.append p').support = p.support ++ p'.support.tail
+SimpleGraph.Walk.support_concat.{u} {V : Type u} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (h : G.Adj v w) :
+  (p.concat h).support = p.support ++ [w]
+SimpleGraph.Walk.support_cons.{u} {V : Type u} {G : SimpleGraph V} {u v w : V} (h : G.Adj u v) (p : G.Walk v w) :
+  (SimpleGraph.Walk.cons h p).support = u :: p.support
+SimpleGraph.Walk.support_copy.{u} {V : Type u} {G : SimpleGraph V} {u v u' v' : V} (p : G.Walk u v) (hu : u = u')
+  (hv : v = v') : (p.copy hu hv).support = p.support
+SimpleGraph.Walk.support_map.{u, v} {V : Type u} {V' : Type v} {G : SimpleGraph V} {G' : SimpleGraph V'} (f : G →g G')
+  {u v : V} (p : G.Walk u v) : (SimpleGraph.Walk.map f p).support = List.map (⇑f) p.support
+SimpleGraph.Walk.support_mapLe_eq_support.{u} {V : Type u} {G G' : SimpleGraph V} (h : G ≤ G') {u v : V}
+  (p : G.Walk u v) : (SimpleGraph.Walk.mapLe h p).support = p.support
+SimpleGraph.Walk.support_nil.{u} {V : Type u} {G : SimpleGraph V} {u : V} : SimpleGraph.Walk.nil.support = [u]
+SimpleGraph.Walk.support_reverse.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) :
+  p.reverse.support = p.support.reverse
+SimpleGraph.Walk.support_take.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (n : ℕ) :
+  (p.take n).support = List.take (n + 1) p.support
+SimpleGraph.Walk.take_getVert.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (n m : ℕ) :
+  (p.take n).getVert m = p.getVert (min n m)
+SimpleGraph.Walk.take_length.{u} {V : Type u} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (n : ℕ) :
+  (p.take n).length = min n p.length
+SimpleGraph.adj_comm.{u} {V : Type u} (G : SimpleGraph V) (u v : V) : G.Adj u v ↔ G.Adj v u
+SimpleGraph.card_neighborSet_eq_degree.{u_1} {V : Type u_1} (G : SimpleGraph V) (v : V) [Fintype ↑(G.neighborSet v)] :
+  Fintype.card ↑(G.neighborSet v) = G.degree v
+SimpleGraph.connected_iff_exists_forall_reachable.{u} {V : Type u} (G : SimpleGraph V) :
+  G.Connected ↔ ∃ v, ∀ (w : V), G.Reachable v w
+SimpleGraph.cycleGraph (n : ℕ) : SimpleGraph (Fin n)
+SimpleGraph.cycleGraph_adj {n : ℕ} {u v : Fin (n + 2)} :
+  (SimpleGraph.cycleGraph (n + 2)).Adj u v ↔ u - v = 1 ∨ v - u = 1
+SimpleGraph.cycleGraph_isContained_iff.{u_1} {V : Type u_1} {G : SimpleGraph V} {n : ℕ} (hn : 2 < n) :
+  (SimpleGraph.cycleGraph n).IsContained G ↔ ∃ v p, p.IsCycle ∧ p.length = n
+SimpleGraph.cycleGraph_preconnected {n : ℕ} : (SimpleGraph.cycleGraph n).Preconnected
+SimpleGraph.cycleGraph_three_eq_top : SimpleGraph.cycleGraph 3 = ⊤
+SimpleGraph.degree_compl.{u_1} {V : Type u_1} (G : SimpleGraph V) (v : V) [Fintype ↑(G.neighborSet v)]
+  [Fintype ↑(Gᶜ.neighborSet v)] [Fintype V] : Gᶜ.degree v = Fintype.card V - 1 - G.degree v
+SimpleGraph.is3Clique_iff.mp : SimpleGraph.IsNClique ?m.2 3 ?m.3 →
+  ∃ a b c, SimpleGraph.Adj ?m.2 a b ∧ SimpleGraph.Adj ?m.2 a c ∧ SimpleGraph.Adj ?m.2 b c ∧ ?m.3 = {a, b, c}
+SimpleGraph.is3Clique_triple_iff.mpr : SimpleGraph.Adj ?m.2 ?m.3 ?m.4 ∧
+    SimpleGraph.Adj ?m.2 ?m.3 ?m.5 ∧ SimpleGraph.Adj ?m.2 ?m.4 ?m.5 →
+  SimpleGraph.IsNClique ?m.2 3 {?m.3, ?m.4, ?m.5}
+SimpleGraph.isClique_compl.{u_1} {α : Type u_1} (G : SimpleGraph α) {s : Set α} : Gᶜ.IsClique s ↔ G.IsIndepSet s
+SimpleGraph.isNClique_compl.{u_1} {α : Type u_1} (G : SimpleGraph α) {n : ℕ} {s : Finset α} :
+  Gᶜ.IsNClique n s ↔ G.IsNIndepSet n s
+SimpleGraph.mem_neighborSet.{u} {V : Type u} (G : SimpleGraph V) (v w : V) : w ∈ G.neighborSet v ↔ G.Adj v w
+SimpleGraph.not_cliqueFree_iff_top_isContained.{u_1} {α : Type u_1} {G : SimpleGraph α} (n : ℕ) :
+  ¬G.CliqueFree n ↔ (SimpleGraph.completeGraph (Fin n)).IsContained G

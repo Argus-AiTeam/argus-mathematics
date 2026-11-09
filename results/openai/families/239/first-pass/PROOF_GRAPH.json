@@ -1,0 +1,170 @@
+{
+  "goal": "C9000239",
+  "routes": {},
+  "nodes": {
+    "C9000239": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 239 (Sharp singularity rates for symmetric random sign matrices.; papers: The sharp exponential rate of singularity for symmetric Bernoulli matrices; The sharp singularity rate for biased symmetric sign matrices; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["U_MAIN", "B_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "U_MAIN": {
+      "statement": "For unbiased symmetric sign matrices A_n, Pr(det A_n=0)=2^(-n+o(n)); U sections/01-introduction.tex:7-15.",
+      "status": "open",
+      "depends_on": ["U_REDUCTION", "U_TYPICAL", "U_DISCRIMINANT", "U_PRICING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "B_MAIN": {
+      "statement": "For every fixed p in (0,1) except 1/2, lim Pr(det A_n^(p)=0)^(1/n)=p^2+(1-p)^2; B sections/01-introduction.tex:8-17.",
+      "status": "open",
+      "depends_on": ["B_REDUCTION", "B_STATIC", "B_RETENTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "U_REDUCTION": {
+      "statement": "Unbiased corank reduction and admissible-column reduction in U Section 2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "U_LATTICE": {
+      "statement": "U Section 3: quotient determinant identities, height submodularity, normal-height identity, stable quotient extraction, robust extraction and height.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "U_TYPICAL": {
+      "statement": "U Section 5: simultaneous typical ranks, inverse-rank, prime-corank and spectrum estimates.",
+      "status": "open",
+      "depends_on": ["C_HEIGHT_COVER", "U_LATTICE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "U_DISCRIMINANT": {
+      "statement": "U Section 6: discriminant blocks, primary coloring, colored-image orders and pairing determinant.",
+      "status": "open",
+      "depends_on": ["U_LATTICE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "U_PRICING": {
+      "statement": "U Sections 7-10: gated minor moves, layer inequalities, cube concentration, witness/certificate pricing and retention cost.",
+      "status": "open",
+      "depends_on": ["U_TYPICAL", "U_DISCRIMINANT", "U_LATTICE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "B_REDUCTION": {
+      "statement": "B Section 2: corank-one reduction and the central admissible-column bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "B_PRIME": {
+      "statement": "Typically, all relevant nonsingular bit matrices have F_q corank at most N^(3/5) for every prime q; B Section 3.",
+      "status": "open",
+      "depends_on": ["U_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "B_INTERSECTION": {
+      "statement": "B Section 4: simultaneous Boolean-cube intersection bound <2^(alpha N) for all cosets of intermediate lattices K with index at least N^(ell^(-D)N).",
+      "status": "open",
+      "depends_on": ["C_HEIGHT_COVER", "U_LATTICE", "B_PRIME"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "B_STATIC": {
+      "statement": "If W_2(B)<=zeta then the admissible-column set S_L0(B) has cardinality at most 2^(e_0 N); B Section 5.",
+      "status": "open",
+      "depends_on": ["B_INTERSECTION", "B_PRIME", "U_DISCRIMINANT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "B_RETENTION": {
+      "statement": "B Section 6: costly path extensions and specified retention events have probability at most 2^(-N(a-2e_0)); width-two gates cost its square in the stated regime.",
+      "status": "open",
+      "depends_on": ["B_INTERSECTION", "B_STATIC", "U_PRICING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md"]
+    },
+    "C_HEIGHT_COVER": {
+      "statement": "For fixed D,A>0 and all sufficiently large N, uniformly for 0<=m<=N, all rational W with H(W)<=exp(N ell^D) are within rank distance N ell^(-A) of a W-independent list of at most 2^(N^2 ell^(-A)) rational subspaces.",
+      "status": "open",
+      "depends_on": ["C_QUANT_COVER", "L_COVER_RATES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/report.md", "research/low_height_audit/quantitative_cover.md"]
+    },
+    "L_HEIGHT_CHAIN": {
+      "statement": "The greatest minimizers of log_N H(U)+a d(U,P_s) form a descending chain, with terminal distance <=h(W)/a and total dimensions of multi-drops <=4h(W)/a.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/quantitative_cover.md", "research/low_height_audit/exact_certificate.json"]
+    },
+    "L_NORMAL_BALANCE": {
+      "statement": "Every transition normal lattice obeys det L>=N^(-a rank L) in the ambient dual lattice and det K/det K'<=N^(a(c-rank K')) for every primitive K' in K.",
+      "status": "open",
+      "depends_on": ["L_HEIGHT_CHAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/quantitative_cover.md", "research/low_height_audit/exact_certificate.json"]
+    },
+    "L_EXPENSIVE": {
+      "statement": "Shortest projected normal flags have O(ac) positions with log_N mu_i>1/2-3a and none if c=1, with constants uniform over actual transitions.",
+      "status": "open",
+      "depends_on": ["L_NORMAL_BALANCE", "L_FLAG_AMORTIZATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/quantitative_cover.md", "research/low_height_audit/Main.lean"]
+    },
+    "L_VECTOR_COUNT": {
+      "statement": "Given a valid flag prefix, the next image costs O(1+N^(1-2a)log^2 N) bits if inexpensive or O(a N log N) otherwise; its fiber costs O((c/a)log N) bits.",
+      "status": "open",
+      "depends_on": ["L_NORMAL_BALANCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/quantitative_cover.md"]
+    },
+    "L_ENCODING": {
+      "statement": "Adaptive flag choices reconstruct each transition and the terminal space; summing all costs yields o(N^2 ell^(-A)) and terminal distance o(N ell^(-A)), uniformly for m<=N.",
+      "status": "open",
+      "depends_on": ["L_HEIGHT_CHAIN", "L_EXPENSIVE", "L_VECTOR_COUNT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/quantitative_cover.md", "research/low_height_audit/exact_certificate.json"]
+    },
+    "L_FLAG_AMORTIZATION": {
+      "statement": "For a>=0 and q>0, every finite family of real block lengths u_i>=1 with total length <=c, total excess <=0, short-block excess >=u_i/5 and long-block excess >=-4 a u_i has at most (20 a+1/q)c blocks; if a>=1/q it has at most 21 a c. The source also proves the stated multi-drop, square-sum, and entropy identities with their nonzero denominator hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/Main.lean", "research/low_height_audit/statement_fidelity.md", "research/low_height_audit/certificates/L_FLAG_AMORTIZATION-c86e8ee9c39b8590.json"]
+    },
+    "C_QUANT_COVER": {
+      "statement": "For integers N>=16, L=log N, 0<a<=1/40, a>=N^(-2/5), a L>=log(10(L+2)), b>=0, and every 0<=m<=N, the rational subspaces W with log H(W)<=b admit a W-independent rank-metric cover of radius b/(a L) and log_2 cardinality at most ceil(10000[N L+N^2 N^(-2a)(L+2)^2+a N b+b^2/(a^3 L)]).",
+      "status": "open",
+      "depends_on": ["L_HEIGHT_CHAIN", "L_NORMAL_BALANCE", "L_EXPENSIVE", "L_VECTOR_COUNT", "L_ENCODING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/quantitative_cover.md", "research/low_height_audit/verify.py", "research/low_height_audit/exact_certificate.json"]
+    },
+    "C_LOGPOWER_COVER": {
+      "statement": "For all sufficiently large integers N and every 0<=m<=N, all rational W with log H(W)<=N(log N)^(1/9) have a W-independent cover of radius N(log N)^(-2/3) and log_2 cardinality at most 100000 N^2(log N)^(-1/9).",
+      "status": "open",
+      "depends_on": ["C_QUANT_COVER", "L_COVER_RATES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/quantitative_cover.md"]
+    },
+    "L_COVER_RATES": {
+      "statement": "Substituting a=(log N)^(-2/9), b=N(log N)^(1/9) into Theorem Q yields radius N(log N)^(-2/3) and dominant entropy powers (log N)^(-1/9). For all fixed real D,A>0 these eventually cover exp(N(log log N)^D) heights with both exact bounds of the staged low-height-cover theorem, uniformly for m<=N.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/low_height_audit/quantitative_cover.md"]
+    }
+  }
+}

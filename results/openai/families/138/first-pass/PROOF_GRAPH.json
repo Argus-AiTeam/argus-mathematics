@@ -1,0 +1,161 @@
+{
+  "goal": "C9000138",
+  "routes": [
+    {
+      "name": "R_CHECKSUM_VERIFY",
+      "status": "current",
+      "evidence": "research/checksum_core/report.md"
+    },
+    {
+      "name": "R_UNIFORM_SECOND_MOMENT",
+      "status": "ruled_out",
+      "retired_because": "The unrestricted phase-averaged variance can be 2^n/N; this routine argument does not prove the required additive error at 2^(tau*n) samples.",
+      "evidence": "research/checksum_core/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000138": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 138 (Subset Sum in $`O(2^{0.49n})`$ time.; papers: Subset Sum in Time $`O(2^{0.49n})`$ ; A Low-Space Algorithm for Worst-Case Subset Sum; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_CHECKSUM"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_CHECKSUM": {
+      "statement": "October thm:checksum with its exact constants, arbitrary residues, integer moduli, uniform sufficiently-large-n guarantee and bounded every-history implementation.",
+      "status": "open",
+      "depends_on": ["C_CONTINUOUS", "C_FINITE", "C_COVERAGE", "C_MATCH_KERNEL", "C_ERROR", "C_COST"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/checksum_core/report.md", "research/checksum_core/exact_certificate.json", "research/checksum_core/verify.py"]
+    },
+    "C_CONTINUOUS": {
+      "statement": "Both exact continuous filtering moments are below 1.429584295<2^0.5168, including inner and outer quadrature errors.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/checksum_core/report.md", "research/checksum_core/exact_certificate.json", "research/checksum_core/verify.py"]
+    },
+    "C_FINITE": {
+      "statement": "Every integer P>=2^256 satisfies both all-finite moment bounds below 1.429584295+2^-32<2^0.5169; bounded scores, entropy order and uniform fixed-accuracy evaluation hold.",
+      "status": "open",
+      "depends_on": ["C_CONTINUOUS", "C_TRANSFER_GENERAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/checksum_core/report.md", "research/checksum_core/exact_certificate.json", "research/checksum_core/verify.py"]
+    },
+    "C_TRANSFER_GENERAL": {
+      "statement": "For every periodic real C^1 log-density pair with sup bounds 3,5 and derivative bounds 8,12, 1<=kappa<9/8, delta<=1/32 and a<=1/16 nonnegative, the two continuous-to-all-finite moment errors are at most 2^224/P for every P>=2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/checksum_core/report.md", "research/checksum_core/verify.py"]
+    },
+    "C_COVERAGE": {
+      "statement": "Conditional coverage of every frequency and unconditional entry and match-count size bounds for the exact block construction.",
+      "status": "open",
+      "depends_on": ["C_FINITE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/checksum_core/report.md"]
+    },
+    "C_MATCH_KERNEL": {
+      "statement": "Exact complex first moment and second-moment upper bound of inverse-multiplicity match sampling on a covered finite support, allowing rejected matches.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/checksum_core/Main.lean", "research/checksum_core/statement_fidelity.md", "research/checksum_core/certificates/C_MATCH_KERNEL-fcb69f31cb4ce864.json"]
+    },
+    "C_ERROR": {
+      "statement": "Pointwise unconditional domination and exponentially small restricted MSE imply simultaneous target accuracy under the original independent phase law.",
+      "status": "open",
+      "depends_on": ["C_FINITE", "C_COVERAGE", "C_MATCH_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/checksum_core/report.md", "research/checksum_core/exact_certificate.json"]
+    },
+    "C_COST": {
+      "statement": "Blockwise generation, prefix-indexed matches, caps, deterministic approximation and bounded random draws satisfy the checksum every-history word-operation bound.",
+      "status": "open",
+      "depends_on": ["C_FINITE", "C_COVERAGE", "C_MATCH_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/checksum_core/report.md", "research/openai_manuscript/Subset-Sum-in-Time-2-power-0-49n-October-4-2026/build/sections/implementation.tex"]
+    },
+    "C_UNIFORM_ROUTE_LIMIT": {
+      "statement": "The unrestricted uniform-frequency second-moment argument alone is insufficient at 2^(tau*n) samples; this is not a refutation of the filtered estimator.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/checksum_core/report.md"]
+    },
+    "C_OCT_MAIN": {
+      "statement": "October main uniform randomized O(2^(0.49*n)) Subset Sum theorem in every fixed polynomial-bit regime.",
+      "status": "open",
+      "depends_on": ["C_OCT_ISOLATION", "C_OCT_DEFICIENCY", "C_OCT_ALIASES", "C_CHECKSUM", "C_OCT_IMPL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subset-Sum-in-Time-2-power-0-49n-October-4-2026/build/sections/introduction.tex"]
+    },
+    "C_OCT_ISOLATION": {
+      "statement": "Exact transformed targets and isolated transformed solution with probability at least 11/12.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subset-Sum-in-Time-2-power-0-49n-October-4-2026/build/sections/setup.tex"]
+    },
+    "C_OCT_DEFICIENCY": {
+      "statement": "Deficiency identities, half-variance and the capped preliminary exact branch or low-mean analysis condition.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subset-Sum-in-Time-2-power-0-49n-October-4-2026/build/sections/setup.tex"]
+    },
+    "C_OCT_ALIASES": {
+      "statement": "Complete modular-alias recovery under the exact low-deficiency and bit-guard hypotheses, including sparse distinction and exclusion/pair caps.",
+      "status": "open",
+      "depends_on": ["C_OCT_DEFICIENCY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subset-Sum-in-Time-2-power-0-49n-October-4-2026/build/sections/aliases.tex"]
+    },
+    "C_OCT_IMPL": {
+      "statement": "Full decision composition, exact alias subtraction and implementation for the October main theorem; checksum evidence alone does not establish this branch.",
+      "status": "open",
+      "depends_on": ["C_OCT_ISOLATION", "C_OCT_ALIASES", "C_CHECKSUM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Subset-Sum-in-Time-2-power-0-49n-October-4-2026/build/sections/implementation.tex"]
+    },
+    "C_SEP_MAIN": {
+      "statement": "September one-sided randomized 2^(n/2) polynomial-time, 2^(0.199*n) polynomial-space theorem.",
+      "status": "open",
+      "depends_on": ["C_SEP_SURVIVAL", "C_SEP_STREAM_PREFIX", "C_SEP_RESOURCES", "C_SEP_SEPARATOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Low-Space-Algorithm-for-Worst-Case-Subset-Sum-September-26-2026/build/introduction.tex"]
+    },
+    "C_SEP_SURVIVAL": {
+      "statement": "Low-mean representation survival and preservation of independence for the extra prime and separators.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Low-Space-Algorithm-for-Worst-Case-Subset-Sum-September-26-2026/build/survival.tex"]
+    },
+    "C_SEP_STREAM_PREFIX": {
+      "statement": "Streams initialization and advances, stopped tie-join bounds, and prefix accounting for task, parent-work and final-input counts.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Low-Space-Algorithm-for-Worst-Case-Subset-Sum-September-26-2026/build/streams.tex", "research/openai_manuscript/A-Low-Space-Algorithm-for-Worst-Case-Subset-Sum-September-26-2026/build/representation.tex"]
+    },
+    "C_SEP_RESOURCES": {
+      "statement": "Unconditional resource estimates and extra-prime bucket bounds yield the stated per-trial success and resource event.",
+      "status": "open",
+      "depends_on": ["C_SEP_SURVIVAL", "C_SEP_STREAM_PREFIX", "C_SEP_SEPARATOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Low-Space-Algorithm-for-Worst-Case-Subset-Sum-September-26-2026/build/resources.tex"]
+    },
+    "C_SEP_SEPARATOR": {
+      "statement": "Weighted disjointness coverage and expected-work/workspace bounds, with reuse.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Low-Space-Algorithm-for-Worst-Case-Subset-Sum-September-26-2026/build/separators.tex"]
+    }
+  }
+}

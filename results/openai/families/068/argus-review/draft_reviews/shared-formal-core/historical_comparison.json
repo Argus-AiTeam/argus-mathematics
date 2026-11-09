@@ -1,0 +1,147 @@
+{
+  "claim_id": "C_TV_FORMAL_CORE",
+  "versions_from_current_coverage_index": [
+    {
+      "source_pointer": "research/MATH_STATE.json#/claims/41",
+      "unit": "shared-formal-core",
+      "is_latest_version": false,
+      "same_natural_statement_as_previous": false,
+      "record": {
+        "claim_id": "C_TV_FORMAL_CORE",
+        "version": 1,
+        "context": {
+          "kind": "context",
+          "subject_id": "CTX068_SOURCE",
+          "content_hash": "73ee5709535a68980b6ee41a1849fe38d71d05f41507d6a62a088a085a38352c"
+        },
+        "natural_statement": "Universal algebraic core of the toroidal-volume audit: in every finite matrix dimension a single logarithmic polar row gives at most a simple determinant pole; for arbitrary nonnegative discrepancies and multiplicities at least one, the clipped-minimum correction is nonpositive as a boundary and vanishes on a nonexceptional branch; for any attained minimum, strict codimension-one integrability is equivalent to the sharp correction interval; a log-canonical discrepancy plus a nonnegative full-support Cartier contribution is strictly positive on every valuation. This claim does not itself formalize complex varieties, measures, direct images, or analytic extension.",
+        "formal_statement": "",
+        "external_assumptions": [],
+        "retired_assumptions": [],
+        "content_hash": "9f9971b12185f5c1ee82ccfb73993e75aca0c549e59e8daccfb62dbd3b79e0ef"
+      }
+    },
+    {
+      "source_pointer": "research/MATH_STATE.json#/claims/42",
+      "unit": "shared-formal-core",
+      "is_latest_version": false,
+      "same_natural_statement_as_previous": false,
+      "record": {
+        "claim_id": "C_TV_FORMAL_CORE",
+        "version": 2,
+        "context": {
+          "kind": "context",
+          "subject_id": "CTX068_SOURCE",
+          "content_hash": "73ee5709535a68980b6ee41a1849fe38d71d05f41507d6a62a088a085a38352c"
+        },
+        "natural_statement": "Universal algebraic core of the toroidal-volume audit: in every finite matrix dimension a single logarithmic polar row gives at most a simple determinant pole; for arbitrary nonnegative discrepancies and multiplicities at least one, the clipped-minimum correction is nonpositive as a boundary and vanishes on a nonexceptional branch; for any attained minimum, strict codimension-one integrability is equivalent to the sharp correction interval; a log-canonical discrepancy plus a nonnegative full-support Cartier contribution, or a klt discrepancy plus any nonnegative Cartier contribution, is strictly positive on every valuation. This claim does not itself formalize complex varieties, measures, direct images, or analytic extension.",
+        "formal_statement": "import Mathlib\n\nnamespace ToroidalVolumeAudit\n\nopen Matrix\n\ntheorem cleared_logarithmic_determinant\n    {I R : Type*} [Fintype I] [DecidableEq I] [CommRing R]\n    (A : Matrix I I R) (k : I) (m : I \u2192 R) (t : R) :\n    (A.updateRow k (m + t \u2022 A k)).det =\n      (A.updateRow k m).det + t * A.det := by\n  rw [Matrix.det_updateRow_add, Matrix.det_updateRow_smul,\n    Matrix.updateRow_eq_self]\n\ntheorem at_most_simple_logarithmic_pole\n    {I K : Type*} [Fintype I] [DecidableEq I] [Field K]\n    (A : Matrix I I K) (k : I) (m : I \u2192 K) (t : K) (ht : t \u2260 0) :\n    t * (A.updateRow k (A k + t\u207b\u00b9 \u2022 m)).det =\n      t * A.det + (A.updateRow k m).det := by\n  rw [Matrix.det_updateRow_add, Matrix.det_updateRow_smul,\n    Matrix.updateRow_eq_self]\n  calc\n    t * (A.det + t\u207b\u00b9 * (A.updateRow k m).det) =\n        t * A.det + (t * t\u207b\u00b9) * (A.updateRow k m).det := by ring\n    _ = t * A.det + (A.updateRow k m).det := by\n      rw [mul_inv_cancel\u2080 ht, one_mul]\n\ndef correction (lam : \u211a) : \u211a := max 0 (lam - 1)\n\ndef room (lam : \u211a) : \u211a := min lam 1\n\ntheorem correction_nonnegative (lam : \u211a) : 0 \u2264 correction lam :=\n  le_max_left _ _\n\ntheorem room_identity (lam : \u211a) : lam - correction lam = room lam := by\n  unfold correction room\n  by_cases h : lam \u2264 1\n  \u00b7 rw [max_eq_left (by linarith), min_eq_left h]\n    ring\n  \u00b7 rw [max_eq_right (by linarith), min_eq_right (by linarith)]\n    ring\n\ntheorem correction_bounded_by_jacobian\n    (a e lam : \u211a) (ha : 0 \u2264 a) (he : 1 \u2264 e)\n    (hmin : e * lam \u2264 a + 1) :\n    e * correction lam \u2264 a := by\n  unfold correction\n  by_cases h : lam \u2264 1\n  \u00b7 rw [max_eq_left (by linarith), mul_zero]\n    exact ha\n  \u00b7 rw [max_eq_right (by linarith)]\n    nlinarith\n\ntheorem nonexceptional_branch_forces_zero\n    (e lam : \u211a) (he : 1 \u2264 e) (hmin : e * lam \u2264 1) :\n    correction lam = 0 := by\n  have hlam : lam \u2264 1 := by\n    by_contra h\n    have hpos : 0 < e := by linarith\n    have hmul := mul_lt_mul_of_pos_left (show 1 < lam by linarith) hpos\n    nlinarith\n  exact max_eq_left (by linarith)\n\ntheorem minimum_positive\n    {I : Type*} (a e : I \u2192 \u211a) (lam : \u211a)\n    (ha : \u2200 i, 0 \u2264 a i) (he : \u2200 i, 0 < e i)\n    (hatt : \u2203 i, e i * lam = a i + 1) :\n    0 < lam := by\n  obtain \u27e8i, hi\u27e9 := hatt\n  have hnum : 0 < a i + 1 := by linarith [ha i]\n  have hprod : 0 < e i * lam := by linarith\n  exact (mul_pos_iff_of_pos_left (he i)).mp hprod\n\ntheorem positive_room (lam : \u211a) (hlam : 0 < lam) : 0 < room lam :=\n  lt_min hlam (by norm_num)\n\ntheorem sharp_prime_threshold\n    {I : Type*} (a e : I \u2192 \u211a) (lam b : \u211a)\n    (he : \u2200 i, 0 < e i)\n    (hmin : \u2200 i, e i * lam \u2264 a i + 1)\n    (hatt : \u2203 i, e i * lam = a i + 1) :\n    (\u2200 i, -1 < a i - e i * (correction lam + b)) \u2194 b < room lam := by\n  constructor\n  \u00b7 intro h\n    obtain \u27e8i, hi\u27e9 := hatt\n    have hmul : e i * (correction lam + b) < e i * lam := by\n      linarith [h i]\n    have hc : correction lam + b < lam :=\n      (mul_lt_mul_left (he i)).mp hmul\n    rw [\u2190 room_identity]\n    linarith\n  \u00b7 intro hb i\n    rw [\u2190 room_identity] at hb\n    have hc : correction lam + b < lam := by linarith\n    have hmul := mul_lt_mul_of_pos_left hc (he i)\n    linarith [hmin i]\n\ntheorem full_support_discrepancy\n    {V : Type*} (lc cartier : V \u2192 \u211a)\n    (hlc : \u2200 v, 0 \u2264 lc v)\n    (hcartier : \u2200 v, 0 \u2264 cartier v)\n    (hfull : \u2200 v, lc v = 0 \u2192 0 < cartier v) :\n    \u2200 v, 0 < lc v + cartier v := by\n  intro v\n  by_cases h : lc v = 0\n  \u00b7 linarith [hfull v h]\n  \u00b7 have hpos : 0 < lc v := lt_of_le_of_ne (hlc v) (Ne.symm h)\n    linarith [hcartier v]\n\ntheorem klt_type_monotonicity\n    {V : Type*} (klt effective : V \u2192 \u211a)\n    (hklt : \u2200 v, 0 < klt v)\n    (heffective : \u2200 v, 0 \u2264 effective v) :\n    \u2200 v, 0 < klt v + effective v := by\n  intro v\n  exact add_pos_of_pos_of_nonneg (hklt v) (heffective v)\n\ntheorem blowup_endpoint (codim s : \u211a) :\n    (-1 < (codim - 1) - (codim - 1 + s)) \u2194 s < 1 := by\n  constructor <;> intro h <;> linarith\n\nend ToroidalVolumeAudit\n",
+        "external_assumptions": [],
+        "retired_assumptions": [],
+        "content_hash": "f277a38df9439346bab3ac465799b305c405c1dec6c24c1822be2d6d8d28b0fc"
+      }
+    },
+    {
+      "source_pointer": "research/MATH_STATE.json#/claims/44",
+      "unit": "shared-formal-core",
+      "is_latest_version": true,
+      "same_natural_statement_as_previous": true,
+      "record": {
+        "claim_id": "C_TV_FORMAL_CORE",
+        "version": 3,
+        "context": {
+          "kind": "context",
+          "subject_id": "CTX068_SOURCE",
+          "content_hash": "73ee5709535a68980b6ee41a1849fe38d71d05f41507d6a62a088a085a38352c"
+        },
+        "natural_statement": "Universal algebraic core of the toroidal-volume audit: in every finite matrix dimension a single logarithmic polar row gives at most a simple determinant pole; for arbitrary nonnegative discrepancies and multiplicities at least one, the clipped-minimum correction is nonpositive as a boundary and vanishes on a nonexceptional branch; for any attained minimum, strict codimension-one integrability is equivalent to the sharp correction interval; a log-canonical discrepancy plus a nonnegative full-support Cartier contribution, or a klt discrepancy plus any nonnegative Cartier contribution, is strictly positive on every valuation. This claim does not itself formalize complex varieties, measures, direct images, or analytic extension.",
+        "formal_statement": "import Mathlib\n\nnamespace ToroidalVolumeAudit\n\nopen Matrix\n\ntheorem cleared_logarithmic_determinant\n    {I R : Type*} [Fintype I] [DecidableEq I] [CommRing R]\n    (A : Matrix I I R) (k : I) (m : I \u2192 R) (t : R) :\n    (A.updateRow k (m + t \u2022 A k)).det =\n      (A.updateRow k m).det + t * A.det := by\n  rw [Matrix.det_updateRow_add, Matrix.det_updateRow_smul,\n    Matrix.updateRow_eq_self]\n\ntheorem at_most_simple_logarithmic_pole\n    {I K : Type*} [Fintype I] [DecidableEq I] [Field K]\n    (A : Matrix I I K) (k : I) (m : I \u2192 K) (t : K) (ht : t \u2260 0) :\n    t * (A.updateRow k (A k + t\u207b\u00b9 \u2022 m)).det =\n      t * A.det + (A.updateRow k m).det := by\n  rw [Matrix.det_updateRow_add, Matrix.det_updateRow_smul,\n    Matrix.updateRow_eq_self]\n  calc\n    t * (A.det + t\u207b\u00b9 * (A.updateRow k m).det) =\n        t * A.det + (t * t\u207b\u00b9) * (A.updateRow k m).det := by ring\n    _ = t * A.det + (A.updateRow k m).det := by\n      rw [mul_inv_cancel\u2080 ht, one_mul]\n\ndef correction (lam : \u211a) : \u211a := max 0 (lam - 1)\n\ndef room (lam : \u211a) : \u211a := min lam 1\n\ntheorem correction_nonnegative (lam : \u211a) : 0 \u2264 correction lam :=\n  le_max_left _ _\n\ntheorem room_identity (lam : \u211a) : lam - correction lam = room lam := by\n  unfold correction room\n  by_cases h : lam \u2264 1\n  \u00b7 rw [max_eq_left (by linarith), min_eq_left h]\n    ring\n  \u00b7 rw [max_eq_right (by linarith), min_eq_right (by linarith)]\n    ring\n\ntheorem correction_bounded_by_jacobian\n    (a e lam : \u211a) (ha : 0 \u2264 a) (he : 1 \u2264 e)\n    (hmin : e * lam \u2264 a + 1) :\n    e * correction lam \u2264 a := by\n  unfold correction\n  by_cases h : lam \u2264 1\n  \u00b7 rw [max_eq_left (by linarith), mul_zero]\n    exact ha\n  \u00b7 rw [max_eq_right (by linarith)]\n    nlinarith\n\ntheorem nonexceptional_branch_forces_zero\n    (e lam : \u211a) (he : 1 \u2264 e) (hmin : e * lam \u2264 1) :\n    correction lam = 0 := by\n  have hlam : lam \u2264 1 := by\n    by_contra h\n    have hpos : 0 < e := by linarith\n    have hmul := mul_lt_mul_of_pos_left (show 1 < lam by linarith) hpos\n    nlinarith\n  exact max_eq_left (by linarith)\n\ntheorem minimum_positive\n    {I : Type*} (a e : I \u2192 \u211a) (lam : \u211a)\n    (ha : \u2200 i, 0 \u2264 a i) (he : \u2200 i, 0 < e i)\n    (hatt : \u2203 i, e i * lam = a i + 1) :\n    0 < lam := by\n  obtain \u27e8i, hi\u27e9 := hatt\n  have hnum : 0 < a i + 1 := by linarith [ha i]\n  have hprod : 0 < e i * lam := by linarith\n  exact (mul_pos_iff_of_pos_left (he i)).mp hprod\n\ntheorem positive_room (lam : \u211a) (hlam : 0 < lam) : 0 < room lam :=\n  lt_min hlam (by norm_num)\n\ntheorem sharp_prime_threshold\n    {I : Type*} (a e : I \u2192 \u211a) (lam b : \u211a)\n    (he : \u2200 i, 0 < e i)\n    (hmin : \u2200 i, e i * lam \u2264 a i + 1)\n    (hatt : \u2203 i, e i * lam = a i + 1) :\n    (\u2200 i, -1 < a i - e i * (correction lam + b)) \u2194 b < room lam := by\n  constructor\n  \u00b7 intro h\n    obtain \u27e8i, hi\u27e9 := hatt\n    have hmul : e i * (correction lam + b) < e i * lam := by\n      linarith [h i]\n    have hc : correction lam + b < lam :=\n      (mul_lt_mul_iff_right\u2080 (he i)).mp hmul\n    rw [\u2190 room_identity]\n    linarith\n  \u00b7 intro hb i\n    rw [\u2190 room_identity] at hb\n    have hc : correction lam + b < lam := by linarith\n    have hmul := mul_lt_mul_of_pos_left hc (he i)\n    linarith [hmin i]\n\ntheorem full_support_discrepancy\n    {V : Type*} (lc cartier : V \u2192 \u211a)\n    (hlc : \u2200 v, 0 \u2264 lc v)\n    (hcartier : \u2200 v, 0 \u2264 cartier v)\n    (hfull : \u2200 v, lc v = 0 \u2192 0 < cartier v) :\n    \u2200 v, 0 < lc v + cartier v := by\n  intro v\n  by_cases h : lc v = 0\n  \u00b7 linarith [hfull v h]\n  \u00b7 have hpos : 0 < lc v := lt_of_le_of_ne (hlc v) (Ne.symm h)\n    linarith [hcartier v]\n\ntheorem klt_type_monotonicity\n    {V : Type*} (klt effective : V \u2192 \u211a)\n    (hklt : \u2200 v, 0 < klt v)\n    (heffective : \u2200 v, 0 \u2264 effective v) :\n    \u2200 v, 0 < klt v + effective v := by\n  intro v\n  exact add_pos_of_pos_of_nonneg (hklt v) (heffective v)\n\ntheorem blowup_endpoint (codim s : \u211a) :\n    (-1 < (codim - 1) - (codim - 1 + s)) \u2194 s < 1 := by\n  constructor <;> intro h <;> linarith\n\nend ToroidalVolumeAudit\n",
+        "external_assumptions": [],
+        "retired_assumptions": [],
+        "content_hash": "7b23c776e6c6cc0c75e1b753b20a17475109e2293ca535953c75ee915a060fed"
+      }
+    }
+  ],
+  "failed_evidence_id": "lean-C_TV_FORMAL_CORE-66e6299166e5",
+  "successful_evidence_id": "lean-C_TV_FORMAL_CORE-9678c7b62fad",
+  "failed_status": "type_error",
+  "failed_exit_code": 1,
+  "failed_stdout": "families/068/first-pass/toroidal_volume_audit/Main.lean:89:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class\n  MulRightStrictMono \u211a\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.\n",
+  "failed_source_sha256": "c1d4c8d194ce6f4a1950e503474b7ebccf0dbe8ae167ae312d1b7a256483d6ba",
+  "successful_source_sha256": "aa20a30000fee4bad1e0c6c4581e40f83ec394be71f506b9a9d77d852957763a",
+  "current_source_sha256": "aa20a30000fee4bad1e0c6c4581e40f83ec394be71f506b9a9d77d852957763a",
+  "successful_archive_equals_immutable_source": true,
+  "same_statement_fidelity_text": true,
+  "source_diff": [
+    "--- failed/Main.lean\n",
+    "+++ successful/Main.lean\n",
+    "@@ -86,7 +86,7 @@\n",
+    "     have hmul : e i * (correction lam + b) < e i * lam := by\n",
+    "       linarith [h i]\n",
+    "     have hc : correction lam + b < lam :=\n",
+    "-      (mul_lt_mul_left (he i)).mp hmul\n",
+    "+      (mul_lt_mul_iff_right\u2080 (he i)).mp hmul\n",
+    "     rw [\u2190 room_identity]\n",
+    "     linarith\n",
+    "   \u00b7 intro hb i\n"
+  ],
+  "declarations": [
+    {
+      "kind": "theorem",
+      "name": "cleared_logarithmic_determinant"
+    },
+    {
+      "kind": "theorem",
+      "name": "at_most_simple_logarithmic_pole"
+    },
+    {
+      "kind": "def",
+      "name": "correction"
+    },
+    {
+      "kind": "def",
+      "name": "room"
+    },
+    {
+      "kind": "theorem",
+      "name": "correction_nonnegative"
+    },
+    {
+      "kind": "theorem",
+      "name": "room_identity"
+    },
+    {
+      "kind": "theorem",
+      "name": "correction_bounded_by_jacobian"
+    },
+    {
+      "kind": "theorem",
+      "name": "nonexceptional_branch_forces_zero"
+    },
+    {
+      "kind": "theorem",
+      "name": "minimum_positive"
+    },
+    {
+      "kind": "theorem",
+      "name": "positive_room"
+    },
+    {
+      "kind": "theorem",
+      "name": "sharp_prime_threshold"
+    },
+    {
+      "kind": "theorem",
+      "name": "full_support_discrepancy"
+    },
+    {
+      "kind": "theorem",
+      "name": "klt_type_monotonicity"
+    },
+    {
+      "kind": "theorem",
+      "name": "blowup_endpoint"
+    }
+  ],
+  "historical_records_are_current_evidence": false
+}

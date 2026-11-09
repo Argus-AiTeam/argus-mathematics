@@ -1,0 +1,67 @@
+{
+  "evidence_id": "lean-CWalk-e25b93896f3d",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/327/first-pass/finite_walk_certificate/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lean",
+      "families/327/first-pass/finite_walk_certificate/Main.lean"
+    ],
+    "cwd": "families/327/first-pass/finite_walk_certificate",
+    "duration_ms": 6107,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/327/first-pass/finite_walk_certificate/Main.lean",
+    "source_sha256": "dcd0a91c9843b7bc9e0d3b99e365f7c241e4a876a56705e0a595073de4e80cbc",
+    "statement_fidelity": "families/327/first-pass/finite_walk_certificate/statement_fidelity.md",
+    "statement_fidelity_sha256": "cd5dff9bb89c27631170f5e7a5ca6bbc326aa64c181c3ea5e77a0bc51f7fc54e",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'Campaign9000327.prop_walks' depends on axioms: [propext, Classical.choice, Quot.sound]\n'OAI.MarkovSuperreflexivity.finiteWalk' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lean",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/finite_walk_certificate/Main.lean",
+    "text": "import OAI.Analysis.MarkovType.FiniteWalk\n\nset_option autoImplicit false\n\nnamespace Campaign9000327\n\nopen OAI.MarkovSuperreflexivity\nopen scoped BigOperators\n\nnoncomputable section\n\ndef AllConditions {N : OrderedNorm} {n : ℕ} (W : FiniteWalkWitness N n) : Prop :=\n  letI := W.stateFintype\n  letI := W.edgeFintype\n  (∀ t, ∑ s, W.chain.π s * markedTransition W.chain s t = W.chain.π t) ∧\n  (∑ ω : MarkedPath W.State W.Edge n, markedPathWeight W.chain n ω = 1) ∧\n  (∀ e, W.label (W.chain.rev e) = -W.label e) ∧\n  (∀ e k, W.coordinateBound ≤ k → W.label e k = 0) ∧\n  (∀ e, N (W.label e) = 1) ∧\n  (3 : ℝ) / 20 ≤ markedProb W.chain n\n    (fun ω => (n : ℝ) / 24 ≤ N (edgeSum W.label ω))\n\ntheorem prop_walks (N : OrderedNorm) (n : ℕ) (hn : 0 < n) :\n    ∃ W : FiniteWalkWitness N n, AllConditions W := by\n  obtain ⟨W⟩ := finiteWalk N n hn\n  refine ⟨W, ?_⟩\n  letI := W.stateFintype\n  letI := W.edgeFintype\n  exact ⟨sum_π_mul_P W.chain.toStateChain, sum_markedPathWeight W.chain n,\n    W.odd, W.support_bound, W.unit, W.escape⟩\n\n#print axioms prop_walks\n#print axioms OAI.MarkovSuperreflexivity.finiteWalk\n\nend\n\nend Campaign9000327\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/finite_walk_certificate/statement_fidelity.md",
+    "text": "# Statement fidelity: Proposition `prop:walks`\n\n`Campaign9000327.prop_walks` is universally quantified over `N : OrderedNorm`,\n`n : Nat`, and a proof `0 < n`. It proves existence, not an algorithm enumerating\nthe chain. There is no upper bound on `n`, and in particular `n = 1` is included.\n\nThe target is the staged September 23, 2026 manuscript, `build/main.tex`,\nProposition `prop:walks`, with the definitions immediately preceding it.\n`C00` is `Nat ->₀ Real`. Its zero-based coordinates correspond to the manuscript\ncoordinates by adding one. `OrderedNorm` consists of a real seminorm, positive\ndefiniteness, invariance under every strictly increasing finite placement, and\ncontractivity of `mergeAt i`, which adds coordinates `i` and `i+1` and shifts\nlater coordinates down. These are precisely a genuine norm, spreading\ninvariance, and contractive adjacent merging. There is no assumption of\nunconditionality, completeness, basis normalization, or finite representability.\n\nThe existential witness has finite types `State` and `Edge`, with their\n`Fintype` instances supplied as fields. Its `FiniteMarkedChain` contains a\nnonnegative probability distribution `pi` with sum one, source and target maps,\nan involutive reversal exchanging endpoints, nonnegative source-normalized edge\nprobabilities `q`, and edgewise detailed balance. Thus marks and parallel edges\nare retained; labels are not required to be differences of a state potential.\n`AllConditions` additionally displays the stationary distribution equation for\nthe induced transition matrix `markedTransition`.\n\nThe label has values in real `c00`. A single natural `coordinateBound` bounds\nthe supports of every label, so all labels lie in one finite coordinate span.\nOddness and norm one hold on **every** marked edge, not merely almost surely or\nonly on the good-transport event.\n\n`MarkedPath State Edge n` stores an initial state and exactly `n` marked edges.\n`markedPathWeight` is zero on invalid paths, and otherwise is the initial\nstationary mass times the product of the `n` transition probabilities.\n`AllConditions` includes the theorem that these weights sum to one.\n`markedProb` sums these weights over the specified event; `edgeSum` sums exactly\nthose `n` labels. The final conclusion is the lower bound `3/20` for the event\n`n/24 <= N(edgeSum ...)`, including equality at the threshold. No independence\nof good transitions is assumed.\n\nThe proof uses the public `OAI.MarkovSuperreflexivity.finiteWalk` construction at\nrevision `4eaee87548250b2682affda7d05d947c05554bae`, its complete custom import\ncone, and the normalization and stationarity lemmas of that same cone.\nThe source snapshot, any explicitly recorded compatibility edits, and the\ncompiler's transitive axiom report determine what has actually been checked.\nOrdinary Lean foundational axioms `propext`, `Classical.choice`, and\n`Quot.sound` are not additional Banach-space hypotheses.\n\nThis statement does **not** certify `lem:ordered-norm`, its finite\nrepresentability assertion, `lem:edge-labels`, or `thm:main`. It does not assert\nirreducibility, aperiodicity, a bound on chain size, or a complex-scalar version.\nThe mathematical proposition and its original Lean proof are prior OpenAI\nresults; this campaign's deliverable is an independent, source-faithful\nverification, not a claim that the mathematical theorem is newly discovered.\n"
+  },
+  "subject": {
+    "content_hash": "576cfccda0ae11c49f7dfb6bdaa4f9b813e74c62599bc9b72e5517447f5e32f4",
+    "kind": "claim",
+    "subject_id": "CWalk"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

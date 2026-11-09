@@ -1,0 +1,100 @@
+{
+  "protocol_version": "2025-11-25",
+  "request": {
+    "request": {
+      "op": "inspect",
+      "operation_id": "prime_field.matrix.rank.compute"
+    }
+  },
+  "result": {
+    "kind": "operation",
+    "operation": {
+      "description": "Compute the exact rank of a bounded integer matrix over the prime field GF(p). The prime is supplied explicitly so that characteristic-dependent rank is always unambiguous.",
+      "examples": [
+        {
+          "description": "Compute the rank of [[1,0,1],[0,1,1],[1,1,0]] over GF(2); the entries must be canonical residues in [0, prime).",
+          "input": {
+            "matrix": {
+              "columns": 3,
+              "entries": [[1, 0, 1], [0, 1, 1], [1, 1, 0]],
+              "prime": 2
+            }
+          },
+          "name": "rank_gf2"
+        }
+      ],
+      "input_schema": {
+        "$defs": {
+          "PrimeFieldMatrix": {
+            "additionalProperties": false,
+            "description": "An immutable matrix with an exact prime and explicit empty shape.",
+            "properties": {
+              "columns": {"title": "Columns", "type": "integer"},
+              "entries": {"items": {"items": {"type": "integer"}, "type": "array"}, "title": "Entries", "type": "array"},
+              "prime": {"title": "Prime", "type": "integer"}
+            },
+            "required": ["prime", "entries", "columns"],
+            "title": "PrimeFieldMatrix",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A bounded integer matrix over an explicit prime field GF(p), as the canonical `PrimeFieldMatrix` value: `prime` must be a prime integer in [2, 2147483647], `entries` must have at most 256 rows, each row 1..256 columns, all rows the same length matching the declared `columns`, and every entry a canonical residue in [0, prime). Zero rows are permitted and carry the explicit `columns` axis.",
+        "properties": {"matrix": {"$ref": "#/$defs/PrimeFieldMatrix"}},
+        "required": ["matrix"],
+        "title": "PrimeFieldMatrixRequest",
+        "type": "object"
+      },
+      "operation_id": "prime_field.matrix.rank.compute",
+      "output_schema": {
+        "$defs": {
+          "PrimeFieldMatrix": {
+            "additionalProperties": false,
+            "description": "An immutable matrix with an exact prime and explicit empty shape.",
+            "properties": {
+              "columns": {"title": "Columns", "type": "integer"},
+              "entries": {"items": {"items": {"type": "integer"}, "type": "array"}, "title": "Entries", "type": "array"},
+              "prime": {"title": "Prime", "type": "integer"}
+            },
+            "required": ["prime", "entries", "columns"],
+            "title": "PrimeFieldMatrix",
+            "type": "object"
+          },
+          "PrimeFieldMatrixRequest": {
+            "additionalProperties": false,
+            "description": "A bounded integer matrix over an explicit prime field GF(p), as the canonical `PrimeFieldMatrix` value: `prime` must be a prime integer in [2, 2147483647], `entries` must have at most 256 rows, each row 1..256 columns, all rows the same length matching the declared `columns`, and every entry a canonical residue in [0, prime). Zero rows are permitted and carry the explicit `columns` axis.",
+            "properties": {"matrix": {"$ref": "#/$defs/PrimeFieldMatrix"}},
+            "required": ["matrix"],
+            "title": "PrimeFieldMatrixRequest",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Rank of a matrix over GF(p), retaining its source matrix.",
+        "properties": {
+          "prime": {"exclusiveMinimum": 1, "maximum": 2147483647, "title": "Prime", "type": "integer"},
+          "rank": {"minimum": 0, "title": "Rank", "type": "integer"},
+          "source": {"$ref": "#/$defs/PrimeFieldMatrixRequest"}
+        },
+        "required": ["prime", "source", "rank"],
+        "title": "PrimeFieldMatrixRankResult",
+        "type": "object"
+      },
+      "read_only": true,
+      "tags": ["linear-algebra", "finite-field", "exact"],
+      "title": "Compute matrix rank over GF(p)"
+    }
+  },
+  "schema_version": 1,
+  "server": {
+    "description": "Search and run atomic, composable Jacobian tools for higher mathematics.",
+    "icons": null,
+    "name": "jacobian",
+    "title": "Jacobian Mathematical Workbench",
+    "version": "0.14.0",
+    "websiteUrl": null
+  },
+  "tool": "math.find",
+  "tools": ["math.find", "math.run"],
+  "transport": "mcp-stdio"
+}

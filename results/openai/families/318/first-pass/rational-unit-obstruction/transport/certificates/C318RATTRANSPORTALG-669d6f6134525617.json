@@ -1,0 +1,67 @@
+{
+  "evidence_id": "lean-C318RATTRANSPORTALG-9d9010745371",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/318/first-pass/rational-unit-obstruction/transport/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lean",
+      "families/318/first-pass/rational-unit-obstruction/transport/Main.lean"
+    ],
+    "cwd": "families/318/first-pass/rational-unit-obstruction/transport",
+    "duration_ms": 1904,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/318/first-pass/rational-unit-obstruction/transport/Main.lean",
+    "source_sha256": "5cefd8034825babecf3cc813a8a80289bba8d7f7c611f742e77d1ba8c9a8f22f",
+    "statement_fidelity": "families/318/first-pass/rational-unit-obstruction/transport/statement_fidelity.md",
+    "statement_fidelity_sha256": "3345da061f54242948113b4f170e7ae8902b24ffeb496c5d06af2dc515623d88",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lean",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/rational-unit-obstruction/transport/Main.lean",
+    "text": "namespace CompletedPrimitiveTransport\n\nstructure Matrix2 (R : Type) where\n  a00 : R\n  a01 : R\n  a10 : R\n  a11 : R\n\nstructure Matrix3 (R : Type) where\n  a00 : R\n  a01 : R\n  a02 : R\n  a10 : R\n  a11 : R\n  a12 : R\n  a20 : R\n  a21 : R\n  a22 : R\n\nvariable {R : Type} [OfNat R 0] [Add R] [Sub R] [Mul R]\n\ndef mul2 (x y : Matrix2 R) : Matrix2 R :=\n  ⟨x.a00 * y.a00 + x.a01 * y.a10,\n   x.a00 * y.a01 + x.a01 * y.a11,\n   x.a10 * y.a00 + x.a11 * y.a10,\n   x.a10 * y.a01 + x.a11 * y.a11⟩\n\ndef sub2 (x y : Matrix2 R) : Matrix2 R :=\n  ⟨x.a00 - y.a00, x.a01 - y.a01,\n   x.a10 - y.a10, x.a11 - y.a11⟩\n\ndef trace2 (x : Matrix2 R) : R := x.a00 + x.a11\n\ndef form2 (x y z : Matrix2 R) : R :=\n  trace2 (mul2 x (sub2 (mul2 y z) (mul2 z y)))\n\ndef mul3 (x y : Matrix3 R) : Matrix3 R :=\n  ⟨x.a00 * y.a00 + x.a01 * y.a10 + x.a02 * y.a20,\n   x.a00 * y.a01 + x.a01 * y.a11 + x.a02 * y.a21,\n   x.a00 * y.a02 + x.a01 * y.a12 + x.a02 * y.a22,\n   x.a10 * y.a00 + x.a11 * y.a10 + x.a12 * y.a20,\n   x.a10 * y.a01 + x.a11 * y.a11 + x.a12 * y.a21,\n   x.a10 * y.a02 + x.a11 * y.a12 + x.a12 * y.a22,\n   x.a20 * y.a00 + x.a21 * y.a10 + x.a22 * y.a20,\n   x.a20 * y.a01 + x.a21 * y.a11 + x.a22 * y.a21,\n   x.a20 * y.a02 + x.a21 * y.a12 + x.a22 * y.a22⟩\n\ndef sub3 (x y : Matrix3 R) : Matrix3 R :=\n  ⟨x.a00 - y.a00, x.a01 - y.a01, x.a02 - y.a02,\n   x.a10 - y.a10, x.a11 - y.a11, x.a12 - y.a12,\n   x.a20 - y.a20, x.a21 - y.a21, x.a22 - y.a22⟩\n\ndef trace3 (x : Matrix3 R) : R := x.a00 + x.a11 + x.a22\n\ndef form3 (x y z : Matrix3 R) : R :=\n  trace3 (mul3 x (sub3 (mul3 y z) (mul3 z y)))\n\ndef upperBlock (a v w : R) (x : Matrix2 R) : Matrix3 R :=\n  ⟨a, v, w, 0, x.a00, x.a01, 0, x.a10, x.a11⟩\n\ntheorem parabolicTrace\n    (addZero : ∀ x : R, x + 0 = x)\n    (zeroAdd : ∀ x : R, 0 + x = x)\n    (mulZero : ∀ x : R, x * 0 = 0)\n    (zeroMul : ∀ x : R, 0 * x = 0)\n    (subSelf : ∀ x : R, x - x = 0)\n    (mulComm : ∀ x y : R, x * y = y * x)\n    (a b c v₁ v₂ w₁ w₂ t₁ t₂ : R) (x y z : Matrix2 R) :\n    form3 (upperBlock a v₁ v₂ x)\n      (upperBlock b w₁ w₂ y) (upperBlock c t₁ t₂ z) =\n    form2 x y z := by\n  have hbc : b * c - c * b = 0 := by\n    rw [mulComm b c]\n    exact subSelf (c * b)\n  simp only [form3, form2, trace3, trace2, mul3, mul2, sub3, sub2,\n    upperBlock, addZero, zeroAdd, mulZero, zeroMul, subSelf, hbc]\n\ntheorem completedTransport\n    {A T W WC D : Type}\n    (pullback : A → T)\n    (pullbackInjective : ∀ x y, pullback x = pullback y → x = y)\n    (witt : A → WC) (base : W → WC)\n    (baseInjective : ∀ x y, base x = base y → x = y)\n    (coefficient : W → D)\n    (scaleA : A → A) (scaleW : W → W)\n    (scaleWC : WC → WC) (scaleD : D → D)\n    (wittScalar : ∀ x, witt (scaleA x) = scaleWC (witt x))\n    (baseScalar : ∀ x, base (scaleW x) = scaleWC (base x))\n    (coefficientScalar : ∀ x,\n      coefficient (scaleW x) = scaleD (coefficient x))\n    (e₃ e₂ : A) (c₃ c₂ : W)\n    (unit₃ : witt e₃ = base c₃)\n    (unit₂ : witt e₂ = base c₂)\n    (geometric : pullback e₃ = pullback (scaleA e₂))\n    (zero : D)\n    (nonzero : coefficient c₂ ≠ zero)\n    (scalarNonzero : ∀ x, x ≠ zero → scaleD x ≠ zero) :\n    coefficient c₃ = scaleD (coefficient c₂) ∧\n      coefficient c₃ ≠ zero := by\n  have hgeom : e₃ = scaleA e₂ :=\n    pullbackInjective e₃ (scaleA e₂) geometric\n  have hwitt : c₃ = scaleW c₂ := by\n    apply baseInjective c₃ (scaleW c₂)\n    calc\n      base c₃ = witt e₃ := unit₃.symm\n      _ = witt (scaleA e₂) := congrArg witt hgeom\n      _ = scaleWC (witt e₂) := wittScalar e₂\n      _ = scaleWC (base c₂) := congrArg scaleWC unit₂\n      _ = base (scaleW c₂) := (baseScalar c₂).symm\n  have hcoeff : coefficient c₃ = scaleD (coefficient c₂) := by\n    calc\n      coefficient c₃ = coefficient (scaleW c₂) :=\n        congrArg coefficient hwitt\n      _ = scaleD (coefficient c₂) := coefficientScalar c₂\n  constructor\n  · exact hcoeff\n  · intro hzero\n    exact scalarNonzero (coefficient c₂) nonzero (hcoeff.symm.trans hzero)\n\nend CompletedPrimitiveTransport\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/rational-unit-obstruction/transport/statement_fidelity.md",
+    "text": "# Statement fidelity: completed primitive transport algebra\n\n`Matrix2` and `Matrix3` contain all four and nine entries, respectively.\n`mul2` and `mul3` are ordinary matrix multiplication; `sub2` and `sub3`\nare entrywise subtraction; `trace2` and `trace3` sum the diagonal.\n`form2` and `form3` compute trace of X times the commutator of Y and Z.\n`upperBlock` inserts an arbitrary scalar and upper row over a lower\ntwo-by-two block, with zero lower-left entries.\n\n`CompletedPrimitiveTransport.parabolicTrace` states the exact equality\n\n    tr_3(X[Y,Z]) = tr_2(X_2[Y_2,Z_2])\n\nfor every three upper block triangular matrices of block sizes 1 and 2,\nincluding arbitrary entries in the unipotent upper rows. The coefficient\ntype is arbitrary. Its operations satisfy only the stated zero identities,\ncommutative multiplication, and x-x=0; hence every commutative ring is an\ninstance. The matrices, multiplication, subtraction, trace, and block maps\nare explicitly defined. There is no assumed trace-restriction identity.\n\n`CompletedPrimitiveTransport.completedTransport` proves the cancellation\npart of the actual comparison diagram. `A` is geometric constant-coefficient\ndegree-three cohomology on Y_C, `T` is its projective pullback, `W` and `WC`\nare Witt cohomology on Y and Y_C, and `D` is completed deformation-coefficient\ncohomology. Projective pullback and Witt base change are separately\ninjective. The two coefficient-unit squares and scalar naturalities are\nexplicit hypotheses. A relation after projective pullback implies the\ncorresponding relation in D; if the second coefficient class is nonzero\nand its scalar multiple remains nonzero, then the first class is nonzero.\n\nThe scalar maps represent multiplication by the same nonzero Q_5 scalar.\nLean does not construct those cohomology groups, their full\nP_3 x P_2-actions, either injective map, or the geometric relation. Their\nexistence, equivariance, and applicability are proved in the accompanying\nhuman proof. The formal theorem does not assume the desired deformation-\ncoefficient relation, and does not formalize spectra, descent convergence,\nor canonical-localization nonvanishing. The unchanged earlier formal\nsource separately handles arbitrary retractions.\n"
+  },
+  "subject": {
+    "content_hash": "5cc1306c7d533c79baffec12da4e03f76fd53a56842318dcb13095978a79f79d",
+    "kind": "claim",
+    "subject_id": "C318RATTRANSPORTALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

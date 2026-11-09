@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CM_FORMAL_CORE-2fa936e9ab52",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/361/first-pass/crossing_matching/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/361/first-pass/crossing_matching/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14315,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/361/first-pass/crossing_matching/Main.lean",
+    "source_sha256": "795fe578c3b39734f7f08314c6f81553ce65d099300a9d66048cedfbf88eb445",
+    "statement_fidelity": "families/361/first-pass/crossing_matching/statement_fidelity.md",
+    "statement_fidelity_sha256": "5ab2ba9537ebd086f2a2a087ce826ea6c033cb489c376c8ab2dcb474380b20f2",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'CrossingMatching.product_fixedPoint_of_finite' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CrossingMatching.clamp_fixed_forces_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CrossingMatching.normalized_line_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/crossing_matching/Main.lean",
+    "text": "import Mathlib\n\nopen Set\n\nnamespace CrossingMatching\n\ntheorem product_fixedPoint_of_finite\n    {I : Type*} {K : I → Type*}\n    [∀ i, TopologicalSpace (K i)] [∀ i, CompactSpace (K i)]\n    [∀ i, T2Space (K i)]\n    (Φ : (∀ i, K i) → (∀ i, K i)) (hΦ : Continuous Φ)\n    (hfinite : ∀ s : Finset I, ∃ x, ∀ i ∈ s, Φ x i = x i) :\n    ∃ x, Φ x = x := by\n  classical\n  let C : I → Set (∀ i, K i) := fun i => {x | Φ x i = x i}\n  have hclosed : ∀ i, IsClosed (C i) := by\n    intro i\n    exact isClosed_eq ((continuous_apply i).comp hΦ) (continuous_apply i)\n  have hnonempty : ∀ s : Finset I, (⋂ i ∈ s, C i).Nonempty := by\n    intro s\n    obtain ⟨x, hx⟩ := hfinite s\n    refine ⟨x, ?_⟩\n    simp only [mem_iInter]\n    exact hx\n  obtain ⟨x, hx⟩ := CompactSpace.iInter_nonempty hclosed hnonempty\n  refine ⟨x, ?_⟩\n  funext i\n  exact mem_iInter.mp hx i\n\ndef clamp (x : ℝ) : ℝ := max (-1) (min 1 x)\n\ntheorem clamp_fixed_forces_zero\n    (z d : ℝ) (hz : -1 ≤ z ∧ z ≤ 1)\n    (hplus : z = 1 → 0 < d) (hminus : z = -1 → d < 0)\n    (hfix : z = clamp (z - d)) : d = 0 := by\n  unfold clamp at hfix\n  have htop : z ≠ 1 := by\n    intro he\n    have hd := hplus he\n    have ht : max (-1 : ℝ) (min 1 (z - d)) < 1 :=\n      max_lt (by norm_num)\n        (lt_of_le_of_lt (min_le_right _ _) (by linarith))\n    linarith\n  have hbot : z ≠ -1 := by\n    intro he\n    have hd := hminus he\n    have ht : (-1 : ℝ) < min 1 (z - d) :=\n      lt_min (by norm_num) (by linarith)\n    have hb := lt_of_lt_of_le ht (le_max_right (-1 : ℝ) (min 1 (z - d)))\n    linarith\n  rcases le_total (z - d) 1 with h | h\n  · rw [min_eq_right h] at hfix\n    by_cases hm : -1 ≤ z - d\n    · rw [max_eq_right hm] at hfix\n      linarith\n    · rw [max_eq_left (le_of_not_ge hm)] at hfix\n      exact (hbot hfix).elim\n  · rw [min_eq_left h] at hfix\n    rw [show max (-1 : ℝ) 1 = 1 by norm_num] at hfix\n    exact (htop hfix).elim\n\ntheorem normalized_line_iff\n    {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (i : Fin n)\n    (v w : Fin n → ℝ) (hw : w i = 1)\n    (σ : ℝ) (hσ : σ = (A.mulVec v) i) (hσ0 : σ ≠ 0) :\n    A.mulVec v = σ • w ↔\n      ∀ h, h ≠ i → (A.mulVec v) h / σ = w h := by\n  constructor\n  · intro he h _\n    have hh := congrFun he h\n    simp only [Pi.smul_apply, smul_eq_mul] at hh\n    apply (div_eq_iff hσ0).2\n    simpa [mul_comm] using hh\n  · intro he\n    funext h\n    by_cases hi : h = i\n    · subst h\n      simp [Pi.smul_apply, hw, hσ]\n    · have hh := (div_eq_iff hσ0).1 (he h hi)\n      simpa [Pi.smul_apply, smul_eq_mul, mul_comm] using hh\n\n#print axioms product_fixedPoint_of_finite\n#print axioms clamp_fixed_forces_zero\n#print axioms normalized_line_iff\n\nend CrossingMatching\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/crossing_matching/statement_fidelity.md",
+    "text": "# Statement fidelity: the infinite matching core\n\nThe claim is `C_CM_FORMAL_CORE`, not the complete analytic theorem\n`C_CM_UNIFORM`.\n\nAll four declarations below are in the namespace `CrossingMatching`.\nThe definition `clamp` is exactly the real function\n`x -> max(-1,min(1,x))`.\n\n`product_fixedPoint_of_finite` quantifies over an arbitrary\nindex type `I`, a family of compact Hausdorff topological spaces `K i`, and a\ncontinuous self-map of their full product with the product topology. Its\nexplicit hypothesis says that **every finite collection of coordinate\nfixed-point equations has a solution in the same full product**. Its conclusion\nis one point satisfying all coordinate equations simultaneously. In the\napplication, the factors are the closed column and control intervals.\nFinite-dimensional Brouwer proves the finite-solvability hypothesis in the\nmathematical report; the Lean theorem does not prove Brouwer or assume a\nuniform-norm continuity statement. The index need not be finite or countable.\n\n`clamp_fixed_forces_zero` concerns arbitrary real numbers\n`z,d`. It assumes `-1 <= z <= 1`, the implications\n`z=1 -> d>0` and `z=-1 -> d<0`, and the equation\n`z=max(-1,min(1,z-d))`. It concludes `d=0`. The endpoint signs are\nhypotheses, not consequences of compilation. This is precisely the control\nequation used at every incoming crossing cut.\n\n`normalized_line_iff` quantifies over every finite real\nsquare matrix, distinguished coordinate, two real columns, and a nonzero\nreal multiplier. It assumes that the target column has distinguished\ncoordinate one and that the multiplier equals the corresponding coordinate\nof the image column. Exact line invariance is equivalent to all the other\nnormalized coordinate equations. The source column need not itself have\ndistinguished coordinate one, so the lemma also covers the manuscript's\nnormalized source columns. Positivity of the multiplier is supplied by the\nanalytic estimates, not by this lemma.\n\nThe source has no custom axioms, `sorry`, `admit`, or deferred obligations.\nThe compiler checks these infinite compactness and algebraic implications.\nIt does **not** check the PDE freezing estimates, the Gaussian weight\nestimates, spectral perturbation theory, the applicability of Brouwer,\nthe angular-program existence, Ricci curvature, novelty, or the full\nharmonic-dimension comparison counterexample. Those distinctions are part\nof the claim, not exceptions to it.\n"
+  },
+  "subject": {
+    "content_hash": "db9103cdb59db1bc92c1863b814ffb86510e8ce3a4c49d1ed7864f1e3e8627aa",
+    "kind": "claim",
+    "subject_id": "C_CM_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

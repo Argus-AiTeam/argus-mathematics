@@ -1,0 +1,162 @@
+{
+  "goal": "C9000023",
+  "routes": [
+    {
+      "name": "Exceptional-moment universal certification",
+      "status": "current",
+      "evidence": "research/exceptional_moments/report.md"
+    },
+    {
+      "name": "Generic endpoint sieves without prime structure",
+      "status": "ruled_out",
+      "reason": "Both bounds have exponent exactly 7/3; finite exponent sampling cannot establish a uniform positive saving.",
+      "evidence": "research/exceptional_moments/exact_certificate.json"
+    }
+  ],
+  "nodes": {
+    "C9000023": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 023 (Patterson's first moment for cubic Gauss sums.; papers: An unconditional first moment for cubic Gauss sums; Lean status: Partially/Comparator formalized (lean/docs/023.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_DUAL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_DUAL": {
+      "statement": "Proposition prop:dual, with independent smooth prime coefficients and uniform positive neighborhoods and savings.",
+      "status": "open",
+      "depends_on": ["C_HB", "C_RECIPROCITY", "C_HECKE_FE", "C_POISSON", "C_ORDINARY", "C_EXTENSIONS", "C_GRAM", "C_DUALITY", "C_REDUCTION", "C_EXPONENTS", "C_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/report.md"]
+    },
+    "C_HB": {
+      "statement": "Heath-Brown's squarefree cubic large sieve, Theorem 2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/sources/heath_brown_as_reproduced.txt"],
+      "note": "The original author PDF was unavailable. The exact theorem reproduction in Dunn--Radziwill v3 (1.11) was inspected; independent citation attribution remains open."
+    },
+    "C_RECIPROCITY": {
+      "statement": "Cubic reciprocity, supplementary laws and primitive Gauss evaluation in the stated Eisenstein conventions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/sources/reciprocity_gauss_poisson.txt", "research/exceptional_moments/report.md"]
+    },
+    "C_HECKE_FE": {
+      "statement": "Entire primitive nonprincipal finite-order Hecke L-functions over Q(omega) satisfy the stated functional equation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/sources/hecke_functional_equation.txt", "research/exceptional_moments/sources/hecke_entireness.txt"]
+    },
+    "C_POISSON": {
+      "statement": "Classical Eisenstein-lattice Poisson summation with the trace-dual normalization of Dunn--Radziwill v3 Lemma 4.2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/sources/reciprocity_gauss_poisson.txt"]
+    },
+    "C_ORDINARY": {
+      "statement": "The planar primitive-character large sieve has bound (Z+Q^2) times the coefficient square norm.",
+      "status": "open",
+      "depends_on": ["C_POISSON"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/report.md"]
+    },
+    "C_EXTENSIONS": {
+      "statement": "The two nonsquarefree extensions follow from the squarefree cubic sieve with the stated length factors.",
+      "status": "open",
+      "depends_on": ["C_HB", "C_RECIPROCITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/report.md"]
+    },
+    "C_GRAM": {
+      "statement": "The off-diagonal squared Gram row sum is at most (PZ)^epsilon (ZP+P^2 Z^(1/3)), uniformly for subsets.",
+      "status": "open",
+      "depends_on": ["C_EXTENSIONS", "C_RECIPROCITY", "C_POISSON"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/report.md", "research/exceptional_moments/verification_result.json"],
+      "note": "Independent analytic derivation and finite exact CRT checks supplied; not yet independently reviewed."
+    },
+    "C_DUALITY": {
+      "statement": "A full smooth nonprincipal character sum admits common-shift dual dyads of length D(1+|t|)^2/Z and amplitude sqrt(Z/J).",
+      "status": "open",
+      "depends_on": ["C_HECKE_FE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/report.md"]
+    },
+    "C_REDUCTION": {
+      "statement": "Prime-power errors, the short Mobius identity, Mellin separation and Euler-factor removal reduce prop:dual to its stated exponent systems or a dominant full sum.",
+      "status": "open",
+      "depends_on": ["C_ORDINARY", "C_EXTENSIONS", "C_RECIPROCITY", "C_DUALITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/report.md"]
+    },
+    "C_EXPONENTS": {
+      "statement": "For every finite nonnegative length simplex, the full two-endpoint multiplicity systems and Gram inequalities exclude an unsaved moment, including a dominant full-length factor.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/exceptional_moments/Main.lean",
+        "research/exceptional_moments/statement_fidelity.md",
+        "research/exceptional_moments/certificates/C_EXPONENTS-eeb17a8f1420a929.json",
+        "research/exceptional_moments/verification_result.json"
+      ],
+      "note": "The ledger derives closed_kernel from a successful Lean 4.31.0 run with no proof holes. This graph node remains open pending independent statement-fidelity review."
+    },
+    "C_UNIFORM": {
+      "statement": "Exclusion of every limiting unsaved sequence implies uniform fixed positive neighborhoods and power savings for the specified coefficient class.",
+      "status": "open",
+      "depends_on": ["C_REDUCTION", "C_EXPONENTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/exceptional_moments/report.md"]
+    },
+    "C_MAIN": {
+      "statement": "The manuscript's unconditional all-primary-prime first-moment asymptotic.",
+      "status": "open",
+      "depends_on": ["C_TYPE_I", "C_DISPERSION", "C_DECOMPOSITION", "C_UNSMOOTHING"],
+      "reviewer_confirmed": false
+    },
+    "C_TYPE_I": {
+      "statement": "The level Voronoi and height estimates provide the claimed Type I comparison.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_DISPERSION": {
+      "statement": "Corrected dispersion reduces the structured Type II terms to the exceptional moments and stated remaining sieve ranges.",
+      "status": "open",
+      "depends_on": ["C_DUAL"],
+      "reviewer_confirmed": false
+    },
+    "C_DECOMPOSITION": {
+      "statement": "The bin-based prime decomposition supplies independent coefficients and controls the product transition.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_UNSMOOTHING": {
+      "statement": "The stated large-height localization and parameter choices remove the smooth cutoff.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_ANGULAR": {
+      "statement": "The fixed-angular comparison follows with the stated shifted Hecke and angular Type I inputs.",
+      "status": "open",
+      "depends_on": ["C_MAIN", "C_ANGULAR_INPUTS"],
+      "reviewer_confirmed": false
+    },
+    "C_ANGULAR_INPUTS": {
+      "statement": "The angular shifted-Hecke and Type I hypotheses and uniformity are valid.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    }
+  }
+}

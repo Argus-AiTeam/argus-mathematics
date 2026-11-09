@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-DR019-CORE-1638dc7609d7",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-latest/argus_skill/tools/lean_axiom_audit.lean",
+      "families/019/argus-review/draft_reviews/universal-core/replay/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/019/argus-review/draft_reviews/universal-core/replay/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14456,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/019/argus-review/draft_reviews/universal-core/replay/Main.lean",
+    "source_sha256": "0f03b807a37d9e107b6c848bfccb1a28ffeda3d510c1086ec84224985f9acfa2",
+    "statement_fidelity": "families/019/argus-review/draft_reviews/universal-core/replay/statement_fidelity.md",
+    "statement_fidelity_sha256": "1e58ca8a4651734bd665c4ad5691c4bc4bd82e818bed64ba5e46a9869dedc914",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/019/argus-review/draft_reviews/universal-core/replay/Main.lean:57:5: warning: Variable name `hpositive` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/draft_reviews/universal-core/replay/Main.lean",
+    "text": "import Mathlib\n\nopen Set\n\nnamespace CollarRootAudit\n\ntheorem rational_collar_capture\n    {X : Type*} [TopologicalSpace X] [CompactSpace X]\n    (N : Set X) (hN : IsOpen N) (v : X → ℝ) (hv : Continuous v)\n    (hbad : ∀ x, x ∉ N → ∃ q : ℚ, v x = (q : ℝ))\n    {a lower upper : ℝ} (ha : Irrational a)\n    (hlower : lower < a) (hupper : a < upper) :\n    ∃ r R : ℚ,\n      lower < (r : ℝ) ∧ (r : ℝ) < a ∧\n      a < (R : ℝ) ∧ (R : ℝ) < upper ∧\n      ∀ x, (r : ℝ) < v x → v x < (R : ℝ) → x ∈ N := by\n  let F : Set ℝ := v '' Nᶜ\n  have hF : IsClosed F := (hN.isClosed_compl.isCompact.image hv).isClosed\n  have haF : a ∉ F := by\n    rintro ⟨x, hx, hxa⟩\n    obtain ⟨q, hq⟩ := hbad x hx\n    exact ha ⟨q, hq.symm.trans hxa⟩\n  have hopen : IsOpen (Fᶜ ∩ Ioo lower upper) :=\n    hF.isOpen_compl.inter isOpen_Ioo\n  have hmem : a ∈ Fᶜ ∩ Ioo lower upper := ⟨haF, hlower, hupper⟩\n  obtain ⟨l, u, hlu, hI⟩ :=\n    mem_nhds_iff_exists_Ioo_subset.mp (hopen.mem_nhds hmem)\n  obtain ⟨r, hlr, hra⟩ := exists_rat_btwn hlu.1\n  obtain ⟨R, haR, hRu⟩ := exists_rat_btwn hlu.2\n  have hrmem : (r : ℝ) ∈ Fᶜ ∩ Ioo lower upper :=\n    hI ⟨hlr, lt_trans hra hlu.2⟩\n  have hRmem : (R : ℝ) ∈ Fᶜ ∩ Ioo lower upper :=\n    hI ⟨lt_trans hlu.1 haR, hRu⟩\n  refine ⟨r, R, hrmem.2.1, hra, haR, hRmem.2.2, ?_⟩\n  intro x hxL hxU\n  by_contra hx\n  have hxF : v x ∈ F := ⟨x, hx, rfl⟩\n  exact (hI ⟨lt_trans hlr hxL, lt_trans hxU hRu⟩).1 hxF\n\ntheorem circuit_genus_balance (n g : ℤ) :\n    2 * (n * g) - 2 = n * (2 * g - 2) + 2 * (n - 1) := by\n  ring\n\ntheorem circuit_stability_balance (n g val : ℤ) :\n    2 * (n * g) - 2 + (2 + n * (val - 2)) =\n      n * (2 * g - 2 + val) := by\n  ring\n\ntheorem unramified_stability_balance (d g gp val valp : ℤ)\n    (hgenus : 2 * gp - 2 = d * (2 * g - 2))\n    (hval : valp = d * val) :\n    2 * gp - 2 + valp = d * (2 * g - 2 + val) := by\n  rw [hgenus, hval]\n  ring\n\ntheorem stable_tree_side_impossible (N total : ℕ)\n    (hpositive : 0 < N) (htree : total + 1 = 2 * N)\n    (hstable : 3 * N ≤ total) : False := by\n  omega\n\nend CollarRootAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/draft_reviews/universal-core/replay/statement_fidelity.md",
+    "text": "# Statement fidelity of the unchanged collar core replay\n\nCurrent claim: `DR019-CORE`, context `CTX-DR019`.\nSource: `research/draft_reviews/universal-core/replay/Main.lean`.\nThe source is an unchanged copy of the old `Main.lean` attached to\n`C9000019-COLLAR-CORE` version 2. This document describes the following five\ndeclarations in namespace `CollarRootAudit`, not the analytic collar lemma.\n\n## `rational_collar_capture`\n\n`X` is any compact topological space; Hausdorffness of `X` is not assumed.\n`N` is any open subset of `X`, and `v : X -> Real` is continuous.\n`lower`, `a`, and `upper` are real numbers with `lower < a < upper`.\n`a` is irrational. For every point `x` outside `N`, the value `v x` equals\nthe real image of some rational number. The complement and its set of\nvalues need not be finite.\n\nThe conclusion gives rational numbers `r` and `R` with\n`lower < r < a < R < upper`, and says that every `x` satisfying\n`r < v x < R` belongs to `N`. These quantifiers express containment of\nthe entire inverse image of the open interval, not containment of a\nselected set of points or just a skeleton.\n\nThe proof uses compactness of the closed complement, continuity of `v`,\nclosedness of a compact subset of the real line, exclusion of the\nirrational value, an open interval neighborhood, and density of the\nrationals. Its geometric application still requires separate proofs of\ncompactness of the analytic window, openness of the chosen node tubes,\ncontinuity of the pulled-back valuation, and rationality at every point\noutside those tubes. No Berkovich space, model, valuation, finite cover,\nor analytic root is a Lean object in this declaration.\n\n## Arithmetic declarations\n\n`circuit_genus_balance` quantifies over all integers `n` and `g` and proves\n`2*(n*g)-2 = n*(2*g-2)+2*(n-1)`. It checks the numerical genus balance;\nit does not assert existence of a residue cover.\n\n`circuit_stability_balance` quantifies over all integers `n`, `g`, and\n`val` and proves\n`2*(n*g)-2 + (2+n*(val-2)) = n*(2*g-2+val)`.\nThere is no positivity or graph-realization hypothesis in this identity.\n\n`unramified_stability_balance` quantifies over all integers `d`, `g`,\n`gp`, `val`, and `valp`. Assuming\n`2*gp-2 = d*(2*g-2)` and `valp = d*val`, it proves\n`2*gp-2+valp = d*(2*g-2+val)`. The Riemann-Hurwitz and valence equalities\nare hypotheses, not conclusions; degree positivity and stability are\nsupplied only in the geometric application.\n\n`stable_tree_side_impossible` quantifies over natural numbers `N` and\n`total`. The hypotheses `0 < N`, `total+1 = 2*N`, and `3*N <= total`\nimply `False`. The source does not encode a graph or prove the\ndegree-sum formula for a tree side with one boundary half-edge. The\npositive-size hypothesis is essential and is available to `omega` even\nthough Lean's variable-name linter calls it implicitly referenced.\n\n## Certification boundary\n\nThe source has no custom axioms, `sorry`, or placeholders. Mathlib supplies\nthe standard topology, real and rational number foundations, and the\n`ring` and `omega` tactics. Compilation and the real axiom audit certify\nthese five statements only. Statement fidelity is a human mathematical\nassessment, not a compiler verdict.\n\nResolution of nonsingularities, model reduction, residue-cover existence,\ntame lifting, annular factorization, binomial convergence, connected\nfinite-etale common covers, and the manuscript's full collar lemma remain\noutside this formalization. They are assessed separately in\n`research/draft_reviews/collar-root/report.md`. Neither compilation nor\nthe finite example certifies downstream patching or a section conjecture.\n"
+  },
+  "subject": {
+    "content_hash": "1cf0fc5b7c7f64d6a5107db832ce1b48b8dca04a0040397792f2ce4e2ec242c7",
+    "kind": "claim",
+    "subject_id": "DR019-CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

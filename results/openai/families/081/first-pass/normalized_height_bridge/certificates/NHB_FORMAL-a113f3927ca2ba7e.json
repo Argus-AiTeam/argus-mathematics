@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-NHB_FORMAL-792ce5e855cb",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/081/first-pass/normalized_height_bridge/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/081/first-pass/normalized_height_bridge/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15166,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/081/first-pass/normalized_height_bridge/Main.lean",
+    "source_sha256": "4916aa7295613f5cf0e1017e320a4cd319343a61c8e569e2f2abda6fc8d2e1c3",
+    "statement_fidelity": "families/081/first-pass/normalized_height_bridge/statement_fidelity.md",
+    "statement_fidelity_sha256": "272ea5abea31d639d728cc66dd6541fdb4f2533790b442c374c7d889708b7cc7",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/normalized_height_bridge/Main.lean",
+    "text": "import Mathlib\n\nopen Filter\nopen scoped Topology\n\nnamespace NormalizedHeightBridge\n\ntheorem cutoff_identity (U V a b : Real) :\n    (U - V) * (a ^ 2 * U - b ^ 2 * V) =\n      (a * U - b * V) ^ 2 - U * V * (a - b) ^ 2 := by\n  ring\n\ntheorem cutoff_error_bound (U V a b : Real) :\n    abs (U * V) * (a - b) ^ 2 <=\n      ((U ^ 2 + V ^ 2) / 2) * (a - b) ^ 2 := by\n  have h : abs (U * V) <= (U ^ 2 + V ^ 2) / 2 := by\n    apply abs_le.mpr\n    constructor\n    · nlinarith [sq_nonneg (U + V)]\n    · nlinarith [sq_nonneg (U - V)]\n  exact mul_le_mul_of_nonneg_right h (sq_nonneg (a - b))\n\ntheorem pairwise_variance {I : Type*} [Fintype I] (p x : I -> Real) :\n    (Finset.univ.sum fun i =>\n      Finset.univ.sum fun j => p i * p j * (x i - x j) ^ 2) =\n    2 * ((Finset.univ.sum p) *\n      (Finset.univ.sum fun i => p i * x i ^ 2) -\n      (Finset.univ.sum fun i => p i * x i) ^ 2) := by\n  calc\n    _ = (Finset.univ.sum fun i =>\n        Finset.univ.sum fun j =>\n          (p i * x i ^ 2) * p j + p i * (p j * x j ^ 2) -\n            (2 * (p i * x i)) * (p j * x j)) := by\n      apply Finset.sum_congr rfl\n      intro i hi\n      apply Finset.sum_congr rfl\n      intro j hj\n      ring\n    _ = _ := by\n      simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib,\n        <- Finset.mul_sum, <- Finset.sum_mul]\n      ring\n\ntheorem mean_correction_limit {I : Type*} {l : Filter I}\n    {a b c : I -> Real} {a0 b0 : Real}\n    (ha : Tendsto a l (nhds a0))\n    (hb : Tendsto b l (nhds b0))\n    (hc : Tendsto c l (nhds 0)) :\n    Tendsto (fun j => a j - c j * b j) l (nhds a0) := by\n  simpa using ha.sub (hc.mul hb)\n\ntheorem two_stage_vanishing {f a b : Nat -> Real}\n    (hf : forall j, 0 <= f j)\n    (ha : Tendsto a atTop (nhds 0))\n    (hb : Tendsto b atTop (nhds 0))\n    (hbound : forall m, Filter.Eventually (fun j => f j <= a m + b j) atTop) :\n    Tendsto f atTop (nhds 0) := by\n  apply tendsto_order.2\n  constructor\n  · intro r hr\n    exact Filter.Eventually.of_forall fun j => lt_of_lt_of_le hr (hf j)\n  · intro r hr\n    have hhalf : (0 : Real) < r / 2 := by linarith\n    obtain ⟨m, hm⟩ := ((tendsto_order.1 ha).2 (r / 2) hhalf).exists\n    have hb' := (tendsto_order.1 hb).2 (r / 2) hhalf\n    filter_upwards [hbound m, hb'] with j hj hjb\n    linarith\n\nend NormalizedHeightBridge\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/normalized_height_bridge/statement_fidelity.md",
+    "text": "# Scope of the Lean statements\n\nThe declarations in `Main.lean` certify four algebraic or convergence\nobligations used in the normalized-height proof. They do **not** formalize\nRadon measures, weak convergence of squared height measures, fractional\nintegrals, or Proposition `prop:height-equation` in its entirety. In\nparticular, the compiler verdict must attach to `NHB_FORMAL`, not to\n`NHB_GOAL`. The analytic proof is `bridge.md` and needs independent\nmathematical review. All declarations below belong to the\n`NormalizedHeightBridge` namespace.\n\n`cutoff_identity` quantifies over all four real\nnumbers `U,V,a,b`, with no sign restrictions. They stand for the two\ncentered unnormalized heights and the two cutoff values. Its conclusion\nis exactly equation `eq:height-cutoff-identity` of Section 04, including\nthe negative sign on the cutoff error.\n\n`cutoff_error_bound` has the same unrestricted\nreal variables and proves\n`abs(U*V)*(a-b)^2 <= (U^2+V^2)*(a-b)^2/2`. This is the symmetric\nsecond-moment bound on the signed cutoff error. The theorem does not\nsilently assume that the two heights have the same sign.\n\n`pairwise_variance` quantifies over every finite\nindex type, including the empty type, and all real weights and values\n`p,x`. It proves that the weighted double sum of squared differences\nequals twice the mass times the weighted second moment minus twice\nthe square of the weighted first moment. Nonnegative weights and\npositive total mass are not needed for this identity. The integral\ncell-variance formula in `bridge.md` additionally uses Fubini, positive\ncell mass, and division by twice that mass; those measure-theoretic\noperations are not encoded in this declaration.\n\n`mean_correction_limit` quantifies over an\narbitrary index type, filter, real sequences/functions `a,b,c`, and\nfinite real limits `a0,b0`. The hypotheses are convergence of `a` to\n`a0`, `b` to `b0`, and `c` to zero, all along the same filter. The\nconclusion is convergence of `a-c*b` to `a0`. In the analytic proof,\n`a` and `b` are the pairings of the original test and the correction\nbump under the **same fixed normalization**. No rate relating `c` to a\nheight parameter or to a normalized origin value occurs in this\nstatement. Proving that the bump pairing has a finite limit remains\nthe analytic obligation, not a Lean hypothesis already known to hold\nfor every conceivable normalization.\n\n`two_stage_vanishing` quantifies over three\nreal sequences `f,a,b`. It assumes nonnegativity of `f`, convergence of\n`a` and `b` to zero, and, for every fixed index `m`, an eventual bound\n`f(j) <= a(m)+b(j)`. It concludes `f(j) -> 0`. The threshold in `j` may\ndepend arbitrarily on `m`; no joint convergence rate is assumed. The\napplication is the difference of the source and limiting pairing,\nwhere `m` selects first a fixed large localization (or a small cap)\nand `j` then tends to infinity. The analytic tail and diagonal\nestimates are required to supply this bound.\n\nNo declaration asserts novelty, publishability, independence of\nreview, or the manuscript's main uniform-rectifiability theorem. Lean\nproves the encoded statements, not this interpretation document; an\nindependent Reviewer must check this interpretation.\n"
+  },
+  "subject": {
+    "content_hash": "7cef33fd97a2abece8e91a6d5e25ef2d6ea27f863af6269be85dab426ad73b8e",
+    "kind": "claim",
+    "subject_id": "NHB_FORMAL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

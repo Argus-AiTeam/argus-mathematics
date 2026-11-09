@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_REPLAY_INTEGER-75de5ffe3785",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-latest/argus_skill/tools/lean_axiom_audit.lean",
+      "families/062/argus-review/draft_reviews/integer_order/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/062/argus-review/draft_reviews/integer_order/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 9435,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/062/argus-review/draft_reviews/integer_order/Main.lean",
+    "source_sha256": "da7fec26e42591955da7e86c0505b0a10ea81864ba8aec3a1651ede0cbec040a",
+    "statement_fidelity": "families/062/argus-review/draft_reviews/integer_order/statement_fidelity.md",
+    "statement_fidelity_sha256": "3864c97f3ce7e9b612900aa438ca98aeb49a2cdaadc756567030b1444ff8baa4",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/062/argus-review/draft_reviews/integer_order/Main.lean:11:39: warning: `Int.ofNat_nonneg` has been deprecated: Use `Int.natCast_nonneg` instead\n'ContactValueDescent.exponent_mul_integer_ne_one' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ContactValueDescent.power_order_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/draft_reviews/integer_order/Main.lean",
+    "text": "import Mathlib.Tactic\n\nset_option autoImplicit false\n\nnamespace ContactValueDescent\n\ntheorem exponent_mul_integer_ne_one\n    (e : Nat) (he : 2 <= e) (m : Int) :\n    Not ((e : Int) * m = 1) := by\n  intro h\n  have he0 : (0 : Int) <= (e : Int) := Int.ofNat_nonneg e\n  have he2 : (2 : Int) <= (e : Int) := by exact_mod_cast he\n  have hm : (1 : Int) <= m := by\n    by_contra hn\n    have hm0 : m <= 0 := by omega\n    have hp : (e : Int) * m <= 0 :=\n      mul_nonpos_of_nonneg_of_nonpos he0 hm0\n    omega\n  have hp : (e : Int) <= (e : Int) * m := by\n    calc\n      (e : Int) = (e : Int) * 1 := (mul_one _).symm\n      _ <= (e : Int) * m := mul_le_mul_of_nonneg_left hm he0\n  omega\n\ntheorem power_order_obstruction\n    {A : Type*} [Monoid A] (order : A -> Int)\n    (e : Nat) (he : 2 <= e) (z t : A)\n    (hpower : order (z ^ e) = (e : Int) * order z)\n    (ht : order t = 1) :\n    Not (z ^ e = t) := by\n  intro hroot\n  apply exponent_mul_integer_ne_one e he (order z)\n  calc\n    (e : Int) * order z = order (z ^ e) := hpower.symm\n    _ = order t := congrArg order hroot\n    _ = 1 := ht\n\nend ContactValueDescent\n\n#print axioms ContactValueDescent.exponent_mul_integer_ne_one\n#print axioms ContactValueDescent.power_order_obstruction\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/draft_reviews/integer_order/statement_fidelity.md",
+    "text": "# Statement fidelity: exact arithmetic reproduction C_REPLAY_INTEGER\n\nThis note accompanies only `research/draft_reviews/integer_order/Main.lean`\nand current claim `C_REPLAY_INTEGER` in `CTX_REPLAY_INTEGER`. The context and\nnatural claim were recorded before this source was created. This is a\nreproduction, not new mathematics and not the current review claim\n`C_REVIEW_F062`.\n\nThe source is an exact copy of the final old\n`9000062/research/contact_value_descent/Main.lean`, recorded as\n`C_DES_INTEGER_ORDER` version 3. Its SHA-256 is\n`da7fec26e42591955da7e86c0505b0a10ea81864ba8aec3a1651ede0cbec040a`.\nThis new fidelity note is intentionally different from the old note; a fresh\nofficial compiler record must bind this exact source and this exact note.\n\n## Exact statements and hypotheses\n\nThe unqualified declaration names are `exponent_mul_integer_ne_one` and\n`power_order_obstruction`; the full names below include their namespace.\n\n1. `ContactValueDescent.exponent_mul_integer_ne_one` quantifies over every\n   `e : Nat`, a proof `he : 2 <= e`, and every `m : Int`. It proves\n   `Not ((e : Int) * m = 1)`.\n2. `ContactValueDescent.power_order_obstruction` quantifies over an arbitrary\n   universe-polymorphic type `A` with `[Monoid A]`, an arbitrary function\n   `order : A -> Int`, `e : Nat`, a proof `he : 2 <= e`, and `z t : A`.\n   Its two additional hypotheses are exactly\n   `order (z ^ e) = (e : Int) * order z` and `order t = 1`.\n   It proves `Not (z ^ e = t)`.\n\nThe monoid need not be commutative. The function is not assumed to be a\nvaluation or a homomorphism, and compatibility is assumed only for this\nparticular power. No additional positivity hypothesis on `order z` is\nassumed. Both conclusions use propositional `Not`, never Boolean `!=`;\nthere is no `BEq A` hypothesis. The condition `2 <= e` is essential to\nthe stated obstruction.\n\n## Argument and trust boundary\n\nIf `e*m=1`, nonnegative `e` forces `m>=1`: otherwise the product is at\nmost zero. Then `e*m>=e>=2`, a contradiction. For the second declaration,\nan equality `z^e=t` and the two order hypotheses would give\n`e*order(z)=1`, contradicting the first declaration.\n\n`import Mathlib.Tactic` supplies the arithmetic infrastructure and tactics.\nThere are no user-declared axioms or admitted proof terms in this source.\nThe old successful run printed the foundational axioms `propext`,\n`Classical.choice`, and `Quot.sound` for both declarations. The fresh\ncompiler and axiom-audit results, including the actual installed toolchain,\nare recorded separately by the official verifier, not asserted by this note.\nHash binding prevents later text substitution; it does not mechanically\nestablish the truth of this natural-language translation.\n\nNeither declaration constructs analytic germs, vanishing orders,\ntransversality, a degree-one sheet, finite maps, purity, or geometric\ndescent. Supplying any such application is an independent mathematical\nobligation. This reproduction neither proves the geometric descent\nproposition nor certifies a manuscript or this retrospective review.\n"
+  },
+  "subject": {
+    "content_hash": "876f1490e78e155faab6b022f1035baab812b2180acec724bd578bd3c202a0dd",
+    "kind": "claim",
+    "subject_id": "C_REPLAY_INTEGER"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

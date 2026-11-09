@@ -1,0 +1,869 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,array}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\newcommand{\kk}{{\overline{\mathbb Q}}}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Lie}{Lie}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Trd}{Trd}
+\DeclareMathOperator{\Hg}{Hdg}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\Sp}{Sp}
+\DeclareMathOperator{\SO}{SO}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\title{Actual derived Hodge images in dimension at most six:\\
+a universal reduction and an exact certificate}
+\author{Campaign 9000032: Engineer submission}
+\date{November 5, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give a verification proof of the actual-group independence assertion
+\texttt{p3ab:independence} and its classification prerequisites in
+\emph{Weil classes and Hodge classes on abelian powers}, October 6, 2026.
+The statement concerns every complex abelian variety of dimension at most
+six with a unital imaginary-quadratic action, not just a generic period.
+The proof uses the full endomorphism commutant, coefficient descent,
+Hodge-circle minimality, and the prime-sized Galois orbits that occur at
+partially pure embeddings. It treats the exceptional identifications
+$B_2=C_2$, $D_2=A_1+A_1$, and $D_3=A_3$ explicitly.
+An executable rational-arithmetic certificate enumerates all necessary
+numerical cases and all possible subdirect graph partitions after these
+reductions. This is a universal proof with a finite algebraic certificate,
+not an enumeration of sampled abelian varieties.
+It verifies the derived-image condition (c) of the manuscript's tensor
+criterion; it does not verify its determinant-supply condition (d), the
+Hodge conjecture, or the remaining manuscripts.
+\end{abstract}
+
+\noindent\textbf{Certification status.}
+This is an Engineer proof submission with a successfully recomputed exact
+certificate. Independent Reviewer acceptance, independent attribution of
+the cited inputs, and publication-level significance/novelty adjudication
+remain pending. No claim of verified-new priority or campaign completion
+is made.
+
+\section{Precise statement and imported inputs}
+
+Fix $\kk=\overline{\Q}\subset\C$. Scalar conjugation means changing
+algebraic coefficients in the cohomology of a fixed complex variety, not
+replacing that variety by a conjugate. For $H=H^1(A,\Q)$, let
+$J=\Hg(H)$ be the smallest rational algebraic subgroup containing the
+Hodge circle. The circle has weights $+1,-1$ on $H^{1,0},H^{0,1}$.
+Put $R=J^{\rm der}$. A summand or map over $\kk$ is
+\emph{admissible} if its projector or map preserves the Hodge grading in
+every scalar conjugate. A pair tensor is nondegenerate and of type
+$(1,1)$ in every scalar conjugate; its symmetry is ordinary tensor
+symmetry, before any cohomological Koszul sign.
+
+Write, up to isogeny,
+\[
+ A\sim\prod_B B^{r_B}
+\]
+with the $B$ simple and pairwise nonisogenous. A \emph{column} means the
+image of a primitive matrix idempotent in the scalar extension of the
+\emph{actual full} algebra
+\[
+ D_B=\End_{\rm Hdg}(H^1(B,\Q))=\End^0(B)^{\rm op}.
+\]
+It is not a summand obtained merely from the initially supplied quadratic
+field. Matrix copies selected by this algebra are identified. In Type IV
+we retain one representative from each pair of opposite center embeddings,
+and act dually on its opposite.
+
+\begin{theorem}\label{thm:main}
+Let $A/\C$ have dimension at most six and admit a unital embedding of an
+imaginary quadratic field $E$ into $\End^0(A)$. No simplicity, genericity,
+centrality of the action, or hyperbolicity assumption is imposed.
+Discard the CM isogeny factors. The remaining actual columns have the
+following necessary possibilities, with $g=\dim B$.
+\begin{enumerate}
+\item In Albert Types I and II their dimensions are $2,4,6$, and the
+derived projection is the full symplectic group.
+\item In Type III, $g=4$ or $6$, the center is $\Q$, and $r_B=1$.
+There is one column, with image $\SO_g$. The two eigenspaces of $E$
+are its two matrix copies, each with Hodge dimensions $(g/2,g/2)$.
+\item In Type IV the actual algebra is a CM field $K$.
+If $E$ does not embed in $K$, then $[K:\Q]=2$, $g=3$, $r_B=2$,
+and the column image is $\SL_3$.
+If $E$ embeds in $K$, put $[K:\Q]=2f$ and $a=g/f$. Then
+\[
+ (f,a,g)=(1,g,g),\quad 3\leq g\leq6,
+ \qquad\text{or}\qquad
+ (f,a,g)\in\{(2,2,4),(2,3,6),(3,2,6)\}.
+ \]
+Every column has image $\SL_a$, with dual action at the opposite
+embedding. If $a=2$, the embedding pairs include both pure and mixed
+ones. A pure column has only one circle weight.
+\end{enumerate}
+After the stated matrix-copy and opposite-embedding identifications,
+these images act independently. More precisely, the image of $R_\kk$
+on all of $H_\kk$ is
+\[
+ \prod_i\Sp(V_i)\ \times\ \prod_j\SO(V_j)\
+ \times\ \prod_l\SL(V_l),
+ \tag{1}\label{eq:product}
+\]
+with standard action on its own copies, dual action on opposite linear
+copies, and trivial action on the CM summand and on other blocks.
+The forms and copy identifications are admissible.
+\end{theorem}
+
+The list is a \emph{covering list}, not an existence theorem for every
+listed endomorphism algebra or signature. This distinction permits the
+certificate to overapproximate realizable cases without losing a case.
+Rank-two Type IV columns remain \emph{linear} blocks: derived self-duality
+alone does not supply a Hodge self-pair.
+
+The proof uses four established structural inputs.
+They are recorded as assumptions in the ledger
+\path{research/MATH_STATE.json}.
+\begin{center}\small
+\begin{tabular}{p{.18\textwidth}p{.73\textwidth}}
+\texttt{ALBERT} &
+The classification of positive endomorphism division algebras:
+Chai--Oort \cite[Sections 10.12--10.14]{CO}, with the Type III wording
+also checked against \cite[Section (1.1)]{MZ}.\\[3pt]
+\texttt{HODGE-GROUP} &
+The actual Hodge group is connected reductive, its commutant is the
+endomorphism algebra, and it is toric exactly in the CM case:
+\cite[Sections (1.2)--(1.3)]{MZ}. The source uses homology, explaining
+the opposite algebra in our cohomological convention.\\[3pt]
+\texttt{DYNKIN} &
+The root-system classification and low-rank identifications:
+\cite[Example 23.5, Theorem 23.7, Remark 23.18]{Et}.\\[3pt]
+\texttt{MINUSCULE-}\newline\texttt{DIMENSION} &
+Highest-weight dimensions, minuscule weights and their Weyl orbits:
+\cite[Proposition 26.8, Definition 30.1, Lemma 30.2,
+Corollary 30.5, Sections 27.2 and 30.4]{Et}.
+\end{tabular}
+\end{center}
+The exact cited versions and passages have been obtained and read;
+the PDFs, extracted text and short locator-specific excerpts are in
+\texttt{literature/}. Independent citation attribution is not replaced
+by the Engineer's own reading. No CM Hodge-conjecture theorem, geometric
+Weil-plane theorem, or assertion of the audited manuscript is imported
+as a premise of Theorem~\ref{thm:main}.
+
+\paragraph{Known scope and comparison.}
+Moonen--Zarhin \cite[Theorems (0.1)--(0.2)]{MZ} already treat all abelian
+varieties through dimension five. Their Section (3.1) describes graph
+links; Lemmas (3.3)--(3.4) impose explicit non-compact-type and
+representation-uniqueness hypotheses. We do not silently apply those
+lemmas to partially pure columns. The additional work here is an
+all-case bridge for this dimension-six quadratic-action problem and
+a reproducible algebraic certificate. A bounded literature lookup
+located this predecessor but did not establish publication novelty of
+the dimension-six formulation. In particular, a search result that
+merely points back to the manuscript under audit cannot verify it.
+The preexisting campaign ledger contained no verification of this step;
+the present contribution is a universal proof reduction, rather than
+a larger finite sample.
+
+\section{Polarization, actual columns, and rational descent}
+
+\subsection{The polarization is an actual one}
+
+Write $E=\Q(u)$, $u^2=-d$, $d>0$. If $e_0$ is any rational Riemann
+form, set
+\[
+ e(x,y)=e_0(x,y)+d^{-1}e_0(ux,uy).
+ \tag{2}\label{eq:average}
+\]
+Because $u$ is a complex-linear invertible endomorphism, both summands
+are positive Riemann forms. Directly,
+$e(ux,y)=-e(x,uy)$; thus $e$ is compatible with $E$.
+A positive integer multiple clears denominators. In the manuscript's
+homological convention,
+\[
+ h_E(x,y)=e(x,uy)+u e(x,y)
+ \tag{3}
+\]
+is conjugate-linear first, linear second, and Hermitian. Indeed
+$h_E(ux,y)=-u h_E(x,y)$, $h_E(x,uy)=u h_E(x,y)$, and
+$h_E(y,x)=\overline{h_E(x,y)}$ follow from $u^2=-d$ and alternation.
+The trace identity is
+\[
+ e(x,y)=\Tr_{E/\Q}\bigl((2u)^{-1}h_E(x,y)\bigr).
+\]
+The independence proof needs a polarization and its actual Rosati
+involution, but no assertion that this Hermitian form is hyperbolic.
+We consequently impose no unverified signature or rational-discriminant
+restriction.
+
+\begin{lemma}[Coefficient descent]\label{lem:descent}
+Let $T$ be a rational vector space, $P\subset T_\C$ a complex-linear
+subspace, and $t\in T_\kk$. If $\gamma t\in P$ for every
+$\gamma\in\Gal(\kk/\Q)$, then
+$t\in(T\cap P)\otimes_\Q\kk$.
+\end{lemma}
+\begin{proof}
+Choose a finite Galois extension $L/\Q$ containing the coefficients
+of $t$, and a basis $b_i$ with trace-dual basis $b_i^*$.
+The rational coefficient of $b_i$ in $t$ is
+\[
+ t_i=\Tr_{L/\Q}(b_i^*t)
+     =\sum_{\sigma\in\Gal(L/\Q)}\sigma(b_i^*)\,\sigma(t).
+ \]
+Every summand lies in $P$, so $t_i\in T\cap P$. This proves the claim.
+Extending each $\sigma$ to $\kk$ justifies the use of the hypothesis.
+\end{proof}
+
+In particular, an algebraic-coefficient operator whose every conjugate
+is a Hodge endomorphism lies in the scalar extension of the \emph{full
+rational} Hodge commutant. It is not sufficient to commute with the
+circle at one embedding. Scalar conjugation here is never assumed to
+commute with complex conjugation on all of $\kk$.
+
+\begin{lemma}[Actual Albert columns]\label{lem:columns}
+For a simple non-CM $B$, write $D=D_B$, $Z=Z(D)$ and $[D:Z]=s^2$.
+Then
+\[
+ D_\kk=\prod_{\tau:Z\hookrightarrow\kk}M_s(\kk),\qquad
+ H^1(B,\kk)=\bigoplus_\tau W_\tau\otimes U_\tau,\quad \dim U_\tau=s.
+ \tag{4}\label{eq:columns}
+\]
+The $W_\tau$ are irreducible for both $J_B$ and $R_B$, distinct as
+full-$J_B$ modules, and matrix units give admissible copy
+identifications. Their necessary data are
+\[
+\begin{array}{c|c|c|c}
+\text{type}&\text{divisibility}&\dim W_\tau&\text{pair}\\ \hline
+\mathrm I&f\mid g&2g/f&\text{alternating self-pair}\\
+\mathrm{II}&2f\mid g&g/f&\text{alternating self-pair}\\
+\mathrm{III}&2f\mid g&g/f&\text{symmetric self-pair}\\
+\mathrm{IV}&fb^2\mid g&g/(fb)&\text{opposite-embedding pair}
+\end{array}
+\tag{5}\label{eq:albert}
+\]
+Here $[Z:\Q]=f$ in the first three types, while $Z=K$ is CM of
+degree $2f$ and $[D:K]=b^2$ in Type IV.
+\end{lemma}
+\begin{proof}
+The Hodge-group input identifies the commutant with the actual division
+algebra. Complete reducibility and the centralizer of a direct sum of
+irreducibles give (4); centralizers commute with scalar extension
+because their defining equations are linear. The connected center of
+$J_B$ acts by scalars on each $W_\tau$, and $Z(J_B)^0R_B\to J_B$ is
+surjective. Thus a nontrivial $R_B$-submodule would be a
+$J_B$-submodule. All projectors and matrix units lie in $D_\kk$, so
+their conjugates remain Hodge maps.
+
+Since $H^1(B,\Q)$ is a vector space over $D$, dimensions give
+$2f\mid g$ in the quaternionic cases and $fb^2\mid g$ in Type IV.
+Dividing each central block by its matrix multiplicity gives the
+column dimensions in (5).
+
+For completeness, the pairing signs do not require a generic-group
+assumption. Let $\psi$ be the rational polarization pairing. On a
+first-kind central block, its adjoint identity with $M_s(\kk)$ gives
+\[
+ \psi|_{W\otimes U}=\beta_W\otimes b_U.
+ \tag{6}
+\]
+To see this, fix the $W$ arguments. A bilinear form on $U$ with
+$c(Tx,y)=c(x,T^\dagger y)$ differs from the form defining
+$\dagger$ by an operator commuting with every matrix, hence by a
+scalar. Nondegeneracy gives nondegenerate factors in (6).
+Their symmetry signs are opposite.
+
+In Type I, $b_U$ is symmetric. In Type II, the positive involution on
+$M_2(\R)$ is orthogonal: a symplectic-adjoint involution would give
+$e^\dagger=1-e$ for a rank-one idempotent and violate positivity of
+$\Tr(ee^\dagger)$. In Type III, positivity on the Hamilton quaternions
+forces canonical conjugation. An orthogonal involution has a nonzero
+fixed pure quaternion $v$ and would give
+$\Trd(vv^\dagger)=\Trd(v^2)<0$. Canonical conjugation becomes
+symplectic-adjoint on $M_2(\kk)$. These facts give exactly the three
+self-pair signs in (5). In particular the Type I dimension is even,
+which gives $f\mid g$.
+
+This argument supplies forms on \emph{actual chosen columns}. For
+Types I--II restrict $\psi$ to a copy selected by a nonisotropic line
+for $b_U$ and transport by matrix units. For Type III use two
+multiplicity lines with nonzero $b_U$-pairing, then identify their
+copies by a matrix unit. Restriction twice to a single multiplicity
+line would be zero and is not the construction. All these operations
+and their scalar conjugates are Hodge maps, and a nonzero determinant
+remains nonzero on conjugating. The inverse tensors are consequently
+pair tensors of the required signs.
+
+In Type IV the positive involution restricts to CM conjugation on $K$.
+The rational polarization pairs opposite central blocks perfectly;
+factoring the matrix multiplicities gives perfect opposite-column
+pairs, again transported to the chosen copies. These identify opposite
+columns as derived duals. Oppositeness is transported by the rational
+pairing, not by an unjustified commutation of arbitrary Galois
+automorphisms with complex conjugation.
+\end{proof}
+
+\section{Two weights and the exhaustive small representations}
+
+\begin{lemma}[Minimality at all scalar embeddings]\label{lem:minuscule}
+Every nontrivial simple-ideal constituent of an actual column is
+minuscule, including a constituent whose column is pure at the current
+embedding.
+\end{lemma}
+\begin{proof}
+Normalize the complexified circle differential to have eigenvalues
+$+1,-1$. A Galois orbit of simple ideals of $\Lie(R_B)_\kk$ descends
+to a rational adjoint factor. The differential cannot vanish on that
+entire orbit: the kernel of the corresponding rational adjoint action
+would be a proper rational subgroup containing the connected Hodge
+circle, contrary to minimality.
+
+Fix an acting ideal and its irreducible representation in the tensor
+decomposition of a column. Move both by one scalar conjugation so
+that this ideal has nonzero circle projection $x$. The transported
+column is still admissible, so still has at most the two circle
+weights. Fixing eigenvectors in all other tensor factors shows that
+$x$ has at most two eigenvalues on this factor. It is semisimple,
+traceless and nonzero: a nonzero representation of a simple Lie
+algebra is faithful. It therefore has at least two eigenvalues.
+
+Choose a Cartan containing $x$. If a highest weight $\lambda$ were
+not minuscule, some positive root $\alpha$ would have
+$\langle\lambda,\alpha^\vee\rangle=m\geq2$. For a highest vector
+$v$ and a root $\mathfrak{sl}_2$ triple, the identities
+$efv=mv$ and $ef^2v=2(m-1)fv$ show that $v,fv,f^2v$ are nonzero.
+Thus the weights include
+$\lambda,\lambda-\alpha,\lambda-2\alpha$. The Weyl orbit of a root
+spans the Cartan dual of an irreducible root system, so a Weyl
+conjugate $x'$ of $x$ has $\alpha(x')\ne0$. Those three weights give
+three distinct eigenvalues on $x'$, hence on $x$, a contradiction.
+Transport the conclusion back to the original ideal. The passage to
+an active conjugate, rather than an assumption that the original
+column is mixed, is essential.
+\end{proof}
+
+All relevant columns have dimension at most six: Type I has even
+$r_B$ by the quadratic-action argument below, hence $g\leq3$;
+the other types already have column dimension at most $g\leq6$.
+A simple Lie algebra acting faithfully on an $n$-space has a Cartan
+inside the traceless diagonal matrices after diagonalization, so its
+rank is at most $n-1\leq5$. The root-system list is therefore
+provably finite before any computation.
+
+The certificate constructs every irreducible Cartan type of rank at
+most five: $A_1,\ldots,A_5$, $B_2,\ldots,B_5$,
+$C_2,\ldots,C_5$, $D_4,D_5,F_4,G_2$. Reflections generate all roots
+and coroots. For a fundamental weight $\omega_i$, the minuscule test
+is that every positive coroot has $i$th coefficient at most one.
+The dimension is recomputed as
+\[
+ \dim L_{\omega_i}
+ =\prod_{\beta^\vee=\sum_j c_j\alpha_j^\vee>0}
+       \frac{\sum_j c_j+c_i}{\sum_j c_j}.
+ \tag{7}
+\]
+Its Weyl-orbit cardinality is checked independently. The resulting
+dimension-at-most-six table is
+\[
+\begin{array}{c|l}
+2&A_1\text{ standard, alternating}\\
+3&A_2\text{ standard and dual}\\
+4&A_3\text{ standard and dual};\quad C_2=B_2\text{ standard/spin,
+alternating}\\
+5&A_4\text{ standard and dual}\\
+6&A_5\text{ standard and dual};\quad C_3\text{ standard,
+alternating};\quad A_3\text{ on }\Lambda^2\kk^4,\text{ symmetric}.
+\end{array}
+\tag{8}\label{eq:small}
+\]
+The unmarked entries are nonselfdual. Self-duality is also checked
+by testing whether $-\omega_i$ belongs to its Weyl orbit.
+There are thirteen entries if the $B_2/C_2$ alias is counted twice,
+and twelve distinct module types up to that identification.
+
+An irreducible module of a semisimple Lie algebra is the tensor
+product of irreducibles for its acting simple ideals. The only
+nontrivial products of dimensions at most six are $2\cdot2$ and
+$2\cdot3$. The former is a tensor product of two alternating
+$A_1$ standards and is symmetric; the latter is nonselfdual and
+has different simple types $A_1,A_2$. Three nontrivial factors
+already have dimension at least eight.
+
+The executable checks do not infer form signs from dimensions.
+They solve $X^tB+BX=0$ and $XT-TX=0$ over $\Q$ in explicit
+standard, symplectic, tensor, and exterior-square models.
+For $\kk^2\otimes\kk^2$ they give a unique nondegenerate symmetric
+form, scalar commutant, and image dimension six. For
+$\Lambda^2\kk^4$ they give a unique nondegenerate symmetric form,
+scalar commutant, and image dimension fifteen; all bracket
+identities of the exterior-square representation are checked.
+These are precisely $\mathfrak{so}_4$ and $\mathfrak{so}_6$,
+since the respective orthogonal Lie algebras have those dimensions.
+The Cartan permutations for $B_2=C_2$ and $D_3=A_3$ are also
+computed. No $\SO_3$ or $\SO_5$ vector representation is
+minuscule here, and $D_4$ triality representations are too large.
+
+\begin{corollary}\label{cor:selfpaired}
+An alternating self-paired column of dimension $2,4,6$ has full
+symplectic image. A symmetric self-paired column cannot have dimension
+two; in dimensions four and six it has full $\SO_4$ and $\SO_6$
+image, respectively.
+\end{corollary}
+\begin{proof}
+Self-duality of an irreducible tensor product forces self-duality
+of each simple-ideal factor, by restriction to that ideal. Apply
+(8), its two tensor possibilities, and the computed form signs.
+Alternatively a connected subgroup of $\SO_2$ is toric and cannot
+act irreducibly on a two-dimensional space over $\kk$.
+Connectedness upgrades the Lie images to the stated matrix groups.
+\end{proof}
+
+\begin{lemma}[Quadratic full center]\label{lem:quadratic}
+If the actual $D_B=K$ is imaginary quadratic and $B$ is non-CM,
+then a column of dimension at most six has full special linear
+derived image. Its dimension is at least three.
+\end{lemma}
+\begin{proof}
+The two columns $W,\overline W$ are both mixed. Otherwise the circle
+lies in the rational torus of $K$-scalars, making $J_B$ toric.
+If $W$ were derived-selfdual, the opposite pairing would give a
+one-dimensional space $\Hom_{R_B}(W,\overline W)$ of isomorphisms.
+Normality of $R_B$ makes this line $J_B$-stable. A nonzero $t$ on
+it satisfies $h(z)t h(z)^{-1}=z^m t$ for an integer $m$.
+Both source and target spectra are $\{-1,1\}$, so translation by
+$m$ preserves this set and $m=0$. Every scalar conjugate has the
+same property. Lemma~\ref{lem:descent}, after extending by the source
+projector, places $t$ in $D_{B,\kk}$. This contradicts preservation
+of the two distinct central embeddings.
+
+Every simple ideal of $\Lie(R_B)_\kk$ acts on $W$, because it acts
+dually on $\overline W$ and the total representation is faithful.
+Each Galois orbit of ideals has an active circle projection by
+Lemma~\ref{lem:minuscule}. Two active ideals on the same tensor
+product would give at least three eigenvalues: the sum of two
+nonconstant finite spectra in characteristic zero has at least
+three elements. Thus there is only one Galois orbit of acting ideals,
+all of the same Lie type. The only composite nonselfdual possibility
+in dimension at most six is $2\otimes3$, of distinct types $A_1,A_2$,
+so it cannot occur. The nonselfdual simple entries in (8) are exactly
+the standard or dual $\SL_n$ modules, $3\leq n\leq6$.
+\end{proof}
+
+\section{Coverage of all quadratic-action cases}
+
+The isotypic projectors are central in $\End^0(A)$, so the $E$-action
+restricts to a unital action on every $B^{r_B}$. A unital map from
+a field into a nonzero algebra is injective.
+
+In Type I, the center $F$ is totally real. The algebra $F\otimes_\Q E$
+is a quadratic field over $F$ and acts on $F^{r_B}$. Hence $r_B$ is
+even, $g\leq3$, and (5) gives alternating dimensions $2,4,6$.
+In Type II, $2f\mid g\leq6$ gives the same dimensions.
+Corollary~\ref{cor:selfpaired} gives their projections.
+
+In Type III that corollary eliminates column dimension two.
+The remaining $g/f=4$ or $6$, together with $gr_B\leq6$ and
+$2f\mid g$, forces $f=r_B=1$ and $g=4$ or $6$.
+Now $E\hookrightarrow D_B$ splits to
+$\kk\times\kk\hookrightarrow M_2(\kk)$. Its two nonzero complementary
+idempotents both have rank one. Thus its eigenspaces are the two
+matrix copies of the column, and the self-pair gives equal Hodge
+dimensions $g/2,g/2$. This uses the actual quaternionic
+multiplicity space, not an assumed central $E$-action.
+
+For Type IV the following elementary exclusion is useful.
+\begin{lemma}[Rank-two and pure columns]\label{lem:pure}
+If all columns of a simple factor are pure, that factor is CM.
+A Type IV rank-two column cannot have every scalar conjugate mixed.
+Consequently a non-CM rank-two Type IV factor has both pure and
+mixed embedding pairs.
+\end{lemma}
+\begin{proof}
+If every column is pure, the circle acts scalarly on each entire
+central block, including its matrix multiplicity. It lies in the
+rational torus of center scalars (with the opposite-pair norm
+condition), so minimality makes the Hodge group toric.
+
+If a rank-two column $W$ is mixed in every conjugate, any nonzero
+element of $\Lambda^2W$ is a nondegenerate alternating pair tensor
+of type $(1,1)$ in every conjugate. Compose its inverse with the
+polarization pair $W^*\to\overline W$. The Hodge shifts cancel,
+giving an admissible isomorphism $W\to\overline W$.
+Coefficient descent puts its extension in the full commutant,
+contradicting the distinct center embeddings. This argument works
+with matrix multiplicities as well.
+\end{proof}
+
+If $b>1$, the divisibility $fb^2\mid g\leq6$ leaves only
+$(g,f,b,\dim W)=(4,1,2,2)$. There is only one opposite pair,
+which is either pure or mixed in every conjugate; both are
+excluded for a non-CM Type IV factor by Lemma~\ref{lem:pure}.
+Thus $D_B=K$ is a field. Rank one is likewise toric.
+
+The central $K$-action commutes with the given action on
+$K^{r_B}$, so $K\otimes_\Q E$ acts. If $E$ does not embed in
+$K$, this is a quadratic field over $K$, requiring even $r_B$
+and $g\leq3$. Rank one and the quadratic rank-two case having
+been excluded, the only non-CM possibility is
+$(f,g,r_B,a)=(1,3,2,3)$, covered by Lemma~\ref{lem:quadratic}.
+
+If $E$ embeds in $K$, then $K\otimes_\Q E=K\times K$.
+Its two idempotents on $K^{r_B}$ have arbitrary ranks
+$r_+,r_-\geq0$, $r_++r_-=r_B$; either may be zero.
+This explicitly includes noncentral actions such as
+$a\mapsto\operatorname{diag}(a,\bar a)$.
+Conjugating those idempotents by a $K$-matrix only reallocates
+matrix copies to $E$-eigenspaces and does not change the derived
+columns or their admissible identifications.
+Now $fa=g\leq6$, $a\geq2$, and the quadratic rank-two exclusion
+give exactly the Type IV list in Theorem~\ref{thm:main}.
+For $f=1$ use Lemma~\ref{lem:quadratic}. For $f>1$, $a=2$ or
+$3$; irreducibility and (8) force a single simple image
+$\SL_2$ or $\SL_3$. A higher-dimensional column cannot be
+derived-trivial, since the center would act by scalars on an
+irreducible space of dimension greater than one. This remains
+valid at a pure embedding. The rank-two assertion follows from
+Lemma~\ref{lem:pure}.
+
+Finally the restriction $J_A\to J_B$ is surjective, not just a
+generic-period assertion. Its rational image contains the circle of
+$B$, hence $J_B$ by minimality. Conversely the inverse image of
+$J_B$ contains the circle of $A$, hence is all of $J_A$.
+Surjectivity of derived groups follows for a surjection of connected
+reductive groups. Thus all the projections computed above are
+projections of the \emph{actual} $R_A$.
+
+\section{Universal exclusion of graph links}
+
+\begin{lemma}[Subdirect partitions]\label{lem:graphs}
+Split every $\mathfrak{so}_4$ target into its two simple ideals.
+A semisimple Lie algebra projecting onto all the resulting simple
+targets is a product of graph-diagonal simple ideals. Failure to be
+the full product therefore identifies at least two isomorphic
+target ideals. The equivalence relation of linked targets is
+Galois-invariant for the actual rational Hodge group.
+\end{lemma}
+\begin{proof}
+Decompose the source into simple ideals. The image of each in a
+simple target is an ideal, hence either zero or the whole target;
+in the latter case the map is an isomorphism. Two different source
+ideals cannot both surject to that target, because they commute.
+Thus each target has a unique source ideal, and grouping targets
+with the same source gives exactly the assertion. Rationality
+transports source ideals, target ideals and their projection maps
+under scalar conjugation.
+\end{proof}
+
+\subsection{Ordinary mixed columns}
+
+Suppose two linked target modules are mixed in every scalar
+conjugate. Apart from the $\SO_4$ factors and the
+$\SO_6/\SL_4$ distinction below, table (8) says that an isomorphism
+of their target Lie algebras identifies the modules, up to the
+standard/dual choice for $\SL$. Replace one column by its opposite
+when necessary. The derived intertwiner equations are over $\kk$;
+there is a nonzero intertwiner $t$ over $\kk$, and its space is a
+line by irreducibility. As in Lemma~\ref{lem:quadratic}, normality
+makes it a full-$J_A$ character line. Its circle character translates
+$\{-1,1\}$ into $\{-1,1\}$, so is trivial. Applying exactly the
+same argument to each conjugate, not conjugating the circle itself,
+and then applying Lemma~\ref{lem:descent}, gives an element of
+\[
+ \End_{\rm Hdg}(H^1(A,\Q))\otimes_\Q\kk.
+ \tag{9}
+\]
+This algebra can mix only matrix copies within the same central
+embedding of the same simple isogeny factor. Such copies, and
+opposite embeddings in the dual case, have already been identified.
+The proposed link is impossible.
+
+Every self-paired column is mixed in every conjugate, and every
+non-CM quadratic-center column is mixed at its two embeddings.
+This argument also covers higher-center columns when all their
+embeddings are mixed. It does not assert independence of their
+central characters.
+
+\subsection{Partially pure Type IV columns}
+
+A partially pure factor has $r_B=1$ and is one of
+$(f,a,g)=(2,2,4),(2,3,6),(3,2,6)$.
+Choose the representatives of its opposite pairs to be the
+embeddings of $K$ lying over one embedding of $E$.
+The action of $\Gal(\kk/E)$ on this set is transitive, whether or
+not $K/E$ is Galois. Its size $f$ is prime.
+
+An invariant equivalence relation on a prime-sized transitive set
+is either discrete or universal: its classes have equal size
+dividing $f$. On a column with Hodge multiplicities $(p,a-p)$,
+the derived part of the normalized circle differential is
+\[
+ h'-\frac{2p-a}{a}\operatorname{id}.
+ \tag{10}
+\]
+It is zero exactly when $p=0$ or $a$, namely at a pure column.
+It is nonzero at a mixed column. A graph isomorphism identifies
+projections of the same source differential and preserves whether
+they are zero. Since both kinds occur, the universal relation is
+impossible. Therefore the ideals within this factor are independent.
+
+Only the quartic-center fourfold can have an external non-CM
+partner: the other two cases already use dimension six.
+Its two $A_1$ targets are interchanged by Galois. The remaining
+dimension is at most two and inherits $E$. The preceding complete
+list shows that a non-CM target in that remainder can only be one
+$A_1$: a non-CM elliptic curve repeated twice, or a Type II
+surface. This single absolute target is Galois-stable.
+A link to one member of the interchanged pair would, by conjugation
+and transitivity of linkage, link it to the other, contradicting
+their established independence. CM partners contribute no derived
+target.
+
+\subsection{The orthogonal exceptions}
+
+For $\SO_6\simeq\SL_4/\{\pm1\}$, the six-dimensional module
+$\Lambda^2\kk^4$ differs from the four-dimensional standard
+$\SL_4$ module. The associated Type III factor has $g=6$ and
+uses the entire dimension budget. There is no second column block
+or non-CM factor with which to link it. This disposes of the only
+unequal-module simple-target identification in this range outside
+$\SO_4$.
+
+For $\SO_4$, the column is $\kk^2\otimes\kk^2$.
+Write the two semisimple circle projections as $x_1,x_2$.
+If both are nonzero, their standard spectra are $\{a,-a\}$ and
+$\{b,-b\}$, $a,b\ne0$, and the tensor spectrum
+$\{\pm a\pm b\}$ has at least three elements. Thus at most one
+projection is nonzero. The self-pair forces mixedness, so exactly
+one is nonzero. The connected center acts trivially on this
+self-paired column, so there is no hidden scalar contribution.
+
+These are the only two absolute ideals of the rational derived
+group of this simple Type III fourfold: its sole column, repeated
+twice, is faithful. If each ideal were separately Galois-stable,
+the one with zero differential would give a proper rational
+adjoint kernel containing the circle, contradicting minimality.
+Galois therefore interchanges the ideals. Their internal
+independence is already part of the full $\SO_4$ projection.
+An external non-CM remainder again has at most one Galois-stable
+$A_1$ target, so the same conjugation argument excludes all
+external links.
+
+\begin{proof}[Completion of Theorem~\ref{thm:main}]
+All individual projections and all possible graph links have
+been treated, so Lemma~\ref{lem:graphs} gives the full product
+Lie algebra. The image of the connected algebraic group $R_\kk$
+is a connected closed subgroup of the product of the connected
+classical matrix groups. Equal Lie algebras imply equal dimension;
+a closed subgroup of full dimension in that connected product
+is the whole product. Thus this is equality of matrix images,
+not merely an isogeny of abstract Lie groups.
+
+On the CM summand the projection of $J$ is toric, so its derived
+projection is trivial. Matrix units and opposite pairings determine
+the action on all repeated and opposite copies. The forms and maps
+are admissible by Lemma~\ref{lem:columns}. This gives exactly
+(1) on the original Hodge structure and condition (c) in the
+manuscript's sense.
+\end{proof}
+
+\section{What the executable certificate proves}
+
+Run, without external packages or a network connection,
+\begin{verbatim}
+python3 research/actual_group_audit/verify.py
+\end{verbatim}
+The program compares freshly recomputed data with
+\path{exact_certificate.json}. It raises an error on
+any mismatch; no timeout, exception, unknown case or empty search
+is converted to success. It does not import the source inventories
+or the manuscript's claimed representation table as an answer.
+
+\subsection{Coverage, not a sample}
+
+The parameter loop uses the divisibilities in (5), $gr_B\leq6$,
+the even-copy field-action restrictions, and the proved CM/rank-two
+exclusions. For each Type IV case it enumerates every tuple
+$p_\tau\in\{0,\ldots,a\}$ and retains every one not excluded by
+Lemma~\ref{lem:pure}. It also records all ranks $r_+,r_-$ for a
+split noncentral quadratic action. No particular number field,
+period, polarization matrix or tensor degree is sampled.
+The result has 68 covering templates: 7 of Type I, 7 of Type II,
+2 of Type III, and 52 of Type IV.
+
+All multisets of these templates of total dimension at most six
+are enumerated, including the empty non-CM multiset and an arbitrary
+CM remainder. Repeated numerical templates are allowed to represent
+distinct nonisogenous factors. There are 111 such multisets.
+Each has at most three absolute simple targets after splitting
+$\mathfrak{so}_4$. Every set partition of these targets is tested,
+not merely pairwise links or selected diagrams.
+
+For the partial orbits the code imposes only the necessary cyclic
+Galois permutation. In degree two this is the transposition. A
+transitive subgroup of $S_3$ contains a three-cycle (otherwise two
+distinct transpositions would already generate one, while a single
+transposition is not transitive). Thus the cyclic test covers both
+$C_3$ and $S_3$, rather than assuming $K/E$ is cyclic. Any external
+target is fixed because there is at most one and it is the rational
+$A_1$ established above. For $\SO_4$ the required transposition
+was proved from circle minimality.
+
+Across the 306 tested partitions, the 111 discrete partitions are
+the only survivors. The 195 nontrivial partitions are excluded as
+follows (the first applicable obstruction is recorded):
+\begin{center}
+\begin{tabular}{lr}
+Nonisomorphic simple ideals &14\\
+Failure of the already full individual $\SO_4$ projection &5\\
+Failure of Galois invariance &74\\
+Zero/nonzero circle-differential conflict &46\\
+All-conjugate intertwiner enlarging the actual commutant &56
+\end{tabular}
+\end{center}
+An arbitrary graph automorphism is not being sampled: table (8)
+handles all twists of an ordinary standard module up to duality,
+and the zero/nonzero tests and Galois arguments are invariant under
+every Lie algebra isomorphism. The preceding proofs establish why
+these combinatorial obstructions are necessary for the actual group.
+That bridge, not the numerical value zero alone, makes the result
+universal.
+
+\subsection{Adversarial controls and the Jacobian boundary}
+
+The diagonal $A_1$ inside the tensor $A_1+A_1$ has image dimension
+three and a two-dimensional commutant. It is explicitly computed
+as an excluded diagram, not promoted to an abelian-variety
+counterexample. The script also compares diagonal and independent
+$A_1$ actions on two standard copies: their commutants have
+dimensions four and two. The diagonal case is the matrix-copy
+phenomenon, for example on the square of a non-CM elliptic curve.
+It is removed by using the actual commutant; it does not refute
+the lemma after the prescribed identifications.
+Likewise the alternating determinant on a pure rank-two column has
+circle weight $+2$ or $-2$, whereas on a mixed column it has weight zero.
+Both pure orientations are checked.
+This exactly detects why derived $\SL_2$ self-duality must not be
+silently treated as a Hodge self-pair.
+
+Jacobian was used only through the approved Argus adapter.
+The inspected operation was \texttt{matrix.nullspace.compute},
+server version \texttt{0.14.0}, protocol \texttt{2025-11-25}.
+Its exact payloads and typed replies are retained in the dedicated
+JSON files. The full $\SO_4$ invariant-form system has 48 rows
+and 16 columns. Although the exposed entry-array schema allowed
+64 rows, the runtime rejected this request with
+\texttt{matrix.budget\_exceeded}, reporting a 32-row/column limit;
+the adapter exited with code 2. This was an interface rejection,
+not mathematical evidence.
+
+The equations were replaced by their exact 15-row RREF basis,
+with row-space equivalence checked by the standalone program.
+The corrected 15-by-16 request exited with code 0 and returned
+rank 15 and nullity one, with a symmetric nondegenerate invariant
+form. The standalone rational elimination independently recomputes
+the full-system kernel and agrees with every entry of the returned
+basis. The discovery and inspected contract do not supply a
+Hodge-group classification, and no such capability is attributed
+to the adapter.
+
+\paragraph{Exactness and limitations.}
+The checker verifies integer root reflection closure, rational
+Weyl dimensions, Weyl orbits, invariant forms and commutants,
+the exceptional exterior-square bracket identities, numerical
+parameter coverage, and all finite graph partitions. The analytic
+and rational Hodge-theoretic bridge is the proof above, not a
+Lean/kernel formalization. No \texttt{.lean} file or compiler
+certificate is claimed. Independent review must assess that bridge,
+the hypotheses of the four imported inputs, and the correspondence
+between the mathematical proof and the enumeration.
+
+\section{Consequences and remaining campaign frontier}
+
+The target source is
+\begin{quote}\small\ttfamily
+research/openai\_manuscript/\\
+Weil-classes-and-Hodge-classes-on-abelian-powers-October-6-2026/\\
+build/paper.tex.
+\end{quote}
+The verification covers the classification and independence chain
+at lines 1128--1608, specifically:
+\begin{quote}\small\ttfamily
+p3ab:albert-columns; p3ab:minuscule;\\
+p3ab:small-projections; p3ab:small-columns;\\
+p3ab:independence.
+\end{quote}
+It supplies condition (c) of
+\texttt{p3:tensor-criterion} using the actual period and actual
+endomorphism algebra.
+
+The proofs of \texttt{p3ab:quadratic-five} at lines 1672--1722 and
+\texttt{p3ab:split-sixfolds} at lines 1724--1834 both invoke this
+independence step. This removes one obstruction to their
+all-powers deductions. It does \emph{not} verify their simultaneous
+balance equation, the CM supply of the required determinant
+products, the invariant-theoretic tensor criterion as a whole,
+the external CM Hodge theorem, or the cycle construction.
+In particular we do not infer the rational Hodge conjecture from
+Theorem~\ref{thm:main}.
+
+The geometric theorem \texttt{p3sw:weil-plane} is on a different
+branch. Its final proof, lines 8004--8024, invokes
+\texttt{p3sw:endpoint-all-lattices}; the inventoried geometric
+branch does not invoke \texttt{p3ab:independence}. Its dependence
+on the earlier Hermitian convention and the elementary
+hyperbolic-basis statement must not be confused with dependence
+on the actual-group argument. No direct source-declared dependence
+of the staged Kuga--Satake or main Milne rationality theorems on
+this independence lemma was established by the complete source
+reading.
+
+All 21 staged \texttt{.tex} files were read, and 191 source claim
+records, including 130 formal theorem/lemma/proposition/corollary
+statements, were added to the existing shared ledger and proof
+graph. Manuscript-specific hypotheses are retained; those source
+assertions are not marked verified merely because they were
+catalogued. The seven \texttt{AG-} audit claims separate the new
+proof obligations from that source inventory. The generic-group
+substitution route is retired with its reason in the ledger.
+The source files themselves are unchanged.
+
+This bounded mission submits a positive verification theorem, not
+an exact counterexample. There is no surviving hypothesis-valid
+obstruction in the proved reduction. Publication-level novelty and
+independent certification are separate requirements, and a
+known-result reconstruction or finite exclusion alone would not
+close the campaign.
+
+\begin{thebibliography}{9}
+\bibitem{CO}
+C.-L. Chai and F. Oort,
+\emph{Moduli of abelian varieties and $p$-divisible groups},
+in \emph{Arithmetic Geometry}, Clay Mathematics Proceedings 8 (2009),
+441--536. ISBN 978-0-8218-4476-2.
+\url{https://www.claymath.org/wp-content/uploads/2022/03/cmip08c.pdf}.
+Locators: Sections 10.12--10.14.
+
+\bibitem{MZ}
+B. J. J. Moonen and Yu. G. Zarhin,
+\emph{Hodge classes on abelian varieties of low dimension},
+Mathematische Annalen 315 (1999), 711--733.
+The version used for all numbered locators is
+\href{https://arxiv.org/abs/math/9901113v2}{arXiv:math/9901113v2},
+13 April 1999. Locators: Theorems (0.1)--(0.2),
+Sections (1.1)--(1.3), Section (3.1), Lemmas (3.3)--(3.4).
+
+\bibitem{Et}
+P. Etingof, \emph{Lie groups and Lie algebras},
+\href{https://arxiv.org/abs/2201.09397v4}{arXiv:2201.09397v4} (2024).
+Locators: Example 23.5, Theorem 23.7, Remark 23.18,
+Proposition 26.8, Section 27.2, Definition 30.1, Lemma 30.2,
+Corollary 30.5, Proposition 30.6, Section 30.4.
+\end{thebibliography}
+\end{document}

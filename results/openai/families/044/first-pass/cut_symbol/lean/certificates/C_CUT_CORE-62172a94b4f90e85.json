@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CUT_CORE-dae3b37c5431",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/044/first-pass/cut_symbol/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/044/first-pass/cut_symbol/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16270,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/044/first-pass/cut_symbol/lean/Main.lean",
+    "source_sha256": "3cda99b8ffbd8fb8b5708dbf5f7fa9def0d0a75c4f2f7bfab0735cc968f9a82d",
+    "statement_fidelity": "families/044/first-pass/cut_symbol/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "53d053bb6639227c6cb7ba22002877b2dbaf6783b02d149da4240616b7407ed7",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/044/first-pass/cut_symbol/lean/Main.lean:25:5: warning: Variable name `ha` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\nfamilies/044/first-pass/cut_symbol/lean/Main.lean:28:38: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/cut_symbol/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace CutSymbol\n\ndef rootExcess (ad ae bd be : Int) : Int :=\n  max (ad - ae) 0 + max (bd - be) 0 -\n    max (ad + bd - ae - be) 0\n\ndef framingExcess (a b : Int) : Int :=\n  max (a - 1) 0 + max b 0 - max (a + b - 1) 0\n\ntheorem excess_nonnegative (u v : Int) :\n    0 ≤ max u 0 + max v 0 - max (u + v) 0 := by\n  simp only [max_def]\n  split_ifs <;> omega\n\ntheorem root_excess_disjoint (ad ae bd be : Int)\n    (had : 0 ≤ ad) (hae : 0 ≤ ae) (hbd : 0 ≤ bd) (hbe : 0 ≤ be)\n    (hd : ad = 0 ∨ bd = 0) (he : ae = 0 ∨ be = 0) :\n    rootExcess ad ae bd be = min ad be + min bd ae := by\n  rcases hd with hd | hd <;> rcases he with he | he <;>\n    simp_all [rootExcess, max_def, min_def] <;> split_ifs <;> omega\n\ntheorem framing_excess_disjoint (a b : Int)\n    (ha : 0 ≤ a) (hb : 0 ≤ b) (hd : a = 0 ∨ b = 0) :\n    framingExcess a b = if 0 < b then 1 else 0 := by\n  rcases hd with hd | hd <;>\n    simp_all [framingExcess, max_def] <;> split_ifs <;> omega\n\ntheorem support_length {ι : Type*} [DecidableEq ι] (A B : Finset ι) :\n    (A ∪ B).card + (A ∩ B).card = A.card + B.card := by\n  classical\n  exact Finset.card_union_add_card_inter A B\n\ntheorem overlap_strictly_lowers_length {ι : Type*} [DecidableEq ι] (A B : Finset ι)\n    (h : (A ∩ B).Nonempty) :\n    (A ∪ B).card < A.card + B.card := by\n  classical\n  have hpos : 0 < (A ∩ B).card := Finset.card_pos.mpr h\n  have hcard := support_length A B\n  omega\n\ntheorem oriented_root_sign {R : Type*} [CommRing R]\n    (x y : R) (u v : Nat) :\n    (y - x) ^ u * (x - y) ^ v =\n      (-1 : R) ^ u * (x - y) ^ (u + v) := by\n  have h : y - x = -(x - y) := by ring\n  rw [h, neg_pow, pow_add]\n  ring\n\ntheorem finite_sign_product {ι R : Type*} [CommRing R]\n    (T : Finset ι) (ε : ι → Nat) (f : ι → R) :\n    (∏ d ∈ T, ((-1 : R) ^ (ε d) * f d)) =\n      (-1 : R) ^ (∑ d ∈ T, ε d) * (∏ d ∈ T, f d) := by\n  classical\n  induction T using Finset.induction_on with\n  | empty => simp\n  | @insert d T hd ih =>\n      simp only [Finset.prod_insert hd, Finset.sum_insert hd, ih, pow_add]\n      ring\n\ntheorem finite_root_excess {ι : Type*} (T : Finset ι)\n    (ad ae bd be : ι → Int)\n    (had : ∀ d ∈ T, 0 ≤ ad d) (hae : ∀ d ∈ T, 0 ≤ ae d)\n    (hbd : ∀ d ∈ T, 0 ≤ bd d) (hbe : ∀ d ∈ T, 0 ≤ be d)\n    (hd : ∀ d ∈ T, ad d = 0 ∨ bd d = 0)\n    (he : ∀ d ∈ T, ae d = 0 ∨ be d = 0) :\n    (∑ d ∈ T, rootExcess (ad d) (ae d) (bd d) (be d)) =\n      (∑ d ∈ T, min (ad d) (be d)) +\n        (∑ d ∈ T, min (bd d) (ae d)) := by\n  calc\n    (∑ d ∈ T, rootExcess (ad d) (ae d) (bd d) (be d)) =\n        ∑ d ∈ T, (min (ad d) (be d) + min (bd d) (ae d)) := by\n      apply Finset.sum_congr rfl\n      intro d hdT\n      exact root_excess_disjoint (ad d) (ae d) (bd d) (be d)\n        (had d hdT) (hae d hdT) (hbd d hdT) (hbe d hdT)\n        (hd d hdT) (he d hdT)\n    _ = _ := Finset.sum_add_distrib\n\nend CutSymbol\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/cut_symbol/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: CutSymbol\n\nThe source `Main.lean` formalizes the arithmetic and finite-set core of\n`C_CUT_CORE`, not the complete BFN theorem or the complete symbol-surjection\nargument. There are no assumptions about bounded ranks or bounded exponents.\n\nAll declarations are in the namespace `CutSymbol`. Their unqualified source\nnames are `rootExcess`, `framingExcess`, `excess_nonnegative`,\n`root_excess_disjoint`, `framing_excess_disjoint`, `support_length`,\n`overlap_strictly_lowers_length`, `oriented_root_sign`,\n`finite_sign_product`, and `finite_root_excess`.\n\n`CutSymbol.rootExcess ad ae bd be` is the integer\n`max(ad-ae,0)+max(bd-be,0)-max(ad+bd-ae-be,0)`. In the manuscript these are\nthe excess exponents for one arrow, after splitting sizes into `a` and `b`.\nThe common shift by minus one in `alpha=a-1` cancels in arrow differences.\n`CutSymbol.framingExcess a b` is\n`max(a-1,0)+max(b,0)-max(a+b-1,0)`, the framing excess.\n\n`CutSymbol.excess_nonnegative` quantifies over every pair of integers and\nproves that the positive-part excess is nonnegative. Thus all multiplication\ncoefficients under discussion are polynomials, not rational functions.\n\n`CutSymbol.root_excess_disjoint` quantifies over all four nonnegative\nintegers `ad, ae, bd, be` subject to `ad=0 or bd=0` and `ae=0 or be=0`.\nIt proves the exact equality of the root excess to\n`min(ad,be)+min(bd,ae)`. A selected/unselected cross pair gives the minimum\nof its two positive sizes; all same-side or zero-size pairs give zero.\nThis includes both directions of an arrow and same-color pairs.\n\n`CutSymbol.framing_excess_disjoint` quantifies over all nonnegative integer\nsizes `a,b` with at least one zero. It proves that the framing excess is\none exactly when `b>0`, otherwise zero. It does not assume that a zero-sized\nslot is selected.\n\n`CutSymbol.support_length` proves the union/intersection cardinality\nidentity for every two finite sets of an arbitrary type.\n`CutSymbol.overlap_strictly_lowers_length` adds the hypothesis that their\nintersection is nonempty and concludes that the union cardinality is\nstrictly smaller than the sum of their cardinalities. Applied to the two\nnonnegative size supports, this is the strict support-length drop used in\nthe filtration; there is no use of reduced algebraic loci here.\n\n`CutSymbol.oriented_root_sign` holds in every commutative ring, for every\ntwo elements `x,y` and every two natural exponents `u,v`. It states\n`(y-x)^u (x-y)^v = (-1)^u (x-y)^(u+v)`. In the manuscript `u` counts the\nremaining arrows whose source is the selected slot, multiplied by the\nminimum size, and `v` counts reverse arrows. This is the orientation\nconvention in the literal formula for `epsilon_S`.\n\n`CutSymbol.finite_sign_product` holds for every finite indexing set,\nevery function of natural exponents and every family of ring elements.\nIt proves that the product of the signed factors has sign `(-1)` to the\nsum of the exponents and the product of the unsigned factors. It covers\narbitrary numbers of arrows and framing weights, not a tested finite list.\n\n`CutSymbol.finite_root_excess` sums the root identity over an arbitrary\nfinite indexing set with the same nonnegativity and disjointness\nhypotheses at each index. Indices may encode directed gauge-slot arrows,\nwith repetitions distinguished, so there is no restriction on arrow\nmultiplicities. Empty finite sets are allowed.\n\nThe compiler does not prove that disjoint decompositions are the cosets\n`H/H_S`, does not prove the generation or derivation argument, does not\nformalize Reynolds averaging, and does not identify this abstract algebra\nwith BFN convolution. Those statements and their hypotheses are given in\n`../proof.md` and require independent mathematical review. In particular a\nsuccessful compiler result for `C_CUT_CORE` is not a kernel proof of\n`C_CUT_SYMBOL` or of the manuscript's main theorem.\n"
+  },
+  "subject": {
+    "content_hash": "743e2663584f333ed223f646560fb2c8baa3e2e7e14fcf7c4cbda12c4a34c377",
+    "kind": "claim",
+    "subject_id": "C_CUT_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

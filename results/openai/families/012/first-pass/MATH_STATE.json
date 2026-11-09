@@ -1,0 +1,865 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX9000012",
+      "version": 1,
+      "statement": "OpenAI Math Audit #012: Independent largest prime factors of consecutive integers.",
+      "definitions": {
+        "openai_family": "012"
+      },
+      "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+    },
+    {
+      "context_id": "CTX_ADAPTIVE_CUT",
+      "version": 1,
+      "statement": "Independent finite endpoint kernels: quantitative transfer from single-site tests to signs chosen after observing every site.",
+      "definitions": {
+        "sites": "Independent finite-valued S_1,...,S_M, with M>=2.",
+        "kernels": "Real zero-diagonal E_ik(u,v)=E_ki(v,u), and symmetric nonnegative H>=|E|.",
+        "C0": "For every i,u, sum_k E[H_ik(u,S_k)]<=C0.",
+        "q": "For every i, sum_k E[H_ik(S_i,S_k)^2]<=q (integrated, not conditionally uniform).",
+        "beta": "The supremum of |sum_ik E[E_ik g_i(S_i) h_k(S_k)]|/M over all single-site tests in [-1,1].",
+        "cut": "The maximum of |sum_ik E_ik(S_i,S_k) epsilon_i delta_k|/M over real signs."
+      },
+      "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C9000012",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 012 (Independent largest prime factors of consecutive integers.; papers: The joint Dickman law for consecutive integers; Lean status: Partially/Comparator formalized (lean/docs/012.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "48e034b77697277b234590fbb535ca409c2a3ab814673123910187619e1a3ab4"
+    },
+    {
+      "claim_id": "C_ADAPTIVE_TRANSFER",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "For 1<=m<M, d>C0, p=Mq/(d-C0)^2<1 and 0<delta<1, put N=binom(M,m)2^m, a=sqrt(8d^2 log(N/delta)/M), L=(beta+sqrt(q)+a+1)/(1-p), b=beta+sqrt(q)+Lp. Then E[cut]<=b+a+2sqrt(Mq/m)+2md/M+sqrt((C0^2+q)(p+delta)); also for every t>0, P(cut>b+a+2sqrt(Mt/m)+2md/M)<=p+q/t+delta.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "5a617100231ca279c55cd8032263a25afce1b0b32b2f680a68704540c1cdd2cc"
+    },
+    {
+      "claim_id": "C_CUT_FINITE_CORE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "For every finite real matrix A, every column vector delta with |delta_k|<=1, and every row estimate h, sum_i |sum_k A_ik delta_k| <= sum_k |sum_i A_ik sgn(h_i)| +2sum_i |sum_k A_ik delta_k-h_i|, with sgn(0)=1. Moreover arbitrary two arrays with row and column absolute masses <=d and agreeing outside pairs incident to a set J have column-response energies differing by at most 4d|J|.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "4403da4df96ebb8f73c055e66aa7d416f31aa0567dda522e0961e334d84dc732"
+    },
+    {
+      "claim_id": "L_CUT_DEGREE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "For every fixed induced subset of independent sites, P(max degree>d)<=Mq/(d-C0)^2; the full normalized absolute mass A has E[A^2]<=C0^2+q.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a8e9ab0c3a80a3a612574e155759224ed81949ce3d969d11c9dc098e5ab12a1b"
+    },
+    {
+      "claim_id": "L_CUT_SKELETON",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "For every realized symmetric matrix with maximum absolute row sum <=d and Q=sum_ik E_ik^2/M, some size-m subset and its signs have restricted column-response value Z with cut<=Z+2sqrt(MQ/m)+2md/M.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "cf0fd5c584b87e9eca61bd94a7b6d4e5e8400eb3227e497a40233aeb67254665"
+    },
+    {
+      "claim_id": "L_CUT_FIXED_MEAN",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "Fix any column subset, its signs and its endpoint types. The remaining sites keep their product law; the corresponding restricted column-response Z satisfies conditional E[Z]<=beta+sqrt(q), uniformly in this fixed assignment.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "4c30f494770c2dc3e7d35c99586c072242732561a93e4d4347306147be398e67"
+    },
+    {
+      "claim_id": "L_CUT_EXTENSION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "On the induced degree-good set, Z is globally 4d/M-Lipschitz for Hamming distance between arbitrary good configurations. The capped infimum extension is bounded by L, has conditional mean <=beta+sqrt(q)+Lp, and upper tail <=exp(-a^2 M/(8d^2)).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "6f15ed58d05f10f786b8739fe466f587fb6410fd54d3afe82e149fc68bbade1f"
+    },
+    {
+      "claim_id": "L_CUT_UNION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "Union only the binom(M,m)2^m extension tails; the full degree-good event implies every induced good event. Its failure probability is counted once, not once per assignment. Direct expected skeleton loss avoids the squared-mass tail.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "0483f0b2c2c943d4bdadfdcbb424d007780768a32e8cda116b93fde15fa00673"
+    },
+    {
+      "claim_id": "U_EQ23",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Staged graph.tex equation (23): for every endpoint type and allowed lag j, E_{S_k} L_ik(S_i,S_k;s) << Sigma(j)/T, hence every-type expected degree is O(1). Not independently verified.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "50bedbc08730b40b30ad794f1f3c2e9186474d7ef08e67fd81a043ed72b8b35a"
+    },
+    {
+      "claim_id": "U_EQ24",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Staged moments.tex equation (24): sup_i sum_{k!=i} E[L_ik^2] << B^(-0.21), integrated over both endpoints. Not independently verified.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "9fbea966581ad1ddb98c11bd140f6c31205fcdbd8bcac413ea1cd56a4e89e0ca"
+    },
+    {
+      "claim_id": "U_EQ44",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Staged kernel.tex equation (44): all bounded single-site tests have normalized integral error <=E0+o(1), uniformly in s. Not independently verified.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d1172aa86de43c0cd7af920192f857a2afaa338e189122f20df1536e48fdf2da"
+    },
+    {
+      "claim_id": "U_M_ROW",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Staged kernel.tex kernel-main-row-bounds: every realized comparator matrix has absolute row sums O(1) and squared-row sums O(1/T); the endpoint kernels have the asserted finite, symmetric, zero-diagonal structure. Not independently verified.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "940a4ccba41dac4b23e9dbccd57bc24cc607bbcb2a1eb1a4a2f83be0cabe803c"
+    },
+    {
+      "claim_id": "C_SAMPLING_45",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Conditional on the exact upstream equations (23), (24), (44) and comparator row bounds, the sampling proposition (45) holds. More precisely, for M asymp B^0.32 and the manuscript m=floor(M B^-0.18), d=K B^0.07, expected adaptive cut <=E0+rho_B+O(B^-0.015), where rho_B>=0 is the uniform o(1) error in (44).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+    },
+    {
+      "claim_id": "C_SAMPLING_45",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Conditional on the exact upstream equations (23), (24), (44) and comparator row bounds, the sampling proposition (45) holds. More precisely, for M asymp B^0.32 and the manuscript m=floor(M B^-0.18), d=K B^0.07, expected adaptive cut <=E0+rho_B+O(B^-0.015), where rho_B>=0 is the uniform o(1) error in (44).",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A23",
+          "statement": "The every-type expected degree conclusion of (23) is valid uniformly in s.",
+          "source": "Staged unpublished OpenAI manuscript, graph.tex, Lemma graph-row-mean, equation (23); read directly, arithmetic proof not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "cedc2249d1af17e2530b70e82a8a7e119f88de0d7e0202d6902826d77be9f292"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+    },
+    {
+      "claim_id": "C_SAMPLING_45",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Conditional on the exact upstream equations (23), (24), (44) and comparator row bounds, the sampling proposition (45) holds. More precisely, for M asymp B^0.32 and the manuscript m=floor(M B^-0.18), d=K B^0.07, expected adaptive cut <=E0+rho_B+O(B^-0.015), where rho_B>=0 is the uniform o(1) error in (44).",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A23",
+          "statement": "The every-type expected degree conclusion of (23) is valid uniformly in s.",
+          "source": "Staged unpublished OpenAI manuscript, graph.tex, Lemma graph-row-mean, equation (23); read directly, arithmetic proof not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "cedc2249d1af17e2530b70e82a8a7e119f88de0d7e0202d6902826d77be9f292"
+        },
+        {
+          "assumption_id": "A24",
+          "statement": "The integrated second-moment row estimate (24) holds uniformly in s.",
+          "source": "Staged unpublished OpenAI manuscript, moments.tex, Proposition moments:rows, equation (24); read directly, proof not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "fcd01c93efefd6957422b9e38a984bcc632beb41fef5420fb255bf04fae46aec"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+    },
+    {
+      "claim_id": "C_SAMPLING_45",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Conditional on the exact upstream equations (23), (24), (44) and comparator row bounds, the sampling proposition (45) holds. More precisely, for M asymp B^0.32 and the manuscript m=floor(M B^-0.18), d=K B^0.07, expected adaptive cut <=E0+rho_B+O(B^-0.015), where rho_B>=0 is the uniform o(1) error in (44).",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A23",
+          "statement": "The every-type expected degree conclusion of (23) is valid uniformly in s.",
+          "source": "Staged unpublished OpenAI manuscript, graph.tex, Lemma graph-row-mean, equation (23); read directly, arithmetic proof not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "cedc2249d1af17e2530b70e82a8a7e119f88de0d7e0202d6902826d77be9f292"
+        },
+        {
+          "assumption_id": "A24",
+          "statement": "The integrated second-moment row estimate (24) holds uniformly in s.",
+          "source": "Staged unpublished OpenAI manuscript, moments.tex, Proposition moments:rows, equation (24); read directly, proof not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "fcd01c93efefd6957422b9e38a984bcc632beb41fef5420fb255bf04fae46aec"
+        },
+        {
+          "assumption_id": "A44",
+          "statement": "The integral single-site comparison (44) has error E0+rho_B with uniform rho_B=o(1).",
+          "source": "Staged unpublished OpenAI manuscript, kernel.tex, Proposition kernel-comparison, equation (44); read directly, proof not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "41c79207968b5c6b0dc624310f9a84396d17209d4e5fed9131562714613fd09b"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+    },
+    {
+      "claim_id": "C_SAMPLING_45",
+      "version": 5,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Conditional on the exact upstream equations (23), (24), (44) and comparator row bounds, the sampling proposition (45) holds. More precisely, for M asymp B^0.32 and the manuscript m=floor(M B^-0.18), d=K B^0.07, expected adaptive cut <=E0+rho_B+O(B^-0.015), where rho_B>=0 is the uniform o(1) error in (44).",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A23",
+          "statement": "The every-type expected degree conclusion of (23) is valid uniformly in s.",
+          "source": "Staged unpublished OpenAI manuscript, graph.tex, Lemma graph-row-mean, equation (23); read directly, arithmetic proof not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "cedc2249d1af17e2530b70e82a8a7e119f88de0d7e0202d6902826d77be9f292"
+        },
+        {
+          "assumption_id": "A24",
+          "statement": "The integrated second-moment row estimate (24) holds uniformly in s.",
+          "source": "Staged unpublished OpenAI manuscript, moments.tex, Proposition moments:rows, equation (24); read directly, proof not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "fcd01c93efefd6957422b9e38a984bcc632beb41fef5420fb255bf04fae46aec"
+        },
+        {
+          "assumption_id": "A44",
+          "statement": "The integral single-site comparison (44) has error E0+rho_B with uniform rho_B=o(1).",
+          "source": "Staged unpublished OpenAI manuscript, kernel.tex, Proposition kernel-comparison, equation (44); read directly, proof not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "41c79207968b5c6b0dc624310f9a84396d17209d4e5fed9131562714613fd09b"
+        },
+        {
+          "assumption_id": "AMROW",
+          "statement": "The deterministic comparator row estimates and finite symmetric zero-diagonal endpoint structure stated in the manuscript hold.",
+          "source": "Staged unpublished OpenAI manuscript, kernel.tex equation kernel-main-row-bounds and sampling.tex setup; read directly, not certified here.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:adaptive-cut",
+          "content_hash": "c4975002c25900fe269c1a5fcf67d225a0c08c08cf998b4d3f35f08a8dd36bff"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+    },
+    {
+      "claim_id": "C_JOINT_DICKMAN",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Staged introduction.tex thm:main: for every fixed a,b in (0,1), the ordinary real-endpoint natural density of {2<=n<=X: Pplus(n)<=n^a, Pplus(n+1)<=n^b} is rho(1/a)rho(1/b). This campaign has not established it.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "06124f0a7455dc7a17a7782c734c171052efeb8225cab468a866e645f1c017fd"
+    },
+    {
+      "claim_id": "U_ROOT21",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "Staged graph.tex equation (21): independent-root expected cut comparison for every symmetric proposed endpoint comparator of uniformly O(B^10) total absolute mass. Not independently verified.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "68402a5693742c1c9248749189f68d0db134644d924424219dbff9c22353d15f"
+    },
+    {
+      "claim_id": "U_LABEL_REDUCTION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000012",
+        "content_hash": "6ec95b74d3eccbf125a0f22439b5cd2a0e800c3692af86a0d693967a8d2cb3fd"
+      },
+      "natural_statement": "The manuscript label cancellation, arithmetic-to-energy reductions and final distribution deductions outside sampling.tex are all required to infer the joint Dickman law. They remain outside this bounded certification and unverified.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a36c8e7ee93c4b8e6f9be0e3bf5dafad0281083b451580bc39d8a58434a752b1"
+    },
+    {
+      "claim_id": "C_CUT_FINITE_CORE",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "For every finite real matrix A, every column vector delta with |delta_k|<=1, and every row estimate h, sum_i |sum_k A_ik delta_k| <= sum_k |sum_i A_ik sgn(h_i)| +2sum_i |sum_k A_ik delta_k-h_i|, with sgn(0)=1. Moreover arbitrary two arrays with row and column absolute masses <=d and agreeing outside pairs incident to a set J have column-response energies differing by at most 4d|J|.",
+      "formal_statement": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace AdaptiveCutTransfer\n\nvariable {ι : Type*} [Fintype ι] [DecidableEq ι]\n\ndef signPlus (x : ℝ) : ℝ := if 0 ≤ x then 1 else -1\n\ntheorem abs_signPlus (x : ℝ) : |signPlus x| = 1 := by\n  unfold signPlus\n  split_ifs <;> norm_num\n\ntheorem response_loss (r h : ℝ) :\n    |r| - r * signPlus h ≤ 2 * |r - h| := by\n  by_cases hh : 0 ≤ h\n  · rw [signPlus, if_pos hh, mul_one]\n    by_cases hr : 0 ≤ r\n    · rw [abs_of_nonneg hr]\n      linarith [abs_nonneg (r - h)]\n    · rw [abs_of_neg (lt_of_not_ge hr)]\n      linarith [neg_le_abs (r - h)]\n  · rw [signPlus, if_neg hh, mul_neg_one]\n    by_cases hr : 0 ≤ r\n    · rw [abs_of_nonneg hr]\n      have hh' : h < 0 := lt_of_not_ge hh\n      linarith [le_abs_self (r - h)]\n    · rw [abs_of_neg (lt_of_not_ge hr)]\n      linarith [abs_nonneg (r - h)]\n\ntheorem test_le_abs (x z : ℝ) (hz : |z| ≤ 1) : x * z ≤ |x| := by\n  calc\n    x * z ≤ |x * z| := le_abs_self _\n    _ = |x| * |z| := abs_mul _ _\n    _ ≤ |x| * 1 := mul_le_mul_of_nonneg_left hz (abs_nonneg x)\n    _ = |x| := mul_one _\n\ndef response (X : ι → ι → ℝ) : ℝ := ∑ k, |∑ i, X i k|\n\ntheorem adaptive_response_bound (A : ι → ι → ℝ) (δ h : ι → ℝ)\n    (hδ : ∀ k, |δ k| ≤ 1) :\n    (∑ i, |∑ k, A i k * δ k|) ≤\n      (∑ k, |∑ i, A i k * signPlus (h i)|) +\n        2 * ∑ i, |(∑ k, A i k * δ k) - h i| := by\n  have loss :\n      (∑ i, (|∑ k, A i k * δ k| -\n        (∑ k, A i k * δ k) * signPlus (h i))) ≤\n          2 * ∑ i, |(∑ k, A i k * δ k) - h i| := by\n    calc\n      _ ≤ ∑ i, 2 * |(∑ k, A i k * δ k) - h i| :=\n        Finset.sum_le_sum fun i _ => response_loss _ _\n      _ = _ := by rw [Finset.mul_sum]\n  have swap :\n      (∑ i, (∑ k, A i k * δ k) * signPlus (h i)) =\n        ∑ k, (∑ i, A i k * signPlus (h i)) * δ k := by\n    simp_rw [Finset.sum_mul]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro k _\n    apply Finset.sum_congr rfl\n    intro i _\n    ring\n  have bound :\n      (∑ i, (∑ k, A i k * δ k) * signPlus (h i)) ≤\n        ∑ k, |∑ i, A i k * signPlus (h i)| := by\n    rw [swap]\n    exact Finset.sum_le_sum fun k _ => test_le_abs _ _ (hδ k)\n  rw [Finset.sum_sub_distrib] at loss\n  linarith\n\ntheorem response_difference (X Y : ι → ι → ℝ) :\n    |response X - response Y| ≤ ∑ i, ∑ k, |X i k - Y i k| := by\n  unfold response\n  calc\n    |(∑ k, |∑ i, X i k|) - ∑ k, |∑ i, Y i k|| =\n        |∑ k, (|∑ i, X i k| - |∑ i, Y i k|)| := by\n      rw [Finset.sum_sub_distrib]\n    _ ≤ ∑ k, ||∑ i, X i k| - |∑ i, Y i k|| :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ k, ∑ i, |X i k - Y i k| := by\n      apply Finset.sum_le_sum\n      intro k _\n      calc\n        ||∑ i, X i k| - |∑ i, Y i k|| ≤\n            |(∑ i, X i k) - ∑ i, Y i k| :=\n          abs_abs_sub_abs_le_abs_sub _ _\n        _ = |∑ i, (X i k - Y i k)| := by rw [Finset.sum_sub_distrib]\n        _ ≤ ∑ i, |X i k - Y i k| := Finset.abs_sum_le_sum_abs _ _\n    _ = ∑ i, ∑ k, |X i k - Y i k| := Finset.sum_comm\n\ntheorem incident_mass_bound (W : ι → ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hW : ∀ i k, 0 ≤ W i k)\n    (hoff : ∀ i k, i ∉ J → k ∉ J → W i k = 0)\n    (hrow : ∀ i, ∑ k, W i k ≤ d)\n    (hcol : ∀ k, ∑ i, W i k ≤ d) :\n    (∑ i, ∑ k, W i k) ≤ 2 * (J.card : ℝ) * d := by\n  have point (i k : ι) :\n      W i k ≤ (if i ∈ J then W i k else 0) +\n        (if k ∈ J then W i k else 0) := by\n    by_cases hi : i ∈ J\n    · by_cases hk : k ∈ J\n      · simp only [if_pos hi, if_pos hk]\n        linarith [hW i k]\n      · simp [hi, hk]\n    · by_cases hk : k ∈ J\n      · simp [hi, hk]\n      · simp [hi, hk, hoff i k hi hk]\n  have first :\n      (∑ i, ∑ k, if i ∈ J then W i k else 0) ≤ (J.card : ℝ) * d := by\n    calc\n      _ ≤ ∑ i, if i ∈ J then d else 0 := by\n        apply Finset.sum_le_sum\n        intro i _\n        by_cases hi : i ∈ J\n        · simpa [hi] using hrow i\n        · simp [hi]\n      _ = _ := by simp\n  have second :\n      (∑ i, ∑ k, if k ∈ J then W i k else 0) ≤ (J.card : ℝ) * d := by\n    rw [Finset.sum_comm]\n    calc\n      _ ≤ ∑ k, if k ∈ J then d else 0 := by\n        apply Finset.sum_le_sum\n        intro k _\n        by_cases hk : k ∈ J\n        · simpa [hk] using hcol k\n        · simp [hk]\n      _ = _ := by simp\n  calc\n    _ ≤ ∑ i, ∑ k,\n        ((if i ∈ J then W i k else 0) + (if k ∈ J then W i k else 0)) :=\n      Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun k _ => point i k\n    _ = (∑ i, ∑ k, if i ∈ J then W i k else 0) +\n        (∑ i, ∑ k, if k ∈ J then W i k else 0) := by\n      simp_rw [Finset.sum_add_distrib]\n    _ ≤ (J.card : ℝ) * d + (J.card : ℝ) * d := add_le_add first second\n    _ = _ := by ring\n\ntheorem good_configuration_lipschitz (X Y : ι → ι → ℝ)\n    (J : Finset ι) (d : ℝ)\n    (hoff : ∀ i k, i ∉ J → k ∉ J → X i k = Y i k)\n    (hrowX : ∀ i, ∑ k, |X i k| ≤ d)\n    (hcolX : ∀ k, ∑ i, |X i k| ≤ d)\n    (hrowY : ∀ i, ∑ k, |Y i k| ≤ d)\n    (hcolY : ∀ k, ∑ i, |Y i k| ≤ d) :\n    |response X - response Y| ≤ 4 * d * (J.card : ℝ) := by\n  have point (i k : ι) : |X i k - Y i k| ≤ |X i k| + |Y i k| := by\n    simpa using abs_sub_le (X i k) 0 (Y i k)\n  have row : ∀ i, ∑ k, |X i k - Y i k| ≤ 2 * d := by\n    intro i\n    calc\n      _ ≤ ∑ k, (|X i k| + |Y i k|) := Finset.sum_le_sum fun k _ => point i k\n      _ = (∑ k, |X i k|) + ∑ k, |Y i k| := Finset.sum_add_distrib\n      _ ≤ d + d := add_le_add (hrowX i) (hrowY i)\n      _ = _ := by ring\n  have col : ∀ k, ∑ i, |X i k - Y i k| ≤ 2 * d := by\n    intro k\n    calc\n      _ ≤ ∑ i, (|X i k| + |Y i k|) := Finset.sum_le_sum fun i _ => point i k\n      _ = (∑ i, |X i k|) + ∑ i, |Y i k| := Finset.sum_add_distrib\n      _ ≤ d + d := add_le_add (hcolX k) (hcolY k)\n      _ = _ := by ring\n  calc\n    _ ≤ ∑ i, ∑ k, |X i k - Y i k| := response_difference X Y\n    _ ≤ 2 * (J.card : ℝ) * (2 * d) :=\n      incident_mass_bound _ J (2 * d) (fun i k => abs_nonneg _)\n        (by intro i k hi hk; rw [hoff i k hi hk, sub_self, abs_zero]) row col\n    _ = _ := by ring\n\ndef deleteVertices (X : ι → ι → ℝ) (J : Finset ι) (i k : ι) : ℝ :=\n  if i ∈ J ∨ k ∈ J then 0 else X i k\n\ntheorem deletion_bound (X : ι → ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hrow : ∀ i, ∑ k, |X i k| ≤ d)\n    (hcol : ∀ k, ∑ i, |X i k| ≤ d) :\n    response X ≤ response (deleteVertices X J) + 2 * (J.card : ℝ) * d := by\n  have point (i k : ι) :\n      |X i k - deleteVertices X J i k| ≤ |X i k| := by\n    unfold deleteVertices\n    split_ifs <;> simp\n  have row : ∀ i, ∑ k, |X i k - deleteVertices X J i k| ≤ d := by\n    intro i\n    exact (Finset.sum_le_sum fun k _ => point i k).trans (hrow i)\n  have col : ∀ k, ∑ i, |X i k - deleteVertices X J i k| ≤ d := by\n    intro k\n    exact (Finset.sum_le_sum fun i _ => point i k).trans (hcol k)\n  have mass :\n      (∑ i, ∑ k, |X i k - deleteVertices X J i k|) ≤\n        2 * (J.card : ℝ) * d := by\n    apply incident_mass_bound _ J d (fun i k => abs_nonneg _) _ row col\n    intro i k hi hk\n    simp [deleteVertices, hi, hk]\n  have hd := (response_difference X (deleteVertices X J)).trans mass\n  have hs := le_abs_self (response X - response (deleteVertices X J))\n  linarith\n\ntheorem adaptive_deleted_response_bound (A : ι → ι → ℝ)\n    (δ h : ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hδ : ∀ k, |δ k| ≤ 1)\n    (hrow : ∀ i, ∑ k, |A i k| ≤ d)\n    (hcol : ∀ k, ∑ i, |A i k| ≤ d) :\n    (∑ i, |∑ k, A i k * δ k|) ≤\n      response (deleteVertices (fun i k => A i k * signPlus (h i)) J) +\n        2 * ∑ i, |(∑ k, A i k * δ k) - h i| +\n        2 * (J.card : ℝ) * d := by\n  have row : ∀ i, ∑ k, |A i k * signPlus (h i)| ≤ d := by\n    intro i\n    simpa only [abs_mul, abs_signPlus, mul_one] using hrow i\n  have col : ∀ k, ∑ i, |A i k * signPlus (h i)| ≤ d := by\n    intro k\n    simpa only [abs_mul, abs_signPlus, mul_one] using hcol k\n  have ha := adaptive_response_bound A δ h hδ\n  have hd := deletion_bound (fun i k => A i k * signPlus (h i)) J d row col\n  unfold response at hd\n  linarith\n\nend AdaptiveCutTransfer\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "c77e2db3351a181bbb0e50fc3a4594baa2f066adba4025c749e01ab39ee9e79d"
+    },
+    {
+      "claim_id": "C_CUT_FINITE_CORE",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "For every finite real matrix A, every column vector delta with |delta_k|<=1, and every row estimate h, sum_i |sum_k A_ik delta_k| <= sum_k |sum_i A_ik sgn(h_i)| +2sum_i |sum_k A_ik delta_k-h_i|, with sgn(0)=1. Moreover arbitrary two arrays with row and column absolute masses <=d and agreeing outside pairs incident to a set J have column-response energies differing by at most 4d|J|.",
+      "formal_statement": "import Mathlib\n\nopen scoped BigOperators\n\nnoncomputable section\n\nnamespace AdaptiveCutTransfer\n\nvariable {ι : Type*} [Fintype ι] [DecidableEq ι]\n\ndef signPlus (x : ℝ) : ℝ := if 0 ≤ x then 1 else -1\n\ntheorem abs_signPlus (x : ℝ) : |signPlus x| = 1 := by\n  unfold signPlus\n  split_ifs <;> norm_num\n\ntheorem response_loss (r h : ℝ) :\n    |r| - r * signPlus h ≤ 2 * |r - h| := by\n  by_cases hh : 0 ≤ h\n  · rw [signPlus, if_pos hh, mul_one]\n    by_cases hr : 0 ≤ r\n    · rw [abs_of_nonneg hr]\n      linarith [abs_nonneg (r - h)]\n    · rw [abs_of_neg (lt_of_not_ge hr)]\n      linarith [neg_le_abs (r - h)]\n  · rw [signPlus, if_neg hh, mul_neg_one]\n    by_cases hr : 0 ≤ r\n    · rw [abs_of_nonneg hr]\n      have hh' : h < 0 := lt_of_not_ge hh\n      linarith [le_abs_self (r - h)]\n    · rw [abs_of_neg (lt_of_not_ge hr)]\n      linarith [abs_nonneg (r - h)]\n\ntheorem test_le_abs (x z : ℝ) (hz : |z| ≤ 1) : x * z ≤ |x| := by\n  calc\n    x * z ≤ |x * z| := le_abs_self _\n    _ = |x| * |z| := abs_mul _ _\n    _ ≤ |x| * 1 := mul_le_mul_of_nonneg_left hz (abs_nonneg x)\n    _ = |x| := mul_one _\n\ndef response (X : ι → ι → ℝ) : ℝ := ∑ k, |∑ i, X i k|\n\ntheorem adaptive_response_bound (A : ι → ι → ℝ) (δ h : ι → ℝ)\n    (hδ : ∀ k, |δ k| ≤ 1) :\n    (∑ i, |∑ k, A i k * δ k|) ≤\n      (∑ k, |∑ i, A i k * signPlus (h i)|) +\n        2 * ∑ i, |(∑ k, A i k * δ k) - h i| := by\n  have loss :\n      (∑ i, (|∑ k, A i k * δ k| -\n        (∑ k, A i k * δ k) * signPlus (h i))) ≤\n          2 * ∑ i, |(∑ k, A i k * δ k) - h i| := by\n    calc\n      _ ≤ ∑ i, 2 * |(∑ k, A i k * δ k) - h i| :=\n        Finset.sum_le_sum fun i _ => response_loss _ _\n      _ = _ := by rw [Finset.mul_sum]\n  have swap :\n      (∑ i, (∑ k, A i k * δ k) * signPlus (h i)) =\n        ∑ k, (∑ i, A i k * signPlus (h i)) * δ k := by\n    simp_rw [Finset.sum_mul]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro k _\n    apply Finset.sum_congr rfl\n    intro i _\n    ring\n  have bound :\n      (∑ i, (∑ k, A i k * δ k) * signPlus (h i)) ≤\n        ∑ k, |∑ i, A i k * signPlus (h i)| := by\n    rw [swap]\n    exact Finset.sum_le_sum fun k _ => test_le_abs _ _ (hδ k)\n  rw [Finset.sum_sub_distrib] at loss\n  linarith\n\ntheorem response_difference (X Y : ι → ι → ℝ) :\n    |response X - response Y| ≤ ∑ i, ∑ k, |X i k - Y i k| := by\n  unfold response\n  calc\n    |(∑ k, |∑ i, X i k|) - (∑ k, |∑ i, Y i k|)| =\n        |∑ k, (|∑ i, X i k| - |∑ i, Y i k|)| := by\n      rw [Finset.sum_sub_distrib]\n    _ ≤ ∑ k, | |∑ i, X i k| - |∑ i, Y i k| | :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ k, ∑ i, |X i k - Y i k| := by\n      apply Finset.sum_le_sum\n      intro k _\n      calc\n        | |∑ i, X i k| - |∑ i, Y i k| | ≤\n            |(∑ i, X i k) - ∑ i, Y i k| :=\n          abs_abs_sub_abs_le_abs_sub _ _\n        _ = |∑ i, (X i k - Y i k)| := by rw [Finset.sum_sub_distrib]\n        _ ≤ ∑ i, |X i k - Y i k| := Finset.abs_sum_le_sum_abs _ _\n    _ = ∑ i, ∑ k, |X i k - Y i k| := Finset.sum_comm\n\ntheorem incident_mass_bound (W : ι → ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hW : ∀ i k, 0 ≤ W i k)\n    (hoff : ∀ i k, i ∉ J → k ∉ J → W i k = 0)\n    (hrow : ∀ i, ∑ k, W i k ≤ d)\n    (hcol : ∀ k, ∑ i, W i k ≤ d) :\n    (∑ i, ∑ k, W i k) ≤ 2 * (J.card : ℝ) * d := by\n  have point (i k : ι) :\n      W i k ≤ (if i ∈ J then W i k else 0) +\n        (if k ∈ J then W i k else 0) := by\n    by_cases hi : i ∈ J\n    · by_cases hk : k ∈ J\n      · simp only [if_pos hi, if_pos hk]\n        linarith [hW i k]\n      · simp [hi, hk]\n    · by_cases hk : k ∈ J\n      · simp [hi, hk]\n      · simp [hi, hk, hoff i k hi hk]\n  have first :\n      (∑ i, ∑ k, if i ∈ J then W i k else 0) ≤ (J.card : ℝ) * d := by\n    calc\n      _ ≤ ∑ i, if i ∈ J then d else 0 := by\n        apply Finset.sum_le_sum\n        intro i _\n        by_cases hi : i ∈ J\n        · simpa [hi] using hrow i\n        · simp [hi]\n      _ = _ := by simp\n  have second :\n      (∑ i, ∑ k, if k ∈ J then W i k else 0) ≤ (J.card : ℝ) * d := by\n    rw [Finset.sum_comm]\n    calc\n      _ ≤ ∑ k, if k ∈ J then d else 0 := by\n        apply Finset.sum_le_sum\n        intro k _\n        by_cases hk : k ∈ J\n        · simpa [hk] using hcol k\n        · simp [hk]\n      _ = _ := by simp\n  calc\n    _ ≤ ∑ i, ∑ k,\n        ((if i ∈ J then W i k else 0) + (if k ∈ J then W i k else 0)) :=\n      Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun k _ => point i k\n    _ = (∑ i, ∑ k, if i ∈ J then W i k else 0) +\n        (∑ i, ∑ k, if k ∈ J then W i k else 0) := by\n      simp_rw [Finset.sum_add_distrib]\n    _ ≤ (J.card : ℝ) * d + (J.card : ℝ) * d := add_le_add first second\n    _ = _ := by ring\n\ntheorem good_configuration_lipschitz (X Y : ι → ι → ℝ)\n    (J : Finset ι) (d : ℝ)\n    (hoff : ∀ i k, i ∉ J → k ∉ J → X i k = Y i k)\n    (hrowX : ∀ i, ∑ k, |X i k| ≤ d)\n    (hcolX : ∀ k, ∑ i, |X i k| ≤ d)\n    (hrowY : ∀ i, ∑ k, |Y i k| ≤ d)\n    (hcolY : ∀ k, ∑ i, |Y i k| ≤ d) :\n    |response X - response Y| ≤ 4 * d * (J.card : ℝ) := by\n  have point (i k : ι) : |X i k - Y i k| ≤ |X i k| + |Y i k| := by\n    simpa using abs_sub_le (X i k) 0 (Y i k)\n  have row : ∀ i, ∑ k, |X i k - Y i k| ≤ 2 * d := by\n    intro i\n    calc\n      _ ≤ ∑ k, (|X i k| + |Y i k|) := Finset.sum_le_sum fun k _ => point i k\n      _ = (∑ k, |X i k|) + ∑ k, |Y i k| := Finset.sum_add_distrib\n      _ ≤ d + d := add_le_add (hrowX i) (hrowY i)\n      _ = _ := by ring\n  have col : ∀ k, ∑ i, |X i k - Y i k| ≤ 2 * d := by\n    intro k\n    calc\n      _ ≤ ∑ i, (|X i k| + |Y i k|) := Finset.sum_le_sum fun i _ => point i k\n      _ = (∑ i, |X i k|) + ∑ i, |Y i k| := Finset.sum_add_distrib\n      _ ≤ d + d := add_le_add (hcolX k) (hcolY k)\n      _ = _ := by ring\n  calc\n    _ ≤ ∑ i, ∑ k, |X i k - Y i k| := response_difference X Y\n    _ ≤ 2 * (J.card : ℝ) * (2 * d) :=\n      incident_mass_bound _ J (2 * d) (fun i k => abs_nonneg _)\n        (by intro i k hi hk; rw [hoff i k hi hk, sub_self, abs_zero]) row col\n    _ = _ := by ring\n\ndef deleteVertices (X : ι → ι → ℝ) (J : Finset ι) (i k : ι) : ℝ :=\n  if i ∈ J ∨ k ∈ J then 0 else X i k\n\ntheorem deletion_bound (X : ι → ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hrow : ∀ i, ∑ k, |X i k| ≤ d)\n    (hcol : ∀ k, ∑ i, |X i k| ≤ d) :\n    response X ≤ response (deleteVertices X J) + 2 * (J.card : ℝ) * d := by\n  have point (i k : ι) :\n      |X i k - deleteVertices X J i k| ≤ |X i k| := by\n    unfold deleteVertices\n    split_ifs <;> simp\n  have row : ∀ i, ∑ k, |X i k - deleteVertices X J i k| ≤ d := by\n    intro i\n    exact (Finset.sum_le_sum fun k _ => point i k).trans (hrow i)\n  have col : ∀ k, ∑ i, |X i k - deleteVertices X J i k| ≤ d := by\n    intro k\n    exact (Finset.sum_le_sum fun i _ => point i k).trans (hcol k)\n  have mass :\n      (∑ i, ∑ k, |X i k - deleteVertices X J i k|) ≤\n        2 * (J.card : ℝ) * d := by\n    apply incident_mass_bound _ J d (fun i k => abs_nonneg _) _ row col\n    intro i k hi hk\n    simp [deleteVertices, hi, hk]\n  have hd := (response_difference X (deleteVertices X J)).trans mass\n  have hs := le_abs_self (response X - response (deleteVertices X J))\n  linarith\n\ntheorem adaptive_deleted_response_bound (A : ι → ι → ℝ)\n    (δ h : ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hδ : ∀ k, |δ k| ≤ 1)\n    (hrow : ∀ i, ∑ k, |A i k| ≤ d)\n    (hcol : ∀ k, ∑ i, |A i k| ≤ d) :\n    (∑ i, |∑ k, A i k * δ k|) ≤\n      response (deleteVertices (fun i k => A i k * signPlus (h i)) J) +\n        2 * ∑ i, |(∑ k, A i k * δ k) - h i| +\n        2 * (J.card : ℝ) * d := by\n  have row : ∀ i, ∑ k, |A i k * signPlus (h i)| ≤ d := by\n    intro i\n    simpa only [abs_mul, abs_signPlus, mul_one] using hrow i\n  have col : ∀ k, ∑ i, |A i k * signPlus (h i)| ≤ d := by\n    intro k\n    simpa only [abs_mul, abs_signPlus, mul_one] using hcol k\n  have ha := adaptive_response_bound A δ h hδ\n  have hd := deletion_bound (fun i k => A i k * signPlus (h i)) J d row col\n  dsimp only [response] at hd ⊢\n  linarith\n\nend AdaptiveCutTransfer\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d298e041424f2e582bd27068550a19b599e609f90e277716a4c97c0b0b03e522"
+    },
+    {
+      "claim_id": "C_CUT_FINITE_CORE",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ADAPTIVE_CUT",
+        "content_hash": "753b55e65e73cded5ea4fefdf5a3e5df4efe32bfb5577f0f890b48c326cac3ae"
+      },
+      "natural_statement": "For every finite real matrix A, every column vector delta with |delta_k|<=1, and every row estimate h, sum_i |sum_k A_ik delta_k| <= sum_k |sum_i A_ik sgn(h_i)| +2sum_i |sum_k A_ik delta_k-h_i|, with sgn(0)=1. Moreover arbitrary two arrays with row and column absolute masses <=d and agreeing outside pairs incident to a set J have column-response energies differing by at most 4d|J|.",
+      "formal_statement": "import Mathlib\n\nopen scoped BigOperators\n\nnoncomputable section\n\nnamespace AdaptiveCutTransfer\n\nvariable {ι : Type*} [Fintype ι] [DecidableEq ι]\n\ndef signPlus (x : ℝ) : ℝ := if 0 ≤ x then 1 else -1\n\ntheorem abs_signPlus (x : ℝ) : |signPlus x| = 1 := by\n  unfold signPlus\n  split_ifs <;> norm_num\n\ntheorem response_loss (r h : ℝ) :\n    |r| - r * signPlus h ≤ 2 * |r - h| := by\n  by_cases hh : 0 ≤ h\n  · rw [signPlus, if_pos hh, mul_one]\n    by_cases hr : 0 ≤ r\n    · rw [abs_of_nonneg hr]\n      linarith [abs_nonneg (r - h)]\n    · rw [abs_of_neg (lt_of_not_ge hr)]\n      linarith [neg_le_abs (r - h)]\n  · rw [signPlus, if_neg hh, mul_neg_one]\n    by_cases hr : 0 ≤ r\n    · rw [abs_of_nonneg hr]\n      have hh' : h < 0 := lt_of_not_ge hh\n      linarith [le_abs_self (r - h)]\n    · rw [abs_of_neg (lt_of_not_ge hr)]\n      linarith [abs_nonneg (r - h)]\n\ntheorem test_le_abs (x z : ℝ) (hz : |z| ≤ 1) : x * z ≤ |x| := by\n  calc\n    x * z ≤ |x * z| := le_abs_self _\n    _ = |x| * |z| := abs_mul _ _\n    _ ≤ |x| * 1 := mul_le_mul_of_nonneg_left hz (abs_nonneg x)\n    _ = |x| := mul_one _\n\ndef response (X : ι → ι → ℝ) : ℝ := ∑ k, |∑ i, X i k|\n\ntheorem adaptive_response_bound (A : ι → ι → ℝ) (δ h : ι → ℝ)\n    (hδ : ∀ k, |δ k| ≤ 1) :\n    (∑ i, |∑ k, A i k * δ k|) ≤\n      (∑ k, |∑ i, A i k * signPlus (h i)|) +\n        2 * ∑ i, |(∑ k, A i k * δ k) - h i| := by\n  have loss :\n      (∑ i, (|∑ k, A i k * δ k| -\n        (∑ k, A i k * δ k) * signPlus (h i))) ≤\n          2 * ∑ i, |(∑ k, A i k * δ k) - h i| := by\n    calc\n      _ ≤ ∑ i, 2 * |(∑ k, A i k * δ k) - h i| :=\n        Finset.sum_le_sum fun i _ => response_loss _ _\n      _ = _ := by rw [Finset.mul_sum]\n  have swap :\n      (∑ i, (∑ k, A i k * δ k) * signPlus (h i)) =\n        ∑ k, (∑ i, A i k * signPlus (h i)) * δ k := by\n    simp_rw [Finset.sum_mul]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro k _\n    apply Finset.sum_congr rfl\n    intro i _\n    ring\n  have bound :\n      (∑ i, (∑ k, A i k * δ k) * signPlus (h i)) ≤\n        ∑ k, |∑ i, A i k * signPlus (h i)| := by\n    rw [swap]\n    exact Finset.sum_le_sum fun k _ => test_le_abs _ _ (hδ k)\n  rw [Finset.sum_sub_distrib] at loss\n  linarith\n\ntheorem response_difference (X Y : ι → ι → ℝ) :\n    |response X - response Y| ≤ ∑ i, ∑ k, |X i k - Y i k| := by\n  unfold response\n  calc\n    |(∑ k, |∑ i, X i k|) - (∑ k, |∑ i, Y i k|)| =\n        |∑ k, (|∑ i, X i k| - |∑ i, Y i k|)| := by\n      rw [Finset.sum_sub_distrib]\n    _ ≤ ∑ k, abs (|∑ i, X i k| - |∑ i, Y i k|) :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ k, ∑ i, |X i k - Y i k| := by\n      apply Finset.sum_le_sum\n      intro k _\n      calc\n        abs (|∑ i, X i k| - |∑ i, Y i k|) ≤\n            |(∑ i, X i k) - ∑ i, Y i k| :=\n          abs_abs_sub_abs_le_abs_sub _ _\n        _ = |∑ i, (X i k - Y i k)| := by rw [Finset.sum_sub_distrib]\n        _ ≤ ∑ i, |X i k - Y i k| := Finset.abs_sum_le_sum_abs _ _\n    _ = ∑ i, ∑ k, |X i k - Y i k| := Finset.sum_comm\n\ntheorem incident_mass_bound (W : ι → ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hW : ∀ i k, 0 ≤ W i k)\n    (hoff : ∀ i k, i ∉ J → k ∉ J → W i k = 0)\n    (hrow : ∀ i, ∑ k, W i k ≤ d)\n    (hcol : ∀ k, ∑ i, W i k ≤ d) :\n    (∑ i, ∑ k, W i k) ≤ 2 * (J.card : ℝ) * d := by\n  have point (i k : ι) :\n      W i k ≤ (if i ∈ J then W i k else 0) +\n        (if k ∈ J then W i k else 0) := by\n    by_cases hi : i ∈ J\n    · by_cases hk : k ∈ J\n      · simp only [if_pos hi, if_pos hk]\n        linarith [hW i k]\n      · simp [hi, hk]\n    · by_cases hk : k ∈ J\n      · simp [hi, hk]\n      · simp [hi, hk, hoff i k hi hk]\n  have first :\n      (∑ i, ∑ k, if i ∈ J then W i k else 0) ≤ (J.card : ℝ) * d := by\n    calc\n      _ ≤ ∑ i, if i ∈ J then d else 0 := by\n        apply Finset.sum_le_sum\n        intro i _\n        by_cases hi : i ∈ J\n        · simpa [hi] using hrow i\n        · simp [hi]\n      _ = _ := by simp\n  have second :\n      (∑ i, ∑ k, if k ∈ J then W i k else 0) ≤ (J.card : ℝ) * d := by\n    rw [Finset.sum_comm]\n    calc\n      _ ≤ ∑ k, if k ∈ J then d else 0 := by\n        apply Finset.sum_le_sum\n        intro k _\n        by_cases hk : k ∈ J\n        · simpa [hk] using hcol k\n        · simp [hk]\n      _ = _ := by simp\n  calc\n    _ ≤ ∑ i, ∑ k,\n        ((if i ∈ J then W i k else 0) + (if k ∈ J then W i k else 0)) :=\n      Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun k _ => point i k\n    _ = (∑ i, ∑ k, if i ∈ J then W i k else 0) +\n        (∑ i, ∑ k, if k ∈ J then W i k else 0) := by\n      simp_rw [Finset.sum_add_distrib]\n    _ ≤ (J.card : ℝ) * d + (J.card : ℝ) * d := add_le_add first second\n    _ = _ := by ring\n\ntheorem good_configuration_lipschitz (X Y : ι → ι → ℝ)\n    (J : Finset ι) (d : ℝ)\n    (hoff : ∀ i k, i ∉ J → k ∉ J → X i k = Y i k)\n    (hrowX : ∀ i, ∑ k, |X i k| ≤ d)\n    (hcolX : ∀ k, ∑ i, |X i k| ≤ d)\n    (hrowY : ∀ i, ∑ k, |Y i k| ≤ d)\n    (hcolY : ∀ k, ∑ i, |Y i k| ≤ d) :\n    |response X - response Y| ≤ 4 * d * (J.card : ℝ) := by\n  have point (i k : ι) : |X i k - Y i k| ≤ |X i k| + |Y i k| := by\n    simpa using abs_sub_le (X i k) 0 (Y i k)\n  have row : ∀ i, ∑ k, |X i k - Y i k| ≤ 2 * d := by\n    intro i\n    calc\n      _ ≤ ∑ k, (|X i k| + |Y i k|) := Finset.sum_le_sum fun k _ => point i k\n      _ = (∑ k, |X i k|) + ∑ k, |Y i k| := Finset.sum_add_distrib\n      _ ≤ d + d := add_le_add (hrowX i) (hrowY i)\n      _ = _ := by ring\n  have col : ∀ k, ∑ i, |X i k - Y i k| ≤ 2 * d := by\n    intro k\n    calc\n      _ ≤ ∑ i, (|X i k| + |Y i k|) := Finset.sum_le_sum fun i _ => point i k\n      _ = (∑ i, |X i k|) + ∑ i, |Y i k| := Finset.sum_add_distrib\n      _ ≤ d + d := add_le_add (hcolX k) (hcolY k)\n      _ = _ := by ring\n  calc\n    _ ≤ ∑ i, ∑ k, |X i k - Y i k| := response_difference X Y\n    _ ≤ 2 * (J.card : ℝ) * (2 * d) :=\n      incident_mass_bound _ J (2 * d) (fun i k => abs_nonneg _)\n        (by intro i k hi hk; rw [hoff i k hi hk, sub_self, abs_zero]) row col\n    _ = _ := by ring\n\ndef deleteVertices (X : ι → ι → ℝ) (J : Finset ι) (i k : ι) : ℝ :=\n  if i ∈ J ∨ k ∈ J then 0 else X i k\n\ntheorem deletion_bound (X : ι → ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hrow : ∀ i, ∑ k, |X i k| ≤ d)\n    (hcol : ∀ k, ∑ i, |X i k| ≤ d) :\n    response X ≤ response (deleteVertices X J) + 2 * (J.card : ℝ) * d := by\n  have point (i k : ι) :\n      |X i k - deleteVertices X J i k| ≤ |X i k| := by\n    unfold deleteVertices\n    split_ifs <;> simp\n  have row : ∀ i, ∑ k, |X i k - deleteVertices X J i k| ≤ d := by\n    intro i\n    exact (Finset.sum_le_sum fun k _ => point i k).trans (hrow i)\n  have col : ∀ k, ∑ i, |X i k - deleteVertices X J i k| ≤ d := by\n    intro k\n    exact (Finset.sum_le_sum fun i _ => point i k).trans (hcol k)\n  have mass :\n      (∑ i, ∑ k, |X i k - deleteVertices X J i k|) ≤\n        2 * (J.card : ℝ) * d := by\n    apply incident_mass_bound _ J d (fun i k => abs_nonneg _) _ row col\n    intro i k hi hk\n    simp [deleteVertices, hi, hk]\n  have hd := (response_difference X (deleteVertices X J)).trans mass\n  have hs := le_abs_self (response X - response (deleteVertices X J))\n  linarith\n\ntheorem adaptive_deleted_response_bound (A : ι → ι → ℝ)\n    (δ h : ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hδ : ∀ k, |δ k| ≤ 1)\n    (hrow : ∀ i, ∑ k, |A i k| ≤ d)\n    (hcol : ∀ k, ∑ i, |A i k| ≤ d) :\n    (∑ i, |∑ k, A i k * δ k|) ≤\n      response (deleteVertices (fun i k => A i k * signPlus (h i)) J) +\n        2 * ∑ i, |(∑ k, A i k * δ k) - h i| +\n        2 * (J.card : ℝ) * d := by\n  have row : ∀ i, ∑ k, |A i k * signPlus (h i)| ≤ d := by\n    intro i\n    simpa only [abs_mul, abs_signPlus, mul_one] using hrow i\n  have col : ∀ k, ∑ i, |A i k * signPlus (h i)| ≤ d := by\n    intro k\n    simpa only [abs_mul, abs_signPlus, mul_one] using hcol k\n  have ha := adaptive_response_bound A δ h hδ\n  have hd := deletion_bound (fun i k => A i k * signPlus (h i)) J d row col\n  dsimp only [response] at hd ⊢\n  linarith\n\nend AdaptiveCutTransfer\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d96839e9ff29d2166479788f47de9806dcbb052b9279fc1d462273a4430471e7"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-C_CUT_FINITE_CORE-771822a8194a",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_CUT_FINITE_CORE",
+        "content_hash": "c77e2db3351a181bbb0e50fc3a4594baa2f066adba4025c749e01ab39ee9e79d"
+      },
+      "tier": "mechanical",
+      "verdict": "inconclusive",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/adaptive-cut-transfer/certificates/C_CUT_FINITE_CORE-d03f1859834768ea.json"
+    },
+    {
+      "evidence_id": "lean-C_CUT_FINITE_CORE-f34ebd535964",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_CUT_FINITE_CORE",
+        "content_hash": "d298e041424f2e582bd27068550a19b599e609f90e277716a4c97c0b0b03e522"
+      },
+      "tier": "mechanical",
+      "verdict": "inconclusive",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/adaptive-cut-transfer/certificates/C_CUT_FINITE_CORE-96d3e0892fc0cbfb.json"
+    },
+    {
+      "evidence_id": "lean-C_CUT_FINITE_CORE-46567f81624c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_CUT_FINITE_CORE",
+        "content_hash": "d96839e9ff29d2166479788f47de9806dcbb052b9279fc1d462273a4430471e7"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/adaptive-cut-transfer/certificates/C_CUT_FINITE_CORE-ff9737a934d9878c.json"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_DEGREE-fa231c571693",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_DEGREE",
+        "content_hash": "a8e9ab0c3a80a3a612574e155759224ed81949ce3d969d11c9dc098e5ab12a1b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:adaptive-cut",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_SKELETON-fa81ac356d25",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_SKELETON",
+        "content_hash": "cf0fd5c584b87e9eca61bd94a7b6d4e5e8400eb3227e497a40233aeb67254665"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:adaptive-cut",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_FIXED_MEAN-c85c1a404526",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_FIXED_MEAN",
+        "content_hash": "4c30f494770c2dc3e7d35c99586c072242732561a93e4d4347306147be398e67"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:adaptive-cut",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_EXTENSION-98a69e125438",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_EXTENSION",
+        "content_hash": "6f15ed58d05f10f786b8739fe466f587fb6410fd54d3afe82e149fc68bbade1f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:adaptive-cut",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_UNION-dcd3a6c41504",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_UNION",
+        "content_hash": "0483f0b2c2c943d4bdadfdcbb424d007780768a32e8cda116b93fde15fa00673"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:adaptive-cut",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_ADAPTIVE_TRANSFER-3d4af82ebc2b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ADAPTIVE_TRANSFER",
+        "content_hash": "5a617100231ca279c55cd8032263a25afce1b0b32b2f680a68704540c1cdd2cc"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:adaptive-cut",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_SAMPLING_45-e840bb311512",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SAMPLING_45",
+        "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:adaptive-cut",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_CUT_FINITE_CORE-9ecc1f891c95",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_CUT_FINITE_CORE",
+        "content_hash": "d96839e9ff29d2166479788f47de9806dcbb052b9279fc1d462273a4430471e7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/adaptive-cut-transfer/certificates/C_CUT_FINITE_CORE-ff9737a934d9878c.json"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_DEGREE-088ad0634a35",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_DEGREE",
+        "content_hash": "a8e9ab0c3a80a3a612574e155759224ed81949ce3d969d11c9dc098e5ab12a1b"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_SKELETON-7149e62137c5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_SKELETON",
+        "content_hash": "cf0fd5c584b87e9eca61bd94a7b6d4e5e8400eb3227e497a40233aeb67254665"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_FIXED_MEAN-7680de0dc93c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_FIXED_MEAN",
+        "content_hash": "4c30f494770c2dc3e7d35c99586c072242732561a93e4d4347306147be398e67"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_EXTENSION-7a4b901130a6",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_EXTENSION",
+        "content_hash": "6f15ed58d05f10f786b8739fe466f587fb6410fd54d3afe82e149fc68bbade1f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-L_CUT_UNION-ead36816dd5e",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_CUT_UNION",
+        "content_hash": "0483f0b2c2c943d4bdadfdcbb424d007780768a32e8cda116b93fde15fa00673"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_ADAPTIVE_TRANSFER-107f76abe437",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ADAPTIVE_TRANSFER",
+        "content_hash": "5a617100231ca279c55cd8032263a25afce1b0b32b2f680a68704540c1cdd2cc"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-C_SAMPLING_45-5279938d98e3",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SAMPLING_45",
+        "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/adaptive-cut-transfer/report.md"
+    },
+    {
+      "evidence_id": "judgement-U_EQ23-603bc7f6281b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "U_EQ23",
+        "content_hash": "50bedbc08730b40b30ad794f1f3c2e9186474d7ef08e67fd81a043ed72b8b35a"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/openai_manuscript/The-joint-Dickman-law-for-consecutive-integers-September-24-2026/build/sections/graph.tex"
+    },
+    {
+      "evidence_id": "judgement-U_EQ24-1f40714ce21d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "U_EQ24",
+        "content_hash": "9fbea966581ad1ddb98c11bd140f6c31205fcdbd8bcac413ea1cd56a4e89e0ca"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/openai_manuscript/The-joint-Dickman-law-for-consecutive-integers-September-24-2026/build/sections/moments.tex"
+    },
+    {
+      "evidence_id": "judgement-U_EQ44-ce8d97d13139",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "U_EQ44",
+        "content_hash": "d1172aa86de43c0cd7af920192f857a2afaa338e189122f20df1536e48fdf2da"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/openai_manuscript/The-joint-Dickman-law-for-consecutive-integers-September-24-2026/build/sections/kernel.tex"
+    },
+    {
+      "evidence_id": "judgement-U_M_ROW-943a5ffb4002",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "U_M_ROW",
+        "content_hash": "940a4ccba41dac4b23e9dbccd57bc24cc607bbcb2a1eb1a4a2f83be0cabe803c"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:974576b5500b",
+      "artifact": "research/openai_manuscript/The-joint-Dickman-law-for-consecutive-integers-September-24-2026/build/sections/kernel.tex"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_ADAPTIVE_FINITE",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_ADAPTIVE_TRANSFER",
+        "content_hash": "5a617100231ca279c55cd8032263a25afce1b0b32b2f680a68704540c1cdd2cc"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "L_CUT_DEGREE",
+          "content_hash": "a8e9ab0c3a80a3a612574e155759224ed81949ce3d969d11c9dc098e5ab12a1b"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "L_CUT_SKELETON",
+          "content_hash": "cf0fd5c584b87e9eca61bd94a7b6d4e5e8400eb3227e497a40233aeb67254665"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "L_CUT_FIXED_MEAN",
+          "content_hash": "4c30f494770c2dc3e7d35c99586c072242732561a93e4d4347306147be398e67"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "L_CUT_EXTENSION",
+          "content_hash": "6f15ed58d05f10f786b8739fe466f587fb6410fd54d3afe82e149fc68bbade1f"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "L_CUT_UNION",
+          "content_hash": "0483f0b2c2c943d4bdadfdcbb424d007780768a32e8cda116b93fde15fa00673"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_CUT_FINITE_CORE",
+          "content_hash": "4403da4df96ebb8f73c055e66aa7d416f31aa0567dda522e0961e334d84dc732"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_45_FROM_UPSTREAM",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_SAMPLING_45",
+        "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_ADAPTIVE_TRANSFER",
+          "content_hash": "5a617100231ca279c55cd8032263a25afce1b0b32b2f680a68704540c1cdd2cc"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "U_EQ23",
+          "content_hash": "50bedbc08730b40b30ad794f1f3c2e9186474d7ef08e67fd81a043ed72b8b35a"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "U_EQ24",
+          "content_hash": "9fbea966581ad1ddb98c11bd140f6c31205fcdbd8bcac413ea1cd56a4e89e0ca"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "U_EQ44",
+          "content_hash": "d1172aa86de43c0cd7af920192f857a2afaa338e189122f20df1536e48fdf2da"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "U_M_ROW",
+          "content_hash": "940a4ccba41dac4b23e9dbccd57bc24cc607bbcb2a1eb1a4a2f83be0cabe803c"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_MAIN_DICKMAN",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_JOINT_DICKMAN",
+        "content_hash": "06124f0a7455dc7a17a7782c734c171052efeb8225cab468a866e645f1c017fd"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_SAMPLING_45",
+          "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "U_ROOT21",
+          "content_hash": "68402a5693742c1c9248749189f68d0db134644d924424219dbff9c22353d15f"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "U_LABEL_REDUCTION",
+          "content_hash": "a36c8e7ee93c4b8e6f9be0e3bf5dafad0281083b451580bc39d8a58434a752b1"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_AUDIT_SAMPLING",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C9000012",
+        "content_hash": "48e034b77697277b234590fbb535ca409c2a3ab814673123910187619e1a3ab4"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_SAMPLING_45",
+          "content_hash": "ba8547262e2df9416a4c910add75a19ea40cfdb957ed6b3d89effb60ebbced2f"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_EXCLUDED_OPTIMIZER_CONDITIONING",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_ADAPTIVE_TRANSFER",
+        "content_hash": "5a617100231ca279c55cd8032263a25afce1b0b32b2f680a68704540c1cdd2cc"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "L_CUT_FIXED_MEAN",
+          "content_hash": "4c30f494770c2dc3e7d35c99586c072242732561a93e4d4347306147be398e67"
+        }
+      ],
+      "retired_because": "Conditioning on which signs the realized optimizer chooses need not preserve the product site law. This is an excluded shortcut, not an assertion made in the staged proof; fix a deterministic assignment instead."
+    },
+    {
+      "route_id": "R_EXCLUDED_CONDITIONAL_MOMENTS",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_ADAPTIVE_TRANSFER",
+        "content_hash": "5a617100231ca279c55cd8032263a25afce1b0b32b2f680a68704540c1cdd2cc"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "L_CUT_DEGREE",
+          "content_hash": "a8e9ab0c3a80a3a612574e155759224ed81949ce3d969d11c9dc098e5ab12a1b"
+        }
+      ],
+      "retired_because": "Integrated row-square control does not bound conditional row-square moments at rare endpoint types. The valid proof averages conditional variances and uses every-type first moments only."
+    }
+  ]
+}

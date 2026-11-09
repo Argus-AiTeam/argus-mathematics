@@ -1,0 +1,181 @@
+{
+  "goal": "C9000171",
+  "routes": [
+    {
+      "name": "R_LPT_VERIFY",
+      "status": "current",
+      "evidence": "research/late-prefix-transfer/report.md"
+    },
+    {
+      "name": "R_LPT_WHOLE_RANGE",
+      "status": "ruled_out",
+      "retired_because": "Whole-transcript logarithmic range n^(1.4+o(1)) is too large for the available stretched-exponential raw error; the generic range inequality is non-informative.",
+      "evidence": "research/late-prefix-transfer/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000171": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 171 (The hypercube Ramsey conjecture.; papers: The hypercube Ramsey number has linear order; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["V_LPT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "M_MAIN": {
+      "statement": "Absolute linear-order bound R(Q_n)<=C2^n, for every integer n>=0; Section 1 thm:main. NOT established by this local audit.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["M_REDUCTION", "LPT_DEEP", "M_PATCH", "M_HIGH", "M_HALL"]
+    },
+    "M_REDUCTION": {
+      "statement": "Counterexample-sequence reduction with arbitrarily slowly diverging C_n; Section 2 lem:counterexample-sequence.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": []
+    },
+    "LPT_DEEP": {
+      "statement": "Deep discrepancy at widths alpha n and n^(x_*), in both orientations; Section 12 eq:source-9. Earlier exclusions in Sections 4-11 are unaudited.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": []
+    },
+    "M_PATCH": {
+      "statement": "Extraction/allocation, cleaning, internal solver, and balanced profiles; Sections 13-14.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["LPT_DEEP"]
+    },
+    "M_HIGH": {
+      "statement": "High direct and cluster modes; Section 15.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["M_PATCH"]
+    },
+    "LPT_GEOMETRY": {
+      "statement": "Low-mode syndrome classes, distinct critical cells, slice separation, and polylogarithmic dimensions; Section 16 lem:late-classes-cells.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["M_PATCH"]
+    },
+    "LPT_SINGLETON": {
+      "statement": "Fresh averaged singleton domination and cleaned degree/nonconflict bounds; Section 16 lem:fresh-singleton.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["M_PATCH", "LPT_GEOMETRY"]
+    },
+    "LPT_MASKED": {
+      "statement": "Initial-validity gate includes the masked-list support cap after at most log(n)^4 omissions; Section 17 definition of S_v.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": []
+    },
+    "LPT_WEIGHT": {
+      "statement": "Unconditioned uniform pair survival-weight second moment; Section 17 after eq:source-24.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["LPT_DEEP", "M_PATCH"]
+    },
+    "M_INITIAL": {
+      "statement": "Uniform pool estimate and finite resampling/local comparison; Section 17.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["LPT_SINGLETON", "LPT_MASKED"]
+    },
+    "LPT_DELETE": {
+      "statement": "Earlier gated deletion comparisons and fixed mask profiles; Section 18 lem:late-local-transition and local requirements.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["M_PATCH"]
+    },
+    "LPT_TARGET": {
+      "statement": "Uniform late-prefix transfer, including one omitted critical cell; Section 18 lem:late-prefix-transfer.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["V_LPT"],
+      "evidence": ["research/late-prefix-transfer/report.md", "research/late-prefix-transfer/exact_certificate.json"]
+    },
+    "V_LPT": {
+      "statement": "Independent uniform verification of the full late-prefix bridge, CONDITIONAL on the explicitly open upstream inputs.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["LPT_DEEP", "LPT_GEOMETRY", "LPT_SINGLETON", "LPT_MASKED", "LPT_WEIGHT", "LPT_DELETE", "V_LPT_PROTOCOL", "V_LPT_CYLINDERS", "V_LPT_SURVIVAL", "V_LPT_STOPPED", "V_LPT_WEIGHTED"],
+      "evidence": ["research/late-prefix-transfer/report.md", "research/late-prefix-transfer/exact_certificate.json"]
+    },
+    "V_LPT_PROTOCOL": {
+      "statement": "Witness-independent bounded-response simulation, including aborts, fixed alphabets, one-block locality, and broad outputs.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["LPT_GEOMETRY", "LPT_MASKED", "LPT_DELETE"],
+      "evidence": ["research/late-prefix-transfer/report.md", "research/late-prefix-transfer/exact_certificate.json"]
+    },
+    "V_LPT_CYLINDERS": {
+      "statement": "Adaptive transcript product cylinders and an integrated K S lambda small-cylinder bound.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/late-prefix-transfer/report.md", "research/late-prefix-transfer/exact_certificate.json"]
+    },
+    "V_LPT_SURVIVAL": {
+      "statement": "Conditional tuple survival near 2^(-a m) using joint domination, low-density prefixes, Fubini, and witness Markov bounds.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["LPT_DEEP", "LPT_SINGLETON", "V_LPT_CYLINDERS"],
+      "evidence": ["research/late-prefix-transfer/report.md", "research/late-prefix-transfer/exact_certificate.json"]
+    },
+    "V_LPT_STOPPED": {
+      "statement": "Finite-parameter stopped likelihood bound with only raw witness-averaged update exceptions.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["V_LPT_CYLINDERS", "V_LPT_L2_STEP"],
+      "evidence": ["research/late-prefix-transfer/report.md", "research/late-prefix-transfer/exact_certificate.json", "research/late-prefix-transfer/certificates/V_LPT_L2_STEP-ad77bac0e0a5e2c5.json"]
+    },
+    "V_LPT_L2_STEP": {
+      "statement": "Universal finite weighted second-moment integration step; Lean 4.31.0 core compiled with no proof holes, pending independent statement-fidelity review.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/late-prefix-transfer/Main.lean", "research/late-prefix-transfer/statement_fidelity.md", "research/late-prefix-transfer/certificates/V_LPT_L2_STEP-ad77bac0e0a5e2c5.json"]
+    },
+    "V_LPT_WEIGHTED": {
+      "statement": "Survival-weighted witness estimate M_i^a 2^(-a d) sqrt(W eta), followed by the manuscript asymptotics.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["LPT_WEIGHT", "V_LPT_STOPPED"],
+      "evidence": ["research/late-prefix-transfer/report.md", "research/late-prefix-transfer/exact_certificate.json"]
+    },
+    "M_TERMINAL": {
+      "statement": "Terminal avoidance and local comparison; Section 18 prop:terminal-avoidance. Unaudited.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["M_INITIAL", "LPT_TARGET"]
+    },
+    "M_LATE": {
+      "statement": "Completion of late assignment; Section 18 prop:late-assignment. Unaudited.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["M_TERMINAL", "LPT_DELETE"]
+    },
+    "M_ENDPOINT": {
+      "statement": "Joint endpoint kernels eq:source-28; Section 18 prop:low-endpoint-kernels. Unaudited.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["M_INITIAL", "M_TERMINAL", "M_LATE", "LPT_WEIGHT"]
+    },
+    "M_HALL": {
+      "statement": "Two-endpoint Hall completion; Section 18 lem:low-two-endpoint-hall. Unaudited.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["M_ENDPOINT", "LPT_GEOMETRY"]
+    },
+    "LPT_GENERIC_TRANSFER": {
+      "statement": "Generic range/max-information comparison does not alone give the needed quantitative bridge.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/late-prefix-transfer/report.md"]
+    }
+  }
+}

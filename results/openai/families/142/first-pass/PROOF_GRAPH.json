@@ -1,0 +1,146 @@
+{
+  "goal": "C9000142",
+  "routes": {},
+  "nodes": {
+    "C9000142": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 142 (Deterministic polynomial factorization over prime fields.; papers: Deterministic Polynomial Factorization over Prime Fields; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_NORM_SOLVE", "C_NORM_BUDGET"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_NORM_SOLVE": {
+      "statement": "Under the exact hypotheses of norm:solve, the explicit local-order, section-space, fiber and extraction construction returns h with Norm(h)=G in uniform deterministic polynomial time without an irreducible-factorization oracle.",
+      "status": "open",
+      "depends_on": ["L_NORM_ROOT", "L_NORM_LOCAL", "L_NORM_PRECISION", "L_NORM_FIBER", "L_NORM_RECOVERY", "L_NORM_BOUNDS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md", "research/norm_solver/verify.py", "research/norm_solver/exact_certificate.json"]
+    },
+    "L_NORM_ROOT": {
+      "statement": "The finite reduced-algebra root routine supplies all promised residue roots using only polynomially bounded gcds, Frobenius linear algebra, primary digit logarithms and CRT.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "L_NORM_LOCAL": {
+      "statement": "The displayed cyclic matrix models and scaled-basis orders are maximal; every section coordinate has local valuation at least -(N+D+2), independently of residue-root choices.",
+      "status": "open",
+      "depends_on": ["L_NORM_ROOT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "L_NORM_PRECISION": {
+      "statement": "The bounded rational ansatz and local congruences compute all global sections and the exact infinity evaluation; precision 2L+1 suffices with L=N+D+2.",
+      "status": "open",
+      "depends_on": ["L_NORM_LOCAL", "L_NORM_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "L_NORM_FORMAL_CORE": {
+      "statement": "For formal power series, multiplication and finite sums preserve equality of coefficients through any prescribed degree; vanishing below 2m and the coefficient at 2m depend only on precision 2m+1.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/norm_solver/Main.lean",
+        "research/norm_solver/statement_fidelity.md",
+        "research/norm_solver/certificates/L_NORM_FORMAL_CORE-ed51652a939dd550.json"
+      ]
+    },
+    "L_NORM_FIBER": {
+      "statement": "The exact section algebra is an endomorphism algebra of a vector bundle on P1; its infinity image is block upper triangular, and the trace-kernel algorithm constructs a rank-one fiber idempotent.",
+      "status": "open",
+      "depends_on": ["L_NORM_PRECISION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "L_NORM_RECOVERY": {
+      "statement": "A lift b of the fiber idempotent has characteristic polynomial T^(q-1)(T-1); b^q is rank-one idempotent, and solving Ve=he recovers Norm(h)=G.",
+      "status": "open",
+      "depends_on": ["L_NORM_FIBER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "L_NORM_BOUNDS": {
+      "statement": "All root, local-congruence, section, power and final-solve steps have uniform polynomial degree and bit bounds and field-dependent zero-test branches only.",
+      "status": "open",
+      "depends_on": ["L_NORM_ROOT", "L_NORM_LOCAL", "L_NORM_PRECISION", "L_NORM_RECOVERY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_DIV_ARITHMETIC": {
+      "statement": "Manuscript div:arithmetic, div:compression, div:trace and div:circuits provide the stated factorization-free divisor and function operations; not certified in this mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_DIV_DIVIDE": {
+      "statement": "Manuscript div:divide reduces promised (1-sigma)-class division to norm:solve and divisor arithmetic.",
+      "status": "open",
+      "depends_on": ["C_NORM_SOLVE", "C_DIV_ARITHMETIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_GEOMETRIC_LIFTS": {
+      "statement": "Manuscript geom:descent, geom:lifts and geom:separation provide rational lifts and forced separation; not certified in this mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_ODD_SPLIT": {
+      "statement": "Manuscript odd:split uses promised class division, simultaneous divisor arithmetic, rational lifts and forced separation to split odd-degree totally split input.",
+      "status": "open",
+      "depends_on": ["C_DIV_DIVIDE", "C_DIV_ARITHMETIC", "C_GEOMETRIC_LIFTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_DRIVER_COMPLEXITY": {
+      "statement": "Manuscript driver:correctness and complexity:bound give the factoring recursion and uniform polynomial bound conditional on auxiliary primes.",
+      "status": "open",
+      "depends_on": ["C_ODD_SPLIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_MAIN_REDUCTION": {
+      "statement": "Manuscript thm:reduction deterministically factors given auxiliary primes satisfying its explicit congruence and nonresidue conditions.",
+      "status": "open",
+      "depends_on": ["C_DRIVER_COMPLEXITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_ANALYTIC_AUXILIARY": {
+      "statement": "Manuscript analytic:auxiliary derives polynomial auxiliary-prime bounds from the companion uniform Hecke zero-free assertion; analytic validity remains unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_MAIN_FACTORIZATION": {
+      "statement": "Manuscript thm:factorization combines thm:reduction with analytic:auxiliary for unconditional deterministic polynomial-time factorization over prime fields.",
+      "status": "open",
+      "depends_on": ["C_MAIN_REDUCTION", "C_ANALYTIC_AUXILIARY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_NORM_BUDGET": {
+      "statement": "Under norm:solve's hypotheses, L=N+D+2 suffices in place of M=10q^2(N+D+1): q^2(L(deg H+1)+1) scalar unknowns and precision 2L+1 compute all sections and the infinity fiber.",
+      "status": "open",
+      "depends_on": ["L_NORM_LOCAL", "L_NORM_PRECISION", "L_NORM_BOUNDS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/report.md"]
+    },
+    "C_NORM_DIAGNOSTIC": {
+      "statement": "For q=3, k=F_19, zeta=7, omega=4, F=X^3-2 and G=2, the actual full 225-by-189 system has rank 180; the section and fiber dimensions are 9, and the constructed h=X-Y has norm 2. This is a finite exact diagnostic, not a universal proof.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/norm_solver/verify.py", "research/norm_solver/exact_certificate.json"]
+    }
+  }
+}

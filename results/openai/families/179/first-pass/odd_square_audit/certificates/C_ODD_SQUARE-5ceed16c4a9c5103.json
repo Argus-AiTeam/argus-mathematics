@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_ODD_SQUARE-8d4a8ebf0434",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/179/first-pass/odd_square_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/179/first-pass/odd_square_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 18152,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/179/first-pass/odd_square_audit/Main.lean",
+    "source_sha256": "8c82f61f68f11a3c5bf921511c64dd91791953797e9e8e38bdf395ce91f2fe03",
+    "statement_fidelity": "families/179/first-pass/odd_square_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "0975559cd979f88c7c1586f66c2bac649786ae0a05b266c059b3c77a2ee928f6",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'Audit9000179.odd_square_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]\n'OAI.CirculantHadamard.LocalComparison.local_character_comparison' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'OAI.CirculantHadamard.alternatingProduct_odd_torsion' depends on axioms: [propext, Classical.choice, Quot.sound]\n'OAI.CirculantHadamard.binary_sign_norm_impossible' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/odd_square_audit/Main.lean",
+    "text": "import OAI.LinearAlgebra.CirculantHadamard.BinaryContradiction\nimport OAI.LinearAlgebra.CirculantHadamard.LocalComparison\n\nnamespace Audit9000179\n\nopen OAI.CirculantHadamard\nopen OAI.CirculantHadamard.CyclicRing\n\ntheorem odd_square_obstruction (u : ℕ) (hu : 1 < u) (hodd : Odd u) :\n    letI : NeZero u := ⟨(lt_trans Nat.zero_lt_one hu).ne'⟩\n    ¬ ∃ h : Elem ℤ (4 * u ^ 2),\n      (∀ a, h.coeff a = 1 ∨ h.coeff a = -1) ∧\n      h * ringStar h = scalar (4 * u ^ 2) ((4 * u ^ 2 : ℕ) : ℤ) := by\n  letI : NeZero u := ⟨(lt_trans Nat.zero_lt_one hu).ne'⟩\n  rintro ⟨h, hsign, hnorm⟩\n  exact binary_sign_norm_impossible hu hodd h hsign hnorm\n\nend Audit9000179\n\n#print axioms Audit9000179.odd_square_obstruction\n#print axioms OAI.CirculantHadamard.LocalComparison.local_character_comparison\n#print axioms OAI.CirculantHadamard.alternatingProduct_odd_torsion\n#print axioms OAI.CirculantHadamard.binary_sign_norm_impossible\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/odd_square_audit/statement_fidelity.md",
+    "text": "# Statement fidelity\n\n`Audit9000179.odd_square_obstruction` quantifies over every natural number\n`u`, assuming exactly `1 < u` and `Odd u`. Natural numbers with these\nhypotheses are exactly the odd integers greater than one in the live\nobjective. The `NeZero u` instance in the proposition is constructed from\n`hu`; it is not an extra hypothesis or a bounded range.\nIts unqualified declaration name is `odd_square_obstruction`.\n\n`CyclicRing.Elem Z n` is `AddMonoidAlgebra Z (ZMod n)`, the ordinary\ninteger group ring of the additive cyclic group of order `n`.\n`h.coeff a` is its literal coefficient at the residue class `a`.\nThe universally quantified sign condition is `h.coeff a = 1` or\n`h.coeff a = -1` for every residue class. `ringStar` reverses the residue\nclass and applies coefficient star. On integers coefficient star is the\nidentity, so this is precisely the involution of the objective.\n`scalar n r` is the group-ring element supported at zero with coefficient\n`r`. Thus the norm equality is the full equality `h h*=4u^2`, including\nall nonidentity coefficients, not only its augmentation or its diagonal.\nThe conclusion excludes the existence of every such `h`.\n\nThe proof uses the primary released\n`OAI.CirculantHadamard.binary_sign_norm_impossible`; its hypotheses are\nthe same sign condition and full norm identity. Its proof constructs\nthe actual three normalized evaluations and proves their odd torsion.\nIt does not assume the character comparison, alternating-product\nconclusion, or nonexistence theorem as an unproved axiom. Source provenance\nand the required Lean 4.31.0 compatibility changes are described in\n`report.md` and `formal_dependencies.json`. This is a replay of released\nmathematics, not a claim of a new mathematical proof.\n\nThe four `#print axioms` commands request the complete transitive axiom\nsets of the objective, local character comparison, alternating odd\ntorsion, and the binary contradiction. A successful import alone is not\nthe required outcome. The accepted axiom set is limited to the standard\nlogical foundations `propext`, `Classical.choice`, and `Quot.sound`.\nIn particular `sorryAx`, additional arithmetic axioms, and a hypothesis\nasserting the disputed conclusion would invalidate this certification.\n\nLean checks the encoded statement and its proof terms. It does not check\nthis reading of the definitions, novelty, publishability, or independent\nReviewer acceptance.\n"
+  },
+  "subject": {
+    "content_hash": "00ad3b8efdfcfc8e2617cdbf7608c64f6f5eebe7677c85690bf55415502dcfd2",
+    "kind": "claim",
+    "subject_id": "C_ODD_SQUARE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,127 @@
+{
+  "goal": "C9000155",
+  "routes": [
+    {
+      "name": "Universal shared-seed activation certification",
+      "status": "current",
+      "evidence": "research/shared_seed/Main.lean",
+      "goal": "C9000155",
+      "obligations": ["C_SHARED_SEED", "R_SHARED_SEED_REVIEW"]
+    },
+    {
+      "name": "Complete manuscript theorem audit",
+      "status": "untried",
+      "evidence": "research/openai_manuscript/A-translational-tile-with-no-fully-periodic-tiling-in-dimension-three-September-23-2026/build/sections/01-introduction.tex",
+      "obligations": ["M_FULL_THEOREM"]
+    }
+  ],
+  "nodes": {
+    "C9000155": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 155 (A counterexample to periodic tiling in dimension three.; papers: A translational tile with no fully periodic tiling in dimension three; Lean status: Partially/Comparator formalized (lean/docs/155.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_SHARED_SEED", "R_SHARED_SEED_REVIEW"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SHARED_SEED": {
+      "statement": "For every labelled block/seed layout and every permitted CRT lift, every ordinary activation map and both seed activation maps have explicit two-sided inverses using one common cyclic output.",
+      "status": "in_progress",
+      "depends_on": ["L_BLOCK_INVERSE", "L_SEED_INVERSE", "L_COORDINATE_TRANSPORT", "C_SOURCE_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/shared_seed/Main.lean",
+        "research/shared_seed/statement_fidelity.md",
+        "research/shared_seed/exact_certificate.json",
+        "research/shared_seed/certificates/C_SHARED_SEED-ff90000428962f7c.json"
+      ],
+      "engineer_result": "Lean 4.31.0 exit_code=0, proof_holes=[]; independent review pending"
+    },
+    "L_BLOCK_INVERSE": {
+      "statement": "Both cyclic block inverse formulas are two-sided, including repeated shift-list indices and arbitrary set labels.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shared_seed/Main.lean"]
+    },
+    "L_SEED_INVERSE": {
+      "statement": "The shared-output active and inactive seed inverses are two-sided, including the region where both seeds are inactive; recovery depends only on prescribed offset residues.",
+      "status": "in_progress",
+      "depends_on": ["L_BLOCK_INVERSE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shared_seed/Main.lean"]
+    },
+    "L_COORDINATE_TRANSPORT": {
+      "statement": "Actual horizontal CRT offsets produce the prescribed source residue; the nonsplit high-coordinate shear preserves beta; ordinary shifts preserve their line partition.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shared_seed/Main.lean"]
+    },
+    "C_SOURCE_INPUTS": {
+      "statement": "The source's chosen labelled partitions, indexed fibre orderings and seed layout instantiate the verification theorem, with exactly one cyclic output and no group-splitting assumption.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/shared_seed/statement_fidelity.md"]
+    },
+    "R_SHARED_SEED_REVIEW": {
+      "statement": "Independent Reviewer replays the certificates, checks statement fidelity and assesses publishable significance and verified novelty without treating this core verification as a formalization of the entire manuscript.",
+      "status": "open",
+      "depends_on": ["C_SHARED_SEED"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "M_FULL_THEOREM": {
+      "statement": "The manuscript's finite tile in dimension three admits a tiling but no fully periodic tiling, including its claimed arbitrary-real-translation conclusion.",
+      "status": "open",
+      "depends_on": ["M_WORD_RULE", "M_CYCLIC_ENCODING", "M_ACTIVATION_OBSTRUCTION", "M_COMMON_SOLUTION", "M_STACKING", "M_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-translational-tile-with-no-fully-periodic-tiling-in-dimension-three-September-23-2026/build/sections/01-introduction.tex"]
+    },
+    "M_WORD_RULE": {
+      "statement": "The word rule has a nonconstant-column model and excludes vertically periodic admissible arrays.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-translational-tile-with-no-fully-periodic-tiling-in-dimension-three-September-23-2026/build/sections/02-word-rule.tex"]
+    },
+    "M_CYCLIC_ENCODING": {
+      "statement": "The graph, dependence and cycle-exclusion equations encode the required functional constraints with a cyclic finite factor.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-translational-tile-with-no-fully-periodic-tiling-in-dimension-three-September-23-2026/build/sections/03-cyclic-encoding.tex"]
+    },
+    "M_ACTIVATION_OBSTRUCTION": {
+      "statement": "Every common solution activates all required channels and cannot be invariant under a finite-index subgroup.",
+      "status": "open",
+      "depends_on": ["M_WORD_RULE", "M_CYCLIC_ENCODING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-translational-tile-with-no-fully-periodic-tiling-in-dimension-three-September-23-2026/build/sections/04-activation.tex"]
+    },
+    "M_COMMON_SOLUTION": {
+      "statement": "The explicit graph solves every graph, dependence, exclusion and activation equation simultaneously.",
+      "status": "open",
+      "depends_on": ["C_SHARED_SEED", "M_WORD_RULE", "M_CYCLIC_ENCODING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-translational-tile-with-no-fully-periodic-tiling-in-dimension-three-September-23-2026/build/sections/05-common-solution.tex"]
+    },
+    "M_STACKING": {
+      "statement": "The simultaneous equations combine into one finite tile while preserving existence, cyclicity and the periodicity obstruction.",
+      "status": "open",
+      "depends_on": ["M_ACTIVATION_OBSTRUCTION", "M_COMMON_SOLUTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-translational-tile-with-no-fully-periodic-tiling-in-dimension-three-September-23-2026/build/sections/06-stacking.tex"]
+    },
+    "M_GEOMETRY": {
+      "statement": "The quotient lift and rigidification give the lattice and arbitrary-real-translation claims in dimension three.",
+      "status": "open",
+      "depends_on": ["M_STACKING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-translational-tile-with-no-fully-periodic-tiling-in-dimension-three-September-23-2026/build/sections/07-three-dimensions.tex"]
+    }
+  }
+}

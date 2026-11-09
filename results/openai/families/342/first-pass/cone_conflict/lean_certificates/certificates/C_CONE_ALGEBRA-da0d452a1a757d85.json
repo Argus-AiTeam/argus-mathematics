@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CONE_ALGEBRA-4fb424aedd85",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/342/first-pass/cone_conflict/lean_certificates/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/342/first-pass/cone_conflict/lean_certificates/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 19482,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/342/first-pass/cone_conflict/lean_certificates/Main.lean",
+    "source_sha256": "ae578f6d7409a7d935b4d86aa9738aa7c3bb498ac56fdfc50324ed0e52b3248f",
+    "statement_fidelity": "families/342/first-pass/cone_conflict/lean_certificates/statement_fidelity.md",
+    "statement_fidelity_sha256": "f8044b5a1153efcaa8eec812536807042f2943fbfa389f9e058f28ab92f34549",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/cone_conflict/lean_certificates/Main.lean",
+    "text": "import Mathlib\n\nnamespace ConeConflict\n\nabbrev Vector4 := ℝ × ℝ × ℝ × ℝ\n\ndef scale (a : ℝ) (v : Vector4) : Vector4 :=\n  (a * v.1, a * v.2.1, a * v.2.2.1, a * v.2.2.2)\n\ndef dot (u v : Vector4) : ℝ :=\n  u.1 * v.1 + u.2.1 * v.2.1 + u.2.2.1 * v.2.2.1 + u.2.2.2 * v.2.2.2\n\ndef K (f k : ℝ) (v : Vector4) : Vector4 :=\n  (-v.2.1 - f * v.2.2.1 - k * v.2.2.2,\n   v.1 - k * v.2.2.1 + f * v.2.2.2,\n   f * v.1 + k * v.2.1 - v.2.2.2,\n   k * v.1 - f * v.2.1 + v.2.2.1)\n\ntheorem K_scale (f k a : ℝ) (v : Vector4) :\n    K f k (scale a v) = scale a (K f k v) := by\n  rcases v with ⟨x, y, z, w⟩\n  dsimp [K, scale]\n  ext <;> ring\n\ntheorem scale_scale (a b : ℝ) (v : Vector4) :\n    scale a (scale b v) = scale (a * b) v := by\n  rcases v with ⟨x, y, z, w⟩\n  dsimp [scale]\n  ext <;> ring\n\ntheorem K_squared (f k : ℝ) (v : Vector4) :\n    K f k (K f k v) = scale (-(1 + f^2 + k^2)) v := by\n  rcases v with ⟨x, y, z, w⟩\n  dsimp [K, scale]\n  ext <;> ring\n\ntheorem K_norm (f k : ℝ) (v : Vector4) :\n    dot (K f k v) (K f k v) = (1 + f^2 + k^2) * dot v v := by\n  rcases v with ⟨x, y, z, w⟩\n  dsimp [K, dot]\n  ring\n\nnoncomputable def J (f k r : ℝ) (v : Vector4) : Vector4 :=\n  scale r⁻¹ (K f k v)\n\ntheorem J_squared (f k r : ℝ) (hr : r ≠ 0)\n    (hn : r^2 = 1 + f^2 + k^2) (v : Vector4) :\n    J f k r (J f k r v) = scale (-1) v := by\n  unfold J\n  rw [K_scale, scale_scale, K_squared, scale_scale]\n  have hc : r⁻¹ * r⁻¹ * (-(1 + f^2 + k^2)) = -1 := by\n    rw [← hn]\n    field_simp [hr]\n  rw [hc]\n\nstructure TwoForm where\n  a12 : ℝ\n  a13 : ℝ\n  a14 : ℝ\n  a23 : ℝ\n  a24 : ℝ\n  a34 : ℝ\n\ndef wedge (a b : TwoForm) : ℝ :=\n  a.a12 * b.a34 - a.a13 * b.a24 + a.a14 * b.a23 +\n  a.a23 * b.a14 - a.a24 * b.a13 + a.a34 * b.a12\n\ndef numerator (f k : ℝ) : TwoForm := ⟨1, f, k, k, -f, 1⟩\ndef eta (f k : ℝ) : TwoForm := ⟨1, 2*f, 0, 2*k, 0, 1⟩\ndef betaPlus : TwoForm := ⟨1, 1, 0, 0, -1, 1⟩\ndef betaMinus : TwoForm := ⟨1, -1, 0, 0, 1, 1⟩\n\ntheorem numerator_square (f k : ℝ) :\n    wedge (numerator f k) (numerator f k) = 2 * (1 + f^2 + k^2) := by\n  dsimp [wedge, numerator]\n  ring\n\ntheorem eta_square (f k : ℝ) : wedge (eta f k) (eta f k) = 2 := by\n  norm_num [wedge, eta]\n\ntheorem tamers_square :\n    wedge betaPlus betaPlus = 4 ∧ wedge betaMinus betaMinus = 4 := by\n  norm_num [wedge, betaPlus, betaMinus]\n\ntheorem tamers_zero_intersection : wedge betaPlus betaMinus = 0 := by\n  norm_num [wedge, betaPlus, betaMinus]\n\ntheorem eta_tamer_pairings (f k : ℝ) :\n    wedge (eta f k) betaPlus = 2 * (1 + f) ∧\n    wedge (eta f k) betaMinus = 2 * (1 - f) := by\n  constructor <;> dsimp [wedge, eta, betaPlus, betaMinus] <;> ring\n\ntheorem eigenvalue_positive (r s : ℝ) (hr : 0 < r) (hs : 0 ≤ s)\n    (hn : r^2 = 1 + s^2) : 0 < r - s := by\n  by_contra h\n  have hd : r - s ≤ 0 := le_of_not_gt h\n  have hp : (r - s) * (r + s) ≤ 0 :=\n    mul_nonpos_of_nonpos_of_nonneg hd (add_nonneg (le_of_lt hr) hs)\n  nlinarith\n\ntheorem taming_coefficients_positive (f r : ℝ) (hr : 0 < r)\n    (hf : -1 < f ∧ f < 1) :\n    0 < (1 + f) / r ∧ 0 < (1 - f) / r := by\n  constructor\n  · exact div_pos (by linarith [hf.1]) hr\n  · exact div_pos (by linarith [hf.2]) hr\n\ntheorem positive_trace_pairing (c t : ℝ) (hc : 0 < c) (ht : 0 < t) :\n    0 < c * t / 2 := by\n  exact div_pos (mul_pos hc ht) (by norm_num)\n\nend ConeConflict\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/cone_conflict/lean_certificates/statement_fidelity.md",
+    "text": "# Statement fidelity for `ConeConflict`\n\nClaim: `C_CONE_ALGEBRA`. The source uses real scalars and the ordered\nvector coordinates \\((x_1,x_2,x_3,x_4)\\) and two-form coordinates\n\\((12,13,14,23,24,34)\\). Multiplication by `scale (-1)` is vector\nnegation. `K` is exactly the matrix \\(-M_{U+fV+kW}\\) in proof.md,\nwith the convention \\(F(u,v)=g(Ju,v)\\). `J` is \\(K/r\\).\n\nThe declarations and their quantifiers are:\n\n* `K_scale`, `scale_scale`: homogeneity and scalar composition for\n  every real parameter and vector.\n* `K_squared`: for all real \\(f,k\\) and vectors \\(v\\),\n  \\(K(Kv)=-(1+f^2+k^2)v\\).\n* `K_norm`: for the same quantifiers,\n  \\(|Kv|^2=(1+f^2+k^2)|v|^2\\), using the explicit Euclidean dot\n  product `dot`.\n* `J_squared`: for every real \\(f,k,r\\), assuming \\(r\\ne0\\) and\n  \\(r^2=1+f^2+k^2\\), the explicit map \\(J\\) squares to \\(-I\\).\n  Positive \\(r\\) is needed in the geometric application, but not\n  for this algebraic identity.\n* `wedge`: the coefficient of the product of two two-forms in the\n  standard orientation. This is an explicit six-coordinate\n  polynomial, not a formal differential-form or cohomology API.\n* `numerator_square`, `eta_square`, `tamers_square`,\n  `tamers_zero_intersection`, `eta_tamer_pairings`: the universal\n  wedge identities for the exact forms named in the torus\n  construction, with arbitrary real \\(f,k\\) where applicable.\n* `eigenvalue_positive`: for real \\(r,s\\), hypotheses\n  \\(r>0,s\\ge0,r^2=1+s^2\\) imply \\(r-s>0\\).\n* `taming_coefficients_positive`: for real \\(f,r\\), hypotheses\n  \\(r>0,-1<f<1\\) imply positivity of both \\((1+f)/r\\) and\n  \\((1-f)/r\\).\n* `positive_trace_pairing`: two positive real scalars have positive\n  product divided by two. Identifying those scalars with the\n  invariant projection coefficient and compatible trace is a\n  separate geometric argument in proof.md.\n\nThese are the algebraic core of Sections 1, 2 and 5, not a formal\nproof that the torus exists, that the displayed forms are globally\nclosed, that anti-invariant cohomology vanishes, that all cohomology\nclasses have invariant representatives, or that a cohomology class\nhas no compatible representative. In particular no smooth forms,\nStokes theorem, harmonic-form argument, currents, source statements\nor literature conclusions occur in this Lean source.\nThose analytic and interpretive obligations are proved separately\nin proof.md, with exact primitives and further algebra replayed by\nverify.py. Successful compilation must not be reported as a\nkernel-level proof of `C_CONE_RESOLUTION`.\n"
+  },
+  "subject": {
+    "content_hash": "e0e6ad35af01b061ee463a7a017e16579f078155d11c46b7c7741d972159e0d6",
+    "kind": "claim",
+    "subject_id": "C_CONE_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

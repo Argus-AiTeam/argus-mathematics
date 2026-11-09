@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C193_IMAGE_CORE-4032250653ba",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/193/first-pass/supported-euler-audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/193/first-pass/supported-euler-audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 7960,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/193/first-pass/supported-euler-audit/Main.lean",
+    "source_sha256": "5bdc438c2ec59ec269560247e285f22e3b01c225720058e880fd9360a6bac15f",
+    "statement_fidelity": "families/193/first-pass/supported-euler-audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "2ea14bdd523c21333a584d10e60fd20e04d410aa6c00fde8640fd0c7167bf89b",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/supported-euler-audit/Main.lean",
+    "text": "import Mathlib.LinearAlgebra.Projection\n\nnamespace SupportedEuler\n\nvariable {R M N Q : Type*} [Ring R]\nvariable [AddCommGroup M] [Module R M]\nvariable [AddCommGroup N] [Module R N]\nvariable [AddCommGroup Q] [Module R Q]\n\ntheorem fixed_of_mem_range\n    (p : M →ₗ[R] M) (hp : p.comp p = p)\n    {x : M} (hx : x ∈ LinearMap.range p) : p x = x := by\n  obtain ⟨y, rfl⟩ := hx\n  exact DFunLike.congr_fun hp y\n\ntheorem range_inter_eq_map\n    (p : M →ₗ[R] M) (hp : p.comp p = p)\n    (F : Submodule R M) (hF : ∀ x ∈ F, p x ∈ F) :\n    LinearMap.range p ⊓ F = F.map p := by\n  apply le_antisymm\n  · intro x hx\n    exact ⟨x, hx.2, fixed_of_mem_range p hp hx.1⟩\n  · intro x hx\n    obtain ⟨y, hy, rfl⟩ := hx\n    exact ⟨⟨y, rfl⟩, hF y hy⟩\n\ntheorem exact_on_ranges\n    (f : M →ₗ[R] N) (g : N →ₗ[R] Q)\n    (a : M →ₗ[R] M) (b : N →ₗ[R] N)\n    (hb : b.comp b = b) (hfa : f.comp a = b.comp f)\n    (hex : ∀ y : N, g y = 0 ↔ ∃ x : M, f x = y) :\n    ∀ y : N, y ∈ LinearMap.range b →\n      (g y = 0 ↔ ∃ x : M, x ∈ LinearMap.range a ∧ f x = y) := by\n  intro y hy\n  constructor\n  · intro h\n    obtain ⟨x, hx⟩ := (hex y).mp h\n    refine ⟨a x, ⟨x, rfl⟩, ?_⟩\n    calc\n      f (a x) = b (f x) := DFunLike.congr_fun hfa x\n      _ = b y := congrArg b hx\n      _ = y := fixed_of_mem_range b hb hy\n  · rintro ⟨x, _, hx⟩\n    exact (hex y).mpr ⟨x, hx⟩\n\ntheorem surjective_on_ranges\n    (g : N →ₗ[R] Q) (b : N →ₗ[R] N) (c : Q →ₗ[R] Q)\n    (hc : c.comp c = c) (hgc : g.comp b = c.comp g)\n    (hgs : Function.Surjective g) :\n    ∀ z : Q, z ∈ LinearMap.range c →\n      ∃ y : N, y ∈ LinearMap.range b ∧ g y = z := by\n  intro z hz\n  obtain ⟨y, hy⟩ := hgs z\n  refine ⟨b y, ⟨y, rfl⟩, ?_⟩\n  calc\n    g (b y) = c (g y) := DFunLike.congr_fun hgc y\n    _ = c z := congrArg c hy\n    _ = z := fixed_of_mem_range c hc hz\n\ntheorem injective_on_range\n    (f : M →ₗ[R] N) (a : M →ₗ[R] M)\n    (hf : Function.Injective f) :\n    Function.Injective (fun x : LinearMap.range a => f x) := by\n  intro x y h\n  exact Subtype.ext (hf h)\n\ntheorem invariant_quotient_fixed_lift\n    (p : M →ₗ[R] M) (hp : p.comp p = p)\n    (F G : Submodule R M) (hG : ∀ x ∈ G, p x ∈ G)\n    {x : M} (hxG : x ∈ G) (hxF : p x - x ∈ F) :\n    ∃ y : M, y ∈ G ∧ p y = y ∧ y - x ∈ F := by\n  refine ⟨p x, hG x hxG, ?_, hxF⟩\n  exact DFunLike.congr_fun hp x\n\nend SupportedEuler\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/supported-euler-audit/statement_fidelity.md",
+    "text": "# Statement fidelity: C193_IMAGE_CORE\n\n`Main.lean` formalizes a module-theoretic core of the idempotent-image\nargument in `as:base-equality`, not the complete proposition.\n\nAll declarations below are in the namespace `SupportedEuler`. All theorems\nquantify over an arbitrary ring `R` and arbitrary additive\ncommutative groups `M`, `N`, and `Q` with `R`-module structures. Every map\ndisplayed as a linear map is `R`-linear. A projector is expressed by the\nliteral equality `p.comp p = p`; its image is `LinearMap.range p`.\nNo finite dimension, freeness, faithful length, or chosen basis is assumed.\n\n* `fixed_of_mem_range`: an idempotent fixes every element of\n  its range.\n* `range_inter_eq_map`: for a submodule `F` invariant under\n  an idempotent `p`, the submodule `range(p) intersect F` is exactly `p(F)`.\n  This is the filtration-intersection identity used on the abutment.\n* `exact_on_ranges`: assume `im(f) = ker(g)`, expressed by\n  `g y = 0 iff there exists x with f x = y`, and `f a = b f` with `b`\n  idempotent. For every `y` in `range(b)`, `g y = 0` holds exactly when it\n  has an `f`-preimage in `range(a)`. This is exactness at the middle of\n  the image sequence. The theorem is slightly stronger than the intended\n  use: `a` need not itself be idempotent.\n* `surjective_on_ranges`: if `g` is surjective, `g b = c g`,\n  and `c` is idempotent, every element of `range(c)` has a preimage under\n  `g` in `range(b)`. Again `b` need not be idempotent for this conclusion.\n* `injective_on_range`: an injective linear map remains\n  injective when restricted to the range of any linear map. Together\n  with the preceding two results this covers short exact image sequences\n  for compatible projectors.\n* `invariant_quotient_fixed_lift`: if `G` is invariant under\n  an idempotent `p`, `x` belongs to `G`, and `p(x)-x` belongs to a submodule\n  `F`, there is a fixed element `y` of `p` in `G` with `y-x` in `F`.\n  With invariant `F <= G`, this is the surjectivity part of identifying\n  the projected graded quotient with `p(G)/p(F)`. The formal theorem\n  itself is stronger and does not require `F <= G` or invariance of `F`.\n\nThese are statements about projectors already present in an abelian\nmodule target. They neither assume nor assert that a Verdier-quotient\nprojector lifts to a chain map. Their use in the report is only after the\nspectral-data functor has actually been localized.\n\nThe following are **not formalized**: the general abelian/Serre-quotient\nversion of these module arguments, the manuscript's supported-roof\nlemma, construction and boundedness of the homology evaluations, the\nspectral sequences with their natural filtered abutments, their\nlocalization, length additivity and ultralimits, or any of the manuscript's\ndescent or positivity arguments. These remain mathematical arguments in\n`report.md` and separate obligations for independent review.\n"
+  },
+  "subject": {
+    "content_hash": "6f995f61d4729eecb2b211108049362a7e9d0d546c8c6d16dad9b4cbd250acd4",
+    "kind": "claim",
+    "subject_id": "C193_IMAGE_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

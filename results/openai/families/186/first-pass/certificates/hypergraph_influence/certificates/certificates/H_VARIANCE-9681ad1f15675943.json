@@ -1,0 +1,67 @@
+{
+  "evidence_id": "lean-H_VARIANCE-8bc7c8666724",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/186/first-pass/certificates/hypergraph_influence/certificates/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean",
+      "families/186/first-pass/certificates/hypergraph_influence/certificates/Main.lean"
+    ],
+    "cwd": "families/186/first-pass/certificates/hypergraph_influence/certificates",
+    "duration_ms": 14437,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/186/first-pass/certificates/hypergraph_influence/certificates/Main.lean",
+    "source_sha256": "36de816f6bd8aa08b889d578f183f7cb323cac7344a1b0af07d49f40e55092f6",
+    "statement_fidelity": "families/186/first-pass/certificates/hypergraph_influence/certificates/statement_fidelity.md",
+    "statement_fidelity_sha256": "e330a3affd4490698ad7a27729f0df3442ee950fde394c7ef3fdc68b53601a27",
+    "status": "success",
+    "stderr": "",
+    "stdout": "uniform_influence : ∀ (r : ℕ),\n  3 ≤ r →\n    ∃ C,\n      0 < C ∧\n        ∀ (n : ℕ),\n          r ≤ n →\n            ∀ (p : ℝ),\n              0 < p →\n                p < 1 →\n                  ∀ (f : Config n r → Bool),\n                    IsInvariant f → variance p f ≤ C * totalInfluence p f / Real.log ↑n ^ (↑r / (↑r - 1))\n'HypergraphInfluence.uniform_influence' depends on axioms: [propext, Classical.choice, Quot.sound]\n'HypergraphInfluence.averaged_block' depends on axioms: [propext, Classical.choice, Quot.sound]\n'HypergraphInfluence.captured_mass' depends on axioms: [propext, Classical.choice, Quot.sound]\n'HypergraphInfluence.variance_le_low_add_tail' depends on axioms: [propext, Classical.choice, Quot.sound]\n'HypergraphInfluence.empty_low_range' depends on axioms: [propext, Classical.choice, Quot.sound]\n'HypergraphInfluence.uniform_numerical_parameters' depends on axioms: [propext, Classical.choice, Quot.sound]\n'OAI.Problem313.BiasedFourier.low_degree_estimate' depends on axioms: [propext, Classical.choice, Quot.sound]\n'OAI.Problem313.BiasedFourier.boolean_dirichlet' depends on axioms: [propext, Classical.choice, Quot.sound]\n'OAI.Problem313.BiasedFourier.restricted_low_degree_mass_average' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'HypergraphCapture.hypergraph_capture' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lean",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.31.0/bin/lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/certificates/hypergraph_influence/certificates/Main.lean",
+    "text": "import research.certificates.hypergraph_influence.Transfer\nimport research.certificates.hypergraph_influence.Constants\n\nopen scoped BigOperators Classical\nopen OAI.Problem313 OAI.Problem313.BiasedFourier\n\nset_option maxHeartbeats 1500000\n\nnamespace HypergraphInfluence\n\nnoncomputable section\n\ntheorem uniform_influence (r : ℕ) (hr : 3 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (n : ℕ), r ≤ n → ∀ (p : ℝ), 0 < p → p < 1 →\n        ∀ (f : Config n r → Bool), IsInvariant f →\n          variance p f ≤ C * totalInfluence p f /\n            (Real.log (n : ℝ)) ^ ((r : ℝ) / ((r : ℝ) - 1)) := by\n  obtain ⟨C, hC, hparameters⟩ := uniform_numerical_parameters r hr\n  refine ⟨C, hC, ?_⟩\n  intro n hrn p hp hp1 f hf\n  have hI : 0 ≤ totalInfluence p f := totalInfluence_nonneg hp.le hp1.le f\n  let σ := Real.sqrt (p * (1 - p))\n  have hpp : 0 < p * (1 - p) := mul_pos hp (sub_pos.mpr hp1)\n  have hσ : 0 < σ := Real.sqrt_pos.mpr hpp\n  have hσsq : σ ^ 2 = p * (1 - p) := Real.sq_sqrt hpp.le\n  have hpquarter : p * (1 - p) ≤ 1 / 4 := by\n    nlinarith [sq_nonneg (p - 1 / 2)]\n  have hσhalf : σ ≤ 1 / 2 := by nlinarith [hpquarter, hσsq]\n  rcases hparameters n hrn with hsmall | ⟨m, hrm, hmn, hm⟩\n  · calc\n      variance p f ≤ p * (1 - p) * totalInfluence p f :=\n        variance_le_dirichlet hp hp1 f\n      _ ≤ (1 / 4 : ℝ) * totalInfluence p f :=\n        mul_le_mul_of_nonneg_right hpquarter hI\n      _ ≤ (C / (Real.log (n : ℝ)) ^ ((r : ℝ) / ((r : ℝ) - 1))) *\n          totalInfluence p f := mul_le_mul_of_nonneg_right hsmall hI\n      _ = C * totalInfluence p f /\n          (Real.log (n : ℝ)) ^ ((r : ℝ) / ((r : ℝ) - 1)) := by ring\n  · obtain ⟨hk, hL, hcapture, hbound⟩ := hm σ hσ hσhalf\n    let k := σ * Real.log (m : ℝ) / 64\n    let L := (k / (r : ℝ)) ^ ((r : ℝ) / ((r : ℝ) - 1))\n    have hlow : lowMass p f L ≤\n        2 * (r : ℝ) * (m : ℝ) ^ (-1 / 4 : ℝ) * totalInfluence p f :=\n      captured_mass hr hrm hmn hp hp1 f hf hk hcapture\n    have htail : variance p f ≤ lowMass p f L +\n        σ ^ 2 / L * totalInfluence p f := by\n      rw [hσsq]\n      exact variance_le_low_add_tail hp hp1 f hL\n    calc\n      variance p f ≤ lowMass p f L + σ ^ 2 / L * totalInfluence p f := htail\n      _ ≤ (2 * (r : ℝ) * (m : ℝ) ^ (-1 / 4 : ℝ) + σ ^ 2 / L) *\n          totalInfluence p f := by nlinarith [hlow]\n      _ ≤ (C / (Real.log (n : ℝ)) ^ ((r : ℝ) / ((r : ℝ) - 1))) *\n          totalInfluence p f := mul_le_mul_of_nonneg_right hbound hI\n      _ = C * totalInfluence p f /\n          (Real.log (n : ℝ)) ^ ((r : ℝ) / ((r : ℝ) - 1)) := by ring\n\n#check @uniform_influence\n#print axioms uniform_influence\n#print axioms averaged_block\n#print axioms captured_mass\n#print axioms variance_le_low_add_tail\n#print axioms empty_low_range\n#print axioms uniform_numerical_parameters\n#print axioms OAI.Problem313.BiasedFourier.low_degree_estimate\n#print axioms OAI.Problem313.BiasedFourier.boolean_dirichlet\n#print axioms OAI.Problem313.BiasedFourier.restricted_low_degree_mass_average\n#print axioms HypergraphCapture.hypergraph_capture\n\nend\n\nend HypergraphInfluence\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/certificates/hypergraph_influence/certificates/statement_fidelity.md",
+    "text": "# Statement fidelity: H_VARIANCE\n\nThe declaration `uniform_influence`, fully qualified as\n`HypergraphInfluence.uniform_influence`, in `Main.lean`\nformalizes the complete variance inequality in `thm:main` of the staged\nOctober 5, 2026 hypergraph manuscript. It is not a finite experiment,\na theorem conditional on a restriction estimate, or the monotone-only\nthreshold corollary.\n\n## Objects and quantifiers\n\nThe theorem has the following quantifier order:\n\n```\nfor every natural r with 3 <= r,\nthere exists a real C with 0 < C,\nfor every natural n with r <= n,\nfor every real p with 0 < p < 1,\nfor every f : Config n r -> Bool with IsInvariant f,\nvariance p f <= C * totalInfluence p f /\n  (Real.log (n : Real)) ^ ((r : Real) / ((r : Real) - 1)).\n```\n\nThus `C` depends on `r` only, not on `n`, `p`, or `f`. All reals are\nfinite reals. The exponent is a real quotient, not natural-number\ndivision. `Real.log` is the natural logarithm. Since `n >= r >= 3`,\nits value and the denominator are positive.\n\n`Edge n r` is the subtype `{e : Finset (Fin n) // e.card = r}`.\nIts elements are all unordered sets of exactly `r` distinct vertices.\n`Config n r` is `Edge n r -> Bool`; every such function is one simple\n`r`-uniform hypergraph. Relabeling `Fin n` by `i -> i+1` identifies the\nvertex set with the manuscript's `[n]`.\n\n`edgePerm sigma` maps an edge by the vertex permutation `sigma`.\n`Reindex.config (edgePerm sigma)` transports a configuration by the\ninverse coordinate permutation. `IsInvariant f` requires equality of\n`f` before and after this transport for every vertex permutation and\nevery configuration. Because all permutations are quantified, this is\nexactly invariance under all vertex relabelings. There is no increasing,\nmonotone, nontrivial, or balanced-function hypothesis. Constant functions\nand arbitrary nonmonotone invariant Boolean functions are included.\n\n## Product law, variance, and influence\n\nThe generic Fourier library defines\n\n```\nweight p x = product over edges e of (if x e = true then p else 1-p).\nboolReal false = 0; boolReal true = 1.\n```\n\n`weight_mass_one` proves that these weights sum to one. For `0<p<1`\nthey are positive Bernoulli product probabilities.\n`fourier p f S` is the actual biased Fourier coefficient of `boolReal`\ncomposed with `f`. Its empty coefficient is the product expectation,\nby `coeff_empty`. The definition in `Model.lean` is\n\n```\nvariance p f =\n  sum over configurations x of\n    weight p x * (boolReal (f x) - fourier p f empty)^2.\n```\n\nThis is genuine product-measure variance, not a separately supplied\nnumber or an assumed spectral identity. The explicit local classical\nequality instance in this definition only selects an enumeration of a\nfinite function space; it does not change the probability law.\n`variance_eq_mass` derives its nonconstant Fourier representation from\nthe compiled generic Parseval theorem.\n\n`totalInfluence p f` is the sum over edges of\n`OAI.Problem313.Reindex.influence p f e`. The latter sums `weight p x`\nover configurations for which\n`f(update x e true) != f(update x e false)`. This event does not depend\non `x e`; summing that coordinate contributes `p+(1-p)=1`.\nIt is therefore exactly the pivotal probability over the other\ncoordinates. No resampling factor, `p(1-p)` factor, normalization by\nthe number of edges, or monotonicity identification is built in.\n`weighted_mass` proves the separate identity\n`sum_S |S| * fourier(S)^2 = p*(1-p)*totalInfluence`.\n\n## Discharged dependencies\n\n`averaged_block` proves the restriction estimate, rather than taking it\nas a hypothesis. The free coordinates are **all** edges intersecting\nthe vertex block. It proves preservation of the exterior assignment,\ninfluence equality along block orbits, and orbit cardinality\n`choose(m,j) >= m` for `1 <= j <= r < m`. Restricted Fourier averaging\nretains all exterior degrees, and averaged restricted pivotal influences\nare the original influences of the free coordinates.\n\n`captured_mass` maps an arbitrary Fourier support injectively to a\nsimple uniform support and invokes the unchanged, independently accepted\n`HypergraphCapture.hypergraph_capture`. Its sampling law is uniform over\nall `m`-element vertex subsets. Its cutoff\n`L = ((sqrt(p*(1-p))*log(m)/64)/r)^(r/(r-1))` is real, without rounding.\n`empty_low_range` proves the empty-sum case `L<1`.\n`variance_le_low_add_tail` and `variance_le_dirichlet` are proved for\narbitrary Boolean functions, without symmetry.\n\n`uniform_numerical_parameters` proves the small-`n`/large-`n`\ndichotomy used by the final theorem. It chooses the large-`n` block\nsize independently of the positive real bias parameter: a natural\nceiling of `sqrt n`. This differs from the manuscript's floor but\ndoes not change its conclusion or hypotheses. The analytic tail bound\nis uniform for every `0 < sigma <= 1/2`, with no positive lower bound:\nit uses `sigma^2 <= sigma^alpha` when `alpha <= 2`. The existence\nof a large enough scale and the bound for every remaining `n` are\nproved, not external assumptions.\n\nThe generic analytic imports are the locally compiled Lean 4.31.0\nport of the pinned upstream sources identified in the certificate.\nNeither Lean 4.34.1 binaries nor an unproved hypercontractive premise\nare used. `#print axioms` in `Main.lean` audits the final theorem and\nits load-bearing dependencies; the permitted foundational axioms are\nonly `propext`, `Classical.choice`, and `Quot.sound`.\n\nThe compiler establishes the encoded theorem. The correspondence to\nthe manuscript and the product-probability interpretation documented\nhere still require independent human/Reviewer inspection; this document\ndoes not claim that such inspection has already occurred.\n"
+  },
+  "subject": {
+    "content_hash": "10b26dfe60f497d7c43c5f6922f88cc7837a8a3f04aafd45652db207537be53e",
+    "kind": "claim",
+    "subject_id": "H_VARIANCE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

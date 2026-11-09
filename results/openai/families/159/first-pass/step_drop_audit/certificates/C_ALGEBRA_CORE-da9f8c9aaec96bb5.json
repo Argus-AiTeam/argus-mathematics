@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_ALGEBRA_CORE-664d4ca508a1",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/159/first-pass/step_drop_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/159/first-pass/step_drop_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15766,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/159/first-pass/step_drop_audit/Main.lean",
+    "source_sha256": "7fa5da7deb09ca33bd72cb59b5ef22b9179aea2a804ad915ad3cbf354c158f7e",
+    "statement_fidelity": "families/159/first-pass/step_drop_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "619ade02de578025b0a2c610cce1c3c91556967163190eece1c478c629b0917f",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/step_drop_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace StepDropAudit\n\ntheorem common_fiber\n    {H G : Type*} [Group H] [Group G]\n    (π : H →* G) (U : Subgroup H) {x y : H}\n    (hx : x ∈ U) (hy : y ∈ U) (hxy : π x = π y) :\n    x * y⁻¹ ∈ U ⊓ π.ker := by\n  constructor\n  · exact U.mul_mem hx (U.inv_mem hy)\n  · change π (x * y⁻¹) = 1\n    simp [hxy]\n\nsection Cocycle\n\nvariable {G A : Type*} [Group G] [AddCommGroup A] [DistribMulAction G A]\nvariable (Y : G → A) (hY : ∀ x y, Y (x * y) = Y x + x • Y y)\n\ninclude hY in\ntheorem common_derivative\n    (a b d : G) (e m u z v : A)\n    (h : Y (a * b * d) - e - (a * b * d) • m =\n      u + a • z + (a * b) • v) :\n    Y b = a⁻¹ • (e + u - Y a) + b • (v + d • m - Y d) + z := by\n  have h' := congrArg (fun q : A => a⁻¹ • q) h\n  simp only [hY, smul_sub, smul_add, mul_smul, inv_smul_smul] at h'\n  calc\n    Y b =\n        (a⁻¹ • Y a + Y b + b • Y d - a⁻¹ • e - b • (d • m)) -\n          a⁻¹ • Y a - b • Y d + a⁻¹ • e + b • (d • m) := by abel\n    _ = (a⁻¹ • u + z + b • v) -\n          a⁻¹ • Y a - b • Y d + a⁻¹ • e + b • (d • m) := by rw [h']\n    _ = _ := by\n      simp only [smul_sub, smul_add]\n      abel\n\ninclude hY in\ntheorem transformed_derivative\n    (a c b : G) (s r z : A)\n    (h : Y (a * c * b) = s + (a * c * b) • r + z) :\n    Y c = a⁻¹ • (s - Y a) + c • (b • r - Y b) + a⁻¹ • z := by\n  have h' := congrArg (fun q : A => a⁻¹ • q) h\n  simp only [hY, smul_add, mul_smul, inv_smul_smul] at h'\n  calc\n    Y c = (a⁻¹ • Y a + Y c + c • Y b) -\n        a⁻¹ • Y a - c • Y b := by abel\n    _ = (a⁻¹ • s + c • (b • r) + a⁻¹ • z) -\n        a⁻¹ • Y a - c • Y b := by rw [h']\n    _ = _ := by\n      simp only [smul_sub]\n      abel\n\ntheorem transformed_lift\n    (a c b : G) (s r : A)\n    (h : s = (a * c * b) • r) :\n    a⁻¹ • s = c • (b • r) := by\n  simp only [h, mul_smul, inv_smul_smul]\n\ntheorem absorption\n    {K : Type*} [AddCommGroup K]\n    (B : G) (S R : K →+ A) (hSR : ∀ k, S k = B • R k)\n    (y s r : A) (k ks kr : K)\n    (h : y = s + B • r + S k) :\n    y = (s - S ks) + B • (r - R kr) + S (k + ks + kr) := by\n  rw [h]\n  simp only [map_add, smul_sub]\n  rw [hSR kr]\n  abel\n\nend Cocycle\n\ntheorem bracket_correction\n    {E A : Type*} [AddCommGroup E] [AddCommGroup A]\n    (Q : E →+ A) (p a b : E) (s r : A)\n    (hp : Q p = s - r) (ha : Q a = s) (hb : Q b = -r) :\n    Q (p - a - b) = 0 := by\n  simp only [map_sub, hp, ha, hb]\n  abel\n\nend StepDropAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/step_drop_audit/statement_fidelity.md",
+    "text": "# Exact scope of C_ALGEBRA_CORE\n\n`Main.lean` proves six algebraic statements, uniformly over the indicated\ntypes. It does not formalize Lemma `prelim:step-drop` as a whole.\n\nThe declaration names are `common_fiber`, `common_derivative`,\n`transformed_derivative`, `transformed_lift`, `absorption`, and\n`bracket_correction`, all in namespace `StepDropAudit`.\n\n`StepDropAudit.common_fiber` quantifies over arbitrary groups H and G, a\ngroup homomorphism pi:H->G, a subgroup U of H, and x,y in U. If pi(x)=pi(y),\nthen x*y^(-1) belongs to U intersect ker(pi). For the relative/diagonal\nsemidirect product in the manuscript this is the uniqueness of a relative\ncoordinate modulo the vertical kernel. Identifying that kernel with V is\nthe mathematical application, not an additional compiler-checked fact.\n\nThe next three declarations quantify over an arbitrary group G, an\narbitrary abelian additive group A with a distributive G-action, and a\nfunction Y:G->A satisfying the explicit right-cocycle identity\nY(x*y)=Y(x)+x acting on Y(y). There is no commutativity assumption on G.\nIn the application the action is the adjoint representation on coefficient\narrays modulo the U-invariant spaces V, and Y is a right logarithmic\nderivative. The existence of this representation and the cocycle identity\nfor those derivatives are justified in `proof.md`, not encoded here.\n\n`StepDropAudit.common_derivative` takes the raw relative-coordinate\nequation, with the left insertion e and right insertion m in precisely\ntheir manuscript order, and proves\nY(b)=a^(-1)(e+u-Y(a))+b(v+d(m)-Y(d))+z.\nThis is equation `prelim:common-derivative` and its displayed formulas for\ns_h and r_h, abstracted to a group representation. No sign or side of the\ngroup action is changed.\n\n`StepDropAudit.transformed_derivative` takes\nY(a*c*b)=s+(a*c*b)(r)+z and solves for Y(c). Its conclusion is\na^(-1)(s-Y(a))+c(b(r)-Y(b))+a^(-1)(z). This is\n`prelim:transformation` with c=B' and z=S(k).\n`StepDropAudit.transformed_lift` proves the accompanying relation\na^(-1)(s)=c(b(r)) from s=(a*c*b)(r), pointwise in k.\n\n`StepDropAudit.absorption` additionally quantifies over an arbitrary\nabelian additive group K and additive maps S,R:K->A satisfying\nS(k)=B(R(k)) for every k. It proves exactly that replacing\ns by s-S(ks), r by r-R(kr), and k by k+ks+kr preserves\ny=s+B(r)+S(k). It assumes no bounds on ks or kr; bounds needed in the\napplication are handled separately in the proof.\n\n`StepDropAudit.bracket_correction` quantifies over abelian additive\ngroups E,A and an additive map Q:E->A. From Q(p)=s-r, Q(a)=s,\nQ(b)=-r it proves Q(p-a-b)=0. It checks the signs in the simultaneous\nslow/rational removal, not the existence or bounds of a rational section.\n\nAll six statements are universal implications with their hypotheses\nvisible in the Lean source. They use no `sorry`, `admit`, custom axiom,\nfinite-dimension cutoff, coefficient-height bound, or comparable-side\nassumption. The lattice geometry, quantitative separation, graded\ninduction, passage from biased squares to a common subgroup, and the\nSzemeredi/reciprocal-sum conclusions are explicitly outside this formal\ncertificate. Their statuses must not be inferred from its compiler exit\ncode. The all-dimensional reduction theorem is a prose proof supported,\nnot wholly formalized, by this certificate.\n"
+  },
+  "subject": {
+    "content_hash": "e218430560e4104c170bf19bd49f737d2160e96ed6c38ab3b0747c546fda9de6",
+    "kind": "claim",
+    "subject_id": "C_ALGEBRA_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

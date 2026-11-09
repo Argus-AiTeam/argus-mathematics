@@ -1,0 +1,342 @@
+{
+  "goal": "C9000285",
+  "routes": [
+    {
+      "name": "overlap-universal-verification",
+      "goal": "C_OVERLAP_AUDIT",
+      "obligations": ["G_OVERLAP"],
+      "status": "current",
+      "evidence": "research/AUDIT_REPORT.md"
+    },
+    {
+      "name": "overlap-admissible-refutation",
+      "goal": "C_OVERLAP_AUDIT",
+      "obligations": ["G_COUNTEREXAMPLE"],
+      "status": "parked",
+      "evidence": "research/AUDIT_REPORT.md"
+    }
+  ],
+  "nodes": {
+    "C9000285": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 285 (Counterexamples to Baum–Connes and Kadison–Kaplansky.; papers: A torsion-free counterexample to reduced Baum–Connes injectivity; A torsion-free counterexample to the Kadison–Kaplansky projection conjecture; An irrational-trace counterexample to reduced Baum–Connes; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_OVERLAP_AUDIT", "PUBLISHABLE_REVIEW"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "PUBLISHABLE_REVIEW": {
+      "statement": "A genuinely publishable mathematical result, with verified novelty if claimed, passes the Host's independent Reviewer; overlap verification alone does not certify the campaign or any main theorem.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "MAIN_IRR": {
+      "statement": "There exist a finitely generated group G and a scalar projection b in C_r^*(G) with irrational canonical trace, whose K0 class is outside coefficient-free proper reduced assembly.",
+      "status": "open",
+      "depends_on": ["IRR_PROJECTION", "IRR_TRACE", "IRR_TRACE_IMAGE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-Irrational-Trace-Counterexample-to-Reduced-Baum-Connes-September-23-2026/build/introduction.tex"]
+    },
+    "MAIN_KK": {
+      "statement": "There exists a finitely generated torsion-free group with a scalar reduced-algebra projection of canonical trace strictly between zero and one half.",
+      "status": "open",
+      "depends_on": ["KK_GEOMETRY", "KK_SAMPLING", "KK_BAND", "KK_SMALL_TRACE", "KK_SCALAR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Torsion-Free-Counterexample-to-the-Kadison-Kaplansky-Projection-Conjecture-September-23-2026/build/sections/introduction.tex"]
+    },
+    "MAIN_INJ": {
+      "statement": "There exists a finitely generated torsion-free group containing an embedded torus with integral orientation detector, but with its rank-zero Bott class zero in reduced K0; the torus Dirac class has infinite order and zero reduced assembly image.",
+      "status": "open",
+      "depends_on": ["INJ_GEOMETRY", "INJ_DETECTOR", "INJ_BOTT_MODEL", "INJ_REDUCED_NORM", "INJ_FINITE_TRANSFER", "INJ_ASSEMBLY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Torsion-Free-Counterexample-to-Reduced-Baum-Connes-Injectivity-September-23-2026/build/sections/00_introduction.tex"]
+    },
+    "C_OVERLAP_AUDIT": {
+      "statement": "Resolve the exact simultaneous-overlap dependency by a universal proof or an admissible exact counterexample. The DAG currently follows the universal-proof alternative; the other route is not required as an additional obligation.",
+      "status": "in_progress",
+      "depends_on": ["G_OVERLAP"],
+      "reviewer_confirmed": false
+    },
+    "G_COUNTEREXAMPLE": {
+      "statement": "An exact counterexample to a named overlap-chain assertion satisfies all applicable graphical hypotheses, and proves lexicographic minimality if it uses a minimal-diagram assertion.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "G_DISTINCT": {
+      "statement": "Under the exact geometry hypotheses, different indexed copies do not share a simple path of length at least lambda times either source girth, and different indices give different subgraphs.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "G_DIAGRAM_EXIST": {
+      "statement": "Every inflated coned loop admits a finite connected plane multigraph diagram with the prescribed exterior side occurrences and bounded contours assigned to translated relator copies; lexicographic minimizers in faces and then edges exist.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "G_SURGERY": {
+      "statement": "The minimal-diagram face omission, equal-copy mergers, unmarked-leaf deletion, bounded-face bridge deletion, and inverse-pair folding preserve the applicable side data and assignments and improve the claimed lexicographic complexity.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_DIAGRAM_EXIST"],
+      "reviewer_confirmed": false
+    },
+    "G_ARCS": {
+      "statement": "In every lexicographically minimal adjustable-side diagram, bounded faces have perimeter at least their assigned girth; every incident compressed arc is shorter than lambda times that girth, and generator-side arcs have unit length.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_DISTINCT", "G_SURGERY"],
+      "reviewer_confirmed": false
+    },
+    "G_EULER": {
+      "statement": "For a compressed minimal diagram with m prescribed sides, b arcs and F bounded faces, Euler and valence counting give v-b+F=1, 2b>=3(v-m), and F/lambda<=2b, including trees and isolated marked vertices.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_SURGERY", "G_ARCS"],
+      "reviewer_confirmed": false
+    },
+    "G_COUNT": {
+      "statement": "Every such diagram satisfies (1/lambda-6)F<=6m-6 and b<=6m for 0<lambda<=1/12.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_EULER"],
+      "reviewer_confirmed": false
+    },
+    "G_DESIGNATED": {
+      "statement": "For an avoiding path closed by one designated P side, no arc has both exterior incidences in that same linear side occurrence; the bridge excursion deletion respects marked positions even when marked vertices are revisited.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_SURGERY"],
+      "reviewer_confirmed": false
+    },
+    "G_AVOID": {
+      "statement": "If a coned edge path of length L joins x,a in P and avoids c_P, then d_P(x,a)<=12(L+1)lambda*sigma(P).",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_COUNT", "G_ARCS", "G_DESIGNATED"],
+      "reviewer_confirmed": false
+    },
+    "G_FILL": {
+      "statement": "Every coned edge loop of length n>0 has a filling using at most 12n closed relations of perimeter at most four, with constants independent of the graphs, alphabet and lambda.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_COUNT", "G_SURGERY"],
+      "reviewer_confirmed": false
+    },
+    "G_COARSE": {
+      "statement": "A simply connected 2-complex with 2-cell attaching lengths at most M and linear combinatorial isoperimetric constant C has delta-hyperbolic 1-skeleton, with delta depending only on M and C and with no local-finiteness or bounded-valence assumption.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "G_THIN": {
+      "statement": "There exists an integer D0 independent of lambda, the graphs and the alphabet such that every vertex of a geodesic triangle in the coned graph is within D0 of a vertex on another side.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_SHARP_FILL", "G_COARSE"],
+      "reviewer_confirmed": false
+    },
+    "G_ROOT": {
+      "statement": "In the coned graph, assuming vertex D0-thinness, fix A=c_P!=R and one A-to-R geodesic with first group vertex a. If Q!=P, x in P intersect Q and d(c_Q,R)<=d(A,R), an A-avoiding walk from x to a has length at most L0=4D0+8, including equal-distance centers and either allowed root type.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "G_OVERLAP": {
+      "statement": "With universal D0, t=D0+3 and L0=4D0+8, every intersection of P with a different Q whose center is no farther from the root than c_P lies in the same intrinsic induced P-ball about the first vertex a of one fixed root geodesic, of radius floor(12(L0+1)lambda*sigma(P)).",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_SHARP_OVERLAP", "G_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-Irrational-Trace-Counterexample-to-Reduced-Baum-Connes-September-23-2026/build/geometry.tex",
+        "research/AUDIT_REPORT.md",
+        "exact_certificate.json"
+      ]
+    },
+    "G_ALGEBRA": {
+      "statement": "The source-bound rational LP has exact minimum min(4m-b)=6, and the saved affine and root-constant certificates prove the stated numerical implications for every admissible value of their premises; this assertion does not certify the topological premises.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["verify.py", "exact_certificate.json"]
+    },
+    "G_SHARP_COUNT": {
+      "statement": "Under all original geometry hypotheses, every nontrivial minimal adjustable-side diagram has b<=4m-6 and (1/lambda-6)F<=4m-6; the isolated case has F=b=0 and is handled separately.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_SURGERY", "G_ARCS", "G_EULER", "G_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md", "exact_certificate.json"]
+    },
+    "G_SHARP_AVOID": {
+      "statement": "Under all original geometry hypotheses, every c_P-avoiding coned edge path of length L>=1 with endpoints x,a in P satisfies d_P(x,a)<=(4L-2)lambda*sigma(P); for L=0 the distance is zero.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_SHARP_COUNT", "G_ARCS", "G_DESIGNATED"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md"]
+    },
+    "G_SHARP_FILL": {
+      "statement": "Under all original geometry hypotheses, every coned edge loop of length n>0 is a product of at most 8n conjugates of closed edge relations of perimeter at most four, giving the corresponding combinatorial disk area bound even with singular intermediate contours.",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_SHARP_COUNT", "G_SURGERY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md"]
+    },
+    "G_SHARP_OVERLAP": {
+      "statement": "Under all original geometry hypotheses there is a universal integer vertex-thinness constant D0 independent of lambda. For every allowed root R!=c_P and one fixed c_P-to-R geodesic with first group vertex a, all P intersect Q with Q!=P and d(c_Q,R)<=d(c_P,R) lie in the same intrinsic induced P-ball about a of radius floor((16D0+30)lambda*sigma(P)).",
+      "context": "CTX_OVERLAP",
+      "status": "in_progress",
+      "depends_on": ["G_SHARP_AVOID", "G_THIN", "G_ROOT", "G_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md", "exact_certificate.json", "verify.py"]
+    },
+    "IRR_DATA": {
+      "statement": "The labelled expander and parameter choices in data.tex:prop:data exist, including isometric embeddings, uniform expansion, sufficiently small induced tree balls, and diverging code-dimension gaps.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "IRR_CYCLES": {
+      "statement": "The ordinary finite-support cycle space of X over F2 is the internal algebraic direct sum of the cycle spaces of all indexed copies.",
+      "status": "open",
+      "depends_on": ["G_OVERLAP", "IRR_DATA"],
+      "reviewer_confirmed": false
+    },
+    "IRR_CODES": {
+      "statement": "The finite-field codes with prescribed words, dimensions and primal/dual distance used in module.tex exist.",
+      "status": "open",
+      "depends_on": ["IRR_DATA"],
+      "reviewer_confirmed": false
+    },
+    "IRR_MODULE": {
+      "statement": "The globally generated relation module W0 has W0 intersect F_p^P equal to C_P perpendicular for every copy P.",
+      "status": "open",
+      "depends_on": ["G_OVERLAP", "IRR_DATA", "IRR_CODES"],
+      "reviewer_confirmed": false
+    },
+    "IRR_MARGINALS": {
+      "statement": "The compact-dual restriction to each copy is exactly the prescribed code and has uniform Haar marginal, with prescribed-word probability p^(-k_i).",
+      "status": "open",
+      "depends_on": ["IRR_MODULE"],
+      "reviewer_confirmed": false
+    },
+    "IRR_VALID": {
+      "statement": "The enabled-graph construction makes designated valid copies pairwise disjoint isolated expander components and gives the asserted local deficits elsewhere.",
+      "status": "open",
+      "depends_on": ["IRR_CODES", "IRR_MARGINALS", "G_DISTINCT"],
+      "reviewer_confirmed": false
+    },
+    "IRR_GLOBAL_DEFICIT": {
+      "statement": "For every enabled remaining graph and every finite vertex set Y, d|Y|-2|E(Y)| >= (c/2)|Y|, including the projected-cycle localization and disjoint cycle-rank charges.",
+      "status": "open",
+      "depends_on": ["IRR_CYCLES", "G_OVERLAP", "IRR_DATA", "IRR_VALID"],
+      "reviewer_confirmed": false
+    },
+    "IRR_REP": {
+      "statement": "The Fourier/crossed-product realization identifies the asserted fiber operators with a faithful reduced representation and gives the canonical trace integral.",
+      "status": "open",
+      "depends_on": ["IRR_MODULE"],
+      "reviewer_confirmed": false
+    },
+    "IRR_GAP": {
+      "statement": "The self-adjoint enabled-graph operator has the asserted kernel and the uniform gap min(rho,c^2/(8d)) on its complement in all relevant reduced fibers.",
+      "status": "open",
+      "depends_on": ["IRR_GLOBAL_DEFICIT", "IRR_DATA", "IRR_VALID", "IRR_REP"],
+      "reviewer_confirmed": false
+    },
+    "IRR_PROJECTION": {
+      "statement": "Continuous functional calculus of the uniformly gapped reduced operator gives the actual scalar projection b0 in C_r^*(V semidirect Gamma), with the asserted fiber diagonals.",
+      "status": "open",
+      "depends_on": ["IRR_GAP", "IRR_REP"],
+      "reviewer_confirmed": false
+    },
+    "IRR_TRACE": {
+      "statement": "The projection has trace sum_i p^(-k_i), which is irrational by the non-eventually-periodic base-p expansion.",
+      "status": "open",
+      "depends_on": ["IRR_PROJECTION", "IRR_MARGINALS", "IRR_DATA", "IRR_REP", "G_DISTINCT"],
+      "reviewer_confirmed": false
+    },
+    "IRR_TRACE_IMAGE": {
+      "statement": "For every countable discrete group, the canonical trace on every integral degree-zero coefficient-free proper reduced assembly class is rational, with the exact assembly comparison used by the manuscript.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "KK_GEOMETRY": {
+      "statement": "The tower, path-recovery labelling, pruning and nilpotent voltage covers give the claimed embedded copies, common-root domains, forest complement and torsion-free finitely generated group.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "KK_SAMPLING": {
+      "statement": "Finite voltage and matrix-weight sampling simultaneously enforce the girth conditions and full regular-norm approximation to the nilpotent fiber model.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "KK_BAND": {
+      "statement": "The local upper band survives removal of overlaps and the unused forest edges to give a uniformly separated, nonempty global reduced matrix spectral band.",
+      "status": "open",
+      "depends_on": ["KK_GEOMETRY", "KK_SAMPLING"],
+      "reviewer_confirmed": false
+    },
+    "KK_SMALL_TRACE": {
+      "statement": "The global upper spectral projection has strictly positive unnormalized matrix trace less than one half, including the weighted losses from all indexed copies.",
+      "status": "open",
+      "depends_on": ["KK_BAND"],
+      "reviewer_confirmed": false
+    },
+    "KK_SCALAR": {
+      "statement": "The quantitative reduced free-product compression converts the small matrix projection to a scalar projection of the same trace while preserving torsion-freeness and finite generation.",
+      "status": "open",
+      "depends_on": ["KK_SMALL_TRACE"],
+      "reviewer_confirmed": false
+    },
+    "INJ_GEOMETRY": {
+      "statement": "The layered labelling, sequential expansion, pruning, Heisenberg voltage cover and common-root domains produce the claimed torsion-free finitely generated group with embedded torus.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "INJ_DETECTOR": {
+      "statement": "An integral degree-two class restricts to the oriented torus generator and detects the torus Dirac K-homology class as infinite order.",
+      "status": "open",
+      "depends_on": ["INJ_GEOMETRY"],
+      "reviewer_confirmed": false
+    },
+    "INJ_BOTT_MODEL": {
+      "statement": "The localized rank-zero Bott families are bounded operators and admit the required even/odd and odd/positive-even norm-continuous homotopies.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "INJ_REDUCED_NORM": {
+      "statement": "The finite sampled group-algebra operators and homotopies approximate the Bott model in the asserted reduced regular norm quotient.",
+      "status": "open",
+      "depends_on": ["INJ_GEOMETRY", "INJ_BOTT_MODEL"],
+      "reviewer_confirmed": false
+    },
+    "INJ_FINITE_TRANSFER": {
+      "statement": "The cancellation in the norm quotient yields an actual finite witness to vanishing of the embedded torus Bott class in one reduced group algebra.",
+      "status": "open",
+      "depends_on": ["INJ_REDUCED_NORM"],
+      "reviewer_confirmed": false
+    },
+    "INJ_ASSEMBLY": {
+      "statement": "The compact-support K-homology conventions, torus Dirac/Bott identification and reduced assembly naturality give an infinite-order assembly kernel class from the detector and analytic vanishing.",
+      "status": "open",
+      "depends_on": ["INJ_DETECTOR", "INJ_FINITE_TRANSFER"],
+      "reviewer_confirmed": false
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C166_COEFF-003401e242a2",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/166/first-pass/concentration_degree/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/166/first-pass/concentration_degree/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14321,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/166/first-pass/concentration_degree/Main.lean",
+    "source_sha256": "6ea344d8e5b9315ba7d70114cb3e151a925595f81ee33dd65f6ca7b373913c19",
+    "statement_fidelity": "families/166/first-pass/concentration_degree/statement_fidelity.md",
+    "statement_fidelity_sha256": "fe0206a152a2a35e1f413a6dec20cf25696baa817f7c75eb3cda0a7c03b4b138",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/concentration_degree/Main.lean",
+    "text": "import Mathlib\n\nnamespace ConcentrationDegree\n\ntheorem coefficient_nonnegative\n    (c : ℕ → ℕ → ℤ)\n    (hzero : ∀ p, c p 0 = 1)\n    (hone : ∀ p, c p 1 = (p : ℤ) - 2)\n    (hstep : ∀ p u, c (p + 2) (u + 2) =\n      (Nat.choose p (u + 2) : ℤ) + c p u) :\n    ∀ u p, u + 1 ≤ p → 0 ≤ c p u := by\n  intro u\n  induction u using Nat.strong_induction_on with\n  | h u ih =>\n    intro p hp\n    rcases u with _ | u\n    · rw [hzero]\n      norm_num\n    rcases u with _ | u\n    · rw [hone]\n      have hp' : (2 : ℤ) ≤ (p : ℤ) := by exact_mod_cast hp\n      omega\n    obtain ⟨q, rfl⟩ : ∃ q, p = q + 2 := ⟨p - 2, by omega⟩\n    rw [hstep]\n    have hprevious : 0 ≤ c q u := ih u (by omega) q (by omega)\n    have hchoose : (0 : ℤ) ≤ (Nat.choose q (u + 2) : ℤ) :=\n      Int.natCast_nonneg _\n    omega\n\ntheorem symmetry_skew_vanish\n    {K : Type*} [Field K] [CharZero K]\n    {I : Type*} (T : I → I → I → K)\n    (hsym : ∀ i j k, T i j k = T j i k)\n    (hskew : ∀ i j k, T i j k = -T i k j) :\n    ∀ i j k, T i j k = 0 := by\n  intro i j k\n  have hneg : T i j k = -T i j k := by\n    calc\n      T i j k = T j i k := hsym i j k\n      _ = -T j k i := hskew j i k\n      _ = -T k j i := congrArg Neg.neg (hsym j k i)\n      _ = -(-T k i j) := congrArg Neg.neg (hskew k j i)\n      _ = T k i j := neg_neg _\n      _ = T i k j := hsym k i j\n      _ = -T i j k := hskew i k j\n  have htwo : (2 : K) * T i j k = 0 := by\n    linear_combination hneg\n  exact (mul_eq_zero.mp htwo).resolve_left (by norm_num)\n\nend ConcentrationDegree\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/concentration_degree/statement_fidelity.md",
+    "text": "# Statement fidelity\n\nThe bare declaration names are `coefficient_nonnegative` and\n`symmetry_skew_vanish`, both in namespace `ConcentrationDegree`.\n\n`Main.lean` imports the installed Mathlib and contains two universally\nquantified algebraic theorems. Neither theorem formalizes a variety,\nintersection number, incidence, Pfaffian classification, or the\ndistinct-distances conjecture.\n\n`ConcentrationDegree.coefficient_nonnegative` quantifies over **every** table\n`c : Nat -> Nat -> Int`. Its hypotheses are exactly\n\n* `c(p,0)=1`;\n* `c(p,1)=p-2`, with the subtraction in the integers;\n* `c(p+2,u+2)=choose(p,u+2)+c(p,u)`.\n\nIts conclusion is `c(p,u)>=0` for all natural `u,p` with `u+1<=p`.\nThus it certifies the unrestricted induction behind the nonnegative\nSegre coefficients, not merely a finite table. The identification of the\nmanuscript coefficient `[z^u](1+z)^p/(1+2z)` with a table satisfying these\nrecurrences is proved in the report from an exact generating-function\nidentity. That identification is **not** a Lean theorem in this file.\nClaim `C166_COEFF` refers to this recurrence-to-positivity theorem.\n\n`ConcentrationDegree.symmetry_skew_vanish` quantifies over any field `K`\nof characteristic zero, any index type `I` (not only a finite type), and\nany tensor `T : I -> I -> I -> K`. Symmetry of the first two positions\nand antisymmetry of the last two positions force every entry to vanish.\nThe theorem applies in particular to `K = Complex`. It checks the\npointwise algebra used for the Hessian/Gram tensor in the null-graph\nrigidity argument. The analytic existence of the graph, equality of mixed\npartials, and passage from a zero Hessian to a global projective linear\nspace remain mathematical arguments in the report.\nClaim `C166_NULL_TENSOR` refers only to the universally quantified tensor\ntheorem, not to that geometric passage.\n\nThe compiler checks these declarations and their proofs. No mathematical\nclaim about all complex varieties, no numerical experiment, and no\nliterature attribution is being relabelled as kernel verification.\n"
+  },
+  "subject": {
+    "content_hash": "c06edd49f80f5bd4966ee39a511ab4d9db09d30933c6527ca01654452929f6e6",
+    "kind": "claim",
+    "subject_id": "C166_COEFF"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

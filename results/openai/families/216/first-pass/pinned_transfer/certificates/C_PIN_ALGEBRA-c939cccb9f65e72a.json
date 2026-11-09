@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-C_PIN_ALGEBRA-c681f59fffd2",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/216/first-pass/pinned_transfer/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6307,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/216/first-pass/pinned_transfer/Main.lean",
+    "source_sha256": "cdd81884593a2abbad2fd035eb33790a56aba717fcc95caac73842ee87c05fe8",
+    "statement_fidelity": "families/216/first-pass/pinned_transfer/statement_fidelity.md",
+    "statement_fidelity_sha256": "ee4e2b158239c69fdfb436a130b78433c34ccb7b9703ab83a9dd606b81a42328",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/216/first-pass/pinned_transfer/Main.lean:25:4: error: unsolved goals\ncase pos\nI : Type u_1\nM : Type u_2\ninst✝² : Fintype I\ninst✝¹ : DecidableEq I\ninst✝ : DecidableEq M\nold fresh : I → M\nho : Function.Injective old\nhf : Function.Injective fresh\nhsep : ∀ (i j : I), fresh i ≠ old j\na : I → ℝ\ni : I\nhos : old i ≠ fresh i\n⊢ 1 + 1 = 2\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/pinned_transfer/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace PinnedTransfer\n\nnoncomputable def gram {M : Type*} [DecidableEq M] (x y : M) : ℝ :=\n  if x = y then 1 else 0\n\ntheorem two_sample_gram\n    {I M : Type*} [Fintype I] [DecidableEq I] [DecidableEq M]\n    (old fresh : I → M)\n    (ho : Function.Injective old) (hf : Function.Injective fresh)\n    (hsep : ∀ i j, fresh i ≠ old j) (a : I → ℝ) :\n    (∑ i, ∑ j, a i * a j *\n      (gram (fresh i) (fresh j) - gram (fresh i) (old j) -\n        gram (old i) (fresh j) + gram (old i) (old j))) =\n      2 * ∑ i, a i ^ 2 := by\n  classical\n  have kernel (i j : I) :\n      gram (fresh i) (fresh j) - gram (fresh i) (old j) -\n        gram (old i) (fresh j) + gram (old i) (old j) =\n        if i = j then 2 else 0 := by\n    by_cases hij : i = j\n    · subst j\n      have hos : old i ≠ fresh i := Ne.symm (hsep i i)\n      simp [gram, hsep, hos]\n    · have hfo : fresh i ≠ fresh j := fun h => hij (hf h)\n      have hoo : old i ≠ old j := fun h => hij (ho h)\n      have hos : old i ≠ fresh j := Ne.symm (hsep j i)\n      simp [gram, hij, hfo, hoo, hos, hsep]\n  simp_rw [kernel]\n  have inner (i : I) :\n      (∑ j, a i * a j * (if i = j then (2 : ℝ) else 0)) =\n        2 * a i ^ 2 := by\n    calc\n      _ = a i * a i * 2 := by\n        rw [Finset.sum_eq_single i]\n        · simp\n        · intro j _ hji\n          simp [Ne.symm hji]\n        · simp\n      _ = 2 * a i ^ 2 := by ring\n  simp_rw [inner]\n  exact (Finset.mul_sum _ _ _).symm\n\ndef oldMask {C : Type*} [DecidableEq C] (s : Finset C) :\n    Finset (C × Bool) :=\n  s.image (fun c => (c, false))\n\ndef freshMask {C : Type*} [DecidableEq C] (large s : Finset C) :\n    Finset (C × Bool) :=\n  s.image (fun c => (c, decide (c ∈ large)))\n\ntheorem oldMask_injective {C : Type*} [DecidableEq C] :\n    Function.Injective (@oldMask C _) := by\n  intro s t h\n  have hp := congrArg (Finset.image Prod.fst) h\n  simpa [oldMask, Finset.image_image, Function.comp_def] using hp\n\ntheorem freshMask_injective {C : Type*} [DecidableEq C] (large : Finset C) :\n    Function.Injective (freshMask large) := by\n  intro s t h\n  have hp := congrArg (Finset.image Prod.fst) h\n  simpa [freshMask, Finset.image_image, Function.comp_def] using hp\n\ntheorem resampled_masks_separated\n    {C I : Type*} [DecidableEq C] (large : Finset C)\n    (pairs : I → Finset C)\n    (htouch : ∀ i, ∃ c ∈ pairs i, c ∈ large) :\n    ∀ i j, freshMask large (pairs i) ≠ oldMask (pairs j) := by\n  intro i j h\n  obtain ⟨c, hc, hl⟩ := htouch i\n  have hm : (c, true) ∈ freshMask large (pairs i) := by\n    apply Finset.mem_image.mpr\n    exact ⟨c, hc, by simp [hl]⟩\n  rw [h] at hm\n  simp [oldMask] at hm\n\ntheorem sign_resampling_exact\n    {C I : Type*} [DecidableEq C] [Fintype I] [DecidableEq I]\n    (large : Finset C) (pairs : I → Finset C)\n    (hpairs : Function.Injective pairs)\n    (htouch : ∀ i, ∃ c ∈ pairs i, c ∈ large) (a : I → ℝ) :\n    (∑ i, ∑ j, a i * a j *\n      (gram (freshMask large (pairs i)) (freshMask large (pairs j)) -\n        gram (freshMask large (pairs i)) (oldMask (pairs j)) -\n        gram (oldMask (pairs i)) (freshMask large (pairs j)) +\n        gram (oldMask (pairs i)) (oldMask (pairs j)))) =\n      2 * ∑ i, a i ^ 2 := by\n  exact two_sample_gram\n    (fun i => oldMask (pairs i)) (fun i => freshMask large (pairs i))\n    (oldMask_injective.comp hpairs) ((freshMask_injective large).comp hpairs)\n    (resampled_masks_separated large pairs htouch) a\n\ntheorem cubic_reach\n    (c p e s M m H : ℝ)\n    (hc : 0 ≤ c) (hp : 0 ≤ p) (hM : 0 ≤ M)\n    (he : c * p ≤ e)\n    (hinterp : e ^ 3 ≤ M * s ^ 2)\n    (hbias : c ^ 2 * s ^ 2 ≤ m * M * H) :\n    c ^ 5 * p ^ 3 ≤ m * M ^ 2 * H := by\n  have hcp : 0 ≤ c * p := mul_nonneg hc hp\n  have he3 : (c * p) ^ 3 ≤ e ^ 3 := by gcongr\n  calc\n    c ^ 5 * p ^ 3 = c ^ 2 * (c * p) ^ 3 := by ring\n    _ ≤ c ^ 2 * e ^ 3 := mul_le_mul_of_nonneg_left he3 (sq_nonneg c)\n    _ ≤ c ^ 2 * (M * s ^ 2) :=\n      mul_le_mul_of_nonneg_left hinterp (sq_nonneg c)\n    _ = M * (c ^ 2 * s ^ 2) := by ring\n    _ ≤ M * (m * M * H) := mul_le_mul_of_nonneg_left hbias hM\n    _ = m * M ^ 2 * H := by ring\n\ntheorem cubic_slack_identity (c p e s M m H : ℝ) :\n    m * M ^ 2 * H - c ^ 5 * p ^ 3 =\n      M * (m * M * H - c ^ 2 * s ^ 2) +\n      c ^ 2 * (M * s ^ 2 - e ^ 3) +\n      c ^ 2 * (e - c * p) * (e ^ 2 + e * c * p + (c * p) ^ 2) := by\n  ring\n\nend PinnedTransfer\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/pinned_transfer/statement_fidelity.md",
+    "text": "# Statement fidelity: exact finite core of the pin-transfer proof\n\nThe declarations are in namespace `PinnedTransfer`. This source formalizes\ntwo universal algebraic/combinatorial ingredients, not the full analytic\nGaussian-field limit theorem `lem:profile-pins`.\n\n`gram x y` is the Kronecker orthogonality kernel for Walsh characters:\none for identical finite sign-support masks and zero otherwise.\n`two_sample_gram` quantifies over any finite coefficient index type, any\nmask type with decidable equality, two injective mask maps with disjoint\nranges, and arbitrary real coefficients. Its conclusion is that the\ndouble-sum Gram norm of the difference of the two samples is exactly\ntwice the sum of coefficient squares.\n\n`oldMask`, `freshMask`, `oldMask_injective`,\n`freshMask_injective`, and `resampled_masks_separated` justify the\northogonality assumptions for sign resampling. A mask labels each cluster\nby its identity and a Boolean old/fresh tag. Only clusters in `large`\nreceive fresh signs. The index map `pairs` is injective and every indexed\nsupport touches `large`. The theorem does not require support cardinality\ntwo: it holds more generally for arbitrary distinct affected supports.\nIn the manuscript application the supports are precisely unordered pairs\nof distinct clusters. Unaffected supports cancel before this theorem is\napplied.\n\n`sign_resampling_exact` instantiates `two_sample_gram` with these masks.\nIts coefficients in the band application are\n`lambda * sum_d |d| M_C(d) M_D(d)`. Independence and fairness identify the\nWalsh Gram norm with the mean squared change of log band weight; that\nprobabilistic interpretation is proved in the mathematical report, not\nencoded as a probability space in this source.\n\n`cubic_reach` quantifies over real `c,p,e,s,M,m,H`. It assumes only\n`c >= 0`, `p >= 0`, `M >= 0`,\n`c*p <= e`, `e^3 <= M*s^2`, and `c^2*s^2 <= m*M*H`. It proves\n`c^5*p^3 <= m*M^2*H`, including boundary values without division.\nFor the reach application `p` is an iterated limiting reach probability,\n`e` the exposed second mass, `s` the first mass through the comparison\ncells, `M` a common bound for second moments of squared mass sums,\n`m` the number of cells, and `H` their summed nonnegative cross mass.\nThe Hölder estimates and variance deficits furnishing the three\nhypotheses are analytic obligations proved in the report; they are not\nsilently formalized by this declaration.\n\n`cubic_slack_identity` is the exact polynomial identity decomposing the\nconclusion's slack into those three hypothesis slacks.\n\nNo theorem here asserts a Bessel-law counterexample, a continuum limit,\nan external citation's correctness, novelty, or independent review.\n"
+  },
+  "subject": {
+    "content_hash": "89686075ad00b128a9d71b9cf509e61599b4efa36a24fcb28a192f16232b0391",
+    "kind": "claim",
+    "subject_id": "C_PIN_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_SEL362_CORE-e475ea726efd",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/362/first-pass/selected_bin_coefficient/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/362/first-pass/selected_bin_coefficient/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 12703,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/362/first-pass/selected_bin_coefficient/Main.lean",
+    "source_sha256": "e4518e0f8c608cc09d1598079be41f122d5c6644ec79c3ce18ff44c2dd50a34d",
+    "statement_fidelity": "families/362/first-pass/selected_bin_coefficient/statement_fidelity.md",
+    "statement_fidelity_sha256": "f7b00f36f59b54cf1e714607606b4931b28e0ac20e874313555a0ed942e81845",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/362/first-pass/selected_bin_coefficient/Main.lean:28:5: warning: Variable name `hz` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/selected_bin_coefficient/Main.lean",
+    "text": "import Mathlib.Data.Real.Basic\nimport Mathlib.Tactic.Linarith\n\nnamespace SelectedBinCoefficient\n\ntheorem energy_maximum_branches {i H c : ℝ} (hi : i ≤ -2 * c) :\n    (H ≤ 2 * c → max i (-H) = -H) ∧\n    (2 * c < H → max i (-H) ≤ -2 * c) := by\n  constructor\n  · intro h\n    exact max_eq_right (by linarith only [hi, h])\n  · intro h\n    exact max_le hi (by linarith only [h])\n\ntheorem occupation_maximum_envelope {i H c rho t : ℝ}\n    (hi : i ≤ -2 * c) (hH : 2 * c ≤ H)\n    (hrho : c ≤ rho) (ht : 0 ≤ t) :\n    max 0 (max (i + 2 * rho + 2 * t) (-H + 2 * rho + 2 * t)) ≤\n      2 * rho - 2 * c + 2 * t := by\n  refine max_le ?_ (max_le ?_ ?_)\n  · linarith only [hrho, ht]\n  · linarith only [hi]\n  · linarith only [hH]\n\ntheorem no_unsafe_selected_exponents\n    {a b c z y H d : ℝ}\n    (ha : 0 ≤ a) (hb : 0 ≤ b) (hc : 0 ≤ c)\n    (hz : 0 ≤ z) (hy : 0 ≤ y) (hH : 0 ≤ H)\n    (hnorm : z + c = 1)\n    (hdelta : d = (a + b + y + H) / 100000)\n    (hnear : 2 * a + H / 2 + 2 * y < z + d)\n    (henergy :\n      (H ≤ 2 * c ∧ b < H / 2 - a + d) ∨\n      (2 * c < H ∧ b < H - c - a + d))\n    (hstable :\n      3 / 10 < z - y → 3 / 10 < 1 - a - y →\n      b < H / 2 + y + z / 500)\n    (himproved :\n      7 / 10 < z → 7 / 10 < 1 - a →\n      (4 / 25) * z < y → (4 / 25) * (1 - a) < y →\n      y < (49 / 100) * z → y < (49 / 100) * (1 - a) →\n      b < H / 2 + (29 / 50) * y + d)\n    (hunsafe0 : 2 * H / 3 + z / 6 - d / 3 < b)\n    (hunsafe1 : b < H + 2 * y - z / 2 + d) :\n    False := by\n  have hd0 : 0 ≤ d := by\n    linarith only [hdelta, ha, hb, hy, hH]\n  have henergy_relaxed : b ≤ H - a + d := by\n    rcases henergy with ⟨_, he⟩ | ⟨_, he⟩\n    · linarith only [he, hH]\n    · linarith only [he, hc]\n  have hdsharp : d < (4 / 99995) * z := by\n    linarith only [hnear, henergy_relaxed, hdelta, ha, hy]\n  have hzpos : 0 < z := by\n    linarith only [hd0, hdsharp]\n  have hdsmall : d < z / 1000 := by\n    linarith only [hdsharp, hzpos]\n  have hhigh : 2 * c < H ∧ b < H - c - a + d := by\n    rcases henergy with ⟨_, he⟩ | ⟨hh, he⟩\n    · exfalso\n      linarith only [he, hunsafe0, hdsmall, hzpos, ha, hH]\n    · exact ⟨hh, he⟩\n  have hHlower : (62 / 125) * z + 3 * (a + c) < H := by\n    linarith only [hhigh.2, hunsafe0, hdsmall]\n  have hactual_margin :\n      (7 / 2) * a + (3 / 2) * c + 2 * y < (753 / 1000) * z := by\n    linarith only [hnear, hHlower, hdsmall]\n  have hzstage1 : 500 / 751 < z := by\n    linarith only [hactual_margin, hnorm, ha, hy]\n  have hyupper :\n      y < (377 / 1000) * z - (7 / 4) * a - (3 / 4) * c := by\n    linarith only [hactual_margin, hzpos]\n  have hactual_receiver : 623 / 1000 < z - y := by\n    linarith only [hyupper, hnorm, ha, hc]\n  have hactual_source : 623 / 1000 < 1 - a - y := by\n    linarith only [hyupper, hnorm, ha, hc]\n  have hstable_far : b < H / 2 + y + z / 500 :=\n    hstable\n      (by linarith only [hactual_receiver])\n      (by linarith only [hactual_source])\n  have hmiddle : H / 3 + (41 / 125) * z < 2 * y := by\n    linarith only [hstable_far, hunsafe0, hdsmall, hzpos]\n  have hHupper : H < (2019 / 2500) * z := by\n    linarith only [hmiddle, hnear, hdsmall, ha]\n  have hasmall : a + c < (21 / 200) * z := by\n    linarith only [hHlower, hHupper, hzpos]\n  have hzhigh : 200 / 221 < z := by\n    linarith only [hasmall, hnorm, ha]\n  have hphigh : 179 / 200 < 1 - a := by\n    linarith only [hasmall, hnorm, hc]\n  have hylower : (19 / 100) * z < y := by\n    linarith only [hunsafe0, hunsafe1, hHupper, hdsmall, hzpos]\n  have hreceiver_lower : (4 / 25) * z < y := by\n    linarith only [hylower, hzpos]\n  have hsource_lower : (4 / 25) * (1 - a) < y := by\n    linarith only [hylower, hzhigh, ha]\n  have hreceiver_upper : y < (49 / 100) * z := by\n    linarith only [hyupper, ha, hc, hzpos]\n  have hsource_upper : y < (49 / 100) * (1 - a) := by\n    linarith only [hyupper, hnorm, ha, hc, hz]\n  have himproved_far : b < H / 2 + (29 / 50) * y + d :=\n    himproved\n      (by linarith only [hzhigh])\n      (by linarith only [hphigh])\n      hreceiver_lower hsource_lower hreceiver_upper hsource_upper\n  have hbeta_lower : H / 3 + (33 / 100) * z < (29 / 25) * y := by\n    linarith only [himproved_far, hunsafe0, hdsmall, hzpos]\n  have hbeta_upper :\n      (29 / 25) * y < (291 / 500) * z - (29 / 100) * H := by\n    linarith only [hnear, ha, hdsmall, hzpos]\n  have hHfinal : H < (378 / 935) * z := by\n    linarith only [hbeta_lower, hbeta_upper]\n  linarith only [hHlower, hHfinal, ha, hc, hzpos]\n\nend SelectedBinCoefficient\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/selected_bin_coefficient/statement_fidelity.md",
+    "text": "# Statement fidelity: selected-bin rational core\n\n`Main.lean` is a universal theorem over **real** variables, not a check of\nsampled dyadic bins. All numerals and fractions in it are exact. All three\ndeclarations are in the namespace `SelectedBinCoefficient`.\n\nThe declaration `no_unsafe_selected_exponents`\nquantifies over nonnegative `a,b,c,z,y,H`, with `z+c=1` and\n`d=(a+b+y+H)/100000`. Here `a` is the manuscript's `alpha`, `d` is\nits `Delta`, and the other letters have the same meaning as in\n`selection.tex`, equation `sel:powers`. It assumes the strict near-selection\ninequality and the exhaustive disjunction of the two energy-derived far\nbounds, with the original split at `H=2c` (equality in the first branch).\nIt concludes `False` if **both** coefficient inequalities are unsafe.\nEquivalently, under the other assumptions, at least one of\n\n```\nb <= 2H/3+z/6-d/3,\nH+2y-z/2+d <= b\n```\n\nholds. These are precisely the safe alternatives after taking logarithms\nof the two terms defining `U`, with equality allowed.\n\nTwo conditional hypotheses encode availability of occupation entries:\n\n1. If both `z-y>3/10` and `1-a-y>3/10`, the stable far bound\n   `b<H/2+y+z/500` is available.\n2. If both momentum exponents exceed `7/10` and all four strict\n   intermediate-angle window inequalities hold, the improved far bound\n   `b<H/2+(29/50)y+d` is available.\n\nNeither antecedent is assumed outright. The proof derives the stable\nantecedent using energy alone, then derives the improved antecedent using\nthe stable bound. The improved hypotheses are stronger than the closed\nwindow in the manuscript, so its analytic bound, if valid, applies.\nBoth far bounds are **weaker** than the manuscript bounds: the nonpositive\nterm `-min(a,c)` is dropped; stable-cell absorption is relaxed to\n`z/500`. Thus the formal proof does not obtain a contradiction by making\nthe occupation information stronger than the source.\n\n`energy_maximum_branches` quantifies over real\n`i,H,c` with `i<=-2c`. It proves the exact energy maximum when `H<=2c`,\nand its upper envelope when `H>2c`, including the equality boundary.\nHere `i=log(I)/log(P)`.\n\n`occupation_maximum_envelope` quantifies over\nreal `i,H,c,rho,t` with `i<=-2c`, `H>=2c`, `rho>=c`, and `t>=0`.\nIt bounds all three exponents in the occupation maximum, including\nthe zero exponent for the constant plateau. Specializing\n`t=y+z/1000` covers the stable entry after absorption; specializing\n`t=0` covers the improved entry. `rho=max(a,c)`.\n\nThe Lean statements do **not** contain particles, fields, source-time\ngeometry, actual occupation measures, real powers, square roots, logarithms,\nor an existential `Pstar`. They do not prove any analytic occupation bound,\nthe direction-change estimate, a signed-force identity, bootstrap closure,\ncontinuation, or global Vlasov--Maxwell regularity. Their conversion into\nthe exact representative theorem and the explicit threshold uniform in all\nbins and all `I>0` are proved in `REPORT.md`, not by Lean.\n\nThe ledger claim `C_SEL362_CORE` is this rational core only.\n`C_SEL362_THRESHOLD` and `C_SEL362_EXPONENTS` are separate prose claims.\nIndependent Reviewer assessment of this translation and these prose proofs\nis still required; kernel compilation cannot establish statement fidelity.\n"
+  },
+  "subject": {
+    "content_hash": "fe913f7bf99ba8f2534f2a52c42ca443c107c15b3f40ba97db6027ecf71bf32b",
+    "kind": "claim",
+    "subject_id": "C_SEL362_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

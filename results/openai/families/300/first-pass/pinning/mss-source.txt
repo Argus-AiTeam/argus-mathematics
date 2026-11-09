@@ -1,0 +1,1138 @@
+                                             Interlacing Families II: Mixed Characteristic Polynomials and
+                                                            The Kadison-Singer Problem ∗
+arXiv:1306.3969v4 [math.CO] 14 Apr 2014
+
+
+
+
+                                                  Adam W. Marcus              Daniel A. Spielman                Nikhil Srivastava
+                                                   Yale University             Yale University              Microsoft Research, India
+
+                                                                                      April 15, 2014
+
+
+
+                                                                                         Abstract
+                                                   We use the method of interlacing families of polynomials introduced in [MSS13] to prove
+                                                two theorems known to imply a positive solution to the Kadison–Singer problem.
+                                                   The first is Weaver’s conjecture KS2 [Wea04], which is known to imply Kadison–Singer
+                                                via a projection paving conjecture of Akemann and Anderson [AA91]. The second is a
+                                                formulation due to Casazza, et al., [CEKP07] of Anderson’s original paving conjecture(s)
+                                                [And79a, And79b, And81], for which we are able to compute explicit paving bounds.
+                                                   The proof involves an analysis of the largest roots of a family of polynomials that we call
+                                                the “mixed characteristic polynomials” of a collection of matrices.
+
+
+
+
+                                             ∗
+                                               This research was partially supported by NSF grants CCF-0915487 and CCF-1111257, an NSF Mathematical
+                                          Sciences Postdoctoral Research Fellowship, Grant No. DMS-0902962, a Simons Investigator Award to Daniel
+                                          Spielman, and a MacArthur Fellowship.
+
+
+                                                                                              1
+1    Introduction
+In their 1959 paper, R. Kadison and I. Singer [KS59] posed the following fundamental question.
+Question 1.1 (Kadison-Singer Problem). Does every pure state on the (abelian) von Neumann
+algebra D of bounded diagonal operators on ℓ2 have a unique extension to a pure state on B(ℓ2 ),
+the von Neumann algebra of all bounded operators on ℓ2 ?
+    A positive answer to Question 1.1 has been shown to be equivalent to a number of conjectures
+spanning numerous fields, including Anderson’s paving conjectures [And79a, And79b, And81],
+Weaver’s discrepancy theoretic KSr and KSr′ conjectures [Wea04], the Bourgain-Tzafriri Con-
+jecture [BT89, CT06], and the Feichtinger Conjecture and the Rǫ -Conjecture [CCLV05]; and
+was known to be implied by Akemann and Anderson’s projection paving conjecture [AA91,
+Conjecture 7.1.3]. Many approaches to these problems have been proposed; and, under slightly
+stronger hypothesis, partial solutions have been found by Berman et al. [BHKW88], Bourgain
+and Tzafriri [BT91, BT89], Paulsen [Pau11], Baranov and Dyakonov [BD11], Lawton [Law10],
+Akemann et al. [AAT12], and Popa [Pop13]. For a discussion of the history and a host of other
+related conjectures, we refer the reader to [CFTW06].
+    We prove these conjectures by proving Weaver’s [Wea04] conjecture KS2 which, as amended
+by [Wea04, Theorem 2], says
+Conjecture 1.2 (KS2 ). There exist universal constants η ≥ 2 and θ > 0 so that the following
+holds. Let w1 , . . . , wm ∈ Cd satisfy kwi k ≤ 1 for all i and suppose
+                                          m
+                                                 |hu, wi i|2 = η
+                                          X
+                                                                                                 (1)
+                                           i=1
+
+for every unit vector u ∈ Cd . Then there exists a partition S1 , S2 of {1, . . . , m} so that
+
+                                          |hu, wi i|2 ≤ η − θ,
+                                      X
+                                                                                                 (2)
+                                        i∈Sj
+
+for every unit vector u ∈ Cd and each j ∈ {1, 2}.
+    Akemann and Anderson’s projection paving conjecture [AA91, Conjecture 7.1.3] follows di-
+rectly from KS2 (see [Wea04, p. 229]).
+    We also give a proof of Anderson’s original paving conjecture, which says
+Conjecture 1.3 (Anderson Paving). For every ǫ > 0 there is an r ∈ N such that for every n × n
+self-adjoint
+Pr           complex matrix T with zero diagonal, there are diagonal projections P1 , . . . , Pr with
+      P
+   i=1 i =  I such that
+                             kPi T Pi k ≤ ǫkT k   for i = 1, . . . , r.
+   A similar conjecture is made by Bourgain and Tzafri [BT89, Conjecture 2.8]. One difference
+between the paving conjecture and KS2 is that the paving conjecture can be extended to infinite
+operators T ∈ B(ℓ2 ) by an elementary compactness argument [And79a], which then gives an
+immediate resolution of Kadison-Singer in a manner described in the original paper [KS59,
+Lemma 5]. On the other hand, the reduction from Kadison-Singer to Akemann and Anderson’s
+projection paving conjecture requires non-elementary operator theory.
+   Our main result follows. Its proof appears at the end of Section 5.
+
+                                                     2
+Theorem 1.4. If ǫ > 0 and v1 , . . . , vm are independent random vectors in Cd with finite support
+such that
+                                           Xm
+                                               E vi vi∗ = Id ,                                 (3)
+                                                         i=1
+
+and
+                                                     E kvi k2 ≤ ǫ, for all i,                              (4)
+
+then
+                                                 m
+                                             "                                         #
+                                                 X                            √
+                                     P                   vi vi∗    ≤ (1 +          2
+                                                                                  ǫ)       >0
+                                                 i=1
+
+    The above theorem may be compared to the concentration inequalities
+                                                                      Pm of Rudelson [Rud99]
+                                                                               ∗
+and Ahlswede and Winter [AW02], which imply in our setting that k i=1 vi vi k ≤ C(ǫ) · log n
+with high probability. Here we are able to control the deviation at the much smaller scale
+     √
+(1 + ǫ)2 , but only with nonzero probability.
+    Our theorem easily implies the following generalization of Conjecture 1.2.
+
+Corollary 1.5. Let r be a positive integer and let u1 , . . . , um ∈ Cd be vectors such that
+                                                          m
+                                                          X
+                                                                  ui u∗i = I,
+                                                           i=1
+
+and kui k2 ≤ δ for all i. Then there exists a partition {S1 , . . . Sr } of [m] such that
+                                                                        2
+                                                            √
+                                                     
+                          X
+                                         ∗               1
+                                 ui ui           ≤       √ + δ                     for j = 1, . . . , r.   (5)
+                                                          r
+                          i∈Sj
+
+    If we set r = 2 and δ = 1/18, this implies Conjecture 1.2 for η = 18 and θ = 2. To see this,
+             √                                    P     ∗
+set ui = wi / η. Weaver’s condition (1) becomes i ui ui = I, and δ = 1/η. When we multiply
+back by η, the result (5) becomes (2) with η − θ = 16.
+    Corollary 1.5 also implies Conjecture 1.3 with r = (6/ǫ)4 ; we defer the (slightly more in-
+volved) proof to Section 6.
+
+Proof of Corollary 1.5. For each i ∈ [m] and k ∈ [r], define wi,k ∈ Crd to be the direct sum of r
+vectors from Cd , all of which are 0d (the 0-vector in Cd ) except for the kth one which is a copy
+of ui . That is,                                  d
+                                      ui             0
+                                    0d            ui 
+                             wi,1 =  .  , wi,2 =  .  , and so on.
+                                                  
+                                     ..           .. 
+                                                 0d                      0d
+                                                                                     √
+Now let v1 , . . . , vm be independent random vectors such that vi takes the values { rwi,k }rk=1
+each with probability 1/r.
+
+
+
+
+                                                                    3
+      These vectors satisfy
+
+                                    ui u∗i 0d×d . . .
+                                                                  
+                                                              0d×d
+                                  0d×d ui u∗ . . .           0d×d 
+                                              i
+                       E vi vi∗ =  .                           ..       and      kvi k2 = r kui k2 ≤ rδ.
+                                                                  
+                                   ..           ..
+                                                    .            . 
+                                    0d×d 0d×d . . .           ui u∗i ,
+
+So,
+                                                        m
+                                                        X
+                                                              E vi vi∗ = Ird
+                                                        i=1
+
+and we can apply Theorem 1.4 with ǫ = rδ to show that there exists an assignment of each vi
+so that
+                   √ 2        m            r   X √
+                             X
+                                    ∗
+                                          X                    √       ∗
+               (1 + rδ) ≥       vi vi =                 rwi,k     rwi,k    .
+                                              i=1               k=1 i:vi =wi,k
+
+Setting Sk = {i : vi = wi,k }, we obtain
+
+                                                          r                                                          √
+                                                                                                                          2
+                                                                          √             √
+                                                                                                              
+        X
+                       ∗
+                               X
+                                                  ∗     1 X       X                                  ∗           1
+               ui ui       =          wi,k wi,k       ≤                        rwi,k         rwi,k        ≤       √ + δ        .
+                                                        r                                                          r
+        i∈Sk                   i∈Sk                      k=1 i:vi =wi,k
+
+and this is true for all k.
+
+
+2      Overview
+We prove Theorem 1.4 using the “method of interlacing families of polynomials” introduced in
+[MSS13], which we review in Section 3.1. Interlacing families of polynomials have the property
+that they always contain at least one polynomial whose largest root is at most the largest root
+of the sum of the polynomials in the family. In Section 4, we prove that the characteristic
+polynomials of the matrices that arise in Theorem 1.4 are such a family.
+    This proof requires us to consider the expected characteristic polynomials of certain sums of
+independent rank-1 positive semidefinite Hermitian matrices. We call such an expected polyno-
+mial a mixed characteristic polynomial. To prove that the polynomials that arise in our proof
+are an interlacing family, we show that all mixed characteristic polynomials are real rooted.
+Inspired by Borcea and Brändén’s proof of Johnson’s Conjecture [BB08], we do this by con-
+structing multivariate real stable polynomials, and then applying operators that preserve real
+stability until we obtain the (univariate) mixed characteristic polynomials.
+    We then need to bound the largest root of the expected characteristic polynomial. We do this
+in Section 5 through a multivariate generalization of the barrier function argument of Batson,
+Spielman, and Srivastava [BSS12]. The original argument essentially considers the behavior of
+the roots of a real rooted univariate polynomial p(x) under the operator 1 − ∂/∂x . It does this
+by keeping track of an upper bound on the roots of the polynomial, along with a measure of
+how far above the roots this upper bound is. We refer to this measure as the “barrier function”.
+    In our multivariate generalization, we consider a vector x to be above the roots of a real
+stable multivariate polynomial p(x1 , . . . , xm ) if p(y1 , . . . , ym ) is non-zero for every vector y that
+
+                                                                   4
+is at least as big as x in every coordinate. The value of our multivariate barrier function at
+x is the vector of the univariate barrier functions obtained by restricting to each coordinate.
+We then show that we are able to control the values of the barrier function when operators of
+the form 1 − ∂/∂xi are applied to the polynomial. Our proof is inspired by a method used by
+Gurvits [Gur08] to prove the van der Waerden Conjecture and a generalization by Bapat [Bap89]
+of this conjecture to mixed discriminants. Gurvits’s proof examines a sequence of polynomials
+similar to those we construct in our proof, and amounts to proving a lower bound on the constant
+term of the mixed characteristic polynomial.
+
+
+3     Preliminaries
+For an integer m, we let [m] = {1, . . . , m}. We write [m]
+                                                                
+                                                              k   to indicate the collection ofQsubsets
+of [m] having k elements. When z1 , . . . , zm are variables and S ⊆ [m], we define z S = i∈S zi .
+    We write ∂zi to indicate the operator that performs partial differentiation in zi , ∂/∂zi . For
+a multivariate polynomial p(z1 , . . . , zm ) and a number x, we write p(z1 , . . . , zm ) z1 =x to indicate
+the restricted polynomial in z2 , . . . , zm obtained by setting z1 to x.
+    As usual, we write kxk to indicate the Euclidean 2-norm of a vector x. For a matrix M ,
+we indicate the operator norm by kM k = maxkxk=1 kM xk. When M is Hermitian positive
+semidefinite, we recall that this is the largest eigenvalue of M .
+    We write P and E for the probability of an event and for the expectation of a random variable,
+respectively.
+
+3.1    Interlacing Families
+We now recall the definition of interlacing families of polynomials from [MSS13], and its main
+consequence. We say that a univariate polynomial is real rooted if all of its coefficients and roots
+are real.
+                                                                  Qn−1
+Definition 3.1. We say thatQ  a real rooted polynomial g(x) = α0 i=1     (x − αi ) interlaces a real
+rooted polynomial f (x) = β0 ni=1 (x − βi ) if
+
+                                β1 ≤ α1 ≤ β2 ≤ α2 ≤ · · · ≤ αn−1 ≤ βn .
+
+We say that polynomials f1 , . . . , fk have a common interlacing if there is a polynomial g so that
+g interlaces fi for each i.
+
+   In [MSS13], we proved the following elementary lemma that shows the utility of having a
+common interlacing.
+
+Lemma 3.2. Let f1 , . . . , fk be polynomials of the same degree that are real-rooted and have
+positive leading coefficients. Define
+                                                Xk
+                                          f∅ =      fi .
+                                                     i=1
+
+If f1 , . . . , fk have a common interlacing, then there exists an i so that the largest root of fi is at
+most the largest root of f∅ .
+
+
+                                                     5
+    In many cases of interest, we are faced with polynomials that are indexed naturally by a
+cartesian product, and it is beneficial to apply Lemma 3.2 inductively to subcollections of the
+polynomials rather than at once. This inspires the following definition from [MSS13]:
+
+Definition 3.3. Let S1 , . . . , Sm be finite sets and for every assignment s1 , . . . , sm ∈ S1 ×· · ·×Sm
+let fs1 ,...,sm (x) be a real-rooted degree n polynomial with positive leading coefficient. For a partial
+assignment s1 , . . . , sk ∈ S1 × . . . × Sk with k < m, define
+                                    def
+                                                    X
+                           fs1,...,sk =                              fs1 ,...,sk ,sk+1 ,...,sm ,
+                                          sk+1 ∈Sk+1 ,...,sm ∈Sm
+
+as well as
+                                          def
+                                                       X
+                                     f∅ =                            fs1 ,...,sm .
+                                                s1 ∈S1 ,...,sm ∈Sm
+
+   We say that the polynomials {fs1 ,...,sm } form an interlacing family if for all k = 0, . . . , m − 1,
+and all s1 , . . . , sk ∈ S1 × · · · × Sk , the polynomials
+
+                                                {fs1 ,...,sk ,t }t∈Sk+1
+
+have a common interlacing.
+
+Theorem 3.4. Let S1 , . . . , Sm be finite sets and let {fs1 ,...,sm } be an interlacing family of poly-
+nomials. Then, there exists some s1 , . . . , sm ∈ S1 × · · · × Sm so that the largest root of fs1 ,...,sm
+is at most the largest root of f∅ .
+
+Proof. From the definition of an interlacing family, we know that the polynomials {ft } for t ∈ S1
+have a common interlacing and that their sum is f∅ . So, Lemma 3.2 tells us that one of the
+polynomials ft has largest root at most the largest root of f∅ . We now proceed inductively.
+For any s1 , . . . , sk , we know that the polynomials {fs1 ,...,sk ,t } for t ∈ Sk+1 have a common
+interlacing and that their sum is fs1 ,...,sk . So, for some choice of t (say sk+1 ) the largest root of
+the polynomial fs1 ,...,sk+1 is at most the largest root of fs1 ,...,sk .
+
+    We will prove that the polynomials {fs } defined in Section 4 form an interlacing family. Ac-
+cording to Definition 3.3, this requires establishing the existence of certain common interlacings.
+There is a systematic way to show that polynomials have common interlacings by proving that
+convex combinations of those polynomials are real rooted. In particular the following result
+seems to have been discovered a number of times. It appears as Theorem 2.1 of Dedieu [Ded92],
+(essentially) as Theorem 2′ of Fell [Fel80], and as (a special case of) Theorem 3.6 of Chudnovsky
+and Seymour [CS07].
+
+Lemma 3.5. Let f1 , . . . , fk be (univariate) polynomials of the same degree
+                                                                           Pk with positive leading
+coefficients. Then f1 , . . . , fk have a common interlacing if and only if i=1 λi fi is real rooted
+for all convex combinations λi ≥ 0, ki=1 λi = 1.
+                                         P
+
+
+
+
+                                                          6
+3.2    Stable Polynomials
+Our results employ tools from the theory of stable polynomials, a generalization of real rooted-
+ness to multivariate polynomials. For a complex number z, let Im(z) denote its imaginary part.
+We recall that a polynomial p(z1 , . . . , zm ) ∈ C[z1 , . . . , zm ] is stable if whenever Im(zi ) > 0 for all
+i, p(z1 , . . . , zm ) 6= 0. A polynomial p is real stable if it is stable and all of its coefficients are real.
+A univariate polynomial is real stable if and only if it is real rooted (as defined at the beginning
+of Section 3.1).
+    To prove that the polynomials we construct in this paper are real stable, we begin with an
+observation of Borcea and Brändén [BB08, Proposition 2.4].
+
+Proposition 3.6. If A1 , . . . , Am are positive semidefinite Hermitian matrices, then the polyno-
+mial                                                      !
+                                                 X
+                                          det       zi Ai
+                                                          i
+
+is real stable.
+
+    We will generate new real stable polynomials from the one above by applying operators of
+the form (1− ∂zi ). One can use general results, such as Theorem 1.3 of [BB10] or Proposition 2.2
+of [LS81], to prove that these operators preserve real stability. It is also easy to prove it di-
+rectly using the fact that the analogous operator on univariate polynomials preserves stability of
+polynomials with complex coefficients. For example, the following theorem appears as Corollary
+18.2a in Marden [Mar85], and is similar to Corollary 5.4.1 of Rahman and Schmeisser [RS02].
+
+Theorem 3.7. If all the zeros of a degree d polynomial q(z) lie in a (closed) circular region A,
+then for λ ∈ C, all the zeros of
+                                        q(z) − λq ′ (z)
+lie in the convex region swept out by translating A in the magnitude and direction of the vector
+dλ.
+
+Corollary 3.8. If p ∈ R[z1 , . . . , zm ] is real stable, then so is
+
+                                           (1 − ∂z1 )p(z1 , . . . , zm ).
+
+Proof. Let x2 , . . . , xm be numbers with positive imaginary part. Then, the univariate polynomial
+
+                                 q(z1 ) = p(z1 , z2 , . . . , zm ) z2 =x2 ,...,zm =xm
+
+is stable. That is, all of its zeros lie in the circular region consisting of numbers with non-positive
+imaginary part. As this region is invariant under translation by d, (1 − ∂z1 )q(z) is stable. This
+implies that (1−∂z1 )p has no roots in which all of the variables have positive imaginary part.
+
+    We will also use the fact that real stability is preserved under setting variables to real numbers
+(see, for instance, [Wag11, Lemma 2.4(d)]).
+
+Proposition 3.9. If p ∈ R[z1 , . . . , zm ] is real stable and a ∈ R, then p|z1 =a = p(a, z2 , . . . , zm ) ∈
+R[z2 , . . . , zm ] is real stable.
+
+
+                                                          7
+3.3   Facts from Linear Algebra
+For a matrix M ∈ Cd×d we write the characteristic polynomial of M in a variable x as
+
+                                   χ [M ] (x) = det (xI − M ) .
+
+   The following identity is sometimes known as the matrix determinant lemma or the rank-1
+update formula.
+Lemma 3.10. If A is an invertible matrix and u, v are vectors, then
+
+                             det (A + uv ∗ ) = det (A) (1 + v ∗ A−1 u)
+
+   We will utilize Jacobi’s formula for the derivative of the determinant of a matrix, which can
+be derived from Lemma 3.10.
+Theorem 3.11. For an invertible matrix A and another matrix B of the same dimensions,
+
+                         ∂t det (A + tB) = det (A) Tr A−1 B .
+                                                           
+
+   We require two standard facts about traces. The first is that for a k-by-n matrix A and an
+n-by-k matrix B,
+                                   Tr (AB) = Tr (BA) .
+The second is
+Lemma 3.12. If A and B are positive semidefinite matrices of the same dimension, then
+
+                                           Tr (AB) ≥ 0.
+
+   One can prove this by decomposing A and B into sums of rank-1 positive semidefinite
+matrices, using linearity of the trace, and then the first fact about traces.
+
+
+4     The Mixed Characteristic Polynomial
+Theorem 4.1. Let v1 , . . . , vm be independent random column vectors in Cd with finite support.
+For each i, let Ai = E vi vi∗ . Then,
+                   "m          #       m
+                                                 !          m
+                                                                     !
+                    X                  Y                   X
+               Eχ      vi vi∗ (x) =       1 − ∂zi det xI +     zi Ai            .            (6)
+                                                                         z1 =···=zm =0
+                   i=1               i=1                      i=1
+
+   In particular, the expected characteristic polynomial of a sum of independent rank one
+Hermitian matrices is a function of the covariance matrices Ai . We call this polynomial the
+mixed characteristic polynomial of A1 , . . . , Am , and denote it by µ [A1 , . . . , Am ] (x).
+   The proof of Theorem 4.1 relies on the following simple identity which shows that random
+rank one updates of determinants correspond in a natural way to differential operators.
+Lemma 4.2. For every square matrix A and random vector v, we have
+                                                                 
+                    E det (A − vv ∗ ) = (1 − ∂t ) det A + t E vv ∗ t=0                       (7)
+
+
+                                                8
+Proof. First, assume A is invertible. By Lemma 3.10, we have
+
+                       E det (A − vv ∗ ) = E det (A) (1 − v ∗ A−1 v)
+                                                = E det (A) (1 − Tr A−1 vv ∗ )
+                                                                            
+
+                                                = det (A) − det (A) E Tr A−1 vv ∗
+                                                                                  
+                                                                                  
+                                                = det (A) − det (A) Tr A−1 E vv ∗
+
+On the other hand, by Theorem 3.11, we have
+                                                                          
+          (1 − ∂t ) det A + t E vv ∗ = det A + t E vv ∗ − det (A) Tr A−1 E vv ∗ .
+
+The claim follows by setting t = 0.
+    If A is not invertible, we can choose a sequence of invertible matrices that approach A. Since
+identity (7) holds for each matrix in the sequence and the two sides are polynomials in the entries
+of the matrix, a continuity argument implies that the identity must hold for A as well.
+
+   We prove Theorem 4.1 by applying this lemma inductively.
+
+Proof of Theorem 4.1. We will show by induction on k that for every matrix M ,
+                       k             k                      k
+                                !              !                     !
+                       X            Y                      X
+                              ∗
+           E det M −      vi vi =       1 − ∂zi det M +        zi Ai           .
+                                                                                                              z1 =···=zk =0
+                           i=1                   i=1                                   i=1
+
+The base case k = 0 is trivial. Assuming the claim holds for i < k, we have:
+             k                                k−1
+                      !                                           !
+            X                                 X
+E det M −       vi vi∗ =     E    E det M −       vi vi∗ − vk vk∗   by independence
+                           v1 ,...,vk−1 vk
+              i=1                                             i=1
+                                                                          k−1
+                                                                                                  !
+                                                                          X
+                       =         E        (1 − ∂zk ) det M −                    vi vi∗ + zk Ak            zk =0
+                                                                                                                        by Lemma 4.2
+                           v1 ,...,vk−1
+                                                                          i=1
+                                                                                      k−1
+                                                                                                      !
+                                                                                      X
+                       = (1 − ∂zk )            E          det M + zk Ak −                    vi vi∗           zk =0
+                                                                                                                         by linearity
+                                           v1 ,...,vk−1
+                                                                                      i=1
+                                             k−1                                                k−1
+                                                              !                                                   !
+                                             Y                                                  X
+                       = (1 − ∂zk )                 1 − ∂zi       det M + zk Ak +                         zi Ai       z1 =···=zk−1 =0 zk =0
+                                              i=1                                               i=1
+                             k                                      k
+                                               !                                  !
+                             Y                                      X
+                       =             1 − ∂zi       det M +                zi Ai       z1 =···=zk =0
+                                                                                                          ,
+                             i=1                                    i=1
+
+as desired.
+
+Remark 4.3. The proof of Theorem 4.1 given here (using induction and Lemma 4.2) was
+suggested to us by James Lee. The slightly longer proof that appeared in our original manuscript
+was not inductive; rather, it utilized the Cauchy–Binet formula to show the equality of each
+coefficient.
+
+                                                              9
+   Now it is immediate from Proposition 3.6 and Corollary 3.8 that the mixed characteristic
+polynomial is real rooted.
+
+Corollary 4.4. The mixed characteristic polynomial of positive semidefinite matrices is real
+rooted.
+
+Proof. Proposition 3.6 tells us that
+                                                               m
+                                                                                !
+                                                               X
+                                              det xI +                  zi Ai
+                                                                  i=1
+
+is real stable. Corollary 3.8 tells us that
+                                      m                                     m
+                                                      !                                     !
+                                      Y                                     X
+                                            1 − ∂zi       det xI +                  zi Ai
+                                      i=1                                   i=1
+
+is real stable as well. Finally, Proposition 3.9 shows that setting all of the zi to zero preserves
+real stability. As the resulting polynomial is univariate, it is real rooted.
+
+    Finally, we use the real rootedness of mixed characteristic polynomials to show that every
+sequence of independent finitely supported random vectors v1 , . . . , vm defines an interlacing
+family. Let li be the size of the support of the random vector vi , and let vi take the values
+wi,1 , . . . , wi,li with probabilities pi,1 , . . . , pi,li . For j1 ∈ [l1 ], . . . , jm ∈ [lm ], define
+                                                     m
+                                                               ! "m                      #
+                                                    Y               X
+                                                                                   ∗
+                                 qj1 ,...,jm =           pi,ji χ        wi,ji wi,j     i
+                                                                                           (x) .
+                                               i=1                  i=1
+
+Theorem 4.5. The polynomials qj1,...,jm form an interlacing family.
+
+Proof. For 1 ≤ k ≤ m and j1 ∈ [l1 ], . . . , jk ∈ [lk ], define
+                                k
+                                        !                " k                m
+                                                                                    #
+                                Y                         X                 X
+                                                                     ∗            ∗
+              qj1 ,...,jk (x) =   pi,ji        E       χ      wi,ji wi,ji +   vi vi (x) .
+                                               vk+1 ,...,vm
+                                i=1                                 i=1                         i=k+1
+
+Also, let                                                         "m               #
+                                                                   X
+                                   q∅ (x) =           E       χ           vi vi∗       (x) .
+                                                 v1 ,...,vm
+                                                                   i=1
+
+We need to prove that for every partial assignment j1 , . . . , jk (possibly empty), the polynomials
+
+                                            {qj1 ,...,jk ,t (x)}t=1,...,lk+1
+
+have a common interlacing.
+   By Lemma 3.5, it suffices to prove that for every nonnegative λ1 , . . . , λlk+1 summing to one,
+the polynomial
+                                       lk+1
+                                       X
+                                            λt qj1 ,...,jk ,t (x)
+                                                t=1
+
+
+                                                              10
+is real rooted. To show this, let uk+1 be a random vector that equals wk+1,t with probability λt .
+Then, the above polynomial equals
+                k
+                         !               " k                              m
+                                                                                  #
+                Y                         X                               X
+                                                     ∗
+                   pi,ji       E       χ      wi,ji wi,j i
+                                                           + uk+1 u∗k+1 +   vi vi∗ (x) ,
+                          uk+1 ,vk+2 ,...,vm
+               i=1                              i=1                                    i=k+2
+
+which is a multiple of a mixed characteristic polynomial and is thus real rooted by Corollary 4.4.
+
+
+
+
+5    The Multivariate Barrier Argument
+In this section we will prove an upper bound on the roots of theP         mixed characteristic polynomial
+µ [A1 , . . . , Am ] (x) as a function of the Ai , in the case of interest m
+                                                                           i=1 Ai = I. Our main theorem
+is:
+
+Theorem 5.1. Suppose A1 , . . . , Am are Hermitian positive semidefinite matrices satisfying
+P  m
+      Ai = I and Tr (Ai ) ≤ ǫ for all i. Then the largest root of µ [A1 , . . . , Am ] (x) is at most
+   i=1√
+(1 + ǫ)2 .
+
+    We begin by deriving a slightly different expression for µ [A1 , . . . , Am ] (x) that allows us to
+reason separately about the effect of each Ai on its roots.
+                                                                                     P
+Lemma 5.2. Let A1 , . . . , Am be Hermitian positive semidefinite matrices. If i Ai = I, then
+                                           m               m
+                                                    !              !
+                                           Y              X
+                µ [A1 , . . . , Am ] (x) =   1 − ∂yi det     yi Ai                    .             (8)
+                                                                                       y1 =···=ym =x
+                                               i=1                       i=1
+
+Proof. For any differentiable function f , we have
+
+                                    ∂yi (f (yi )) y =z +x = ∂zi f (zi + x).
+                                                     i   i
+
+
+So, the lemma follows by substituting yi = zi + x into expression (8), and observing that it
+produces the expression on the right hand side of (6).
+
+    Let us write
+                                   µ [A1 , . . . , Am ] (x) = Q(x, x, . . . , x),                      (9)
+where Q(y1 , . . . , ym ) is the multivariate polynomial on the right hand side of (8). The bound
+on the roots of µ [A1 , . . . , Am ] (x) will follow from a “multivariate upper bound” on the roots of
+Q, defined as follows.
+
+Definition 5.3. Let p(z1 , . . . , zm ) be a multivariate polynomial. We say that z ∈ Rm is above
+the roots of p if
+
+                     p(z + t) > 0          for all           t = (t1 , . . . , tm ) ∈ Rm , ti ≥ 0,
+
+i.e., if p is positive on the nonnegative orthant with origin at z.
+
+                                                             11
+     We will denote the set of points which are above the roots of p by Abp . To prove Theorem 5.1,
+                                          √
+it is sufficient by (9) to show that (1 + ǫ)2 · 1 ∈ AbQ , where 1 is the all-ones vector. We will
+achieve this by an inductive “barrier function” argument. In particular, we will construct Q by
+iteratively applying operations of the form (1 − ∂yi ), and we will track the locations of the roots
+of the polynomials that arise in this process by studying the evolution of the functions defined
+below.
+
+Definition 5.4. Given a real stable polynomial p and a point z = (z1 , . . . , zm ) ∈ Abp , the
+barrier function of p in direction i at z is
+
+                                                  ∂zi p(z)
+                                     Φip (z) =             = ∂zi log p(z).
+                                                   p(z)
+
+Equivalently, we may define Φip by
+                                                           ′ (z )      r
+                                                          qz,i   i     X    1
+                               Φip (z1 , . . . , zm ) =              =           ,                          (10)
+                                                          qz,i (zi )     zi − λj
+                                                                       j=1
+
+where the univariate restriction
+
+                                qz,i (t) = p(z1 , . . . , zi−1 , t, zi+1 , . . . , zm )                     (11)
+
+has roots λ1 , . . . , λr , which are real by Proposition 3.9.
+    Although the Φip are m−variate functions, the properties that we require of them may be
+deduced by considering their bivariate restrictions. We establish these properties by exploiting
+the following powerful characterization of bivariate real stable polynomials. It is stated in the
+form we want by Borcea and Brändén [BB10, Corollary 6.7], and is proved using an adaptation
+of a result of Helton and Vinnikov [HV07] by Lewis, Parrilo and Ramana [LPR05].
+
+Lemma 5.5. If p(z1 , z2 ) is a bivariate real stable polynomial of degree exactly d, then there exist
+d-by-d positive semidefinite matrices A, B and a Hermitian matrix C such that
+
+                                  p(z1 , z2 ) = ± det(z1 A + z2 B + C).
+
+Remark 5.6. We can also conclude that for every z1 , z2 > 0, z1 A + z2 B must be positive
+definite. If this were not the case, then there would be a nonzero vector that is in the nullspace
+of both A and B. This would cause the degree of the polynomial to be lower than d.
+
+   The two analytic properties of the barrier functions that we use are that, above the roots of
+a polynomial, they are nonincreasing and convex in every coordinate.
+
+Lemma 5.7. Suppose p is real stable and z ∈ Abp . Then for all i, j ≤ m and δ ≥ 0,
+
+             Φip (z + δej ) ≤ Φip (z), and                                                (monotonicity)    (12)
+             Φip (z + δej ) ≤ Φip (z) + δ · ∂zj Φip (z + δej )                               (convexity).   (13)
+
+
+
+
+                                                          12
+Proof. If i = j, then we consider the real-rooted univariate restriction qz,i (zi ) = rk=1 (zi − λk )
+                                                                                     Q
+defined in (11). Since z ∈ Abp we know that zi > λk for all k. Monotonicity follows immediately
+by considering each term in (10), and convexity is easily established by computing
+                                       
+                                   1             2
+                         ∂z2i             =             >0    as zi > λk .
+                                zi − λk     (zi − λk )3
+   In the case i 6= j we fix all variables other than zi and zj and consider the bivariate restriction
+                                      qz,ij (zi , zj ) = p(z1 , . . . , zm ).
+By Lemma 5.5 there are Hermitian positive semidefinite Bi , Bj and a Hermitian matrix C such
+that
+                          qz,ij (zi , zj ) = ± det(zi Bi + zj Bj + C).
+Remark 5.6 allows us to conclude that the sign is positive: for sufficiently large t, t(Bi + Bj ) + C
+is positive definite and for t ≥ max(z1 , z2 ) qz,ij (t, t) > 0.
+    The barrier function in direction i can now be simply expressed as
+                     ∂zi det(zi Bi + zj Bj + C)
+         Φip (z) =
+                      det(zi Bi + zj Bj + C)
+                  det(zi Bi + zj Bj + C)Tr (zi Bi + zj Bj + C)−1 Bi
+                                                                                
+                =                                                                   by Theorem 3.11
+                                 det(zi Bi + zj Bj + C)
+                = Tr (zi Bi + zj Bj + C)−1 Bi
+                                               
+
+Let M = (zi Bi + zj Bj + C). As z ∈ Abp and Bi + Bj is positive definite, we can conclude that
+M is positive definite: if it were not, there would be a t for which det (M + t(Bi + Bj )) = 0.
+We now write
+                          Φip (z + δej ) = Tr (M + δBj )−1 Bi
+                                                              
+
+                                         = Tr M −1 (I + δBj M −1 )−1 Bi
+                                                                        
+
+                                         = Tr (I + δBj M −1 )−1 Bi M −1 .
+                                                                        
+
+For δ sufficiently small, we may expand (I + δBj M −1 )−1 in a power series as
+                                                          X
+                          I − δBj M −1 + δ2 (Bj M −1 )2 +   (−δBj M −1 )ν .
+                                                                   ν≥3
+
+Thus,
+                                  ∂zj Φip (z) = −Tr Bj M −1 Bi M −1 .
+                                                                   
+
+To see that this is non-positive, and thereby prove (12), observe that both Bj and M −1 Bi M −1
+are positive semidefinite, and recall from Lemma 3.12 that the trace of the product of positive
+semidefinite matrices is non-negative. To prove convexity, observe that the second derivative is
+non-negative because
+              ∂z2j Φip (z) = Tr (Bj M −1 )2 Bi M −1 = Tr (Bj M −1 Bj )(M −1 Bi M −1 )
+                                                                                    
+
+is also the trace of the product of positive semidefinite matrices.
+    Inequality (13) is equivalent to convexity in direction ej and may be obtained by observing
+that f (x + δ) ≤ f (x) + δf ′ (x + δ) for any convex differentiable f .
+
+                                                       13
+Remark 5.8. There are other ways of proving Lemma 5.7 that go through more elementary
+techniques than those used by Helton and Vinnikov [HV07]. James Renegar has pointed out
+that it follows from Corollary 4.6 of [BGLS01]. Terence Tao [Tao13] has also presented a more
+elementary proof.
+    Recall that we are interested in finding points that lie in AbQ ,P
+                                                                     where Q is generated by apply-
+ing several operators of the form 1 − ∂zi to the polynomial det( m     i=1 zi Ai ). The purpose of the
+“barrier functions” Φip is to allow us to reason about the relationship between Abp and Abp−∂zi p ;
+in particular, the monotonicity property alone immediately implies the following statement.
+Lemma 5.9. Suppose that p is real stable, that z is above its roots, and that Φip (z) < 1. Then
+z is above the roots of p − ∂zi p.
+Proof. Let t be a nonnegative vector. As Φ is nonincreasing in each coordinate we have Φip (z +
+t) < 1, whence
+                      ∂zi p(z + t) < p(z + t) =⇒ (p − ∂zi p)(x + t) > 0,
+as desired.
+
+   Lemma 5.9 allows us to prove that a vector is above the roots of p − ∂zi p. However, it is
+not strong enough for an inductive argument because the barrier functions can increase with
+each 1 − ∂zi operator that we apply. To remedy this, we will require the barrier functions to be
+bounded away from 1, and we will compensate for the effect of each 1 − ∂zj operation by shifting
+our upper bound away from zero in direction ej . In particular, by exploiting the convexity
+properties of the Φip , we arrive at the following strengthening of Lemma 5.9.
+Lemma 5.10. Suppose that p(z1 , . . . , zm ) is real stable, that z ∈ Abp , and that δ > 0 satisfies
+                                                          1
+                                             Φjp (z) ≤ 1 − .                                     (14)
+                                                          δ
+Then for all i,
+                                     Φip−∂z p (z + δej ) ≤ Φip (z).
+                                             j
+
+Proof. We will write ∂i instead of ∂zi to ease notation. We begin by computing an expression
+for Φip−∂j p in terms of Φjp , Φip , and ∂j Φip :
+
+                                          ∂i (p − ∂j p)
+                             Φip−∂j p =
+                                            p − ∂j p
+                                                        
+                                          ∂i (1 − Φjp )p
+                                     =
+                                             (1 − Φjp )p
+                                          (1 − Φjp )(∂i p)         (∂i (1 − Φjp ))p
+                                     =                         +
+                                            (1 − Φjp )p              (1 − Φjp )p
+                                                  ∂i Φjp
+                                     = Φip −               .
+                                                 1 − Φjp
+                                                  ∂j Φip
+                                     = Φip −               ,
+                                                 1 − Φjp
+
+
+                                                     14
+as ∂i Φjp = ∂j Φip . We would like to show that Φip−∂j p (z + δej ) ≤ Φip (z). By the above identity
+this is equivalent to
+                                ∂j Φip (z + δej )
+                            −         j
+                                                  ≤ Φip (z) − Φip (z + δej ).
+                               1 − Φp (z + δej )
+      By part (13) of Lemma 5.7,
+
+                              δ · (−∂j Φip (z + δej )) ≤ Φip (z) − Φip (z + δej ).
+
+Thus it is sufficient to establish that
+                                    ∂j Φip (z + δej )
+                               −                             ≤ δ · (−∂j Φip (z + δej )).                               (15)
+                                   1 − Φjp (z + δej )
+
+    From part (12) of Lemma 5.7, we know that (−∂j Φip (z + δej )) ≥ 0; so, we may divide both
+sides of (15) by this term to obtain
+                                                         1
+                                                                   ≤ δ.                                                (16)
+                                                1 − Φip (z + δej )
+
+Applying Lemma 5.7 once more we observe that Φjp (z + δej ) ≤ Φjp (z), and conclude that (16) is
+implied by
+                                         1
+                                                ≤ δ,
+                                    1 − Φjp (z)
+which is implied by (14).
+
+      We now have the necessary tools to prove the main theorem of this section.
+
+Proof of Theorem 5.1. Let
+                                                                          m
+                                                                                        !
+                                                                          X
+                                     P (y1 , . . . , ym ) = det                 yi Ai       .
+                                                                          i=1
+Set                                                          √
+                                                        t=       ǫ + ǫ.
+As all of the matrices Ai are positive semidefinite and
+                                              !
+                                         X
+                                 det t      Ai = det (tI) > 0,
+                                                    i
+
+the vector t1 is above the roots of P .
+   By Theorem 3.11,
+                                                                                                       !−1     
+                                                                                    m
+                                             ∂i P (y1 , . . . , ym )                X
+                  ΦiP (y1 , . . . , ym ) =                           = Tr                      yi Ai         Ai  .
+                                              P (y1 , . . . , ym )
+                                                                                    i=1
+
+So,                                                                                         √
+                                 ΦiP (t1) = Tr (Ai ) /t ≤ ǫ/t = ǫ/(ǫ +                          ǫ),
+
+                                                             15
+which we define to be φ. Set                                                     √
+                                            δ = 1/(1 − φ) = 1 +                   ǫ.
+    For k ∈ [m], define
+                                                          k
+                                                                             !
+                                                          Y
+                              Pk (y1 , . . . , ym ) =           1 − ∂yi          P (y1 , . . . , ym ).
+                                                          i=1
+
+Note that Pm = Q.
+     Set x0 to be the all-t vector, and for k ∈ [m] define xk to be the vector that is t + δ in the
+first k coordinates and t in the rest. By inductively applying Lemmas 5.9 and 5.10, we prove
+that xk is above the roots of Pk , and that for all i
+
+                                                    ΦiPk (xk ) ≤ φ.
+
+    It follows that the largest root of
+
+                                      µ [A1 , . . . , Am ] (x) = Pm (x, . . . , x)
+
+is at most                                         √   √            √
+                                   t+δ =1+          ǫ + ǫ + ǫ = (1 + ǫ)2 .
+
+
+Proof of Theorem 1.4. Let Ai = E vi vi∗ . We have
+
+                               Tr (Ai ) = E Tr (vi vi∗ ) = E vi∗ vi = E kvi k2 ≤ ǫ,
+
+for all i.
+      The expected characteristic polynomial of the i vi vi∗ is the mixed characteristic polynomial
+                                                                 P
+µ [A1 , . . . , Am ] (x). Theorem 5.1 implies that the largest root of this polynomial is at most
+        √
+(1 + ǫ)2 .
+      For i ∈ [m], let li be the size of the support of the random vector vi , and let vi take the
+values wi,1 , . . . , wi,li with probabilities pi,1 , . . . , pi,li . Theorem 4.5 tells us that the polynomials
+qj1 ,...,jm are an interlacing family. So, Theorem 3.4 implies that there exist j1 , . . . , jm so that the
+largest root of the characteristic polynomial of
+                                                        m
+                                                        X
+                                                                     ∗
+                                                              wi,ji wi,j i
+                                                        i=1
+                  √
+is at most (1 +       ǫ)2 .
+
+
+
+
+                                                               16
+6    The Paving Conjecture
+The main result of this section is the following quantitative version of Conjecture 1.3. Follow-
+ing [CEKP07], we will say that P     a square matrix T can be (r, ǫ)-paved if there are coordinate
+projections P1 , . . . , Pr such that ri=1 Pi = I and kPi T Pi k ≤ ǫkT k for all i.
+
+Theorem 6.1. For every ǫ > 0, every zero-diagonal complex self-adjoint matrix T can be
+(r, ǫ)−paved with r = (6/ǫ)4 .
+
+   To prove this theorem, we rely on the following result of Casazza et al. which says that
+paving arbitrary self-adjoint matrices can be reduced to paving certain projection matrices. Its
+short proof is based on elementary linear algebra.
+
+Lemma 6.2 (Theorem 3 of [CEKP07]). Suppose there is a function r : R+ → N so that every
+2n × 2n projection matrix Q with diagonal entries equal to 1/2 can be (r(ǫ), 1+ǫ  2 )-paved for all
+ǫ > 0. Then every n × n self-adjoint zero-diagonal matrix T can be (r 2 (ǫ), ǫ)-paved for all ǫ > 0.
+
+Proof of Theorem 6.1. Let Q be an arbitrary 2n × 2n projection matrix with diagonal entries
+equal to 1/2. Then Q = (u∗i uj )i,j∈[2n] is the gram matrix of 2n vectors u1 , . . . , u2n ∈ Cn with
+kui k2 = 1/2 = δ. Applying Corollary 1.5 to these vectors for any r yields a partition S1 , . . . , Sr
+of [2n]. Letting Pk be the projection onto the indices in Sk , we have for each k ∈ [r]:
+                                                                                     2
+                                                   X                          1  1             1  3
+             kPk QPk k =    (u∗i uj )i,j∈Sk   =           ui ui   ∗
+                                                                      ≤       √ +√         <     +√ .   (17)
+                                                                               r  2            2   r
+                                                   i∈Sk
+
+
+Thus every Q can be (r, 1+ǫ                    2
+                         2 )−paved for r = 36/ǫ . Applying Lemma 6.2 yields Theorem 6.1.
+
+
+
+    It is well-known that Theorem 6.1 can be extended to arbitrary matrices T with zero diagonal
+at the cost of a further quadratic loss in parameters: simply decompose T = A + iB for self-
+adjoint zero-diagonal matrices A, B, and take a product of pavings of A and B.
+    We have not made any attempt to optimize the dependence of r on ǫ in Theorem 6.1, and
+leave this as an open question. It is known [CEKP07] that it is not possible to do better than
+r = 1/ǫ2 .
+
+
+7    Conclusion
+When m = d, the constant coefficient of the mixed characteristic polynomial of A1 , . . . , Ad is the
+mixed discriminant of A1 , . . . , Ad . The mixed discriminant has many definitions, among them
+                                                  d
+                                                       !              !
+                                                 Y            X
+                          D(A1 , . . . , Ad ) =     ∂zi det      zi Ai .
+                                                     i=1                      i
+
+See [Gur06] or [BR97].
+   When k < d, we define
+
+                        D(A1 , . . . , Ak ) = D(A1 , . . . , Ak , I, . . . , I)/(d − k)!,
+
+                                                       17
+where the identity matrix I is repeated d − k times. For example D(A1 ) is the just the trace of
+A1 .
+     With this notation, we can write
+                                                   d
+                                                   X                   X
+                      µ [A1 , . . . , Am ] (x) =         xd−k (−1)k             D((Ai )i∈S ).
+                                                   k=0                S∈([m]
+                                                                          k )
+
+
+    When the matrices A1 , . . . , Ad are diagonal, µ [A1 , . . . , Ad ] (x) is the matching polynomial
+defined by Heilmann and Lieb [HL72] of the bipartite graph with d vertices on each side in which
+the edge (i, j) has weight Ai (j, j). When all the matrices have the same trace and their sum is
+the identity, the graph is regular and our bound on the largest root of the mixed characteristic
+polynomial agrees to the first order with that obtained for the matching polynomial by Heilmann
+and Lieb [HL72].                                                                 P
+    We conjecture that among the families of matrices A1 , . . . , Am with i Ai = I and Tr (Ai ) ≤
+ǫ, the largest root of the mixed characteristic polynomial is maximized when as many of the
+matrices as possible equal ǫI/d, another is a smaller multiple of the identity, and the rest are zero.
+When all of the matrices have the same trace, d/m, this produces a scaled associated Laguerre
+polynomial Lm−d
+              d   (mx). The bound that we prove on the largest root of the mixed characteristic
+polynomial agrees asymptotically with the largest root of Lm−d       d     (mx) as d/m is held constant
+and d grows. Evidence for our conjecture may be found in the work of Gurvits [Gur06, Gur08],
+who proves that when m = d, the constant term of the mixed polynomial is minimized when
+each Ai equals I/d.
+    Two natural questions arise from our work. The first is whether one can design an efficient
+algorithm to find the partitions and pavings that are guaranteed to exist by Corollary 1.5. The
+second is broader. There are many operations that are known to preserve real stability and real
+rootedness of polynomials (see [LS81, BB10, BB09a, BB09b, Pem12, Wag11]). For a technique
+like the “method of characteristic polynomials” it would be useful to understand what these
+operations do to the roots and the coefficients of the polynomials.
+
+
+8    Acknowledgements
+We thank Gil Kalai for making us aware of the Kadison-Singer conjecture and for pointing out
+the resemblance between the paving conjecture and the sparsification results of [BSS12]. We
+thank Joshua Batson for discussions of this connection at the beginning of this research effort.
+We thank James Lee for suggesting the simple proof of Theorem 4.1. Following the initial release
+of this paper, we received a number of comments and improvements, and we would like to thank
+everyone that took the time to give us input.
+
+
+References
+[AA91]       C. A. Akemann and J. Anderson. Lyapunov theorems for operator algebras. Number
+             458 in Memoirs of the American Mathematical Society. AMS, 1991.
+[AAT12]      C. A. Akemann, J. Anderson, and B. Tanbay. The Kadison–Singer problem for the
+             direct sum of matrix algebras. Positivity, 16(1):53–66, 2012.
+
+                                                          18
+[And79a]   J. Anderson. Extensions, restrictions, and representations of states on C ∗ -algebras.
+           Transactions of the American Mathematical Society, 249(2):303–329, 1979.
+[And79b]   J. Anderson. Extreme points in sets of positive linear maps on B(H). Journal of
+           Functional Analysis, 31(2):195–217, 1979.
+[And81]    J. Anderson. A conjecture concerning the pure states of B(H) and related theorem.
+           Topics in modern operator theory (Timisoara/Herculane, 1980), Birkhäuser, Basel-
+           Boston, Mass, pages 27–43, 1981.
+[AW02]     R. Ahlswede and A. Winter. Strong converse for identification via quantum channels.
+           Information Theory, IEEE Transactions on, 48(3):569–579, 2002.
+[Bap89]    R. B. Bapat. Mixed discriminants of positive semidefinite matrices. Linear Algebra
+           and its Applications, 126:107–124, 1989.
+[BB08]     J. Borcea and P. Brändén. Applications of stable polynomials to mixed determi-
+           nants: Johnson’s conjectures, unimodality, and symmetrized Fischer products. Duke
+           Mathematical Journal, 143(2):205–223, 2008.
+[BB09a]    J. Borcea and P. Brändén. The Lee-Yang and Pólya-Schur programs. I. linear
+           operators preserving stability. Inventiones mathematicae, 177(3):541–569, 2009.
+[BB09b]    J. Borcea and P. Brändén. The Lee-Yang and Pólya-Schur programs. II. theory of
+           stable polynomials and applications. Communications on Pure and Applied Math-
+           ematics, 62(12):1595–1631, 2009.
+[BB10]     J. Borcea and P. Brändén. Multivariate Polya-Schur classification problems in the
+           Weyl algebra. Proceedings of the London Mathematical Society, (3) 101(1):73–104,
+           2010.
+[BD11]     A. Baranov and K. Dyakonov. The Feichtinger conjecture for reproducing kernels
+           in model subspaces. Journal of Geometric Analysis, 21(2):276–287, 2011.
+[BGLS01]   H. H. Bauschke, O. Güler, A. S. Lewis, and H. S. Sendov. Hyperbolic polynomials
+           and convex analysis. Canadian Journal of Mathematics, 53(3):470–488, 2001.
+[BHKW88] K. Berman, H. Halpern, V. Kaftal, and G. Weiss. Matrix norm inequalities and
+         the relative dixmier property. Integral Equations and Operator Theory, 11(1):28–48,
+         1988.
+[BR97]     R. B. Bapat and T. E. S. Raghavan. Nonnegative matrices and applications, vol-
+           ume 64. Cambridge University Press, 1997.
+[BSS12]    J. Batson, D. A. Spielman, and N. Srivastava. Twice-Ramanujan sparsifiers. SIAM
+           Journal on Computing, 41(6):1704–1721, 2012.
+[BT89]     J. Bourgain and L. Tzafriri. Restricted invertibility of matrices and applications. In
+           Analysis at Urbana, Volume 2, Analysis in Abstract Spaces, number 138 in London
+           Mathematical Society Lecture Note Series, pages 61–107. Cambridge University
+           Press, 1989.
+
+                                              19
+[BT91]     J. Bourgain and L. Tzafriri. On a problem of Kadison and Singer. J. reine angew.
+           Math, 420:1–43, 1991.
+
+[CCLV05]   P. G. Casazza, O. Christensen, A. Lindner, and R. Vershynin. Frames and
+           the Feichtinger conjecture. Proceedings of the American Mathematical Society,
+           133(4):1025–1033, 2005.
+
+[CEKP07] P. G. Casazza, D. Edidin, D. Kalra, and V. I. Paulsen. Projections and the Kadison-
+         Singer problem. Operators and Matrices, 1(3):391408, 2007.
+
+[CFTW06] P. G. Casazza, M. Fickus, J. C. Tremain, and E. Weber. The Kadison–Singer
+         problem in mathematics and engineering: a detailed account. Contemporary Math-
+         ematics, 414:299, 2006.
+
+[CS07]     M. Chudnovsky and P. Seymour. The roots of the independence polynomial of a
+           clawfree graph. Journal of Combinatorial Theory, Series B, 97(3):350–357, 2007.
+
+[CT06]     P. G. Casazza and J. C. Tremain. The Kadison–Singer problem in mathematics and
+           engineering. Proceedings of the National Academy of Sciences of the United States
+           of America, 103(7):2032–2039, 2006.
+
+[Ded92]    J. P. Dedieu. Obreschkoff’s theorem revisited: what convex sets are contained in the
+           set of hyperbolic polynomials? Journal of Pure and Applied Algebra, 81(3):269–278,
+           1992.
+
+[Fel80]    H. J. Fell. Zeros of convex combinations of polynomials. Pacific J. Math., 89(1):43–
+           50, 1980.
+
+[Gur06]    L. Gurvits. The van der Waerden conjecture for mixed discriminants. Advances in
+           Mathematics, 200(2):435–454, 2006.
+
+[Gur08]    L. Gurvits. Van der Waerden/Schrijver-Valiant like conjectures and stable (aka
+           hyperbolic) homogeneous polynomials: one theorem for all. the electronic journal
+           of combinatorics, 15(R66):1, 2008.
+
+[HL72]     O. J. Heilmann and E. H. Lieb. Theory of monomer-dimer systems. Communications
+           in Mathematical Physics, 25(3):190–232, 1972.
+
+[HV07]     J. W. Helton and V. Vinnikov. Linear matrix inequality representation of sets.
+           Communications on pure and applied mathematics, 60(5):654–674, 2007.
+
+[KS59]     R. V. Kadison and I. M. Singer. Extensions of pure states. American Jour. Math.,
+           81:383–400, 1959.
+
+[Law10]    W. Lawton. Minimal sequences and the Kadison–Singer problem. Bulletin of
+           the Malaysian Mathematical Sciences Society, http://math. usm. my/bulletin,(2),
+           33(2):169–176, 2010.
+
+[LPR05]    A. Lewis, P. Parrilo, and M. Ramana. The Lax conjecture is true. Proceedings of
+           the American Mathematical Society, 133(9):2495–2499, 2005.
+
+                                             20
+[LS81]    E. H. Lieb and A. D. Sokal. A general Lee-Yang theorem for one-component and mul-
+          ticomponent ferromagnets. Communications in Mathematical Physics, 80(2):153–
+          179, 1981.
+
+[Mar85]   M. Marden. Geometry of polynomials, volume 3. American Mathematical Soc.,
+          1985.
+
+[MSS13]   A. Marcus, D. A. Spielman, and N. Srivastava. Interlacing families I: Bipartite
+          Ramanujan graphs of all degrees. arXiv preprint arXiv:1304.4132, 2013.
+
+[Pau11]   V. Paulsen. Syndetic sets, paving and the Feichtinger conjecture. Proceedings of the
+          American Mathematical Society, 139(3):1115–1120, 2011.
+
+[Pem12]   R. Pemantle. Hyperbolicity and stable polynomials in combinatorics and probability.
+          arXiv preprint arXiv:1210.3231, 2012.
+
+[Pop13]   S. Popa. A II1 factor approach to the Kadison–Singer problem. arXiv preprint
+          arXiv:1303.1424, 2013.
+
+[RS02]    Q. I. Rahman and G. Schmeisser. Analytic theory of polynomials, volume 26. Oxford
+          University Press, 2002.
+
+[Rud99]   M. Rudelson. Random vectors in the isotropic position. Journal of Functional
+          Analysis, 164(1):60–72, 1999.
+
+[Tao13]   T. Tao.     Real stable polynomials and the Kadison-Singer problem, 2013.
+          from http://terrytao.wordpress.com/2013/11/04/real-stable-polynomials-and-the-
+          kadison-singer-problem/.
+
+[Wag11]   D. G. Wagner. Multivariate stable polynomials: theory and applications. Bulletin
+          of the American Mathematical Society, 48(1):53–84, 2011.
+
+[Wea04]   N. Weaver. The Kadison–Singer problem in discrepancy theory. Discrete Mathe-
+          matics, 278(1–3):227–239, 2004.
+
+
+
+
+                                            21
+

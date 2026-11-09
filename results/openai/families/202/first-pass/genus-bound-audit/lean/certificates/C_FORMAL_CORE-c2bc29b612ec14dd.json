@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FORMAL_CORE-1a8d74c1a84d",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/202/first-pass/genus-bound-audit/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/202/first-pass/genus-bound-audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15108,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/202/first-pass/genus-bound-audit/lean/Main.lean",
+    "source_sha256": "6df747420e8096de35cef87bd2acccf6abff344eb88cf66c98a938f3f574725a",
+    "statement_fidelity": "families/202/first-pass/genus-bound-audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "e515e7db74d0041062c9b0833baf3331383729c79c3189a24ae24a3425ce0ce3",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/genus-bound-audit/lean/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace GenusAudit\n\ntheorem determinant_frobenius\n    {R : Type*} [CommRing R] (p : ℕ) [Fact p.Prime] [CharP R p]\n    {ι : Type*} [Fintype ι] [DecidableEq ι] (A : Matrix ι ι R) :\n    (A.map (frobenius R p)).det = A.det ^ p := by\n  exact ((frobenius R p).map_det A).symm\n\ntheorem genus_recurrence_numerator\n    (p q v next f image : ℚ)\n    (hgenus : v = q * next + (p - 1) * f)\n    (himage : image = v + f) :\n    p * v = q * next + (p - 1) * image := by\n  linear_combination hgenus - (p - 1) * himage\n\ndef discounted (t : ℚ) : List ℚ → ℚ\n  | [] => 0\n  | x :: xs => (1 - t) * x + t * discounted t xs\n\ntheorem prefix_weights (t : ℚ) (u : ℕ) :\n    (∑ j ∈ Finset.range u, (1 - t) * t ^ j) = 1 - t ^ u := by\n  induction u with\n  | zero => simp\n  | succ u ih =>\n      rw [Finset.sum_range_succ, ih, pow_succ]\n      ring\n\ntheorem length_le_sum\n    (m : List ℕ) (hm : ∀ x ∈ m, 1 ≤ x) :\n    m.length ≤ m.sum := by\n  induction m with\n  | nil => simp\n  | cons x xs ih =>\n      have hx : 1 ≤ x := hm x (by simp)\n      have hxs : ∀ y ∈ xs, 1 ≤ y := by\n        intro y hy\n        exact hm y (by simp [hy])\n      have htail := ih hxs\n      simp only [List.length_cons, List.sum_cons]\n      omega\n\nprivate theorem profile_error_step\n    (t h x a b z : ℚ) (hab : 0 ≤ a - b) :\n    (1 - t) * (h + x) +\n        t * ((h + 1) * (1 - z) + (1 - t) * (a - b)) ≤\n      (h + 1) * (1 - z * t) + (1 - t) * (x + a - (b + 1)) := by\n  apply le_of_sub_nonneg\n  have hid :\n      ((h + 1) * (1 - z * t) + (1 - t) * (x + a - (b + 1))) -\n        ((1 - t) * (h + x) +\n          t * ((h + 1) * (1 - z) + (1 - t) * (a - b))) =\n        (1 - t) ^ 2 * (a - b) := by ring\n  rw [hid]\n  exact mul_nonneg (sq_nonneg (1 - t)) hab\n\ntheorem profile_error_bound\n    (t h : ℚ) (ht : 0 ≤ t) (m : List ℕ)\n    (hm : ∀ x ∈ m, 1 ≤ x) :\n    discounted t (m.map (fun (x : ℕ) => h + (x : ℚ))) ≤\n      (h + 1) * (1 - t ^ m.length) +\n        (1 - t) * ((m.sum : ℚ) - (m.length : ℚ)) := by\n  induction m with\n  | nil => simp [discounted]\n  | cons x xs ih =>\n      have hxs : ∀ y ∈ xs, 1 ≤ y := by\n        intro y hy\n        exact hm y (by simp [hy])\n      have htail := ih hxs\n      have hlength : (xs.length : ℚ) ≤ (xs.sum : ℚ) := by\n        exact_mod_cast length_le_sum xs hxs\n      have hscaled := mul_le_mul_of_nonneg_left htail ht\n      have hstep := profile_error_step t h (x : ℚ) (xs.sum : ℚ)\n        (xs.length : ℚ) (t ^ xs.length) (sub_nonneg.mpr hlength)\n      have hbound := le_trans\n        (add_le_add (le_refl ((1 - t) * (h + (x : ℚ)))) hscaled) hstep\n      simpa only [List.map_cons, discounted, List.length_cons, List.sum_cons,\n        Nat.cast_add, Nat.cast_one, pow_succ] using hbound\n\ntheorem degree_lattice_rounding\n    (N A : ℤ) (hN : 0 < N) (hdiv : N ∣ A) (hA : -N < A) :\n    0 ≤ A := by\n  obtain ⟨k, rfl⟩ := hdiv\n  have hk0 : 0 ≤ k := by\n    by_contra hk\n    have hkneg : k ≤ -1 := by omega\n    have hprod := mul_le_mul_of_nonneg_left hkneg (le_of_lt hN)\n    linarith\n  exact mul_nonneg (le_of_lt hN) hk0\n\ntheorem exact_degree_bound\n    (N nu branch : ℤ) (loss : ℚ)\n    (hN : 0 < N) (hdiv : N ∣ nu - branch)\n    (happrox : -loss ≤ ((nu - branch : ℤ) : ℚ))\n    (hthreshold : loss < (N : ℚ)) :\n    branch ≤ nu := by\n  have hAq : (-(N : ℚ)) < ((nu - branch : ℤ) : ℚ) := by\n    linarith\n  have hA : -N < nu - branch := by exact_mod_cast hAq\n  exact sub_nonneg.mp (degree_lattice_rounding N (nu - branch) hN hdiv hA)\n\nend GenusAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/genus-bound-audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: the certified algebraic core\n\n`GenusAudit.determinant_frobenius` quantifies over every commutative ring\nof prime characteristic p and every square matrix indexed by an arbitrary\nfinite decidable type, including the empty type. It proves that taking\nentrywise pth powers raises the determinant to the positive pth power.\nIt does not itself construct the kernel/cokernel bundles, check coordinate\nversus frame conventions, or prove that their local presentations glue.\n\n`GenusAudit.genus_recurrence_numerator` quantifies over six rational\nnumbers. From the height-one genus identity and the image-degree identity\nit derives p*v=q*next+(p-1)*image. It has no positivity hypotheses and\ndoes not identify the input numbers with geometric degrees.\n`GenusAudit.prefix_weights` proves the finite geometric-sum identity for\nevery rational discount t and every natural length; t=1 is included.\n\n`GenusAudit.length_le_sum` and `GenusAudit.profile_error_bound` quantify\nover every finite list of positive natural stage ranks. The latter uses\nan arbitrary rational h and a nonnegative rational discount t, and proves\nthat the recursively discounted error is at most\n(h+1)*(1-t^length)+(1-t)*(sum-length).\nFor the geometric application t=1/p, h is the rank-loss allowance and\nsum=log_p(d). The proof is valid even without the additional t<=1\nhypothesis; that hypothesis is needed later when interpreting the\nweights and maximizing over lengths in the prose theorem.\nThe maximizing length and its geometric realizability are not claimed\nas Lean theorems.\n\n`GenusAudit.degree_lattice_rounding` concerns all integers N,A with N>0,\nN dividing A, and A>-N. `GenusAudit.exact_degree_bound` applies it to all\ninteger genus and branch degrees with a rational loss satisfying the\nstated strict threshold. Neither declaration asserts that a geometric\ndivisor exists, that its degree is divisible by N, or that a cover has\nthe required profile.\n\nThus this file certifies the universal algebraic and arithmetic steps\nused by the full geometric proof in report.md. It does NOT formalize\nthm:inseparable-genus, normalization, cohomology, the elliptic twist,\nthe marked-point degree estimate, or the blockwise Alperin weight\nconjecture. Those distinctions are part of the mathematical claim.\n"
+  },
+  "subject": {
+    "content_hash": "57310fc5df0d57075d947401c9cfc03294bc15fbe210d7155f66e9488ab82a35",
+    "kind": "claim",
+    "subject_id": "C_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

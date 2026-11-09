@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "unit": "universal-principalization",
+  "assessment_kind": "engineering",
+  "claim": {
+    "id": "C_GLOBAL_PRINCIPAL",
+    "version": 1,
+    "ledger_content_hash": "7b6c137d55a52efaad967d056719c3a8397f800def0af62bea0804f0fb5843df",
+    "statement": "For every commutative unital ring R and a,d,b,c,t in R with ac-bd=1, put s=dc-abt and v=a^2t-d^2. Then (t-s^2,bd-sab)=(v) as ideals.",
+    "hypotheses": [
+      "R is a commutative ring with identity; the zero ring is allowed",
+      "a*c-b*d=1",
+      "t is an arbitrary element of R"
+    ],
+    "not_assumed": [
+      "nontriviality",
+      "domain or reducedness",
+      "characteristic zero",
+      "invertibility of a, 2, or 3",
+      "t=ab+u^2"
+    ]
+  },
+  "verdict": "supported",
+  "verdict_scope": "Exact algebraic ideal equality and its explicit witnesses, not the surrounding geometric obstruction.",
+  "attribution": {
+    "assessed_work": "Old Argus engineering draft, report.md Theorem 1 and Main.lean universal_principalization",
+    "comparison": "OpenAI, A stable coordinate that is not a coordinate in four variables, October 5, 2026, lemma bun:principalization",
+    "comparison_source_revision": "4eaee87548250b2682affda7d05d947c05554bae",
+    "classification": "Source-verified strengthening of hypotheses and explicit proof refinement relative to the cited October lemma; global originality not determined"
+  },
+  "sources": [
+    {
+      "path": "families/049/first-pass/stable_core_certificate/report.md",
+      "locator": "Theorem 1, section 1, equations (4)-(6)",
+      "sha256": "68b969f393762d6b834c6b0e03ce5a1eb82a2e8944c97af14313184acecbd875"
+    },
+    {
+      "path": "families/049/first-pass/stable_core_certificate/Main.lean",
+      "locator": "IndependentStableCore.universal_principalization, lines 17-59",
+      "sha256": "fea7d30d06349b4e15bc63852970443a958b8e4f99e38ac09a8897f7a27bb916"
+    },
+    {
+      "path": "families/049/first-pass/stable_core_certificate/statement_fidelity.md",
+      "sha256": "683a28a67564cb14f2809d0e8844ff0ce781a563c205df47eb2ec7e0d84df0ed"
+    },
+    {
+      "path": "families/049/first-pass/stable_core_certificate/exact_certificate.json",
+      "locator": "global_f0_factor, global_g0_factor, global_bezout, global_reverse_ideal, boundary_a_zero_g0, boundary_a_zero_v_unit",
+      "sha256": "104d3503ab1d34038b0d5a9a2dc633a6a223769866f4107570a3aa51815799c9"
+    },
+    {
+      "path": "openai-math/preprints/A-stable-coordinate-that-is-not-a-coordinate-in-four-variables-October-5-2026/build/source/sections/04-bundle.tex",
+      "locator": "bun:principalization",
+      "sha256": "332df2ac44774e20ab0c4b4d988c1274c7579b9ae0f4d1112199b4f50b217414",
+      "manifest_hash_match": true
+    }
+  ],
+  "components": [
+    {
+      "id": "residuals-and-bezout",
+      "verdict": "supported",
+      "reason": "Expanded over Z: f-Av=-t*rho*(rho+2), g-b^2v=-bd*rho, and rA+qb^2=(ac-bd)^3. Specialization gives both ideal inclusions."
+    },
+    {
+      "id": "zero-divisors-characteristics-zero-ring",
+      "verdict": "supported",
+      "reason": "No cancellation or inversion occurs and CommRing has no Nontrivial hypothesis. At a=0, g=-1 and (-b^2)v=1."
+    },
+    {
+      "id": "formal-statement-fidelity",
+      "verdict": "supported",
+      "declaration": "IndependentStableCore.universal_principalization",
+      "reason": "The inspected binder list and Ideal.span equality encode exactly the stated universal ideal equality."
+    },
+    {
+      "id": "surrounding-geometry",
+      "verdict": "partial",
+      "reason": "Principalization alone does not prove injection, line-bundle geometry, action lifting, or invariant exclusion. Those are separately proved dependencies, not conclusions of this declaration."
+    },
+    {
+      "id": "global-novelty",
+      "verdict": "unresolved",
+      "reason": "The cited October specialization was compared directly; no global prior-art certification is supplied."
+    }
+  ],
+  "formal_evidence": {
+    "type": "archived_source_bound_compiler_record",
+    "record": "families/049/first-pass/stable_core_certificate/lean_verification_result.json",
+    "certificate": "families/049/first-pass/stable_core_certificate/certificates/C_STABLE_CORE_VERIFY-1f2393b585c126fe.json",
+    "certificate_sha256": "f93ec4e9eb00260bdfef04b169e6274fbcc6a60a2025f8813e4f100dc82e979c",
+    "certificate_subject": "C_STABLE_CORE_VERIFY version 3",
+    "lean_version": "4.31.0",
+    "lean_commit": "68218e876d2a38b1985b8590fff244a83c321783",
+    "lake_version": "5.0.0-src+68218e8",
+    "workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "recorded_exit_code": 0,
+    "recorded_proof_holes": [],
+    "recorded_axioms_for_declaration": [
+      "propext",
+      "Quot.sound"
+    ],
+    "main_hash_matches_record": true,
+    "fidelity_hash_matches_record": true,
+    "embedded_source_and_fidelity_match": true,
+    "fresh_compile_performed_by_this_assessor": false,
+    "fresh_compile_assignment": "Separate agent under coordinator",
+    "common_exact_replay_performed_by_this_assessor": false,
+    "common_exact_replay_assignment": "Coordinator"
+  },
+  "dependencies": [
+    {
+      "source": "Main.lean universal_principalization",
+      "role": "Direct ring identities and two ideal inclusions"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/ObstructionPrincipalization.lean map_I_eq_span_v and baseMap_factor_of_mem_I",
+      "role": "Existing specialized October transport; not needed to prove the universal identity"
+    },
+    {
+      "source": "formal_sources/OAI/AlgebraicGeometry/StableCoordinate/BundleCharts.lean baseMap_injective",
+      "role": "Separate ingredient needed when transporting nonzero base elements"
+    }
+  ],
+  "verification_performed": [
+    "Read current contract, prior-draft inventory, and coverage index",
+    "Read old theorem, actual Lean proof, fidelity document, exact-certificate entries, ledger claim and dependency graph",
+    "Checked determinant residual and Bezout expansions and both ideal inclusions in prose",
+    "Checked zero-ring and a=0 cases without localization",
+    "Matched Main/fidelity hashes and embedded texts to archived compiler evidence",
+    "Verified cited October source hash against the existing manuscript manifest"
+  ],
+  "mathematical_gaps": [],
+  "evidence_limits": [
+    "No fresh Lean compilation or duplicate 81-check driver was run by this assessor",
+    "An algebraic ideal identity does not certify the surrounding geometry or entire manuscript",
+    "No novelty claim or independent acceptance is made"
+  ],
+  "external_assumptions": [
+    "Only the explicit ring and determinant hypotheses are mathematical assumptions of the claim",
+    "Archived formal evidence trusts Lean 4.31.0, its kernel, and imported library definitions and proofs; its printed axioms are standard logical foundations"
+  ],
+  "novelty": "not_asserted",
+  "independent_review_required": true,
+  "acceptance": "not_granted_engineering_assessment"
+}

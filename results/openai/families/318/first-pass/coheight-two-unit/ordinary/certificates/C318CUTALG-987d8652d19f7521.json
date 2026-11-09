@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C318CUTALG-383eb5365d28",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/318/first-pass/coheight-two-unit/ordinary/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/318/first-pass/coheight-two-unit/ordinary/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15570,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/318/first-pass/coheight-two-unit/ordinary/Main.lean",
+    "source_sha256": "7e55f0bb1baff9370a70c53890f3156a5aeee96649414bafe0813efec9791829",
+    "statement_fidelity": "families/318/first-pass/coheight-two-unit/ordinary/statement_fidelity.md",
+    "statement_fidelity_sha256": "2d1b196769b81ac312f293bb247f7c0d68e15ee90d47a3de0809762ba02726db",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/coheight-two-unit/ordinary/Main.lean",
+    "text": "import Mathlib\n\nnamespace OrdinaryCutoff\n\nopen Filter\n\nvariable {F M X : Type*} [Field F]\n  [AddCommGroup M] [Module F M]\n  [AddCommGroup X] [Module F X]\n\ndef stable (S : Module.End F M) : Submodule F M :=\n  ⨅ n : ℕ, LinearMap.range (S ^ n)\n\ndef nilpotentPart (S : Module.End F M) : Submodule F M :=\n  ⨆ n : ℕ, LinearMap.ker (S ^ n)\n\ntheorem intertwines_pow (S : Module.End F M) (T : Module.End F X)\n    (f : M →ₗ[F] X) (commutes : ∀ m, f (S m) = T (f m)) :\n    ∀ n m, f ((S ^ n) m) = (T ^ n) (f m) := by\n  intro n\n  induction n with\n  | zero => intro m; simp\n  | succ n ih =>\n      intro m\n      rw [pow_succ', Module.End.mul_apply, commutes, ih,\n        pow_succ', Module.End.mul_apply]\n\ntheorem preserves_stable (S : Module.End F M) (T : Module.End F X)\n    (f : M →ₗ[F] X) (commutes : ∀ m, f (S m) = T (f m))\n    {m : M} (hm : m ∈ stable S) :\n    f m ∈ stable T := by\n  apply (Submodule.mem_iInf _).mpr\n  intro n\n  obtain ⟨v, hv⟩ := (Submodule.mem_iInf _).mp hm n\n  exact ⟨f v, by rw [← intertwines_pow S T f commutes n, hv]⟩\n\ntheorem split_transfer_bijective [FiniteDimensional F X]\n    (T Φ : Module.End F X) (split : ∀ x, T (Φ x) = x) :\n    Function.Bijective T := by\n  have hs : Function.Surjective T := fun x => ⟨Φ x, split x⟩\n  exact ⟨LinearMap.injective_iff_surjective.mpr hs, hs⟩\n\ntheorem stable_cutoff_of_split\n    [FiniteDimensional F M] [FiniteDimensional F X]\n    (S : Module.End F M) (T Φ : Module.End F X)\n    (f : M →ₗ[F] X)\n    (commutes : ∀ m, f (S m) = T (f m))\n    (split : ∀ x, T (Φ x) = x)\n    (kernel_nilpotent : ∀ m, f m = 0 → ∃ n : ℕ, (S ^ n) m = 0)\n    (absorption : ∃ n : ℕ, ∀ x, ∃ m, f m = (T ^ n) x) :\n    Function.Bijective (fun m : stable S => f m) := by\n  have ht := split_transfer_bijective T Φ split\n  have ht_pow : ∀ n : ℕ, Function.Bijective (T ^ n) := by\n    intro n\n    simpa only [Module.End.coe_pow] using ht.iterate n\n  have hnil : nilpotentPart S ≤ LinearMap.ker f := by\n    apply iSup_le\n    intro n m hm\n    apply (ht_pow n).1\n    rw [← intertwines_pow S T f commutes n]\n    simpa using congrArg f hm\n  have hdisjoint : Disjoint (nilpotentPart S) (stable S) :=\n    (LinearMap.isCompl_iSup_ker_pow_iInf_range_pow S).disjoint\n  have hsurj : Function.Surjective f := by\n    obtain ⟨n, hn⟩ := absorption\n    intro x\n    obtain ⟨y, hy⟩ := (ht_pow n).2 x\n    obtain ⟨m, hm⟩ := hn y\n    exact ⟨m, hm.trans hy⟩\n  constructor\n  · intro u v huv\n    have hker : f ((u : M) - v) = 0 := by\n      simp [map_sub, huv]\n    obtain ⟨n, hn⟩ := kernel_nilpotent _ hker\n    have hnilmem : (u : M) - v ∈ nilpotentPart S :=\n      (le_iSup (fun n : ℕ => LinearMap.ker (S ^ n)) n) hn\n    have hstable : (u : M) - v ∈ stable S := (stable S).sub_mem u.2 v.2\n    have hz : (u : M) - v = 0 := by\n      have hbot : (u : M) - v ∈ (⊥ : Submodule F M) := by\n        rw [← disjoint_iff.mp hdisjoint]\n        exact ⟨hnilmem, hstable⟩\n      exact hbot\n    exact Subtype.ext (sub_eq_zero.mp hz)\n  · intro x\n    obtain ⟨m, hm⟩ := hsurj x\n    have htop : nilpotentPart S ⊔ stable S = ⊤ :=\n      (LinearMap.isCompl_iSup_ker_pow_iInf_range_pow S).sup_eq_top\n    have hmem : m ∈ nilpotentPart S ⊔ stable S := by\n      rw [htop]\n      trivial\n    obtain ⟨u, hu, v, hv, huv⟩ := Submodule.mem_sup.mp hmem\n    refine ⟨⟨v, hv⟩, ?_⟩\n    have hfu : f u = 0 := hnil hu\n    have hsum : f u + f v = x := by rw [← map_add, huv, hm]\n    simpa [hfu] using hsum\n\ntheorem stable_action_naturality\n    {M' X' : Type*} [AddCommGroup M'] [Module F M']\n    [AddCommGroup X'] [Module F X']\n    (S : Module.End F M) (S' : Module.End F M')\n    (a : M →ₗ[F] M') (f : M →ₗ[F] X) (f' : M' →ₗ[F] X')\n    (b : X →ₗ[F] X')\n    (transfer_naturality : ∀ m, a (S m) = S' (a m))\n    (coefficient_naturality : ∀ m, f' (a m) = b (f m))\n    (m : stable S) :\n    f' (⟨a m, preserves_stable S S' a transfer_naturality m.2⟩ : stable S') =\n      b (f m) := by\n  exact coefficient_naturality m\n\nsection ProcyclicNorm\n\nvariable {R : Type*} [CommRing R]\n\ndef normFive (g : R) : R := 1 + g + g ^ 2 + g ^ 3 + g ^ 4\n\ntheorem norm_chain_identity (g : R) :\n    (g - 1) * normFive g = g ^ 5 - 1 := by\n  unfold normFive\n  ring\n\ntheorem characteristic_five_norm :\n    normFive (Polynomial.X : Polynomial (ZMod 5)) =\n      (Polynomial.X - 1) ^ 4 := by\n  have h5 : (5 : Polynomial (ZMod 5)) = 0 := CharP.cast_eq_zero _ 5\n  unfold normFive\n  linear_combination\n    (Polynomial.X ^ 3 - Polynomial.X ^ 2 + Polynomial.X) * h5\n\ntheorem trivial_character_corestriction :\n    normFive (1 : ZMod 5) = 0 := by\n  decide\n\nend ProcyclicNorm\n\nend OrdinaryCutoff\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/coheight-two-unit/ordinary/statement_fidelity.md",
+    "text": "# Statement fidelity: ordinary transfer cutoff and procyclic norm\n\nThis source belongs to the new claim `C318CUTALG`, not the already reviewed\n`C318CO2ALG`. It does not encode the deformation rings, compact supports,\nor Morava stabilizer cohomology. It certifies the exact algebraic step\nneeded at `full:stable-cutoff`, with the hypotheses exposed.\n\nThe field F is arbitrary. M and X are vector spaces; the main theorem\nassumes both are finite-dimensional. S is a linear endomorphism of M,\nT and Phi are linear endomorphisms of X, and f is a linear map M -> X.\n`stable S` is the intersection of the images of every nonnegative\npower of S, including power zero. `nilpotentPart S` is the sum of the\nkernels of those powers.\n\n`intertwines_pow` and `preserves_stable` prove naturality of iterates\nand stable images for an intertwining linear map. `split_transfer_bijective`\nproves that T Phi = identity makes T bijective on a finite-dimensional\nspace. This conclusion is false for infinite-dimensional spaces and\nthe finite-dimensionality assumption is not omitted.\n\n`stable_cutoff_of_split` assumes:\n\n- f S = T f;\n- T Phi = identity;\n- every m in the kernel of f is killed by some power of S, with the\n  exponent allowed to depend on m;\n- there is one exponent n such that the image of T^n is contained in\n  the image of f.\n\nIt proves that the actual restriction of f to `stable S` is bijective\nonto the whole X, not a replacement module with the same dimension.\nThe proof uses the Fitting decomposition supplied by Mathlib.\nLinearity of the restricted map is inherited from f; the theorem's\nconclusion expresses bijectivity as a function. It neither derives\nfinite-dimensionality of ordinary cohomology nor supplies the\ncompact-lattice support comparison.\n\n`stable_action_naturality` concerns a second pair M', X', an\nintertwining map a between transfer modules, and a commuting square\nwith a map b between targets. It proves that the stable restriction\nretains that same square. In the application a and b may be the maps\nin different cohomological degrees induced by an actual constant\ncochain class. The formal theorem does not construct those cup maps;\ntheir cochain-level naturality is proved in the accompanying prose.\n\n`norm_chain_identity` proves the integral group-ring identity\n(g-1)(1+g+g^2+g^3+g^4)=g^5-1 over every commutative ring.\n`characteristic_five_norm` proves that this norm is (X-1)^4 in\nF_5[X]. `trivial_character_corestriction` checks that the norm at\nthe trivial character is zero. These certify the algebraic formula\nfor the degree-zero part of the actual index-five corestriction;\nthe degree-one part is the identity.\n\nThe procyclic continuous resolution, common finite frame and pole\nconditions, passage to connected corestriction, its naturality for\ndegree-shifted derived maps, and the geometric comparison are prose\narguments, not additional compiler results. No theorem here asserts\nthat a perfected or completed coefficient is the ordinary one.\n"
+  },
+  "subject": {
+    "content_hash": "e980942cec6bc872daae495c8bdf50cc737210bd0399d929e8c1729984cda214",
+    "kind": "claim",
+    "subject_id": "C318CUTALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

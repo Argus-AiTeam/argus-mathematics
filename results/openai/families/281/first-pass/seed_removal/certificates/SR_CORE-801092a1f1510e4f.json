@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-SR_CORE-8977fe47f849",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/281/first-pass/seed_removal/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/281/first-pass/seed_removal/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15882,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/281/first-pass/seed_removal/Main.lean",
+    "source_sha256": "cfeefb5f80288c14fab73177b889de0c9031d5907c7701424dbb2f0a94810bbc",
+    "statement_fidelity": "families/281/first-pass/seed_removal/statement_fidelity.md",
+    "statement_fidelity_sha256": "5fe4de10980add13c953b417a0350d41ea25a80aee0f02f2537ce49562f64fba",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/seed_removal/Main.lean",
+    "text": "import Mathlib\n\nnamespace SeedRemoval\n\nvariable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]\n\ntheorem pullback_sub_norm (V : E ≃ₗᵢ[ℝ] E) (a b : E) :\n    ‖V.symm a - b‖ = ‖a - V b‖ := by\n  calc\n    ‖V.symm a - b‖ = ‖V (V.symm a - b)‖ := (V.norm_map _).symm\n    _ = ‖a - V b‖ := by simp\n\ntheorem pullback_add_norm (V : E ≃ₗᵢ[ℝ] E) (a b : E) :\n    ‖V.symm a + b‖ = ‖a + V b‖ := by\n  calc\n    ‖V.symm a + b‖ = ‖V (V.symm a + b)‖ := (V.norm_map _).symm\n    _ = ‖a + V b‖ := by simp\n\ntheorem identity_defect (V Z : E ≃ₗᵢ[ℝ] E) (x : E) :\n    ‖V.symm (Z (V x)) - Z x‖ ≤\n      ‖V x - x‖ + ‖V (Z x) - Z x‖ := by\n  rw [pullback_sub_norm]\n  calc\n    ‖Z (V x) - V (Z x)‖ =\n        ‖(Z (V x) - Z x) + (Z x - V (Z x))‖ := by congr 1; abel\n    _ ≤ ‖Z (V x) - Z x‖ + ‖Z x - V (Z x)‖ := norm_add_le _ _\n    _ = ‖V x - x‖ + ‖V (Z x) - Z x‖ := by\n      rw [← map_sub, Z.norm_map, norm_sub_rev (Z x) (V (Z x))]\n\ntheorem flip_defect (V Z F : E ≃ₗᵢ[ℝ] E)\n    (anti : ∀ x, Z (F x) = -(F (Z x))) (x : E) :\n    ‖V.symm (Z (V x)) + Z x‖ ≤\n      ‖V x - F x‖ + ‖V (Z x) - F (Z x)‖ := by\n  rw [pullback_add_norm]\n  calc\n    ‖Z (V x) + V (Z x)‖ =\n        ‖(Z (V x) - Z (F x)) + (V (Z x) - F (Z x))‖ := by\n      rw [anti]\n      congr 1\n      abel\n    _ ≤ ‖Z (V x) - Z (F x)‖ + ‖V (Z x) - F (Z x)‖ := norm_add_le _ _\n    _ = ‖V x - F x‖ + ‖V (Z x) - F (Z x)‖ := by\n      rw [← map_sub, Z.norm_map]\n\ntheorem split_insertion_defect (V Z F : E ≃ₗᵢ[ℝ] E)\n    (anti : ∀ x, Z (F x) = -(F (Z x))) (o s : E) :\n    ‖V.symm (Z (V (o + s))) - Z (o + s) + (2 : ℝ) • Z s‖ ≤\n      (‖V o - o‖ + ‖V (Z o) - Z o‖) +\n      (‖V s - F s‖ + ‖V (Z s) - F (Z s)‖) := by\n  have split :\n      V.symm (Z (V (o + s))) - Z (o + s) + (2 : ℝ) • Z s =\n      (V.symm (Z (V o)) - Z o) + (V.symm (Z (V s)) + Z s) := by\n    simp only [map_add, two_smul]\n    abel\n  rw [split]\n  exact (norm_add_le _ _).trans (add_le_add (identity_defect V Z o)\n    (flip_defect V Z F anti s))\n\ntheorem transported_identity_defect (U V Z : E ≃ₗᵢ[ℝ] E) (s : E) :\n    ‖U.symm (V.symm (Z (V s))) - U.symm (Z s)‖ ≤\n      ‖V s - s‖ + ‖V (Z s) - Z s‖ := by\n  calc\n    ‖U.symm (V.symm (Z (V s))) - U.symm (Z s)‖ =\n        ‖V.symm (Z (V s)) - Z s‖ := by rw [← map_sub, U.symm.norm_map]\n    _ ≤ _ := identity_defect V Z s\n\ntheorem transported_flip_defect (U V Z F : E ≃ₗᵢ[ℝ] E)\n    (anti : ∀ x, Z (F x) = -(F (Z x))) (s : E) :\n    ‖U.symm (V.symm (Z (V s))) + U.symm (Z s)‖ ≤\n      ‖V s - F s‖ + ‖V (Z s) - F (Z s)‖ := by\n  calc\n    ‖U.symm (V.symm (Z (V s))) + U.symm (Z s)‖ =\n        ‖V.symm (Z (V s)) + Z s‖ := by rw [← map_add, U.symm.norm_map]\n    _ ≤ _ := flip_defect V Z F anti s\n\ntheorem rescale_defect (r t K : ℝ) (hr : 0 < r) (d : E)\n    (hd : ‖d‖ ≤ K * r ^ 2) :\n    ‖(t / r) • d‖ ≤ |t| * K * r := by\n  calc\n    ‖(t / r) • d‖ = (|t| / r) * ‖d‖ := by\n      rw [norm_smul, Real.norm_eq_abs, abs_div, abs_of_pos hr]\n    _ ≤ (|t| / r) * (K * r ^ 2) :=\n      mul_le_mul_of_nonneg_left hd (div_nonneg (abs_nonneg t) hr.le)\n    _ = |t| * K * r := by field_simp [ne_of_gt hr]\n\ntheorem singular_echo_bound (r t K : ℝ) (hr : 0 < r) (v vp w : E)\n    (hd : ‖vp - v + (2 * r) • w‖ ≤ K * r ^ 2) :\n    ‖(t / r) • (vp - v) + (2 * t) • w‖ ≤ |t| * K * r := by\n  have cancel : (t / r) * (2 * r) = 2 * t := by\n    field_simp [ne_of_gt hr]\n  have algebra :\n      (t / r) • (vp - v) + (2 * t) • w =\n      (t / r) • (vp - v + (2 * r) • w) := by\n    rw [smul_add, smul_smul, cancel]\n  rw [algebra]\n  exact rescale_defect r t K hr _ hd\n\nomit [NormedSpace ℝ E] in\ntheorem finite_transport_accumulation {n : ℕ} (errors : Fin n → E)\n    (bounds : Fin n → ℝ) (h : ∀ j, ‖errors j‖ ≤ bounds j) :\n    ‖∑ j, errors j‖ ≤ ∑ j, bounds j :=\n  (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => h j)\n\ntheorem reuse_energy_gap (q z : ℝ) :\n    q * (1 + z ^ 2) / 4 - q * z / 2 = q * (1 - z) ^ 2 / 4 := by\n  ring\n\ntheorem gaussian_gap_positive :\n    0 < Real.exp (-(1 / 2 : ℝ)) * (1 - Real.exp (-1)) ^ 2 / 4 := by\n  have h : Real.exp (-1) < 1 := Real.exp_lt_one_iff.mpr (by norm_num)\n  have hp : 0 < 1 - Real.exp (-1) := by linarith\n  positivity\n\nend SeedRemoval\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/seed_removal/statement_fidelity.md",
+    "text": "# Statement fidelity: algebraic core of reusable-seed removal\n\n`Main.lean` formalizes the real-linear isometric core of the packet\nargument, without assuming packet separation, selective accuracy,\nGaussian independence or the disputed seed-removal theorem.\nA complex Hilbert space and its unitaries satisfy the real normed-space\nhypotheses by restricting scalars. No orthogonality of the exact\nordinary/special decomposition is assumed.\n\nThe quantified space `E` is any real normed vector space.\n`U,V,Z,F` are arbitrary surjective real-linear isometries.\n`U.symm` and `V.symm` represent inverse circuit prefixes and hence\nadjoints in the Hilbert-space application. `Z` represents the root\nPauli isometry; `F` represents the target special flip. The hypothesis\n`anti : forall x, Z(F x)=-F(Z x)` is exactly anticommutation, not\nselective accuracy.\n\n`pullback_sub_norm` and `pullback_add_norm` move an inverse isometry\noutside a norm. `identity_defect` bounds a conjugated insertion error\nby the two *forward* errors on `x` and `Z x`. `flip_defect` is the\nanticommuting analogue, with comparison to `F`.\n`split_insertion_defect` applies both inequalities to arbitrary vectors\n`o,s`; it bounds the insertion change plus `2 Z s` by the four forward\nerrors on `o, Z o, s, Z s`. These vectors are not required to be\northogonal. In the application their forward errors are obtained\nanalytically, not postulated to vanish in Lean.\n\n`transported_identity_defect` and `transported_flip_defect` pull\nthese bounds back by an arbitrary prefix `U`. They do not require\nthat a bulk mixer commute with `Z`; the first applies when the\n*compensated* mixer has small forward errors on the special vectors.\n`finite_transport_accumulation` bounds a finite sum of arbitrary\ntransport-error vectors by the sum of their individual bounds.\n\n`rescale_defect` assumes only `r>0` and `norm(d)<=K r^2` and concludes\n`norm((t/r)d)<=abs(t) K r`. `singular_echo_bound` applies this to\n`d=vp-v+2r w`, keeping the actual `v,vp` distinct until after their\ndifference is controlled. This is a finite-r inequality, not a limit\nassertion or a replacement of an uncontrolled O(r) error by o(r).\n\n`reuse_energy_gap` is the exact scalar identity\n`q(1+z^2)/4-qz/2=q(1-z)^2/4`.\n`gaussian_gap_positive` proves positivity at `q=exp(-1/2)`,\n`z=exp(-1)`. The analytic identification of these scalars with the\ntwo root-shift energies is proved in `report.md` and replayed by\n`verify.py`, not formalized by these two declarations.\n\nThus a successful compiler run certifies these norm/transport,\nrescaling and scalar-algebra theorems only. The Fock estimates,\nGaussian integration, full quantitative compiler, citation fidelity,\nnovelty and final SK theorem are outside this formalization.\n"
+  },
+  "subject": {
+    "content_hash": "d7e1ce9d609cc32c9d6eca2cdd6852464b14b1421df4dc4b0295f2eab5da5209",
+    "kind": "claim",
+    "subject_id": "SR_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CORE-decaf4f71030",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/288/first-pass/invariant-intertwiners/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/288/first-pass/invariant-intertwiners/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 18432,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/288/first-pass/invariant-intertwiners/Main.lean",
+    "source_sha256": "b5ca94abe80ec87190dcda9927521a4bff432acd12960fc9b13783afe58b55d2",
+    "statement_fidelity": "families/288/first-pass/invariant-intertwiners/statement_fidelity.md",
+    "statement_fidelity_sha256": "9b35b5eb6c1a0a760d4cf4e08be56af2f6eac7b6775391b8d2539a95d19f8566",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/288/first-pass/invariant-intertwiners/Main.lean:12:4: warning: try 'simp' instead of 'simpa'\n\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/invariant-intertwiners/Main.lean",
+    "text": "import Mathlib\n\nnamespace InvariantIntertwiners\n\ntheorem matrix_unit_product {I : Type*} [Fintype I] [DecidableEq I]\n    (i j k l : I) :\n    Matrix.single i j (1 : ℂ) * Matrix.single k l 1 =\n      if j = k then Matrix.single i l 1 else 0 := by\n  by_cases h : j = k\n  · subst k\n    simp\n  · simpa [h] using\n      (Matrix.single_mul_single_of_ne i j k h (1 : ℂ) :\n        Matrix.single i j (1 : ℂ) * Matrix.single k l 1 = 0)\n\ntheorem normalized_matrix_unit_trace {I : Type*} [Fintype I] [DecidableEq I]\n    (i j : I) :\n    Matrix.trace (Matrix.single i j (1 : ℂ)) / (Fintype.card I : ℂ) =\n      if i = j then 1 / (Fintype.card I : ℂ) else 0 := by\n  by_cases h : i = j\n  · subst j\n    simp\n  · simp [h, Matrix.trace_single_eq_of_ne i j (1 : ℂ) h]\n\ntheorem probe_successor_unique {S I : Type*} [Fintype I] [DecidableEq I]\n    (embed : S → I) (hembed : Function.Injective embed)\n    (p q : Equiv.Perm S)\n    (hproduct : ∀ i,\n      Matrix.single (embed i) (embed (p i)) (1 : ℂ) *\n        Matrix.single (embed (q i)) (embed (p (q i))) 1 ≠ 0) :\n    p = q := by\n  ext i\n  apply hembed\n  by_contra h\n  apply hproduct i\n  rw [matrix_unit_product, if_neg h]\n\ntheorem cycle_lengths_forced {t n r : ℕ} (lengths : Fin t → ℕ)\n    (hroot : 1 ≤ r) (htails : ∀ i, 2 ≤ lengths i)\n    (htotal : r + ∑ i, lengths i = n + 1)\n    (hthreshold : n + 2 ≤ 2 * (t + 1)) :\n    r = 1 ∧ ∀ i, lengths i = 2 := by\n  have hsum : 2 * t ≤ ∑ i, lengths i := by\n    calc\n      2 * t = ∑ _i : Fin t, 2 := by simp [Nat.mul_comm]\n      _ ≤ ∑ i, lengths i := Finset.sum_le_sum fun i _ => htails i\n  have hr : r = 1 := by omega\n  have hs : ∑ i, lengths i = 2 * t := by omega\n  have hexpand :\n      ∑ i, lengths i = (∑ i, (lengths i - 2)) + 2 * t := by\n    calc\n      ∑ i, lengths i = ∑ i, ((lengths i - 2) + 2) := by\n        apply Finset.sum_congr rfl\n        intro i _\n        exact (Nat.sub_add_cancel (htails i)).symm\n      _ = (∑ i, (lengths i - 2)) + 2 * t := by\n        rw [Finset.sum_add_distrib]\n        simp [Nat.mul_comm]\n  have hzero : ∑ i, (lengths i - 2) = 0 := by omega\n  refine ⟨hr, ?_⟩\n  intro i\n  have hsingle : lengths i - 2 ≤ ∑ j, (lengths j - 2) :=\n    Finset.single_le_sum (fun j _ => Nat.zero_le (lengths j - 2))\n      (Finset.mem_univ i)\n  have hi := htails i\n  omega\n\ndef partner {P : Type*} (x : P × Bool) : P × Bool :=\n  (x.1, !x.2)\n\ntheorem partner_involutive {P : Type*} (x : P × Bool) :\n    partner (partner x) = x := by\n  cases x with\n  | mk p b => cases b <;> rfl\n\ntheorem partner_ne {P : Type*} (x : P × Bool) : partner x ≠ x := by\n  cases x with\n  | mk p b => cases b <;> simp [partner]\n\ntheorem pool_label_forces_partner {P V : Type*}\n    (tag : P → V) (htag : Function.Injective tag)\n    (f : P × Bool → P × Bool)\n    (hnofix : ∀ x, f x ≠ x)\n    (hsupport : ∀ x, tag (f x).1 = tag x.1) :\n    f = partner := by\n  funext x\n  have hp : (f x).1 = x.1 := htag (hsupport x)\n  have hb : (f x).2 ≠ x.2 := by\n    intro h\n    exact hnofix x (Prod.ext hp h)\n  change f x = (x.1, !x.2)\n  apply Prod.ext\n  · exact hp\n  · cases hleft : (f x).2 <;> cases hright : x.2 <;> simp_all\n\ntheorem pool_assignment_injective {P A : Type*} (a : P → A) :\n    Function.Injective (fun p => (p, a p)) := by\n  intro p q h\n  exact congrArg Prod.fst h\n\ntheorem pairing_support_product {P V : Type*}\n    [Fintype P] [DecidableEq P] [DecidableEq V]\n    (tag : P → V) (htag : Function.Injective tag)\n    (f : P × Bool → P × Bool) (hnofix : ∀ x, f x ≠ x) :\n    (∏ x : P × Bool, if tag x.1 = tag (f x).1 then (1 : ℂ) else 0) =\n      if f = partner then 1 else 0 := by\n  classical\n  by_cases h : f = partner\n  · subst f\n    simp [partner]\n  · have hnot : ¬ ∀ x, tag x.1 = tag (f x).1 := by\n      intro hs\n      exact h (pool_label_forces_partner tag htag f hnofix\n        (fun x => (hs x).symm))\n    push Not at hnot\n    obtain ⟨x, hx⟩ := hnot\n    rw [if_neg h]\n    exact Finset.prod_eq_zero (Finset.mem_univ x) (by simp [hx])\n\ntheorem independent_pool_count (s t M : ℕ) :\n    Fintype.card ((Fin s → Fin M) × (Fin t → Fin M)) = M ^ (s + t) := by\n  simp [pow_add]\n\ntheorem nat_pow_ge (N r : ℕ) (hN : 1 ≤ N) (hr : 0 < r) :\n    (N : ℝ) ≤ (N : ℝ) ^ r := by\n  have hNreal : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  have hNnonneg : (0 : ℝ) ≤ N := by positivity\n  cases r with\n  | zero => omega\n  | succ s =>\n    have hp : (1 : ℝ) ≤ (N : ℝ) ^ s := by\n      clear hr\n      induction s with\n      | zero => simp\n      | succ s ih =>\n        rw [pow_succ]\n        have hmul := mul_le_mul_of_nonneg_right ih hNnonneg\n        nlinarith\n    calc\n      (N : ℝ) = 1 * N := by ring\n      _ ≤ (N : ℝ) ^ s * N := mul_le_mul_of_nonneg_right hp hNnonneg\n      _ = (N : ℝ) ^ (s + 1) := (pow_succ _ _).symm\n\ntheorem unbounded_power_zero (a C : ℝ) (r : ℕ)\n    (sizes : ℕ → ℕ) (ha : 0 ≤ a) (hr : 0 < r)\n    (hunbounded : ∀ B : ℕ, ∃ j, B ≤ sizes j)\n    (hbound : ∀ j, a * (sizes j : ℝ) ^ r ≤ C) :\n    a = 0 := by\n  by_contra hne\n  have hapos : 0 < a := lt_of_le_of_ne ha (Ne.symm hne)\n  obtain ⟨N, hN⟩ := exists_nat_gt (max (1 : ℝ) (C / a))\n  obtain ⟨j, hj⟩ := hunbounded N\n  have hN1 : 1 ≤ N := by\n    have : (1 : ℝ) < N := lt_of_le_of_lt (le_max_left _ _) hN\n    exact_mod_cast this.le\n  have hsize : 1 ≤ sizes j := le_trans hN1 hj\n  have hratio : C / a < (sizes j : ℝ) := by\n    have hsmall : C / a < (N : ℝ) :=\n      lt_of_le_of_lt (le_max_right _ _) hN\n    have hlarge : (N : ℝ) ≤ sizes j := by exact_mod_cast hj\n    exact lt_of_lt_of_le hsmall hlarge\n  have htoo : C < (sizes j : ℝ) * a := (div_lt_iff₀ hapos).mp hratio\n  have hp := nat_pow_ge (sizes j) r hsize hr\n  have hlow := mul_le_mul_of_nonneg_left hp ha\n  have hu := hbound j\n  nlinarith\n\ntheorem complex_coefficient_zero (coefficient : ℂ) (C : ℝ) (r : ℕ)\n    (sizes : ℕ → ℕ) (hr : 0 < r)\n    (hunbounded : ∀ B : ℕ, ∃ j, B ≤ sizes j)\n    (hbound : ∀ j, ‖coefficient‖ ^ 2 * (sizes j : ℝ) ^ r ≤ C ^ 2) :\n    coefficient = 0 := by\n  have hz : ‖coefficient‖ ^ 2 = 0 :=\n    unbounded_power_zero (‖coefficient‖ ^ 2) (C ^ 2) r sizes\n      (sq_nonneg _) hr hunbounded hbound\n  have hn := norm_nonneg coefficient\n  have hnorm : ‖coefficient‖ = 0 := by nlinarith\n  exact norm_eq_zero.mp hnorm\n\ntheorem same_side_coefficient_zero (coefficient : ℂ) (C : ℝ) (s t : ℕ)\n    (hpositive : 0 < s + t)\n    (hbound : ∀ M : ℕ, 1 ≤ M →\n      ‖coefficient‖ ^ 2 * (M : ℝ) ^ (s + t) ≤ C ^ 2) :\n    coefficient = 0 := by\n  apply complex_coefficient_zero coefficient C (s + t) (fun j => j + 1)\n    hpositive\n  · intro B\n    exact ⟨B, by omega⟩\n  · intro j\n    exact hbound (j + 1) (by omega)\n\ndef crossSideEquiv {I : Type*} (q : I → I)\n    (hinv : ∀ i, q (q i) = i) (side : I → Bool)\n    (hcross : ∀ i, side (q i) = !side i) :\n    {i // side i = false} ≃ {i // side i = true} where\n  toFun x := ⟨q x, by rw [hcross, x.property]; rfl⟩\n  invFun x := ⟨q x, by rw [hcross, x.property]; rfl⟩\n  left_inv x := Subtype.ext (hinv x)\n  right_inv x := Subtype.ext (hinv x)\n\ntheorem cross_pairing_cardinality {I : Type*} [Fintype I]\n    (q : I → I) (hinv : ∀ i, q (q i) = i) (side : I → Bool)\n    (hcross : ∀ i, side (q i) = !side i) :\n    Fintype.card {i // side i = false} =\n      Fintype.card {i // side i = true} := by\n  exact Fintype.card_congr (crossSideEquiv q hinv side hcross)\n\nend InvariantIntertwiners\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/invariant-intertwiners/statement_fidelity.md",
+    "text": "# Statement fidelity: all-degree support-elimination core\n\nThe declarations below are in namespace `InvariantIntertwiners` in `Main.lean`.\nThey quantify over arbitrary types, finite cardinalities, natural degrees,\nand unbounded sequences as specified; they are not bounded computations.\n\n`matrix_unit_product` proves the exact product rule for complex matrix units\non any finite index type. `normalized_matrix_unit_trace` proves their trace\ndivided by the matrix size, with value `1/m` exactly on diagonal units.\n`probe_successor_unique` takes arbitrary permutations `p,q` of an arbitrary\nslot type, an injective embedding of slots into finite matrix indices, and\nnonzero products of consecutive probe units at every slot. It concludes\n`p=q`. The nonzero adjacent products are the support condition supplied\nin prose by a nonzero product of cycle traces. This declaration does not\nformalize the entire cycle-trace polynomial or Schur--Weyl duality.\n\n`cycle_lengths_forced` takes any root cycle length `r>=1`, any list indexed\nby `Fin t` of other cycle lengths at least two, total slot count `n+1`,\nand `n+2<=2(t+1)`. It proves `r=1` and every other length equals two.\nThe correspondence of these lengths with actual permutation cycles and\nthe disappearance of singleton centered tail traces are proved in prose,\nnot encoded as hypotheses about a von Neumann algebra in Lean.\n\n`partner` exchanges the Boolean coordinates in `P x Bool`.\n`partner_involutive` and `partner_ne` establish the matching axioms.\n`pool_label_forces_partner` takes any injective tag map on the arbitrary\npair-block type `P`, and any fixed-point-free function on its two-slot\nblocks which preserves tags. It proves that function equals `partner`.\n`pool_assignment_injective` proves that assigning label `(p,a(p))`\nkeeps different pair blocks disjoint for any assignment `a`.\n`pairing_support_product` proves that the product of all slotwise\nKronecker support indicators is exactly one for `partner` and zero for\nevery competing fixed-point-free function. For an orthonormal-pool\npairing evaluation, checking both ends of a pair duplicates only a\nzero-or-one factor and hence has the same value as checking it once.\nThe declaration is a support identity, not a Hilbert-space norm theorem.\n\n`independent_pool_count` counts the pairs of independent source and test\nassignments: `card ((Fin s -> Fin M) x (Fin t -> Fin M))=M^(s+t)`,\nincluding zero degrees and `M=0`. `nat_pow_ge` gives the elementary growth\nbound for `N>=1` and positive exponent. `unbounded_power_zero` takes any\nnonnegative real `a`, real bound `C`, positive natural exponent `r`, and\nany natural-valued sequence with `forall B, exists j, B<=sizes(j)`.\nIf `a*sizes(j)^r<=C` for every `j`, it proves `a=0`.\n`complex_coefficient_zero` applies this to the squared norm of an arbitrary\ncomplex coefficient. `same_side_coefficient_zero` specializes it to\n`r=s+t>0` and a bound for every integer `M>=1`. Its inequality is the\nsquared, divided form of the operator bound in the accompanying proof.\nThe passage from tensor sums and bounded operators to this inequality is\nproved in prose and replayed on finite exact examples by `verify.py`.\n\n`crossSideEquiv` explicitly constructs the equivalence between the two\nBoolean side fibers for any involution which reverses side.\n`cross_pairing_cardinality` proves their cardinalities agree on every\nfinite slot type. Taking source and test slots of cardinalities `k,l`\ntherefore forces `k=l`. This includes empty side fibers.\n\nNo declaration asserts the existence or classification of a bounded\noperator on `L2(D)`, the density of matrix stages, the finite-dimensional\ninvariant-theory step, or the reduced-word decomposition. Those analytic\nand translation steps are supplied in `proof.md` and require human review.\nThe formal claim `C_CORE` is only the conjunction of the algebraic,\ncombinatorial, and scalar-inequality results described here.\nIn particular, this is not a Lean proof of `C_INV`, `C_WORD`, the\nfree-product corner estimate, or Kadison's similarity conjecture.\n"
+  },
+  "subject": {
+    "content_hash": "c8dd6b333041e7a0a5bc295a1d2d240bc1a083f223b94422605361451dcf3774",
+    "kind": "claim",
+    "subject_id": "C_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

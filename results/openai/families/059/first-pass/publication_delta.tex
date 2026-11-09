@@ -1,0 +1,508 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,geometry,hyperref,booktabs}
+\geometry{margin=1in}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newcommand{\C}{\mathbb C}
+\newcommand{\OO}{\mathcal O}
+\newcommand{\crit}{\mathfrak c}
+\newcommand{\MF}{\mathcal F}
+\newcommand{\ord}{\operatorname{ord}}
+\title{The prepared-suspension formula and the published\\
+composition and polar-intersection theorems}
+\author{Campaign 9000059: primary-source comparison}
+\date{November 5, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The already reviewed claim C059LOCAL gives a uniform local
+Milnor-number formula for a prepared analytic suspension.  We identify
+its precise relationship to N\'emethi's ICIS composition theorem:
+the candidate evaluates a residual polar intersection which that
+theorem leaves as an input.  We also compute the removed critical-cycle
+contribution and explain exactly why the applicable Iomdin--L\^e formula
+does not determine the remaining intersection.  Independent-block
+Sebastiani--Thom statements and generic-hyperplane formulas cannot be
+applied by simply ignoring the constraint or its hypotheses.
+
+This identifies a mathematically substantive \emph{candidate}
+contribution, not established originality or publishability.  The
+comparison below neither proves direct subsumption by a stronger
+published numerical evaluation nor establishes that no such evaluation
+exists.  The publication gate remains open.  The accepted local theorem,
+its proof and certificate, and the reviewed M45 verification are
+preserved.
+\end{abstract}
+
+\section{Exact candidate and the retained evidence}
+
+All rings below are convergent local analytic rings at the origin.
+The Milnor number of an isolated hypersurface germ is the dimension
+of its Jacobian quotient; its equality with the bouquet rank is the
+previously checked isolated-Milnor-fibre fact in
+\cite[Section 1, items (4)--(5), p.~6]{massey}.
+
+\begin{theorem}[Retained C059LOCAL v2]\label{thm:candidate}
+Let \(p=(v,u)\), and let \(h:(\C^2,0)\to(\C,0)\) have an isolated
+critical point.  Suppose that every nonconstant analytic \(p\)-arc
+satisfies
+\[
+ \nu(\nabla h)\leq L\min(\nu v,\nu u).
+\]
+Let \(k\geq1\) and
+\[
+ R(p,w)=w^k+\sum_{j<k}A_j(p)w^j,\qquad A_j(0)=0,\qquad R_v(0)\ne0.
+\]
+The surface \(R=0\) is smooth, with coordinates \((u,w)\).
+Assume its restriction \(d=h|_{\{R=0\}}\) has an isolated critical
+point and \(d(u,0)\not\equiv0\).
+For integers \(a,b>1\) with
+\[
+ \frac{ab-a-b}{a+b}>L,
+\]
+the function
+\[
+ f=\left.h(p)+w(y^a+z^b)\right|_{X},\qquad
+ X=\{yz=R(p,w)\}\subset(\C^5,0),
+\]
+has an isolated critical point, and
+\begin{equation}\label{eq:candidate}
+ \mu(f)=\mu(d)+(kab+a+b)\mu(h).
+\end{equation}
+\end{theorem}
+
+The proof is the general intersection-length theorem in
+\texttt{research/audit\_report.tex}, Sections 2--3.  Its arc and
+finite-flatness argument works with the exact analytic \(R\).
+The supporting \texttt{research/verify.py} and
+\texttt{research/exact\_certificate.json} certify the specified algebraic
+inputs and identities, not the analytic proof in a proof kernel.
+The Engineer and independent Reviewer judgements on C059LOCAL v2
+are retained without alteration.  No unchanged certificate replay is
+presented as a new mathematical result here.
+
+For comparison with the staged manuscript, its M45 Section 04
+uses the particular base \(T(X-T^2)(X-2T^2)\), two degree-four
+prepared graph maps, their particular plane restrictions, and a
+small deformation parameter.  Equation \eqref{eq:candidate}
+allows arbitrary \(h,k,R\) satisfying the displayed hypotheses and
+does not require a tube or lattice identification.  That is a genuine
+scope difference from this manuscript's special case.  It does
+\emph{not}, by itself, establish a difference from the published
+singularity-theory literature.
+
+\section{What the primary theorems actually say}
+
+\subsection{Local and global independent-block composition}
+
+N\'emethi \cite[Theorem L1 and Corollary 2.3, pp.~2--3]{nemethi80}
+takes arbitrary analytic germs \(g(x)\) and \(j(y)\) in
+\emph{independent variable blocks}, and an analytic plane germ
+\(P(c,e)\).  Write \(G,J,Q_P\) for their Milnor fibres.
+If \(n_c=0\) when \(c\mid P\), and otherwise
+\(n_c=I_0(P,c)\), with \(n_e\) defined similarly, the formula is
+\begin{equation}\label{eq:local-ts}
+ \chi(\MF_{P(g,j)})=
+ (\chi(Q_P)-n_c-n_e)\chi(G)\chi(J)
+       +n_c\chi(J)+n_e\chi(G).
+\end{equation}
+The initial connectedness assumption on \(Q_P\) is removed
+componentwise in Remark 2.2.  Isolatedness of \(g,j\) is not required.
+For \(P=c+e\) this gives the join; for \(P=ce\), the fibre is a
+bundle over an annulus and has Euler characteristic zero.
+For \emph{isolated} sums the familiar numerical consequence is
+\(\mu(g+j)=\mu(g)\mu(j)\), not an additive formula.
+It is not legitimate to use a finite isolated Milnor number for
+the nonisolated factor \(w(y^a+z^b)\).
+
+The global sum theorem \cite[Theorems 2.2 and 2.4]{nemethi-global}
+concerns polynomials on \(\C^n\times\C^m\) and their generic
+\emph{global} fibres, outside the sum of the bifurcation sets.
+These sets include atypical values, not just critical values.
+There is no global properness hypothesis in that theorem.
+The generalized global result
+\cite[Section 3.2 and Theorem G1, p.~6]{nemethi80}
+also uses independent-block polynomials.  Its plane polynomial
+depends effectively on both variables, its generic fibre is
+connected, and it requires
+\[
+ T_c\cap\Lambda_g=\varnothing,\qquad
+ T_e\cap\Lambda_j=\varnothing,
+\]
+where \(T_c,T_e\) specify the tangent lines at the two indicated
+points at infinity of the projective generic plane fibre.
+These statements do not identify a local analytic prepared germ
+with a global polynomial fibre.
+
+The constraint \(yz=R(p,w)\) couples the proposed blocks.  Solving
+it for \(v\) gives
+\[
+ h(v(u,w,yz),u)+w(y^a+z^b),
+\]
+not a displayed independent-block sum.
+This rules out that \emph{direct substitution};
+it is not a theorem that no indirect reduction is possible.
+
+\subsection{The strongest applicable composition statement}
+
+N\'emethi \cite[Sections 2.0.1--2.0.4 and Theorem A(a),
+pp.~66--69]{nemethi79} allows shared variables, but assumes that
+\[
+ U=(H,G):(\C^{n+1},0)\longrightarrow(\C^2,0)
+\]
+defines an isolated complete intersection singularity (ICIS).
+Let \(\crit=I_2 DU\), and put
+\(\gamma_K(\crit)=\crit:K^\infty\) for \(K=P(H,G)\).
+The theorem gives
+\begin{equation}\label{eq:nemethi}
+ \chi(\MF_K)=\chi(\MF_P)\chi(\MF_U)
+               +(-1)^n I_0(\gamma_K(\crit),K).
+\end{equation}
+The unsaturated quotient \(\OO/\crit\) is a
+one-dimensional Cohen--Macaulay ring; the saturation removes
+the critical-curve components contained in \(K=0\).
+Part (a) does not assume these components are absent.
+The stronger bouquet assertion in part (b) does.  In particular,
+``no common discriminant component'' is not a condition of
+part (a), nor should it be replaced by transversality at the origin.
+
+\begin{proposition}[An exact reduction, not a novelty certificate]
+\label{prop:reduction}
+Under Theorem~\ref{thm:candidate}, define on the unconstrained
+ambient germ \(\C^5\)
+\[
+ Q=y^a+z^b,\qquad F=h(v,u)+wQ,\qquad S=yz-R(v,u,w).
+\]
+Let \(\crit=I_2D(F,S)\) and let \(\Gamma\) be the residual critical
+cycle defined by \(\crit:F^\infty\).  Then
+\begin{equation}\label{eq:residual-F}
+ \mu(f)=\mu(h)+I_0(\Gamma,F).
+\end{equation}
+Consequently the retained formula is equivalent to the evaluation
+\begin{equation}\label{eq:delta-F}
+ I_0(\Gamma,F)=\mu(d)+(kab+a+b-1)\mu(h).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Apply \eqref{eq:local-ts} first to the product \(wQ\):
+\(\chi(\MF_{wQ})=0\).  Then apply its sum case to the
+independent blocks \(p\) and \((w,y,z)\).  It gives
+\(\chi(\MF_F)=1-\mu(h)\).
+Since \(S_v=-R_v\) is a unit, \(S=0\) is smooth.
+The accepted isolatedness of \(f=F|_{S=0}\) makes
+\((F,S)\) an ICIS.  Its Milnor fibre is that of \(f\), and has
+Euler characteristic \(1-\mu(f)\).
+Use \eqref{eq:nemethi} with \(n=4\) and \(P(c,e)=c\), whose
+Milnor fibre is a disk.  Thus
+\[
+ 1-\mu(h)=1-\mu(f)+I_0(\Gamma,F).
+\]
+This proves \eqref{eq:residual-F}; substitution of the retained
+theorem proves \eqref{eq:delta-F}.
+\end{proof}
+
+In particular, this application uses the already accepted
+isolatedness.  It is not a replacement proof of isolatedness.
+All prepared coefficients are retained: the unit \(R_v\) shows
+that the exact minor ideal is generated by
+\begin{equation}\label{eq:minors}
+\begin{split}
+ R_vh_u-R_uh_v,\quad &R_vQ-R_wh_v,\\
+ aR_vwy^{a-1}+zh_v,\quad &bR_vwz^{b-1}+yh_v.
+\end{split}
+\end{equation}
+The remaining minors are combinations of these after division
+by \(R_v\).  A bounded exact Jacobian adapter calculation verifies
+the sign \(R_vQ-R_wh_v\); its typed contract, payload, output,
+server version, and execution status are retained in
+\path{research/literature/prepared_comparison_jacobian_*.json}.
+This determinant calculation is not evidence of originality or
+a mechanical certification of Proposition~\ref{prop:reduction}.
+
+\section{Iomdin--L\^e and the precise remaining polar invariant}
+
+A tempting application on \(X\) would use the pair
+\((h(p),wQ)\).  It is \emph{not} an ICIS: its zero fibre contains
+the two curves
+\[
+ p=w=z=0,\qquad p=w=y=0.
+\]
+At every point on either curve \(d(h(p))=0\), so the pair has
+rank less than two away from the origin.  This defeats the
+direct use of both the power-series construction
+\cite[Section 2.1.4]{nemethi79} and the general high-order
+perturbation variant in its Section 2.1.7.  The latter
+explicitly retains the ICIS hypothesis, requires the perturbed
+function to be isolated, and imposes an order bound involving
+the residual polar length.  High exponents alone do not repair
+the failed hypothesis.
+
+There is, however, a valid Iomdin--L\^e application to the ambient
+pair \((F,S)\).  Computing exactly what it says gives a stronger
+comparison than merely rejecting the invalid pair.
+
+\begin{proposition}[The removed cycle and ambient Iomdin formula]
+\label{prop:iomdin}
+Let
+\[
+ B=\bigl(k(a-1)(b-1)+a+b\bigr)\mu(h).
+\]
+For the pair \((F,S)\) above, the critical components removed by
+saturation have total intersection \(B\) with \(S=0\), and
+\begin{align}
+ \mu(f)&=I_0(\Gamma,S)+B,\label{eq:full-polar}\\
+ \mu(F+S^q)&=qB-\mu(h)\qquad(q\ \hbox{sufficiently large}).
+ \label{eq:iomdin}
+\end{align}
+Thus the precise additional numerical evaluation supplied by the
+retained theorem is equivalently
+\begin{equation}\label{eq:delta-S}
+ \boxed{I_0(\Gamma,S)=\mu(d)+k(a+b-1)\mu(h).}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Direct differentiation gives
+\[
+ \Sigma F=\{p=y=z=0\}\ \cup\
+              \{p=w=0,\ y^a+z^b=0\}.
+\]
+The first component is the \(w\)-axis.  At its nonzero points,
+the transversal Milnor number is
+\((a-1)(b-1)\mu(h)\).  Indeed \(w\) is a unit there;
+on a transverse \(S\)-slice, take analytic roots of this unit
+in the changes \(Y=yw^{1/a}\), \(Z=zw^{1/b}\).
+The transversal germ becomes \(h(p)+Y^a+Z^b\).
+The order of \(S\) on this axis is \(k\), since
+\(R(0,w)=w^k\).
+
+At a nonzero point of a branch of the second component, \(Q\)
+is a smooth coordinate and the transversal germ is \(h(p)+wQ\).
+Its transversal Milnor number is \(\mu(h)\).
+If \(g=\gcd(a,b)\), the reduced curve \(Q=0\) has \(g\)
+branches, with parametrizations of orders \(b/g,a/g\)
+in \(y,z\).  On each, \(S=yz\) has order \((a+b)/g\).
+Thus these branches contribute \((a+b)\mu(h)\).
+The restriction of \(S\) to each critical branch is nonconstant
+and is a local coordinate away from the origin.
+
+There are no additional critical-curve components contained in
+\(F=0\).  On any such component, the ICIS condition makes \(S\)
+nonconstant.  Generically \(dF=\lambda\,dS\); differentiation
+along the component, on which \(F\) is constant, gives
+\(\lambda=0\).  It is therefore a component of \(\Sigma F\).
+The generic scheme multiplicities of \(\crit\) on these
+components are exactly the transversal Jacobian lengths just
+computed.  This proves the claimed value \(B\).
+
+Using \(S\) as one analytic coordinate, the ideal
+\((S,\crit)\) becomes the Jacobian ideal of \(f\) together with
+that coordinate.  Its length is \(\mu(f)\).  Additivity of
+intersection numbers for the one-dimensional critical cycle,
+with its scheme multiplicities, gives \eqref{eq:full-polar}.
+In particular neither a reduced support nor an unsaturated
+length is being substituted for the residual cycle.
+
+Section 2.1.4 of \cite{nemethi79}, applied to this ICIS pair,
+gives for sufficiently large \(q\)
+\[
+ \mu(F+S^q)+\mu(f)=I_0(\Gamma,F)+qB.
+\]
+Equation \eqref{eq:residual-F} cancels \(\mu(f)\) from this
+identity, proving \eqref{eq:iomdin}.  Finally,
+\[
+ kab+a+b-\bigl(k(a-1)(b-1)+a+b\bigr)=k(a+b-1)
+\]
+and \eqref{eq:candidate} yield \eqref{eq:delta-S}.
+\end{proof}
+
+The applicable high-power formula \eqref{eq:iomdin} does not even
+contain \(\mu(d)\).  Combining these identities alone cannot
+recover \eqref{eq:delta-S}, because the unknown section Milnor
+number cancels.  This is a limited algebraic conclusion about
+these formulas, not an exclusion of other uses of polar or
+Iomdin--L\^e theory.
+
+\section{Generic sections, L\^e--Greuel, and the accepted calculation}
+
+L\^e's original attaching result
+\cite[Theorem (2.3) and Section (3.1), pp.~267--268]{le}
+constructs the Milnor fibre from a generic hyperplane-section
+fibre by attaching \(I_0(\Gamma,F)\) cells.  Its choice of
+hyperplane uses Theorem (1.1) and the good-stratification
+transversality conditions in Section 2.  Merely knowing that
+\(S_v\) is a unit does not assert those genericity conditions
+for this particular nonlinear \(S\).
+The ICIS composition theorem above is the applicable
+shared-variable replacement.  Likewise, the Teissier identity
+in \cite[Exercise 3.3, p.~19]{massey} is
+\[
+ I_0(\Gamma_{G,z_0},G)=I_0(\Gamma_{G,z_0},z_0)
+                  +I_0(\Gamma_{G,z_0},G_{z_0}),
+\]
+when the indicated polar intersections are proper.  It
+relates polar intersections, rather than evaluating an arbitrary
+one from \(k,\mu(h),\mu(d)\).
+
+A modern, directly applicable L\^e--Greuel formulation is
+Damon--Pike \cite[Theorem 3.3, equation (3-2), p.~923]{damon-pike}.
+It assumes an \(H\)-holonomic free divisor in \(\C^N\), an
+ICIS \(X=\varphi^{-1}(0)\subset\C^n\), and transversality of the
+map \(g|_X\) to that divisor away from the origin.
+Put
+\[
+ n=5,\quad p=N=1,\quad \varphi=S,\quad g=F,\quad
+ H(t)=t,\quad V=\{0\}.
+\]
+Here \(V\) is \(H\)-holonomic, its annihilating vector-field
+module is zero, \(X\) is smooth with \(\mu(S)=0\), and
+isolatedness of \(f\) supplies the required transversality.
+The formula specializes to
+\[
+ \mu(f)=
+ \dim_\C
+ \frac{\OO_{X,0}^2}
+ {\langle(S_{x_i},F_{x_i}):1\leq i\leq5\rangle}
+ =
+ \dim_\C\frac{\OO_{\C^5,0}}{(S,\crit)}.
+\]
+The last equality follows by eliminating the module coordinate
+with the unit \(S_v\).  It is also immediate by the analytic
+chain rule, independently of this general theorem.
+Again the numerical evaluation, rather than the description
+of the invariant as a length, remains to be supplied.
+
+The accepted proof supplies that evaluation without computing
+the discriminant or discarding a Weierstrass unit.  For a
+precise reference to its independent mathematical work, write
+\(m=a+b\), \(n=ab\), \(N=n-m\), and
+\(\ell=\ord d(u,0)-1\).  Its three exact local lengths are
+\[
+ L_z=a\ell+(a-1)\mu(d),\qquad
+ L_w=a\ell+m\mu(h),\qquad
+ L_A=a\mu(d)+kn\mu(h).
+\]
+It proves finiteness before using
+\(\mu(f)+L_z=L_w+L_A\).
+The nontrivial uniform analytic input is the polar-intersection
+lemma in Section 2 of the retained proof: the arc-gradient
+bound prevents cancellation under the perturbation, and
+finite flatness preserves length.  The finite free cover
+\(y=Y^b,z=Z^a\) then makes the last length accessible.
+These are references to the accepted proof, not another proof
+or another computational certificate of the same theorem.
+
+\section{Contribution and publication boundary}
+
+The strongest applicable published result inspected is
+\eqref{eq:nemethi}.  It is much more general than the candidate
+as a structural theorem: arbitrary ICIS pairs and analytic
+plane compositions are allowed.  Calling C059LOCAL a new
+generalization of that theory would be wrong.
+The concrete possible contribution is instead the
+\emph{explicit evaluation} \eqref{eq:delta-S}, for the
+specified prepared family and explicit sufficient gradient
+condition.  It replaces a residual polar intersection in five
+variables by two plane Jacobian lengths and \(k,a,b\), for
+analytic rather than merely polynomial coefficients.
+Together with the independent local proof this is more than
+matching examples.  However, \eqref{eq:delta-S} is
+\emph{equivalent to the retained theorem}; changing its notation
+does not create another original result.
+
+Relative to the strongest prior \emph{campaign} result, there
+is no stronger correctness theorem here.  The improvement is
+the exact comparison: which published theorem applies, which
+ideal and sign it uses, the value of the removed cycle, and
+the residual numerical input that remains.  All independently
+reviewed M45 conclusions remain as before.
+
+Technical substance is therefore identifiable, but
+field-level significance is not yet demonstrated.  A useful
+uniform computation need not be a publishable original
+contribution.  No sharpness result, new topological
+classification, new integral lattice theorem, or independent
+application beyond the retained construction has been proved
+in this mission.  None is silently added to rescue the
+publication claim.
+
+The literature comparison was bounded.  It started with both
+N\'emethi references in the retained Massey text and the
+specified Compositio 79 paper, then inspected the original
+L\^e statement and the directly relevant Damon--Pike
+L\^e--Greuel formula.  A separately delegated nonlinear-section
+lead found a discriminant freeness theorem, not a numerical
+polar evaluation; it is not used as a proof input.
+No directly subsuming \emph{numerical} theorem was verified in
+this examination.  This is not a claim that none exists.
+The preliminary search synthesis had no usable primary
+comparison and misstated classical formulas; it is excluded
+from the evidence.  Absent exact search hits, a bibliography,
+and agreement of examples cannot establish originality.
+
+\paragraph{Verdict submitted for independent review.}
+C059PUBCOMPARISON is the mathematical comparison proved here,
+conditional on the named published inputs and the retained
+C059LOCAL proof.  C059PUBSIGNIFICANCE and
+C059PUBCONTRIBUTION remain unestablished.  The Engineer
+does not assign \texttt{novelty\_status=verified\_new},
+\texttt{significance\_status=publishable}, or campaign completion.
+The normal independent Reviewer should assess only these new
+comparison and contribution claims and attribute the new
+citations; the accepted proof and certificates need not be
+reopened.  A found prior numerical evaluation would require
+its exact reduction and replanning, not a weakened theorem or
+an unrelated extension.
+
+\paragraph{Source and computation fidelity.}
+Primary PDFs and located excerpts are retained under
+\texttt{research/literature/}.  The Compositio text layers omit
+some displayed formulas; the formulas used here were read in
+the rendered original pages, not reconstructed from search
+summaries.  The previously confirmed Massey isolated-fibre
+passage is reused from its existing literature archive.
+The new source bindings await independent attribution; no
+source is declared independently checked merely because its
+identifier resolves.  The typed determinant output and exact
+symbolic coefficient cancellations check only the indicated
+algebra.  No Lean source or kernel evidence is introduced.
+
+\begin{thebibliography}{9}
+\bibitem{nemethi80}
+A.~N\'emethi, \emph{Generalized local and global
+Sebastiani--Thom type theorems}, Compositio Math.\ \textbf{80}
+(1991), 1--14.  Theorem L1, Corollary 2.3, Examples 2.4,
+and Section 3.2/Theorem G1.
+\url{https://www.numdam.org/item/CM_1991__80_1_1_0/}.
+\bibitem{nemethi-global}
+A.~N\'emethi, \emph{Global Sebastiani--Thom theorem for polynomial
+maps}, J.\ Math.\ Soc.\ Japan \textbf{43} (1991), 213--218.
+Theorems 2.2 and 2.4.
+\url{https://doi.org/10.2969/jmsj/04320213}.
+\bibitem{nemethi79}
+A.~N\'emethi, \emph{The Milnor fiber and the zeta function of the
+singularities of type \(f=P(h,g)\)}, Compositio Math.\ \textbf{79}
+(1991), 63--97.  Sections 2.0.1--2.0.4, Theorem A(a), and
+Sections 2.1.4, 2.1.7.
+\url{https://www.numdam.org/item/CM_1991__79_1_63_0/}.
+\bibitem{le}
+L\^e D\~ung Tr\'ang, \emph{Calcul du nombre de cycles
+\'evanouissants d'une hypersurface complexe},
+Ann.\ Inst.\ Fourier \textbf{23}(4) (1973), 261--270.
+Theorems (1.1), (2.3), and Sections (3.1), (3.3).
+\url{https://www.numdam.org/item/AIF_1973__23_4_261_0/}.
+\bibitem{massey}
+D.~B.~Massey, \emph{Non-isolated hypersurface singularities
+and L\^e cycles}, arXiv:1410.3312v2 (November 13, 2015).
+Section 1, items (4)--(5), Theorem 2.23, and Exercise 3.3.
+\url{https://arxiv.org/abs/1410.3312v2}.
+\bibitem{damon-pike}
+J.~Damon and B.~Pike, \emph{Solvable groups, free divisors and
+nonisolated matrix singularities II: Vanishing topology},
+Geom.\ Topol.\ \textbf{18} (2014), 911--962.
+Theorem 3.3, equation (3-2), p.~923.
+\url{https://doi.org/10.2140/gt.2014.18.911}.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "claim_id": "N_BOUNDED_NULL",
+  "sharpness_claim_id": "N_SHARP_NULL",
+  "result_class": "new_reduction",
+  "independent_review": "pending",
+  "novelty_status": "not_yet_independently_assessed",
+  "scope": "A general bounded finite-witness theorem, with a universal sharpness construction. The categorical bridge is proved in theorem.md, not encoded completely in Lean.",
+  "positive_budget": ["mul", "N", "L"],
+  "negative_budget": "L",
+  "kernel": {
+    "claim_id": "K_NULL_CORE",
+    "source": "Main.lean",
+    "statement_fidelity": "statement_fidelity.md",
+    "certificate": "lean/certificates/K_NULL_CORE-6b971cb81595d4c3.json",
+    "declarations": [
+      "middleExact",
+      "middleExactAcyclic",
+      "secondaryKernelZero",
+      "strictChamberDetect",
+      "finiteSeparation",
+      "topVanishes",
+      "rankStage",
+      "boundedStagesEscape"
+    ]
+  },
+  "universal_homotopy": {
+    "meaning": "D_b C_n is chain-homotopy equivalent to C_(n+1), uniformly for all n >= 0.",
+    "variables": ["d", "r", "k", "j", "t"],
+    "relations": [
+      ["dd", "0"],
+      ["rd", "0"],
+      ["tr", "0"],
+      ["tt", "0"],
+      ["tj", "jt"],
+      ["tk", "kt"]
+    ],
+    "block_order": ["A", "B", "C", "U", "T"],
+    "remaining_blocks": ["A", "C", "U"],
+    "matrices": {
+      "D": [
+        ["d", "0", "0", "0", "0"],
+        ["kr", "tj", "0", "0", "0"],
+        ["r", "0", "0", "0", "0"],
+        ["0", "t", "0", "0", "0"],
+        ["0", "1", "-k", "-j", "0"]
+      ],
+      "Dbar": [
+        ["d", "0", "0"],
+        ["r", "0", "0"],
+        ["0", "tk", "tj"]
+      ],
+      "i": [
+        ["1", "0", "0"],
+        ["0", "k", "j"],
+        ["0", "1", "0"],
+        ["0", "0", "1"],
+        ["0", "0", "0"]
+      ],
+      "p": [
+        ["1", "0", "0", "0", "0"],
+        ["0", "0", "1", "0", "0"],
+        ["0", "0", "0", "1", "-t"]
+      ],
+      "h": [
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "1"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"],
+        ["0", "0", "0", "0", "0"]
+      ]
+    }
+  },
+  "equality_certificates": [
+    {
+      "name": "old_top_zero",
+      "variables": ["old", "new", "top", "row_old", "row_new"],
+      "equations": {
+        "count": ["sub", ["add", ["sub", "new", "old"], "row_old"], "top"],
+        "row_difference": ["sub", ["sub", "row_new", "row_old"], ["mul", 2, ["sub", "new", "old"]]],
+        "old_zero": "row_old",
+        "new_zero": "row_new"
+      },
+      "target": "top",
+      "combination": [
+        ["-1", "count"],
+        ["-1/2", "row_difference"],
+        ["1/2", "old_zero"],
+        ["1/2", "new_zero"]
+      ]
+    }
+  ],
+  "polynomial_identities": [
+    {
+      "name": "euler_surplus",
+      "variables": ["a", "b", "bs", "h"],
+      "left": ["sub", ["sub", ["add", "a", "b"], ["sub", "bs", "h"]], "a"],
+      "right": ["add", ["sub", "b", "bs"], "h"]
+    },
+    {
+      "name": "stage_budget",
+      "variables": ["k", "L"],
+      "left": ["add", ["mul", "k", "L"], "L"],
+      "right": ["mul", ["add", "k", 1], "L"]
+    },
+    {
+      "name": "sharp_family_level",
+      "variables": ["s", "t"],
+      "left": ["add", ["add", -2, ["sub", "t", "s"]], ["sub", ["add", 3, ["mul", 2, "s"]], ["mul", 2, "t"]]],
+      "right": ["sub", ["add", "s", 1], "t"]
+    }
+  ],
+  "sharp_family": {
+    "S": ["a", "b", "k"],
+    "X": ["a", "b"],
+    "I": ["a", "b"],
+    "J": ["b"],
+    "q": 1,
+    "c": [1, 1],
+    "base_word_in_action_order": [["k", 1], ["a", 1], ["a", 1]],
+    "negative_color": "b",
+    "parameter": "all integers n >= 0",
+    "sample_parameters": [0, 1, 2, 4],
+    "channels": 2,
+    "b_level_one_count": {"n_zero": 0, "n_positive": 2},
+    "d_min_for_positive_n": ["sub", 1, "n"],
+    "boundary_level": 0,
+    "longest_length": 1
+  },
+  "orbit_experiment": "transport_experiment.json",
+  "jacobian": {
+    "operation_id": "matrix.rank.compute",
+    "contract": "jacobian/rank_contract.json",
+    "payload": "jacobian/rank_payload.json",
+    "typed_result": "jacobian/rank_result.json",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "adapter_exit_code": 0,
+    "adapter_error": null,
+    "timed_out": false,
+    "rank": 5
+  },
+  "literature": [
+    {
+      "claim_id": "N_BOUNDED_NULL",
+      "assumption_id": "COXETER_WORD",
+      "source_id": "isbn:9780691131382",
+      "locator": "Theorem 3.4.2(ii)",
+      "excerpt": "literature/davis_word_excerpt.txt",
+      "independent_attribution": "pending"
+    },
+    {
+      "claim_id": "N_BOUNDED_NULL",
+      "assumption_id": "FINITE_CARTAN",
+      "source_id": "isbn:9780691131382",
+      "locator": "Theorem 6.12.9",
+      "excerpt": "literature/davis_finite_excerpt.txt",
+      "independent_attribution": "pending"
+    }
+  ],
+  "refuted_literal_manuscript_assertions": []
+}

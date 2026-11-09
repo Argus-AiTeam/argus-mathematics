@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_RA_CORE-1f26318cd171",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/290/first-pass/relative_amplification/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/290/first-pass/relative_amplification/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16500,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/290/first-pass/relative_amplification/Main.lean",
+    "source_sha256": "31c9806ee490c47801e1a7a45bc72562d0adb923114bc12e1b862eed87109ae7",
+    "statement_fidelity": "families/290/first-pass/relative_amplification/statement_fidelity.md",
+    "statement_fidelity_sha256": "7cc96aefb7c26a3554ac7adeebaee0693d432c52046847c945d48a68d9610f34",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/relative_amplification/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace RelativeAmplification\n\ndef captureLength (e B b : ℝ) : ℝ :=\n  max 0 (min B (e + b) - max (-B) (e - b))\n\ntheorem capture_length_le (e B b : ℝ) (hb : 0 ≤ b) :\n    captureLength e B b ≤ 2 * b := by\n  unfold captureLength\n  apply max_le\n  · positivity\n  · have h₁ := min_le_right B (e + b)\n    have h₂ := le_max_right (-B) (e - b)\n    linarith\n\ntheorem capture_probability_le (e B b : ℝ) (hB : 0 < B) (hb : 0 ≤ b) :\n    captureLength e B b / (2 * B) ≤ b / B := by\n  have h := capture_length_le e B b hb\n  apply (div_le_iff₀ (by positivity : 0 < 2 * B)).2\n  calc\n    captureLength e B b ≤ 2 * b := h\n    _ = b / B * (2 * B) := by field_simp\n\ntheorem capture_probability_eq (e B b : ℝ) (hB : 0 < B) (hb : 0 ≤ b)\n    (hinside : |e| + b ≤ B) :\n    captureLength e B b / (2 * B) = b / B := by\n  have hlo : -B ≤ e - b := by\n    have h := neg_abs_le e\n    linarith\n  have hhi : e + b ≤ B := by\n    have h := le_abs_self e\n    linarith\n  unfold captureLength\n  rw [min_eq_right hhi, max_eq_right hlo]\n  have hsub : e + b - (e - b) = 2 * b := by ring\n  rw [hsub, max_eq_right (by positivity : 0 ≤ 2 * b)]\n  field_simp\n\ntheorem norm_sub_sq_le_two {E : Type*} [SeminormedAddCommGroup E] (x y : E) :\n    ‖x - y‖ ^ 2 ≤ 2 * ‖x‖ ^ 2 + 2 * ‖y‖ ^ 2 := by\n  have h := norm_sub_le x y\n  have hs : ‖x - y‖ ^ 2 ≤ (‖x‖ + ‖y‖) ^ 2 :=\n    (sq_le_sq₀ (norm_nonneg _) (by positivity)).2 h\n  nlinarith [sq_nonneg (‖x‖ - ‖y‖)]\n\ntheorem averaging_loss {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]\n    (v u d : E) (hu : ‖u‖ ≤ ‖v‖) (hd : ‖d‖ = ‖v‖) :\n    ‖u - d‖ ^ 2 ≤ 4 * (‖v‖ ^ 2 - ‖(1 / 2 : ℝ) • (u + d)‖ ^ 2) := by\n  have hp := parallelogram_law_with_norm ℝ u d\n  have hs : ‖(1 / 2 : ℝ) • (u + d)‖ ^ 2 = (1 / 4 : ℝ) * ‖u + d‖ ^ 2 := by\n    rw [norm_smul]\n    norm_num\n    ring\n  have hu₂ : ‖u‖ ^ 2 ≤ ‖v‖ ^ 2 :=\n    (sq_le_sq₀ (norm_nonneg _) (norm_nonneg _)).2 hu\n  rw [hd] at hp\n  nlinarith\n\nnoncomputable def captureWeight (b A l : ℝ) (j : ℕ) : ℝ :=\n  b ^ 2 / (2 * A * (b + 1 + ((j : ℝ) + 1) * l))\n\ntheorem capture_weight_pos (b A l : ℝ) (hb : 0 < b) (hA : 0 < A)\n    (hl : 0 ≤ l) (j : ℕ) : 0 < captureWeight b A l j := by\n  unfold captureWeight\n  positivity\n\ntheorem capture_weight_harmonic_lower (b A l : ℝ) (hb : 0 < b) (hA : 0 < A)\n    (hl : 0 ≤ l) (j : ℕ) :\n    (b ^ 2 / (2 * A * (b + 1 + l))) / ((j : ℝ) + 1) ≤\n      captureWeight b A l j := by\n  have hj : 0 ≤ (j : ℝ) := Nat.cast_nonneg j\n  have hB : 0 < b + 1 + ((j : ℝ) + 1) * l := by positivity\n  have hden : 2 * A * (b + 1 + ((j : ℝ) + 1) * l) ≤\n      (2 * A * (b + 1 + l)) * ((j : ℝ) + 1) := by\n    have h := mul_nonneg (by linarith : 0 ≤ b + 1) hj\n    have hinner : b + 1 + ((j : ℝ) + 1) * l ≤\n        (b + 1 + l) * ((j : ℝ) + 1) := by nlinarith\n    nlinarith [mul_le_mul_of_nonneg_left hinner (by positivity : 0 ≤ 2 * A)]\n  rw [div_div]\n  exact div_le_div_of_nonneg_left (sq_nonneg b) (by positivity) hden\n\ntheorem capture_weight_not_summable (b A l : ℝ) (hb : 0 < b) (hA : 0 < A)\n    (hl : 0 ≤ l) : ¬ Summable (captureWeight b A l) := by\n  intro hw\n  let K := b ^ 2 / (2 * A * (b + 1 + l))\n  have hK : 0 < K := by dsimp [K]; positivity\n  have hdom : Summable (fun j : ℕ => K / ((j : ℝ) + 1)) :=\n    Summable.of_nonneg_of_le (fun j => by positivity)\n      (fun j => capture_weight_harmonic_lower b A l hb hA hl j) hw\n  have hharm : Summable (fun j : ℕ => 1 / ((j : ℝ) + 1)) := by\n    simpa only [div_eq_mul_inv, ← mul_assoc, inv_mul_cancel₀ hK.ne', one_mul]\n      using hdom.mul_left K⁻¹\n  have hshift : Summable (fun j : ℕ => 1 / ((j + 1 : ℕ) : ℝ)) := by\n    simpa only [Nat.cast_add, Nat.cast_one] using hharm\n  exact Real.not_summable_one_div_natCast\n    ((summable_nat_add_iff (f := fun j : ℕ => 1 / (j : ℝ)) 1).1 hshift)\n\ntheorem weighted_error_floor (m : ℕ) (alpha c : ℝ)\n    (w prefixError ideal capturedError defect loss : ℕ → ℝ)\n    (hi : ∀ j < m, alpha * c ^ 2 * w j ≤ ideal j)\n    (he : ∀ j < m, capturedError j ≤ 4 * w j * prefixError j)\n    (ht : ∀ j < m, ideal j ≤ 2 * defect j + 2 * capturedError j)\n    (hl : ∀ j < m, defect j ≤ 4 * loss j)\n    (hbudget : ∑ j ∈ Finset.range m, loss j ≤ 1) :\n    alpha * c ^ 2 / 8 * (∑ j ∈ Finset.range m, w j) - 1 ≤\n      ∑ j ∈ Finset.range m, w j * prefixError j := by\n  have hsum :\n      (∑ j ∈ Finset.range m, alpha * c ^ 2 * w j) ≤\n        ∑ j ∈ Finset.range m, (8 * loss j + 8 * (w j * prefixError j)) := by\n    apply Finset.sum_le_sum\n    intro j hj\n    have hjm := Finset.mem_range.mp hj\n    have h₁ := hi j hjm\n    have h₂ := he j hjm\n    have h₃ := ht j hjm\n    have h₄ := hl j hjm\n    nlinarith\n  simp only [Finset.sum_add_distrib, ← Finset.mul_sum] at hsum\n  nlinarith\n\ntheorem nonsummable_budget_obstruction (w : ℕ → ℝ) (hw : ∀ j, 0 ≤ w j)\n    (hdiv : ¬ Summable w) (gamma eta : ℝ) (hgap : eta < gamma)\n    (prefixError : ℕ → ℕ → ℝ)\n    (herror : ∀ m j, j < m → prefixError m j ≤ eta)\n    (hfloor : ∀ m, gamma * (∑ j ∈ Finset.range m, w j) - 1 ≤\n      ∑ j ∈ Finset.range m, w j * prefixError m j) : False := by\n  apply hdiv\n  apply summable_of_sum_range_le hw (c := 1 / (gamma - eta))\n  intro m\n  have hupper :\n      (∑ j ∈ Finset.range m, w j * prefixError m j) ≤\n        eta * (∑ j ∈ Finset.range m, w j) := by\n    rw [Finset.mul_sum]\n    apply Finset.sum_le_sum\n    intro j hj\n    nlinarith [mul_le_mul_of_nonneg_left\n      (herror m j (Finset.mem_range.mp hj)) (hw j)]\n  have hf := hfloor m\n  apply (le_div_iff₀ (sub_pos.mpr hgap)).2\n  nlinarith\n\ntheorem arbitrary_terminal_amplification\n    (w : ℕ → ℝ) (hw : ∀ j, 0 ≤ w j) (hdiv : ¬ Summable w)\n    (alpha c eta : ℝ) (hgap : eta < alpha * c ^ 2 / 8)\n    (prefixError ideal capturedError defect loss : ℕ → ℕ → ℝ)\n    (herror : ∀ m j, j < m → prefixError m j ≤ eta)\n    (hi : ∀ m j, j < m → alpha * c ^ 2 * w j ≤ ideal m j)\n    (he : ∀ m j, j < m → capturedError m j ≤ 4 * w j * prefixError m j)\n    (ht : ∀ m j, j < m → ideal m j ≤ 2 * defect m j + 2 * capturedError m j)\n    (hl : ∀ m j, j < m → defect m j ≤ 4 * loss m j)\n    (hbudget : ∀ m, ∑ j ∈ Finset.range m, loss m j ≤ 1) : False := by\n  apply nonsummable_budget_obstruction w hw hdiv (alpha * c ^ 2 / 8) eta hgap\n    prefixError herror\n  intro m\n  exact weighted_error_floor m alpha c w (prefixError m) (ideal m)\n    (capturedError m) (defect m) (loss m) (hi m) (he m) (ht m) (hl m) (hbudget m)\n\ntheorem affine_capture_amplification\n    (b A l alpha c eta : ℝ) (hb : 0 < b) (hA : 0 < A) (hl : 0 ≤ l)\n    (hgap : eta < alpha * c ^ 2 / 8)\n    (prefixError ideal capturedError defect loss : ℕ → ℕ → ℝ)\n    (herror : ∀ m j, j < m → prefixError m j ≤ eta)\n    (hi : ∀ m j, j < m → alpha * c ^ 2 * captureWeight b A l j ≤ ideal m j)\n    (he : ∀ m j, j < m →\n      capturedError m j ≤ 4 * captureWeight b A l j * prefixError m j)\n    (ht : ∀ m j, j < m → ideal m j ≤ 2 * defect m j + 2 * capturedError m j)\n    (hdefect : ∀ m j, j < m → defect m j ≤ 4 * loss m j)\n    (hbudget : ∀ m, ∑ j ∈ Finset.range m, loss m j ≤ 1) : False := by\n  exact arbitrary_terminal_amplification (captureWeight b A l)\n    (fun j => (capture_weight_pos b A l hb hA hl j).le)\n    (capture_weight_not_summable b A l hb hA hl) alpha c eta hgap\n    prefixError ideal capturedError defect loss herror hi he ht hdefect hbudget\n\nend RelativeAmplification\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/relative_amplification/statement_fidelity.md",
+    "text": "# Statement fidelity: C_RA_CORE\n\n`Main.lean`, namespace `RelativeAmplification`, formalizes the dimension-free\nloss-and-capture core, not the complete spectral operator implication `C_RA`.\nEvery theorem is universally quantified; no terminal length or dimension is\nfixed by evaluation. There are no additional axioms or admitted proofs.\n\n## Interval capture and Hilbert-space loss\n\n`captureLength e B b` is the length\n`max 0 (min B (e+b) - max (-B) (e-b))` of the intersection of two real\nintervals. `capture_probability_le` assumes `B>0` and `b>=0` and bounds this\nlength divided by `2B` by `b/B` for **every real e**. In particular it has no\nbounded-spectrum hypothesis. `capture_probability_eq` adds `|e|+b<=B` and\nproves equality. These are scalar geometric statements; lifting them through\na projection-valued spectral measure is proved in the report, not encoded.\n\n`norm_sub_sq_le_two` holds in any real-valued seminormed additive group.\n`averaging_loss` holds in an arbitrary real inner-product space, for all\nvectors `v,u,d` with `norm u<=norm v` and `norm d=norm v`. It proves\n`norm(u-d)^2 <= 4*(norm v^2 - norm((u+d)/2)^2)`.\nA complex Hilbert space is regarded as a real inner-product space. No\nfinite-dimensional, spectral, or commutation hypothesis is present.\n\n## Arbitrary finite experiments\n\nIn `weighted_error_floor`, `m` is any natural number, including zero.\nThe six functions of a natural index denote the capture weight, expected\n**squared** prefix error, captured ideal squared defect, captured error\nsquared defect, actual captured squared defect, and expected squared-norm\nloss. `prefixError` is already a squared norm, not its square root.\nThe hypotheses are exactly\n\n```\nalpha*c^2*w_j <= ideal_j\ncapturedError_j <= 4*w_j*prefixError_j\nideal_j <= 2*defect_j + 2*capturedError_j\ndefect_j <= 4*loss_j\nsum_(j<m) loss_j <= 1.\n```\n\nThe conclusion is\n\n```\n(alpha*c^2/8)*sum_(j<m) w_j - 1\n  <= sum_(j<m) w_j*prefixError_j.\n```\n\nThe scalar implication needs no extra nonnegativity hypotheses: its displayed\ninequalities suffice. In the operator interpretation all these data are\nnonnegative expectations.\n\n`nonsummable_budget_obstruction` permits a different `prefixError m j`\nfor **each terminal length m**. Nonnegative, nonsummable weights and a\nuniform upper bound `eta<gamma` contradict the finite lower bounds\n`gamma*sum w - 1 <= sum w*prefixError`. `arbitrary_terminal_amplification`\ncombines this with the preceding five hypotheses, allowing all five\nexperiment arrays to depend on `m`. Its strict hypothesis is\n`eta<alpha*c^2/8`. Neither a single infinite random experiment nor\nconsistency between different terminal lengths is assumed.\n\n## The actual nonsummable weights\n\n`captureWeight b A l j = b^2/(2*A*(b+1+(j+1)*l))`, with zero-based `j`.\n`capture_weight_harmonic_lower` proves domination of\n`[b^2/(2*A*(b+1+l))]/(j+1)`. `capture_weight_not_summable` proves\nnonsummability from `b>0`, `A>0`, and `l>=0`, using Mathlib's harmonic-series\ntheorem. The case `l=0` is included, not divided away.\n`affine_capture_amplification` specializes the fully quantified obstruction\nto these weights.\n\n## Boundary of the compiler's answer\n\nThe operator direct integrals, tensor-word disintegration, Fourier/Plancherel\nlocalization, measurability and integration of the random experiment, spectral\nlifting of interval capture, and the extraction of a nonzero local defect are\nnot encoded. The report proves these analytically and identifies the ledger's\nbackground assumptions. The compiler does not prove that the manuscript's\nuniform energy estimate holds, does not formalize bicentralizers, and does not\ncheck novelty or this translation document. `C_RA_CORE` must not be relabelled\nas a formal proof of `C_RA` or of the manuscript's main theorem.\n"
+  },
+  "subject": {
+    "content_hash": "a5a3ced5f112dc05ec6ebfd829a380b0c0e44416a4899d55f50e11a2c76ad4ca",
+    "kind": "claim",
+    "subject_id": "C_RA_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

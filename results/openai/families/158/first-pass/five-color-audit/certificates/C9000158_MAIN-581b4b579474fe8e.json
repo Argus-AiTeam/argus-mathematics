@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C9000158_MAIN-0b5bb7d9b9a6",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/158/first-pass/five-color-audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/158/first-pass/five-color-audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 13833,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/158/first-pass/five-color-audit/Main.lean",
+    "source_sha256": "6d19f917051bf1a8dd34694fd96db9d5062e146acd024f0264ce6f52ef1ca851",
+    "statement_fidelity": "families/158/first-pass/five-color-audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "609bc2c933cf630346bed018622cffc57a390d787c127b03912e6a15f57b8b7b",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'Audit9000158.no_unrestricted_five_coloring' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/five-color-audit/Main.lean",
+    "text": "import OAI.Geometry.PlaneColoring.Five\n\nnamespace Audit9000158\n\ntheorem no_unrestricted_five_coloring :\n    ¬ ∃ c : Complex → Fin 5,\n      ∀ z w : Complex, ‖z - w‖ = 1 → c z ≠ c w := by\n  simpa only [OAI.EuclideanFiveColor.ProperColoring] using\n    OAI.EuclideanFiveColor.no_proper_five_coloring\n\nend Audit9000158\n\n#print axioms Audit9000158.no_unrestricted_five_coloring\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/five-color-audit/statement_fidelity.md",
+    "text": "# Statement fidelity: unrestricted five-color obstruction\n\nThe source declaration `no_unrestricted_five_coloring` is inside namespace\n`Audit9000158`; its fully qualified name is\n`Audit9000158.no_unrestricted_five_coloring`. It states that there is no\nfunction `c : Complex -> Fin 5` satisfying\n\n```\nforall z w : Complex, norm(z - w) = 1 -> c z != c w.\n```\n\nThe object `Complex` is the ordinary Mathlib complex plane. Its norm is the\nEuclidean norm, so `norm(z - w) = 1` means Euclidean distance exactly one.\n`Fin 5` has precisely five labels; using only a subset of them is allowed.\nBoth endpoints range over the entire plane. The function has no regularity,\nmeasurability, continuity, definability, density, or surjectivity hypothesis.\nThere are no extra parameters or premises on the theorem.\n\nThis is the literal lower-bound assertion of the staged manuscript,\n`sections/introduction.tex`, `thm:main`, lines 60-68, with the proper-coloring\ndefinition at lines 3-7. Identifying the real plane with the complex plane\ndoes not alter that assertion. This declaration does not certify the\nseparate seven-color upper bound.\n\nThe proof unfolds only `OAI.EuclideanFiveColor.ProperColoring` and applies\n`OAI.EuclideanFiveColor.no_proper_five_coloring`, imported from the actual\npublished `OAI.Geometry.PlaneColoring.Five` module, not from its comparator\nchallenge. The manuscript's measurable intermediate statements are not\nadded as hypotheses to this declaration. The proof is a faithful\ncertification wrapper around the published implementation, not a separately\ndiscovered geometric proof and not a claim of new mathematical originality.\n\nA compiler run must check the imported theorem's transitive axiom closure,\nnot merely the wrapper text. Only `propext`, `Classical.choice`, and\n`Quot.sound` are permitted as ordinary Lean logical foundations. Any\n`sorryAx`, additional theorem-specific axiom, unchecked implementation, or\nmissing environment audit disqualifies positive certification. The\n`#print axioms` command exposes the wrapper's transitive axioms for the\ncertificate reader.\n\nCompilation establishes the encoded theorem under those foundations.\nThe compiler does not itself establish this document's correspondence with\nthe staged prose, originality, or the truth of every separately stated\nmanuscript lemma. Those are distinct independent Reviewer questions.\n"
+  },
+  "subject": {
+    "content_hash": "ff5daa300a2fa6e33b4ebb56022bede8da49bfd43b55bcf00d47f261751e8e26",
+    "kind": "claim",
+    "subject_id": "C9000158_MAIN"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

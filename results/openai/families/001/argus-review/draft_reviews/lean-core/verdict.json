@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "unit_id": "lean-core",
+  "assessment": {
+    "status": "supported_in_exact_stated_scope",
+    "summary": "All four abstract declarations are valid; source, fidelity, compiler receipt and PF-CORE v2 binding match. Geometric realization is not formalized.",
+    "statement_fidelity": "matches_all_four_abstract_statements",
+    "mathematical_defect_found": false
+  },
+  "result_class": "abstract_formal_proof",
+  "source": {
+    "input_root": "campaigns/9000001",
+    "attribution": "Historical Argus PF-CORE formalization using Mathlib; current contribution is reproduction and assessment.",
+    "claim_id": "PF-CORE",
+    "claim_version": 2,
+    "claim_content_hash": "0c811b6a6965ef5573ee50c7785d59fcdc672b699d5518aff4a3c11e68c3e9bd",
+    "source_sha256": "948a1aed68e838b8114db1388670d42cdc11d803675ef8b9ce0477227750b40d",
+    "fidelity_sha256": "3169c7b701f5791a5e6cfc4b2f34553e31b543a7c9468ab3c6709e5844aba69c"
+  },
+  "claims": [
+    {
+      "declaration": "PrescribedFiltration.frobenius_basis_change",
+      "quantifiers": "Every group G, every endomorphism sigma:G->*G, every b,g:G.",
+      "hypotheses": ["Group structure", "sigma is a group homomorphism"],
+      "conclusion": "sigma(g)^-1 * sigma(b) * sigma(sigma(g)) = sigma(g^-1 * b * sigma(g))",
+      "reason": "Preservation of multiplication and inverse.",
+      "axiom_dependencies": ["propext"]
+    },
+    {
+      "declaration": "PrescribedFiltration.representation_basis_change",
+      "quantifiers": "Every pair of groups G,H, homomorphisms sigma:G->*G, tau:H->*H, rho:G->*H, and b,g:G.",
+      "hypotheses": ["For every a:G, tau(rho(a)) = rho(sigma(a))"],
+      "conclusion": "rho(sigma(g))^-1 * rho(sigma(b)) * tau(rho(sigma(g))) = rho(sigma(g^-1 * b * sigma(g)))",
+      "reason": "Use compatibility at sigma(g), then homomorphism laws.",
+      "axiom_dependencies": ["propext"]
+    },
+    {
+      "declaration": "PrescribedFiltration.faithful_central_preimage",
+      "quantifiers": "Every pair of groups G,H, homomorphism rho:G->*H, and z:G.",
+      "hypotheses": [
+        "rho is injective",
+        "For every a:H, rho(z)*a = a*rho(z)"
+      ],
+      "conclusion": "For every g:G, z*g = g*z",
+      "reason": "Centrality at rho(g), multiplicativity, injectivity.",
+      "axiom_dependencies": []
+    },
+    {
+      "declaration": "PrescribedFiltration.propagate_tensor_equalities",
+      "quantifiers": "Every topological space X, index type I, value types A(i), fixed maps d_i:X->A(i), specified zero_i, and common predicate good.",
+      "hypotheses": [
+        "Every d_i is locally constant",
+        "For every x:X there exists good y in connectedComponent(x)",
+        "At every good y, for every i:I, d_i(y)=zero_i"
+      ],
+      "conclusion": "For every i:I and x:X, d_i(x)=zero_i",
+      "reason": "A locally constant map is constant on a preconnected connected component.",
+      "axiom_dependencies": ["propext", "Classical.choice", "Quot.sound"]
+    }
+  ],
+  "supported_scope": [
+    "Universal group identities, without finiteness or prime restrictions and without assuming sigma invertible.",
+    "Central preimage under an explicitly injective homomorphism.",
+    "Conditional simultaneous propagation of a fixed indexed family from a common good-point set.",
+    "Reuse of one historical PF-CORE v2 certificate; duplicate files and submission handle are not extra proofs."
+  ],
+  "limitations": [
+    "No abelian varieties, crystalline representations, local Shimura varieties, tensor torsors, admissible filtrations or universal quasi-isogenies are constructed.",
+    "Geometric local constancy, fixed-type interpretation of discrepancies, component coverage and simultaneous good-point values remain external obligations.",
+    "No scalar-center or group-scheme centrality identification is formalized.",
+    "Historical certificate does not hash imported Mathlib dependencies; current workspace manifest identifies its declared revision, not a separately pinned installed tree; the stdin run is supplemental.",
+    "Axiom-audit success is not a claim that transitive dependencies use no standard foundational axioms.",
+    "No certification or refutation of PF-REALIZATION or the surrounding manuscript."
+  ],
+  "evidence": [
+    {
+      "path": "research/prescribed-filtration-audit/Main.lean",
+      "role": "Exact four-declaration historical source; lean-evidence/Main.lean is byte-identical."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/statement_fidelity.md",
+      "role": "Exact abstract statement reading; lean-evidence copy is byte-identical."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/lean-evidence/certificates/PF-CORE-1814cc54e847468b.json",
+      "role": "Matching historical mechanical receipt for PF-CORE v2.",
+      "evidence_id": "lean-PF-CORE-7b64505ddbc9",
+      "sha256": "7160261299b80d2cb16a143238e10a8bfc6b5881482c954b409939c92a690f36"
+    },
+    {
+      "path": "research/prescribed-filtration-audit/lean-evidence/lean_check.json",
+      "role": "Compile and axiom-audit results, identical to certificate embedding."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/lean-evidence/compile.log",
+      "role": "Consistent historical compiler and audit log."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/lean-submit.json",
+      "role": "Submission provenance only, not a second successful proof."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/exact_certificate.json",
+      "role": "Broader bundle explicitly excludes full geometric kernel certification."
+    }
+  ],
+  "replay": {
+    "status": "PASS",
+    "receipt": "research/draft_reviews/lean-core/replay.json",
+    "command": "PYTHONDONTWRITEBYTECODE=1 $WORKSPACE/argus-latest/.venv/bin/python -B research/draft_reviews/lean-core/check_receipt.py",
+    "historical_certificate_match": true,
+    "historical_claim_hash_recomputed": true,
+    "historical_compile_exit_code": 0,
+    "historical_audit_exit_code": 0,
+    "historical_proof_holes": [],
+    "supplemental_command": ["$WORKSPACE/.elan/bin/lake", "env", "lean", "--stdin"],
+    "supplemental_cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "supplemental_exit_code": 0,
+    "supplemental_stderr": "",
+    "versions": {
+      "python": "3.13.5, Anaconda build, GCC 11.2.0",
+      "sympy": "not used by this driver",
+      "lean": "4.31.0",
+      "lean_commit": "68218e876d2a38b1985b8590fff244a83c321783",
+      "lake": "5.0.0-src+68218e8",
+      "elan": "4.2.3 (b6cec7e10)",
+      "current_mathlib_revision": "fabf563a7c95a166b8d7b6efca11c8b4dc9d911f",
+      "current_mathlib_revision_source": "Existing lake-manifest.json; installed dependency tree not independently pinned."
+    },
+    "historical_read_set_unchanged": true,
+    "new_lean_file": false,
+    "new_claim_bound_certificate": false,
+    "ledger_written": false
+  },
+  "contribution_type": {
+    "historical": "Abstract formalization of elementary group and topology arguments.",
+    "current": "Reproduction, exact receipt binding and scoped statement assessment; no new theorem claimed."
+  },
+  "novelty_status": "not assessed/not claimed",
+  "independent_review": "pending_native_reviewer"
+}

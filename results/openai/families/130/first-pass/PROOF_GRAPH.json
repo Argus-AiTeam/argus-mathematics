@@ -1,0 +1,182 @@
+{
+  "goal": "C9000130",
+  "routes": [
+    {"name": "R_NETWORK", "status": "current", "evidence": "research/network-audit/report.md"},
+    {"name": "R_NETWORK_TENSOR", "status": "current", "evidence": "research/network-audit/report.md"},
+    {"name": "R_PARAMETER_EXTENSION", "status": "current", "evidence": "research/network-audit/report.md"},
+    {"name": "R_EXPLICIT_FOURIER", "status": "untried", "evidence": "research/network-audit/report.md"},
+    {"name": "R_COMPANION_FOURIER", "status": "untried", "evidence": "research/network-audit/report.md"}
+  ],
+  "nodes": {
+    "C9000130": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 130 (Exact Fourier transforms below $`n\\log n`$.; papers: An explicit power saving for the exact discrete Fourier transform; Finite tensor savings and exact Fourier circuits; Lean status: Partially/Comparator formalized (lean/docs/130.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["N_TENSOR", "N_IMPROVED"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "N_SCALAR": {
+      "statement": "net:scalar: for arbitrary complex bank and auxiliary inputs, the eight-row invocation is (x,y,A,c) -> (x,y+x,A,c); the inverse middle stage gives the signed exchange (X,Y) -> (-Y,X) and restores every auxiliary.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_BINARY": {
+      "statement": "Every finite-dimensional nondegenerate symmetric binary bilinear space containing a norm-one vector admits an orthonormal basis; the unit-plus-hyperbolic-plane change is invertible and orthonormal.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md", "research/network-audit/jacobian_output.json"]
+    },
+    "N_EDGE": {
+      "statement": "net:edge: for nested nondegenerate subspaces of the ordinary binary dot space, an orthonormal residual basis of size rho factors Phi_V Phi_U^{-1} into rho forward or inverse kernels C_z; C_z^{-1}=R_z C_z.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_LABELS": {
+      "statement": "The actual chronological gate incidences and net:labels, including reversed stage 2, have nested nondegenerate endpoint labels; their nonzero residuals have norm-one vectors and orthonormal bases, with matching interstage boundaries.",
+      "status": "open", "depends_on": ["N_BINARY"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_RESIDUALS": {
+      "statement": "net:residuals for h=100: the physical-edge absolute dimension sum is s=1873807244636671267308000000, W=1873807244643542670000, m=1000000, and Wm-s=6871402692000000; auxiliary source/sink edges are included.",
+      "status": "open", "depends_on": ["N_LABELS"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_TERMINAL": {
+      "statement": "The exceptional routed X_d-to-Y_d frame ratio is R_{u_d} C^{tensor m}, wt(u_d)=27, whereas every other routed role has ratio C^{tensor m}; translations and the signed exchange correct all roles.",
+      "status": "open", "depends_on": ["N_SCALAR", "N_EDGE"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_LIFT": {
+      "statement": "Common-frame cancellation, directional conjugacy to selected-bit fibers, and terminal corrections hold for every integer f>=1 and arbitrary spectator bits; only address frames are tensor-powered, not the bank-role exchange.",
+      "status": "open", "depends_on": ["N_EDGE", "N_TERMINAL"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_INTERFACE": {
+      "statement": "net:finite-interface: for every integer f>=1 and every number of spectator bits, the h=100 network transforms each of W arbitrary arrays by C^{tensor mf} using exactly s grouped directional steps and only a fixed number of other pointwise maps and address permutations.",
+      "status": "open", "depends_on": ["N_SCALAR", "N_RESIDUALS", "N_TERMINAL", "N_LIFT"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_INDEX": {
+      "statement": "net:indexing: for fixed m and a fixed invertible binary column map, all-column address changes, fixed column translations and selected-bit fiber packing on k=mf+r bits cost O(2^k), including O(f+1) setup and data movement.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_TENSOR": {
+      "statement": "net:tensor-bound: W_star=2^71, S=(2^71)*1000000-6871402692000000 and lambda=S/W_star give t(k)<=A+lambda*t(floor(k/1000000)); exact batches imply C^{tensor k} costs O(2^k(k+1)^theta), theta=log_1000000(lambda)<1, for all k>=0.",
+      "status": "open", "depends_on": ["N_INTERFACE", "N_INDEX"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_GENERAL": {
+      "statement": "For every integer h>=7 the same triple network has the all-role all-f interface with m=h^3, v=binomial(h,3), I=3v^2, W=2v^3+I(v*(binomial(h-3,3)+3(h-3))+h+1) and s=Wm-2v^2(v-3h(h+1)); its strict saving holds exactly for integer h>=22.",
+      "status": "open", "depends_on": ["N_SCALAR", "N_LABELS", "N_EDGE", "N_LIFT"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "N_IMPROVED": {
+      "statement": "For h=25, the same all-role construction has m=15625, W=58645352620000, Delta=3703000000, W_star=2^46 and lambda=17179869126140625/1099511627776. Its charged tensor bound holds for every k>=0, and 1-log_15625(lambda) is greater than 1500 times the corresponding gap for the padded h=100 construction.",
+      "status": "open", "depends_on": ["N_GENERAL", "N_INDEX", "N_TENSOR"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md", "research/network-audit/exact_certificate.json"]
+    },
+    "E_LOCAL": {
+      "statement": "Unaudited loc:compiler: F_r(u) has an exact-width synchronized monomial/C-slot word of O(1+log^4 r) layers, with polynomial preparation and roots of order at most 8r.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "E_SECTORS": {
+      "statement": "Unaudited lem:sector-address: mixed-radix sector start is the stated prefix-product sum, and sector packing, unpacking and enumeration cost O(R).",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "E_SYNC": {
+      "statement": "Unaudited prop:tensor-fourier: the tensor product of Fourier factors of total length R costs O(R*(ell+1)^theta*(1+log r_max)^4) plus polynomial preparation.",
+      "status": "open", "depends_on": ["E_LOCAL", "E_SECTORS", "N_TENSOR"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "E_PRIMES": {
+      "statement": "Unaudited lem:prime-lengths: odd primes r_j=O((j+1)^2) give log(product r_j)=Theta(ell log ell) and ell=Theta(log n/log log n) for the maximal product below 2n, with polylogarithmic construction.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "E_LENGTH": {
+      "statement": "Unaudited working-length claim: the least L=R_ell*2^e>=2n satisfies 2n<=L<4n, 2^e<2r_{ell+1}, and e=O(log ell).",
+      "status": "open", "depends_on": ["E_PRIMES"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "E_CHIRP": {
+      "statement": "Unaudited chirp convolution and CRT transfer: the length-n Fourier transform reduces to three length-L transforms and O(L) charged preparation for L>=2n.",
+      "status": "open", "depends_on": ["E_LENGTH"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "E_ROOT": {
+      "statement": "Unaudited master-root claim: D*=(2n)L*2^ceil(log_2(16L))<1024n^3 supplies all chirp, factor and local roots as powers of one input root.",
+      "status": "open", "depends_on": ["E_LENGTH", "E_LOCAL"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "E_MAIN": {
+      "statement": "Unaudited primary main theorem: for every n the exact deterministic DFT has cost O(n*(log n)^theta*(log log n)^(4-theta)), using one supplied root of order D*<1024n^3.",
+      "status": "open", "depends_on": ["E_SYNC", "E_CHIRP", "E_ROOT"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_PRICE": {
+      "statement": "Unaudited thm:prices: a no-finite-win hypothesis yields normalized global matrix prices, zero on monomials, product-subadditive, tensor/direct-sum additive, and invariant under inverse, transpose and monomial changes.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_WORD": {
+      "statement": "Unaudited price:word-bounds: under the price axioms, identity padding is free, nontrivial elementary shears cost one and invertible 2-by-2 matrices cost at most two.",
+      "status": "open", "depends_on": ["Q_PRICE"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_BOUNDARY": {
+      "statement": "Unaudited lem:boundary-comparison: polynomial tensor evaluation modulo an admissible monic polynomial differs from its coefficient Toeplitz price by at most C_G*N*(t log(2t)+(k+1)^6), uniformly in the modulus.",
+      "status": "open", "depends_on": ["Q_PRICE", "Q_WORD"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_FEEDBACK": {
+      "statement": "Unaudited thm:feedback: for invertible K=[[M,C],[B,D]] with M invertible, a regular invertible H(s)=M+sC(I-sD)^(-1)B satisfies p(H(s))<=p(K), without assuming D invertible.",
+      "status": "open", "depends_on": ["Q_BOUNDARY", "Q_PRICE"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_SPECIAL": {
+      "statement": "Unaudited thm:specialization: a rational matrix regular and invertible at z0 inherits a generic price upper bound holding off a finite exceptional set.",
+      "status": "open", "depends_on": ["Q_BOUNDARY", "Q_PRICE"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_PIVOT": {
+      "statement": "Unaudited lem:pivot-bound: for invertible K=[[A,C],[B,D]] with A,D invertible, pivoting to [[A-CD^(-1)B,CD^(-1)],[-D^(-1)B,D^(-1)]] increases price by at most 4r.",
+      "status": "open", "depends_on": ["Q_FEEDBACK", "Q_WORD"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_SCALAR_PIVOT": {
+      "statement": "Unaudited lem:scalar-pivot: a one-coordinate pivot preserves price exactly, using the one-coordinate intersection argument.",
+      "status": "open", "depends_on": ["Q_PIVOT"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_DENSE": {
+      "statement": "Unaudited lem:pair-price: every invertible dense 2-by-2 complex matrix has price at most 3/2.",
+      "status": "open", "depends_on": ["Q_SCALAR_PIVOT", "Q_PRICE"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_REFLECT": {
+      "statement": "Unaudited sparse-reflection bound: reflection in the kernel of a real symmetric matrix with h supported off-diagonal pairs has price at most 3h/2+2w.",
+      "status": "open", "depends_on": ["Q_DENSE", "Q_FEEDBACK", "Q_SPECIAL"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_WIN": {
+      "statement": "Unaudited thm:finite-win: the reflection construction contradicts the no-win price bounds and yields a nonmonomial q-by-q matrix A whose tensor power A^{tensor b} uses fewer than b*q^(b-1) A-calls with free monomial maps.",
+      "status": "open", "depends_on": ["Q_REFLECT", "Q_PIVOT", "Q_PRICE"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_TRANSFER": {
+      "statement": "Unaudited prop:win-to-fourier: a finite tensor saving transfers to exact Fourier circuits with an asymptotic saving along an unbounded sequence of lengths.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    },
+    "Q_FOURIER": {
+      "statement": "Unaudited companion main claim: there are exact nonuniform complex Fourier circuits of size o(n log n) along an unbounded sequence, counting all additions, subtractions and scalar multiplications.",
+      "status": "open", "depends_on": ["Q_WIN", "Q_TRANSFER"], "reviewer_confirmed": false,
+      "evidence": ["research/network-audit/report.md"]
+    }
+  }
+}

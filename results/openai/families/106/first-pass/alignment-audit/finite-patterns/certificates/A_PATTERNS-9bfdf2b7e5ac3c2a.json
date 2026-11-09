@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-A_PATTERNS-9c87467acffc",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/106/first-pass/alignment-audit/finite-patterns/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/106/first-pass/alignment-audit/finite-patterns/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15383,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/106/first-pass/alignment-audit/finite-patterns/Main.lean",
+    "source_sha256": "1fdb5fc137297d30a28930eb89deb64b32d957855c927f7910d3fab7eec6cba7",
+    "statement_fidelity": "families/106/first-pass/alignment-audit/finite-patterns/statement_fidelity.md",
+    "statement_fidelity_sha256": "ccb4b620eee48c2da79d5027e808b4fd7541049eca0ae79572c885c1792f5062",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/alignment-audit/finite-patterns/Main.lean",
+    "text": "import Mathlib\n\nopen Finset\nopen scoped Classical\n\nnamespace AlignmentFinitePatterns\n\nuniverse u v w\n\ndef AlignedFamily {ι : Type u} {M : Type v} {β : Type w}\n    (A : ι → Finset M) (T : Finset ι) (C : ι → Finset β)\n    (B : Finset β) : Prop :=\n  ∃ a : M → β, (∀ x, a x ∈ B) ∧\n    ∀ i ∈ T, ∀ x ∈ A i, a x ∈ C i\n\ntheorem aligned_image_iff {ι : Type u} {M : Type v} {K : Type*} [DecidableEq K]\n    {β : Type w}\n    (A : ι → Finset M) (U : Finset M) (φ : M → K)\n    (hU : ∀ i, A i ⊆ U) (hinj : Set.InjOn φ U)\n    (T : Finset ι) (C : ι → Finset β) {B : Finset β} (hB : B.Nonempty) :\n    AlignedFamily (fun i => (A i).image φ) T C B ↔ AlignedFamily A T C B := by\n  constructor\n  · rintro ⟨a, haB, ha⟩\n    refine ⟨a ∘ φ, fun x => haB (φ x), ?_⟩\n    intro i hi x hx\n    exact ha i hi (φ x) (Finset.mem_image_of_mem φ hx)\n  · rintro ⟨a, haB, ha⟩\n    obtain ⟨b, hb⟩ := hB\n    let f : K → β := fun y =>\n      if hy : ∃ x, x ∈ U ∧ φ x = y then a hy.choose else b\n    refine ⟨f, ?_, ?_⟩\n    · intro y\n      dsimp [f]\n      split_ifs with hy\n      · exact haB hy.choose\n      · exact hb\n    · intro i hi y hy\n      obtain ⟨x, hx, hxy⟩ := Finset.mem_image.mp hy\n      have he : ∃ z, z ∈ U ∧ φ z = y := ⟨x, hU i hx, hxy⟩\n      have hrepr : he.choose = x :=\n        hinj he.choose_spec.1 (hU i hx) (he.choose_spec.2.trans hxy.symm)\n      dsimp [f]\n      rw [dif_pos he, hrepr]\n      exact ha i hi x hx\n\ntheorem finite_relabeling {ι : Type u} [Fintype ι] {M : Type v}\n    (A : ι → Finset M) (d : ℕ) (hd : ∀ i, (A i).card ≤ d) :\n    ∃ φ : M → Fin (d * Fintype.card ι + 1),\n      (∀ i, ((A i).image φ).card = (A i).card) ∧\n      (∀ i j, Disjoint ((A i).image φ) ((A j).image φ) ↔ Disjoint (A i) (A j)) ∧\n      (∀ (β : Type w) (T : Finset ι) (C : ι → Finset β)\n        (B : Finset β), B.Nonempty →\n        (AlignedFamily (fun i => (A i).image φ) T C B ↔ AlignedFamily A T C B)) ∧\n      (∀ i j, ∀ x ∈ A i, ∀ y ∈ A j, φ x = φ y ↔ x = y) := by\n  let U : Finset M := Finset.univ.biUnion A\n  have hU : ∀ i, A i ⊆ U := by\n    intro i x hx\n    exact Finset.mem_biUnion.mpr ⟨i, Finset.mem_univ _, hx⟩\n  have hcard : U.card ≤ d * Fintype.card ι := by\n    calc\n      U.card ≤ ∑ i, (A i).card := Finset.card_biUnion_le\n      _ ≤ ∑ _i : ι, d := Finset.sum_le_sum fun i _ => hd i\n      _ = d * Fintype.card ι := by simp [Nat.mul_comm]\n  have hbound : Fintype.card ↥U ≤ d * Fintype.card ι + 1 := by\n    simpa using hcard.trans (Nat.le_succ (d * Fintype.card ι))\n  let e : ↥U → Fin (d * Fintype.card ι + 1) := fun x =>\n    ⟨(Fintype.equivFin ↥U x).val, ((Fintype.equivFin ↥U x).isLt).trans_le hbound⟩\n  have he : Function.Injective e := by\n    intro x y hxy\n    apply (Fintype.equivFin ↥U).injective\n    apply Fin.ext\n    have hval : (e x).val = (e y).val := congrArg Fin.val hxy\n    exact hval\n  let φ : M → Fin (d * Fintype.card ι + 1) := fun x =>\n    if hx : x ∈ U then e ⟨x, hx⟩ else ⟨0, by omega⟩\n  have hinj : Set.InjOn φ U := by\n    intro x hx y hy hxy\n    change x ∈ U at hx\n    change y ∈ U at hy\n    have heq : e ⟨x, hx⟩ = e ⟨y, hy⟩ := by\n      simpa only [φ, dif_pos hx, dif_pos hy] using hxy\n    exact congrArg Subtype.val (he heq)\n  refine ⟨φ, ?_, ?_, ?_, ?_⟩\n  · intro i\n    exact Finset.card_image_of_injOn (hinj.mono (hU i))\n  · intro i j\n    constructor\n    · intro h\n      apply Finset.disjoint_left.mpr\n      intro x hx hy\n      exact Finset.disjoint_left.mp h\n        (Finset.mem_image_of_mem φ hx) (Finset.mem_image_of_mem φ hy)\n    · intro h\n      apply Finset.disjoint_left.mpr\n      intro z hz hz'\n      obtain ⟨x, hx, hxz⟩ := Finset.mem_image.mp hz\n      obtain ⟨y, hy, hyz⟩ := Finset.mem_image.mp hz'\n      have hxy : x = y := hinj (hU i hx) (hU j hy) (hxz.trans hyz.symm)\n      exact Finset.disjoint_left.mp h hx (hxy ▸ hy)\n  · intro β T C B hB\n    exact aligned_image_iff A U φ hU hinj T C hB\n  · intro i j x hx y hy\n    exact ⟨hinj (hU i hx) (hU j hy), fun h => congrArg φ h⟩\n\ntheorem representative_space_finite (ι : Type u) [Finite ι] (k : ℕ) :\n    Finite (ι → Finset (Fin k)) := by infer_instance\n\nend AlignmentFinitePatterns\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/alignment-audit/finite-patterns/statement_fidelity.md",
+    "text": "# Fidelity of the finite-pattern reduction\n\nThe claim is `A_PATTERNS`. This source proves a finite-universe\nrepresentative version of the manuscript's occupied-slot argument.\nIt is a general finite-family theorem, not a bounded experiment.\n\nThe indexing type `iota` is any finite type. For the manuscript it can\nbe the nonempty subsets of `[r]` of size at most `s`; alternatively\none may use all subsets and give excluded indices empty lists.\nThe label type `M` is completely arbitrary. The only size hypothesis\nis `card (A i) <= d` for each indexed finite list.\n\n`finite_relabeling` produces a map\n\n    phi : M -> Fin (d * card iota + 1).\n\nThe target size depends only on the number of lists and their size\nbound, not on `M` or the particular labels. The proof bounds the union\nof all lists by `d * card iota`, embeds that union in the finite\ntarget, and sends unused labels to a default value. The extra one\nensures that this default always exists, including for empty unions.\n\nThe conclusion proves all of the following:\n\n- Every list has exactly the same cardinality after relabeling.\n- Two relabeled lists are disjoint if and only if the original lists\n  are disjoint.\n- For any two labels appearing in any indexed lists,\n  `phi x = phi y` if and only if `x = y`.\n- Alignment on every nonempty target `B` is equivalent before and\n  after relabeling, for every chosen subfamily of constraints.\n\n`AlignedFamily A T C B` means a map from the whole label universe into\n`B` sends labels on list `A i` into `C i` for each `i` in `T`.\nTaking `T` to be all nonempty subsets of a sampled `B`, and `C I = I`,\nrecovers the exact manuscript conclusion. The arbitrary finite\nsubfamily `T` makes the equivalence valid after every restriction.\nThe nonemptiness hypothesis on `B` is precisely the manuscript's\n`s >= 1`, not an extra restriction on its application.\n\n`representative_space_finite` establishes that the type of all\nfamilies with this finite target is finite. Thus every actual family\nhas a representative in one fixed finite space preserving all\noccupied-slot equalities, lengths, separation, and badness. One may\nkeep each list's arbitrary slot order when applying `phi`; injectivity\non the used labels preserves that order's equality pattern.\n\nThe relabeling may depend on the input lists. This does not change the\nsampling quantifiers: a law chosen to work for **every** family in the\nfixed finite representative space consequently works for every\noriginal family in every universe. No sampler is constructed by this\nfile, and no minimax, Ramsey, probability-extension, or invariant-cut\nstatement is assumed or proved here.\n\nThe file introduces no project axioms. Its dependencies are ordinary\nMathlib finite-set cardinalities, finite-type equivalences, images,\nclassical choice, and function composition.\n"
+  },
+  "subject": {
+    "content_hash": "888eb0edf21cd7cf1d680ca561fd0926f8944d394de0429bff1925451ecadf2f",
+    "kind": "claim",
+    "subject_id": "A_PATTERNS"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

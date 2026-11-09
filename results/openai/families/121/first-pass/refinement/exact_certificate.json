@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "claim_id": "C121_L1_REFINEMENT",
+  "formal_core_claim_id": "C121_DEFECT_TRANSFER",
+  "result_class": "new_theorem",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "independent_review": {
+    "status": "required_pending",
+    "significance_status": "unreviewed",
+    "novelty_status": "unreviewed"
+  },
+  "scope": {
+    "result": "Error-sensitive fixed-seed refinement with actual L1 oracle-defect budgets",
+    "formal_core": "Universal first-crossing, finite-expectation, and root-excess transfer",
+    "end_to_end_edit_distance_lean": false,
+    "manuscript_application": "Complete mathematical argument in statement_fidelity.md; not kernel-closed",
+    "false_manuscript_assertions_established": [],
+    "upstream_prior": "physicalProgram_expected_state_excess already exists at openai/math commit 4eaee87548250b2682affda7d05d947c05554bae"
+  },
+  "manuscript": {
+    "directory": "research/openai_manuscript/An-Almost-Linear-Approximation-Scheme-for-Edit-Distance-September-24-2026/build/sections",
+    "target": "04-cones.tex",
+    "literal_fragments": [
+      "\\begin{theorem}[Refinement]\\label{thm:refinement}",
+      "0\\le U(I,q)\\le N,\\qquad c(I,q)\\le U(I,q)\\le A c(I,q).",
+      "d_S(I,q)\\ge c(I,q)/a,\\qquad \\E\\bigl[\\pos{d_S(I,q)-c(I,q)}\\bigr]\\le c(I,q)/\\ell.",
+      "the expectation in the second is conditional on the fixed table $U$.",
+      "At zero-cost states the returned value is zero for every outcome."
+    ],
+    "dependency_labels": {
+      "05-bands.tex": ["eq:refined-update", "lem:group-accuracy"],
+      "06-comparison.tex": ["lem:comparison-band", "eq:curvature-structural"],
+      "07-regret.tex": ["lem:entropy", "prop:node-regret"],
+      "08-accuracy.tex": ["eq:root-regret-telescope", "eq:total-error"]
+    }
+  },
+  "lean": {
+    "source": "research/refinement/Main.lean",
+    "statement_fidelity": "research/refinement/statement_fidelity.md",
+    "compiler_result": "research/refinement/lean_check.json",
+    "archive": "research/refinement/certificates/C121_DEFECT_TRANSFER-fe11c907fbfefff1.json",
+    "claim_version": 2,
+    "version": "4.31.0",
+    "allowed_axioms": ["propext", "Classical.choice", "Quot.sound"],
+    "declarations": [
+      "RefinementAudit.firstCrossing_defect_sum",
+      "RefinementAudit.expected_firstCrossing_defect",
+      "RefinementAudit.oracleDefect_minimal",
+      "RefinementAudit.root_excess_from_node_regrets",
+      "RefinementAudit.robust_accuracy",
+      "RefinementAudit.mean_product_kernel",
+      "RefinementAudit.root_accuracy_from_defect_budgets"
+    ]
+  },
+  "parameters": {
+    "e_min": 1000,
+    "variables": "ell=2^e, H=2^h, 2^(e-1)<=h<=ell, q=p_*+21",
+    "substitution": {
+      "J": "100 H/ell",
+      "inverse_T": "H^(-3/4)",
+      "inverse_S": "ell^2/H",
+      "F": "ell",
+      "M_upper": "H",
+      "inverse_P": "H^(-20)",
+      "tau": "ell^(-4)",
+      "kappa": "ell^(-4)",
+      "inverse_eta": "ell^(-5)",
+      "delta": "ell^(-10)"
+    },
+    "dominance": [
+      {"coefficient": "800", "H": "-18", "ell": "-1", "q": "0", "target": 0},
+      {"coefficient": "51200", "H": "-19", "ell": "0", "q": "0", "target": 0},
+      {"coefficient": "40000", "H": "-3/4", "ell": "4", "q": "0", "target": 1},
+      {"coefficient": "4000000", "H": "-79/4", "ell": "3", "q": "0", "target": 1},
+      {"coefficient": "4000000", "H": "-1/2", "ell": "3", "q": "0", "target": 1},
+      {"coefficient": "200", "H": "-1/4", "ell": "1", "q": "0", "target": 2},
+      {"coefficient": "26400", "H": "0", "ell": "-2", "q": "0", "target": 3},
+      {"coefficient": "51200", "H": "0", "ell": "-2", "q": "1", "target": 3},
+      {"coefficient": "400", "H": "0", "ell": "-9", "q": "0", "target": 3},
+      {"coefficient": "12800", "H": "-2", "ell": "0", "q": "0", "target": 4}
+    ],
+    "upper_terms": [
+      {"coefficient": "52000", "H": "-18", "ell": "0", "q": "0"},
+      {"coefficient": "8040000", "H": "-1/2", "ell": "4", "q": "0"},
+      {"coefficient": "200", "H": "-1/4", "ell": "1", "q": "0"},
+      {"coefficient": "1000000", "H": "0", "ell": "-2", "q": "1"},
+      {"coefficient": "13200", "H": "-2", "ell": "0", "q": "0"}
+    ],
+    "affine_exponent_bounds": [
+      {"purpose": "first allocation", "a": 1, "b": 19},
+      {"purpose": "second allocation", "a": 10, "b": 52},
+      {"purpose": "third allocation", "a": 8, "b": 44},
+      {"purpose": "fifth allocation", "a": 1, "b": 17},
+      {"purpose": "original oracle tax", "a": 1, "b": 12},
+      {"purpose": "ell^200 <= H^(1/100)", "a": 20000, "b": 0}
+    ],
+    "dyadic_ceilings": [
+      {"value": 416000, "power": 19},
+      {"value": 64320000, "power": 26},
+      {"value": 1600, "power": 11},
+      {"value": 105600, "power": 17},
+      {"value": 3200, "power": 12}
+    ],
+    "square_induction_difference": [398, 40, 1],
+    "baseline_allocation": "5/8",
+    "per_term_allocation": "1/8",
+    "original_defect_allocation": "1/8",
+    "allowed_defect_allocation": "3/8",
+    "original_total_allocation": "3/4"
+  },
+  "oracle_example": {
+    "is_edit_string_counterexample": false,
+    "horizon": 1,
+    "c": "1",
+    "delta": "1/10",
+    "kappa": "1/4",
+    "previous_action": "57/50",
+    "current_action": "1",
+    "online": "1",
+    "clipped_children": "1",
+    "cone": ["11/10", "57/50"],
+    "probabilities": ["1/2", "1/2"],
+    "oracle_defects": ["0", "3/200"],
+    "returned_values": ["1", "57/55"],
+    "expected_defect": "3/400",
+    "expected_positive_excess": "1/55",
+    "coarse_failure_tax_at_F_1": "1"
+  },
+  "jacobian": {
+    "operation_id": "probability.finite_distribution.raw_moment.compute",
+    "protocol_version": "2025-11-25",
+    "server_version": "0.14.0",
+    "payload": "research/refinement/jacobian_residual_payload.json",
+    "output": "research/refinement/jacobian_residual_output.json",
+    "adapter_exit_code": 0,
+    "status": "success",
+    "timeout": false,
+    "expected_moment": "3/400"
+  }
+}

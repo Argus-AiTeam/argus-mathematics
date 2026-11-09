@@ -1,0 +1,113 @@
+{
+  "goal": "C9000237",
+  "routes": {
+    "R_ARCH_SOURCE_BRIDGE": {
+      "name": "All-width local diagram, polynomial vacuum, and source interpolation proof",
+      "status": "active",
+      "evidence": "research/strip_arch_audit/report.md"
+    }
+  },
+  "nodes": {
+    "C9000237": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 237 (The three-quarter exponent for honeycomb self-avoiding walk.; papers: Radial transfer estimates and polygon length laws for honeycomb walks; Critical honeycomb chords with prescribed boundary endpoints; Cylinder loop weights and planar nesting; Mass and covering exponents for fixed-length honeycomb walks; Signed cylinder propagation and marked polygons on the honeycomb lattice; Cylinder amplitudes and logarithmic bridge-length windows on the honeycomb lattice; Marked polygon correlations and one-arc bounds; Disk transfer representations and confined bridge mass; Polynomial vacuum representations and bridge mass for honeycomb walks; Renewal and changes of law for critical honeycomb walks; Critical strip-crossing mass on the honeycomb lattice; Uniform marked-polygon estimates and sharp finite bridge moments; Cap-selected amplitudes and triangle chords for honeycomb walks; Lean status: Partially/Comparator formalized (lean/docs/237.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_ARCH_AUDIT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_ARCH_AUDIT": {
+      "statement": "Certify an admissible exact obstruction or an all-width proof for Proposition prop:arch-formula, with independent review and no assertion about the exponent from an intermediate obstruction alone.",
+      "status": "open",
+      "depends_on": ["C_ARCH_FORMULA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md", "research/strip_arch_audit/exact_certificate.json"]
+    },
+    "C_ARCH_FORMULA": {
+      "statement": "For every width, the physical arch moment equals the stated Pfaffian quotient coefficient, by the all-width proof in report.md; independent mathematical review is pending.",
+      "status": "open",
+      "depends_on": ["L_ARCH_CONVERGENCE", "L_ARCH_TRANSFER", "L_ARCH_REFLECTION", "L_ARCH_GLUING", "L_ARCH_PFAFFIAN", "L_ARCH_DEGREE", "L_ARCH_INTERPOLATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md", "research/strip_arch_audit/exact_certificate.json"]
+    },
+    "L_ARCH_CONVERGENCE": {
+      "statement": "At each fixed-width mixed physical/flat list, both restricted transfers have spectral radius less than one, giving regular stationary/source vectors and absolutely convergent path sums.",
+      "status": "open",
+      "depends_on": ["L_ARCH_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md", "research/strip_arch_audit/exact_certificate.json"]
+    },
+    "L_ARCH_TRANSFER": {
+      "statement": "Reconstruct the zero-loop vacuum and source column maps using the manuscript's nine diagrams and exact port ordering.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md", "research/strip_arch_audit/verify.py", "research/strip_arch_audit/exact_certificate.json"]
+    },
+    "L_ARCH_REFLECTION": {
+      "statement": "Settle the diagrammatic reflected source projection at merge and deletion specializations without replacing diagrammatic transpose by coordinate transpose.",
+      "status": "open",
+      "depends_on": ["L_ARCH_TRANSFER", "L_ARCH_CONVERGENCE", "C_ARCH_RESOLVENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md"]
+    },
+    "L_ARCH_GLUING": {
+      "statement": "Compute the occupancy- and connectivity-sensitive one-source gluing and justify its relation to the arch moment.",
+      "status": "open",
+      "depends_on": ["L_ARCH_TRANSFER", "L_ARCH_CONVERGENCE", "C_ARCH_RESOLVENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md"]
+    },
+    "L_ARCH_PFAFFIAN": {
+      "statement": "Evaluate the scalar Pfaffian quotient coefficient by polynomial continuation, including coincident physical rapidities.",
+      "status": "open",
+      "depends_on": ["L_ARCH_SCALAR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md"]
+    },
+    "L_ARCH_DEGREE": {
+      "statement": "Verify or refute the passage from the polynomial vacuum degree bound to the degree bound for p_N squared times the arch moment.",
+      "status": "open",
+      "depends_on": ["L_ARCH_VACUUM", "L_ARCH_TRANSFER", "L_ARCH_GLUING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md"]
+    },
+    "L_ARCH_INTERPOLATION": {
+      "statement": "If the preceding obligations hold, establish the reductions and sufficient distinct interpolation roots for every width; otherwise certify the precise obstruction.",
+      "status": "open",
+      "depends_on": ["L_ARCH_REFLECTION", "L_ARCH_GLUING", "L_ARCH_PFAFFIAN", "L_ARCH_DEGREE", "C_ARCH_INTERPOLATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md"]
+    },
+    "L_ARCH_SCALAR": {
+      "statement": "For every positive size, the continued Pfaffian is a symmetric polynomial with the stated degree, leading coefficient, and flat/merge/deletion rules; p_0=1 is a separate convention.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md", "research/strip_arch_audit/exact_certificate.json"]
+    },
+    "L_ARCH_VACUUM": {
+      "statement": "For every positive size, the deletion-node interpolant has no Laurent poles, has exponent bound 2N-2, and is stationary by the parity residual argument; hence it is p_N P_N. W_0=1 is a separate convention.",
+      "status": "open",
+      "depends_on": ["L_ARCH_TRANSFER", "L_ARCH_CONVERGENCE", "L_ARCH_SCALAR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/report.md"]
+    },
+    "C_ARCH_RESOLVENT": {
+      "statement": "The general projection/insertion/adjoint-pairing implications have a Lean 4.31.0 compiler certificate with zero proof holes. Independent statement-fidelity review is still pending.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/Main.lean", "research/strip_arch_audit/statement_fidelity.md", "research/strip_arch_audit/lean_evidence/certificates/C_ARCH_RESOLVENT-cc5ca50e72f28b73.json"]
+    },
+    "C_ARCH_INTERPOLATION": {
+      "statement": "Degree at most 2N and agreement on 4N-3 distinct nodes imply polynomial equality for N at least 2; proved as arch_interpolation in the compiled formal source.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/strip_arch_audit/Main.lean", "research/strip_arch_audit/lean_evidence/certificates/C_ARCH_RESOLVENT-cc5ca50e72f28b73.json"]
+    }
+  }
+}

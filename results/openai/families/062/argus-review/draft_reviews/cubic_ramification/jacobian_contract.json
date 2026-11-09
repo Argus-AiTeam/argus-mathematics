@@ -1,0 +1,454 @@
+{
+  "command": [
+    "$WORKSPACE/argus-live-update/.venv/bin/python",
+    "-m",
+    "argus_skill.tools.jacobian",
+    "inspect",
+    "--operation",
+    "polynomial.compute.discriminant"
+  ],
+  "cwd": "campaigns/9200062",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "started_at_utc": "2026-11-07T20:22:45.640879+00:00",
+  "timeout_seconds": 45,
+  "exit_code": 0,
+  "stdout": "{\"protocol_version\": \"2025-11-25\", \"request\": {\"request\": {\"op\": \"inspect\", \"operation_id\": \"polynomial.compute.discriminant\"}}, \"result\": {\"kind\": \"operation\", \"operation\": {\"description\": \"Compute the standard exact discriminant in one named variable over QQ.\", \"examples\": [{\"description\": \"Compute the discriminant of x\u00b2-1.\", \"input\": {\"polynomial\": {\"domain\": \"QQ\", \"polynomial\": {\"terms\": [{\"coefficient\": {\"den\": \"1\", \"num\": \"1\"}, \"exponents\": [2]}, {\"coefficient\": {\"den\": \"1\", \"num\": \"-1\"}, \"exponents\": [0]}]}, \"variables\": [\"x\"]}, \"variable\": \"x\"}, \"name\": \"discriminant_x2_minus_one\"}], \"input_schema\": {\"$defs\": {\"CanonicalRational\": {\"additionalProperties\": false, \"description\": \"A reduced rational whose denominator is positive and whose zero is 0/1.\", \"examples\": [{\"den\": \"2\", \"num\": \"1\"}], \"properties\": {\"den\": {\"description\": \"Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.\", \"examples\": [\"2\"], \"pattern\": \"^(?:0|-?[1-9][0-9]*)$\", \"title\": \"Den\", \"type\": \"string\"}, \"num\": {\"description\": \"Canonical decimal numerator of the reduced rational.\", \"examples\": [\"1\"], \"pattern\": \"^(?:0|-?[1-9][0-9]*)$\", \"title\": \"Num\", \"type\": \"string\"}}, \"required\": [\"num\", \"den\"], \"title\": \"CanonicalRational\", \"type\": \"object\"}, \"RationalPolynomial\": {\"additionalProperties\": false, \"description\": \"One sparse polynomial together with its exact coefficient ring.\", \"properties\": {\"domain\": {\"const\": \"QQ\", \"default\": \"QQ\", \"title\": \"Domain\", \"type\": \"string\"}, \"polynomial\": {\"$ref\": \"#/$defs/SparseRationalPolynomial\"}, \"variables\": {\"items\": {\"pattern\": \"^[A-Za-z][A-Za-z0-9_]{0,31}$\", \"type\": \"string\"}, \"maxItems\": 8, \"minItems\": 1, \"title\": \"Variables\", \"type\": \"array\"}}, \"required\": [\"variables\", \"polynomial\"], \"title\": \"RationalPolynomial\", \"type\": \"object\"}, \"RationalPolynomialTerm\": {\"additionalProperties\": false, \"properties\": {\"coefficient\": {\"$ref\": \"#/$defs/CanonicalRational\"}, \"exponents\": {\"items\": {\"type\": \"integer\"}, \"maxItems\": 8, \"minItems\": 0, \"title\": \"Exponents\", \"type\": \"array\"}}, \"required\": [\"coefficient\", \"exponents\"], \"title\": \"RationalPolynomialTerm\", \"type\": \"object\"}, \"SparseRationalPolynomial\": {\"additionalProperties\": false, \"properties\": {\"terms\": {\"default\": [], \"description\": \"Nonzero monomials in descending lexicographic order of their exponent tuples (highest first). For one variable, list [2] before [0].\", \"examples\": [[{\"coefficient\": {\"den\": \"1\", \"num\": \"1\"}, \"exponents\": [2]}, {\"coefficient\": {\"den\": \"1\", \"num\": \"-1\"}, \"exponents\": [0]}]], \"items\": {\"$ref\": \"#/$defs/RationalPolynomialTerm\"}, \"maxItems\": 4096, \"title\": \"Terms\", \"type\": \"array\"}}, \"title\": \"SparseRationalPolynomial\", \"type\": \"object\"}}, \"additionalProperties\": false, \"properties\": {\"polynomial\": {\"$ref\": \"#/$defs/RationalPolynomial\"}, \"variable\": {\"pattern\": \"^[A-Za-z][A-Za-z0-9_]{0,31}$\", \"title\": \"Variable\", \"type\": \"string\"}}, \"required\": [\"polynomial\", \"variable\"], \"title\": \"PolynomialDiscriminantRequest\", \"type\": \"object\"}, \"operation_id\": \"polynomial.compute.discriminant\", \"output_schema\": {\"$defs\": {\"CanonicalRational\": {\"additionalProperties\": false, \"description\": \"A reduced rational whose denominator is positive and whose zero is 0/1.\", \"examples\": [{\"den\": \"2\", \"num\": \"1\"}], \"properties\": {\"den\": {\"description\": \"Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.\", \"examples\": [\"2\"], \"pattern\": \"^(?:0|-?[1-9][0-9]*)$\", \"title\": \"Den\", \"type\": \"string\"}, \"num\": {\"description\": \"Canonical decimal numerator of the reduced rational.\", \"examples\": [\"1\"], \"pattern\": \"^(?:0|-?[1-9][0-9]*)$\", \"title\": \"Num\", \"type\": \"string\"}}, \"required\": [\"num\", \"den\"], \"title\": \"CanonicalRational\", \"type\": \"object\"}, \"PolynomialScalarValue\": {\"additionalProperties\": false, \"properties\": {\"kind\": {\"const\": \"SCALAR\", \"default\": \"SCALAR\", \"title\": \"Kind\", \"type\": \"string\"}, \"value\": {\"$ref\": \"#/$defs/CanonicalRational\"}}, \"required\": [\"value\"], \"title\": \"PolynomialScalarValue\", \"type\": \"object\"}, \"PolynomialValue\": {\"additionalProperties\": false, \"properties\": {\"kind\": {\"const\": \"POLYNOMIAL\", \"default\": \"POLYNOMIAL\", \"title\": \"Kind\", \"type\": \"string\"}, \"value\": {\"$ref\": \"#/$defs/RationalPolynomial\"}}, \"required\": [\"value\"], \"title\": \"PolynomialValue\", \"type\": \"object\"}, \"RationalPolynomial\": {\"additionalProperties\": false, \"description\": \"One sparse polynomial together with its exact coefficient ring.\", \"properties\": {\"domain\": {\"const\": \"QQ\", \"default\": \"QQ\", \"title\": \"Domain\", \"type\": \"string\"}, \"polynomial\": {\"$ref\": \"#/$defs/SparseRationalPolynomial\"}, \"variables\": {\"items\": {\"pattern\": \"^[A-Za-z][A-Za-z0-9_]{0,31}$\", \"type\": \"string\"}, \"maxItems\": 8, \"minItems\": 1, \"title\": \"Variables\", \"type\": \"array\"}}, \"required\": [\"variables\", \"polynomial\"], \"title\": \"RationalPolynomial\", \"type\": \"object\"}, \"RationalPolynomialTerm\": {\"additionalProperties\": false, \"properties\": {\"coefficient\": {\"$ref\": \"#/$defs/CanonicalRational\"}, \"exponents\": {\"items\": {\"type\": \"integer\"}, \"maxItems\": 8, \"minItems\": 0, \"title\": \"Exponents\", \"type\": \"array\"}}, \"required\": [\"coefficient\", \"exponents\"], \"title\": \"RationalPolynomialTerm\", \"type\": \"object\"}, \"SparseRationalPolynomial\": {\"additionalProperties\": false, \"properties\": {\"terms\": {\"default\": [], \"description\": \"Nonzero monomials in descending lexicographic order of their exponent tuples (highest first). For one variable, list [2] before [0].\", \"examples\": [[{\"coefficient\": {\"den\": \"1\", \"num\": \"1\"}, \"exponents\": [2]}, {\"coefficient\": {\"den\": \"1\", \"num\": \"-1\"}, \"exponents\": [0]}]], \"items\": {\"$ref\": \"#/$defs/RationalPolynomialTerm\"}, \"maxItems\": 4096, \"title\": \"Terms\", \"type\": \"array\"}}, \"title\": \"SparseRationalPolynomial\", \"type\": \"object\"}}, \"additionalProperties\": false, \"properties\": {\"convention\": {\"const\": \"STANDARD_UNIVARIATE\", \"default\": \"STANDARD_UNIVARIATE\", \"title\": \"Convention\", \"type\": \"string\"}, \"discriminant\": {\"discriminator\": {\"mapping\": {\"POLYNOMIAL\": \"#/$defs/PolynomialValue\", \"SCALAR\": \"#/$defs/PolynomialScalarValue\"}, \"propertyName\": \"kind\"}, \"oneOf\": [{\"$ref\": \"#/$defs/PolynomialScalarValue\"}, {\"$ref\": \"#/$defs/PolynomialValue\"}], \"title\": \"Discriminant\"}, \"variable\": {\"pattern\": \"^[A-Za-z][A-Za-z0-9_]{0,31}$\", \"title\": \"Variable\", \"type\": \"string\"}}, \"required\": [\"variable\", \"discriminant\"], \"title\": \"PolynomialDiscriminantResult\", \"type\": \"object\"}, \"read_only\": true, \"tags\": [\"polynomial\", \"discriminant\"], \"title\": \"Compute a polynomial discriminant\"}}, \"schema_version\": 1, \"server\": {\"description\": \"Search and run atomic, composable Jacobian tools for higher mathematics.\", \"icons\": null, \"name\": \"jacobian\", \"title\": \"Jacobian Mathematical Workbench\", \"version\": \"0.14.0\", \"websiteUrl\": null}, \"tool\": \"math.find\", \"tools\": [\"math.find\", \"math.run\"], \"transport\": \"mcp-stdio\"}\n",
+  "stderr": "",
+  "timed_out": false,
+  "response": {
+    "protocol_version": "2025-11-25",
+    "request": {
+      "request": {
+        "op": "inspect",
+        "operation_id": "polynomial.compute.discriminant"
+      }
+    },
+    "result": {
+      "kind": "operation",
+      "operation": {
+        "description": "Compute the standard exact discriminant in one named variable over QQ.",
+        "examples": [
+          {
+            "description": "Compute the discriminant of x\u00b2-1.",
+            "input": {
+              "polynomial": {
+                "domain": "QQ",
+                "polynomial": {
+                  "terms": [
+                    {
+                      "coefficient": {
+                        "den": "1",
+                        "num": "1"
+                      },
+                      "exponents": [
+                        2
+                      ]
+                    },
+                    {
+                      "coefficient": {
+                        "den": "1",
+                        "num": "-1"
+                      },
+                      "exponents": [
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "variables": [
+                  "x"
+                ]
+              },
+              "variable": "x"
+            },
+            "name": "discriminant_x2_minus_one"
+          }
+        ],
+        "input_schema": {
+          "$defs": {
+            "CanonicalRational": {
+              "additionalProperties": false,
+              "description": "A reduced rational whose denominator is positive and whose zero is 0/1.",
+              "examples": [
+                {
+                  "den": "2",
+                  "num": "1"
+                }
+              ],
+              "properties": {
+                "den": {
+                  "description": "Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.",
+                  "examples": [
+                    "2"
+                  ],
+                  "pattern": "^(?:0|-?[1-9][0-9]*)$",
+                  "title": "Den",
+                  "type": "string"
+                },
+                "num": {
+                  "description": "Canonical decimal numerator of the reduced rational.",
+                  "examples": [
+                    "1"
+                  ],
+                  "pattern": "^(?:0|-?[1-9][0-9]*)$",
+                  "title": "Num",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "num",
+                "den"
+              ],
+              "title": "CanonicalRational",
+              "type": "object"
+            },
+            "RationalPolynomial": {
+              "additionalProperties": false,
+              "description": "One sparse polynomial together with its exact coefficient ring.",
+              "properties": {
+                "domain": {
+                  "const": "QQ",
+                  "default": "QQ",
+                  "title": "Domain",
+                  "type": "string"
+                },
+                "polynomial": {
+                  "$ref": "#/$defs/SparseRationalPolynomial"
+                },
+                "variables": {
+                  "items": {
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$",
+                    "type": "string"
+                  },
+                  "maxItems": 8,
+                  "minItems": 1,
+                  "title": "Variables",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "variables",
+                "polynomial"
+              ],
+              "title": "RationalPolynomial",
+              "type": "object"
+            },
+            "RationalPolynomialTerm": {
+              "additionalProperties": false,
+              "properties": {
+                "coefficient": {
+                  "$ref": "#/$defs/CanonicalRational"
+                },
+                "exponents": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 0,
+                  "title": "Exponents",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "coefficient",
+                "exponents"
+              ],
+              "title": "RationalPolynomialTerm",
+              "type": "object"
+            },
+            "SparseRationalPolynomial": {
+              "additionalProperties": false,
+              "properties": {
+                "terms": {
+                  "default": [],
+                  "description": "Nonzero monomials in descending lexicographic order of their exponent tuples (highest first). For one variable, list [2] before [0].",
+                  "examples": [
+                    [
+                      {
+                        "coefficient": {
+                          "den": "1",
+                          "num": "1"
+                        },
+                        "exponents": [
+                          2
+                        ]
+                      },
+                      {
+                        "coefficient": {
+                          "den": "1",
+                          "num": "-1"
+                        },
+                        "exponents": [
+                          0
+                        ]
+                      }
+                    ]
+                  ],
+                  "items": {
+                    "$ref": "#/$defs/RationalPolynomialTerm"
+                  },
+                  "maxItems": 4096,
+                  "title": "Terms",
+                  "type": "array"
+                }
+              },
+              "title": "SparseRationalPolynomial",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "properties": {
+            "polynomial": {
+              "$ref": "#/$defs/RationalPolynomial"
+            },
+            "variable": {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$",
+              "title": "Variable",
+              "type": "string"
+            }
+          },
+          "required": [
+            "polynomial",
+            "variable"
+          ],
+          "title": "PolynomialDiscriminantRequest",
+          "type": "object"
+        },
+        "operation_id": "polynomial.compute.discriminant",
+        "output_schema": {
+          "$defs": {
+            "CanonicalRational": {
+              "additionalProperties": false,
+              "description": "A reduced rational whose denominator is positive and whose zero is 0/1.",
+              "examples": [
+                {
+                  "den": "2",
+                  "num": "1"
+                }
+              ],
+              "properties": {
+                "den": {
+                  "description": "Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.",
+                  "examples": [
+                    "2"
+                  ],
+                  "pattern": "^(?:0|-?[1-9][0-9]*)$",
+                  "title": "Den",
+                  "type": "string"
+                },
+                "num": {
+                  "description": "Canonical decimal numerator of the reduced rational.",
+                  "examples": [
+                    "1"
+                  ],
+                  "pattern": "^(?:0|-?[1-9][0-9]*)$",
+                  "title": "Num",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "num",
+                "den"
+              ],
+              "title": "CanonicalRational",
+              "type": "object"
+            },
+            "PolynomialScalarValue": {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "SCALAR",
+                  "default": "SCALAR",
+                  "title": "Kind",
+                  "type": "string"
+                },
+                "value": {
+                  "$ref": "#/$defs/CanonicalRational"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "title": "PolynomialScalarValue",
+              "type": "object"
+            },
+            "PolynomialValue": {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "const": "POLYNOMIAL",
+                  "default": "POLYNOMIAL",
+                  "title": "Kind",
+                  "type": "string"
+                },
+                "value": {
+                  "$ref": "#/$defs/RationalPolynomial"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "title": "PolynomialValue",
+              "type": "object"
+            },
+            "RationalPolynomial": {
+              "additionalProperties": false,
+              "description": "One sparse polynomial together with its exact coefficient ring.",
+              "properties": {
+                "domain": {
+                  "const": "QQ",
+                  "default": "QQ",
+                  "title": "Domain",
+                  "type": "string"
+                },
+                "polynomial": {
+                  "$ref": "#/$defs/SparseRationalPolynomial"
+                },
+                "variables": {
+                  "items": {
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$",
+                    "type": "string"
+                  },
+                  "maxItems": 8,
+                  "minItems": 1,
+                  "title": "Variables",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "variables",
+                "polynomial"
+              ],
+              "title": "RationalPolynomial",
+              "type": "object"
+            },
+            "RationalPolynomialTerm": {
+              "additionalProperties": false,
+              "properties": {
+                "coefficient": {
+                  "$ref": "#/$defs/CanonicalRational"
+                },
+                "exponents": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 0,
+                  "title": "Exponents",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "coefficient",
+                "exponents"
+              ],
+              "title": "RationalPolynomialTerm",
+              "type": "object"
+            },
+            "SparseRationalPolynomial": {
+              "additionalProperties": false,
+              "properties": {
+                "terms": {
+                  "default": [],
+                  "description": "Nonzero monomials in descending lexicographic order of their exponent tuples (highest first). For one variable, list [2] before [0].",
+                  "examples": [
+                    [
+                      {
+                        "coefficient": {
+                          "den": "1",
+                          "num": "1"
+                        },
+                        "exponents": [
+                          2
+                        ]
+                      },
+                      {
+                        "coefficient": {
+                          "den": "1",
+                          "num": "-1"
+                        },
+                        "exponents": [
+                          0
+                        ]
+                      }
+                    ]
+                  ],
+                  "items": {
+                    "$ref": "#/$defs/RationalPolynomialTerm"
+                  },
+                  "maxItems": 4096,
+                  "title": "Terms",
+                  "type": "array"
+                }
+              },
+              "title": "SparseRationalPolynomial",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "properties": {
+            "convention": {
+              "const": "STANDARD_UNIVARIATE",
+              "default": "STANDARD_UNIVARIATE",
+              "title": "Convention",
+              "type": "string"
+            },
+            "discriminant": {
+              "discriminator": {
+                "mapping": {
+                  "POLYNOMIAL": "#/$defs/PolynomialValue",
+                  "SCALAR": "#/$defs/PolynomialScalarValue"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/PolynomialScalarValue"
+                },
+                {
+                  "$ref": "#/$defs/PolynomialValue"
+                }
+              ],
+              "title": "Discriminant"
+            },
+            "variable": {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$",
+              "title": "Variable",
+              "type": "string"
+            }
+          },
+          "required": [
+            "variable",
+            "discriminant"
+          ],
+          "title": "PolynomialDiscriminantResult",
+          "type": "object"
+        },
+        "read_only": true,
+        "tags": [
+          "polynomial",
+          "discriminant"
+        ],
+        "title": "Compute a polynomial discriminant"
+      }
+    },
+    "schema_version": 1,
+    "server": {
+      "description": "Search and run atomic, composable Jacobian tools for higher mathematics.",
+      "icons": null,
+      "name": "jacobian",
+      "title": "Jacobian Mathematical Workbench",
+      "version": "0.14.0",
+      "websiteUrl": null
+    },
+    "tool": "math.find",
+    "tools": [
+      "math.find",
+      "math.run"
+    ],
+    "transport": "mcp-stdio"
+  },
+  "duration_seconds": 3.214822
+}

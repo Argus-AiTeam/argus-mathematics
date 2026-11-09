@@ -1,0 +1,152 @@
+{
+  "goal": "C9000089",
+  "routes": {
+    "R89_PLANAR_MANUSCRIPT": {
+      "goal": "P89_MAIN",
+      "obligations": ["P89_GEOMETRY", "P89_INTERPOLATION", "P89_ASSEMBLY"]
+    },
+    "R89_TREEWIDTH_MANUSCRIPT": {
+      "goal": "T89_MAIN",
+      "obligations": ["T89_PARTICLES", "T89_COBAG", "T89_ANCHORS", "T89_LOWER"]
+    },
+    "R89_LOCALIZATION_PROOF": {
+      "goal": "P89_LOCALIZATION",
+      "obligations": ["L89_CORE", "L89_BRIDGE"]
+    },
+    "R89_COUNT_FROM_CORE": {
+      "goal": "L89_COUNT",
+      "obligations": ["L89_CORE"]
+    },
+    "R89_BRIDGE_INPUTS": {
+      "goal": "L89_BRIDGE",
+      "obligations": ["G89_GEODESICS", "G89_PADDING"]
+    }
+  },
+  "nodes": {
+    "C9000089": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 089 (Bounded-distortion <i>L</i><sub>1</sub> embeddings of planar and bounded-treewidth graphs.; papers: Planar Graph Metrics Embed into L1 with Constant Distortion; L1 Embeddings of Graphs of Bounded Treewidth; Lean status: Partially/Comparator formalized (lean/docs/089.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["P89_LOCALIZATION", "P89_PACK"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "P89_MAIN": {
+      "statement": "Planar manuscript thm:main: a universal L1 distortion bound for all finite positively weighted planar graphs.",
+      "status": "open", "depends_on": ["P89_GEOMETRY", "P89_INTERPOLATION", "P89_ASSEMBLY"],
+      "reviewer_confirmed": false, "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/introduction.tex"]
+    },
+    "P89_GEOMETRY": {
+      "statement": "Column realization, geodesics, noncrossing separation, connected distance sublevels, radial cells, and padding (geometry.tex).",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/geometry.tex"]
+    },
+    "P89_INTERPOLATION": {
+      "statement": "int:interpolation: switch-respecting approximation with shared atoms and chart control.",
+      "status": "open", "depends_on": ["P89_GEOMETRY"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/interpolation.tex"]
+    },
+    "P89_MAIN_RAY": {
+      "statement": "main:ray: failure of the main raise supplies a descending shortest path and its prefix inequality.",
+      "status": "open", "depends_on": ["P89_GEOMETRY", "P89_INTERPOLATION"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/main-packing.tex"]
+    },
+    "P89_BARRIER": {
+      "statement": "pack:barrier: a sufficiently low nearby separating tip provides component-refined separation.",
+      "status": "open", "depends_on": ["P89_GEOMETRY"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/main-packing.tex"]
+    },
+    "P89_LOCALIZATION": {
+      "statement": "pack:near-path: every selected surviving seed in the narrow-band ball is within j+epsilon+2a1 of two extremal paths of length at most 4R.",
+      "status": "open", "depends_on": ["L89_CORE", "L89_BRIDGE"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/main-packing.tex"]
+    },
+    "P89_PACK": {
+      "statement": "pack:bound: at most 2+ceil(1600R/g) surviving groups meet a narrow-band ball of radius 4R.",
+      "status": "open", "depends_on": ["P89_LOCALIZATION", "L89_COUNT", "G89_PADDING"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/main-packing.tex"]
+    },
+    "P89_SECONDARY": {
+      "statement": "sec:admitted-success and sec:remaining: isolated secondary proposals or transverse increments separate surviving pairs.",
+      "status": "open", "depends_on": ["P89_PACK", "P89_INTERPOLATION"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/secondary.tex"]
+    },
+    "P89_PERSISTENCE": {
+      "statement": "pad:persistence: chart-splitting probabilities are bounded independently of column count and construction history.",
+      "status": "open", "depends_on": ["P89_PACK", "P89_INTERPOLATION", "P89_SECONDARY"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/assembly.tex"]
+    },
+    "P89_ASSEMBLY": {
+      "statement": "Movement, local success, chart persistence, and scale spacing assemble the planar L1 embedding.",
+      "status": "open", "depends_on": ["P89_MAIN_RAY", "P89_BARRIER", "P89_SECONDARY", "P89_PERSISTENCE"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/assembly.tex"]
+    },
+    "T89_MAIN": {
+      "statement": "Treewidth thm:main: for bag size k a distortion bound C_k is independent of graph size, decomposition depth, and edge-length ratios.",
+      "status": "open", "depends_on": ["T89_PARTICLES", "T89_COBAG", "T89_ANCHORS", "T89_LOWER"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/L1-Embeddings-of-Graphs-of-Bounded-Treewidth-September-23-2026/build/01-introduction.tex"]
+    },
+    "T89_PARTICLES": {
+      "statement": "lem:trace-update, lem:particle-bounds, prop:particle-realization: arbitrarily many updates preserve bag traces and a uniform Lipschitz invariant.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/L1-Embeddings-of-Graphs-of-Bounded-Treewidth-September-23-2026/build/03-particles.tex"]
+    },
+    "T89_COBAG": {
+      "statement": "prop:cobag: padded perturbations and reservations give a co-bag lower comparison and a uniform upper comparison.",
+      "status": "open", "depends_on": ["T89_PARTICLES", "T89_PADDED", "T89_TRANSPORT"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/L1-Embeddings-of-Graphs-of-Bounded-Treewidth-September-23-2026/build/04-perturbations.tex"]
+    },
+    "T89_PADDED": {
+      "statement": "thm:padded: bounded-treewidth metrics have partitions with uniform diameter and padding parameters depending only on bag size.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/L1-Embeddings-of-Graphs-of-Bounded-Treewidth-September-23-2026/build/04-perturbations.tex"]
+    },
+    "T89_CKR": {
+      "statement": "CKR arXiv:1006.3970v2 Theorem 4.4: the quoted symmetric bounded-state Markov-flow bound. Not rechecked in this mission.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/L1-Embeddings-of-Graphs-of-Bounded-Treewidth-September-23-2026/build/02-cut-laws.tex"]
+    },
+    "T89_TRANSPORT": {
+      "statement": "lem:gluing and prop:uncertainty: consistent bag laws glue and common-submeasure uncertainty transports along arbitrary bag paths.",
+      "status": "open", "depends_on": ["T89_CKR"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/L1-Embeddings-of-Graphs-of-Bounded-Treewidth-September-23-2026/build/02-cut-laws.tex"]
+    },
+    "T89_ANCHORS": {
+      "statement": "lem:cache-defined and lem:anchor-tests: a bounded deterministic anchor cache supports persistent reservations and uncertainty tests.",
+      "status": "open", "depends_on": ["T89_PARTICLES", "T89_PADDED", "T89_TRANSPORT"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/L1-Embeddings-of-Graphs-of-Bounded-Treewidth-September-23-2026/build/05-anchors.tex"]
+    },
+    "T89_LOWER": {
+      "statement": "prop:combined-lower via youngest-crossing, old-distant, obstruction, protected-successor and younger-crossing anchor lemmas.",
+      "status": "open", "depends_on": ["T89_COBAG", "T89_ANCHORS"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/L1-Embeddings-of-Graphs-of-Bounded-Treewidth-September-23-2026/build/06-lower-comparison.tex"]
+    },
+    "L89_CORE": {
+      "statement": "For arbitrary noncrossing models with a bounded broad-path relation, genuine-distance profiles, and retained witnesses, all finite seed families localize within j+err+2a of two length-L extreme traces; b-separated chosen seeds satisfy card <= 2+2L/(b-2rho). The manuscript constants give card <= 800160050.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/packing_audit/Main.lean", "research/packing_audit/statement_fidelity.md", "research/packing_audit/localization.md", "research/packing_audit/exact_certificate.json", "research/packing_audit/certificates/L89_CORE-f1e95243444a89d2.json"]
+    },
+    "L89_BRIDGE": {
+      "statement": "The actual distance field, eligibility, bands, terminal switches, and witness selection in pack:bound satisfy the hypotheses of L89_CORE.",
+      "status": "open", "depends_on": ["G89_GEODESICS", "G89_PADDING"], "reviewer_confirmed": false,
+      "evidence": ["research/packing_audit/localization.md", "research/packing_audit/statement_fidelity.md"]
+    },
+    "L89_COUNT": {
+      "statement": "Pairwise broad-intrinsic b-separated seeds with broad locating paths of length rho to two length-L paths have cardinality at most 2+2L/(b-2rho), when b>2rho.",
+      "status": "open", "depends_on": ["L89_CORE"], "reviewer_confirmed": false,
+      "evidence": ["research/packing_audit/Main.lean", "research/packing_audit/localization.md"]
+    },
+    "G89_GEODESICS": {
+      "statement": "geo:geodesics: finite closed-switch column quotients have component metrics, attained finite shortest words, and the stated vertical transfers.",
+      "status": "open", "depends_on": [], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/geometry.tex"]
+    },
+    "G89_PADDING": {
+      "statement": "geo:padding: under a1<=g/1000, points whose radial values are farther than 0.02g from layer interfaces and lie in distinct width-g cells have broad intrinsic distance greater than 0.01g.",
+      "status": "open", "depends_on": ["G89_GEODESICS"], "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Planar-Graph-Metrics-Embed-into-L1-with-Constant-Distortion-September-23-2026/build/sections/geometry.tex"]
+    }
+  }
+}

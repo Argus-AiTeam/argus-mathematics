@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-L_TATE_RANK9000311-3bbe0c1def90",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/311/first-pass/tate_jacobian/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6857,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/311/first-pass/tate_jacobian/lean/Main.lean",
+    "source_sha256": "ed4d2e889bcc50abc318379148036000e74b4345711bb24a8ee6b86e6602061f",
+    "statement_fidelity": "families/311/first-pass/tate_jacobian/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "3aab7a541136598aab932df173e9a479566dd2a576c1cf7136d238cc8da78985",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/311/first-pass/tate_jacobian/lean/Main.lean:67:2: warning: 'change t (P y) = s (P y)' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/311/first-pass/tate_jacobian/lean/Main.lean:88:9: error(lean.unknownIdentifier): Unknown constant `Matrix.isUnit_iff_isUnit_det.mp`\nfamilies/311/first-pass/tate_jacobian/lean/Main.lean:101:6: error: Type mismatch: After simplification, term\n  htrivial v hv\n has type\n  KS (0, v) = 0\nbut is expected to have type\n  KS (0, v) = KS (0, 0)\nfamilies/311/first-pass/tate_jacobian/lean/Main.lean:108:9: error(lean.unknownIdentifier): Unknown constant `Matrix.isUnit_iff_isUnit_det.mp`\n'TateJacobian.frobenius_ignores_square_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'TateJacobian.linearized_inseparable_polynomial' depends on axioms: [propext, Classical.choice, Quot.sound]\n'TateJacobian.section_of_kernel_annihilation' depends on axioms: [propext, Classical.choice, Quot.sound]\n'TateJacobian.etale_block_det_ne_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'TateJacobian.det_ne_zero_from_trivial_deformation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/tate_jacobian/lean/Main.lean",
+    "text": "import Mathlib\n\nset_option autoImplicit false\n\nnamespace TateJacobian\n\ntheorem frobenius_ignores_square_zero\n    {R : Type*} [CommRing R] (p : ℕ) [Fact p.Prime] [CharP R p]\n    (a b : R) (hb : b ^ 2 = 0) :\n    (a + b) ^ p = a ^ p := by\n  have hp : 2 ≤ p := (Fact.out : p.Prime).two_le\n  have hz : b ^ p = 0 := by\n    calc\n      b ^ p = b ^ (2 + (p - 2)) := by congr 1; omega\n      _ = b ^ 2 * b ^ (p - 2) := pow_add b 2 (p - 2)\n      _ = 0 := by rw [hb, zero_mul]\n  rw [add_pow_char a b p, hz, add_zero]\n\ntheorem linearized_inseparable_polynomial\n    {R I : Type*} [CommRing R] (p : ℕ) [Fact p.Prime] [CharP R p]\n    (S : Finset I) (a b : I → R) (k : I → ℕ)\n    (e t s : R) (he : e ^ 2 = 0) :\n    (∑ i ∈ S, (a i + e * b i) * (t + e * s) ^ (p * k i)) =\n      (∑ i ∈ S, a i * t ^ (p * k i)) +\n        e * (∑ i ∈ S, b i * t ^ (p * k i)) := by\n  have hes : (e * s) ^ 2 = 0 := by rw [mul_pow, he, zero_mul]\n  have hf : (t + e * s) ^ p = t ^ p :=\n    frobenius_ignores_square_zero p t (e * s) hes\n  have hk (i : I) : (t + e * s) ^ (p * k i) = t ^ (p * k i) := by\n    simp only [pow_mul, hf]\n  calc\n    (∑ i ∈ S, (a i + e * b i) * (t + e * s) ^ (p * k i)) =\n        ∑ i ∈ S, (a i * t ^ (p * k i) + e * (b i * t ^ (p * k i))) := by\n      apply Finset.sum_congr rfl\n      intro i hi\n      rw [hk i]\n      ring\n    _ = (∑ i ∈ S, a i * t ^ (p * k i)) +\n        e * (∑ i ∈ S, b i * t ^ (p * k i)) := by\n      rw [Finset.sum_add_distrib, Finset.mul_sum]\n\ntheorem section_of_kernel_annihilation\n    {E₁ E₂ G : Type*}\n    [AddCommGroup E₁] [AddCommGroup E₂] [AddCommGroup G]\n    (P : E₁ →+ E₂) (pi : G →+ E₂) (W : E₁ →+ G)\n    (hP : Function.Surjective P) (hker : P.ker ≤ W.ker)\n    (hquot : pi.comp W = P) :\n    ∃! s : E₂ →+ G, s.comp P = W ∧ pi.comp s = AddMonoidHom.id E₂ := by\n  classical\n  let s : E₂ →+ G := P.liftOfSurjective hP ⟨W, hker⟩\n  have hs : s.comp P = W :=\n    AddMonoidHom.liftOfRightInverse_comp P (Function.surjInv hP)\n      (Function.rightInverse_surjInv hP) ⟨W, hker⟩\n  have hpi : pi.comp s = AddMonoidHom.id E₂ := by\n    ext x\n    obtain ⟨y, rfl⟩ := hP x\n    have hsy : s (P y) = W y :=\n      congrArg (fun f : E₁ →+ G => f y) hs\n    have hqy : pi (W y) = P y :=\n      congrArg (fun f : E₁ →+ E₂ => f y) hquot\n    change pi (s (P y)) = P y\n    rw [hsy, hqy]\n  refine ⟨s, ⟨hs, hpi⟩, ?_⟩\n  intro t ht\n  ext x\n  obtain ⟨y, rfl⟩ := hP x\n  change t (P y) = s (P y)\n  exact (congrArg (fun f : E₁ →+ G => f y) ht.1).trans\n    (congrArg (fun f : E₁ →+ G => f y) hs).symm\n\ntheorem etale_block_det_ne_zero\n    {K : Type*} [Field K] (a r : ℕ)\n    (L : ((Fin a → K) × (Fin r → K)) →ₗ[K]\n      ((Fin a → K) × (Fin r → K)))\n    (hL : Function.Injective L)\n    (M : Matrix (Fin r) (Fin r) K)\n    (hconnected : ∀ v, (L (0, v)).1 = 0)\n    (hetale : ∀ v, (L (0, v)).2 = M.mulVec v) :\n    M.det ≠ 0 := by\n  have hM : Function.Injective M.mulVec := by\n    intro v w h\n    have hpair : L (0, v) = L (0, w) := by\n      apply Prod.ext\n      · rw [hconnected v, hconnected w]\n      · rw [hetale v, hetale w]\n        exact h\n    exact congrArg Prod.snd (hL hpair)\n  exact (Matrix.isUnit_iff_isUnit_det.mp\n    (Matrix.mulVec_injective_iff_isUnit.mp hM)).ne_zero\n\ntheorem det_ne_zero_from_trivial_deformation\n    {K V : Type*} [Field K] [AddCommGroup V] [Module K V] (a r : ℕ)\n    (KS : ((Fin a → K) × (Fin r → K)) →ₗ[K] V)\n    (hKS : Function.Injective KS)\n    (M : Matrix (Fin r) (Fin r) K)\n    (htrivial : ∀ v, M.mulVec v = 0 → KS (0, v) = 0) :\n    M.det ≠ 0 := by\n  have hker : ∀ v, M.mulVec v = 0 → v = 0 := by\n    intro v hv\n    have hzero : KS (0, v) = KS (0, 0) := by\n      simpa only [map_zero] using htrivial v hv\n    exact congrArg Prod.snd (hKS hzero)\n  have hM : Function.Injective M.mulVec := by\n    intro v w h\n    apply sub_eq_zero.mp\n    apply hker\n    rw [Matrix.mulVec_sub, h, sub_self]\n  exact (Matrix.isUnit_iff_isUnit_det.mp\n    (Matrix.mulVec_injective_iff_isUnit.mp hM)).ne_zero\n\n#print axioms frobenius_ignores_square_zero\n#print axioms linearized_inseparable_polynomial\n#print axioms section_of_kernel_annihilation\n#print axioms etale_block_det_ne_zero\n#print axioms det_ne_zero_from_trivial_deformation\n\nend TateJacobian\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/tate_jacobian/lean/statement_fidelity.md",
+    "text": "# Statement fidelity for L_TATE_RANK9000311\n\n`Main.lean` formalizes algebraic cores of the finite-level proof in\n`research/tate_jacobian/report.md`. It does not formalize p-divisible groups,\ntheir deformation functors, a Tate-module construction, analytic convergence,\nor the application of the cited literature. In particular a successful\ncompilation is not a kernel proof of `C_TATE9000311`.\n\nAll five declarations are in namespace `TateJacobian`.\n\n## Frobenius and linearized p-series\n\n`frobenius_ignores_square_zero` quantifies over every commutative ring R,\nevery natural prime p with characteristic-p instance, and a,b in R.\nIts only nilpotence hypothesis is b^2=0, and its conclusion is\n(a+b)^p=a^p. In the application b is any infinitesimal coordinate.\nThe statement does not require that Frobenius fix a; C is perfect but\nnot the prime field.\n\n`linearized_inseparable_polynomial` quantifies over every such R and p,\nan arbitrary index type and finite set S, coefficient functions a,b,\nnonnegative exponent multipliers k, and elements e,t,s with e^2=0.\nIt proves exactly\n\n    sum_(i in S) (a_i+e*b_i)*(t+e*s)^(p*k_i)\n      = sum_(i in S) a_i*t^(p*k_i)\n        + e*sum_(i in S) b_i*t^(p*k_i).\n\nThus varying the input coordinate has no first-order contribution to a\np-inseparable polynomial; the sign of the coefficient variation is positive.\nExponents divisible by q=p^h, h>=1, are a special case. There is no\nclaim here about infinite series: passage to analytic limits is justified\nseparately by the Tate-algebra estimates in the report.\n\n## Descent core\n\n`section_of_kernel_annihilation` quantifies over arbitrary additive\ncommutative groups E1,E2,G, homomorphisms P:E1->E2, pi:G->E2 and\nW:E1->G, and the hypotheses that P is surjective, ker(P) is contained\nin ker(W), and pi composed with W equals P. It concludes the existence\nof exactly one homomorphism s:E2->G with s composed with P equal to W\nand pi composed with s the identity. It assumes no section of pi.\n\nThis is the additive-group universal-quotient calculation underlying\nVerschiebung descent. Applying that calculation to an epimorphism of\nfppf sheaves is an ordinary sheaf-theoretic argument in the report, not\nan encoded identification of sheaves with their A-valued points.\nSurjectivity on arbitrary A-valued points of a p-divisible group is\nneither assumed nor claimed in the geometric application.\n\n## Rank cores\n\n`etale_block_det_ne_zero` quantifies over every field K and every pair\nof natural dimensions a,r, including zero dimensions. L is a linear\nendomorphism of K^a times K^r and is assumed injective. For a square\nr-by-r matrix M, the connected component of L(0,v) is assumed zero\nand its etale component is assumed M*v, for every v. The conclusion\nis det(M)!=0. There is no hypothesis on the rank or determinant of M.\n\n`det_ne_zero_from_trivial_deformation` is the form actually used by\nthe report. It quantifies over every field K, K-module V, dimensions\na,r, injective comparison KS:K^a times K^r -> V, and square matrix M.\nIts geometric input is the explicit hypothesis\n\n    for every v, M*v=0 implies KS(0,v)=0.\n\nIt concludes det(M)!=0. Here a=h-1 and r=n-h. The report proves that\nhypothesis using genuine finite p-torsion points, Frobenius--Verschiebung\ndescent, and connected height rigidity. Lean does not prove those\ngeometric facts or the injectivity of the actual Kodaira--Spencer map;\nthey are not concealed as a formalized full-rank theorem.\n\nThe kernel checks these universally quantified algebraic implications,\nnot any particular finite collection of numerical Jacobians. The\nexternal mathematical assumptions of the overall theorem are listed\nin the report and the exact certificate, and require independent review.\n"
+  },
+  "subject": {
+    "content_hash": "f54dc656dccb57117eb2ee86b72f07965e08682191a1ded2adceec62fbb999ab",
+    "kind": "claim",
+    "subject_id": "L_TATE_RANK9000311"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

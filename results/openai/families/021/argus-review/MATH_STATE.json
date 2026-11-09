@@ -1,0 +1,799 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX_OLD_REVIEW",
+      "version": 1,
+      "statement": "Review the existing family-021 inverse draft and every historical claim version under OBJECTIVE.md; no new manuscript-error search, novelty claim, or certification of the global Jacobsthal theorem.",
+      "definitions": {
+        "old_root": "campaigns/9000021; read-only September-25-2026 manuscript revision 4eaee87548250b2682affda7d05d947c05554bae",
+        "quantifiers": "Fixed parameters and list constants precede a sufficiently small fixed xi; the eventual z threshold may depend on xi.",
+        "scope_search": "No matching Jacobsthal, partial-modular, inverse-sieve, rational-list or draft-review page was found in the inherited Wiki index; applicable Skill descriptions were absent. This bounded miss establishes neither novelty nor nonexistence of literature.",
+        "failed_route": "Whole-set residue occupancy alone does not give point-specific partial incidences or a rational list fixed before the failure set; the historical generic inverse-sieve route is not a manuscript refutation."
+      },
+      "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "R_SCOPE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "The old report addresses a conditional inverse-step verification and structural strengthening, not a counterexample or a verification of the full Jacobsthal theorem; its global ledger goals remain a dependency frontier.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "4fd235d76656b44a974b5948c138969fd414ad369c3c6a1bcb2e0d07fa82aaa8"
+    },
+    {
+      "claim_id": "R_FINITE_KERNEL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "The declarations in namespace PartialIncidence in the preserved Main.lean hold with exactly their encoded finite-set, field, integer, coprimality, margin and rational-exponent hypotheses; no unencoded geometric, analytic, interpolation or asymptotic conclusion is included.",
+      "formal_statement": "import Mathlib\n\nopen Finset\n\nnoncomputable section\n\nnamespace PartialIncidence\n\nattribute [local instance] Classical.propDecidable\n\nvariable {Point Cell PrimeIndex : Type*}\n\ndef rowCount (X : Finset Point) (rel : Cell → Point → Prop) (c : Cell) : ℕ := by\n  classical\n  exact (X.filter (rel c)).card\n\ndef mass (C : Finset Cell) (X : Finset Point) (rel : Cell → Point → Prop) : ℕ :=\n  ∑ c ∈ C, rowCount X rel c\n\ndef overlap (C : Finset Cell) (rel : Cell → Point → Prop) (x y : Point) : ℕ := by\n  classical\n  exact (C.filter (fun c => rel c x ∧ rel c y)).card\n\ntheorem transpose_mass (C : Finset Cell) (X : Finset Point)\n    (rel : Cell → Point → Prop) :\n    (∑ x ∈ X, rowCount C (fun x c => rel c x) x) = mass C X rel := by\n  classical\n  simp only [rowCount, mass, Finset.card_filter]\n  exact Finset.sum_comm\n\ntheorem row_square (X : Finset Point) (rel : Cell → Point → Prop) (c : Cell) :\n    rowCount X rel c ^ 2 =\n      ∑ x ∈ X, ∑ y ∈ X, if rel c x ∧ rel c y then 1 else 0 := by\n  classical\n  simp only [rowCount, Finset.card_filter, pow_two, Finset.sum_mul, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro x hx\n  apply Finset.sum_congr rfl\n  intro y hy\n  split_ifs <;> simp_all\n\ntheorem energy_identity (C : Finset Cell) (X : Finset Point)\n    (rel : Cell → Point → Prop) :\n    (∑ c ∈ C, rowCount X rel c ^ 2) =\n      ∑ x ∈ X, ∑ y ∈ X, overlap C rel x y := by\n  classical\n  simp_rw [row_square]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro x hx\n  rw [Finset.sum_comm]\n  simp only [overlap, Finset.card_filter]\n\ntheorem energy_bound (C : Finset Cell) (X : Finset Point)\n    (rel : Cell → Point → Prop) (B : ℕ)\n    (hpair : ∀ x ∈ X, ∀ y ∈ X, x ≠ y → overlap C rel x y ≤ B) :\n    (∑ c ∈ C, rowCount X rel c ^ 2) ≤\n      B * X.card * (X.card - 1) + mass C X rel := by\n  classical\n  rw [energy_identity]\n  calc\n    (∑ x ∈ X, ∑ y ∈ X, overlap C rel x y) ≤\n        ∑ x ∈ X, (B * (X.card - 1) +\n          rowCount C (fun x c => rel c x) x) := by\n      apply Finset.sum_le_sum\n      intro x hx\n      rw [← Finset.sum_erase_add X (fun y => overlap C rel x y) hx]\n      have hdiag : overlap C rel x x =\n          rowCount C (fun x c => rel c x) x := by\n        simp [overlap, rowCount]\n      rw [hdiag]\n      apply Nat.add_le_add_right\n      calc\n        (∑ y ∈ X.erase x, overlap C rel x y) ≤ ∑ _y ∈ X.erase x, B := by\n          apply Finset.sum_le_sum\n          intro y hy\n          exact hpair x hx y (Finset.mem_of_mem_erase hy)\n            (Ne.symm (Finset.ne_of_mem_erase hy))\n        _ = B * (X.card - 1) := by simp [Finset.card_erase_of_mem hx, Nat.mul_comm]\n    _ = B * X.card * (X.card - 1) + mass C X rel := by\n      rw [Finset.sum_add_distrib, transpose_mass]\n      simp only [Finset.sum_const, nsmul_eq_mul, Nat.cast_id]\n      ring\n\ntheorem partial_collision_bound (C : Finset Cell) (X : Finset Point)\n    (rel : Cell → Point → Prop) (B : ℕ)\n    (hpair : ∀ x ∈ X, ∀ y ∈ X, x ≠ y → overlap C rel x y ≤ B) :\n    mass C X rel ^ 2 ≤\n      C.card * (B * X.card * (X.card - 1) + mass C X rel) := by\n  have hCS := Finset.sum_mul_sq_le_sq_mul_sq C (fun _ => (1 : ℕ))\n    (rowCount X rel)\n  have hCS' : mass C X rel ^ 2 ≤\n      C.card * (∑ c ∈ C, rowCount X rel c ^ 2) := by\n    simpa [mass] using hCS\n  exact hCS'.trans (Nat.mul_le_mul_left _ (energy_bound C X rel B hpair))\n\ntheorem partial_collision_bound_loose (C : Finset Cell) (X : Finset Point)\n    (rel : Cell → Point → Prop) (B : ℕ)\n    (hpair : ∀ x ∈ X, ∀ y ∈ X, x ≠ y → overlap C rel x y ≤ B) :\n    mass C X rel ^ 2 ≤ C.card * (B * X.card ^ 2 + mass C X rel) := by\n  have h := partial_collision_bound C X rel B hpair\n  have hN : X.card - 1 ≤ X.card := Nat.sub_le _ _\n  calc\n    mass C X rel ^ 2 ≤ C.card * (B * X.card * (X.card - 1) + mass C X rel) := h\n    _ ≤ C.card * (B * X.card ^ 2 + mass C X rel) := by\n      apply Nat.mul_le_mul_left C.card\n      apply Nat.add_le_add_right\n      simpa [pow_two, Nat.mul_assoc] using Nat.mul_le_mul_left (B * X.card) hN\n\ntheorem degree_le (C : Finset Cell) (X : Finset Point)\n    (rel : Cell → Point → Prop) :\n    mass C X rel ≤ C.card * X.card := by\n  classical\n  calc\n    mass C X rel ≤ ∑ _c ∈ C, X.card := by\n      exact Finset.sum_le_sum (fun c hc => Finset.card_le_card (Finset.filter_subset _ _))\n    _ = C.card * X.card := by simp\n\ntheorem point_cover_bound [DecidableEq PrimeIndex]\n    (P A E : Finset PrimeIndex) (C : Finset Cell)\n    (primeOf : Cell → PrimeIndex) (full : PrimeIndex → Prop) (rel : Cell → Prop)\n    (hcover : ∀ p ∈ P, full p → p ∈ A ∨ p ∈ E ∨\n      ∃ c ∈ C, primeOf c = p ∧ rel c) :\n    (P.filter full).card ≤ A.card + E.card + (C.filter rel).card := by\n  classical\n  have hsub : P.filter full ⊆ A ∪ E ∪ (C.filter rel).image primeOf := by\n    intro p hp\n    obtain hpP := (Finset.mem_filter.mp hp).1\n    obtain hpF := (Finset.mem_filter.mp hp).2\n    rcases hcover p hpP hpF with ha | he | ⟨c, hc, hcp, hcr⟩\n    · simp [ha]\n    · simp [he]\n    · apply Finset.mem_union.mpr\n      right\n      exact Finset.mem_image.mpr ⟨c, Finset.mem_filter.mpr ⟨hc, hcr⟩, hcp⟩\n  calc\n    (P.filter full).card ≤ (A ∪ E ∪ (C.filter rel).image primeOf).card :=\n      Finset.card_le_card hsub\n    _ ≤ (A ∪ E).card + ((C.filter rel).image primeOf).card := Finset.card_union_le _ _\n    _ ≤ A.card + E.card + (C.filter rel).card :=\n      Nat.add_le_add (Finset.card_union_le _ _) (Finset.card_image_le)\n\ntheorem partial_incidence_forces_alignment [DecidableEq PrimeIndex]\n    (P A E : Finset PrimeIndex) (C : Finset Cell) (X : Finset Point)\n    (primeOf : Cell → PrimeIndex) (full : PrimeIndex → Point → Prop)\n    (rel : Cell → Point → Prop) (B r t : ℕ)\n    (hpair : ∀ x ∈ X, ∀ y ∈ X, x ≠ y → overlap C rel x y ≤ B)\n    (hcover : ∀ x ∈ X, ∀ p ∈ P, full p x → p ∈ A ∨ p ∈ E ∨\n      ∃ c ∈ C, primeOf c = p ∧ rel c x)\n    (hrich : ∀ x ∈ X, r ≤ rowCount P (fun x p => full p x) x)\n    (hbudget : mass C X rel ≤ P.card * X.card)\n    (hgap : E.card + t ≤ r)\n    (hmargin : C.card * (B * X.card ^ 2 + P.card * X.card) <\n      ((r - E.card - t) * X.card) ^ 2) :\n    t < A.card := by\n  classical\n  by_contra hA\n  have hAt : A.card ≤ t := Nat.le_of_not_gt hA\n  have hlower : r * X.card ≤\n      ∑ x ∈ X, rowCount P (fun x p => full p x) x := by\n    calc\n      r * X.card = ∑ _x ∈ X, r := by simp [Nat.mul_comm]\n      _ ≤ _ := Finset.sum_le_sum hrich\n  have hupper : (∑ x ∈ X, rowCount P (fun x p => full p x) x) ≤\n      (A.card + E.card) * X.card + mass C X rel := by\n    calc\n      _ ≤ ∑ x ∈ X, (A.card + E.card + rowCount C (fun x c => rel c x) x) := by\n        apply Finset.sum_le_sum\n        intro x hx\n        exact point_cover_bound P A E C primeOf (fun p => full p x)\n          (fun c => rel c x) (hcover x hx)\n      _ = _ := by\n        rw [Finset.sum_add_distrib, transpose_mass]\n        simp [Nat.mul_comm]\n  have hr : r - E.card - t + E.card + t = r := by omega\n  have hsmall : (r - E.card - t) * X.card ≤ mass C X rel := by\n    nlinarith [Nat.mul_le_mul_right X.card hAt]\n  have hsq := Nat.pow_le_pow_left hsmall 2\n  have hcollision := partial_collision_bound_loose C X rel B hpair\n  have hbound : mass C X rel ^ 2 ≤\n      C.card * (B * X.card ^ 2 + P.card * X.card) :=\n    hcollision.trans (Nat.mul_le_mul_left _ (Nat.add_le_add_left hbudget _))\n  exact (not_lt_of_ge (hsq.trans hbound)) hmargin\n\ntheorem fixed_list_packing (P : Finset PrimeIndex) (L : Finset Point)\n    (align : PrimeIndex → Point → Prop) (B t : ℕ)\n    (hpair : ∀ x ∈ L, ∀ y ∈ L, x ≠ y → overlap P align x y ≤ B)\n    (hdegree : ∀ x ∈ L, t ≤ rowCount P (fun x p => align p x) x)\n    (hscale : 2 * P.card * B ≤ t ^ 2) :\n    L.card * t ^ 2 ≤ 2 * P.card ^ 2 := by\n  have hlower : L.card * t ≤ mass P L align := by\n    rw [← transpose_mass]\n    calc\n      L.card * t = ∑ _x ∈ L, t := by simp\n      _ ≤ _ := Finset.sum_le_sum hdegree\n  have hupper := degree_le P L align\n  have hcoll := partial_collision_bound_loose P L align B hpair\n  have hbound : mass P L align ^ 2 ≤\n      P.card * (B * L.card ^ 2 + P.card * L.card) :=\n    hcoll.trans (Nat.mul_le_mul_left _ (Nat.add_le_add_left hupper _))\n  have hlowersq := Nat.pow_le_pow_left hlower 2\n  have hscalemul := Nat.mul_le_mul_right (L.card ^ 2) hscale\n  by_cases hL : L.card = 0\n  · simp [hL]\n  have hcancel : L.card * (L.card * t ^ 2) ≤ L.card * (2 * P.card ^ 2) := by\n    nlinarith only [hbound, hlowersq, hscalemul]\n  exact Nat.le_of_mul_le_mul_left hcancel (Nat.pos_of_ne_zero hL)\n\ntheorem no_rich_nonstructured_line [DecidableEq PrimeIndex]\n    (P A E : Finset PrimeIndex) (C : Finset Cell) (X : Finset Point)\n    (primeOf : Cell → PrimeIndex) (full : PrimeIndex → Point → Prop)\n    (rel : Cell → Point → Prop) (B r t : ℕ)\n    (hpair : ∀ x ∈ X, ∀ y ∈ X, x ≠ y → overlap C rel x y ≤ B)\n    (hcover : ∀ x ∈ X, ∀ p ∈ P, full p x → p ∈ A ∨ p ∈ E ∨\n      ∃ c ∈ C, primeOf c = p ∧ rel c x)\n    (hrich : ∀ x ∈ X, r ≤ rowCount P (fun x p => full p x) x)\n    (hbudget : mass C X rel ≤ P.card * X.card)\n    (hgap : E.card + t ≤ r)\n    (hmargin : C.card * (B * X.card ^ 2 + P.card * X.card) <\n      ((r - E.card - t) * X.card) ^ 2)\n    (hlist : t < A.card → ∀ x ∈ X, ∀ p ∈ A, ¬full p x) :\n    False := by\n  have hA := partial_incidence_forces_alignment P A E C X primeOf full rel B r t\n    hpair hcover hrich hbudget hgap hmargin\n  have hcover' : ∀ x ∈ X, ∀ p ∈ P, full p x →\n      p ∈ (∅ : Finset PrimeIndex) ∨ p ∈ E ∨ ∃ c ∈ C, primeOf c = p ∧ rel c x := by\n    intro x hx p hp hfull\n    rcases hcover x hx p hp hfull with ha | he | hc\n    · exact (hlist hA x hx p ha hfull).elim\n    · exact Or.inr (Or.inl he)\n    · exact Or.inr (Or.inr hc)\n  have hmargin' : C.card * (B * X.card ^ 2 + P.card * X.card) <\n      ((r - E.card - 0) * X.card) ^ 2 := by\n    apply lt_of_lt_of_le hmargin\n    exact Nat.pow_le_pow_left (Nat.mul_le_mul_right X.card (by omega)) 2\n  have hz := partial_incidence_forces_alignment P ∅ E C X primeOf full rel B r 0\n    hpair hcover' hrich hbudget (by omega) hmargin'\n  simp at hz\n\ntheorem common_alignment_determinant (p ap A₁ D₁ A₂ D₂ : ℤ)\n    (h₁ : p ∣ D₁ * ap - A₁) (h₂ : p ∣ D₂ * ap - A₂) :\n    p ∣ A₁ * D₂ - A₂ * D₁ := by\n  have hid : A₁ * D₂ - A₂ * D₁ =\n      D₁ * (D₂ * ap - A₂) - D₂ * (D₁ * ap - A₁) := by ring\n  rw [hid]\n  exact dvd_sub (dvd_mul_of_dvd_right h₂ D₁) (dvd_mul_of_dvd_right h₁ D₂)\n\ntheorem same_slope_same_residue {F : Type*} [Field F]\n    (d a b ap s x₁ y₁ x₂ y₂ : F)\n    (hunaligned : d * ap ≠ b)\n    (hline₁ : d * y₁ = a * x₁ + b)\n    (hline₂ : d * y₂ = a * x₂ + b)\n    (hhit₁ : y₁ + s * x₁ = ap)\n    (hhit₂ : y₂ + s * x₂ = ap) :\n    x₁ = x₂ := by\n  have h₁ : (a + d * s) * x₁ = d * ap - b := by\n    linear_combination d * hhit₁ - hline₁\n  have h₂ : (a + d * s) * x₂ = d * ap - b := by\n    linear_combination d * hhit₂ - hline₂\n  have hne : a + d * s ≠ 0 := by\n    intro hz\n    rw [hz, zero_mul] at h₁\n    exact hunaligned (sub_eq_zero.mp h₁.symm)\n  exact mul_left_cancel₀ hne (h₁.trans h₂.symm)\n\ntheorem line_g_divides_q (g D A a q b : ℤ)\n    (hcoprime : IsCoprime g a)\n    (hline : (g * D) * b = a * q + g * A) :\n    g ∣ q := by\n  have hmul : g ∣ a * q := by\n    use D * b - A\n    linear_combination -hline\n  exact hcoprime.dvd_of_dvd_mul_left hmul\n\ntheorem line_nonaligned_prime_divides_g (g D A a q b ell : ℤ)\n    (hell : Prime ell) (hdiv : ell ∣ q)\n    (hline : (g * D) * b = a * q + g * A)\n    (hnonaligned : ¬ell ∣ D * b - A) :\n    ell ∣ g := by\n  have hmul : ell ∣ g * (D * b - A) := by\n    have hid : g * (D * b - A) = a * q := by linear_combination hline\n    rw [hid]\n    exact dvd_mul_of_dvd_right hdiv a\n  exact (hell.dvd_or_dvd hmul).resolve_right hnonaligned\n\ntheorem squarefree_exception_product (E : Finset ℤ) (g D A a q b : ℤ)\n    (hprime : ∀ ell ∈ E, Prime ell)\n    (hcoprime : (↑E : Set ℤ).Pairwise (Function.onFun IsCoprime id))\n    (hdiv : ∀ ell ∈ E, ell ∣ q)\n    (hbad : ∀ ell ∈ E, ¬ell ∣ D * b - A)\n    (hline : (g * D) * b = a * q + g * A) :\n    (∏ ell ∈ E, ell) ∣ g := by\n  apply Finset.prod_dvd_of_coprime hcoprime\n  intro ell he\n  exact line_nonaligned_prime_divides_g g D A a q b ell\n    (hprime ell he) (hdiv ell he) hline (hbad ell he)\n\ntheorem squarefree_exception_height (E : Finset ℤ) (g D A a q b : ℤ)\n    (hprime : ∀ ell ∈ E, Prime ell)\n    (hcoprime : (↑E : Set ℤ).Pairwise (Function.onFun IsCoprime id))\n    (hdiv : ∀ ell ∈ E, ell ∣ q)\n    (hbad : ∀ ell ∈ E, ¬ell ∣ D * b - A)\n    (hline : (g * D) * b = a * q + g * A)\n    (hg : 0 < g) (hD : 0 ≤ D) :\n    D * (∏ ell ∈ E, ell) ≤ g * D := by\n  have hprod := squarefree_exception_product E g D A a q b\n    hprime hcoprime hdiv hbad hline\n  have hle := Int.le_of_dvd hg hprod\n  nlinarith\n\ntheorem prime_product_forces_zero (P : Finset ℤ) (value : ℤ)\n    (hcoprime : (↑P : Set ℤ).Pairwise (Function.onFun IsCoprime id))\n    (hdiv : ∀ p ∈ P, p ∣ value)\n    (hsmall : value.natAbs < (∏ p ∈ P, p).natAbs) :\n    value = 0 := by\n  exact Int.eq_zero_of_dvd_of_natAbs_lt_natAbs\n    (Finset.prod_dvd_of_coprime hcoprime hdiv) hsmall\n\ntheorem marked_abscissa_constant (d : ℕ) (hd : 2 ≤ d) :\n    5 * d ^ 2 + 4 * d + 2 ≤ 8 * d ^ 2 := by\n  nlinarith\n\ntheorem structural_exponent_margin (alpha : ℚ) (ha : alpha < 1 / 5) :\n    (10 * alpha - 2) / 3 < 0 ∧ 3 * alpha - 2 < 0 ∧ 2 - 2 * alpha > 0 := by\n  constructor\n  · linarith\n  constructor <;> linarith\n\nend PartialIncidence\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "b6253f4f0f2b5d86154abc9d14088fc58bdfc90c8207c14486b61bff3e1f187a"
+    },
+    {
+      "claim_id": "R_FINITE_BRIDGE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "Under the full finite REPORT.md hypotheses (F), polynomial vanishing and the nonlinear-point bound, a rich incidence set cannot consist entirely of incidences nonstructured relative to the pre-fixed height-capped rational list; under (4), that list obeys M*t^2 <= 2*n^2.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "35fce5d3fbc9d78fd46198f197051a8f7cfe59aac890e108b7b9224d9249c342"
+    },
+    {
+      "claim_id": "R_POLYNOMIAL",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "For v=(d+1)(d+2)/2, simultaneous modular line constraints of index at most product p^((d+1)|T_p|), an integer h>=1 with (h+1)^v greater than that index and v*h*S^d < R^r yields a nonzero degree-at-most-d integer polynomial vanishing on every r-rich point in [0,S]^2.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "c4239829d8717421d9d17cff03abbb5c8f99d08c3e4cfbc3b124d92316c4b121"
+    },
+    {
+      "claim_id": "R_CUBIC",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "For nonzero real bivariate polynomial degree at most d and S>=1, the lattice points on its nonlinear complex-irreducible components in [0,S]^2 number at most 512*d^3*(1+ceil_cuberoot(S^2)), independently of coefficients.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "04e3a11de897286da151a70358bde441b4cf02c036d483289f11f041754e700a"
+    },
+    {
+      "claim_id": "R_SAMPLING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "Conditional on the stated independent regular boxes, upper small-prime sieve, PNT/Mertens and additive large sieve, a whole-box bad nonstructured harmonic fraction greater than sigma supplies the old report rich set |X|>=S/Z^4, r>=c5*n, K<=n*R/L^6, preserving partial incidences and constant choice order.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+    },
+    {
+      "claim_id": "R_APPLICATION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "Conditional on the explicitly stated regular-box and analytic inputs, the old report finite, polynomial, cubic and sampling arguments imply the manuscript inverse proposition at alpha<=1/100 with a pre-fixed whole-box list and exceptional harmonic mass at most sigma, not the global Jacobsthal theorem.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a9075d7c4b985f407bb5b4e9fb20e5ed86ecc91c0ff288b81651b5a87dd602d5"
+    },
+    {
+      "claim_id": "R_EXTENSION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "For fixed 0<alpha_min<=alpha<=alpha_max<1/5, the structural inverse implication follows from the same rich-configuration outputs; this extends neither their upstream construction nor the Jacobsthal bound.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "c8f34df49d8af5390100734fb98871121a2056aa5509f6fb190bba415cbff02e"
+    },
+    {
+      "claim_id": "R_SAMPLING",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "Conditional on the stated independent regular boxes, upper small-prime sieve, PNT/Mertens and additive large sieve, a whole-box bad nonstructured harmonic fraction greater than sigma supplies the old report rich set |X|>=S/Z^4, r>=c5*n, K<=n*R/L^6, preserving partial incidences and constant choice order.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_REGULAR_BOXES",
+          "statement": "Independent full candidate boxes have disjoint squarefree prime factors, multiplicity-one p and u bins, the specified lower and upper prime ranges, J/U>=w^(3*a_star/4) up to constants, S/q subpower distortion, and total length O(log B).",
+          "source": "Unpublished staged A quadratic bound for Jacobsthal function, 2026-09-25, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/boxes.tex, Proposition prop:regular-boxes(iv), equations boxes-candidate-slack, boxes-prime-ranges, boxes-sq; construction not certified by this review.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "a90e9d0640af63a3a4caaa7c033fd4e5e3e2fb31c5d134556b39ff6c00f060e7"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+    },
+    {
+      "claim_id": "R_SAMPLING",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "Conditional on the stated independent regular boxes, upper small-prime sieve, PNT/Mertens and additive large sieve, a whole-box bad nonstructured harmonic fraction greater than sigma supplies the old report rich set |X|>=S/Z^4, r>=c5*n, K<=n*R/L^6, preserving partial incidences and constant choice order.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_REGULAR_BOXES",
+          "statement": "Independent full candidate boxes have disjoint squarefree prime factors, multiplicity-one p and u bins, the specified lower and upper prime ranges, J/U>=w^(3*a_star/4) up to constants, S/q subpower distortion, and total length O(log B).",
+          "source": "Unpublished staged A quadratic bound for Jacobsthal function, 2026-09-25, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/boxes.tex, Proposition prop:regular-boxes(iv), equations boxes-candidate-slack, boxes-prime-ranges, boxes-sq; construction not certified by this review.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "a90e9d0640af63a3a4caaa7c033fd4e5e3e2fb31c5d134556b39ff6c00f060e7"
+        },
+        {
+          "assumption_id": "A_SMALL_SIEVE",
+          "statement": "For arbitrary forbidden classes and coprime progression step, a coordinate interval of length J>=u^eta has sifted count O_eta(J*V_sm(u)), uniformly in classes and initial point; for a fixed xi the same bound applies once xi*J>=u^eta.",
+          "source": "Same staged manuscript and revision, build/sections/inputs.tex, Lemma lem:small-sieve, equation small-upper and its final paragraph; treated as an upstream analytic input.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "03578883d1eac1cd5eb1fdcfad94fdbc1f584753bebe1299c782b27bfee095ee"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+    },
+    {
+      "claim_id": "R_SAMPLING",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "Conditional on the stated independent regular boxes, upper small-prime sieve, PNT/Mertens and additive large sieve, a whole-box bad nonstructured harmonic fraction greater than sigma supplies the old report rich set |X|>=S/Z^4, r>=c5*n, K<=n*R/L^6, preserving partial incidences and constant choice order.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_REGULAR_BOXES",
+          "statement": "Independent full candidate boxes have disjoint squarefree prime factors, multiplicity-one p and u bins, the specified lower and upper prime ranges, J/U>=w^(3*a_star/4) up to constants, S/q subpower distortion, and total length O(log B).",
+          "source": "Unpublished staged A quadratic bound for Jacobsthal function, 2026-09-25, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/boxes.tex, Proposition prop:regular-boxes(iv), equations boxes-candidate-slack, boxes-prime-ranges, boxes-sq; construction not certified by this review.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "a90e9d0640af63a3a4caaa7c033fd4e5e3e2fb31c5d134556b39ff6c00f060e7"
+        },
+        {
+          "assumption_id": "A_SMALL_SIEVE",
+          "statement": "For arbitrary forbidden classes and coprime progression step, a coordinate interval of length J>=u^eta has sifted count O_eta(J*V_sm(u)), uniformly in classes and initial point; for a fixed xi the same bound applies once xi*J>=u^eta.",
+          "source": "Same staged manuscript and revision, build/sections/inputs.tex, Lemma lem:small-sieve, equation small-upper and its final paragraph; treated as an upstream analytic input.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "03578883d1eac1cd5eb1fdcfad94fdbc1f584753bebe1299c782b27bfee095ee"
+        },
+        {
+          "assumption_id": "A_PNT_MERTENS",
+          "statement": "PNT and Mertens give n_p comparable to xi*R/log R and n_u comparable to xi*U/log U for each fixed xi, and M0^2=Z^o(1) for the stated small-prime cutoff.",
+          "source": "Same staged manuscript and revision, build/sections/inputs.tex, Lemma lem:prime-inputs(i); build/sections/inverse.tex, inverse-bin-counts and the paragraph defining M0.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "a0b098bf62dffe66026a0582a0769b36842499bfe0ec5be75302883c7ac6fa78"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+    },
+    {
+      "claim_id": "R_SAMPLING",
+      "version": 5,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "Conditional on the stated independent regular boxes, upper small-prime sieve, PNT/Mertens and additive large sieve, a whole-box bad nonstructured harmonic fraction greater than sigma supplies the old report rich set |X|>=S/Z^4, r>=c5*n, K<=n*R/L^6, preserving partial incidences and constant choice order.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_PNT_MERTENS",
+          "statement": "PNT and Mertens give n_p comparable to xi*R/log R and n_u comparable to xi*U/log U for each fixed xi, and M0^2=Z^o(1) for the stated small-prime cutoff.",
+          "source": "Same staged manuscript and revision, build/sections/inputs.tex, Lemma lem:prime-inputs(i); build/sections/inverse.tex, inverse-bin-counts and the paragraph defining M0.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "a0b098bf62dffe66026a0582a0769b36842499bfe0ec5be75302883c7ac6fa78"
+        },
+        {
+          "assumption_id": "A_REGULAR_BOXES",
+          "statement": "Independent full candidate boxes have disjoint squarefree prime factors, multiplicity-one p and u bins, the specified lower and upper prime ranges, J/U>=w^(3*a_star/4) up to constants, S/q subpower distortion, and total length O(log B).",
+          "source": "Unpublished staged A quadratic bound for Jacobsthal function, 2026-09-25, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/boxes.tex, Proposition prop:regular-boxes(iv), equations boxes-candidate-slack, boxes-prime-ranges, boxes-sq; construction not certified by this review.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "a90e9d0640af63a3a4caaa7c033fd4e5e3e2fb31c5d134556b39ff6c00f060e7"
+        },
+        {
+          "assumption_id": "A_SMALL_SIEVE",
+          "statement": "For arbitrary forbidden classes and coprime progression step, a coordinate interval of length J>=u^eta has sifted count O_eta(J*V_sm(u)), uniformly in classes and initial point; for a fixed xi the same bound applies once xi*J>=u^eta.",
+          "source": "Same staged manuscript and revision, build/sections/inputs.tex, Lemma lem:small-sieve, equation small-upper and its final paragraph; treated as an upstream analytic input.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "03578883d1eac1cd5eb1fdcfad94fdbc1f584753bebe1299c782b27bfee095ee"
+        },
+        {
+          "assumption_id": "A_ADDITIVE_LARGE_SIEVE",
+          "statement": "For coefficients on J consecutive integers, the sum of squared exponential sums over distinct reduced fractions of denominator at most Q is O((J+Q^2)*sum |b_j|^2).",
+          "source": "Same staged manuscript and revision, build/sections/inputs.tex, equation large-sieve-input; elementary proof supplied at build/sections/elementary-inputs.tex, Lemma lem:elementary-large-sieve.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "e71b33a002342fad43dea4ced2d3c911f26e1d40511adfa8d2ab47695ad1d00e"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+    },
+    {
+      "claim_id": "R_CUBIC",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "For nonzero real bivariate polynomial degree at most d and S>=1, the lattice points on its nonlinear complex-irreducible components in [0,S]^2 number at most 512*d^3*(1+ceil_cuberoot(S^2)), independently of coefficients.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_AFFINE_BEZOUT",
+          "statement": "Two coprime nonconstant bivariate polynomials over C of total degrees a,b have at most a*b distinct common affine zeros.",
+          "source": "Same staged manuscript and revision, build/sections/elementary-inputs.tex, Lemma lem:elementary-bezout; standard affine Bezout bound, with its elementary resultant proof to be assessed.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "aeaf08adc452ce269b6e11eed10dbb53c2927c87ee4043a3ce61e61cae0d2b78"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "04e3a11de897286da151a70358bde441b4cf02c036d483289f11f041754e700a"
+    },
+    {
+      "claim_id": "R_CUBIC",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "For nonzero real bivariate polynomial degree at most d and S>=1, the lattice points on its nonlinear complex-irreducible components in [0,S]^2 number at most 512*d^3*(1+ceil_cuberoot(S^2)), independently of coefficients.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_AFFINE_BEZOUT",
+          "statement": "Two coprime nonconstant bivariate polynomials over C of total degrees a,b have at most a*b distinct common affine zeros.",
+          "source": "Same staged manuscript and revision, build/sections/elementary-inputs.tex, Lemma lem:elementary-bezout; standard affine Bezout bound, with its elementary resultant proof to be assessed.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "aeaf08adc452ce269b6e11eed10dbb53c2927c87ee4043a3ce61e61cae0d2b78"
+        },
+        {
+          "assumption_id": "A_REAL_IMPLICIT_FUNCTION",
+          "statement": "At a smooth real plane-curve point where the Y partial derivative is nonzero, the zero set locally is a smooth graph; a bounded such branch can cease continuation only at a critical point or the chosen boundary.",
+          "source": "Ordinary real implicit-function theorem and continuation on compact subrectangles; used explicitly in the staged inverse.tex nonlinear-points proof, not a Lean-checked input.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "4b4cce98f1b962b4b444dbe27a47d7110f3456d139f1c0fb4a93439e69e1b3a4"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "04e3a11de897286da151a70358bde441b4cf02c036d483289f11f041754e700a"
+    },
+    {
+      "claim_id": "R_APPLICATION",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "Conditional on the explicitly stated regular-box and analytic inputs, the old report finite, polynomial, cubic and sampling arguments imply the manuscript inverse proposition at alpha<=1/100 with a pre-fixed whole-box list and exceptional harmonic mass at most sigma, not the global Jacobsthal theorem.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_UPSTREAM_ANALYTIC",
+          "statement": "The regular-box construction, arbitrary-class upper small-prime sieve, PNT/Mertens and additive large sieve hold in precisely the forms recorded for R_SAMPLING.",
+          "source": "Same staged manuscript and revision, boxes.tex prop:regular-boxes(iv), inputs.tex lem:small-sieve, lem:prime-inputs(i), eq:large-sieve-input. The local review does not certify the full construction or other global dependencies.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "f14bd368d0cb96f8b73bbd54e9d4914fc0a24057216c79c9d59b81ec86a60a84"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "a9075d7c4b985f407bb5b4e9fb20e5ed86ecc91c0ff288b81651b5a87dd602d5"
+    },
+    {
+      "claim_id": "R_SAMPLING",
+      "version": 6,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_OLD_REVIEW",
+        "content_hash": "6ceafef6d9af325f4331f42917299841a7125be8f83e6fac1db6c4ff8c509348"
+      },
+      "natural_statement": "Conditional on the stated independent regular boxes, upper small-prime sieve, PNT/Mertens and additive large sieve, a whole-box bad nonstructured harmonic fraction greater than sigma supplies the old report rich set |X|>=S/Z^4, r>=c5*n, K<=n*R/L^6, preserving partial incidences and constant choice order.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_ADDITIVE_LARGE_SIEVE",
+          "statement": "For coefficients on J consecutive integers, the sum of squared exponential sums over distinct reduced fractions of denominator at most Q is O((J+Q^2)*sum |b_j|^2).",
+          "source": "Same staged manuscript and revision, build/sections/inputs.tex, equation large-sieve-input; elementary proof supplied at build/sections/elementary-inputs.tex, Lemma lem:elementary-large-sieve.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "e71b33a002342fad43dea4ced2d3c911f26e1d40511adfa8d2ab47695ad1d00e"
+        },
+        {
+          "assumption_id": "A_PNT_MERTENS",
+          "statement": "PNT and Mertens give n_p comparable to xi*R/log R and n_u comparable to xi*U/log U for each fixed xi, and M0^2=Z^o(1) for the stated small-prime cutoff.",
+          "source": "Same staged manuscript and revision, build/sections/inputs.tex, Lemma lem:prime-inputs(i); build/sections/inverse.tex, inverse-bin-counts and the paragraph defining M0.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "a0b098bf62dffe66026a0582a0769b36842499bfe0ec5be75302883c7ac6fa78"
+        },
+        {
+          "assumption_id": "A_REGULAR_BOXES",
+          "statement": "Independent full candidate boxes have disjoint squarefree prime factors, multiplicity-one p and u bins, the specified lower and upper prime ranges, J/U>=w^(3*a_star/4) up to constants, S/q subpower distortion, and total length O(log B).",
+          "source": "Unpublished staged A quadratic bound for Jacobsthal function, 2026-09-25, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/boxes.tex, Proposition prop:regular-boxes(iv), equations boxes-candidate-slack, boxes-prime-ranges, boxes-sq; construction not certified by this review.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "a90e9d0640af63a3a4caaa7c033fd4e5e3e2fb31c5d134556b39ff6c00f060e7"
+        },
+        {
+          "assumption_id": "A_SMALL_SIEVE",
+          "statement": "For arbitrary forbidden classes and coprime progression step, a coordinate interval of length J>=u^eta has sifted count O_eta(J*V_sm(u)), uniformly in classes and initial point; for a fixed xi the same bound applies once xi*J>=u^eta.",
+          "source": "Same staged manuscript and revision, build/sections/inputs.tex, Lemma lem:small-sieve, equation small-upper and its final paragraph; treated as an upstream analytic input.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "03578883d1eac1cd5eb1fdcfad94fdbc1f584753bebe1299c782b27bfee095ee"
+        },
+        {
+          "assumption_id": "A_MERTENS_DENSITY",
+          "statement": "The small-prime survivor density V0=product_{p<=w}(1-1/p) is comparable to 1/log w as w tends to infinity, uniformly in prescribed classes because this product itself is class independent.",
+          "source": "Staged September 25 2026 manuscript, revision 4eaee87548250b2682affda7d05d947c05554bae, build/sections/inputs.tex, Lemma lem:prime-inputs(i), Mertens product estimate; used in inverse.tex equation inverse-large-sieve. Local source statement opened and read.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "55cabaac67b0aca601090282ef0c14ae53b9a7f355c9e637dad3b0cbee55a0d8"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-R_FINITE_KERNEL-c0f1d975fab5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_FINITE_KERNEL",
+        "content_hash": "b6253f4f0f2b5d86154abc9d14088fc58bdfc90c8207c14486b61bff3e1f187a"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/draft_reviews/finite-rigidity/replay/certificates/R_FINITE_KERNEL-03dc49553ed63800.json"
+    },
+    {
+      "evidence_id": "judgement-R_SCOPE-458cc192bbc8",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_SCOPE",
+        "content_hash": "4fd235d76656b44a974b5948c138969fd414ad369c3c6a1bcb2e0d07fa82aaa8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/draft_reviews/scope-and-frontier/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_FINITE_KERNEL-a40ab21c436d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_FINITE_KERNEL",
+        "content_hash": "b6253f4f0f2b5d86154abc9d14088fc58bdfc90c8207c14486b61bff3e1f187a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/draft_reviews/finite-rigidity/replay/certificates/R_FINITE_KERNEL-03dc49553ed63800.json"
+    },
+    {
+      "evidence_id": "judgement-R_FINITE_BRIDGE-f8d02f5a2884",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_FINITE_BRIDGE",
+        "content_hash": "35fce5d3fbc9d78fd46198f197051a8f7cfe59aac890e108b7b9224d9249c342"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/draft_reviews/finite-rigidity/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_POLYNOMIAL-c6c2e7192b63",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_POLYNOMIAL",
+        "content_hash": "c4239829d8717421d9d17cff03abbb5c8f99d08c3e4cfbc3b124d92316c4b121"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/draft_reviews/polynomial-concentration/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_CUBIC-2482ab84995b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_CUBIC",
+        "content_hash": "04e3a11de897286da151a70358bde441b4cf02c036d483289f11f041754e700a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/draft_reviews/nonlinear-cubic/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_SAMPLING-c0fe01bac455",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_SAMPLING",
+        "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/draft_reviews/analytic-sampling/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_APPLICATION-498f8fded716",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_APPLICATION",
+        "content_hash": "a9075d7c4b985f407bb5b4e9fb20e5ed86ecc91c0ff288b81651b5a87dd602d5"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/draft_reviews/inverse-application/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_EXTENSION-901377445f21",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_EXTENSION",
+        "content_hash": "c8f34df49d8af5390100734fb98871121a2056aa5509f6fb190bba415cbff02e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/draft_reviews/structural-extension/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_SCOPE-5422733cc2b8",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_SCOPE",
+        "content_hash": "4fd235d76656b44a974b5948c138969fd414ad369c3c6a1bcb2e0d07fa82aaa8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-l2",
+      "artifact": "research/draft_reviews/scope-and-frontier/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_FINITE_KERNEL-e1efd786104b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_FINITE_KERNEL",
+        "content_hash": "b6253f4f0f2b5d86154abc9d14088fc58bdfc90c8207c14486b61bff3e1f187a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-l2",
+      "artifact": "research/draft_reviews/finite-rigidity/replay/certificates/R_FINITE_KERNEL-03dc49553ed63800.json"
+    },
+    {
+      "evidence_id": "judgement-R_FINITE_BRIDGE-28867126a631",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_FINITE_BRIDGE",
+        "content_hash": "35fce5d3fbc9d78fd46198f197051a8f7cfe59aac890e108b7b9224d9249c342"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-l2",
+      "artifact": "research/draft_reviews/finite-rigidity/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_POLYNOMIAL-624e68de8c9b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_POLYNOMIAL",
+        "content_hash": "c4239829d8717421d9d17cff03abbb5c8f99d08c3e4cfbc3b124d92316c4b121"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-l2",
+      "artifact": "research/draft_reviews/polynomial-concentration/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_CUBIC-e22dd4bf2461",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_CUBIC",
+        "content_hash": "04e3a11de897286da151a70358bde441b4cf02c036d483289f11f041754e700a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-l2",
+      "artifact": "research/draft_reviews/nonlinear-cubic/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_SAMPLING-8c11baf1a3d5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_SAMPLING",
+        "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-l2",
+      "artifact": "research/draft_reviews/analytic-sampling/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_APPLICATION-8c3b1677a59f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_APPLICATION",
+        "content_hash": "a9075d7c4b985f407bb5b4e9fb20e5ed86ecc91c0ff288b81651b5a87dd602d5"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-l2",
+      "artifact": "research/draft_reviews/inverse-application/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_EXTENSION-d37bfaaba5ed",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_EXTENSION",
+        "content_hash": "c8f34df49d8af5390100734fb98871121a2056aa5509f6fb190bba415cbff02e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot-l2",
+      "artifact": "research/draft_reviews/structural-extension/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_SCOPE-5188b2a060db",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_SCOPE",
+        "content_hash": "4fd235d76656b44a974b5948c138969fd414ad369c3c6a1bcb2e0d07fa82aaa8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-family021-final",
+      "artifact": "research/OLD_ROUND_REVIEW.md"
+    },
+    {
+      "evidence_id": "judgement-R_FINITE_KERNEL-8f03aaacf4ff",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_FINITE_KERNEL",
+        "content_hash": "b6253f4f0f2b5d86154abc9d14088fc58bdfc90c8207c14486b61bff3e1f187a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-family021-final",
+      "artifact": "research/draft_reviews/finite-rigidity/replay/certificates/R_FINITE_KERNEL-03dc49553ed63800.json"
+    },
+    {
+      "evidence_id": "judgement-R_FINITE_BRIDGE-2e2e8213eea3",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_FINITE_BRIDGE",
+        "content_hash": "35fce5d3fbc9d78fd46198f197051a8f7cfe59aac890e108b7b9224d9249c342"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-family021-final",
+      "artifact": "research/draft_reviews/finite-rigidity/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_POLYNOMIAL-6826c164e31d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_POLYNOMIAL",
+        "content_hash": "c4239829d8717421d9d17cff03abbb5c8f99d08c3e4cfbc3b124d92316c4b121"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-family021-final",
+      "artifact": "research/draft_reviews/polynomial-concentration/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_CUBIC-6ed5e51c972c",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_CUBIC",
+        "content_hash": "04e3a11de897286da151a70358bde441b4cf02c036d483289f11f041754e700a"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-family021-final",
+      "artifact": "research/draft_reviews/nonlinear-cubic/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_SAMPLING-7d9dcfd899c2",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_SAMPLING",
+        "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-family021-final",
+      "artifact": "research/draft_reviews/analytic-sampling/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_APPLICATION-9d8a57a842b5",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_APPLICATION",
+        "content_hash": "a9075d7c4b985f407bb5b4e9fb20e5ed86ecc91c0ff288b81651b5a87dd602d5"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-family021-final",
+      "artifact": "research/draft_reviews/inverse-application/report.md"
+    },
+    {
+      "evidence_id": "judgement-R_EXTENSION-8c3692875468",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "R_EXTENSION",
+        "content_hash": "c8f34df49d8af5390100734fb98871121a2056aa5509f6fb190bba415cbff02e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:native-family021-final",
+      "artifact": "research/draft_reviews/structural-extension/report.md"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "ROUTE_APPLICATION_REVIEW",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "R_APPLICATION",
+        "content_hash": "a9075d7c4b985f407bb5b4e9fb20e5ed86ecc91c0ff288b81651b5a87dd602d5"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "R_FINITE_BRIDGE",
+          "content_hash": "35fce5d3fbc9d78fd46198f197051a8f7cfe59aac890e108b7b9224d9249c342"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "R_POLYNOMIAL",
+          "content_hash": "c4239829d8717421d9d17cff03abbb5c8f99d08c3e4cfbc3b124d92316c4b121"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "R_CUBIC",
+          "content_hash": "04e3a11de897286da151a70358bde441b4cf02c036d483289f11f041754e700a"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "R_SAMPLING",
+          "content_hash": "c314d80ed634e22087778c927410fbe44d7aa2654b5a13e62dbbbbbadff379d7"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "ROUTE_EXTENSION_REVIEW",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "R_EXTENSION",
+        "content_hash": "c8f34df49d8af5390100734fb98871121a2056aa5509f6fb190bba415cbff02e"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "R_FINITE_BRIDGE",
+          "content_hash": "35fce5d3fbc9d78fd46198f197051a8f7cfe59aac890e108b7b9224d9249c342"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "R_POLYNOMIAL",
+          "content_hash": "c4239829d8717421d9d17cff03abbb5c8f99d08c3e4cfbc3b124d92316c4b121"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "R_CUBIC",
+          "content_hash": "04e3a11de897286da151a70358bde441b4cf02c036d483289f11f041754e700a"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "ROUTE_FINITE_SPECIALIZATION",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "R_FINITE_BRIDGE",
+        "content_hash": "35fce5d3fbc9d78fd46198f197051a8f7cfe59aac890e108b7b9224d9249c342"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "R_FINITE_KERNEL",
+          "content_hash": "b6253f4f0f2b5d86154abc9d14088fc58bdfc90c8207c14486b61bff3e1f187a"
+        }
+      ],
+      "retired_because": ""
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "goal": "C9000298",
+  "routes": [
+    {
+      "name": "R298_FULL_SEPARATION",
+      "status": "untried",
+      "evidence": "research/openai_manuscript/A-finite-entropy-separation-of-microstates-and-nonmicrostates-free-entropy-September-25-2026/build/sections/01-introduction.tex"
+    },
+    {
+      "name": "R_AF_ALL_ORDER",
+      "status": "current",
+      "evidence": "research/analytic_fisher/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000298": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 298 (Two notions of free entropy differ even when both are finite.; papers: A finite-entropy separation of microstates and nonmicrostates free entropy; Lean status: Partially/Comparator formalized (lean/docs/298.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C298_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C298_MAIN": {
+      "statement": "There is a bounded self-adjoint tuple X in a faithful normal tracial von Neumann algebra with -infinity < chi(X) <= chi*(X)-1/2 < infinity, for cutoff-limsup microstates entropy.",
+      "status": "open",
+      "depends_on": ["AF_ENTROPY", "AF_ENSEMBLE_FLOW", "AF_BLOCK_EVENT", "AF_FINITE_CHI"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finite-entropy-separation-of-microstates-and-nonmicrostates-free-entropy-September-25-2026/build/sections/01-introduction.tex"]
+    },
+    "AF_WICK": {
+      "statement": "Wick testing, with the adjoint Wick word and arbitrary centered bounded self-adjoint signal coordinates, holds at every order.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/analytic_fisher/report.md", "research/analytic_fisher/exact_certificate.json", "research/openai_manuscript/A-finite-entropy-separation-of-microstates-and-nonmicrostates-free-entropy-September-25-2026/build/sections/03-fisher.tex"]
+    },
+    "AF_FISHER": {
+      "statement": "The L2-convergent bilinear cumulant residual gives the squared-cumulant Fisher deficit bound for diagonal covariance.",
+      "status": "open",
+      "depends_on": ["AF_WICK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/analytic_fisher/report.md", "research/openai_manuscript/A-finite-entropy-separation-of-microstates-and-nonmicrostates-free-entropy-September-25-2026/build/sections/03-fisher.tex"]
+    },
+    "AF_KERNEL": {
+      "statement": "All-order finite combinatorial kernel: pairings inside blocks of a noncrossing partition have noncrossing union, and labels constant on k covering pairs have at most p^k possibilities.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/analytic_fisher/Main.lean", "research/analytic_fisher/statement_fidelity.md", "research/analytic_fisher/certificates/AF_KERNEL-6fff72e964446391.json"]
+    },
+    "AF_SUPPORT": {
+      "statement": "For the prescribed tensor signal, ||kappa_m(C)||_2 <= 128^m p^(m/4); odd orders vanish, and even m>=4 satisfy the stronger squared bound 128^(2m)*p^((m-2)/2), without assuming freeness of Y and B.",
+      "status": "open",
+      "depends_on": ["AF_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/analytic_fisher/report.md", "research/analytic_fisher/exact_certificate.json", "research/openai_manuscript/A-finite-entropy-separation-of-microstates-and-nonmicrostates-free-entropy-September-25-2026/build/sections/04-signal.tex"]
+    },
+    "AF_ANALYTIC": {
+      "statement": "For every p>=2 and u>2*128^2*sqrt(p), the prescribed tensor signal satisfies the manuscript's Fisher deficit bound and the stronger upper bound (4/3)*128^8*p*u^(-5).",
+      "status": "open",
+      "depends_on": ["AF_FISHER", "AF_SUPPORT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/analytic_fisher/report.md", "research/analytic_fisher/verify.py", "research/analytic_fisher/exact_certificate.json"]
+    },
+    "AF_ENTROPY": {
+      "statement": "For every a>0, the entropy deficit is one half the integrated Fisher deficit. Above the manuscript threshold it is at most both 128^6*p^(3/2)/(3*a^3) and 128^8*p/(6*a^4); the free-noise finite-time entropy identity follows.",
+      "status": "open",
+      "depends_on": ["AF_ANALYTIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/analytic_fisher/report.md"]
+    },
+    "AF_ASYMPTOTIC": {
+      "statement": "For any symmetric contraction T tensor-independent of p free standard semicirculars, u^5 times the Fisher deficit tends to D=2*p*tau(T^2)^2+kappa_4(T)^2, and a^4 times the entropy deficit tends to D/8. For the atomic signal D>=2*p/9, proving that linear p dependence in a uniform u^(-5) bound is optimal.",
+      "status": "open",
+      "depends_on": ["AF_WICK", "AF_FISHER", "AF_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/analytic_fisher/report.md", "research/analytic_fisher/verify.py", "research/analytic_fisher/exact_certificate.json"]
+    },
+    "AF_ENSEMBLE_FLOW": {
+      "statement": "The specified sequence of matrix ensembles obeys the finite-time entropy-production transfer in section 5.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finite-entropy-separation-of-microstates-and-nonmicrostates-free-entropy-September-25-2026/build/sections/05-flow.tex"]
+    },
+    "AF_BLOCK_EVENT": {
+      "statement": "The terminal matrix ensembles retain the block event and the comparison GUE law has the asserted exponential rarity, as in section 6.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finite-entropy-separation-of-microstates-and-nonmicrostates-free-entropy-September-25-2026/build/sections/06-blocks.tex"]
+    },
+    "AF_FINITE_CHI": {
+      "statement": "The prescribed noised tensor signal has finite cutoff-limsup microstates entropy, with a faithful bounded realization.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finite-entropy-separation-of-microstates-and-nonmicrostates-free-entropy-September-25-2026/build/sections/04-signal.tex"]
+    }
+  }
+}

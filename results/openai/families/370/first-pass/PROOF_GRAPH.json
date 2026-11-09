@@ -1,0 +1,153 @@
+{
+  "goal": "C9000370",
+  "engineer_result": "Complete analytic Riesz pressure proof and Newton specialization; exact algebra replay and Lean geometric core. Independent review is pending, so nodes are not marked proved.",
+  "routes": [
+    {
+      "name": "R_PRESSURE_AUDIT",
+      "status": "current",
+      "evidence": "research/openai_manuscript/The-Subcritical-Henon-Lane-Emden-Conjecture-September-24-2026/build/sections/05-pressure.tex"
+    },
+    {
+      "name": "R_PHAN_TRANSFER_ONLY",
+      "status": "ruled_out",
+      "evidence": "research/pressure-certificate/REPORT.md",
+      "reason": "The already-known n=5,p=q=4,A=B=3 parameter obstruction has weighted sum 16/5>3 but unweighted sum 2<3; weighted subcriticality does not supply Phan Theorem 1.2's unweighted hypothesis."
+    }
+  ],
+  "nodes": {
+    "C9000370": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 370 (The Lane–Emden and Hénon–Lane–Emden conjectures.; papers: The Subcritical Hénon–Lane–Emden Conjecture; Lean status: Partially/Comparator formalized (lean/docs/370.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PRESSURE_VERIFICATION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN": {
+      "statement": "The staged subcritical nonexistence theorem, in its full origin-continuous positive solution class.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_REDUCTIONS", "C_POTENTIAL", "C_UNIFORM", "C_VIRIAL", "C_LOCALIZATION", "C_PRESSURE", "C_SCALING"]
+    },
+    "C_REDUCTIONS": {
+      "statement": "Existence implies n>=3, A,B>-2 and pq>1.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": []
+    },
+    "C_POTENTIAL": {
+      "statement": "Distributional extension, Newton lower bounds, representations with nonnegative harmonic constants, and absolutely convergent gradients off zero.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_REDUCTIONS"]
+    },
+    "C_SOURCE_BOUNDS": {
+      "statement": "Uniform centered source masses from the lower potentials and origin-centered scaling; no exact-potential or energy-bound premise.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_POTENTIAL"]
+    },
+    "C_EXACT_POTENTIAL": {
+      "statement": "The harmonic constants vanish by comparison with the centered source bounds, giving u=K*g and v=K*f.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_POTENTIAL", "C_SOURCE_BOUNDS"]
+    },
+    "C_UNIFORM": {
+      "statement": "Uniform centered source masses, local L1 potentials, and truncated-potential bounds; no uniform energy assumption.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SOURCE_BOUNDS", "C_EXACT_POTENTIAL"]
+    },
+    "C_VIRIAL": {
+      "statement": "The localized weighted potential-kernel virial identity.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_POTENTIAL"]
+    },
+    "C_LOCALIZATION": {
+      "statement": "Energy-relative localization and marginal mismatch.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_EXACT_POTENTIAL", "C_UNIFORM"]
+    },
+    "C_PRESSURE": {
+      "statement": "The literal localized-pressure inequality of prop:pressure, with constants uniform over admissible solutions.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_EXACT_POTENTIAL", "C_UNIFORM", "C_PRESSURE_VERIFICATION"],
+      "evidence": ["research/pressure-certificate/REPORT.md"]
+    },
+    "C_SCALING": {
+      "statement": "Positive subcritical gap, equal energy scaling exponents, and the final dilation contradiction given a uniform local energy bound.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": []
+    },
+    "C_BASELINE_RADIAL": {
+      "statement": "Known radial existence on and above the critical hyperbola under n>=3, A,B>-2, p,q>0 and pq>1; not a new nonradial theorem.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/pressure-certificate/baseline-excerpts.txt"]
+    },
+    "C_PRESSURE_VERIFICATION": {
+      "statement": "Annular pressure for Riesz integral systems with positive log-Lipschitz spatial weights, derived from source and tail bounds without a uniform energy premise; Newton specialization gives prop:pressure.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["L_INTERVAL", "L_CAP", "L_LOSS", "L_ENDPOINT", "L_TONELLI", "L_RECOVERY"],
+      "evidence": ["research/pressure-certificate/REPORT.md", "research/pressure-certificate/verify.py", "research/pressure-certificate/exact_certificate.json"]
+    },
+    "L_MIDPOINT_SIGN": {
+      "statement": "The paired shifted-even decreasing overlap term has the sign of its midpoint separation, and the weighted endpoint-defect reduction is valid.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/pressure-certificate/Main.lean", "research/pressure-certificate/statement_fidelity.md", "research/pressure-certificate/certificates/L_MIDPOINT_SIGN-9289b79b4d3f5adf.json"]
+    },
+    "L_INTERVAL": {
+      "statement": "Weighted interval-pair comparison for positive Riesz kernels; zero-weight unbounded intervals use only nonnegative extended integrals.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["L_MIDPOINT_SIGN"],
+      "evidence": ["research/pressure-certificate/REPORT.md"]
+    },
+    "L_CAP": {
+      "statement": "Normalized radial caps give energy-relative cap mismatch and directional-pressure error.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/pressure-certificate/REPORT.md"]
+    },
+    "L_LOSS": {
+      "statement": "Averaged high/low layer loss is at most (C_kappa delta+C_kappa,delta/P)E+CP, with the displayed independence of constants.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["L_CAP"],
+      "evidence": ["research/pressure-certificate/REPORT.md"]
+    },
+    "L_ENDPOINT": {
+      "statement": "Positive component weights force finite endpoints in the annulus and O(delta d) relative endpoint error for log-Lipschitz spatial weights.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/pressure-certificate/REPORT.md"]
+    },
+    "L_TONELLI": {
+      "statement": "Joint measurability and nonnegative integration recover the actual endpoint potentials; all needed terms are finite before subtraction.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["L_INTERVAL", "L_ENDPOINT"],
+      "evidence": ["research/pressure-certificate/REPORT.md"]
+    },
+    "L_RECOVERY": {
+      "statement": "Weighted layer recovery incurs exactly two layer-loss copies overall, and sequential parameter selection absorbs the entire relative error.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["L_CAP", "L_LOSS", "L_ENDPOINT", "L_TONELLI"],
+      "evidence": ["research/pressure-certificate/REPORT.md"]
+    }
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "goal": "C9000131",
+  "routes": [
+    {
+      "name": "R_DISJOINT_CELL_SLICE_431",
+      "status": "current",
+      "evidence": "research/disjoint_core/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000131": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 131 (Rapid mixing of graph switches for every degree sequence.; papers: Polynomial mixing of the switch chain for every graphical degree sequence; Lean status: Partially/Comparator formalized (lean/docs/131.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_DISJOINT_CORE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_DISJOINT_CORE": {
+      "statement": "For every graphical labeled degree vector on a finite complete simple host, the ordered sum of h_a h_b over disjoint unordered vertex pairs is self-adjoint and positive semidefinite.",
+      "status": "open",
+      "depends_on": ["C_GRAPH_CELL", "C_INTERACTION", "C_SLICE_BUDGET", "C_ORDERED_ASSEMBLY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/disjoint_core/report.md",
+        "research/disjoint_core/Main.lean",
+        "research/disjoint_core/statement_fidelity.md",
+        "research/disjoint_core/exact_certificate.json",
+        "research/disjoint_core/lean_evidence/certificates/C_DISJOINT_CORE-62dcf5099e93ad3c.json"
+      ]
+    },
+    "C_GRAPH_CELL": {
+      "statement": "The preserved-data cells are exactly the binary 2-by-2 cross matrices with fixed total, together with independent subset choices of sizes q0-r and q1-c; left pair conditioning is X=(c,W), right pair conditioning is Y=(r,U), including overlapping outside singleton sets.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026/build/sections/disjoint.tex",
+        "research/disjoint_core/Main.lean",
+        "research/disjoint_core/exact_certificate.json"
+      ]
+    },
+    "C_INTERACTION": {
+      "statement": "For disjoint a,b, 2<h_a f,h_b f> >= 2||g_ab f||^2-||R_ab f||^2-||R_ba f||^2, including absent-center and vanishing-line cases.",
+      "status": "open",
+      "depends_on": ["C_GRAPH_CELL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026/build/sections/disjoint.tex",
+        "research/disjoint_core/Main.lean",
+        "research/disjoint_core/exact_certificate.json"
+      ]
+    },
+    "C_SLICE_BUDGET": {
+      "statement": "On every uniform q-subset slice, sum Q_ij <= (1/2)sum(I-tau_ij); transporting to every full pair fiber gives the complete directed equality-projection budget.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026/build/sections/slice.tex",
+        "research/disjoint_core/Main.lean",
+        "research/disjoint_core/exact_certificate.json"
+      ]
+    },
+    "C_ORDERED_ASSEMBLY": {
+      "statement": "Summing the local interaction over unordered disjoint pair-pairs and the directed budget over all a proves positivity with exactly the manuscript ordered-sum normalization.",
+      "status": "open",
+      "depends_on": ["C_INTERACTION", "C_SLICE_BUDGET"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026/build/sections/slice.tex",
+        "research/disjoint_core/Main.lean",
+        "research/disjoint_core/exact_certificate.json"
+      ]
+    },
+    "C_LOCAL_SHARPNESS": {
+      "statement": "The universal coefficient 1 multiplying both directed equality errors in the local disjoint interaction inequality is optimal: the graphical family d=(1,m+1,1,m+1,2^m) has exact required coefficients m/(m+2) approaching 1.",
+      "status": "open",
+      "depends_on": ["C_GRAPH_CELL", "C_INTERACTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/disjoint_core/report.md", "research/disjoint_core/verify.py", "research/disjoint_core/exact_certificate.json"]
+    },
+    "C_SHARP_SLICE": {
+      "statement": "For N>=4 and 1<=q<=N-1, the equality-frame eigenvalues are mu1=(N-2q)^2/(2(N-2)p) and mu2=2(q-1)(N-q-1)/((N-3)(N-2)p), giving the sharp imagewise comparison factor max(2mu1/N,mu2/(N-1)).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/disjoint_core/report.md", "research/disjoint_core/verify.py", "research/disjoint_core/exact_certificate.json"]
+    },
+    "C_TRIPLE": {
+      "statement": "For every vertex triple, H_T^2 >= H_T via the exact internal-edge augmented three-row encoding and the three-row variance inequality.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026/build/sections/triples.tex"]
+    },
+    "C_GLOBAL_H": {
+      "statement": "H^2=sum_T H_T^2-(n-3)H+D >= H.",
+      "status": "open",
+      "depends_on": ["C_TRIPLE", "C_DISJOINT_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026/build/sections/mixing.tex"]
+    },
+    "C_SWITCH_COMPARISON": {
+      "statement": "Switch connectivity identifies ker H as constants; H <= 2 n^2 L for the once-per-neighbor unnormalized switch Laplacian.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026/build/sections/mixing.tex"]
+    },
+    "C_MIXING_MAIN": {
+      "statement": "For the manuscript lazy six-ordered-matching proposal chain, gap >= 1/(24 n^2 binom(n,4)) on nontrivial spaces and t_mix(1/4) <= 2 n^8.",
+      "status": "open",
+      "depends_on": ["C_GLOBAL_H", "C_SWITCH_COMPARISON"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026/build/sections/mixing.tex"]
+    },
+    "C_SAMPLER": {
+      "statement": "The exact sampler is uniform, almost surely terminating, and has expected polynomial bit cost; outside this mission's verification and upstream selected Lean scope.",
+      "status": "open",
+      "depends_on": ["C_MIXING_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026/build/sections/exact-sampling.tex"]
+    }
+  }
+}

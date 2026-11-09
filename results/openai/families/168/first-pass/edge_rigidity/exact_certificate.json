@@ -1,0 +1,135 @@
+{
+  "result_class": "partial_result",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "publication_bar_satisfied": false,
+  "finite_replay_working_directory": "research/edge_rigidity",
+  "target": {
+    "claim": "C_IMAGE_EQUALITY",
+    "source": "research/openai_manuscript/Combinatorial-Invariance-of-Kazhdan-Lusztig-Polynomials-September-24-2026/build/05-comparison.tex",
+    "equation": "eq:image-equality",
+    "assertion": "For every genuine interval isomorphism and transported geometric reflection-order schedule, the actual BMP endpoint images satisfy I=f_e J.",
+    "resolved": false,
+    "falsified_manuscript_assertions": []
+  },
+  "formal_theorem": {
+    "claim": "C_DEFICIT_RIGIDITY",
+    "declaration": "TransportedEdgeRigidity.no_hidden_deficits",
+    "objects": "Arbitrary real-valued vectors on any index type, any finite schedule, and elementary transfers id+t_k E_(a_k,b_k).",
+    "hypotheses": [
+      "Every transfer weight is nonnegative.",
+      "The actual and exact trajectories have the same initial vector.",
+      "The exact trajectory follows every transfer exactly.",
+      "The actual trajectory is bounded above coordinatewise by every transfer applied to its previous vector.",
+      "The actual and exact trajectories have the same final vector."
+    ],
+    "conclusion": "The two trajectories coincide at every intermediate state and every transfer bound is attained.",
+    "application_limit": "The actual BMP step inequalities and endpoint equality are not proved here.",
+    "source": "research/edge_rigidity/Main.lean",
+    "statement_fidelity": "research/edge_rigidity/statement_fidelity.md",
+    "compiler": "Lean 4.31.0",
+    "compiler_exit_code": 0,
+    "proof_holes": [],
+    "replay_from_project_root": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.lean_evidence verify research/edge_rigidity/Main.lean --statement-fidelity research/edge_rigidity/statement_fidelity.md --claim C_DEFICIT_RIGIDITY --project-root .",
+    "certificate": "research/edge_rigidity/certificates/C_DEFICIT_RIGIDITY-39d98dfcaab08137.json",
+    "independent_statement_fidelity_review": "pending"
+  },
+  "exact_finite_results": [
+    {
+      "claim": "C_FINITE_A3",
+      "source_tops": ["3412", "4231"],
+      "source_bottoms": "All vertices whose actually constructed BMP stalk has more than one generator.",
+      "target_intervals": "All Bruhat intervals in S4.",
+      "geometric_orders": 1,
+      "genuine_interval_isomorphisms": 76,
+      "distinct_embedded_module_comparisons": 266,
+      "all_equalities_hold": true,
+      "data": "research/edge_rigidity/search.json",
+      "replay": "verify.py --tops 3412 4231 --max-isomorphisms 10000"
+    },
+    {
+      "claim": "C_FINITE_A4_34512",
+      "source_tops": ["34512"],
+      "source_bottoms": "All vertices whose actually constructed BMP stalk has more than one generator.",
+      "target_intervals": "All Bruhat intervals in S5.",
+      "geometric_orders": 1,
+      "genuine_interval_isomorphisms": 2688,
+      "distinct_embedded_module_comparisons": 934,
+      "all_equalities_hold": true,
+      "data": "research/edge_rigidity/search_a5.json",
+      "replay": "verify.py --tops 34512 --max-isomorphisms 10000"
+    },
+    {
+      "claim": "C_FINITE_CROSSTYPE",
+      "source_tops": ["3412", "4231"],
+      "source_bottoms": "All vertices whose actually constructed BMP stalk has more than one generator.",
+      "target_intervals": "All Bruhat intervals in B3, constructed as the 48 signed permutations.",
+      "target_reflections": 9,
+      "geometric_orders": 6,
+      "genuine_interval_isomorphisms": 436,
+      "schedules": 2616,
+      "distinct_embedded_module_comparisons": 324,
+      "all_equalities_hold": true,
+      "data": "research/edge_rigidity/search_b3.json",
+      "replay": "type_b_targets.py --source search.json"
+    }
+  ],
+  "domain_validation": {
+    "data": "research/edge_rigidity/type_a_hypotheses.json",
+    "S4": {
+      "group_order": 24,
+      "reflections": 6,
+      "strict_comparable_pairs": 189,
+      "increasing_reflection_edges": 72,
+      "hasse_edges": 58
+    },
+    "S5": {
+      "group_order": 120,
+      "reflections": 10,
+      "strict_comparable_pairs": 3661,
+      "increasing_reflection_edges": 600,
+      "hasse_edges": 444
+    },
+    "checks": [
+      "Inversion counts equal exact breadth-first Coxeter word lengths.",
+      "The listed transpositions are precisely the conjugates of simple reflections.",
+      "Sorted-prefix comparisons equal the transitive closure of all increasing reflection edges.",
+      "The same order is recovered from the rank-one Hasse edges."
+    ]
+  },
+  "adapter_check": {
+    "operation_id": "polynomial.ideal.normal_form.compute",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "payload": "research/edge_rigidity/jacobian_payload.json",
+    "typed_output": "research/edge_rigidity/jacobian_output.json",
+    "adapter_status": "research/edge_rigidity/jacobian_status.json",
+    "adapter_exit_code": 0,
+    "outcome": "COMPUTED",
+    "mathematical_assertion": "x1-x2 belongs to (x2-x3,x1-x3), the actual edge-image presentation for 1234->3214 in the BMP sheaf with top 3412.",
+    "scope": "One actual ideal-membership check only."
+  },
+  "incomplete_attempts": [
+    {
+      "route": "R_S5_TEN_ORDER_FALSIFICATION",
+      "task_id": "type-a5-full-pattern-orders",
+      "state": "timeout",
+      "elapsed_seconds": 1800.0,
+      "completed_result_file_exists": false,
+      "receipt": "research/edge_rigidity/search_a5_orders_receipt.json",
+      "terminal_status": "research/edge_rigidity/a5_orders_status.json",
+      "mathematical_conclusion": "None. This is neither a witness nor an exclusion of the requested finite family."
+    }
+  ],
+  "dependencies": ["Python", "SymPy", "NetworkX", "Singular"],
+  "source_attribution": {
+    "assumption": "C_BMP_CONSTRUCTION/BMP_DEFINITION",
+    "source_id": "arxiv:math/0512176v3",
+    "locator": "Section 6.1",
+    "primary_source_obtained": true,
+    "independent_attribution": "pending"
+  },
+  "independent_review": "pending",
+  "report": "research/edge_rigidity/analysis.md",
+  "remaining_obligation": "C_QUANTIFIED_OBSTRUCTION: a genuine exact counterexample or a uniform proof of the actual local inclusion and simultaneous induction."
+}

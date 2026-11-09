@@ -1,0 +1,150 @@
+{
+  "goal": "C9000314",
+  "routes": [
+    {
+      "name": "R_PROFINITE_EFFECTIVE",
+      "status": "current",
+      "evidence": "research/profinite_rigidity/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000314": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 314 (Cyclic length and chromatic fixed-point loss.; papers: Cyclic length and chromatic fixed-point loss; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["P_PROCYCLIC"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "P_CHROMATIC": {
+      "statement": "Manuscript thm:main: r_n(G,H)=ell(G,H) for all finite p-group pairs and n>=0; unverified here.",
+      "status": "open",
+      "depends_on": ["P_RATIONAL_GLUING", "P_HIGHER_GLUING", "P_SUPPORT"],
+      "reviewer_confirmed": false
+    },
+    "P_CHARACTERS": {
+      "statement": "Manuscript thm:pro-characters constructs the profinite source and natural evaluation splitting; unverified here.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "P_CONGRUENCES": {
+      "statement": "Manuscript lem:hom-integrality and thm:subgroup-congruence give every arithmetic hypothesis for that source; unverified here.",
+      "status": "open",
+      "depends_on": ["P_CHARACTERS"],
+      "reviewer_confirmed": false
+    },
+    "P_RATIONAL_GLUING": {
+      "statement": "Manuscript cor:rational-gluing; application remains unverified because its character inputs are open.",
+      "status": "open",
+      "depends_on": ["P_CHARACTERS", "P_CONGRUENCES", "P_PROCYCLIC"],
+      "reviewer_confirmed": false
+    },
+    "P_HIGHER_GLUING": {
+      "statement": "Manuscript higher-height gluing estimate and product-series rank subtraction; unverified here.",
+      "status": "open",
+      "depends_on": ["P_RATIONAL_GLUING"],
+      "reviewer_confirmed": false
+    },
+    "P_SUPPORT": {
+      "statement": "Manuscript subgroup support separation argument; unverified here.",
+      "status": "open",
+      "depends_on": ["P_HIGHER_GLUING"],
+      "reviewer_confirmed": false
+    },
+    "P_PROCYCLIC": {
+      "statement": "Under the exact three hypotheses of thm:procyclic, Gamma has a closed subnormal Z_p series of length at most l.",
+      "status": "open",
+      "depends_on": ["P_FIRST_QUOTIENT", "P_KERNEL", "P_SHRINK", "P_SECTION_RANK"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/profinite_rigidity/report.md",
+        "research/profinite_rigidity/exact_certificate.json"
+      ]
+    },
+    "P_FIRST_QUOTIENT": {
+      "statement": "Cyclic-target homomorphism-count integrality forces a nontrivial finitely generated pro-p group to map onto Z_p.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profinite_rigidity/report.md"]
+    },
+    "P_KERNEL": {
+      "statement": "Manuscript lem:kernel-abelianization follows from the effective integral detector obstruction.",
+      "status": "open",
+      "depends_on": ["P_GRAPH_COUNT", "P_QUOTIENT_SUM", "P_EFFECTIVE", "P_DETECTOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profinite_rigidity/report.md"]
+    },
+    "P_GRAPH_COUNT": {
+      "statement": "Actual graph subgroups correspond bijectively to (V,W,f) with V normal open, W open, and f:W onto K/V; the index is [K:V][Z_p^d:W], with no automorphism denominator.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/profinite_rigidity/report.md",
+        "research/profinite_rigidity/exact_certificate.json"
+      ]
+    },
+    "P_QUOTIENT_SUM": {
+      "statement": "For finite abelian A of order p^b, sum over B<=A of |Sur(Z_p^d,A/B)| equals p^(bd).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/profinite_rigidity/report.md",
+        "research/profinite_rigidity/exact_certificate.json"
+      ]
+    },
+    "P_LATTICE": {
+      "statement": "The lattice generating function is product_(u=0)^(d-1)(1-p^u t)^(-1); D_d a_j(d)=1 mod p^(j+1).",
+      "status": "open",
+      "depends_on": ["P_LEAN_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profinite_rigidity/report.md"]
+    },
+    "P_EFFECTIVE": {
+      "statement": "If |K^ab|=p^b and d>=1, then D_d c_h=p^(bd) mod p^(h-b+1) for h>=b, and v_p(c_h)=bd for h>=b(d+1).",
+      "status": "open",
+      "depends_on": ["P_GRAPH_COUNT", "P_QUOTIENT_SUM", "P_LATTICE", "P_LEAN_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profinite_rigidity/report.md"]
+    },
+    "P_DETECTOR": {
+      "statement": "For F=K/Phi(K) of order p^r, |F|e_F is integral and its inflated congruence sum at h=b(d+1) is p^r c_h, not divisible by p^(h+1).",
+      "status": "open",
+      "depends_on": ["P_EFFECTIVE", "P_LEAN_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profinite_rigidity/report.md"]
+    },
+    "P_SHRINK": {
+      "statement": "Shrinking a split Z_p action transfers all open-subgroup finite-set congruences and the finite-section rank bound to N x Z_p^(d+1).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profinite_rigidity/report.md"]
+    },
+    "P_SECTION_RANK": {
+      "statement": "The finite-section generator bound makes each closed kernel finitely generated and forces termination by the quotient (C_p)^(d+1).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/profinite_rigidity/report.md"]
+    },
+    "P_LEAN_CORE": {
+      "statement": "For p>=2, d=n+1, arbitrary integer weights summing to p^(bd), and h>=b(d+1), the recursively defined graph count is divisible by p^(bd) but not p^(bd+1); for r<=b the scaled count at h=b(d+1) is not divisible by p^(h+1). Universal lattice stabilization and denominator cancellation are proved too.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/profinite_rigidity/Main.lean",
+        "research/profinite_rigidity/statement_fidelity.md",
+        "research/profinite_rigidity/lean_check.json",
+        "research/profinite_rigidity/certificates/P_LEAN_CORE-816b45e413d08ebc.json"
+      ],
+      "remaining_obligation": "Formal claim is closed_kernel; independent review of statement fidelity and its group-theoretic interpretation remains."
+    }
+  }
+}

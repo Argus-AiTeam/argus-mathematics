@@ -1,0 +1,511 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX9000181",
+      "version": 1,
+      "statement": "OpenAI Math Audit #181: The Erdős–Gallai cycle-decomposition conjecture.",
+      "definitions": {
+        "openai_family": "181"
+      },
+      "content_hash": "1cbba746ca1c168619e4a086df5cff00151985ccd37c12427c52d88291838c94"
+    },
+    {
+      "context_id": "CTX_ROUTING",
+      "version": 1,
+      "statement": "Finite simple graph P on r>=2 vertices, cut expansion h>0, nonempty root set S, common deleted undirected edges F and root-specific forbidden vertices W_s. All logarithms are base two.",
+      "definitions": {
+        "ball_s(t)": "vertices reached within t edges in (P-F)-W_s, with s not in W_s",
+        "unionBall_A(t)": "union of ball_s(t) over roots s in A, preserving each W_s",
+        "g": "ceil(8(r/h)log_2(2r))"
+      },
+      "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C9000181",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000181",
+        "content_hash": "1cbba746ca1c168619e4a086df5cff00151985ccd37c12427c52d88291838c94"
+      },
+      "natural_statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 181 (The Erdős–Gallai cycle-decomposition conjecture.; papers: A linear cycle-and-edge decomposition of every graph; Lean status: Partially/Comparator formalized (lean/docs/181.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "ff2236f0d7307af6b8b8cbc0a71824e21c84d871bfe577f9ef459b05e5079aaf"
+    },
+    {
+      "claim_id": "V_UNION_GROWTH",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ROUTING",
+        "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+      },
+      "natural_statement": "If every |W_s|<=h/4, 0<|B_t(A)|<=r/2, and |F|<=h|B_t(A)|/4, then |B_(t+1)(A)| >= (1+h/(2r))|B_t(A)| for actual root-labelled graph balls.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d54fc36b4225521aa1dbb395ea08961ab65071342d7974974fb9465154e8a36d"
+    },
+    {
+      "claim_id": "V_GROWTH_BLOCK",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ROUTING",
+        "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+      },
+      "natural_statement": "For the graph balls above, any positive union meeting |F|<=h|B_t(A)|/4 exceeds r/2 after another g steps.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a79aec69758098712b9b4a850cc5f07f64be2b83b9b0ea57ec77d9106e67d144"
+    },
+    {
+      "claim_id": "V_ROOT_HALVING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ROUTING",
+        "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+      },
+      "natural_statement": "If a labelled root union exceeds r/2 and |F|<=hr/64, repeated partitions of at most 2^(m+1) roots into sets of at most 2^m roots preserve a large union after a growth block and reach one root within ceil(log_2|S|) halvings.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "3e69487b818f853adc79352ebe382942a26315b904c5e2a677dad761ad034c79"
+    },
+    {
+      "claim_id": "V_ROUTING_ROOT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ROUTING",
+        "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+      },
+      "natural_statement": "For all finite simple graphs P on r>=2 vertices with cut expansion h>0, nonempty S, common F, and root-specific W_s not containing s, if |W_s|<=h/4, |F|<=h|S|/4 and |F|<=hr/64, then some s in S has more than r/2 vertices in its ball at radius at most ceil(8(r/h)log_2(2r))(1+ceil(log_2|S|)).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "163ce45aec9a7318f85987a77dd179762f0003323b91443c871de5cfe24546c2"
+    },
+    {
+      "claim_id": "V_ROUTING_BUDGET",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ROUTING",
+        "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+      },
+      "natural_statement": "If h>=64(ell^2(k+b)+z), |F|<=2ell^2|I|, |S|>=|I|/(4k), 2|I|<=kr and |W_s|<=z+4bell^2, then |W_s|<=h/4, |F|<=h|S|/4, and |F|<=hr/64.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d2816aaf38d1b638ef611395d1d46670d6d6e7c09800a34a0c8a97dd40d178ed"
+    },
+    {
+      "claim_id": "D_TEAM_ROUTING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ROUTING",
+        "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+      },
+      "natural_statement": "For indexed demands with endpoint load at most k, teams of size at most b, and |Z_p|<=z, h>=64(ell^2(k+b)+z) suffices for simple routes of length at most ell that avoid Z_p internally, are globally edge-disjoint, and are internally vertex-disjoint within each team; Z_p may contain endpoints.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "fc5c2ae0f2dfac4977a708520cc07d62a7438790c715760ebe5fb6307b84e98f"
+    },
+    {
+      "claim_id": "A_MATCHING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ROUTING",
+        "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+      },
+      "natural_statement": "A finite indexed bounded-rank family of hypergraphs has disjoint representatives if each nonempty subfamily union has matching number strictly greater than s(|I|-1).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "1842bddc4a1fbeda79b7f1d5b8ac6b5248a4549a1568cdf1043190713f311b80"
+    },
+    {
+      "claim_id": "M_MAIN",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000181",
+        "content_hash": "1cbba746ca1c168619e4a086df5cff00151985ccd37c12427c52d88291838c94"
+      },
+      "natural_statement": "There is an absolute C>0 such that every finite simple graph on n vertices has an edge partition into at most Cn simple cycles and single edges (staged main.tex, thm:main; not verified by this routing mission).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "9e6690d83a53740551a1b0414845b65e9cd45475e05f98b6172c57b589a304a8"
+    },
+    {
+      "claim_id": "M_INDUCTION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000181",
+        "content_hash": "1cbba746ca1c168619e4a086df5cff00151985ccd37c12427c52d88291838c94"
+      },
+      "natural_statement": "The manuscript scale-prefix induction satisfies all part-count and recursive-order budgets (induction.tex, prop:induction-bound; open).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "6e01e61ae60f48bb225dc8eb9b5aa604711491280b8518a75497deabefa13f7b"
+    },
+    {
+      "claim_id": "M_SCALE_SPLIT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000181",
+        "content_hash": "1cbba746ca1c168619e4a086df5cff00151985ccd37c12427c52d88291838c94"
+      },
+      "natural_statement": "The scale-splitting construction has its stated piece expansion and box order-sum bounds (splitting.tex, lem:scale-split; open).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d2244fe02f401fe9781fe42f51a02a97282375bf299f2125d33fa6c685ce3e7f"
+    },
+    {
+      "claim_id": "M_SMALL_RESIDUE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000181",
+        "content_hash": "1cbba746ca1c168619e4a086df5cff00151985ccd37c12427c52d88291838c94"
+      },
+      "natural_statement": "An expanding piece admits the claimed small-residue construction (residue.tex, lem:small-residue; open).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "90bfd48df621efb01b2d5583372f23de3a9699dc22cf0c405eaf1f9ef7ea1b04"
+    },
+    {
+      "claim_id": "M_SAMPLING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000181",
+        "content_hash": "1cbba746ca1c168619e4a086df5cff00151985ccd37c12427c52d88291838c94"
+      },
+      "natural_statement": "The edge-splitting and vertex-sampling claims preserve the expansion and concentration budgets used by small residue (residue.tex, lem:edge-split and lem:vertex-sampling; open).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "9443ffef3924a31268ade4a90d0253645f2ed36325e94704bef7c76db6a90733"
+    },
+    {
+      "claim_id": "M_BATCH_RESOLUTION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000181",
+        "content_hash": "1cbba746ca1c168619e4a086df5cff00151985ccd37c12427c52d88291838c94"
+      },
+      "natural_statement": "Batch resolution and simple-cycle lifting obey the claimed cost and order bounds (folding.tex, lem:batch-resolution; open).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "ccc2f1a700aa0168ab855b5898a1ca893daf3f7f7525ae13f36eda8540766619"
+    },
+    {
+      "claim_id": "M_PAIR_FOLDING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000181",
+        "content_hash": "1cbba746ca1c168619e4a086df5cff00151985ccd37c12427c52d88291838c94"
+      },
+      "natural_statement": "Pair folding preserves representative assignments and has only the claimed linear simplification losses (folding.tex, lem:pair-folding; open).",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "b965ff3335b162f2d7927799f4c7815381598e919e634020b00873451fe76aaa"
+    },
+    {
+      "claim_id": "D_TEAM_ROUTING",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ROUTING",
+        "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+      },
+      "natural_statement": "For indexed demands with endpoint load at most k, teams of size at most b, and |Z_p|<=z, h>=64(ell^2(k+b)+z) suffices for simple routes of length at most ell that avoid Z_p internally, are globally edge-disjoint, and are internally vertex-disjoint within each team; Z_p may contain endpoints.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "AH_BM6",
+          "statement": "For positive rank s, a finite indexed family of hypergraphs with nonempty edges of size at most s has disjoint representatives if every nonempty index subfamily I has a union matching of size strictly greater than s(|I|-1).",
+          "source": "Bucic--Montgomery, Towards the Erdos-Gallai Cycle Decomposition Conjecture; primary-source excerpt read and stored in research/routing_core/BM_THEOREM6.txt.",
+          "source_id": "arxiv:2211.07689v2",
+          "locator": "Theorem 6",
+          "filed_by": "engineer:copilot",
+          "content_hash": "22c8bf0f7b79543f0c1b3190a1342ff46feef2d036a2572b9e399776477bd6c2"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "fc5c2ae0f2dfac4977a708520cc07d62a7438790c715760ebe5fb6307b84e98f"
+    },
+    {
+      "claim_id": "V_ROUTING_ROOT",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_ROUTING",
+        "content_hash": "0e017812fa97bfc0389398fe5f3427edd06763db5848dcdc375b4ccbc2e95eff"
+      },
+      "natural_statement": "For all finite simple graphs P on r>=2 vertices with cut expansion h>0, nonempty S, common F, and root-specific W_s not containing s, if |W_s|<=h/4, |F|<=h|S|/4 and |F|<=hr/64, then some s in S has more than r/2 vertices in its ball at radius at most ceil(8(r/h)log_2(2r))(1+ceil(log_2|S|)).",
+      "formal_statement": "import Mathlib\n\nopen Finset\n\nnoncomputable section\n\nnamespace RoutingCore\n\nvariable {r : ℕ}\n\ndef boundary (P : SimpleGraph (Fin r)) (B : Finset (Fin r)) :\n    Finset (Fin r × Fin r) := by\n  classical\n  exact (B ×ˢ (univ \\ B)).filter fun e => P.Adj e.1 e.2\n\ndef CutExpansion (P : SimpleGraph (Fin r)) (h : ℝ) : Prop :=\n  ∀ B : Finset (Fin r),\n    h * min (B.card : ℝ) ((r : ℝ) - B.card) ≤ (boundary P B).card\n\ndef ball (P : SimpleGraph (Fin r)) (F : Finset (Sym2 (Fin r)))\n    (W : Fin r → Finset (Fin r)) (s : Fin r) : ℕ → Finset (Fin r)\n  | 0 => {s}\n  | t + 1 => by\n    classical\n    exact ball P F W s t ∪ univ.filter (fun w =>\n      w ∉ W s ∧ ∃ v ∈ ball P F W s t, P.Adj v w ∧ s(v, w) ∉ F)\n\ndef unionBall (P : SimpleGraph (Fin r)) (F : Finset (Sym2 (Fin r)))\n    (W : Fin r → Finset (Fin r)) (A : Finset (Fin r)) (t : ℕ) :\n    Finset (Fin r) := by\n  classical\n  exact A.biUnion fun s => ball P F W s t\n\nlemma boundary_mem {P : SimpleGraph (Fin r)} {B : Finset (Fin r)}\n    {e : Fin r × Fin r} :\n    e ∈ boundary P B ↔ e.1 ∈ B ∧ e.2 ∉ B ∧ P.Adj e.1 e.2 := by\n  classical\n  simp [boundary, and_assoc]\n\nlemma ball_mono (P : SimpleGraph (Fin r)) (F : Finset (Sym2 (Fin r)))\n    (W : Fin r → Finset (Fin r)) (s : Fin r) :\n    Monotone (ball P F W s) := by\n  apply monotone_nat_of_le_succ\n  intro t\n  exact subset_union_left\n\nlemma unionBall_mono (P : SimpleGraph (Fin r)) (F : Finset (Sym2 (Fin r)))\n    (W : Fin r → Finset (Fin r)) (A : Finset (Fin r)) :\n    Monotone (unionBall P F W A) := by\n  intro t u htu v hv\n  classical\n  obtain ⟨s, hs, hv⟩ := mem_biUnion.mp hv\n  exact mem_biUnion.mpr ⟨s, hs, ball_mono P F W s htu hv⟩\n\n@[simp] lemma unionBall_zero (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    (A : Finset (Fin r)) : unionBall P F W A 0 = A := by\n  classical\n  ext v\n  simp [unionBall, ball]\n\nlemma unionBall_roots_mono (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    {A D : Finset (Fin r)} (hAD : A ⊆ D) (t : ℕ) :\n    unionBall P F W A t ⊆ unionBall P F W D t := by\n  classical\n  intro v hv\n  obtain ⟨s, hs, hv⟩ := mem_biUnion.mp hv\n  exact mem_biUnion.mpr ⟨s, hAD hs, hv⟩\n\nlemma ball_extend (P : SimpleGraph (Fin r)) (F : Finset (Sym2 (Fin r)))\n    (W : Fin r → Finset (Fin r)) {s v w : Fin r} {t : ℕ}\n    (hv : v ∈ ball P F W s t) (ha : P.Adj v w)\n    (hf : s(v, w) ∉ F) (hw : w ∉ W s) :\n    w ∈ ball P F W s (t + 1) := by\n  classical\n  simp only [ball, mem_union, mem_filter, mem_univ, true_and]\n  exact Or.inr ⟨hw, v, hv, ha, hf⟩\n\nlemma ball_avoids (P : SimpleGraph (Fin r)) (F : Finset (Sym2 (Fin r)))\n    (W : Fin r → Finset (Fin r)) {s : Fin r} (hs : s ∉ W s)\n    (t : ℕ) : ∀ v ∈ ball P F W s t, v ∉ W s := by\n  classical\n  induction t with\n  | zero => simpa [ball] using hs\n  | succ t ih =>\n    intro v hv\n    rcases mem_union.mp hv with hv | hv\n    · exact ih v hv\n    · exact (mem_filter.mp hv).2.1\n\nlemma deleted_boundary_card (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (B : Finset (Fin r)) :\n    ((boundary P B).filter fun e => s(e.1, e.2) ∈ F).card ≤ F.card := by\n  classical\n  let D := (boundary P B).filter fun e => s(e.1, e.2) ∈ F\n  have hinj : Set.InjOn (fun e : Fin r × Fin r => s(e.1, e.2)) D := by\n    intro a ha b hb hab\n    have haB := boundary_mem.mp (mem_filter.mp ha).1\n    have hbB := boundary_mem.mp (mem_filter.mp hb).1\n    rcases Sym2.eq_iff.mp hab with hab | hab\n    · exact Prod.ext hab.1 hab.2\n    · exact False.elim (hbB.2.1 (hab.1 ▸ haB.1))\n  calc\n    D.card = (D.image fun e => s(e.1, e.2)).card :=\n      (card_image_iff.mpr hinj).symm\n    _ ≤ F.card := card_le_card (by\n      intro e he\n      obtain ⟨a, ha, rfl⟩ := mem_image.mp he\n      exact (mem_filter.mp ha).2)\n\ntheorem union_growth (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    (h : ℝ) (_hh : 0 < h) (hr : 0 < r)\n    (hexp : CutExpansion P h) (A : Finset (Fin r)) (hA : A.Nonempty)\n    (hW : ∀ s ∈ A, (W s).card ≤ h / 4) (t : ℕ)\n    (hsmall : ((unionBall P F W A t).card : ℝ) ≤ (r : ℝ) / 2)\n    (hF : (F.card : ℝ) ≤ h * (unionBall P F W A t).card / 4) :\n    (1 + h / (2 * r)) * (unionBall P F W A t).card ≤\n      ((unionBall P F W A (t + 1)).card : ℝ) := by\n  classical\n  let B := unionBall P F W A t\n  let N := unionBall P F W A (t + 1)\n  obtain ⟨s0, hs0⟩ := hA\n  let label : Fin r → Fin r := fun v =>\n    if hv : v ∈ B then (mem_biUnion.mp hv).choose else s0\n  have hl (v : Fin r) (hv : v ∈ B) :\n      label v ∈ A ∧ v ∈ ball P F W (label v) t := by\n    simpa only [label, dif_pos hv] using (mem_biUnion.mp hv).choose_spec\n  let C := boundary P B\n  let D := C.filter fun e => s(e.1, e.2) ∈ F\n  let K := B.biUnion fun v => (W (label v)).image fun w => (v, w)\n  let U := C \\ (D ∪ K)\n  have hD : D.card ≤ F.card := deleted_boundary_card P F B\n  have hKnat : K.card ≤ ∑ v ∈ B, (W (label v)).card := by\n    exact (card_biUnion_le).trans (sum_le_sum fun v _ => card_image_le)\n  have hK : (K.card : ℝ) ≤ (h / 4) * B.card := by\n    calc\n      (K.card : ℝ) ≤ ∑ v ∈ B, ((W (label v)).card : ℝ) := by\n        exact_mod_cast hKnat\n      _ ≤ ∑ _v ∈ B, h / 4 := sum_le_sum fun v hv => hW _ (hl v hv).1\n      _ = (h / 4) * B.card := by simp [mul_comm]\n  have hUN : U ⊆ B ×ˢ (N \\ B) := by\n    intro e he\n    have heC := boundary_mem.mp (mem_sdiff.mp he).1\n    have hnot := mem_sdiff.mp he\n    have hf : s(e.1, e.2) ∉ F := by\n      intro hf\n      exact hnot.2 (mem_union_left K (mem_filter.mpr ⟨hnot.1, hf⟩))\n    have hw : e.2 ∉ W (label e.1) := by\n      intro hw\n      exact hnot.2 (mem_union_right D (mem_biUnion.mpr\n        ⟨e.1, heC.1, mem_image.mpr ⟨e.2, hw, rfl⟩⟩))\n    have hn : e.2 ∈ N := mem_biUnion.mpr\n      ⟨label e.1, (hl e.1 heC.1).1,\n        ball_extend P F W (hl e.1 heC.1).2 heC.2.2 hf hw⟩\n    exact mem_product.mpr ⟨heC.1, mem_sdiff.mpr ⟨hn, heC.2.1⟩⟩\n  have hBcard : B.card ≤ r := by\n    simpa using card_le_univ B\n  have hU : (U.card : ℝ) ≤ (r : ℝ) * (N \\ B).card := by\n    have hc : U.card ≤ r * (N \\ B).card := calc\n      U.card ≤ (B ×ˢ (N \\ B)).card := card_le_card hUN\n      _ = B.card * (N \\ B).card := card_product _ _\n      _ ≤ r * (N \\ B).card := Nat.mul_le_mul_right _ hBcard\n    exact_mod_cast hc\n  have hcover : C ⊆ (D ∪ K) ∪ U := by\n    intro e he\n    by_cases hd : e ∈ D ∪ K\n    · exact mem_union_left U hd\n    · exact mem_union_right (D ∪ K) (mem_sdiff.mpr ⟨he, hd⟩)\n  have hcountNat : C.card ≤ D.card + K.card + U.card :=\n    (card_le_card hcover).trans\n      ((card_union_le _ _).trans (Nat.add_le_add_right (card_union_le _ _) _))\n  have hcount : (C.card : ℝ) ≤ (F.card : ℝ) + (h / 4) * B.card +\n      (r : ℝ) * (N \\ B).card := by\n    have hc : (C.card : ℝ) ≤ (D.card : ℝ) + K.card + U.card := by\n      exact_mod_cast hcountNat\n    have hd : (D.card : ℝ) ≤ F.card := by exact_mod_cast hD\n    linarith\n  have he : h * B.card ≤ (C.card : ℝ) := by\n    have hm : min (B.card : ℝ) ((r : ℝ) - B.card) = B.card :=\n      min_eq_left (by dsimp [B]; linarith)\n    simpa only [hm] using hexp B\n  have hBN : B ⊆ N := unionBall_mono P F W A (Nat.le_succ t)\n  have hdiffNat := card_sdiff_add_card_eq_card hBN\n  have hdiff : ((N \\ B).card : ℝ) + B.card = N.card := by\n    exact_mod_cast hdiffNat\n  have hrR : (0 : ℝ) < r := by exact_mod_cast hr\n  have hx : h * (B.card : ℝ) / 2 ≤ (r : ℝ) * (N.card - B.card) := by\n    have hF' : (F.card : ℝ) ≤ h * B.card / 4 := hF\n    nlinarith\n  have hx' : h / (2 * r) * (B.card : ℝ) ≤ (N.card : ℝ) - B.card := by\n    calc\n      h / (2 * r) * (B.card : ℝ) = (h * B.card / 2) / r := by ring\n      _ ≤ (N.card : ℝ) - B.card := (div_le_iff₀ hrR).mpr (by nlinarith)\n  dsimp [B, N] at *\n  nlinarith\n\ndef growthRadius (r : ℕ) (h : ℝ) : ℕ :=\n  ⌈8 * ((r : ℝ) / h) * Real.logb 2 (2 * r)⌉₊\n\nlemma expansion_le_order (P : SimpleGraph (Fin r)) (h : ℝ)\n    (hr : 2 ≤ r) (hexp : CutExpansion P h) : h ≤ r := by\n  classical\n  let v : Fin r := ⟨0, by omega⟩\n  have hrR : (2 : ℝ) ≤ r := by exact_mod_cast hr\n  have hm : min (1 : ℝ) ((r : ℝ) - 1) = 1 := min_eq_left (by linarith)\n  have he := hexp {v}\n  simp only [card_singleton, Nat.cast_one, hm, mul_one] at he\n  have hsub : boundary P {v} ⊆ {v} ×ˢ univ := by\n    intro e he\n    exact mem_product.mpr ⟨(boundary_mem.mp he).1, mem_univ _⟩\n  have hc : (boundary P {v}).card ≤ r := by\n    simpa using card_le_card hsub\n  exact he.trans (by exact_mod_cast hc)\n\nlemma log_growth_lower (h : ℝ) (hr : 0 < r) (hh : 0 < h)\n    (hhr : h ≤ r) :\n    h / (4 * r) ≤ Real.log (1 + h / (2 * r)) := by\n  have hrR : (0 : ℝ) < r := by exact_mod_cast hr\n  let a := h / (2 * r)\n  have ha : 0 ≤ a := by dsimp [a]; positivity\n  have ha1 : a ≤ 1 := by\n    dsimp [a]\n    apply (div_le_iff₀ (by positivity : (0 : ℝ) < 2 * r)).mpr\n    linarith\n  have hden : 0 < a + 2 := by linarith\n  calc\n    h / (4 * r) = a / 2 := by dsimp [a]; ring\n    _ ≤ 2 * a / (a + 2) := (le_div_iff₀ hden).mpr (by nlinarith)\n    _ ≤ Real.log (1 + a) := Real.le_log_one_add_of_nonneg ha\n\nlemma radius_log_bound (P : SimpleGraph (Fin r)) (h : ℝ)\n    (hr : 2 ≤ r) (hh : 0 < h) (hexp : CutExpansion P h) :\n    Real.log (2 * r) <\n      (growthRadius r h : ℝ) * Real.log (1 + h / (2 * r)) := by\n  have hrN : 0 < r := by omega\n  have hrR : (0 : ℝ) < r := by exact_mod_cast hrN\n  have hr2 : (2 : ℝ) ≤ r := by exact_mod_cast hr\n  have hL : 0 < Real.log (2 * r) := Real.log_pos (by linarith)\n  have h2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)\n  have h2le : Real.log (2 : ℝ) ≤ 1 := by\n    have H := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 2)\n    norm_num at H ⊢\n    exact H\n  have hlog : Real.log (2 * r) ≤ Real.logb 2 (2 * r) := by\n    rw [Real.logb]\n    exact (le_div_iff₀ h2).mpr (by nlinarith)\n  have hg : 8 * ((r : ℝ) / h) * Real.log (2 * r) ≤\n      (growthRadius r h : ℝ) := by\n    exact (mul_le_mul_of_nonneg_left hlog (by positivity)).trans (Nat.le_ceil _)\n  have hmul : 2 * Real.log (2 * r) ≤\n      (growthRadius r h : ℝ) * (h / (4 * r)) := by\n    calc\n      2 * Real.log (2 * r) =\n          (8 * ((r : ℝ) / h) * Real.log (2 * r)) * (h / (4 * r)) := by\n        field_simp\n        ring\n      _ ≤ (growthRadius r h : ℝ) * (h / (4 * r)) :=\n        mul_le_mul_of_nonneg_right hg (by positivity)\n  have hglog := mul_le_mul_of_nonneg_left\n    (log_growth_lower h hrN hh (expansion_le_order P h hr hexp))\n    (Nat.cast_nonneg (growthRadius r h) : (0 : ℝ) ≤ growthRadius r h)\n  linarith\n\nlemma unionBall_card_mono (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    (A : Finset (Fin r)) {t u : ℕ} (htu : t ≤ u) :\n    ((unionBall P F W A t).card : ℝ) ≤ (unionBall P F W A u).card := by\n  exact_mod_cast card_le_card (unionBall_mono P F W A htu)\n\ntheorem growth_block (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    (h : ℝ) (hh : 0 < h) (hr : 2 ≤ r)\n    (hexp : CutExpansion P h) (A : Finset (Fin r)) (hA : A.Nonempty)\n    (hW : ∀ s ∈ A, (W s).card ≤ h / 4) (t : ℕ)\n    (hF : (F.card : ℝ) ≤ h * (unionBall P F W A t).card / 4) :\n    (r : ℝ) / 2 < (unionBall P F W A (t + growthRadius r h)).card := by\n  classical\n  have hrN : 0 < r := by omega\n  have hrR : (0 : ℝ) < r := by exact_mod_cast hrN\n  let g := growthRadius r h\n  let a := h / (2 * r)\n  have ha : 0 < 1 + a := by dsimp [a]; positivity\n  by_contra hn\n  have hfinal : ((unionBall P F W A (t + g)).card : ℝ) ≤ (r : ℝ) / 2 :=\n    le_of_not_gt hn\n  have hind : ∀ i : ℕ, i ≤ g →\n      (1 + a) ^ i * (unionBall P F W A t).card ≤\n        ((unionBall P F W A (t + i)).card : ℝ) := by\n    intro i\n    induction i with\n    | zero => intro _; simp\n    | succ i ih =>\n      intro hi\n      have hii : i ≤ g := by omega\n      have hsmall := (unionBall_card_mono P F W A\n        (Nat.add_le_add_left hii t)).trans hfinal\n      have hstart := unionBall_card_mono P F W A (Nat.le_add_right t i)\n      have hFi : (F.card : ℝ) ≤ h * (unionBall P F W A (t + i)).card / 4 := by\n        nlinarith\n      have hstep := union_growth P F W h hh hrN hexp A hA hW (t + i) hsmall hFi\n      calc\n        (1 + a) ^ (i + 1) * (unionBall P F W A t).card =\n            (1 + a) * ((1 + a) ^ i * (unionBall P F W A t).card) := by ring\n        _ ≤ (1 + a) * (unionBall P F W A (t + i)).card :=\n          mul_le_mul_of_nonneg_left (ih hii) ha.le\n        _ ≤ ((unionBall P F W A (t + (i + 1))).card : ℝ) := by\n          simpa only [Nat.add_assoc] using hstep\n  have hstartNat : 1 ≤ (unionBall P F W A t).card := by\n    have H := card_le_card (unionBall_mono P F W A (Nat.zero_le t))\n    rw [unionBall_zero] at H\n    exact (Nat.succ_le_iff.mpr (card_pos.mpr hA)).trans H\n  have hstartR : (1 : ℝ) ≤ (unionBall P F W A t).card := by\n    exact_mod_cast hstartNat\n  have hpow : (1 + a) ^ g ≤ (r : ℝ) / 2 := by\n    have H := hind g le_rfl\n    have Hp : (0 : ℝ) ≤ (1 + a) ^ g := (pow_pos ha g).le\n    nlinarith\n  have hlog := Real.log_le_log (pow_pos ha g) hpow\n  rw [Real.log_pow] at hlog\n  have hcomp : Real.log ((r : ℝ) / 2) ≤ Real.log (2 * r) :=\n    Real.log_le_log (by positivity) (by linarith)\n  have hstrict := radius_log_bound P h hr hh hexp\n  dsimp [g, a] at hlog\n  linarith\n\nlemma unionBall_union (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    (A D : Finset (Fin r)) (t : ℕ) :\n    unionBall P F W (A ∪ D) t =\n      unionBall P F W A t ∪ unionBall P F W D t := by\n  classical\n  ext v\n  simp [unionBall, or_and_right, exists_or]\n\ntheorem halve_large_union (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    (h : ℝ) (hh : 0 < h) (hr : 2 ≤ r) (hexp : CutExpansion P h)\n    (S : Finset (Fin r)) (hW : ∀ s ∈ S, (W s).card ≤ h / 4)\n    (hF : (F.card : ℝ) ≤ h * r / 64) :\n    ∀ (m : ℕ) (A : Finset (Fin r)), A ⊆ S → A.Nonempty →\n      A.card ≤ 2 ^ m → ∀ t : ℕ,\n      (r : ℝ) / 2 < (unionBall P F W A t).card →\n      ∃ s ∈ A, (r : ℝ) / 2 < (ball P F W s (t + m * growthRadius r h)).card := by\n  classical\n  have hrN : 0 < r := by omega\n  have hrR : (0 : ℝ) < r := by exact_mod_cast hrN\n  intro m\n  induction m with\n  | zero =>\n    intro A hAS hA hcard t hlarge\n    have hc : A.card = 1 := by\n      have hp := card_pos.mpr hA\n      simp only [pow_zero] at hcard\n      omega\n    obtain ⟨s, rfl⟩ := card_eq_one.mp hc\n    exact ⟨s, by simp, by simpa [unionBall] using hlarge⟩\n  | succ m ih =>\n    intro A hAS hA hcard t hlarge\n    obtain ⟨C, hCA, hCcard⟩ :=\n      exists_subset_card_eq (min_le_left A.card (2 ^ m))\n    let D := A \\ C\n    have hCbound : C.card ≤ 2 ^ m := by\n      rw [hCcard]\n      exact min_le_right _ _\n    have hDbound : D.card ≤ 2 ^ m := by\n      have hd := card_sdiff_add_card_eq_card hCA\n      rw [hCcard] at hd\n      rw [pow_succ] at hcard\n      dsimp [D]\n      omega\n    have hDA : D ⊆ A := sdiff_subset\n    have hsplit : A = C ∪ D := (union_sdiff_of_subset hCA).symm\n    have hcover : ((unionBall P F W A t).card : ℝ) ≤\n        (unionBall P F W C t).card + (unionBall P F W D t).card := by\n      rw [hsplit, unionBall_union]\n      exact_mod_cast card_union_le (unionBall P F W C t) (unionBall P F W D t)\n    have hchoice : (r : ℝ) / 4 < (unionBall P F W C t).card ∨\n        (r : ℝ) / 4 < (unionBall P F W D t).card := by\n      by_contra hn\n      push Not at hn\n      linarith\n    have hE : ∃ E : Finset (Fin r), E ⊆ A ∧ E.card ≤ 2 ^ m ∧\n        (r : ℝ) / 4 < (unionBall P F W E t).card := by\n      rcases hchoice with hC | hD\n      · exact ⟨C, hCA, hCbound, hC⟩\n      · exact ⟨D, hDA, hDbound, hD⟩\n    obtain ⟨E, hEA, hEcard, hEquarter⟩ := hE\n    have hEnonempty : E.Nonempty := by\n      by_contra hn\n      have he : E = ∅ := not_nonempty_iff_eq_empty.mp hn\n      simp only [he, unionBall, biUnion_empty, card_empty, Nat.cast_zero] at hEquarter\n      linarith\n    have hES : E ⊆ S := hEA.trans hAS\n    have hFE : (F.card : ℝ) ≤ h * (unionBall P F W E t).card / 4 := by\n      have H := mul_lt_mul_of_pos_left hEquarter hh\n      nlinarith [mul_pos hh hrR]\n    have hgrown := growth_block P F W h hh hr hexp E hEnonempty\n      (fun s hs => hW s (hES hs)) t hFE\n    obtain ⟨s, hs, hball⟩ := ih E hES hEnonempty hEcard\n      (t + growthRadius r h) hgrown\n    refine ⟨s, hEA hs, ?_⟩\n    have ht : (t + growthRadius r h) + m * growthRadius r h =\n        t + (m + 1) * growthRadius r h := by ring\n    rw [ht] at hball\n    exact hball\n\ntheorem root_growth_and_halving (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    (h : ℝ) (hh : 0 < h) (hr : 2 ≤ r) (hexp : CutExpansion P h)\n    (S : Finset (Fin r)) (hS : S.Nonempty)\n    (_hroot : ∀ s ∈ S, s ∉ W s)\n    (hW : ∀ s ∈ S, (W s).card ≤ h / 4)\n    (hFS : (F.card : ℝ) ≤ h * S.card / 4)\n    (hFr : (F.card : ℝ) ≤ h * r / 64) :\n    ∃ s ∈ S, (r : ℝ) / 2 <\n      (ball P F W s (growthRadius r h * (1 + Nat.clog 2 S.card))).card := by\n  have hstart : (F.card : ℝ) ≤ h * (unionBall P F W S 0).card / 4 := by\n    simpa using hFS\n  have hlarge := growth_block P F W h hh hr hexp S hS hW 0 hstart\n  obtain ⟨s, hs, hball⟩ := halve_large_union P F W h hh hr hexp S hW hFr\n    (Nat.clog 2 S.card) S (Subset.refl _) hS (Nat.le_pow_clog (by norm_num) _)\n    (growthRadius r h) (by simpa using hlarge)\n  refine ⟨s, hs, ?_⟩\n  have ht : growthRadius r h + Nat.clog 2 S.card * growthRadius r h =\n      growthRadius r h * (1 + Nat.clog 2 S.card) := by ring\n  rw [ht] at hball\n  exact hball\n\ndef rootGraph (P : SimpleGraph (Fin r)) (F : Finset (Sym2 (Fin r)))\n    (W : Fin r → Finset (Fin r)) (s : Fin r) : SimpleGraph (Fin r) where\n  Adj v w := P.Adj v w ∧ s(v, w) ∉ F ∧ v ∉ W s ∧ w ∉ W s\n  symm := ⟨by\n    intro v w hvw\n    exact ⟨hvw.1.symm, by simpa only [Sym2.eq_swap] using hvw.2.1,\n      hvw.2.2.2, hvw.2.2.1⟩⟩\n  loopless := ⟨by\n    intro v hv\n    exact P.loopless.irrefl v hv.1⟩\n\nlemma ball_walk_witness (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    {s : Fin r} (hs : s ∉ W s) (t : ℕ) :\n    ∀ v ∈ ball P F W s t,\n      ∃ p : (rootGraph P F W s).Walk s v, p.length ≤ t := by\n  classical\n  induction t with\n  | zero =>\n    intro v hv\n    have hv' : v = s := by simpa [ball] using hv\n    subst v\n    exact ⟨SimpleGraph.Walk.nil, by simp⟩\n  | succ t ih =>\n    intro w hw\n    rcases mem_union.mp hw with hw | hw\n    · obtain ⟨p, hp⟩ := ih w hw\n      exact ⟨p, hp.trans (Nat.le_succ t)⟩\n    · obtain ⟨hwW, v, hv, hva, hvF⟩ := (mem_filter.mp hw).2\n      obtain ⟨p, hp⟩ := ih v hv\n      have he : (rootGraph P F W s).Adj v w :=\n        ⟨hva, hvF, ball_avoids P F W hs t v hv, hwW⟩\n      exact ⟨p.concat he, by simpa using Nat.add_le_add_right hp 1⟩\n\nlemma walk_mem_ball (P : SimpleGraph (Fin r)) (F : Finset (Sym2 (Fin r)))\n    (W : Fin r → Finset (Fin r)) (s : Fin r) {v w : Fin r}\n    (p : (rootGraph P F W s).Walk v w) (t : ℕ)\n    (hv : v ∈ ball P F W s t) :\n    w ∈ ball P F W s (t + p.length) := by\n  induction p generalizing t with\n  | nil => simpa\n  | @cons v u w he p ih =>\n    have hu := ball_extend P F W hv he.1 he.2.1 he.2.2.2\n    have H := ih (t + 1) hu\n    simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using H\n\ntheorem mem_ball_iff_walk (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    {s v : Fin r} (hs : s ∉ W s) (t : ℕ) :\n    v ∈ ball P F W s t ↔\n      ∃ p : (rootGraph P F W s).Walk s v, p.length ≤ t := by\n  constructor\n  · exact ball_walk_witness P F W hs t v\n  · rintro ⟨p, hp⟩\n    have hv := walk_mem_ball P F W s p 0 (by simp [ball])\n    exact ball_mono P F W s hp (by simpa using hv)\n\ndef walkBall (P : SimpleGraph (Fin r)) (F : Finset (Sym2 (Fin r)))\n    (W : Fin r → Finset (Fin r)) (s : Fin r) (t : ℕ) : Finset (Fin r) := by\n  classical\n  exact univ.filter fun v => ∃ p : (rootGraph P F W s).Walk s v, p.length ≤ t\n\nlemma ball_eq_walkBall (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    {s : Fin r} (hs : s ∉ W s) (t : ℕ) :\n    ball P F W s t = walkBall P F W s t := by\n  classical\n  ext v\n  simpa only [walkBall, mem_filter, mem_univ, true_and] using\n    mem_ball_iff_walk P F W hs t (v := v)\n\ntheorem routing_root (P : SimpleGraph (Fin r))\n    (F : Finset (Sym2 (Fin r))) (W : Fin r → Finset (Fin r))\n    (h : ℝ) (hh : 0 < h) (hr : 2 ≤ r) (hexp : CutExpansion P h)\n    (S : Finset (Fin r)) (hS : S.Nonempty)\n    (hroot : ∀ s ∈ S, s ∉ W s)\n    (hW : ∀ s ∈ S, (W s).card ≤ h / 4)\n    (hFS : (F.card : ℝ) ≤ h * S.card / 4)\n    (hFr : (F.card : ℝ) ≤ h * r / 64) :\n    ∃ s ∈ S, (r : ℝ) / 2 <\n      (walkBall P F W s\n        (⌈8 * ((r : ℝ) / h) * Real.logb 2 (2 * r)⌉₊ *\n          (1 + ⌈Real.logb 2 (S.card : ℝ)⌉₊))).card := by\n  obtain ⟨s, hs, hb⟩ := root_growth_and_halving P F W h hh hr hexp S hS\n    hroot hW hFS hFr\n  refine ⟨s, hs, ?_⟩\n  have hclog : ⌈Real.logb 2 (S.card : ℝ)⌉₊ = Nat.clog 2 S.card := by\n    simpa using Real.natCeil_logb_natCast 2 S.card\n  rw [hclog]\n  simpa only [growthRadius, ball_eq_walkBall P F W (hroot s hs)] using hb\n\ntheorem obstruction_budgets (x k b z h n a R f w : ℝ)\n    (hx : 0 ≤ x) (hk : 0 ≤ k) (hb : 0 ≤ b) (hz : 0 ≤ z)\n    (ha : 0 ≤ a) (hR : 0 ≤ R)\n    (hc : 64 * (x * (k + b) + z) ≤ h)\n    (hf : f ≤ 2 * x * n) (hp : n ≤ 4 * k * a)\n    (hend : 2 * n ≤ k * R) (hw : w ≤ z + 4 * b * x) :\n    w ≤ h / 4 ∧ f ≤ h * a / 4 ∧ f ≤ h * R / 64 := by\n  have hxb := mul_nonneg hx hb\n  have hxk := mul_nonneg hx hk\n  have hweak : w ≤ h / 4 := by nlinarith\n  have hi : 8 * k * x ≤ h / 4 := by nlinarith\n  have hg : k * x ≤ h / 64 := by nlinarith\n  have hfinit : f ≤ (8 * k * x) * a := by\n    have H := mul_le_mul_of_nonneg_left hp (show 0 ≤ 2 * x by positivity)\n    nlinarith\n  have hfglob : f ≤ (k * x) * R := by\n    have H := mul_le_mul_of_nonneg_left hend hx\n    nlinarith\n  constructor\n  · exact hweak\n  constructor\n  · have H := mul_le_mul_of_nonneg_right hi ha\n    nlinarith\n  · have H := mul_le_mul_of_nonneg_right hg hR\n    nlinarith\n\n#print axioms RoutingCore.union_growth\n#print axioms RoutingCore.routing_root\n\nend RoutingCore\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "5b7323c11b8dbe1ff4a6c02bf4776babb41a7db8ba0be0be1fed7098c84b8dd8"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-V_ROUTING_ROOT-7363d825cad8",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_ROUTING_ROOT",
+        "content_hash": "5b7323c11b8dbe1ff4a6c02bf4776babb41a7db8ba0be0be1fed7098c84b8dd8"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/routing_core/certificates/V_ROUTING_ROOT-fa23589cc74773a0.json"
+    },
+    {
+      "evidence_id": "judgement-V_ROUTING_ROOT-5d675017ff85",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_ROUTING_ROOT",
+        "content_hash": "5b7323c11b8dbe1ff4a6c02bf4776babb41a7db8ba0be0be1fed7098c84b8dd8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/routing_core/certificates/V_ROUTING_ROOT-fa23589cc74773a0.json"
+    },
+    {
+      "evidence_id": "judgement-V_UNION_GROWTH-933d88b8c39b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_UNION_GROWTH",
+        "content_hash": "d54fc36b4225521aa1dbb395ea08961ab65071342d7974974fb9465154e8a36d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/routing_core/Main.lean"
+    },
+    {
+      "evidence_id": "judgement-V_GROWTH_BLOCK-f4de6f5179cd",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_GROWTH_BLOCK",
+        "content_hash": "a79aec69758098712b9b4a850cc5f07f64be2b83b9b0ea57ec77d9106e67d144"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/routing_core/Main.lean"
+    },
+    {
+      "evidence_id": "judgement-V_ROOT_HALVING-98190e3e6bea",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_ROOT_HALVING",
+        "content_hash": "3e69487b818f853adc79352ebe382942a26315b904c5e2a677dad761ad034c79"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/routing_core/Main.lean"
+    },
+    {
+      "evidence_id": "judgement-V_ROUTING_BUDGET-e65e3fc17450",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_ROUTING_BUDGET",
+        "content_hash": "d2816aaf38d1b638ef611395d1d46670d6d6e7c09800a34a0c8a97dd40d178ed"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/routing_core/Main.lean"
+    },
+    {
+      "evidence_id": "judgement-D_TEAM_ROUTING-eb8fa027bcce",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "D_TEAM_ROUTING",
+        "content_hash": "fc5c2ae0f2dfac4977a708520cc07d62a7438790c715760ebe5fb6307b84e98f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/routing_core/REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-A_MATCHING-43f84c521ecc",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "A_MATCHING",
+        "content_hash": "1842bddc4a1fbeda79b7f1d5b8ac6b5248a4549a1568cdf1043190713f311b80"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/routing_core/BM_THEOREM6.txt"
+    },
+    {
+      "evidence_id": "judgement-V_ROUTING_ROOT-f0116b5c7eae",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_ROUTING_ROOT",
+        "content_hash": "5b7323c11b8dbe1ff4a6c02bf4776babb41a7db8ba0be0be1fed7098c84b8dd8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent",
+      "artifact": "research/routing_core/certificates/V_ROUTING_ROOT-fa23589cc74773a0.json"
+    },
+    {
+      "evidence_id": "judgement-V_UNION_GROWTH-8edc6e8dd23f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_UNION_GROWTH",
+        "content_hash": "d54fc36b4225521aa1dbb395ea08961ab65071342d7974974fb9465154e8a36d"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent",
+      "artifact": "research/routing_core/REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-V_GROWTH_BLOCK-b553deed5c18",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_GROWTH_BLOCK",
+        "content_hash": "a79aec69758098712b9b4a850cc5f07f64be2b83b9b0ea57ec77d9106e67d144"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent",
+      "artifact": "research/routing_core/REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-V_ROOT_HALVING-a04cc187d9c9",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_ROOT_HALVING",
+        "content_hash": "3e69487b818f853adc79352ebe382942a26315b904c5e2a677dad761ad034c79"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent",
+      "artifact": "research/routing_core/REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-V_ROUTING_BUDGET-508fba2474a0",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "V_ROUTING_BUDGET",
+        "content_hash": "d2816aaf38d1b638ef611395d1d46670d6d6e7c09800a34a0c8a97dd40d178ed"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent",
+      "artifact": "research/routing_core/REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-D_TEAM_ROUTING-50663a5293b4",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "D_TEAM_ROUTING",
+        "content_hash": "fc5c2ae0f2dfac4977a708520cc07d62a7438790c715760ebe5fb6307b84e98f"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent",
+      "artifact": "research/routing_core/REPORT.md"
+    },
+    {
+      "evidence_id": "judgement-AH_BM6-97196339c6a6",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "AH_BM6",
+        "content_hash": "22c8bf0f7b79543f0c1b3190a1342ff46feef2d036a2572b9e399776477bd6c2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:independent",
+      "artifact": "research/routing_core/BM_THEOREM6.txt"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_ROUTING_LABELLED_BOUNDARY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "V_ROUTING_ROOT",
+        "content_hash": "5b7323c11b8dbe1ff4a6c02bf4776babb41a7db8ba0be0be1fed7098c84b8dd8"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "V_UNION_GROWTH",
+          "content_hash": "d54fc36b4225521aa1dbb395ea08961ab65071342d7974974fb9465154e8a36d"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "V_GROWTH_BLOCK",
+          "content_hash": "a79aec69758098712b9b4a850cc5f07f64be2b83b9b0ea57ec77d9106e67d144"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "V_ROOT_HALVING",
+          "content_hash": "3e69487b818f853adc79352ebe382942a26315b904c5e2a677dad761ad034c79"
+        }
+      ],
+      "retired_because": "The preformal version-1 goal was superseded when version 2 acquired the completed Lean formalization and its successful compiler certificate. The mathematical route succeeded; this historical plan is not a failed or excluded graph argument and must not be retried as unfinished work."
+    },
+    {
+      "route_id": "R_TEAM_OBSTRUCTION",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "D_TEAM_ROUTING",
+        "content_hash": "fc5c2ae0f2dfac4977a708520cc07d62a7438790c715760ebe5fb6307b84e98f"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "V_ROUTING_ROOT",
+          "content_hash": "5b7323c11b8dbe1ff4a6c02bf4776babb41a7db8ba0be0be1fed7098c84b8dd8"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "V_ROUTING_BUDGET",
+          "content_hash": "d2816aaf38d1b638ef611395d1d46670d6d6e7c09800a34a0c8a97dd40d178ed"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "A_MATCHING",
+          "content_hash": "1842bddc4a1fbeda79b7f1d5b8ac6b5248a4549a1568cdf1043190713f311b80"
+        }
+      ],
+      "retired_because": ""
+    }
+  ]
+}

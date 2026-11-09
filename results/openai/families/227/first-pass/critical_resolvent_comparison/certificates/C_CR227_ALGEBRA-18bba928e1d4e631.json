@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CR227_ALGEBRA-23da4cfe266d",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/227/first-pass/critical_resolvent_comparison/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/227/first-pass/critical_resolvent_comparison/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15967,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/227/first-pass/critical_resolvent_comparison/Main.lean",
+    "source_sha256": "74cdc42a23223dafade27c7fbe155321743092c58312593232a7dd4092291298",
+    "statement_fidelity": "families/227/first-pass/critical_resolvent_comparison/statement_fidelity.md",
+    "statement_fidelity_sha256": "cb9d7fffd9348b518525c6bad9b6f3338438028e40a65e858c1716c6edc4ffc3",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/227/first-pass/critical_resolvent_comparison/Main.lean:31:14: warning: this tactic is never executed\n\nNote: This linter can be disabled with `set_option linter.unreachableTactic false`\nfamilies/227/first-pass/critical_resolvent_comparison/Main.lean:31:14: warning: 'ring' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\nfamilies/227/first-pass/critical_resolvent_comparison/Main.lean:78:15: warning: This simp argument is unused:\n  pow_add\n\nHint: Omit it from the simp argument list.\n  simp only [pow_a̵d̵d̵,̵ ̵p̵o̵w̵_̵succ]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/critical_resolvent_comparison/Main.lean",
+    "text": "import Mathlib\n\nnamespace CriticalResolventComparison\n\ntheorem tiltedMeanNumerator (t u s : ℝ) :\n    ((1 + t) / 2) * (1 + u * s) -\n        ((1 - t) / 2) * (1 - u * s) = t + u * s := by\n  ring\n\ntheorem tiltedMass (t u s : ℝ) :\n    ((1 + t) / 2) * (1 + u * s) +\n        ((1 - t) / 2) * (1 - u * s) = 1 + u * s * t := by\n  ring\n\ntheorem varianceNumerator (t u s : ℝ) (hs : s ^ 2 = 1) :\n    (1 + u * s * t) ^ 2 - (t + u * s) ^ 2 =\n      (1 - t ^ 2) * (1 - u ^ 2) := by\n  calc\n    _ = (1 - t ^ 2) * (1 - u ^ 2 * s ^ 2) := by ring\n    _ = _ := by rw [hs]; ring\n\ntheorem unnormalizedEndpointVariance (t u s : ℝ) (hs : s ^ 2 = 1)\n    (hd : 1 + u * s * t ≠ 0) :\n    (1 + u * s * t) * (1 - ((t + u * s) / (1 + u * s * t)) ^ 2) =\n      (1 - t ^ 2) * ((1 - u ^ 2) / (1 + u * s * t)) := by\n  have h := varianceNumerator t u s hs\n  calc\n    _ = ((1 + u * s * t) ^ 2 - (t + u * s) ^ 2) /\n        (1 + u * s * t) := by\n          field_simp [hd]\n          <;> ring\n    _ = _ := by rw [h]; ring\n\ntheorem halfDifferenceResidual (t s gp gm : ℝ) :\n    s * (gp + gm) / 2 + s * t * ((gp - gm) / 2) =\n      s * (((1 + t) / 2) * gp + ((1 - t) / 2) * gm) := by\n  ring\n\ntheorem finiteEndpointResidual {ι : Type*} [Fintype ι]\n    (weight slope mean other plus minus : ι → ℝ) :\n    (∑ k, weight k * slope k *\n      (other k * (plus k + minus k) / 2 +\n        other k * mean k * ((plus k - minus k) / 2))) =\n    ∑ k, weight k * slope k * other k *\n      (((1 + mean k) / 2) * plus k +\n        ((1 - mean k) / 2) * minus k) := by\n  apply Finset.sum_congr rfl\n  intro k hk\n  rw [halfDifferenceResidual]\n  ring\n\ntheorem binaryJensenIdentity (t gp gm : ℝ) :\n    ((1 + t) / 2) * gp ^ 2 + ((1 - t) / 2) * gm ^ 2 -\n      (((1 + t) / 2) * gp + ((1 - t) / 2) * gm) ^ 2 =\n      (1 - t ^ 2) * ((gp - gm) / 2) ^ 2 := by\n  ring\n\ntheorem binaryJensen (t gp gm : ℝ) (ht : t ^ 2 ≤ 1) :\n    (((1 + t) / 2) * gp + ((1 - t) / 2) * gm) ^ 2 ≤\n      ((1 + t) / 2) * gp ^ 2 + ((1 - t) / 2) * gm ^ 2 := by\n  have h := binaryJensenIdentity t gp gm\n  have hn : 0 ≤ (1 - t ^ 2) * ((gp - gm) / 2) ^ 2 :=\n    mul_nonneg (by linarith) (sq_nonneg _)\n  linarith\n\ntheorem twoEndpointCauchy (a b x y : ℝ) :\n    (a * x + b * y) ^ 2 ≤ (a ^ 2 + b ^ 2) * (x ^ 2 + y ^ 2) := by\n  nlinarith [sq_nonneg (a * y - b * x)]\n\ntheorem endpointCoefficientRecurrence (a : ℝ) (k : ℕ) :\n    ((-a) ^ (k + 2) - (-a) ^ k) +\n      a * ((-a) ^ (k + 1) - (if k = 0 then 0 else (-a) ^ (k - 1))) =\n      if k = 0 then -1 else 0 := by\n  cases k with\n  | zero => norm_num; ring\n  | succ k =>\n    simp only [Nat.succ_ne_zero, ↓reduceIte, Nat.succ_sub_one]\n    simp only [pow_add, pow_succ]\n    ring\n\nsection BilinearCompletion\n\nvariable {V : Type*} [AddCommGroup V] [Module ℝ V]\n\ntheorem residualEquation\n    (M : V →ₗ[ℝ] V →ₗ[ℝ] ℝ) (b : V →ₗ[ℝ] ℝ) (v y : V)\n    (hv : ∀ g, M v g = b g) :\n    ∀ g, M (v - y) g = (b - M y) g := by\n  intro g\n  simp only [map_sub, LinearMap.sub_apply, hv]\n\ntheorem variationalCompletion\n    (M : V →ₗ[ℝ] V →ₗ[ℝ] ℝ) (b : V →ₗ[ℝ] ℝ) (v y : V)\n    (hsym : ∀ f g, M f g = M g f)\n    (hv : ∀ g, M v g = b g) :\n    b v = 2 * b y - M y y + (b - M y) (v - y) := by\n  have hcross : M y v = b y := (hsym y v).trans (hv y)\n  simp only [map_sub, LinearMap.sub_apply, hcross]\n  ring\n\ntheorem variationalCompletionEnergy\n    (M : V →ₗ[ℝ] V →ₗ[ℝ] ℝ) (b : V →ₗ[ℝ] ℝ) (v y : V)\n    (hsym : ∀ f g, M f g = M g f)\n    (hv : ∀ g, M v g = b g) :\n    b v = 2 * b y - M y y + M (v - y) (v - y) := by\n  rw [residualEquation M b v y hv]\n  exact variationalCompletion M b v y hsym hv\n\nend BilinearCompletion\n\nend CriticalResolventComparison\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/critical_resolvent_comparison/statement_fidelity.md",
+    "text": "# Statement fidelity: C_CR227_ALGEBRA\n\nThe declarations are in namespace `CriticalResolventComparison`.\nAll scalar variables are arbitrary real numbers unless stated otherwise.\n\n`tiltedMass` and `tiltedMeanNumerator` compute the total mass and signed\nfirst moment of the two weights\n`((1+t)/2)(1+us)` and `((1-t)/2)(1-us)`. For actual conditional\nprobabilities, `t` is the conditional spin mean and `s` is the other\nspin in the interaction.\n\n`varianceNumerator` assumes `s^2=1`. It proves the polynomial identity\nthat gives the variance after the binary tilt.\n`unnormalizedEndpointVariance` additionally assumes\n`1+ust != 0` and proves\n\n`(1+ust)(1-((t+us)/(1+ust))^2) = (1-t^2)(1-u^2)/(1+ust)`.\n\nThus the energy multiplier is `(1-u^2)/(1+ust)`. No division by\n`1-t^2` occurs: the statement does not introduce a nondegeneracy\nassumption at a frozen spin. The real Gibbs application has\n`|u|<1`, `|t|<=1`, so its denominator is positive.\n\n`halfDifferenceResidual` is the exact endpoint cancellation\n`D_k(qg)+s t_k D_kg = s E_kg`. Here `gp` and `gm` are the two\nvalues of the test function, and `D_k` is the half difference.\n`finiteEndpointResidual` proves the corresponding finite weighted\nsum for arbitrary endpoint weights, slopes, and conditional means.\nThese are identities without positivity assumptions.\n\n`binaryJensenIdentity` is the exact two-point variance identity.\n`binaryJensen` derives conditional Jensen's inequality assuming\n`t^2<=1`. `twoEndpointCauchy` proves the two-component real\nCauchy--Schwarz inequality, the endpoint-counting source of the\nconstant two in the residual estimate.\n\n`endpointCoefficientRecurrence` states the denominator-clearing\nrecurrence for the coefficients of `(1-u^2)/(1+ua)` from order two\nonward; the exceptional order-two right-hand side is minus one.\nIt is a polynomial identity for every natural `k`.\n\nFor any real module `V`, `residualEquation` assumes a bilinear form\n`M`, a linear source `b`, and a vector `v` solving `M(v,g)=b(g)` for\nevery test `g`. It proves that `v-y` solves the equation with source\n`b-M(y,.)`. `variationalCompletion` and\n`variationalCompletionEnergy` additionally assume symmetry of `M`.\nThey prove the exact residual-square completion, respectively using\nthe residual covector and its energy. In the Gibbs application,\n`v=M(u)^(-1)b(u)` and `y=Y`; invertibility follows from positive\nmass and energy in the mathematical report, not from a Lean\nassumption hidden in a definition.\n\nThe compiler certifies these finite algebraic statements, not their\ntranslation from the manuscript. It does not certify the full\noperator-norm estimates, disorder overlap concentration, fourth\nderivative bound, infinite-volume Gaussian inputs, functional\nconvergence, novelty, or publishability. Those are explicitly\nseparate mathematical proof and independent-review obligations.\n"
+  },
+  "subject": {
+    "content_hash": "daba8eadf28a1187e6e0c5ad2fafa908bd3ee9fbdbb885cdc73969b3c91914a1",
+    "kind": "claim",
+    "subject_id": "C_CR227_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

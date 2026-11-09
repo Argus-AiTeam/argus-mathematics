@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FINITE_WAIT_CORE-0913693d56af",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/333/first-pass/exact_correction_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/333/first-pass/exact_correction_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15315,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/333/first-pass/exact_correction_audit/Main.lean",
+    "source_sha256": "59cd45ef0c18313b1d761b87ad096478aef1fd4eb609dc0b3400c7c28d760ccb",
+    "statement_fidelity": "families/333/first-pass/exact_correction_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "4a942d27d17f2522ee12790428b03d93218015b2dbdfb4da40d3c96cce146bce",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/exact_correction_audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace ExactCorrectionAudit\n\ntheorem metric_transfer_identity\n    (g₁ g₂ s₁ s₂ u₁ u₂ h hs ht d e : ℝ) :\n    h - (g₁ + u₁) * (g₂ + u₂) - e ^ 2 * h =\n      ((h - g₁ * g₂) - d ^ 2 * hs) -\n        ((s₁ + u₁) * (s₂ + u₂) - s₁ * s₂ -\n          d ^ 2 * hs + e ^ 2 * ht) -\n        ((g₁ - s₁) * u₂ + (g₂ - s₂) * u₁) +\n        e ^ 2 * (ht - h) := by\n  ring\n\ntheorem summable_increment_margin (k m : ℝ)\n    (hk : 10 ≤ k) (hm : 2 * m ≤ k) :\n    1 < k + (6 / 5 : ℝ) * (1 - m) := by\n  linarith\n\ntheorem step_to_affine_bound (B x c y : ℝ)\n    (hB : 1 ≤ B) (hx : 0 ≤ x) (hc : c ≤ 1 / 4)\n    (hy : y ≤ B / 4 + c * (1 + x)) :\n    y ≤ B / 2 + x / 4 := by\n  have hcx : c * (1 + x) ≤ (1 / 4 : ℝ) * (1 + x) :=\n    mul_le_mul_of_nonneg_right hc (by linarith)\n  linarith\n\ntheorem block_bound (B : ℝ) (x : ℕ → ℝ)\n    (hB : 0 ≤ B)\n    (hstep : ∀ n, x (n + 1) ≤ B / 2 + x n / 4) :\n    ∀ n, x n ≤ (2 / 3 : ℝ) * B + (1 / 4 : ℝ) ^ n * x 0 := by\n  intro n\n  induction n with\n  | zero =>\n      simp only [pow_zero, one_mul]\n      linarith\n  | succ n ih =>\n      have hs := hstep n\n      rw [pow_succ]\n      nlinarith\n\ntheorem finite_waiting (B : ℝ) (x c : ℕ → ℝ)\n    (hB : 1 ≤ B) (hx : ∀ n, 0 ≤ x n)\n    (hc : ∀ n, c n ≤ 1 / 4)\n    (hstep : ∀ n, x (n + 1) ≤ B / 4 + c n * (1 + x n)) :\n    ∃ n, x n < B := by\n  have hden : 0 < 3 * (x 0 + 1) := by\n    have := hx 0\n    linarith\n  have hpositive : 0 < B / (3 * (x 0 + 1)) :=\n    div_pos (by linarith) hden\n  obtain ⟨n, hn⟩ :=\n    exists_pow_lt_of_lt_one hpositive (show (1 / 4 : ℝ) < 1 by norm_num)\n  have hn' : (1 / 4 : ℝ) ^ n * (3 * (x 0 + 1)) < B :=\n    (lt_div_iff₀ hden).mp hn\n  have hb := block_bound B x (by linarith)\n    (fun n => step_to_affine_bound B (x n) (c n) (x (n + 1))\n      hB (hx n) (hc n) (hstep n)) n\n  have hp : 0 ≤ (1 / 4 : ℝ) ^ n := pow_nonneg (by norm_num) n\n  exact ⟨n, by nlinarith⟩\n\ntheorem retained_bound_persists (B x c y : ℝ)\n    (hB : 1 ≤ B) (hx : 0 ≤ x) (hxB : x ≤ B)\n    (hc : c ≤ 1 / 4)\n    (hy : y ≤ B / 4 + c * (1 + x)) :\n    y < B := by\n  have := step_to_affine_bound B x c y hB hx hc hy\n  linarith\n\ntheorem finite_waiting_after (B : ℝ) (x c : ℕ → ℝ)\n    (hB : 1 ≤ B) (hx : ∀ n, 0 ≤ x n)\n    (hc : ∃ n₀, ∀ n, n₀ ≤ n → c n ≤ 1 / 4)\n    (hstep : ∀ n, x (n + 1) ≤ B / 4 + c n * (1 + x n)) :\n    ∀ start, ∃ n, start ≤ n ∧ x n < B := by\n  intro start\n  obtain ⟨n₀, hn₀⟩ := hc\n  let base := max n₀ start\n  have hshift : ∀ n, x (base + (n + 1)) ≤\n      B / 4 + c (base + n) * (1 + x (base + n)) := by\n    intro n\n    simpa only [Nat.add_assoc] using hstep (base + n)\n  obtain ⟨n, hn⟩ := finite_waiting B (fun n => x (base + n))\n    (fun n => c (base + n)) hB (fun n => hx (base + n))\n    (fun n => hn₀ (base + n) (by dsimp [base]; omega)) hshift\n  exact ⟨base + n, by dsimp [base]; omega, hn⟩\n\nend ExactCorrectionAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/exact_correction_audit/statement_fidelity.md",
+    "text": "# Exact statement fidelity\n\nThe declarations are in namespace `ExactCorrectionAudit`, in `Main.lean`.\nThe scalar field is the real numbers; sequence indices are natural numbers.\nAll displayed variables are universally quantified unless an existential\nconclusion is explicitly stated.\n\n`metric_transfer_identity` is the bilinear, single-ambient-component\nexpansion of equation (27) in `theorem.md`. Here `g_1,g_2` are derivatives\nof the unsmoothed map, `s_1,s_2` those of the smoothed map, and `u_1,u_2`\nthose of the increment. `h,hs,ht` represent a target component, a smoothed\nnormalized-defect component, and a smoothed-target component. `d,e`\nrepresent the old and new amplitudes. The old defect times `d^2` has\nalready been replaced by `h-g_1*g_2`. There are no positivity or\nnonzero-amplitude hypotheses because this is an identity without division.\nSumming the component identity gives the Euclidean metric identity; that\nfinite-dimensional interpretation is not encoded here.\n\n`summable_increment_margin` assumes real `k >= 10` and `2*m <= k` and\nproves `1 < k+(6/5)*(1-m)`. For the analytic application, use the integer\norder `m=floor(k/2)`. The declaration does not encode weighted norms,\nreal powers, summability, or any manifold.\n\n`step_to_affine_bound` assumes `B >= 1`, `x >= 0`, `c <= 1/4`, and\n`y <= B/4+c*(1+x)`, and proves `y <= B/2+x/4`. No positivity of `c`\nis required by this implication.\n\n`block_bound` assumes `B >= 0` and the affine inequality\n`x(n+1) <= B/2+x(n)/4` for every natural index. It proves, for every\nindex, `x(n) <= (2/3)*B+(1/4)^n*x(0)`. The initial value has no\nupper bound and need not be nonnegative for this declaration.\n\n`finite_waiting` assumes `B >= 1`, nonnegative `x(n)`, coefficients\n`c(n) <= 1/4`, and the recurrence\n`x(n+1) <= B/4+c(n)*(1+x(n))`, at every index. It proves that some\nfinite index has `x(n) < B`. There is no uniform bound on that index.\nThe proof uses the Archimedean decay of the geometric sequence, not a\nfinite search.\n\n`retained_bound_persists` adds `x <= B` to the scalar step hypotheses\nand proves `y < B`.\n\n`finite_waiting_after` weakens the coefficient hypothesis to an\neventual bound: there exists `n_0` after which every coefficient is\nat most `1/4`. It proves that for every natural `start` there exists\n`n >= start` with `x(n) < B`. Together with persistence this justifies\nwaiting for arbitrarily late finite scale thresholds. Convergence of\nthe analytic coefficients to zero is proved in the prose argument,\nnot assumed to be verified by the compiler.\n\nThese declarations certify the transfer algebra and the universal scalar\nfinite-waiting mechanism. They do not formalize smooth sections,\nsmoothing, the finite mode solver, positivity of phase decompositions,\nthe full variable-order construction, or the analytic correction\ntheorem. The latter requires the independent mathematical reading of\n`theorem.md`; a successful compile must not be reported as a kernel\nproof of that theorem.\n"
+  },
+  "subject": {
+    "content_hash": "c5202a3377be5317c5342031c0fc789be961139ce9dfafa1a2d5bad069c10482",
+    "kind": "claim",
+    "subject_id": "C_FINITE_WAIT_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

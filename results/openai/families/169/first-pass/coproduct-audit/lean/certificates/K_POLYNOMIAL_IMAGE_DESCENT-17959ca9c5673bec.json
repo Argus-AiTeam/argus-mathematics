@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-K_POLYNOMIAL_IMAGE_DESCENT-55f9bca5147f",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/169/first-pass/coproduct-audit/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/169/first-pass/coproduct-audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 7389,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/169/first-pass/coproduct-audit/lean/Main.lean",
+    "source_sha256": "3101011f370187ab10e9afdfedb0ee630d3ec511017867b07eacb8f89ea3b733",
+    "statement_fidelity": "families/169/first-pass/coproduct-audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "e6d409dc09d3a919158f3aa68163097e93abd19360b48de8b19679d155d28764",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/coproduct-audit/lean/Main.lean",
+    "text": "import Mathlib.Data.Finsupp.Basic\nimport Mathlib.Algebra.Polynomial.Inductions\n\nnamespace CoproductAudit\n\ntheorem polynomial_image_descent\n    {V W : Type*} [Zero V] [Zero W]\n    (T : V → W) (hT : Function.Injective T) (hzero : T 0 = 0)\n    (c : ℤ → V) (q : ℕ →₀ W)\n    (hcoeff : ∀ j : ℤ, T (c j) = if 0 ≤ j then q j.toNat else 0) :\n    ∃ p : ℕ →₀ V,\n      (∀ n : ℕ, p n = c (n : ℤ)) ∧\n      (∀ j : ℤ, j < 0 → c j = 0) ∧\n      Finsupp.mapRange T hzero p = q ∧\n      T (p 0) = q 0 := by\n  classical\n  have hnegative : ∀ j : ℤ, j < 0 → c j = 0 := by\n    intro j hj\n    apply hT\n    simpa [not_le.mpr hj, hzero] using hcoeff j\n  have hvanish : ∀ n : ℕ, q n = 0 → c (n : ℤ) = 0 := by\n    intro n hn\n    apply hT\n    simpa [hn, hzero] using hcoeff (n : ℤ)\n  let p : ℕ →₀ V :=\n    Finsupp.onFinset q.support (fun n => c (n : ℤ)) (by\n      intro n hn\n      exact Finsupp.mem_support_iff.mpr (fun hq => hn (hvanish n hq)))\n  have hp : ∀ n : ℕ, p n = c (n : ℤ) := by\n    intro n\n    exact Finsupp.onFinset_apply\n  refine ⟨p, hp, hnegative, ?_, ?_⟩\n  · ext n\n    change T (p n) = q n\n    simpa [hp n] using hcoeff (n : ℤ)\n  · simpa [hp 0] using hcoeff 0\n\ntheorem constant_lift_unique\n    {V W : Type*} (T : V → W) (hT : Function.Injective T)\n    (c c' : ℤ → V)\n    (hcoeff : ∀ j : ℤ, T (c j) = T (c' j)) :\n    c 0 = c' 0 :=\n  hT (hcoeff 0)\n\ntheorem polynomial_kernel_cancellation\n    {R : Type*} [CommRing R] (F : Polynomial R) :\n    (-(Polynomial.X : Polynomial R)) * (-F.divX) =\n      F - Polynomial.C (F.coeff 0) := by\n  rw [neg_mul_neg]\n  exact eq_sub_iff_add_eq.mpr (Polynomial.X_mul_divX_add F)\n\ntheorem evaluated_kernel_cancellation\n    {R : Type*} [CommRing R] (F : Polynomial R) (u : R) :\n    (-u) * (-(F.divX.eval u)) = F.eval u - F.coeff 0 := by\n  have h := congrArg (Polynomial.eval u) (polynomial_kernel_cancellation F)\n  simpa using h\n\nend CoproductAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/coproduct-audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: actual coefficient lifts and polynomial descent\n\nThe ledger claim `K_POLYNOMIAL_IMAGE_DESCENT` is represented by\n`CoproductAudit.polynomial_image_descent`.\n\nThe declaration names are `polynomial_image_descent`,\n`constant_lift_unique`, `polynomial_kernel_cancellation`, and\n`evaluated_kernel_cancellation`, all in namespace `CoproductAudit`.\n\n`V` and `W` are arbitrary types with distinguished zeros. `T : V -> W`\npreserves zero and is injective. This is stronger generality than the\nclaim's rational-linear setting. `c : Int -> V` is an **already\nconstructed** coefficient family. `q : Nat ->_0 W` is a finitely\nsupported family, hence the coefficient representation of a\n`W`-valued polynomial in one extra variable. The hypothesis says that\n`T(c_j)` is `q_j` when `j >= 0` and is zero otherwise.\n\nThe conclusion constructs a finitely supported nonnegative coefficient\nfamily `p` in `V`, whose coefficient at every `n` is `c_n`, proves\n`c_j=0` for every negative integer `j`, proves coefficientwise\n`T(p)=q`, and includes the constant-coefficient identity. There is no\nsurjectivity assumption on `T` and no inference from polynomiality\nalone: the actual lifts `c_j` are essential input.\n\nFor the coproduct application, `V` is the weight-`w` associated grade\nof `B_a tensor B_b`; `W` is the family of independent refinement-symbol\ntargets, regarded as a vector space; `T` is their jointly injective\nmap; `c_j=[C_j(f)]`; and `q` is the coefficient polynomial of the\nconcatenated source symbol after shifting the first group of centers\nby `Z`. There are finitely many refinement lists at fixed dimension.\nThe compiler does **not** establish that these particular manuscript\nobjects satisfy the hypotheses. Their construction, quotient descent,\nfiltration preservation, and matching of symbols are proved in\n`report.md` and require independent mathematical review.\n\n`CoproductAudit.constant_lift_unique` formalizes the uniqueness of\nthe constant coefficient under injective tests.\n\n`CoproductAudit.polynomial_kernel_cancellation` additionally proves\n`(-X)(-divX F) = F - C(coeff_0 F)` for every univariate polynomial\nover every commutative ring, including rings with nilpotents.\n`CoproductAudit.evaluated_kernel_cancellation` proves the same\nidentity after substituting any ring element for `X`. Taking the\ncoefficient ring to contain the other variables gives the exact\nkernel cancellation used for the diagnostic's arbitrary polynomial\ntail. These declarations do not formalize its destabilizing ideal,\nthe classification of all filtration pieces, or the full manuscript\ncoproduct theorem.\n\nNo theorem here states elementary positivity, novelty, or independent\nReviewer acceptance.\n"
+  },
+  "subject": {
+    "content_hash": "0eb7a09bb133c4ef61b963faddb92d8321a1e2ed909d96b3c110e233b5763edb",
+    "kind": "claim",
+    "subject_id": "K_POLYNOMIAL_IMAGE_DESCENT"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

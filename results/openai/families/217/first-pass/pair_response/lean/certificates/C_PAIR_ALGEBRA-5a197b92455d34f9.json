@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_PAIR_ALGEBRA-2788a5e969ef",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/217/first-pass/pair_response/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/217/first-pass/pair_response/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14720,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/217/first-pass/pair_response/lean/Main.lean",
+    "source_sha256": "78c674ba8c6ac7e3c64282369d2456ef5e83607e573bc16bfafeea4c525638dc",
+    "statement_fidelity": "families/217/first-pass/pair_response/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "d0e897c153c36dfc2420096519b4e7f4db1fea60529b6bef9b023ec133652921",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/217/first-pass/pair_response/lean/Main.lean:16:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/pair_response/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace PairResponse\n\ndef falling (x : ℝ) : ℕ → ℝ\n  | 0 => 1\n  | n + 1 => falling x n * (x - (n : ℝ))\n\ndef childSlots (a b k : ℝ) : ℕ → ℝ\n  | 0 => 1\n  | n + 1 => childSlots a b k n * (a - (k + (n : ℝ)) * b)\n\ntheorem real_power_factor (a b k n : ℝ) (hb : b ≠ 0) :\n    b * (a / b - k - n) = a - (k + n) * b := by\n  field_simp [hb]\n  <;> ring\n\ntheorem real_power_slots (a b k : ℝ) (hb : b ≠ 0) (n : ℕ) :\n    b ^ n * falling (a / b - k) n = childSlots a b k n := by\n  induction n with\n  | zero => simp [falling, childSlots]\n  | succ n ih =>\n      simp only [falling, childSlots, pow_succ]\n      calc\n        b ^ n * b * (falling (a / b - k) n * (a / b - k - (n : ℝ))) =\n            (b ^ n * falling (a / b - k) n) *\n              (b * (a / b - k - (n : ℝ))) := by ring\n        _ = childSlots a b k n * (a - (k + (n : ℝ)) * b) := by\n          rw [ih, real_power_factor a b k (n : ℝ) hb]\n\ndef prefixCurvature (p F u c cz czz jz jzz S Qpast : ℝ) : ℝ :=\n  let H := p * F * u - S\n  F ^ 2 * (czz + 2 * p * c ^ 2 + 4 * p * u * cz + 4 * p ^ 2 * u ^ 2 * c)\n    + 2 * F * jzz + 4 * p * F * u * jz\n    + 2 * F * (-F * (czz + 2 * p * c ^ 2 + 2 * p * u * cz) - jzz)\n    + 2 * H * (-F * (cz + 2 * p * u * c) - jz)\n    + F ^ 2 * czz + 2 * F * H * cz\n    + (H ^ 2 + p * F ^ 2 * c - Qpast) * c\n\ntheorem colored_prefix_cancellation (p F u c cz czz jz jzz S Qpast : ℝ) :\n    prefixCurvature p F u c cz czz jz jzz S Qpast =\n      -p * F ^ 2 * c ^ 2 - Qpast * c\n        + (p * F * u + S) ^ 2 * c + 2 * (p * F * u + S) * jz := by\n  unfold prefixCurvature\n  ring\n\ntheorem one_sheet_constant (p q r : ℝ) :\n    (1 - q ^ 2) + 2 * (p - 2) * (q - q ^ 2)\n        + (p - 2) * (p - 3) * (r - q ^ 2) / 2 =\n      (1 - 2 * q + r) - 2 * (1 - p) * (q - r + p * (r - q ^ 2) / 4) := by\n  ring\n\ntheorem one_sheet_additive (p q r : ℝ) :\n    (1 - q ^ 2) + (p - 4) * (q - q ^ 2) - (p - 3) * (r - q ^ 2) =\n      (1 - 2 * q + r) - (2 - p) * (q - r) := by\n  ring\n\ntheorem child_mixed_difference (a a' c c' : ℝ) :\n    a * c - a' * c - a * c' + a' * c' = (a - a') * (c - c') := by\n  ring\n\ntheorem gram_energy_nonneg\n    {ι Ω Λ : Type*} [Fintype ι]\n    (E : (Ω → ℝ) → ℝ) (I : (Λ → ℝ) → ℝ)\n    (hE : ∀ g : Ω → ℝ, (∀ ω, 0 ≤ g ω) → 0 ≤ E g)\n    (hI : ∀ g : Λ → ℝ, (∀ s, 0 ≤ g s) → 0 ≤ I g)\n    (weight : Ω → ℝ) (alpha : Λ → ℝ)\n    (m : ι → Ω → ℝ) (v : ι → Λ → Ω → ℝ) (f : ι → ℝ)\n    (hw : ∀ ω, 0 ≤ weight ω) (ha : ∀ s, 0 ≤ alpha s) :\n    0 ≤ E (fun ω => weight ω * (∑ r, f r * m r ω) ^ 2) +\n      I (fun s => alpha s * E (fun ω => (∑ r, f r * v r s ω) ^ 2)) := by\n  apply add_nonneg\n  · apply hE\n    intro ω\n    exact mul_nonneg (hw ω) (sq_nonneg _)\n  · apply hI\n    intro s\n    apply mul_nonneg (ha s)\n    apply hE\n    intro ω\n    exact sq_nonneg _\n\ntheorem gram_decrement_nonneg\n    {ι Ω Λ : Type*} [Fintype ι]\n    (E : (Ω → ℝ) → ℝ) (I : (Λ → ℝ) → ℝ)\n    (hE : ∀ g : Ω → ℝ, (∀ ω, 0 ≤ g ω) → 0 ≤ E g)\n    (hI : ∀ g : Λ → ℝ, (∀ s, 0 ≤ g s) → 0 ≤ I g)\n    (alpha : Λ → ℝ) (v : ι → Λ → Ω → ℝ) (f : ι → ℝ)\n    (ha : ∀ s, 0 ≤ alpha s) :\n    0 ≤ I (fun s => alpha s * E (fun ω => (∑ r, f r * v r s ω) ^ 2)) := by\n  apply hI\n  intro s\n  apply mul_nonneg (ha s)\n  apply hE\n  intro ω\n  exact sq_nonneg _\n\nend PairResponse\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/pair_response/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: scalar pair-response algebra\n\nThe declarations in `Main.lean` certify the algebraic core of\n`report.md`, not its analytical or stochastic arguments.\n\n`PairResponse.real_power_slots` quantifies over arbitrary real incoming\nmass `a`, real nonzero child mass `b`, real occupied-child count `k`,\nand every natural slot count `n`. `falling x n` is the falling product\n`x (x-1) ... (x-(n-1))`; `childSlots a b k n` is the product of\n`a-(k+j)b` for `0 <= j < n`. The theorem is\n`b^n falling(a/b-k,n) = childSlots(a,b,k,n)`. It requires only\n`b != 0`; positive masses and integer occupied counts are applications,\nnot extra encoded conclusions. `real_power_factor` is its induction\nstep. This is report equation (12).\n\n`PairResponse.colored_prefix_cancellation` quantifies over ten arbitrary\nreal numbers `p F u c cz czz jz jzz S Qpast`. `prefixCurvature` is\nexactly the left side of report equation (20), with\n`H = p F u - S`. The conclusion is exactly its right side. The\ndeclaration does not assume or prove that any of these numbers is a\nderivative, scalar spin moment, or Gaussian conditional expectation.\nThose identifications and the weighted integration-by-parts calculation\nare in report Sections 1 and 5.\n\n`PairResponse.one_sheet_constant` and `one_sheet_additive` quantify over\narbitrary real `p q r` and prove the two displayed polynomial\nspecializations of (H2). No moment admissibility is inferred from this\nquantification. In the actual one-sheet scalar model, `q` and `r` are\nthe second and fourth moments of its conditional spin mean.\n\n`PairResponse.child_mixed_difference` is the scalar product-difference\nidentity behind report equation (25). It assumes no independence.\n\n`PairResponse.gram_energy_nonneg` has an arbitrary finite marker type,\narbitrary sample and time types, real functions `m`, `v`, `weight`,\n`alpha`, and `f`, and two positive functionals `E` and `I`.\nPositivity of these functionals on every pointwise nonnegative\nfunction is an explicit hypothesis, as are nonnegativity of `weight`\nand `alpha`. The conclusion is nonnegativity of the sum of their\nweighted-square expressions, the algebraic form of report (8).\n`gram_decrement_nonneg` proves the corresponding integral-term\nnonnegativity in (9). The functions need not be random variables and\nthe functionals are not constructed as integrals in Lean.\n\nIn particular, no declaration proves a Parisi PDE theorem, Ito's\nformula, Gaussian integration by parts, interchange of derivatives and\nexpectations, existence or continuity of impulse derivatives, the\nidentity between the manuscript Hessian and the Gram energy,\nreal-mass transfer for arbitrary old-label topologies, uniform analytic\nderivative bounds, or an SK fluctuation or limiting-law theorem.\nThose obligations remain with the mathematical report and its\nindependent Reviewer. The compiler certificate is attached only to\nledger claim `C_PAIR_ALGEBRA`.\n"
+  },
+  "subject": {
+    "content_hash": "42c06618dd641cce978e009d2639fb9e0c686689d32c8722a261075d9ddb55f9",
+    "kind": "claim",
+    "subject_id": "C_PAIR_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

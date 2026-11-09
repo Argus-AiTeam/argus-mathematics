@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-PF-CORE-7b64505ddbc9",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/001/first-pass/prescribed-filtration-audit/lean-evidence/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/001/first-pass/prescribed-filtration-audit/lean-evidence/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6887,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/001/first-pass/prescribed-filtration-audit/lean-evidence/Main.lean",
+    "source_sha256": "948a1aed68e838b8114db1388670d42cdc11d803675ef8b9ce0477227750b40d",
+    "statement_fidelity": "families/001/first-pass/prescribed-filtration-audit/lean-evidence/statement_fidelity.md",
+    "statement_fidelity_sha256": "3169c7b701f5791a5e6cfc4b2f34553e31b543a7c9468ab3c6709e5844aba69c",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/prescribed-filtration-audit/lean-evidence/Main.lean",
+    "text": "import Mathlib.Algebra.Group.Equiv.Basic\nimport Mathlib.Topology.LocallyConstant.Basic\n\nnamespace PrescribedFiltration\n\ntheorem frobenius_basis_change {G : Type*} [Group G]\n    (sigma : G →* G) (b g : G) :\n    (sigma g)⁻¹ * sigma b * sigma (sigma g) =\n      sigma (g⁻¹ * b * sigma g) := by\n  simp only [map_mul, map_inv]\n\ntheorem representation_basis_change {G H : Type*} [Group G] [Group H]\n    (sigma : G →* G) (tau : H →* H) (rho : G →* H)\n    (compatible : ∀ a, tau (rho a) = rho (sigma a)) (b g : G) :\n    (rho (sigma g))⁻¹ * rho (sigma b) * tau (rho (sigma g)) =\n      rho (sigma (g⁻¹ * b * sigma g)) := by\n  rw [compatible (sigma g)]\n  simp only [map_mul, map_inv]\n\ntheorem faithful_central_preimage {G H : Type*} [Group G] [Group H]\n    (rho : G →* H) (faithful : Function.Injective rho) (z : G)\n    (central : ∀ a : H, rho z * a = a * rho z) :\n    ∀ g : G, z * g = g * z := by\n  intro g\n  apply faithful\n  simpa only [map_mul] using central (rho g)\n\ntheorem propagate_tensor_equalities {X I : Type*} [TopologicalSpace X]\n    {A : I → Type*} (discrepancy : ∀ i, X → A i)\n    (locallyConstant : ∀ i, IsLocallyConstant (discrepancy i))\n    (zero : ∀ i, A i) (good : X → Prop)\n    (hitsComponents : ∀ x : X,\n      ∃ y : X, y ∈ connectedComponent x ∧ good y)\n    (goodValues : ∀ y : X, good y →\n      ∀ i : I, discrepancy i y = zero i) :\n    ∀ i : I, ∀ x : X, discrepancy i x = zero i := by\n  intro i x\n  obtain ⟨y, hy, hgood⟩ := hitsComponents x\n  calc\n    discrepancy i x = discrepancy i y :=\n      (locallyConstant i).apply_eq_of_isPreconnected\n        isPreconnected_connectedComponent mem_connectedComponent hy\n    _ = zero i := goodValues y hgood i\n\nend PrescribedFiltration\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/prescribed-filtration-audit/lean-evidence/statement_fidelity.md",
+    "text": "# Statement fidelity: PF-CORE\n\nThis document describes exactly the four declarations in\n`research/prescribed-filtration-audit/Main.lean`. The ledger claim is\n`PF-CORE`, not `PF-REALIZATION`.\n\n## Algebraic declarations\n\n`frobenius_basis_change` in namespace `PrescribedFiltration` quantifies over an arbitrary\ngroup G, an arbitrary multiplicative homomorphism sigma:G->G, and any\nb,g in G. It proves\n\n    sigma(g)^-1 sigma(b) sigma(sigma(g))\n      = sigma(g^-1 b sigma(g)).\n\nIt does not assume sigma is invertible. Frobenius on the coefficient\nisocrystal is an allowed instance. This is a universal group identity,\nnot a calculation in a finite group.\n\n`representation_basis_change` in namespace `PrescribedFiltration` quantifies over two\ngroups G,H, homomorphisms sigma, tau and rho, the explicit compatibility\ntau(rho(a))=rho(sigma(a)) for every a, and b,g in G. It proves the image\nof the same change-of-basis identity in H. In the application H is the\ngroup of invertible cohomological matrices, rho is the dual\nrepresentation, and tau is coefficient Frobenius. The theorem does not\nconstruct these geometric objects or assert their compatibility without\nthe stated hypothesis.\n\n`faithful_central_preimage` in namespace `PrescribedFiltration` quantifies over groups\nG,H, an injective homomorphism rho, and z in G whose image commutes with\nevery element of H. It proves that z commutes with every element of G.\nTaking H=GL gives the center condition needed in PR Proposition 3.1.1.\nIdentifying the center of GL with scalar matrices is not formalized\nhere and is not needed in this abstract statement.\n\n## Topological declaration\n\n`propagate_tensor_equalities` in namespace `PrescribedFiltration` quantifies over every\ntopological space X, every index type I, every family of value types A(i),\nand every indexed map discrepancy(i):X->A(i). Each map is hypothesized\nto be locally constant. A value zero(i) is specified for each index;\nno additive structure or finiteness of I is assumed.\n\nOne good-point predicate is fixed on X. Every connected component must\ncontain a good point. At every good point **all** the indexed maps have\ntheir specified zero values. The conclusion says that every indexed\nmap is identically zero on X. The same discrepancy maps are retained\nthroughout; there is no replacement of the universal quasi-isogeny\nwhen the index changes.\n\nFor the geometric interpretation, X is the underlying topological space\nof the perfect reduced marked RZ space, I indexes the tensor, ell != p,\nand a finite reduction level. A(i) is the corresponding constant finite\netale tensor module. The good points are specializations of the initial\nlift's at-p Hecke orbit. These geometric identifications, local\nconstancy, orbit-component coverage, and the existence and compatibility\nof the universal algebraic quasi-isogeny are established in the prose\nargument using the explicitly listed external theorems. They are **not**\nhypotheses discharged by Lean.\n\n## Exclusions\n\nThe formal source contains no definition of an abelian variety,\ncrystalline representation, local Shimura variety, integral tensor\ntorsor, or admissible filtration. It does not prove or refute the\nrealization lemma, the constrained-filtration theorem, the\nbalanced-Weil dichotomy, the rationality conjecture, or the companion\nCM Hodge theorem in the kernel.\n\nThe full realization argument is a mathematical proof relative to\nthe external geometric results in `realization_proof.md`. Its independent\nreview and novelty assessment are separate from compiler acceptance.\nThe symbolic matrix family and the p=2 integral-lattice obstruction\nbelong to `verify.py`, not to these Lean declarations.\n"
+  },
+  "subject": {
+    "content_hash": "0c811b6a6965ef5573ee50c7785d59fcdc672b699d5518aff4a3c11e68c3e9bd",
+    "kind": "claim",
+    "subject_id": "PF-CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,139 @@
+{
+  "goal": "C9000204",
+  "routes": [
+    {
+      "name": "R_CONT_ALT: all-rank continuation or rank drop; Engineer proof complete, independent review pending",
+      "status": "current",
+      "evidence": "research/continuation/report.md"
+    },
+    {
+      "name": "R_MAIN_SOURCE: manuscript assembly, not verified by the selected mission",
+      "status": "untried",
+      "evidence": "research/continuation/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000204": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 204 (Tensor saturation for even spin groups.; papers: Tensor saturation for even spin groups; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "in_progress",
+      "is_goal": true,
+      "depends_on": ["C_CONT_ALT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "T_D_SATURATION": {
+      "statement": "Manuscript thm:main: type-D tensor saturation at scale one under the root-lattice congruence.",
+      "status": "open",
+      "depends_on": ["T_INTEGRAL_SCHEDULE", "L_COLUMNS", "L_FLAG_COMPOSITION", "L_ZERO_TAIL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    },
+    "T_INTEGRAL_SCHEDULE": {
+      "statement": "Manuscript thm:integral-schedule for permutation systems and D_l with at most one zero moving coordinate.",
+      "status": "open",
+      "depends_on": ["L_REAL_SCHEDULE", "L_SCHEDULE_MOMENT", "L_BLOCK_EXCEPTION", "C_CONTINUATION", "L_MOMENT_LINK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    },
+    "L_REAL_SCHEDULE": {
+      "statement": "Manuscript prop:basic-schedule produces a limiting-cover root-basis schedule from a moment solution.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    },
+    "L_SCHEDULE_MOMENT": {
+      "statement": "Manuscript lem:schedule-moment produces real moments from a real schedule, including coordinate blocks.",
+      "status": "open",
+      "depends_on": ["L_FLAG_COMPOSITION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    },
+    "L_BLOCK_EXCEPTION": {
+      "statement": "Manuscript block reduction and exceptional-case lemmas exclude deficient-rank schedules with at most l switches under the standing assumptions.",
+      "status": "open",
+      "depends_on": ["L_SCHEDULE_MOMENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    },
+    "L_HALF_KERNEL": {
+      "statement": "Manuscript int:half-kernel supplies bounded primitive half-relations, integral extrapolation, and a common potential.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md", "research/continuation/exact_certificate.json"]
+    },
+    "C_CONTINUATION": {
+      "statement": "Manuscript prop:continuation: under the standing no-integral-schedule assumption, a local link cannot exist.",
+      "status": "in_progress",
+      "depends_on": ["L_BLOCK_EXCEPTION", "C_CONT_ALT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    },
+    "L_CONT_PRESERVATION": {
+      "statement": "Rank-two replacements preserve endpoint, lattice, primitive direction, integral extrapolation, and admissibility.",
+      "status": "in_progress",
+      "depends_on": ["L_HALF_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md", "research/continuation/exact_certificate.json"]
+    },
+    "C_CONT_ALT": {
+      "statement": "Independent all-rank corank-one continuation alternative: a feasible type-D augmented coefficient state at a strictly interior parameter yields either an integral schedule or a deficient-rank schedule with at most l switches.",
+      "status": "in_progress",
+      "depends_on": ["L_HALF_KERNEL", "L_CONT_PRESERVATION", "L_CONT_SORTING", "L_CONT_ENDPOINT", "C_CONT_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md", "research/continuation/exact_certificate.json"]
+    },
+    "C_CONT_CORE": {
+      "statement": "Kernel-checked universal arithmetic, common-potential, median-time, finite-descent, and compact-endpoint lemmas; independent statement-fidelity approval remains pending.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/Main.lean", "research/continuation/statement_fidelity.md", "research/continuation/certificates/C_CONT_CORE-79797aba77e19dc7.json"]
+    },
+    "L_CONT_SORTING": {
+      "statement": "Common-potential rank-two sorting terminates with weakly ordered times, including ties and shape breaks.",
+      "status": "in_progress",
+      "depends_on": ["L_CONT_PRESERVATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md", "research/continuation/exact_certificate.json"]
+    },
+    "L_CONT_ENDPOINT": {
+      "statement": "Deletion strictness and compactness give right extension and attainment of parameter one.",
+      "status": "in_progress",
+      "depends_on": ["L_HALF_KERNEL", "L_CONT_SORTING", "C_CONT_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md", "research/continuation/exact_certificate.json"]
+    },
+    "L_MOMENT_LINK": {
+      "statement": "Manuscript strict count and knot count force a forbidden local link in the exceptional case.",
+      "status": "open",
+      "depends_on": ["C_CONTINUATION", "L_SCHEDULE_MOMENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    },
+    "L_COLUMNS": {
+      "statement": "Manuscript prop:columns turns fundamental-column integral schedules into tensor occurrence.",
+      "status": "open",
+      "depends_on": ["L_FLAG_COMPOSITION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    },
+    "L_FLAG_COMPOSITION": {
+      "statement": "Manuscript lem:flag-composition ensures nonvanishing on the Cartan summand for flow-ordered flags.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    },
+    "L_ZERO_TAIL": {
+      "statement": "Manuscript prop:zero-tail gives doubled occurrence after common-zero-tail reduction.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/continuation/report.md"]
+    }
+  }
+}

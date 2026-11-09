@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-L_MASS_CLOSURE-d55541c154cd",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/337/first-pass/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/337/first-pass/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 8839,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/337/first-pass/lean/Main.lean",
+    "source_sha256": "2ed552e7d891acea3c7d2327feeb6391ece9476f2572541ac5ee2ee88e5c8681",
+    "statement_fidelity": "families/337/first-pass/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "5ecea16d40e81313ea637b7341b7a95dcdd25e515e5df256bb8013927f4291b7",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/337/first-pass/lean/Main.lean:18:37: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/lean/Main.lean",
+    "text": "import Mathlib.Analysis.SpecialFunctions.Pow.Real\nimport Mathlib.Tactic.FieldSimp\nimport Mathlib.Tactic.Linarith\nimport Mathlib.Tactic.NormNum\nimport Mathlib.Tactic.Ring\n\nset_option autoImplicit false\n\nnamespace SobolevAudit\n\ntheorem critical_constants (m : ℝ) (hm : 2 < m) :\n    0 < 4 / (m - 2) ∧\n    2 * m / (m - 2) - 2 = 4 / (m - 2) ∧\n    (4 / (m - 2)) * ((m - 2) / 2) = 2 ∧\n    (4 / (m - 2)) * ((m - 2) / 2) ^ 2 = m - 2 := by\n  have hd : 0 < m - 2 := sub_pos.mpr hm\n  refine ⟨div_pos (by norm_num) hd, ?_, ?_, ?_⟩\n  all_goals field_simp [ne_of_gt hd] <;> ring\n\ntheorem critical_mass_exponent (m : ℝ) (hm : 2 < m) :\n    0 < (m - 2) / m ∧ (m - 2) / m < 1 := by\n  have hm0 : 0 < m := lt_trans (by norm_num) hm\n  constructor\n  · exact div_pos (sub_pos.mpr hm) hm0\n  · exact (div_lt_iff₀ hm0).mpr (by linarith)\n\ntheorem no_mass_loss (p Y B t : ℝ)\n    (hp : p ≤ 1) (hY : 0 ≤ Y) (hgap : Y < B)\n    (ht0 : 0 ≤ t) (ht1 : t ≤ 1)\n    (hmass : Y * t ^ p + B * (1 - t) ^ p ≤ Y) :\n    t = 1 := by\n  have hB : 0 ≤ B := le_trans hY hgap.le\n  have htp : t ≤ t ^ p :=\n    Real.self_le_rpow_of_le_one ht0 ht1 hp\n  have hsp : 1 - t ≤ (1 - t) ^ p :=\n    Real.self_le_rpow_of_le_one (by linarith) (by linarith) hp\n  have hleft := mul_le_mul_of_nonneg_left htp hY\n  have hright := mul_le_mul_of_nonneg_left hsp hB\n  have hprod : (B - Y) * (1 - t) ≤ 0 := by nlinarith\n  have hzero : 1 - t = 0 := by\n    by_contra hne\n    have hpos : 0 < 1 - t :=\n      lt_of_le_of_ne (by linarith) (Ne.symm hne)\n    have hstrict : 0 < (B - Y) * (1 - t) :=\n      mul_pos (sub_pos.mpr hgap) hpos\n    linarith\n  linarith\n\ntheorem coordinate_bound (c q Y E : ℝ) (hc : 0 < c)\n    (hcq : c = q - 2) (h : (q - 2) * Y ≤ c * E) :\n    Y ≤ E := by\n  rw [← hcq] at h\n  by_contra hn\n  have hpos : 0 < Y - E := sub_pos.mpr (lt_of_not_ge hn)\n  have hstrict : 0 < c * (Y - E) := mul_pos hc hpos\n  nlinarith\n\ntheorem square_rigidity (c Y E D : ℝ) (hc : 0 < c)\n    (hD : 0 ≤ D) (hlower : E + c * D ≤ Y) (hupper : Y ≤ E) :\n    D = 0 := by\n  by_contra hne\n  have hpos : 0 < D := lt_of_le_of_ne hD (Ne.symm hne)\n  have hstrict : 0 < c * D := mul_pos hc hpos\n  linarith\n\nend SobolevAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: critical compactness and square saturation\n\nClaim `L_MASS_CLOSURE` is the universal real-variable closure used in\nSections 4 and 5 of `research/sobolev_verification.md`. It is not the\ngeometric Sobolev theorem and does not formalize Sobolev spaces, integrals,\nweak derivatives, curvature comparison, balancing, or zero extension.\n\nAll five declarations below are in namespace `SobolevAudit`. Their\nunqualified names are `critical_constants`, `critical_mass_exponent`,\n`no_mass_loss`, `coordinate_bound`, and `square_rigidity`.\n\n`critical_constants` quantifies over every real `m>2` and\nproves positivity of `c=4/(m-2)` and the three coefficient identities\n`q-2=c`, `c*alpha=2`, `c*alpha^2=m-2`, with\n`q=2*m/(m-2)` and `alpha=(m-2)/2`.\n\n`critical_mass_exponent` proves\n`0<(m-2)/m<1` for every real `m>2`. The exponent `(m-2)/m` is `2/q`\nin the application; the corresponding rational identity is also replayed\nby `verify.py`.\n\n`no_mass_loss` quantifies over real `p,Y,B,t`. Its hypotheses\nare `p<=1`, `0<=Y<B`, `0<=t<=1`, and\n`Y*t^p+B*(1-t)^p<=Y`. Its conclusion is `t=1`.\nHere `B` is the sharp Euclidean threshold `Y_m`, `Y` is the Dirichlet\ninfimum, and `t` is the limiting critical mass. Real powers are Mathlib's\nreal powers. Positivity of `p`, although true in the application, is not\nneeded for this stronger implication. In particular `Y=0` is included;\nno division by `Y` or strict-concavity shortcut is hidden.\n\n`coordinate_bound` quantifies over real `c,q,Y,E`.\nIf `c>0`, `c=q-2`, and `(q-2)*Y<=c*E`, then `Y<=E`.\nThe analytic argument, not Lean, produces this scalar inequality by\nsumming the balanced coordinate variations.\n\n`square_rigidity` quantifies over real `c,Y,E,D`.\nIf `c>0`, `D>=0`, `E+c*D<=Y`, and `Y<=E`, then `D=0`.\nIn the application `D` is the integral of\n`|grad psi-alpha*psi*grad u|^2` and `E` is the weighted map energy.\nThe analytic identification of that integral and the inference of\nalmost-everywhere vanishing are outside this formalization.\n\nThese are implications with explicitly stated input inequalities, not\naxioms asserting that a geometric minimizer exists. The compilation\nrecord can close only `L_MASS_CLOSURE`. It cannot confer a kernel status\non `C_EXTRINSIC_SOB`, its arbitrary-codimension extension, or the\nmanuscript's downstream comparison and equality theorems.\n"
+  },
+  "subject": {
+    "content_hash": "7d459fb0549a10f00bce8313b8b6a6ff763931842aaf3ef00969717391da35a9",
+    "kind": "claim",
+    "subject_id": "L_MASS_CLOSURE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

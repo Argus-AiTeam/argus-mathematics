@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-L_CAUSAL_CORE-61c8a0040670",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/364/first-pass/audits/causal-exposure/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/364/first-pass/audits/causal-exposure/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16948,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/364/first-pass/audits/causal-exposure/lean/Main.lean",
+    "source_sha256": "ee4e5c096161a78c17c2a30dae8e7588b8dfb08d8f10952b65663f2d3fe95c8f",
+    "statement_fidelity": "families/364/first-pass/audits/causal-exposure/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "968836faf2e8d16a647d52f78d3bf1f5a8f4c0ddb3d222bbce394afe996b3d48",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/audits/causal-exposure/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace CausalExposure\n\nsection Translation\n\nvariable {V A : Type*} [AddCommGroup V]\n\ndef install (anchor : V) (q : A → V) (i l : A) : V :=\n  anchor + q l - q i\n\ntheorem install_gauge_invariant (anchor c : V) (q : A → V) (i l : A) :\n    install anchor (fun j => c + q j) i l = install anchor q i l := by\n  change anchor + (c + q l) - (c + q i) = anchor + q l - q i\n  simp only [sub_eq_add_neg, neg_add_rev]\n  abel\n\ntheorem install_recovers (anchor c : V) (q : A → V) (i l : A)\n    (contact : anchor = c + q i) :\n    install anchor q i l = c + q l := by\n  unfold install\n  rw [contact]\n  abel\n\ntheorem relative_merge_recovers (a b normal qa qb ql : V)\n    (contact : b + qb = a + normal + qa) :\n    a + (normal + qa - qb) + ql = b + ql := by\n  have hb : b = a + normal + qa - qb := by\n    rw [← contact]\n    abel\n  rw [hb]\n  abel\n\nend Translation\n\nsection Dependency\n\nvariable {I Ω X Y : Type*}\n\ndef AgreesOn (S : Set I) (u v : I → Ω) : Prop :=\n  ∀ i ∈ S, u i = v i\n\ndef SupportedBy (S : Set I) (f : (I → Ω) → X) : Prop :=\n  ∀ u v, AgreesOn S u v → f u = f v\n\ntheorem supported_mono {S T : Set I} {f : (I → Ω) → X}\n    (hST : S ⊆ T) (hf : SupportedBy S f) : SupportedBy T f := by\n  intro u v huv\n  exact hf u v (fun i hi => huv i (hST hi))\n\ntheorem supported_map {S : Set I} {f : (I → Ω) → X}\n    (hf : SupportedBy S f) (g : X → Y) :\n    SupportedBy S (fun u => g (f u)) := by\n  intro u v huv\n  change g (f u) = g (f v)\n  rw [hf u v huv]\n\ntheorem supported_install {V A : Type*} [AddCommGroup V]\n    {S : Set I} (anchor : (I → Ω) → V) (q : (I → Ω) → A → V)\n    (ha : SupportedBy S anchor) (hq : SupportedBy S q) (i l : A) :\n    SupportedBy S (fun u => install (anchor u) (q u) i l) := by\n  intro u v huv\n  change install (anchor u) (q u) i l = install (anchor v) (q v) i l\n  rw [ha u v huv, hq u v huv]\n\nstructure Update (I Ω X : Type*) where\n  reads : Set I\n  act : (I → Ω) → X → X\n  depends_only_on_reads : ∀ u v x, AgreesOn reads u v → act u x = act v x\n\ndef allReads : List (Update I Ω X) → Set I\n  | [] => ∅\n  | e :: es => e.reads ∪ allReads es\n\ndef run (initial : (I → Ω) → X) : List (Update I Ω X) → (I → Ω) → X\n  | [] => initial\n  | e :: es => run (fun u => e.act u (initial u)) es\n\ntheorem update_supported {S : Set I} {initial : (I → Ω) → X}\n    (h : SupportedBy S initial) (e : Update I Ω X) :\n    SupportedBy (S ∪ e.reads) (fun u => e.act u (initial u)) := by\n  intro u v huv\n  change e.act u (initial u) = e.act v (initial v)\n  have hs : initial u = initial v := h u v (fun i hi => huv i (Or.inl hi))\n  rw [hs]\n  exact e.depends_only_on_reads u v (initial v) (fun i hi => huv i (Or.inr hi))\n\ntheorem run_supported (es : List (Update I Ω X)) :\n    ∀ (S : Set I) (initial : (I → Ω) → X),\n      SupportedBy S initial →\n      SupportedBy (S ∪ allReads es) (run initial es) := by\n  induction es with\n  | nil =>\n      intro S initial h\n      simpa [allReads, run] using h\n  | cons e es ih =>\n      intro S initial h\n      have hnext := update_supported h e\n      have htail := ih (S ∪ e.reads) (fun u => e.act u (initial u)) hnext\n      simpa [allReads, run, Set.union_assoc] using htail\n\nend Dependency\n\nsection Counting\n\nvariable {I : Type*} [DecidableEq I]\n\ndef cover : List (Finset I) → Finset I\n  | [] => ∅\n  | B :: Bs => B ∪ cover Bs\n\ntheorem fresh_disjoint (seen requested : Finset I) :\n    Disjoint (requested \\ seen) seen := by\n  apply Finset.disjoint_left.mpr\n  intro i hi hseen\n  exact (Finset.mem_sdiff.mp hi).2 hseen\n\ntheorem fresh_cap (seen requested : Finset I) (h : requested.card ≤ 2) :\n    (requested \\ seen).card ≤ 2 :=\n  le_trans (Finset.card_le_card Finset.sdiff_subset) h\n\ntheorem cover_card_le_two_mul (Bs : List (Finset I))\n    (h : ∀ B ∈ Bs, B.card ≤ 2) :\n    (cover Bs).card ≤ 2 * Bs.length := by\n  induction Bs with\n  | nil => simp [cover]\n  | cons B Bs ih =>\n      have hB : B.card ≤ 2 := h B (by simp)\n      have hBs : ∀ C ∈ Bs, C.card ≤ 2 := by\n        intro C hC\n        exact h C (by simp [hC])\n      calc\n        (cover (B :: Bs)).card ≤ B.card + (cover Bs).card :=\n          Finset.card_union_le B (cover Bs)\n        _ ≤ 2 + 2 * Bs.length := Nat.add_le_add hB (ih hBs)\n        _ = 2 * (B :: Bs).length := by simp; omega\n\ntheorem exposure_count (K : Finset I) (Bs : List (Finset I))\n    (hcover : K ⊆ cover Bs) (hcap : ∀ B ∈ Bs, B.card ≤ 2) :\n    K.card ≤ 2 * Bs.length :=\n  le_trans (Finset.card_le_card hcover) (cover_card_le_two_mul Bs hcap)\n\nend Counting\n\nsection Flux\n\nvariable {R : Type*} [CommRing R]\n\ndef det3 (a b c d e f g h i : R) : R :=\n  a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g)\n\ntheorem contact_flux_numerator (e u v x y z : R) :\n    det3\n      x (2 * e * (1 - u ^ 2 + v ^ 2)) (-4 * e * u * v)\n      y (-4 * e * u * v) (2 * e * (1 + u ^ 2 - v ^ 2))\n      z (-4 * e * u) (-4 * e * v)\n      = 4 * e ^ 2 * (1 + u ^ 2 + v ^ 2) *\n        (2 * u * x + 2 * v * y + (1 - u ^ 2 - v ^ 2) * z) := by\n  unfold det3\n  ring\n\nend Flux\n\nsection PowerComplexity\n\nnoncomputable def powerEta (B alpha : ℝ) : ℝ :=\n  alpha / (800 * (3 * B + 1))\n\ntheorem power_eta_pos (B alpha : ℝ) (hB : 1 ≤ B) (ha : 0 < alpha) :\n    0 < powerEta B alpha := by\n  unfold powerEta\n  have hden : 0 < 800 * (3 * B + 1) := by linarith\n  exact div_pos ha hden\n\ntheorem power_eta_budget (B alpha : ℝ) (hB : 1 ≤ B) :\n    (3 * B + 1) * powerEta B alpha = alpha / 800 := by\n  have hden : 3 * B + 1 ≠ 0 := by linarith\n  unfold powerEta\n  field_simp\n\ntheorem power_budget_bounds (B alpha eta : ℝ)\n    (hB : 1 ≤ B) (ha : alpha ≤ 1) (he : 0 ≤ eta)\n    (hbudget : (3 * B + 1) * eta ≤ alpha / 800) :\n    (23 : ℝ) / 2400 ≤ 1 / 100 - B * eta ∧\n    (239 : ℝ) / 2400 ≤ 1 / 10 - B * eta ∧\n    (2 * B + alpha * B / 2) * eta - alpha / 200 ≤ -3 * alpha / 800 := by\n  have hBe : 0 ≤ B * eta := mul_nonneg (by linarith) he\n  have hcross : 0 ≤ (1 - alpha) * (B * eta) :=\n    mul_nonneg (by linarith) hBe\n  have hsmall : B * eta ≤ (1 : ℝ) / 2400 := by nlinarith\n  constructor\n  · nlinarith\n  constructor\n  · nlinarith\n  · nlinarith\n\nend PowerComplexity\n\nend CausalExposure\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/audits/causal-exposure/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: L_CAUSAL_CORE\n\nThe source is `research/audits/causal-exposure/Main.lean`, namespace\n`CausalExposure`. It uses Lean/Mathlib without additional axioms or proof holes.\nIts claim is only the universal finite algebraic/combinatorial core, not\nProposition `exp:exposure`.\n\n## Dormant translation algebra\n\nFor every additive commutative group `V`, every index type `A`, every\nrelative configuration `q : A -> V`, and any `i,l : A`,\n`install anchor q i l = anchor + q l - q i`.\n`install_gauge_invariant` says that adding one common vector to every\nrelative position does not change installed positions.\n`install_recovers` assumes the exact contact equation\n`anchor = c + q i` and concludes `install anchor q i l = c + q l`.\nFor the manuscript, `anchor` is `x_j(t) + epsilon*n`, not `x_j(t)`.\n`relative_merge_recovers` is the analogous exact two-component contact\ntranslation identity. None of these declarations proves that a\nHamiltonian trajectory actually has the assumed contact equation.\n\n## Coordinate dependence\n\n`AgreesOn S u v` means that environments `u,v : I -> Omega` agree at every\ncoordinate in `S`. `SupportedBy S f` means that such agreement forces\n`f u = f v`. The sets and types are arbitrary; no probability law is encoded.\nThe fixed exterior coordinate `xi` is held fixed when this definition is\napplied to the selected-block environment.\n\n`supported_install` derives support of installed positions from support of\nthe anchor and the entire relative configuration. It does not silently\nassume relative configurations of dormant components have this support.\n`Update` explicitly requires `depends_only_on_reads`, saying that a state update, for\nfixed input state, reads only its declared coordinate set.\n`run_supported` proves by induction that an arbitrary finite update list\nreads only the initial support and the union of those declared sets.\nConsequently this is a noninterference theorem **conditional on the local\nsupport specifications**, not a compiler verification that the manuscript's\nconcrete ODE updates satisfy them. That semantic obligation remains an\nanalytic proof obligation in `report.md`.\n\n## Exposure counts\n\nFor every type with decidable equality, `fresh_disjoint` proves that newly\nrequested coordinates after subtracting `seen` are disjoint from `seen`;\n`fresh_cap` preserves a size-at-most-two bound. `exposure_count` quantifies\nover an arbitrary finite set `K` and arbitrary list of finite sets `Bs`.\nIf `K` is covered by their union and each has cardinality at most two,\nit concludes `K.card <= 2 * Bs.length`. There is no finite enumeration bound\nand no independence premise hidden in this cardinality statement.\nIt does not prove that actual trajectory contacts induce such a covering\nlist, or prove a measure/product bound.\n\n## Flux identity\n\n`contact_flux_numerator` holds over every commutative ring for six arbitrary\nelements `e,u,v,x,y,z`. It is the exact determinant of the polynomial\nmatrix in `jacobian_payload.json`. Over the reals, putting\n`D = 1+u^2+v^2`, the two latter columns are `e*D^2` times the derivatives\nof `n(u,v) = (2u,2v,1-u^2-v^2)/D`. Dividing the polynomial identity by\n`D^4` gives `det[w,e*n_u,e*n_v] = e^2 (w dot n) 4/D^2`.\nThat division, the area element `4/D^2`, and the area formula are\nexplained analytically in the report; they are not Lean declarations.\n\n## Power-complexity parameter core\n\n`powerEta B alpha` is the real number `alpha / (800 * (3*B+1))`.\n`power_eta_pos` assumes `1 <= B` and `0 < alpha` and proves this\nnumber positive. `power_eta_budget` assumes only `1 <= B` and proves\n`(3*B+1) * powerEta B alpha = alpha/800` for every real `alpha`.\n\n`power_budget_bounds` quantifies over arbitrary real `B,alpha,eta`.\nIt assumes `1 <= B`, `alpha <= 1`, `0 <= eta`, and\n`(3*B+1)*eta <= alpha/800`. Its three conclusions are\n`23/2400 <= 1/100-B*eta`, `239/2400 <= 1/10-B*eta`, and\n`(2*B+alpha*B/2)*eta-alpha/200 <= -3*alpha/800`.\nThe assumption `alpha > 0`, used for a strictly positive decay\nexponent in Theorem PCE, is not needed for this weak inequality;\nthe budget already forces `alpha >= 0`.\n\nThese are universal ordered-field inequalities, not a finite grid\nsearch. They certify the scalar exponent accounting in (11)--(13)\nof the report. They do not prove the existence of the coarse\nconstant `B`, its independence from the mesh count, or any of\nthe analytic estimates to which these scalar parameters are applied.\n\n## What this compilation cannot establish\n\nThe file contains no ODE, Hamiltonian flow, scattering map, Haar probability,\nsurface integral, source norm, epsilon limit, chronological first-contact\nsearch, or continuous tube estimate. A successful compiler run therefore\ncertifies L_CAUSAL_CORE only. It cannot confer `closed_kernel` on\nP_EXPOSURE, P_REPLAY_AGREEMENT, P_FRESH_BLOCK, V_POWER_EXPOSURE_001, or\neither manuscript's main theorem. The natural-language interpretation and the concrete semantic\nbridge require independent review.\n"
+  },
+  "subject": {
+    "content_hash": "8c89f9cc28c080582a1b1318d6a2b9b9b89356e256b736ba6c8e290c549c4350",
+    "kind": "claim",
+    "subject_id": "L_CAUSAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

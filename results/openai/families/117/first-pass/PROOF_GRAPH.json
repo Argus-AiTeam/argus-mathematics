@@ -1,0 +1,232 @@
+{
+  "goal": "C9000117",
+  "routes": [
+    {
+      "name": "R_QC_GENERAL_V2",
+      "status": "current",
+      "evidence": "research/quadratic_correction/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000117": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 117 (Uniform sparsest cut: hardness and semidefinite gaps.; papers: Constant-factor hardness of uniform sparsest cut; Near-square-root logarithmic integrality gaps for uniform sparsest cut; Lean status: Partially/Comparator formalized (lean/docs/117.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["H_QC"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "H_MAIN": {
+      "statement": "For every fixed C>1 there is a polynomial-time 3CNF-to-rational-capacity uniform-sparsest-cut reduction with SAT optimum at most a and UNSAT optimum greater than C a, with unit demand on every distinct pair. Source: hardness sections/00-introduction.tex, thm:main.",
+      "status": "open",
+      "depends_on": ["H_BIT_TEST", "H_EVENTS", "H_RARE", "H_SCORE", "H_PATHS", "H_FINITE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/00-introduction.tex"]
+    },
+    "H_PENCIL_POLE": {
+      "statement": "The characteristic-two tower simple-pole lemma gives irreducibility of X^r+X-b, the local basis, ramification order r, and discriminant order 2(r-1). Source: hardness sections/01-pencil.tex, lem:pencil-simple-pole.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/01-pencil.tex"]
+    },
+    "H_PENCIL": {
+      "statement": "For fixed lambda_0>0 and sufficiently large power-of-two r, q=r^2, every d>=1 has a deterministic 2^{O(d)}-time list of m=O(d) vectors containing the standard basis; every homogeneous quadratic nonzero on the list vanishes on at most lambda_0 m list indices. Source: lem:pencil.",
+      "status": "open",
+      "depends_on": ["H_PENCIL_POLE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/01-pencil.tex"]
+    },
+    "H_MATRIX": {
+      "statement": "The actual rank-one matrix walk has mean-zero L2 norm at most lambda_1=lambda_0+q^{-1}; hence every nonempty E has conditional internal directed edge probability at most mu(E)+lambda_1. Source: sections/02-bit-tests.tex, lem:matrix-walk and eq:internal-edge-bound.",
+      "status": "open",
+      "depends_on": ["H_PENCIL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/02-bit-tests.tex"]
+    },
+    "H_MASK": {
+      "statement": "The four-time masked parity law is exchangeable with uniform marginals and pair norm at most max(lambda_1,2/(q-3)), with the same bound on two independent copies. Source: lem:masked-pair-mixing.",
+      "status": "open",
+      "depends_on": ["H_MATRIX"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/02-bit-tests.tex"]
+    },
+    "H_SLACK": {
+      "statement": "Products of principal minors vanishing on Boolean diagonals admit the displayed minor-product slack; tag-bank and selector differences pack the honest fields while preserving quadratic rank-one line restrictions. Source: lem:minor-product-slack and eq:selector-isolation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/02-bit-tests.tex"]
+    },
+    "H_QC": {
+      "statement": "With gamma=10^{-3}, line failure at most delta^2, 2delta+lambda_1<gamma/2, 1-4gamma-4delta-2/(q-1)>delta+lambda_1, and 27gamma+5delta<1, there exist one scalar-invariant H of direction mass at least 1-delta and one P' differing on at most 2delta, quadratic on every H-line at every base. Source: lem:quadratic-correction.",
+      "status": "open",
+      "depends_on": ["Q_GENERAL", "H_MATRIX"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quadratic_correction/report.md", "research/quadratic_correction/exact_certificate.json"]
+    },
+    "H_SUPPORT": {
+      "statement": "A nonzero function of degree at most D<q-1 on scalar-invariant directions of mass at least 1-rho has support density at least 1-rho-D/(q-1)-lambda_1. Source: lem:line-support-gap.",
+      "status": "open",
+      "depends_on": ["H_MATRIX"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/02-bit-tests.tex"]
+    },
+    "H_EXACT_DECODE": {
+      "statement": "After correction, subgroup stabilizers exactify assignment invariance and bank affinity; fixed-shift expansion bounds full discrepancy degree by four; the support gap forces exact identities and gives a satisfying Boolean assignment. Source: sections/02-bit-tests.tex, Support gaps and exact bank affinity.",
+      "status": "open",
+      "depends_on": ["H_QC", "H_SUPPORT", "H_SLACK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/02-bit-tests.tex"]
+    },
+    "H_BIT_TEST": {
+      "statement": "For each fixed lambda>0, polynomially enumerable bounded-arity bit tests have bounded marginals, perfect completeness, constant soundness, and a mixing exchangeable four-bit parity law. Source: thm:bit-test-system.",
+      "status": "open",
+      "depends_on": ["H_MASK", "H_SLACK", "H_EXACT_DECODE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/02-bit-tests.tex"]
+    },
+    "H_EVENTS": {
+      "statement": "A valuation with the manuscript's approximate calibration and order-preservation properties yields a satisfying Boolean assignment through the bit-test system. Source: sections/03-events.tex, lem:event-obstruction.",
+      "status": "open",
+      "depends_on": ["H_BIT_TEST"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/03-events.tex"]
+    },
+    "H_RARE": {
+      "statement": "The rare-event criterion extracts the required calibrated valuation from the manuscript's conjunction-response hypothesis without dependence on minimum atom or support size. Source: sections/04-entropy.tex, lem:rare-event.",
+      "status": "open",
+      "depends_on": ["H_EVENTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/04-entropy.tex"]
+    },
+    "H_SCORE": {
+      "statement": "The analytic score-gap theorem links bounded score functions, comparison cost, and demand variance to the valuation obstruction; its amplitude signal is transferred through the path argument. Source: sections/05-scores.tex, thm:score-gap and lem:amplitude-signal.",
+      "status": "open",
+      "depends_on": ["H_RARE", "H_BIT_TEST"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/05-scores.tex"]
+    },
+    "H_PATHS": {
+      "statement": "The conditional-kernel and ordered-path estimates establish the finite score-compilation interface. Source: sections/06-paths.tex, prop:score-compilation.",
+      "status": "open",
+      "depends_on": ["H_SCORE", "H_RARE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/06-paths.tex"]
+    },
+    "H_FINITE": {
+      "statement": "Rational score rounding, key replication, and heavy/auxiliary edges yield unit demand on every distinct pair while preserving the promised completeness and all-nontrivial-cuts soundness ratio. Source: sections/07-finite-graph.tex, lem:rational-compilation and eq:final-threshold.",
+      "status": "open",
+      "depends_on": ["H_PATHS", "H_SCORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/07-finite-graph.tex"]
+    },
+    "I_MAIN": {
+      "statement": "There are c>0 and uniform-demand instances on n_j tending to infinity with positive Goemans-Linial optimum and OPT/GL >= c sqrt(log n_j)/(log log n_j)^3. This is an existential integrality-gap sequence, not computational hardness. Source: gap main.tex, thm:main.",
+      "status": "open",
+      "depends_on": ["I_DUALITY", "I_COPIES", "I_ASYMPTOTIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-square-root-logarithmic-integrality-gaps-for-uniform-sparsest-cut-September-24-2026/build/source/main.tex"]
+    },
+    "I_DIRECTIONS": {
+      "statement": "For N=m^6 and S=m^3 the direction charts satisfy norm, covariance, Gaussian-approximation, and uniform directional-maximum controls. Source: gap directions.tex, lem:directions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-square-root-logarithmic-integrality-gaps-for-uniform-sparsest-cut-September-24-2026/build/source/directions.tex"]
+    },
+    "I_KERNEL": {
+      "statement": "The kernel construction with a=m^{-40}, b=m^{40}, epsilon=m^{-200}, r=m^{-8}, tau=m^{-2000} supplies the stated global and local angle controls. Source: gap kernel.tex, ker:parameters and ker:angles.",
+      "status": "open",
+      "depends_on": ["I_DIRECTIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-square-root-logarithmic-integrality-gaps-for-uniform-sparsest-cut-September-24-2026/build/source/kernel.tex"]
+    },
+    "I_REPAIR": {
+      "statement": "Triangle repair produces a negative-type semimetric, preserves macroscopic distances, and controls adjacent rounded-label distances. Source: gap repair.tex, lem:repair.",
+      "status": "open",
+      "depends_on": ["I_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-square-root-logarithmic-integrality-gaps-for-uniform-sparsest-cut-September-24-2026/build/source/repair.tex"]
+    },
+    "I_METRIC": {
+      "statement": "The finite negative-type metric has macroscopic distance c_*sqrt(m)|theta-eta| up to Cr, same-chart adjacent bound C tau(m/N)(log m)^2, size at most exp(Cm log m), diameter at most Cm, and first-chart average at least cm. Source: gap metric.tex, prop:metric.",
+      "status": "open",
+      "depends_on": ["I_DIRECTIONS", "I_KERNEL", "I_REPAIR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-square-root-logarithmic-integrality-gaps-for-uniform-sparsest-cut-September-24-2026/build/source/metric.tex"]
+    },
+    "I_CONTRACTION": {
+      "statement": "Every finite-dimensional l1 contraction of the constructed metric has first-chart average distance at most C sqrt(m)(log m)^{5/2}. Source: gap contraction.tex, prop:contraction.",
+      "status": "open",
+      "depends_on": ["I_DIRECTIONS", "I_METRIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-square-root-logarithmic-integrality-gaps-for-uniform-sparsest-cut-September-24-2026/build/source/contraction.tex"]
+    },
+    "I_DUALITY": {
+      "statement": "For a squared-Hilbert semimetric with mean at least a and every finite-dimensional l1 contraction having mean at most b, cut-cone duality gives capacities with OPT>=1 and 0<GL<=b/a. Source: gap reduction.tex, lem:duality.",
+      "status": "open",
+      "depends_on": ["I_METRIC", "I_CONTRACTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-square-root-logarithmic-integrality-gaps-for-uniform-sparsest-cut-September-24-2026/build/source/reduction.tex"]
+    },
+    "I_COPIES": {
+      "statement": "Multiplicity rounding M=m^m+m^2|V| and k_v=1+floor(Mw_v) makes uniform copies with TV error <=m^{-2}, mean metric >=c'm and contraction mean <=C'sqrt(m)(log m)^{5/2}. Source: gap reduction.tex, red:tv, red:uniform-metric and red:uniform-contraction.",
+      "status": "open",
+      "depends_on": ["I_METRIC", "I_CONTRACTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-square-root-logarithmic-integrality-gaps-for-uniform-sparsest-cut-September-24-2026/build/source/reduction.tex"]
+    },
+    "I_ASYMPTOTIC": {
+      "statement": "The uniform-copy gap is at least c''sqrt(m)/(log m)^{5/2} and m log m<=log n<=Km log m, yielding the stated sqrt(log n)/(log log n)^3 sequence. Source: gap reduction.tex, red:m-gap and red:size.",
+      "status": "open",
+      "depends_on": ["I_DUALITY", "I_COPIES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Near-square-root-logarithmic-integrality-gaps-for-uniform-sparsest-cut-September-24-2026/build/source/reduction.tex"]
+    },
+    "I_FORMAL_SCOPE": {
+      "statement": "Official lean/docs/117.md describes an integrality-gap formalization for an existential sequence with unit pair demands and positive relaxation optimum; it explicitly does not certify computational hardness or every size. The supplied archived comparator receipt has not been replayed in this mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quadratic_correction/literature/family117_scope.md"]
+    },
+    "Q_GENERAL": {
+      "statement": "For every finite field F_q, every finite-dimensional F_q-vector space, every scalar-invariant direction law satisfying the internal-edge estimate with lambda>=0, and every integer 0<=d<q-1: if the degree-d all-points line test fails with probability <=epsilon, alpha,beta,gamma>0, rho=epsilon/beta, 2epsilon/alpha+lambda<gamma/2, 1-(d+2)(alpha+gamma)-d/(q-1)>beta+lambda, and [2(d+1)^2+3(d+1)]gamma+3rho<1, there is one scalar-invariant H of mass >=1-rho and one correction differing on at most 2epsilon/alpha, of degree <=d on every H-line at every base.",
+      "status": "open",
+      "depends_on": ["Q_CLEANUP", "Q_PROPAGATE", "Q_FILL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quadratic_correction/report.md", "research/quadratic_correction/exact_certificate.json", "research/quadratic_correction/verify.py", "research/quadratic_correction/replay_result.json"]
+    },
+    "Q_CLEANUP": {
+      "statement": "Under the input hypotheses of Q_GENERAL, not its correction conclusion, Markov's inequality and 2epsilon/alpha+lambda<gamma/2 produce one missing set of density <=2epsilon/alpha, containing all points whose bad-direction mass exceeds alpha, with every outside point entering the missing set with probability <gamma.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quadratic_correction/report.md"]
+    },
+    "Q_PROPAGATE": {
+      "statement": "Under the input hypotheses of Q_GENERAL, not its correction conclusion, define H by failing-base fraction <=beta and take the cleaned set from Q_CLEANUP. Every degree-d interpolation relation in an H direction whose d+2 positions are clean is exact; a nonempty failure set would have internal-edge probability greater than beta+lambda.",
+      "status": "open",
+      "depends_on": ["Q_CLEANUP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quadratic_correction/report.md"]
+    },
+    "Q_KERNEL": {
+      "statement": "Over arbitrary finite index sets and any commutative ring, double interpolation sums commute and zero translated relations transfer to reconstructed centers. For every finite nonnegative real probability vector, there exists a modal atom at least its collision probability. The general collision and completion budget identities, the quadratic manuscript budget implication, and the displayed positive parameter margins hold.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quadratic_correction/Main.lean", "research/quadratic_correction/statement_fidelity.md", "research/quadratic_correction/certificates/Q_KERNEL-9dabfbe65d434cae.json"]
+    },
+    "Q_FILL": {
+      "statement": "Under the input hypotheses of Q_GENERAL, not its correction conclusion, let fixed scalar-invariant H have missing direction mass <=rho and let a partial assignment satisfy every H interpolation relation on old assigned points. With r=d+1 nonzero interpolation nodes, assigned-point entry into the missing set <=gamma, and a missing center with the same entry bound, a modal prediction has collision failure <=(r^2+2r)gamma+2rho. One common transverse-direction event for each newly enabled relation extends the partial assignment at that center when (2r^2+3r)gamma+3rho<1, preserving all relations and entry bounds after removal of that center, without a union bound over relations or dimension.",
+      "status": "open",
+      "depends_on": ["Q_PROPAGATE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/quadratic_correction/report.md"]
+    }
+  }
+}

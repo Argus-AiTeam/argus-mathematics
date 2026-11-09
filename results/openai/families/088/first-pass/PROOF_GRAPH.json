@@ -1,0 +1,127 @@
+{
+  "goal": "C9000088",
+  "routes": [
+    {
+      "name": "Universal quantitative scalar verification and conditional norm transfer",
+      "status": "current",
+      "evidence": "research/scalar_defect/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000088": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 088 (Sharp projection-body inequalities and a counterexample to simplex maximization.; papers: Petty’s projection-volume conjecture in dimensions at least four; A product counterexample to the simplex maximum for projection-body volume; Lean status: Partially/Comparator formalized (lean/docs/088.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_SCALAR_DEFECT", "C_NORM_DEFECT", "INDEPENDENT_SCALAR_REVIEW"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SCALAR_DEFECT": {
+      "statement": "For every integer n>=4 and real z>0, 2W-L >= (41/360)(z-1)^2/max(1,z)^(2n), with the manuscript's unchanged constants.",
+      "status": "open",
+      "depends_on": ["SCALAR_LEFT_INTERVAL", "SCALAR_SMALL_DIMENSIONS", "SCALAR_LARGE_DIMENSIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/scalar_defect/Main.lean", "research/scalar_defect/statement_fidelity.md", "research/scalar_defect/certificates/C_SCALAR_DEFECT-aeb6e84e428855c8.json", "research/scalar_defect/verify.py", "research/scalar_defect/exact_certificate.json"]
+    },
+    "SCALAR_LEFT_INTERVAL": {
+      "statement": "The inverse-power Taylor recurrence gives the required quadratic margin for every n>=4 and 0<z<=1, including equality at one.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/scalar_defect/Main.lean", "research/scalar_defect/report.md", "research/scalar_defect/certificates/C_SCALAR_DEFECT-aeb6e84e428855c8.json"]
+    },
+    "SCALAR_SMALL_DIMENSIONS": {
+      "statement": "In dimensions 4,5,6 the defining rational expressions give the printed polynomials, with quartic lower bounds 328,193700,451790.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/scalar_defect/verify.py", "research/scalar_defect/exact_certificate.json"]
+    },
+    "C_POWER_TAIL": {
+      "statement": "For every natural n and real x>=0, T3(2n,x)>=8*T3(n,x)>=0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/scalar_defect/Main.lean", "research/scalar_defect/report.md"]
+    },
+    "SCALAR_LARGE_DIMENSIONS": {
+      "statement": "The recomputed large-polynomial identity and power-tail decomposition prove the margin n+3-8c>=9/10 for all n>=7; 7,8,9 are exact finite bridge cases and n>=10 is universal.",
+      "status": "open",
+      "depends_on": ["C_POWER_TAIL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/scalar_defect/Main.lean", "research/scalar_defect/exact_certificate.json"]
+    },
+    "SCALAR_MEAN_BOUND": {
+      "statement": "The original scalar mean-coefficient estimate holds for every n>=4.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/scalar_defect/Main.lean", "research/scalar_defect/verify.py"]
+    },
+    "C_SCALAR_ORIGINAL": {
+      "statement": "Lemma lem:scalar-estimates is valid in every n>=4, with pointwise equality exactly at z=1.",
+      "status": "open",
+      "depends_on": ["C_SCALAR_DEFECT", "SCALAR_MEAN_BOUND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/scalar_defect/report.md", "research/scalar_defect/certificates/C_SCALAR_DEFECT-aeb6e84e428855c8.json"]
+    },
+    "CURVATURE_REDUCTION_INPUT": {
+      "statement": "Analytic input: the manuscript's curvature, projection, and mean-range estimates imply equation eq:norm-reduction. The scalar mission does not independently formalize this input.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Pettys-projection-volume-conjecture-in-dimensions-at-least-four-September-24-2026/build/latex/sections/04_norm.tex"]
+    },
+    "C_NORM_DEFECT": {
+      "statement": "Conditional on the recorded analytic reduction, the norm deficit is at least (41/360)E[(g-1)^2/max(1,g)^(2n)], and hence at least (41/360)max(1,||g||infinity)^(-2n)||g-1||2^2.",
+      "status": "open",
+      "depends_on": ["C_SCALAR_DEFECT", "SCALAR_MEAN_BOUND", "CURVATURE_REDUCTION_INPUT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/scalar_defect/report.md"]
+    },
+    "INDEPENDENT_SCALAR_REVIEW": {
+      "statement": "Host-invoked independent Reviewer replays the exact and Lean certificates, checks statement fidelity and norm transfer, and judges significance and novelty without promoting this scalar result to the full geometric theorem.",
+      "status": "open",
+      "depends_on": ["C_SCALAR_DEFECT", "C_SCALAR_ORIGINAL", "C_NORM_DEFECT"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_PETTY_MAIN": {
+      "statement": "Unaudited global source theorem thm:main: for every n>=4 and convex body K, |Pi K|/|K|^(n-1) >= kappa_(n-1)^n*kappa_n^(2-n), with equality exactly for ellipsoids.",
+      "status": "open",
+      "depends_on": ["GLOBAL_BILINEAR_PAIRING", "GLOBAL_MEASURE_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Pettys-projection-volume-conjecture-in-dimensions-at-least-four-September-24-2026/build/latex/sections/01_introduction.tex"]
+    },
+    "GLOBAL_BILINEAR_PAIRING": {
+      "statement": "Unaudited global source theorem thm:bilinear: bounded spanning positive measures satisfying the support-functional condition have absolute inner-product pairing at least b_n, with the stated ellipsoid equality implication.",
+      "status": "open",
+      "depends_on": ["C_NORM_DEFECT", "GLOBAL_AFFINE_POSITION", "GLOBAL_SIGN_REPRESENTATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Pettys-projection-volume-conjecture-in-dimensions-at-least-four-September-24-2026/build/latex/sections/06_conclusion.tex"]
+    },
+    "GLOBAL_AFFINE_POSITION": {
+      "statement": "Unaudited prerequisite prop:position: under the definitions in section 05, there is a symmetric positive definite A with det A=1 for which g_A^k has no degree-two component; the proof requires continuity through singular matrix ranks.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Pettys-projection-volume-conjecture-in-dimensions-at-least-four-September-24-2026/build/latex/sections/05_position.tex"]
+    },
+    "GLOBAL_SIGN_REPRESENTATION": {
+      "statement": "Unaudited global prerequisites: the spherical sign/multiplier bounds of section 03 and variational representation prop:representation in section 05 connect the measure pairing to the norm estimate.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Pettys-projection-volume-conjecture-in-dimensions-at-least-four-September-24-2026/build/latex/sections/03_spherical.tex", "research/openai_manuscript/Pettys-projection-volume-conjecture-in-dimensions-at-least-four-September-24-2026/build/latex/sections/05_position.tex"]
+    },
+    "GLOBAL_MEASURE_REDUCTION": {
+      "statement": "Unaudited global prerequisite: the normalized body-to-measure construction, projection-body normalization, affine covariance, and equality transfer in section 06 turn thm:bilinear into thm:main.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Pettys-projection-volume-conjecture-in-dimensions-at-least-four-September-24-2026/build/latex/sections/06_conclusion.tex"]
+    }
+  }
+}

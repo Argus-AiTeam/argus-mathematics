@@ -1,0 +1,43 @@
+{
+  "command": [
+    "$WORKSPACE/argus-live-update/.venv/bin/python",
+    "-m",
+    "argus_skill.verticals.math.math_state",
+    "revise-claim",
+    "--project-root",
+    "campaigns/9000124",
+    "--id",
+    "C_TFC_HISTORY",
+    "--formal-file",
+    "research/two_frame_compression/formal_hierarchy/Main.lean"
+  ],
+  "exit_code": 0,
+  "post_mutation_checks": [
+    {
+      "command": [
+        "$WORKSPACE/argus-live-update/.venv/bin/python",
+        "-m",
+        "argus_skill.verticals.math.math_state",
+        "check",
+        "--project-root",
+        "campaigns/9000124"
+      ],
+      "exit_code": 1,
+      "stdout": "{\n  \"ok\": false,\n  \"issues\": [\n    {\n      \"code\": \"route_goal_stale\",\n      \"path\": \"$.routes[4].goal\",\n      \"message\": \"route 'R_TFC_RAW_PLUS_PROTOCOL' aims at a statement that is not the current version of any claim\"\n    },\n    {\n      \"code\": \"route_goal_stale\",\n      \"path\": \"$.routes[5].goal\",\n      \"message\": \"route 'R_TFC_UNIVERSAL' aims at a statement that is not the current version of any claim\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "$WORKSPACE/argus-live-update/.venv/bin/python",
+        "-m",
+        "argus_skill.verticals.math.proof_graph_check",
+        "check",
+        "--project-root",
+        "campaigns/9000124"
+      ],
+      "exit_code": 0,
+      "stdout": "proof graph valid: 15 node(s)\n",
+      "stderr": ""
+    }
+  ]
+}

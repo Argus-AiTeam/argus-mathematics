@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-F258-CORE-f58166fe5e53",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/258/first-pass/row_restriction/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/258/first-pass/row_restriction/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16494,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/258/first-pass/row_restriction/Main.lean",
+    "source_sha256": "9874f5cee2a7691a8c74f0234a3e1c61cb7dfb1afb6e332190179e3c1dd38527",
+    "statement_fidelity": "families/258/first-pass/row_restriction/statement_fidelity.md",
+    "statement_fidelity_sha256": "1dc5e24f4d01719e0a32784bd0b5297c6bc0af68d77b07da69b50b9e8b9194ad",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/row_restriction/Main.lean",
+    "text": "import Mathlib\n\nnamespace RowRestriction\n\nsection Pivots\n\nvariable {D : Type*} [DivisionRing D]\n\ntheorem right_pivot_cancel {c p : D} (hp : p ≠ 0) (h : c * p = 0) :\n    c = 0 :=\n  (mul_eq_zero.mp h).resolve_right hp\n\ntheorem triangular_injective {B : Type*} (q : B → D) (p : D) (hp : p ≠ 0) :\n    Function.Injective\n      (fun v : (B → D) × D => ((fun j => v.1 j + v.2 * q j), v.2 * p)) := by\n  intro v w h\n  have hpivot : v.2 * p = w.2 * p := congrArg Prod.snd h\n  have hdiff : (v.2 - w.2) * p = 0 := by\n    rw [sub_mul, hpivot, sub_self]\n  have hc : v.2 = w.2 := sub_eq_zero.mp (right_pivot_cancel hp hdiff)\n  apply Prod.ext\n  · funext j\n    have hj := congrFun (congrArg Prod.fst h) j\n    change v.1 j + v.2 * q j = w.1 j + w.2 * q j at hj\n    rw [hc] at hj\n    exact add_right_cancel hj\n  · exact hc\n\ntheorem private_column\n    {A B W : Type*} [AddGroup A] [AddGroup B] [AddGroup W]\n    (source : A →+ W) (relation : B →+ W)\n    (probe : W →+ D) (coefficient : B →+ D)\n    (hs : Function.Injective source) (hc : Function.Injective coefficient)\n    (p : D) (hp : p ≠ 0)\n    (hsource : ∀ a, probe (source a) = 0)\n    (hrelation : ∀ b, probe (relation b) = coefficient b * p)\n    {a : A} {b : B} (h : source a = relation b) :\n    a = 0 ∧ b = 0 := by\n  have hzero : coefficient b * p = 0 := by\n    rw [← hrelation b, ← h, hsource a]\n  have hb : b = 0 := hc (by simpa using right_pivot_cancel hp hzero)\n  have ha : a = 0 := hs (by simpa [hb] using h)\n  exact ⟨ha, hb⟩\n\ndef xToY (x s : D) (v : D × D) : D × D :=\n  (-v.1 * x, v.1 * s + v.2)\n\ndef yToX (x s : D) (v : D × D) : D × D :=\n  (-v.1 * x⁻¹, v.1 * x⁻¹ * s + v.2)\n\ntheorem root_frame_inverse (x s : D) (hx : x ≠ 0) (v : D × D) :\n    yToX x s (xToY x s v) = v ∧ xToY x s (yToX x s v) = v := by\n  constructor <;> apply Prod.ext <;>\n    simp [xToY, yToX, mul_assoc, hx]\n\nend Pivots\n\nsection Line\n\nvariable {E V : ℤ → Type*}\nvariable [∀ i, AddCommGroup (E i)] [∀ i, AddCommGroup (V i)]\n\ntheorem line_single_support\n    (left : ∀ i, E i →+ V i) (right : ∀ i, E (i - 1) →+ V i)\n    (hl : ∀ i, Function.Injective (left i))\n    (hr : ∀ i, Function.Injective (right i))\n    (b : ∀ i, E i) (s : Finset ℤ)\n    (hs : ∀ i, b i ≠ 0 ↔ i ∈ s) (root : ℤ)\n    (hboundary : ∀ i, i ≠ root → left i (b i) = right i (b (i - 1))) :\n    ∀ i, b i = 0 := by\n  classical\n  by_contra h\n  obtain ⟨j, hj⟩ := not_forall.mp h\n  have hne : s.Nonempty := ⟨j, (hs j).mp hj⟩\n  let lo := s.min' hne\n  let hi := s.max' hne\n  have hlo : lo ∈ s := Finset.min'_mem s hne\n  have hhi : hi ∈ s := Finset.max'_mem s hne\n  have hbelow : b (lo - 1) = 0 := by\n    by_contra hn\n    have hm : lo - 1 ∈ s := (hs (lo - 1)).mp hn\n    have hh : lo ≤ lo - 1 := Finset.min'_le s (lo - 1) hm\n    omega\n  have habove : b (hi + 1) = 0 := by\n    by_contra hn\n    have hm : hi + 1 ∈ s := (hs (hi + 1)).mp hn\n    have hh : hi + 1 ≤ hi := Finset.le_max' s (hi + 1) hm\n    omega\n  have hroot : lo = root := by\n    by_contra hn\n    have he := hboundary lo hn\n    have hz : b lo = 0 := hl lo (by simpa [hbelow] using he)\n    exact ((hs lo).mpr hlo) hz\n  have horder : lo ≤ hi := Finset.min'_le s hi hhi\n  have hfar : hi + 1 ≠ root := by omega\n  have he := hboundary (hi + 1) hfar\n  have hz : b ((hi + 1) - 1) = 0 :=\n    hr (hi + 1) (by simpa [habove] using he.symm)\n  have hm : (hi + 1) - 1 ∈ s := by\n    have hpred : (hi + 1) - 1 = hi := by omega\n    rw [hpred]\n    exact hhi\n  exact ((hs ((hi + 1) - 1)).mpr hm) hz\n\ntheorem line_vertex_relation\n    (left : ∀ i, E i →+ V i) (right : ∀ i, E (i - 1) →+ V i)\n    (hl : ∀ i, Function.Injective (left i))\n    (hr : ∀ i, Function.Injective (right i))\n    (b : ∀ i, E i) (s : Finset ℤ)\n    (hs : ∀ i, b i ≠ 0 ↔ i ∈ s) (root : ℤ) (v : V root)\n    (hboundary : ∀ i, i ≠ root → left i (b i) = right i (b (i - 1)))\n    (hatroot : left root (b root) - right root (b (root - 1)) = v) :\n    v = 0 := by\n  have hz := line_single_support left right hl hr b s hs root hboundary\n  simpa [hz root, hz (root - 1)] using hatroot.symm\n\nend Line\n\nend RowRestriction\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/row_restriction/statement_fidelity.md",
+    "text": "# Statement fidelity: the division-free algebraic core\n\nThe registered compiler claim is `F258-CORE`, not the complete\ngroup-homology proposition `C258-ROW`.\n\n`RowRestriction.line_single_support` quantifies over arbitrary families\n`E i` and `V i` of abelian groups indexed by all integers. An edge `i`\nmaps to vertex `i` by `left i` and to vertex `i+1` by\n`right (i+1)`. Both endpoint maps must be injective. The family `b`\nhas exactly the finite nonzero support `s`; there is no bound on its\nsize, its location, or the groups. At every vertex other than the\narbitrary vertex `root`, the two incident images agree. The conclusion\nis that every edge value is zero. This is finite-support trimming, not\nan assumption that a vertex map to a homology group is injective.\n\n`RowRestriction.line_vertex_relation` adds a value `v` at `root` and\nidentifies it with the incidence boundary there, with signs\n`left - right`. It proves `v = 0`. Therefore a single vertex summand\nhas zero intersection with the image of the finite-support incidence\nmap. For the cokernel, the kernel of the vertex map is precisely that\nintersection. Padding with zero groups also covers finite lines.\n\nThe other declarations certify local algebra used in the proof:\n\n- `right_pivot_cancel`: in any division ring, right multiplication by\n  a nonzero pivot has zero kernel.\n- `triangular_injective`: for any index type `B`, any function\n  `q : B -> D`, and nonzero `p`, the map\n  `(b,c) |-> (b + c*q, c*p)` is injective. Multiplication order is\n  exactly the manuscript's coefficient-on-the-left order. A zero\n  common alphabet is allowed.\n- `private_column`: an injective source chain map whose image has zero\n  probe coordinate has zero intersection with a relation map whose\n  probe is `coefficient(b)*p`, where `coefficient` is injective and\n  `p` is nonzero. The conclusion includes that the original relation\n  coefficient is zero. There is no division or lifting of a boundary\n  coefficient from a larger ring.\n- `root_frame_inverse`: for arbitrary nonzero `x` and arbitrary `s`\n  in a possibly noncommutative division ring, the coefficient changes\n  `(c,e) |-> (-c*x, c*s+e)` and\n  `(c,e) |-> (-c*x^-1, c*x^-1*s+e)` are inverse. These are the Fox\n  changes between the root-row bases `(B,x,u)` and `(B,y,u)` when\n  `y=x^-1*u^n` and `s` is the Fox power sum for `u^n`. Only the group\n  element `x`, not a power sum, is inverted in these chain changes.\n\nThe Lean source does not encode group presentations, the existence of\nLinnell division rings, the Mackey-Shapiro isomorphisms, the\nMayer-Vietoris sequence, or the identification of the manuscript's\nactual stabilizers. Those are proved or sourced explicitly in\n`report.md` and require mathematical review. In particular a compiler\nsuccess for this file must not be reported as a kernel proof of all\nof `row:restriction`. It proves the universal algebraic core, rather\nthan a finite experiment or a dimension inequality.\n"
+  },
+  "subject": {
+    "content_hash": "c44f7659951a68c93c0067350e4affb4dac052e683f4047ba440c2b0356c38f9",
+    "kind": "claim",
+    "subject_id": "F258-CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "unit_id": "fixed-three-height",
+  "review_role": "Engineer",
+  "project_root": "campaigns/9200039",
+  "historical_project_root": "campaigns/9000039",
+  "exact_claims": [
+    {
+      "claim_id": "C_RS_HEIGHT",
+      "versions": [1, 2],
+      "natural_statement": "For all real H,d,w>0 with d^2 H>=6 and dw<1/3, put W=dH, R=H/w, T=d^2H, a0=WT/(1+T). There exist integers i,p,q and real a,b,t such that i*q-3*p=1, a0<a<W, b=W-a>0, t=a/b>T, a=Wt/(1+t), b=W/(1+t), -3a<3b<i/d, and i/d+3a=R.",
+      "same_natural_statement_in_both_versions": true,
+      "external_mathematical_assumptions": [],
+      "context_id": "CTX_RESHAPE",
+      "context_hash": "cd4bd002951dbb28b4fb4249d6cac279c3caac6c25eab342b92c97f173cd8e80"
+    }
+  ],
+  "assessment": {
+    "classification": "supported_exact_arithmetic_claim_with_stale_historical_route_binding",
+    "mathematics": "The fixed-three height existence assertion is valid under its stated positivity, d^2 H >= 6 and strict dw < 1/3 hypotheses.",
+    "formal_fidelity": "The four declarations match their limited arithmetic descriptions. fixed_three_height contains every conjunct of the historical natural height statement.",
+    "historical_closure": "The v2 certificate and v2 evidence match. They do not mechanically discharge R_RS_FULL's exact v1 height obligation.",
+    "novelty": "Replay and reconciliation only. The strongest prior result is already dw < 1/3 with mixed-order maximum-rank transfer; this review improves neither.",
+    "whole_reshaping_or_manuscript_certified": false,
+    "duplicate_results_counted_separately": false
+  },
+  "attribution": {
+    "draft": "Existing Argus research/reshaping_audit/report.md",
+    "height_subsection_lines": [182, 211],
+    "formal_namespace": "ReshapingAudit",
+    "originality_or_priority_established": false
+  },
+  "decisive_argument": {
+    "primitive_integer": "n=floor(L)+1 and n+1 both lie strictly inside (L,U) when U-L>2. One is not divisible by 3. The three residue cases provide explicit integers p,q with iq-3p=1, also for negative endpoints.",
+    "height": "dw<1/3 gives R>3W. The interval (d(R-3W),d(R-3a0)) has length 3T/(1+T)>2 since T>=6. Choose its determinant-one integer i and set a=(R-i/d)/3, b=W-a, t=a/b. Interval membership gives a0<a<W and b>0; a0<a gives T<t. The ratio identities follow from a+b=W and bt=a. Height gaps are 3W>0 and R-3W>0, and the total range is i/d+3a=R.",
+    "auxiliaries": "Expansion proves tent_slice_length. Dividing the assumed tent bound by R>0 proves compressed_tent_inside_simplex."
+  },
+  "formal_coverage": {
+    "declaration_count": 4,
+    "declarations": [
+      {
+        "name": "ReshapingAudit.primitive_three_in_interval",
+        "parameters": "L,U : real",
+        "hypotheses": ["2 < U-L"],
+        "conclusion": "There exist integers i,p,q with L<i<U and i*q-3*p=1.",
+        "scope": "Arithmetic determinant-one completion; no lattice-family or polygon operation."
+      },
+      {
+        "name": "ReshapingAudit.fixed_three_height",
+        "parameters": "H,d,w : real; W=dH; R=H/w; T=dW=d^2H; a0=WT/(1+T)",
+        "hypotheses": ["0<H", "0<d", "0<w", "6<=d^2*H", "d*w<1/3"],
+        "conclusion": "There exist integers i,p,q and reals a,b,t with iq-3p=1, a0<a<W, b=W-a>0, t=a/b>T, a=Wt/(1+t), b=W/(1+t), -3a<3b<i/d, and i/d+3a=R.",
+        "scope": "Exactly the height natural statement, not full reshaping or geometry."
+      },
+      {
+        "name": "ReshapingAudit.tent_slice_length",
+        "parameters": "q0,q1,q2,w,h : real",
+        "hypotheses": [],
+        "conclusion": "(q2+(q1-q2)*(h/w))-(q0+(q1-q0)*(h/w))=(q2-q0)*(1-h/w)",
+        "scope": "Universal real identity, including Lean total division at w=0; no slice construction."
+      },
+      {
+        "name": "ReshapingAudit.compressed_tent_inside_simplex",
+        "parameters": "R,w,h,z : real",
+        "hypotheses": ["0<R", "0<w", "0<=h", "h<=w", "0<=z", "z<=R*(1-h/w)"],
+        "conclusion": "0<=h and 0<=z and h/w+z/R<=1",
+        "scope": "Real inequality implication. The proof does not need the declared 0<w or h<=w once the upper bound is assumed."
+      }
+    ],
+    "source_level_new_axioms": [],
+    "axiom_dependency_enumeration": {
+      "method": "Real Lean compilation of unchanged original source followed only by four #print axioms commands",
+      "source": "source_attachments/AxiomAudit.lean.txt",
+      "exit_code": 0,
+      "per_declaration": {
+        "ReshapingAudit.primitive_three_in_interval": ["propext", "Classical.choice", "Quot.sound"],
+        "ReshapingAudit.fixed_three_height": ["propext", "Classical.choice", "Quot.sound"],
+        "ReshapingAudit.tent_slice_length": ["propext", "Classical.choice", "Quot.sound"],
+        "ReshapingAudit.compressed_tent_inside_simplex": ["propext", "Classical.choice", "Quot.sound"]
+      },
+      "standard_foundational_axioms_not_draft_specific_assumptions": true,
+      "axiom_free": false,
+      "sorryAx_present": false,
+      "stdout": "axiom_print.log",
+      "parsed_dependencies": "axiom_dependencies.json",
+      "source_or_fidelity_modified_by_probe": false
+    },
+    "not_formalized": [
+      "intercept definitions A,B,H=AB,d=max(3/A,2/B) imply d^2H>=6",
+      "vertices, determinant height map, convex hulls or slice geometry",
+      "nodal formal-series bound",
+      "full reshaping",
+      "all-degree gradedness and residual-degree-zero coverage",
+      "lattice-row compression",
+      "formal specialization or mixed-order jet-rank transfer",
+      "restoration of labels",
+      "maximality",
+      "optimality or priority"
+    ]
+  },
+  "historical_discrepancy": {
+    "claim_v1_hash": "bd56efdd4d3aa7463aa628d72c42bc6b6620f720afafff69a83ee441cbb2853b",
+    "claim_v1_formal_statement": "",
+    "claim_v2_hash": "a64cc0e3f8964f6a60314df66e4214b1a09ffbe02e889b601e33e3cb4d600ccc",
+    "mechanical_evidence_subject_hash": "a64cc0e3f8964f6a60314df66e4214b1a09ffbe02e889b601e33e3cb4d600ccc",
+    "certificate_claim_subject_hash": "a64cc0e3f8964f6a60314df66e4214b1a09ffbe02e889b601e33e3cb4d600ccc",
+    "both_judgement_subject_hashes": "a64cc0e3f8964f6a60314df66e4214b1a09ffbe02e889b601e33e3cb4d600ccc",
+    "canonical_claim_and_context_hashes_recomputed_match": true,
+    "certificate_matches_v2_and_mechanical_record": true,
+    "route_id": "R_RS_FULL",
+    "route_height_obligation_hash": "bd56efdd4d3aa7463aa628d72c42bc6b6620f720afafff69a83ee441cbb2853b",
+    "route_height_obligation_version": 1,
+    "evidence_for_exact_v1_subject": [],
+    "resolution": "Adding the full formal text changed the claim digest without changing the natural statement. Evidence, certificate and both judgements bind v2; the full route remains pinned to v1. This is a stale route reference, not a corrupt v2 certificate.",
+    "filename_fragment_is_claim_digest": false,
+    "historical_math_state_height_status": "closed_kernel",
+    "historical_height_graph_status": "open",
+    "historical_height_graph_reviewer_confirmed": false,
+    "historical_reviewer_label_is_current_native_acceptance": false,
+    "details": "historical_reconciliation.json"
+  },
+  "source_and_evidence": {
+    "source_sha256": "d547ec7484dd54fcbfdfcb441a2a6001008cc12155f763a987e12d7ce15d73f6",
+    "source_bytes": 4001,
+    "fidelity_sha256": "8132df0d1e434b5b0876675ae0509d7c66da09e0a5c1eb4074e0dd6ed4b83bf0",
+    "fidelity_bytes": 2463,
+    "original_duplicate_ledger_and_certificate_source_text_match": true,
+    "original_duplicate_and_certificate_fidelity_text_match": true,
+    "local_canonical_copies_unchanged": true,
+    "historical_certificate": "research/reshaping_audit/lean/certificates/C_RS_HEIGHT-c62d2854794e7272.json",
+    "historical_certificate_root": "campaigns/9000039",
+    "historical_certificate_sha256": "2cc828bd202f8ab1d385359630746f8c498b22a36c3c5bf45f13c69221937e20",
+    "historical_mechanical_evidence_id": "lean-C_RS_HEIGHT-50cecdd49d11",
+    "historical_judgements": [
+      {
+        "evidence_id": "judgement-C_RS_HEIGHT-4acc13321105",
+        "producer": "engineer:reshaping-audit",
+        "artifact": "research/reshaping_audit/lean/certificates/C_RS_HEIGHT-c62d2854794e7272.json",
+        "verdict": "supports"
+      },
+      {
+        "evidence_id": "judgement-C_RS_HEIGHT-c391cb094d51",
+        "producer": "reviewer:reshaping-audit",
+        "artifact": "research/reshaping_audit/lean/certificates/C_RS_HEIGHT-c62d2854794e7272.json",
+        "verdict": "supports"
+      }
+    ],
+    "historical_lean_check_equals_certificate_payload": true,
+    "historical_lean_verification_equals_check_plus_matching_kernel_record": true,
+    "historical_compile_log_agrees": true,
+    "snapshot_manifest": "$WORKSPACE/.copilot/session-state/<id>/files/openai-audit-drafts-20261106T1020Z-manifest.json",
+    "relevant_manifest_and_archive_members_match_live_inputs": true
+  },
+  "source_attachment_archival": {
+    "manager_hold_timestamp": 1794075985.1414824,
+    "active_formal_source": "research/draft_reviews/fixed-three-height/lean/Main.lean",
+    "attachments": [
+      {
+        "original_path": "research/draft_reviews/fixed-three-height/Main.lean",
+        "attachment_path": "research/draft_reviews/fixed-three-height/source_attachments/Main.lean.txt",
+        "bytes": 4001,
+        "sha256": "d547ec7484dd54fcbfdfcb441a2a6001008cc12155f763a987e12d7ce15d73f6",
+        "relationship": "Byte-identical redundant replay input for the unchanged certified lean/Main.lean; not an additional result."
+      },
+      {
+        "original_path": "research/draft_reviews/fixed-three-height/AxiomAudit.lean",
+        "attachment_path": "research/draft_reviews/fixed-three-height/source_attachments/AxiomAudit.lean.txt",
+        "bytes": 4214,
+        "sha256": "cb253b6030d9f24d3742a00917c9ef30b2abf3687a10686a327bba4c383ba1c2",
+        "relationship": "The certified source followed only by a blank line and four #print axioms commands; existing axiom_status.json records exit 0 and stdout identical to axiom_print.log."
+      }
+    ],
+    "substantive_unmatched_proof_present": false,
+    "active_source_certificate_fidelity_results_and_logs_unchanged": true,
+    "historical_receipts_and_logs_retain_original_paths": true,
+    "claims_ledgers_graph_and_acceptance_flags_changed": false,
+    "recovery": "Rename either exact-byte text attachment to its recorded original path; restoring active Lean source requires its own matching compiler result.",
+    "new_compilation_claimed_for_attachments": false
+  },
+  "fresh_compilation": {
+    "interpreter_for_all_argus_modules": "$WORKSPACE/argus-latest/.venv/bin/python",
+    "source": "research/draft_reviews/fixed-three-height/lean/Main.lean",
+    "original_input_source": "research/draft_reviews/fixed-three-height/Main.lean",
+    "statement_fidelity": "research/draft_reviews/fixed-three-height/lean/statement_fidelity.md",
+    "original_input_statement_fidelity": "research/draft_reviews/fixed-three-height/statement_fidelity.md",
+    "verifier_module": "argus_skill.verticals.math.lean_evidence",
+    "source_and_fidelity_immutable_during_verify": true,
+    "lakefile_created": false,
+    "status": "success",
+    "verdict": "supports",
+    "compile_exit_code": 0,
+    "axiom_audit_exit_code": 0,
+    "proof_holes": [],
+    "duration_ms": 29691,
+    "lean": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)",
+    "lake": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)",
+    "elan": "elan 4.2.3 (b6cec7e10 2026-06-08)",
+    "automatically_discovered_mathlib_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "separate_mathlib_source_commit_integrity_audit_performed": false,
+    "compile_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/039/argus-review/draft_reviews/fixed-three-height/lean/Main.lean"
+    ],
+    "warnings": ["unnecessarySimpa at line 9", "unused hw at line 117", "unused hhw at line 117"],
+    "certificate": "research/draft_reviews/fixed-three-height/lean/certificates/C_REVIEW_HEIGHT-48cc9275faca4908.json",
+    "certificate_sha256": "8442c1c4c5e42cf8ecd282f765b18cc9eba80910565e4481d5f55e6a145367b9",
+    "mechanical_evidence_id": "lean-C_REVIEW_HEIGHT-9004a208c2ad",
+    "certificate_subject_matches_current_claim": true,
+    "payload_source_fidelity_and_check_match": true,
+    "compiler_statement_fidelity_verified_by": null,
+    "fidelity_was_checked_by_engineer_in_report_not_by_compiler": true,
+    "initial_submission_receipt": "verification_submission.json",
+    "initial_failure_record": "verification_status.json",
+    "initial_failure": "TypeError: float(None) in latest verifier default-timeout handling, before source compilation; no tool code changed.",
+    "successful_retry_receipt": "verification_retry_submission.json",
+    "successful_retry_task_id": "review-height-9200039-timeout600-20261107",
+    "successful_retry_run_id": "review-height-9200039-timeout600-20261107-1794073974106256661",
+    "successful_retry_state": "done",
+    "retry_compile_timeout_seconds": 600,
+    "retry_durable_runner_timeout_seconds": 900,
+    "retry_status": "verification_retry_status.json",
+    "full_verifier_result": "lean_verification.json",
+    "durable_registry_and_status_command_cwd": "families/039/argus-review/draft_reviews/fixed-three-height",
+    "supplementary_axiom_probe": {
+      "receipt": "axiom_submission.json",
+      "task_id": "review-height-9200039-axioms-20261107",
+      "run_id": "review-height-9200039-axioms-20261107-1794074054983791094",
+      "status": "axiom_status.json",
+      "state": "done",
+      "exit_code": 0,
+      "elapsed_seconds": 12.6,
+      "command": "cd $WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0 && $WORKSPACE/.elan/bin/lake env lean families/039/argus-review/draft_reviews/fixed-three-height/AxiomAudit.lean",
+      "check_with": "$WORKSPACE/argus-latest/.venv/bin/python -m argus_skill.tools.subagent status --task-id review-height-9200039-axioms-20261107"
+    },
+    "successful_retry_check_with": "$WORKSPACE/argus-latest/.venv/bin/python -m argus_skill.tools.subagent status --task-id review-height-9200039-timeout600-20261107",
+    "durable_work_remaining": false
+  },
+  "active_ledger": {
+    "claim_id": "C_REVIEW_HEIGHT",
+    "version": 2,
+    "natural_statement_unchanged_from_historical_v2": true,
+    "content_hash": "3c93ff123e1d92e6b12b97d672bd77a64f5e5f6ec419b5e84f581c8f368366c5",
+    "context_id": "CTX_OLD_REVIEW",
+    "external_assumptions": [],
+    "status_after_compiler": "closed_kernel",
+    "height_proof_graph_status": "open",
+    "height_proof_graph_reviewer_confirmed": false,
+    "new_engineer_judgement_written": true,
+    "engineer_judgement_actor": "engineer:old-draft-review",
+    "engineer_judgement_scope": "Parent assessment of the exact source-bound height claim and fidelity, citing its fresh certificate; not native Reviewer acceptance",
+    "new_reviewer_judgement_written": false,
+    "other_claims_or_assumptions_modified_by_this_worker": false,
+    "proof_graph_modified_by_this_worker": false,
+    "reviewer_confirmed_set_true_by_this_worker": false,
+    "route_id": "R_REVIEW_UNITS",
+    "observed_route_height_hash": "8028194f3fad07f5bc5036412bf4efe543cc0b19bf5209d430624375dea51128",
+    "observed_route_height_version": 1,
+    "observed_route_is_current_height_v2": false,
+    "route_rebound_by_this_worker": false,
+    "parent_current_route": "R_REVIEW_UNITS_CURRENT",
+    "parent_current_route_height_version": 2,
+    "parent_resolution": "Supersede the initial review route solely to bind the newly formalized exact claim version; no historical record or natural mathematical assertion is changed.",
+    "details": "active_reconciliation.json"
+  },
+  "official_checks": {
+    "project_root": "campaigns/9200039",
+    "after_formal_binding": {
+      "math_state": {"exit_code": 0, "ok": true, "issues": []},
+      "proof_graph_check": {"exit_code": 0, "status": "proof graph valid: 12 node(s)"}
+    },
+    "after_failed_replay": {
+      "math_state": {"exit_code": 0, "ok": true, "issues": []},
+      "proof_graph_check": {"exit_code": 0, "status": "proof graph valid: 12 node(s)"}
+    },
+    "after_mechanical_evidence": {
+      "math_state": {"exit_code": 0, "ok": true, "issues": []},
+      "proof_graph_check": {"exit_code": 0, "status": "proof graph valid: 12 node(s)"}
+    },
+    "source_attachment_repair": {
+      "interpreter": "$WORKSPACE/argus-latest/.venv/bin/python",
+      "project_root": "campaigns/9200039",
+      "exact_gate": "argus_skill.verticals.math.stages.stage_completion_issues",
+      "stage": "review",
+      "before_archival": {
+        "exit_code": 1,
+        "missing_compiler_result_sources": [
+          "research/draft_reviews/fixed-three-height/AxiomAudit.lean",
+          "research/draft_reviews/fixed-three-height/Main.lean"
+        ],
+        "other_issues": []
+      },
+      "after_archival": {
+        "review_stage_completion": {"exit_code": 0, "ok": true, "issues": []},
+        "math_state": {"exit_code": 0, "ok": true, "issues": []},
+        "proof_graph_check": {"exit_code": 0, "status": "proof graph valid: 12 node(s)"},
+        "attachment_and_evidence_integrity": {
+          "exit_code": 0,
+          "attachments_checked": 2,
+          "exact_bytes_recoverable": true,
+          "only_active_unit_source": "research/draft_reviews/fixed-three-height/lean/Main.lean",
+          "protected_evidence_and_ledgers_unchanged": true,
+          "current_formal_claim_and_certificate_match": true,
+          "direct_index_references_valid": true,
+          "coverage_counts_unchanged": true
+        }
+      },
+      "independent_review_of_repaired_submission": "required_native_host_invoked_reviewer"
+    },
+    "structural_checks_are_not_mathematical_or_route_closure": true
+  },
+  "unresolved_obligations": [
+    "Do not transfer historical v2 certificate support to the v1 R_RS_FULL obligation without an explicit valid rebinding or separate evidence.",
+    "Separate review is required for nodal formal series, full reshaping and geometry, all-degree and mixed-order-rank arguments, maximality, optimality and priority.",
+    "Native Host-invoked independent Reviewer acceptance remains pending."
+  ],
+  "identified_gap_in_exact_height_mathematics": null,
+  "files_written": {
+    "unit_directory": "research/draft_reviews/fixed-three-height",
+    "reports": ["report.md", "verdict.json"],
+    "faithful_inputs": ["lean/Main.lean", "statement_fidelity.md"],
+    "non_active_source_attachments": ["source_attachments/Main.lean.txt", "source_attachments/AxiomAudit.lean.txt"],
+    "official_compiler_artifacts": ["lean/Main.lean", "lean/statement_fidelity.md", "lean/lean_check.json", "lean/compile.log", "lean/certificates/C_REVIEW_HEIGHT-48cc9275faca4908.json", "lean_verification.json"],
+    "axiom_probe": ["source_attachments/AxiomAudit.lean.txt", "axiom_print.log", "axiom_dependencies.json"],
+    "supporting_artifacts": "Exact durable receipts and task-local .argus_subagents logs/records; historical/active reconciliation. Measured structural-check outcomes are recorded in the report and this verdict.",
+    "sanctioned_ledger": "research/MATH_STATE.json: only C_REVIEW_HEIGHT formal binding and official mechanical evidence"
+  },
+  "report": "research/draft_reviews/fixed-three-height/report.md",
+  "reviewer_acceptance": "pending_native_independent_review"
+}

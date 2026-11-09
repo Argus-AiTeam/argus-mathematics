@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "claim_id": "C_DISK_RECONSTRUCTION",
+  "result_class": "constructive_verification",
+  "scope": "The disk reconstruction in Proposition nonclosed-reduction, not the entire integral-density theorem.",
+  "proof": "report.md",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "novelty_status": "not_claimed",
+  "independent_review": "pending",
+  "universal_domain": "Arbitrary ranks of the named finite free modules over any commutative ring; zero blocks are allowed. The manuscript application uses its full ring of integers.",
+  "source": "research/openai_manuscript/Integral-points-on-character-varieties-of-curves-September-25-2026/build/sections/reduction.tex",
+  "source_fragments": [
+    "\\label{prop:nonclosed-reduction}",
+    "\\xrightarrow{(p_A,p_B)}A\\oplus B",
+    "\\xrightarrow{(i_A,i_B)}Q_*\\longrightarrow0",
+    "p_A(a,b,h)&=(a,h,0),&p_B(a,b,h)&=(b,h,0)",
+    "i_A(a,h,x)&=(h,x,0),&i_B(b,h,y)&=(-h,0,y)",
+    "\\Hom_R(y,a)",
+    "\\Hom_R(x,b)",
+    "K_{\\rm interval}/K_{\\rm coarse}",
+    "On return, the starting interval still has just one lift"
+  ],
+  "modules": {
+    "U": ["a", "b", "h"],
+    "M": ["a", "h", "x", "b", "h", "y"],
+    "Q": ["h", "x", "y"]
+  },
+  "maps": {
+    "P": {
+      "source": "U",
+      "target": "M",
+      "matrix": [[1, 0, 0], [0, 0, 1], [0, 0, 0], [0, 1, 0], [0, 0, 1], [0, 0, 0]]
+    },
+    "I": {
+      "source": "M",
+      "target": "Q",
+      "matrix": [[0, 1, 0, 0, -1, 0], [0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 1]]
+    },
+    "R": {
+      "source": "M",
+      "target": "U",
+      "matrix": [[1, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 1, 0]]
+    },
+    "S": {
+      "source": "Q",
+      "target": "M",
+      "matrix": [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 0], [0, 0, 0], [0, 0, 1]]
+    }
+  },
+  "generic_lower_data": {
+    "invertible_contact_maps": ["PA", "PB", "IA"],
+    "arbitrary_shears": ["cA", "cB", "dA", "dB"],
+    "fourth_contact_map": "IB = -IA PA PB^-1",
+    "meaning": "PA and PB identify h_U with h_A and h_B; IA identifies h_A with h_Q. The fourth contact is forced by the -I disk, while all four off-diagonal shears remain arbitrary.",
+    "normalization": "Block diagonal on A direct_sum B; identity on the named a,b,x,y quotients; invertible on every h contact.",
+    "verification": "Noncommutative polynomial identities with only adjacent inverse cancellation, valid in arbitrary block ranks."
+  },
+  "swap_stabilizers": {
+    "coarse": {
+      "u_flags": [["a", "b", "h"]],
+      "q_flags": [["h", "x", "y"]],
+      "support": []
+    },
+    "incoming": {
+      "u_flags": [["a"], ["a", "b", "h"]],
+      "q_flags": [["h", "x"], ["h", "x", "y"]],
+      "support": [["a", "y"]]
+    },
+    "outgoing": {
+      "u_flags": [["b"], ["a", "b", "h"]],
+      "q_flags": [["h", "y"], ["h", "x", "y"]],
+      "support": [["b", "x"]]
+    }
+  },
+  "split_stabilizer": {
+    "quantifier": "For every s >= 0 and all 1 <= k,j <= s",
+    "support": "k < j",
+    "forward_witness": "t = j",
+    "reverse_identity": "(t-k-1) = (j-k-1) + (t-j)",
+    "fine_fiber": "direct_sum_(k<j) Hom_R(q_j,w_k)",
+    "coarse_fiber": "0"
+  },
+  "anchor": {
+    "conditions": ["q_i = 0 for i <= k", "u_i = 0 for i > k"],
+    "stabilizer": "H",
+    "identified_lift_space": "singleton",
+    "closure_length": "every natural number, including zero"
+  },
+  "jacobian": {
+    "operation_id": "matrix.rational_linear_system.solve",
+    "protocol_version": "2025-11-25",
+    "server_version": "0.14.0",
+    "payload": "jacobian-payload.json",
+    "output": "jacobian-output.json",
+    "status": "jacobian-status.json",
+    "unknowns": ["r_A", "r_B", "s_A", "s_B"],
+    "solution": [0, 1, 1, 0],
+    "coefficient_determinant": 1,
+    "interpretation": "A bounded coefficient calculation for the universal h-block contraction, not a proof from sampled ranks."
+  },
+  "lean": {
+    "claim_id": "C_FORMAL_RECONSTRUCTION_CORE",
+    "source": "Main.lean",
+    "fidelity": "statement_fidelity.md",
+    "result": "lean_check.json",
+    "archive": "certificates/C_FORMAL_RECONSTRUCTION_CORE-a4725ba37e3cfd3d.json",
+    "declarations": [
+      "swap_ip",
+      "swap_rp",
+      "swap_is",
+      "swap_contraction",
+      "swap_p_injective",
+      "swap_i_surjective",
+      "swap_exact",
+      "path_exists",
+      "anchored_closure"
+    ],
+    "not_formalized": [
+      "Normalization of arbitrary lower-diagram data with their identified quotients",
+      "The geometric incidence and orientation interpretation",
+      "The locally affine bundle and integral-density conclusions"
+    ]
+  },
+  "adversarial_controls": [
+    "Changing the negative h coefficient to positive fails IP=0 over the integers.",
+    "Using U_i instead of U_(i-1) admits forbidden diagonal quotient shears.",
+    "Separate one-sided surjectivity does not imply two-sided surjectivity.",
+    "The universal split support formula is checked symbolically, not by a maximum tested rank."
+  ]
+}

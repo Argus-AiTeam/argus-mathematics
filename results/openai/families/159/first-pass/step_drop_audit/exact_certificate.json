@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "claim": "C_UNIFORM_RECOVERY",
+  "proof": "proof.md",
+  "proof_kind": "Universal prose proof with separately kernel-checked algebra and exact symbolic replay",
+  "candidate_result_class": "new_reduction",
+  "novelty_status": "not_assessed",
+  "significance_status": "pending_independent_review",
+  "research_target_level": "publishable",
+  "campaign_complete": false,
+  "explicit_lattice_theorem": {
+    "claim": "C_LATTICE_EXPLICIT",
+    "dimension": "N=n+m",
+    "constant": "C=delta^(-1)*((N+2)*R)^N",
+    "bound": "B=C*l^(m+1)",
+    "hypothesis": "min(T_i)>B, with exactly the hypotheses of prelim:lattice",
+    "joint_denominator": "D=l*I*abs(det(l*H_J))<=B",
+    "unrestricted": ["entries of M", "entries of Y", "rational coefficient numerators", "ratios T_i/T_j"]
+  },
+  "jacobian": {
+    "operation_id": "matrix.symbolic.determinant.compute",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "contract": "jacobian/contract_symbolic_determinant.json",
+    "payload": "jacobian/pivot_payload.json",
+    "result": "jacobian/pivot_result.json",
+    "execution_status": "success",
+    "adapter_error": null,
+    "timeout": false,
+    "expected_determinant": "w*(a*d-b*c)",
+    "scope": "Exact symbolic rank-two pivot identity; not the all-rank proof"
+  },
+  "free_algebra": {
+    "maximum_weight": 4,
+    "scope": "Exact word identities in a free associative algebra truncated by positive generator weights; not an all-step finite sweep"
+  },
+  "heisenberg_rank_family": {
+    "replayed_rank": 3,
+    "common_q": 5,
+    "parameter_count": "n=2*rank",
+    "coefficient_space_dimension": "m=n+rank*n",
+    "lattice_denominator": "l=2*q",
+    "radius": "R=n+1",
+    "density": 1,
+    "base_side": "T=((n+m+2)*R)^(n+m)*l^(m+1)+1",
+    "sides": "T_i=T^(i+1), i=0,...,n-1",
+    "unbounded_numerator": "A_j=(j+1)*T^(n+2)+1",
+    "central_coefficient": "C_j=A_j^2/q",
+    "symbol_log": "sum_j A_j*t_(2j)*X_j+(t_(2j+1)/q)*Y_j+C_j*t_(2j)*t_(2j+1)*Z_j",
+    "conclusion": "K is the full horizontal space, S is its coordinate inclusion, R_lift=M^(-1)S, with image norm one and unrestricted lift numerators",
+    "scope": "A construction for every rank; exact executable replay at the stated rank"
+  },
+  "real_fast_family": {
+    "T1": 65536,
+    "T2_power": 11,
+    "right_integer_power": 9,
+    "alpha": "arbitrary real, represented by the indeterminate u",
+    "symbolic_variables": ["t1", "t2", "u", "h1", "h2", "q_h"],
+    "left_log": "(t1/T1)*Y",
+    "middle_log": "u*t1*X",
+    "right_log": "(T2^9+17)*t2*Y",
+    "rounding_hypothesis": "q_h is an integer and abs(h1*u-q_h)<=1/2",
+    "scope": "Universal polynomial identities; existence of q_h and uniform norm bounds are proved in proof.md"
+  },
+  "lean": {
+    "claim": "C_ALGEBRA_CORE",
+    "source": "Main.lean",
+    "statement_fidelity": "statement_fidelity.md",
+    "result": "lean_check.json",
+    "archived_certificate": "certificates/C_ALGEBRA_CORE-da9f8c9aaec96bb5.json",
+    "scope": "Common fiber, right-cocycle common derivative, transformation, lift, absorption, and correction signs only"
+  },
+  "limitations": [
+    "The all-dimensional lattice geometry and full graded induction are proved in prose, not fully formalized.",
+    "The replay reads a real Lean 4.31.0 compiler record and verifies its binding; it does not substitute for a fresh compiler invocation.",
+    "The normalized-square selection and lower-degree induction producing the common fast subgroup remain separate antecedents.",
+    "The quantitative density theorem and reciprocal-sum conjecture are not certified here.",
+    "No false literal manuscript assertion was found, and no F_ refutation is claimed.",
+    "Independent Reviewer replay, statement fidelity, novelty and significance decisions are still required."
+  ]
+}

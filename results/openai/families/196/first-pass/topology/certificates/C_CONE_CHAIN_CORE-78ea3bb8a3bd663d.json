@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CONE_CHAIN_CORE-2355d14c6f20",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/196/first-pass/topology/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/196/first-pass/topology/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15685,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/196/first-pass/topology/Main.lean",
+    "source_sha256": "7ed955eac11531714f9127516ef635ee403336e9b0aa6139e5e8aeacce24ea85",
+    "statement_fidelity": "families/196/first-pass/topology/statement_fidelity.md",
+    "statement_fidelity_sha256": "0739e018650492d20004f29d86e558c237fa0128d47e87102c3cef48794a576f",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/196/first-pass/topology/Main.lean:143:2: warning: `push_neg` has been deprecated. Prefer using `push Not` instead.\nIf you'd rather continue using `push_neg` in your project, you can implement it as follows:\n```\nopen Lean.Parser.Tactic in\nmacro \"push_neg\" cfg:optConfig loc:(location)? : tactic =>\n  `(tactic| push $cfg:optConfig Not $[$loc]?)\n```\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/topology/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace ConePicture\n\nvariable {A B C T : Type*}\nvariable [AddCommGroup A] [AddCommGroup B] [AddCommGroup C] [AddCommGroup T]\n\ndef coneD2 (δ : A →+ B) (a : A) : A × B :=\n  (a, -δ a)\n\ndef coneD1 (δ : A →+ B) (ε : B →+ C) (x : A × B) : B × C :=\n  (δ x.1 + x.2, -ε x.2)\n\ndef coneD0 (ε : B →+ C) (x : B × C) : C :=\n  ε x.1 + x.2\n\ntheorem coneD2_injective (δ : A →+ B) : Function.Injective (coneD2 δ) := by\n  intro a b h\n  exact congrArg Prod.fst h\n\ntheorem coneD2_zero_iff (δ : A →+ B) (a : A) :\n    coneD2 δ a = 0 ↔ a = 0 := by\n  constructor\n  · intro h\n    exact congrArg Prod.fst h\n  · rintro rfl\n    simp [coneD2]\n\ntheorem coneD1_coneD2 (δ : A →+ B) (ε : B →+ C)\n    (hεδ : ∀ a, ε (δ a) = 0) (a : A) :\n    coneD1 δ ε (coneD2 δ a) = 0 := by\n  simp [coneD1, coneD2, hεδ]\n\ntheorem coneD0_coneD1 (δ : A →+ B) (ε : B →+ C)\n    (hεδ : ∀ a, ε (δ a) = 0) (x : A × B) :\n    coneD0 ε (coneD1 δ ε x) = 0 := by\n  simp [coneD0, coneD1, map_add, hεδ]\n\ntheorem cone_exact_one (δ : A →+ B) (ε : B →+ C)\n    (hεδ : ∀ a, ε (δ a) = 0) (x : A × B) :\n    coneD1 δ ε x = 0 ↔ ∃ a, coneD2 δ a = x := by\n  constructor\n  · intro h\n    have hb : δ x.1 + x.2 = 0 := congrArg Prod.fst h\n    refine ⟨x.1, Prod.ext rfl ?_⟩\n    change -δ x.1 = x.2\n    calc\n      -δ x.1 = -δ x.1 + (δ x.1 + x.2) := by rw [hb]; simp\n      _ = x.2 := by abel\n  · rintro ⟨a, rfl⟩\n    exact coneD1_coneD2 δ ε hεδ a\n\ntheorem cone_exact_zero (δ : A →+ B) (ε : B →+ C)\n    (hεδ : ∀ a, ε (δ a) = 0) (z : B × C) :\n    coneD0 ε z = 0 ↔ ∃ x, coneD1 δ ε x = z := by\n  constructor\n  · intro h\n    refine ⟨(0, z.1), Prod.ext ?_ ?_⟩\n    · simp [coneD1]\n    · change -ε z.1 = z.2\n      change ε z.1 + z.2 = 0 at h\n      calc\n        -ε z.1 = -ε z.1 + (ε z.1 + z.2) := by rw [h]; simp\n        _ = z.2 := by abel\n  · rintro ⟨x, rfl⟩\n    exact coneD0_coneD1 δ ε hεδ x\n\ntheorem cone_augmentation_surjective (ε : B →+ C) :\n    Function.Surjective (coneD0 ε) := by\n  intro c\n  exact ⟨(0, c), by simp [coneD0]⟩\n\ndef graphIncidence {V E : Type*} [Fintype E] [DecidableEq V]\n    (source target : E → V) : (E → ℤ) →+ (V → ℤ) where\n  toFun a v := ∑ e, ((if target e = v then a e else 0) -\n    (if source e = v then a e else 0))\n  map_zero' := by\n    funext v\n    simp\n  map_add' a b := by\n    funext v\n    simp only [Pi.add_apply]\n    rw [← Finset.sum_add_distrib]\n    apply Finset.sum_congr rfl\n    intro e _\n    split_ifs <;> ring\n\ndef graphAugmentation {V : Type*} [Fintype V] : (V → ℤ) →+ ℤ where\n  toFun a := ∑ v, a v\n  map_zero' := by simp\n  map_add' a b := by simp [Finset.sum_add_distrib]\n\ntheorem graph_augmentation_incidence {V E : Type*}\n    [Fintype V] [Fintype E] [DecidableEq V]\n    (source target : E → V) (a : E → ℤ) :\n    graphAugmentation (graphIncidence source target a) = 0 := by\n  classical\n  change (∑ v, ∑ e, ((if target e = v then a e else 0) -\n    (if source e = v then a e else 0))) = 0\n  rw [Finset.sum_comm]\n  apply Finset.sum_eq_zero\n  intro e _\n  rw [Finset.sum_sub_distrib]\n  simp\n\ntheorem graph_cone_exact {V E : Type*}\n    [Fintype V] [Fintype E] [DecidableEq V]\n    (source target : E → V) :\n    Function.Injective (coneD2 (graphIncidence source target)) ∧\n      (∀ a, coneD1 (graphIncidence source target) graphAugmentation\n        (coneD2 (graphIncidence source target) a) = 0) ∧\n      (∀ x, coneD1 (graphIncidence source target) graphAugmentation x = 0 ↔\n        ∃ a, coneD2 (graphIncidence source target) a = x) ∧\n      (∀ z, coneD0 graphAugmentation z = 0 ↔\n        ∃ x, coneD1 (graphIncidence source target) graphAugmentation x = z) ∧\n      Function.Surjective (coneD0 (graphAugmentation (V := V))) := by\n  have hεδ := graph_augmentation_incidence source target\n  exact ⟨coneD2_injective _, coneD1_coneD2 _ _ hεδ,\n    cone_exact_one _ _ hεδ, cone_exact_zero _ _ hεδ,\n    cone_augmentation_surjective _⟩\n\ntheorem residual_conservation (δ : A →+ B) (push : A →+ T)\n    (z z₁ z₂ : T) (q : A)\n    (hclosed_in_cone : coneD2 δ q = 0)\n    (hcut : z - z₁ - z₂ = push q) :\n    z = z₁ + z₂ := by\n  have hq : q = 0 := (coneD2_zero_iff δ q).mp hclosed_in_cone\n  rw [hq, map_zero] at hcut\n  calc\n    z = (z - z₁ - z₂) + (z₁ + z₂) := by abel\n    _ = z₁ + z₂ := by rw [hcut]; simp\n\ntheorem essential_split (δ : A →+ B) (push : A →+ T)\n    (z z₁ z₂ : T) (q : A)\n    (hclosed_in_cone : coneD2 δ q = 0)\n    (hcut : z - z₁ - z₂ = push q)\n    (hessential : z ≠ 0) :\n    z₁ ≠ 0 ∨ z₂ ≠ 0 := by\n  have hsum := residual_conservation δ push z z₁ z₂ q hclosed_in_cone hcut\n  by_contra h\n  push_neg at h\n  exact hessential (by simpa [h.1, h.2] using hsum)\n\ntheorem strict_split_descent (old left right rest : ℕ)\n    (h : old = left + right + rest + 2) :\n    left + rest < old ∧ right + rest < old := by\n  omega\n\nend ConePicture\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/topology/statement_fidelity.md",
+    "text": "# Statement fidelity: cone chains and essential self-band splitting\n\nAll declarations in `Main.lean` are in namespace `ConePicture`. This is a\nformalization of the augmented **cellular chain algebra of a graph cone** and\nthe residual-cycle safeguard used in the topological proof. It is not a\nformalization of surface transversality, covering-space lifting, Hurewicz,\nWhitehead, or the complete implication `C_TOPOLOGY`.\n\n## Chain groups, differentials, and exactness\n\nFor arbitrary additive commutative groups `A`, `B`, `C` and additive maps\n`delta : A ->+ B`, `epsilon : B ->+ C`, the definitions are\n\n`coneD2 delta a = (a, -delta a)`,\n\n`coneD1 delta epsilon (a,b) = (delta a + b, -epsilon b)`,\n\n`coneD0 epsilon (b,c) = epsilon b + c`.\n\n`coneD2_injective` and `coneD2_zero_iff` prove injectivity and the zero-kernel\ncriterion without an assumption about either additive map.\n`coneD1_coneD2`, `coneD0_coneD1`, `cone_exact_one`, and `cone_exact_zero`\nassume **for every** `a`, `epsilon (delta a) = 0`. They prove the two\nsuccessive-differential identities and exactness in degrees one and zero.\n`cone_augmentation_surjective` proves surjectivity of `coneD0`.\n\n`graphIncidence source target` is the integer incidence map of every finite\noriented multigraph: at vertex `v`, it sums incoming edge coefficients minus\noutgoing edge coefficients. `V` and `E` are arbitrary finite types, and\n`source,target : E -> V` are arbitrary; loops, multiple edges, disconnected\ngraphs, and empty edge types are allowed. `graphAugmentation` sums all vertex\ncoefficients. `graph_augmentation_incidence` proves that augmentation composed\nwith incidence is zero, rather than assuming it.\n\n`graph_cone_exact` specializes the preceding universal results to these\nactual maps. With `A = E -> Int`, `B = V -> Int`, `C = Int`, the groups are\nthe cone's oriented 2-cells, its base edges plus radial edges, and its base\nvertices plus apex. The boundary of the cone on an oriented edge is that\nbase edge plus its source radial edge minus its target radial edge.\nThus the formal exactness statement is the complete augmented cellular\nacyclicity calculation for the abstract cone, including injectivity in top\ndegree. It does not assert that a graph cone embeds in the presentation\ncomplex.\n\n## Residual chains and a surviving essential summand\n\n`residual_conservation` quantifies over the above `A,B`, an arbitrary\nadditive commutative target group `T`, an additive pushforward `push : A ->+ T`,\nthree target elements `z,z1,z2`, and a residual cone 2-chain `q`.\nIt assumes:\n\n1. `coneD2 delta q = 0`: the residual chain is closed **in the abstract cone**.\n2. `z - z1 - z2 = push q`: the cut-and-cap residual identity in the target.\n\nIt proves `z = z1 + z2` by first proving `q = 0`.\n`essential_split` adds `z != 0` and concludes `z1 != 0 OR z2 != 0`.\nIt does not assume either summand is essential, that both survive, or that a\npreselected summand survives. In the proof's cellular interpretation, `T`\nmay be the target cellular 2-chain group; a two-dimensional target has no\n3-boundaries, and nonzero 2-cycles represent nonzero homology classes.\n\nThe geometric proof in `proof.md`, Section 4, must still establish the\nresidual identity and closedness in the **same lifted cone**. Closedness\nonly after applying `push` is deliberately not substituted for the first\nhypothesis. The compiler does not construct an annulus or verify that the\nchosen caps have matching lifted seams.\n\n`strict_split_descent` quantifies over natural boundary lengths and proves\nthat either retained part plus the nonnegative remaining length is smaller\nthan the old total when exactly two letters have been removed. The geometry\nand graph-path endpoints giving those lengths are proved in prose and\ntested separately, not silently assumed to be a Lean theorem about surfaces.\n\n## Evidence boundary\n\nClaim `C_CONE_CHAIN_CORE` is exactly the collection of statements above.\nNo standard topological theorem or external axiom is added to this claim.\nA successful official Lean 4.31.0 compiler/axiom-audit run certifies this\nalgebraic core only. The full universal topological theorem requires the\nindependent Reviewer's reading of `proof.md` and the explicitly cited\nstandard topology, in addition to this certificate.\n"
+  },
+  "subject": {
+    "content_hash": "0f7129116e60c8e7b383eb4936f8cbed629aba6f311a246c0f767a5f873a2cca",
+    "kind": "claim",
+    "subject_id": "C_CONE_CHAIN_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

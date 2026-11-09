@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "inspection": "bounded public-source and interface inspection; not an independent mathematical review or a compiler certificate",
+  "repository": "https://github.com/openai/math",
+  "revision": "4eaee87548250b2682affda7d05d947c05554bae",
+  "revision_commit_date": "2026-10-30T00:35:35Z",
+  "revision_resolution": "one gh api repos/openai/math/commits/HEAD read",
+  "retrieval": "gh api contents endpoints with the canonical revision supplied as ref; no git commands",
+  "canonical_source_url_template": "https://github.com/openai/math/blob/4eaee87548250b2682affda7d05d947c05554bae/{repository_relative_path}",
+  "license": {
+    "spdx": "Apache-2.0",
+    "paths": ["LICENSE", "lean/LICENSE"],
+    "copies_identical": true,
+    "source_files_unmodified": true
+  },
+  "build": {
+    "source_toolchain": "leanprover/lean4:v4.34.1",
+    "source_toolchain_path": "lean/lean-toolchain",
+    "campaign_requested_version": "4.31.0",
+    "campaign_version_compatibility": "not established; this snapshot is not a Lean 4.31.0 certificate",
+    "mathlib_revision": "d13f23b723b8a846827a245b89c10fc7d3f11612",
+    "package": "OAI",
+    "package_version": "0.1.0",
+    "fixedToolchain": true,
+    "lean_options": {"autoImplicit": false},
+    "custom_cone_external_packages": ["mathlib", "Lean/Init toolchain"],
+    "original_lakefile_caution": "lean/lakefile.lean:290-304 executes run_cmd IO during configuration, including an unsafe env.evalConstCheck at line 296 and compatibility-patch preparation for unrelated packages. The helper code invokes git and may clone packages. It was read but not executed. These build-configuration mechanisms are not mathematical axioms of finiteWalk.",
+    "compilation_performed": false,
+    "minimal_compile_strategy": [
+      "Use an isolated parent-owned project with the declared Lean 4.34.1 toolchain and the pinned mathlib revision; preserve all 41 custom module paths below. Do not execute the downloaded monolithic lakefile merely to build this cone.",
+      "A minimal package needs mathlib and an OAI Lean library, with autoImplicit false. Other direct dependencies in the public monolithic manifest are outside this source import cone.",
+      "Build only module target +OAI.Analysis.MarkovType.FiniteWalk and its dependencies, not the default OAI library target.",
+      "A wrapper should import OAI.Analysis.MarkovType.FiniteWalk, use OAI.MarkovSuperreflexivity.finiteWalk, and expose FiniteWalkWitness fields without strengthening their types. When unpacking a witness, install its stateFintype and edgeFintype as local instances.",
+      "Run #print axioms OAI.MarkovSuperreflexivity.finiteWalk and #print axioms on the final wrapper. Inspect the resulting closure for sorryAx, extra mathematical axioms, and compiler-trust axioms; source scanning alone is not this check.",
+      "A Lean 4.31.0 deliverable needs an explicitly checked compatibility port with an appropriate 4.31.0 mathlib, or a separately pinned compatible public snapshot. Do not silently relabel these 4.34.1 sources as a 4.31.0 compilation.",
+      "No build was run here. Any parent command expected to exceed two minutes should use the requested argus_skill.tools.subagent submit --mode direct launcher."
+    ]
+  },
+  "entrypoint": {
+    "module": "OAI.Analysis.MarkovType.FiniteWalk",
+    "file": "lean/OAI/Analysis/MarkovType/FiniteWalk.lean",
+    "line": 76,
+    "declaration": "OAI.MarkovSuperreflexivity.finiteWalk",
+    "signature": "(N : OAI.MarkovSuperreflexivity.OrderedNorm) (n : ℕ) (hn : 0 < n) : Nonempty (OAI.MarkovSuperreflexivity.FiniteWalkWitness N n)",
+    "direct_imports": [
+      "OAI.Analysis.MarkovType.FiniteWalkWitness",
+      "OAI.Analysis.MarkovType.WalkMarkedDisplacement",
+      "OAI.Analysis.MarkovType.ChartPathProbability",
+      "Mathlib.Tactic.FieldSimp"
+    ],
+    "proof_assembly": [
+      "OAI.MarkovSuperreflexivity.FiniteWalkDrift.exists_concreteChartPath_valid_tail_all_good",
+      "OAI.MarkovSuperreflexivity.normalizedChartEdgeSum_displacement",
+      "OAI.MarkovSuperreflexivity.FiniteWalkDrift.eventMass_mono",
+      "OAI.MarkovSuperreflexivity.normalizedChartEdgeLabel_odd",
+      "OAI.MarkovSuperreflexivity.normalizedChartEdgeLabel_supportedBelow",
+      "OAI.MarkovSuperreflexivity.normalizedChartEdgeLabel_unit"
+    ]
+  },
+  "interfaces": {
+    "namespace": "OAI.MarkovSuperreflexivity",
+    "C00": {
+      "location": "lean/OAI/Analysis/MarkovType/OrderedSequences.lean:12",
+      "definition": "abbrev C00 := ℕ →₀ ℝ",
+      "coordinate_indexing": "zero-based natural numbers",
+      "place": "{m : ℕ} (ι : Fin m → ℕ) (a : Fin m → ℝ) : C00 := ∑ i, Finsupp.single (ι i) (a i)",
+      "ofArray": "{m : ℕ} (a : Fin m → ℝ) : C00 := place Fin.val a",
+      "mergeIndex": "(i j : ℕ) : ℕ := if j ≤ i then j else j - 1",
+      "mergeAt": "(i : ℕ) (x : C00) : C00 := Finsupp.mapDomain (mergeIndex i) x",
+      "merging_semantics": "Add coordinates i and i+1 at i, then shift coordinates above i+1 down by one."
+    },
+    "OrderedNorm": {
+      "location": "lean/OAI/Analysis/MarkovType/OrderedNorm.lean:9",
+      "kind": "structure",
+      "fields": [
+        "toSeminorm : Seminorm ℝ C00",
+        "definite : ∀ x, toSeminorm x = 0 → x = 0",
+        "spreading : ∀ {m : ℕ} (ι : Fin m → ℕ), StrictMono ι → ∀ a : Fin m → ℝ, toSeminorm (C00.place ι a) = toSeminorm (C00.ofArray a)",
+        "merge_le : ∀ (i : ℕ) (x : C00), toSeminorm (C00.mergeAt i x) ≤ toSeminorm x"
+      ],
+      "coercion": "CoeFun OrderedNorm (fun _ => C00 → ℝ)",
+      "scope": "Arbitrary real norm on finitely supported sequences satisfying exactly the displayed spreading and adjacent-merging assumptions. No completeness, unconditionality, or basis normalization is assumed."
+    },
+    "FiniteWalkWitness": {
+      "location": "lean/OAI/Analysis/MarkovType/FiniteWalkWitness.lean:8",
+      "parameters": "(N : OrderedNorm) (n : ℕ)",
+      "fields": [
+        "State : Type",
+        "Edge : Type",
+        "stateFintype : Fintype State",
+        "edgeFintype : Fintype Edge",
+        "chain : @FiniteMarkedChain State Edge stateFintype edgeFintype",
+        "coordinateBound : ℕ",
+        "label : Edge → C00",
+        "odd : ∀ e, label (chain.rev e) = -label e",
+        "support_bound : ∀ e k, coordinateBound ≤ k → label e k = 0",
+        "unit : ∀ e, N (label e) = 1",
+        "escape : (3 : ℝ) / 20 ≤ @markedProb State Edge stateFintype edgeFintype chain n (fun ω => (n : ℝ) / 24 ≤ N (edgeSum label ω))"
+      ],
+      "instance_note": "stateFintype and edgeFintype are explicit structure fields, not automatically installed instances."
+    },
+    "FiniteMarkedChain": {
+      "location": "lean/OAI/Analysis/MarkovType/MarkedChains.lean:13",
+      "parameters": "(S E : Type*) [Fintype S] [Fintype E]",
+      "fields": [
+        "π : S → ℝ",
+        "π_nonneg : ∀ s, 0 ≤ π s",
+        "sum_π : ∑ s, π s = 1",
+        "src : E → S",
+        "tgt : E → S",
+        "rev : E → E",
+        "rev_rev : Function.Involutive rev",
+        "src_rev : ∀ e, src (rev e) = tgt e",
+        "tgt_rev : ∀ e, tgt (rev e) = src e",
+        "q : E → ℝ",
+        "q_nonneg : ∀ e, 0 ≤ q e",
+        "sum_q : ∀ s, ∑ e, (if src e = s then q e else 0) = 1",
+        "balance : ∀ e, π (src e) * q e = π (tgt e) * q (rev e)"
+      ]
+    },
+    "path_definitions": {
+      "location": "lean/OAI/Analysis/MarkovType/MarkedChains.lean:28-68",
+      "MarkedPath": "(S E : Type*) (n : ℕ) := S × (Fin n → E)",
+      "markedState": "{S E : Type*} [Fintype S] [Fintype E] (C : FiniteMarkedChain S E) {n : ℕ} (ω : MarkedPath S E n) (i : Fin (n + 1)) : S := if h : i = 0 then ω.1 else C.tgt (ω.2 (i.pred h))",
+      "markedValid": "{S E : Type*} [Fintype S] [Fintype E] (C : FiniteMarkedChain S E) {n : ℕ} (ω : MarkedPath S E n) : Prop := ∀ i : Fin n, C.src (ω.2 i) = markedState C ω i.castSucc",
+      "markedPathWeight": "{S E : Type*} [Fintype S] [Fintype E] (C : FiniteMarkedChain S E) (n : ℕ) (ω : MarkedPath S E n) : ℝ; equals if markedValid C ω then C.π ω.1 * ∏ i : Fin n, C.q (ω.2 i) else 0",
+      "markedProb": "{S E : Type*} [Fintype S] [Fintype E] (C : FiniteMarkedChain S E) (n : ℕ) (A : MarkedPath S E n → Prop) : ℝ; equals ∑ ω, if A ω then markedPathWeight C n ω else 0",
+      "edgeSum": "{S E V : Type*} [AddCommMonoid V] {n : ℕ} (g : E → V) (ω : MarkedPath S E n) : V := ∑ i : Fin n, g (ω.2 i)",
+      "OddLabel": "{S E V : Type*} [Fintype S] [Fintype E] [Neg V] (C : FiniteMarkedChain S E) (g : E → V) : Prop := ∀ e, g (C.rev e) = -g e"
+    },
+    "supporting_declarations": [
+      {
+        "name": "OAI.MarkovSuperreflexivity.FiniteMarkedChain.toStateChain",
+        "location": "lean/OAI/Analysis/MarkovType/MarkedPaths.lean:56",
+        "signature": "{S E : Type*} [Fintype S] [Fintype E] (C : FiniteMarkedChain S E) : FiniteReversibleChain S",
+        "definition": "π := C.π; P := markedTransition C",
+        "markedTransition": "(C : FiniteMarkedChain S E) (s t : S) : ℝ := ∑ e, if C.src e = s ∧ C.tgt e = t then C.q e else 0"
+      },
+      {
+        "name": "OAI.MarkovSuperreflexivity.sum_π_mul_P",
+        "location": "lean/OAI/Analysis/MarkovType/FinitePaths.lean:20",
+        "signature": "{S : Type*} [Fintype S] (C : FiniteReversibleChain S) (t : S) : ∑ s, C.π s * C.P s t = C.π t"
+      },
+      {
+        "name": "OAI.MarkovSuperreflexivity.pathWeight_reverse",
+        "location": "lean/OAI/Analysis/MarkovType/FinitePaths.lean:61",
+        "signature": "{S : Type*} [Fintype S] (C : FiniteReversibleChain S) (n : ℕ) (ω : StatePath S n) : pathWeight C n (pathReverse ω) = pathWeight C n ω"
+      },
+      {
+        "name": "OAI.MarkovSuperreflexivity.sum_markedPathWeight",
+        "location": "lean/OAI/Analysis/MarkovType/MarkedPaths.lean:169",
+        "signature": "{S E : Type*} [Fintype S] [Fintype E] (C : FiniteMarkedChain S E) (n : ℕ) : ∑ ω : MarkedPath S E n, markedPathWeight C n ω = 1"
+      },
+      {
+        "name": "OAI.MarkovSuperreflexivity.markedLaw",
+        "location": "lean/OAI/Analysis/MarkovType/MarkedPaths.lean:182",
+        "signature": "{S E : Type*} [Fintype S] [Fintype E] (C : FiniteMarkedChain S E) (n : ℕ) : FiniteLaw (MarkedPath S E n)"
+      },
+      {
+        "name": "OAI.MarkovSuperreflexivity.markedExpect_edge",
+        "location": "lean/OAI/Analysis/MarkovType/MarkedPaths.lean:306",
+        "signature": "{S E : Type*} [Fintype S] [Fintype E] (C : FiniteMarkedChain S E) (n : ℕ) (i : Fin n) (H : E → ℝ) : markedExpect C n (fun ω => H (ω.2 i)) = ∑ e, (C.π (C.src e) * C.q e) * H e"
+      },
+      {
+        "name": "OAI.MarkovSuperreflexivity.normalizedChartEdgeLabel",
+        "location": "lean/OAI/Analysis/MarkovType/FiniteWalk.lean:18",
+        "signature": "(N : OrderedNorm) {n B : ℕ} (ν : FiniteLaw (Chart (walkLandmarks n) B)) (e : FiniteWalkDrift.ConcreteChartEdge ν) : C00",
+        "definition": "(N.alternatingNorm (walkWindowLength n))⁻¹ • rawChartEdgeLabel ν e"
+      }
+    ]
+  },
+  "conditions_established_in_source": {
+    "quantifier": "For every OrderedNorm N and every natural n with 0 < n, Nonempty (FiniteWalkWitness N n). No upper bound or n >= 2 restriction.",
+    "finiteness": "Both State and Edge have Fintype witnesses; a common finite coordinateBound bounds every label support.",
+    "stationarity": "The chain has a probability π, row-normalized nonnegative q, and edgewise detailed balance. FiniteMarkedChain.toStateChain supplies a finite reversible state chain; sum_π_mul_P proves its stationary distribution equation. markedExpect_edge proves the stationary marked-edge marginal at every step.",
+    "reversibility": "rev is an involution, interchanges source and target, and preserves stationary edge mass by the balance field.",
+    "labels": "Every edge, including zero-transition-probability edges, has an odd label and N(label e) = 1.",
+    "escape_event": "At least 3/20 of the normalized finite marked path law satisfies N(sum of exactly n edge labels) >= n/24.",
+    "source_implementation": "States are positive-mass chart supports; edges are State × Letter × State with Letter = Fin 2 × Bool. Reversal exchanges endpoints and inverts the letter. Existence of the chart law and all norm/probability estimates are proved in the downloaded custom cone.",
+    "extra_not_required_by_interface": "The concrete construction restricts to strictly positive state mass, but this is not a separate field of FiniteWalkWitness."
+  },
+  "conventions": {
+    "time_and_endpoints": "Time n means n edges indexed by Fin n and n+1 states indexed by Fin (n+1). The initial state is ω.1; the terminal state is markedState C ω (Fin.last n). The edge at i connects states i.castSucc and i.succ on valid paths.",
+    "invalid_paths": "MarkedPath includes invalid arrays; markedPathWeight assigns them zero mass. sum_markedPathWeight proves total mass one.",
+    "n_zero": "finiteWalk is not stated at n=0 because hn : 0<n is required. The underlying definitions exist at zero: no edges, edgeSum is the empty sum, validity is vacuous, weight is π of the initial state, walkWindowLength 0 = 8, and walkError 0 = 0 under total real division.",
+    "n_one": "Included by the same finiteWalk theorem. walkWindowLength 1 = 16, walkWindowLeft 1 = 4, walkWindowRight 1 = 12, walkWindowPairs 1 = 8, and walkError 1 = 1/10.",
+    "window": "walkWindowLength n = 8*(n+1); positiveWalkLabel sums j : Fin (walkWindowLength n), with one positive and one negative basis coordinate per j.",
+    "alternating_normalizer": "C00.alternating k has k pairs, hence 2*k alternating coordinates, not k coordinates. OrderedNorm.alternatingNorm N k = N(C00.alternating k). The normalizer at walkWindowLength n is strictly positive even before assuming 0<n.",
+    "coordinate_bound": "All coordinates k >= coordinateBound vanish; the possible support is Finset.range coordinateBound.",
+    "prefix": "prefixCut x k sums indices strictly below k. chartCut C x = (C x).val+1, so a chart cut includes the coordinate at x.",
+    "interval_endpoints": "PrefixIndicators.halfOpen a b y is 1 exactly when a <= y and y < b; periodic arcs use the same left-closed, right-open convention. Interior-prefix lemmas require 0<y<walkWindowLength n.",
+    "label_orientation": "rawWalkLabel C s C' = positiveWalkLabel C s when s.2=true; otherwise it is -positiveWalkLabel C' s.inv. Reversal swaps C,C' and inverts s."
+  },
+  "statement_scope_and_limits": [
+    "The source interface matches the supplied live marked-chain mathematical target when the arbitrary norm is represented by OrderedNorm over real c00. It is not itself a wrapper restating an unstaged manuscript.",
+    "The theorem returns Nonempty of a record, not a numerically enumerated chain or executable witness. Existence proofs and choices are noncomputable.",
+    "No irreducibility, aperiodicity, or labels depending only on the unmarked state pair are claimed by FiniteWalkWitness.",
+    "Real scalars and natural-number coordinate indexing are explicit. A complex-scalar extension is not stated here.",
+    "Detailed balance and a stationary marked-edge marginal are available. No standalone theorem named markedPathWeight_reverse was found in this custom cone; pathWeight_reverse is for the induced state chain.",
+    "Only the source import cone is closed here. The full transitive external mathlib/Lean source and axiom graph was not downloaded or compiled.",
+    "The pinned Lean version differs from 4.31.0. This source/toolchain observation is not a manuscript refutation."
+  ],
+  "trust_inspection": {
+    "custom_module_count": 41,
+    "custom_line_count": 7067,
+    "scan_terms": ["sorry", "admit", "axiom", "unsafe", "native_decide", "implemented_by", "extern", "trustCompiler", "skipKernelTC", "run_tac", "run_cmd", "set_option", "#eval", "#print", "#check"],
+    "custom_source_matches": [],
+    "custom_mathematical_axiom_declarations_detected": [],
+    "classical_and_noncomputable": "Classical.propDecidable and noncomputable definitions/sections occur; these are not unproved mathematical axioms or proof holes.",
+    "standard_lean_axioms_to_distinguish": ["Classical.choice", "propext", "Quot.sound"],
+    "exact_final_axiom_closure": null,
+    "exact_final_axiom_closure_status": "Requires compilation and #print axioms; the listed standard axioms are categories, not a measured exact dependency set.",
+    "external_boundary": "Mathlib tactics and standard Lean tactics are imported. No custom compiler-trust proof tactic is present in the 41 custom modules. The transitive external dependency axiom closure remains unmeasured.",
+    "build_configuration_unsafe": "Present only in the downloaded lakefile outside the theorem import cone; see build.original_lakefile_caution."
+  },
+  "custom_dependency_graph": {
+    "root": "FiniteWalk",
+    "module_prefix": "OAI.Analysis.MarkovType.",
+    "repository_path_prefix": "lean/OAI/Analysis/MarkovType/",
+    "repository_path_suffix": ".lean",
+    "node_row_schema": ["module_suffix", "sha256", "custom_import_module_suffixes"],
+    "nodes": [
+      ["AlternatingNorm", "ee13f4c96ce83f31f4a3fef3edf91cedf43641c9d8012fbf05e25e2c4c325c5e", ["OrderedNorm"]],
+      ["ChartAveraging", "745e84609614332b76c4cd439a530c57745b40777809aca3bc500228e4cf1b26", ["FiniteCharts", "FiniteRamsey", "FiniteAveraging"]],
+      ["ChartChain", "76df2676f7d45c4f4abe75c834e3da853e49563c64c7ff7f64d168fcfaa2a1fb", ["ChartAveraging", "ChartTransport", "MarkedLetters"]],
+      ["ChartPathProbability", "93dde61a29048f9e49ff5df40cbdd956fc8a722331b0dd464443ccf456e6b4b5", ["ChartChain", "MarkedPaths", "MarkedLetters", "PeriodicArcs", "WalkParameters", "WalkDrift"]],
+      ["ChartTransport", "de22cf13863f5bc12a0927df616c2cee103dd275149b5b16cf7932a2f5328175", ["FiniteCharts", "FiniteCoupling", "FiniteProbability", "MarkedChains"]],
+      ["EndNorm", "0a9d522e008a5d6b648052e3157a1bc789012ce1ddf13c415d239f3b1fdc84b5", ["AlternatingNorm", "PrefixBlocks", "PrefixIndicators"]],
+      ["FiniteAveraging", "2d1f1e5a55382ac3ee838d78f4ad1869bac223874b30da6df3d41ad82bd17fd5", ["FiniteSeparation", "FiniteCoupling"]],
+      ["FiniteChains", "87310a3140207babbaaf64897122485a912ba48888c717b004e9e039a10a29e9", ["FiniteProbability"]],
+      ["FiniteCharts", "b3d37a3ff4f31ea49393bdab7594d03e749ad86451049b03649c959ed3ab21b4", []],
+      ["FiniteCoupling", "018c80efde7cedbf12a2adb2f72df0a9f017f69c1d519ca998949ebbaebf9f1e", []],
+      ["FinitePaths", "4d4e0763dcdb0aa9bb51778b38b615c6dab142835d3b26e75f8aab69b89537d2", ["FiniteChains"]],
+      ["FiniteProbability", "88744114b630cf6242a573c21c8c46db5ff6386cbd0f24bbba82086f14836a0d", []],
+      ["FiniteRamsey", "44319ec593b803666406862955ace53cb77342d4577a32a32435a1ae100cbe68", []],
+      ["FiniteSeparation", "8bf72c406bb2e0ec896a4a187cef32b958f0a66df08b6c82b2994e7213236a44", []],
+      ["FiniteWalk", "481dc06293b75040bc159cadfb24238c5b99d13e44ea60b2c2d00cd2ffd5e17e", ["FiniteWalkWitness", "WalkMarkedDisplacement", "ChartPathProbability"]],
+      ["FiniteWalkWitness", "854b7c1616936cdd087a8636a01d1b7e5dbd40b8255dcb1e5932eba9e122e56f", ["OrderedNorm", "MarkedChains"]],
+      ["FourLetters", "752dd66ce150c1ae81c272ae790a31105ef02e69705b28e402ab00ca966e8480", []],
+      ["IntegerCocycle", "8f049559ca259b9f8c1d41b3974069d867f638e628b246b1f824cb63a052edeb", ["WordAction"]],
+      ["InterleavedCuts", "ae6b2268afbd4145bd1d284f711c8f39832809117bee2f396ef92c2c1017ddac", ["EndNorm"]],
+      ["MarkedChains", "c22f82d8fa715004918c5b51f0fb9f50e375dd5e44e325cb3d34038c471bfc62", ["FiniteChains"]],
+      ["MarkedLetters", "cc6bba987e7b51927d8fc0b92e51b0c7c7a5f47fdbda0d9d14c7f9ba383cfb40", ["MarkedPaths"]],
+      ["MarkedPaths", "76dab78c81c79bb8c24e0eee13a4b70934960285f4bc186272c2f95d7b2d7081", ["MarkedChains", "FinitePaths"]],
+      ["NormCompression", "87ea2da24027eaac2783867f9471b8f19c50e6ef899ebac4a18f1c2eb547ae2b", ["OrderedNorm"]],
+      ["OrderedNorm", "9de71ef49557c832a84048fc9119474ad9810239c155543487cb0e9664679862", ["OrderedSequences"]],
+      ["OrderedSequences", "a74880c23b3aa8664b0fd6abfd64f612084db31548ae19337fd252af8c7cc648", []],
+      ["PeriodicArcs", "9d9c40224c36677ae1f3d5edacb3530568c334be2b2a3d3f513ca56d7dd037cb", ["FourLetters", "PeriodicOrderIso"]],
+      ["PeriodicOrderIso", "b5eb1dc3dad1a4055964bf3ca69225e495263695ab84223439861313c077636c", []],
+      ["PrefixBlocks", "a786045072075bc881337f5af58b028096ecf0ea9f5d4ced60f4faaf6a5ebf81", ["NormCompression"]],
+      ["PrefixIndicators", "e7652766c4ff370ce67f3963fb4c9e5df1be43b309698f6a4e7daca7e20f68c8", ["OrderedSequences", "FiniteCharts"]],
+      ["TwoLevels", "cda73c44872e928afdda2320b0f359b8b6b4ea8f7269759816a9283d6d3ef2b7", ["IntegerCocycle"]],
+      ["WalkDisplacement", "bc2a7fd3b32b4284c3a64f7eda6dd68b37833c2d067938ec6387a3fabe9cedbf", ["WalkPrefixLevels", "InterleavedCuts"]],
+      ["WalkDrift", "fd3e6a79e5775f4d71ee97b96b30948467f89897e1c4322336d3bd8415330640", ["WordReduction", "WeightedEvents"]],
+      ["WalkLabels", "1c6092b16a999222ed8f3b4a55121ff9e8fdcadec0a80598c1717daee91a9464", ["WalkLandmarks", "PrefixIndicators", "NormCompression", "AlternatingNorm", "IntegerCocycle"]],
+      ["WalkLandmarks", "8ef9ee26aabff90037fc3c6664fe63bcb36ed791e78e671236b77c811304a5f5", ["PeriodicArcs", "WordAction", "WalkParameters"]],
+      ["WalkMarkedDisplacement", "9bce2b4302684253352246c69e8e10788509010cd18aecf53c35ce6d242facf7", ["WalkDisplacement", "ChartPathProbability"]],
+      ["WalkParameters", "ed61d414b38e2622bfe32c382ddff55d70b5e2881cb597db86036ea0f8e0aaec", []],
+      ["WalkPrefixLevels", "6d2b57578fde96101a6fcc25fb33e8e043482310c4c5bcfd1292a9d2a7b72178", ["WalkLabels", "WalkTransport", "TwoLevels"]],
+      ["WalkTransport", "5b004e34206868f997c84c200b9a6d6cadbcdc9726b236f29dd98d5e457dabd0", ["WalkLandmarks", "FiniteCharts", "IntegerCocycle"]],
+      ["WeightedEvents", "b9896720075e77a30e3c0ce2652f2014138885ffc65b89b3b7b27c77d590ba47", []],
+      ["WordAction", "7c4d1c87c1dc3cdf3b1b0c3aedf01873f39d0bb1f1fd37227b3bcfc0ab81e902", ["PeriodicArcs", "WordReduction"]],
+      ["WordReduction", "4a66f24d8d1ee98639727a3668edd5768c6e0a7a4d188cab64d372647c1aa9fd", ["FourLetters"]]
+    ],
+    "node_count": 41,
+    "custom_import_edge_count": 66,
+    "missing_custom_modules": [],
+    "external_imports": [
+      "Init.Data.List.Count",
+      "Lean.Elab.Tactic.Omega",
+      "Mathlib.Algebra.BigOperators.Field",
+      "Mathlib.Algebra.BigOperators.Fin",
+      "Mathlib.Algebra.BigOperators.Group.Finset.Piecewise",
+      "Mathlib.Algebra.BigOperators.Intervals",
+      "Mathlib.Algebra.BigOperators.Module",
+      "Mathlib.Algebra.BigOperators.Pi",
+      "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+      "Mathlib.Algebra.Order.Floor.Ring",
+      "Mathlib.Analysis.LocallyConvex.Separation",
+      "Mathlib.Analysis.Normed.Group.Basic",
+      "Mathlib.Analysis.Normed.Module.Seminorm.Norm",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Basic.Real.Basic",
+      "Mathlib.Data.Fin.Basic",
+      "Mathlib.Data.Fin.Rev",
+      "Mathlib.Data.Fin.Tuple.Basic",
+      "Mathlib.Data.Finset.Lattice.Fold",
+      "Mathlib.Data.Finset.Max",
+      "Mathlib.Data.Finset.Sort",
+      "Mathlib.Data.Finsupp.BigOperators",
+      "Mathlib.Data.Finsupp.SMul",
+      "Mathlib.Data.Fintype.BigOperators",
+      "Mathlib.Data.Fintype.Fin",
+      "Mathlib.Data.Fintype.Pi",
+      "Mathlib.Data.Fintype.Prod",
+      "Mathlib.Data.Fintype.Sigma",
+      "Mathlib.Data.Int.Interval",
+      "Mathlib.Data.List.Chain",
+      "Mathlib.Data.List.OfFn",
+      "Mathlib.Data.List.TakeDrop",
+      "Mathlib.Order.Fin.Basic",
+      "Mathlib.Order.Interval.Finset.Fin",
+      "Mathlib.Order.Interval.Set.OrderIso",
+      "Mathlib.Tactic.Abel",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.FinCases",
+      "Mathlib.Tactic.FunProp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Positivity",
+      "Mathlib.Tactic.Push",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.SplitIfs",
+      "Mathlib.Topology.Instances.Real.Lemmas",
+      "Mathlib.Topology.Order.MonotoneContinuity"
+    ],
+    "external_import_count": 49
+  },
+  "other_downloaded_files_row_schema": ["repository_relative_path", "sha256"],
+  "other_downloaded_files": [
+    ["LICENSE", "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"],
+    ["lean/LICENSE", "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"],
+    ["lean/ComparatorChallenges/README.md", "051459a45da1bedd1c0a6585a5b5e5425c7c40a369f2922d7b519e2fd02333b0"],
+    ["lean/README.md", "292ff9d539f494158dfbf68d989ba85a82782a4343b2fe43088f8fa62525bf1b"],
+    ["lean/docs/327.md", "6e7aa05cf96fadd65581ba74de37c1a78b975a57431729313dbb03e931327948"],
+    ["lean/formalization.yaml", "b8e7072ab9ac195a290110d78c3a3497608ce76ac5b67d307685f38408299b39"],
+    ["lean/lake-manifest.json", "cf6105a25d9dca2f166b241d9191bd12c7e13305890dc9c4d0952351cccc0794"],
+    ["lean/lakefile.lean", "fc590a5d14923f79e71ea80e29efd42950bb3ec051481b5209157f0a01f63de1"],
+    ["lean/lean-toolchain", "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b"]
+  ],
+  "downloaded_primary_file_count": 50,
+  "inventory_validation": {
+    "all_downloaded_sha256_match": true,
+    "all_recorded_custom_import_lists_match_sources": true,
+    "all_custom_modules_reachable_from_entrypoint": true,
+    "custom_graph_acyclic": true,
+    "recorded_external_import_union_matches_sources": true,
+    "only_listed_downloads_and_this_inventory_present": true
+  },
+  "stop_reason": "Relevant custom import graph is closed, theorem interface and conventions are understood, and source/toolchain limitations are recorded. No staged manuscript, parent ledger, or parent progress files were read or changed."
+}

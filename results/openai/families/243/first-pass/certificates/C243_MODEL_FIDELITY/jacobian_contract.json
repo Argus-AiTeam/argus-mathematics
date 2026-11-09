@@ -1,0 +1,43 @@
+{
+  "operation_id": "group.orbit.compute",
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "inspected_before_run": true,
+  "input_schema": {
+    "$defs": {
+      "PermutationGroupRequest": {
+        "additionalProperties": false,
+        "description": "A finite permutation group given by generator permutations on {0,...,n-1}.",
+        "properties": {
+          "degree": {"maximum": 64, "minimum": 1, "title": "Degree", "type": "integer"},
+          "generators": {"items": {"items": {"type": "integer"}, "type": "array"}, "maxItems": 64, "minItems": 1, "title": "Generators", "type": "array"}
+        },
+        "required": ["degree", "generators"],
+        "title": "PermutationGroupRequest",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Request the orbit of a point under a permutation group.\n\nThe group is the canonical permutation-group value, so a stabilizer\nresult's ``stabilizer`` subgroup feeds the advertised orbit consumer\nunchanged instead of being unpacked into parallel top-level fields.",
+    "properties": {
+      "group": {"$ref": "#/$defs/PermutationGroupRequest", "description": "Permutation group acting on {0,...,degree-1} as the canonical value; pass a previous stabilizer or order request's group value unchanged."},
+      "point": {"maximum": 63, "minimum": 0, "title": "Point", "type": "integer"}
+    },
+    "required": ["group", "point"],
+    "title": "GroupOrbitRequest",
+    "type": "object"
+  },
+  "output_schema": {
+    "additionalProperties": false,
+    "description": "The orbit of a point under a permutation group.",
+    "properties": {
+      "orbit": {"items": {"type": "integer"}, "maxItems": 64, "minItems": 1, "title": "Orbit", "type": "array"},
+      "point": {"maximum": 63, "minimum": 0, "title": "Point", "type": "integer"}
+    },
+    "required": ["orbit", "point"],
+    "title": "GroupOrbitResult",
+    "type": "object"
+  },
+  "mathematical_scope": "Finite sanity check of the one-face F3 Heisenberg action from the first manuscript's edge product. Index (x,y,z) by 9x+3y+z; generators are left multiplication by (1,0,0) and (0,1,0). This does not certify the universal support or separation theorem."
+}

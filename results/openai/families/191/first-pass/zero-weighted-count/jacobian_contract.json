@@ -1,0 +1,129 @@
+{
+  "protocol_version": "2025-11-25",
+  "request": {
+    "request": {
+      "op": "inspect",
+      "operation_id": "lattice.rank_gram.compute"
+    }
+  },
+  "result": {
+    "kind": "operation",
+    "operation": {
+      "description": "For a full-row-rank integer lattice basis under the standard bilinear form, return the exact rank, labelled Gram matrix B B^T, and squared covolume det(G).",
+      "examples": [
+        {
+          "description": "Compute the Gram matrix and covolume of ZZ^2.",
+          "input": {
+            "lattice": {
+              "ambient_dimension": 2,
+              "basis": {
+                "entries": [["1", "0"], ["0", "1"]]
+              }
+            }
+          },
+          "name": "identity_lattice"
+        }
+      ],
+      "input_schema": {
+        "$defs": {
+          "IntegerLattice": {
+            "additionalProperties": false,
+            "description": "A rank-``r`` lattice in ``ZZ^n`` given by full-row-rank integer rows.",
+            "properties": {
+              "ambient_dimension": {
+                "maximum": 32,
+                "minimum": 1,
+                "title": "Ambient Dimension",
+                "type": "integer"
+              },
+              "basis": {"$ref": "#/$defs/IntegerMatrix"}
+            },
+            "required": ["ambient_dimension", "basis"],
+            "title": "IntegerLattice",
+            "type": "object"
+          },
+          "IntegerMatrix": {
+            "additionalProperties": false,
+            "description": "One nonempty rectangular matrix over exact canonical integers.",
+            "properties": {
+              "domain": {"const": "ZZ", "default": "ZZ", "title": "Domain", "type": "string"},
+              "entries": {
+                "items": {
+                  "items": {"pattern": "^(?:0|-?[1-9][0-9]*)$", "type": "string"},
+                  "type": "array"
+                },
+                "maxItems": 32,
+                "minItems": 1,
+                "title": "Entries",
+                "type": "array"
+              }
+            },
+            "required": ["entries"],
+            "title": "IntegerMatrix",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "description": "One integer lattice for rank, Gram matrix, and covolume.",
+        "properties": {"lattice": {"$ref": "#/$defs/IntegerLattice"}},
+        "required": ["lattice"],
+        "title": "RankGramRequest",
+        "type": "object"
+      },
+      "operation_id": "lattice.rank_gram.compute",
+      "output_schema": {
+        "$defs": {
+          "IntegerMatrix": {
+            "additionalProperties": false,
+            "description": "One nonempty rectangular matrix over exact canonical integers.",
+            "properties": {
+              "domain": {"const": "ZZ", "default": "ZZ", "title": "Domain", "type": "string"},
+              "entries": {
+                "items": {
+                  "items": {"pattern": "^(?:0|-?[1-9][0-9]*)$", "type": "string"},
+                  "type": "array"
+                },
+                "maxItems": 32,
+                "minItems": 1,
+                "title": "Entries",
+                "type": "array"
+              }
+            },
+            "required": ["entries"],
+            "title": "IntegerMatrix",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Exact rank, labelled Gram matrix ``G = B B^T``, and squared covolume.",
+        "properties": {
+          "ambient_dimension": {"maximum": 32, "minimum": 1, "title": "Ambient Dimension", "type": "integer"},
+          "covolume_rational": {"title": "Covolume Rational", "type": "boolean"},
+          "gram_matrix": {"$ref": "#/$defs/IntegerMatrix"},
+          "gram_mode": {"const": "EXACT", "default": "EXACT", "title": "Gram Mode", "type": "string"},
+          "rank": {"maximum": 32, "minimum": 0, "title": "Rank", "type": "integer"},
+          "relation": {"const": "GRAM_EQUALS_BASIS_TIMES_BASIS_TRANSPOSE", "default": "GRAM_EQUALS_BASIS_TIMES_BASIS_TRANSPOSE", "title": "Relation", "type": "string"},
+          "squared_covolume": {"title": "Squared Covolume", "type": "string"}
+        },
+        "required": ["rank", "ambient_dimension", "gram_matrix", "squared_covolume", "covolume_rational"],
+        "title": "RankGramResult",
+        "type": "object"
+      },
+      "read_only": true,
+      "tags": ["lattice", "gram", "exact-integer", "bounded"],
+      "title": "Compute exact rank, Gram matrix, and squared covolume of a lattice"
+    }
+  },
+  "schema_version": 1,
+  "server": {
+    "description": "Search and run atomic, composable Jacobian tools for higher mathematics.",
+    "icons": null,
+    "name": "jacobian",
+    "title": "Jacobian Mathematical Workbench",
+    "version": "0.14.0",
+    "websiteUrl": null
+  },
+  "tool": "math.find",
+  "tools": ["math.find", "math.run"],
+  "transport": "mcp-stdio"
+}

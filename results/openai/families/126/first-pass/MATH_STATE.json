@@ -1,0 +1,591 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX9000126",
+      "version": 1,
+      "statement": "OpenAI Math Audit #126: Exponential semidefinite complexity of perfect matching.",
+      "definitions": {
+        "openai_family": "126"
+      },
+      "content_hash": "8f113ec956de3627d8791d5c8092a677373959f9239678617f492720b3a6b55c"
+    },
+    {
+      "context_id": "CTX_FOURIER",
+      "version": 1,
+      "statement": "Finite product-channel Fourier smoothing for real PSD matrix-valued functions; the manuscript statements are unverified targets, not assumptions.",
+      "definitions": {
+        "L": "2^a with a>=1; characters are real Walsh characters on (F_2)^a",
+        "Gram potential": "sum over branches of the squared Frobenius norm of the weighted coefficient row-Gram matrix",
+        "adaptive": "projections may depend on remaining x inputs but never on future averaging m parameters"
+      },
+      "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C9000126",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000126",
+        "content_hash": "8f113ec956de3627d8791d5c8092a677373959f9239678617f492720b3a6b55c"
+      },
+      "natural_statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 126 (Exponential semidefinite complexity of perfect matching.; papers: Exponential PSD rank of positively shifted matching matrices; Lean status: Partially/Comparator formalized (lean/docs/126.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "95ad8e9e8f505801b0446413cea7cc6194e953de18cd2a5ec4b18f4a7abc32e0"
+    },
+    {
+      "claim_id": "C_FOURIER_TRANSFER",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "For all finite product channels satisfying the marginal and scalar variance hypotheses, thm:fourier-smoothing has exact square reconstruction, the stated expected Gram-potential bound, and the stated Fourier-mass bound, in every finite real matrix dimension. A verification must prove its splitting dependency rather than assume it.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "fd09f3299b0a9edac564e8a1188ea092766f6ed1168b9917c8e39336d5f42f75"
+    },
+    {
+      "claim_id": "C_SPLITTING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "For every L=2^a>=2 and every finite-dimensional family of real symmetric PSD matrices A_z, orthogonal projections summing to I satisfy sum_z sum_(s!=z) ||P_s A_z P_s||_F^2 <= 2^(L-1) sum_(z!=zprime) tr(A_z A_zprime), as asserted by lem:splitting; seek a sharper balanced-recursion constant.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "3790e9488365f46a76bfebb363b8d44f33647a5a55fb451520e145d0d968cf8e"
+    },
+    {
+      "claim_id": "C_TAGGED_OVERLAP",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "For arbitrary rectangular coefficient matrices U(x), the tagged Fourier stack satisfies V_z^T V_zprime = L^(-2) sum_y chi_z(y) chi_zprime(y) sum_x pi_y^m(x) U(x)^T U(x), with no products between distinct row tags.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "b1f7a726098af4166d9580321c2988df542cb23497224e736dd5539e40771680"
+    },
+    {
+      "claim_id": "C_ADAPTIVE_INDUCTION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "Conditioned on processed averaging parameters and the inputs after the next coordinate, the old coefficient function U(x) is independent of the next averaging parameter, even when earlier projections depend on x; exact square reconstruction and the claimed expected-potential induction hold.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "725e33d6802cec18b34cd2aaf9b0f4021f1095250d580ed1c72081cff345c892"
+    },
+    {
+      "claim_id": "C_FOURIER_RANK",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "At stage i the coefficient concatenation has r L^i columns, regardless of its row dimension. PSD rank-trace Cauchy-Schwarz and Cauchy-Schwarz over L^t branches convert the Gram-potential bound to the exact Fourier-mass bound in thm:fourier-smoothing.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "e45f80b5e7aa01abdad43ba1bd7c0683fc5a6893b155361467d9be8a494ac918"
+    },
+    {
+      "claim_id": "C_MATCHING_MAIN",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000126",
+        "content_hash": "8f113ec956de3627d8791d5c8092a677373959f9239678617f492720b3a6b55c"
+      },
+      "natural_statement": "Manuscript thm:main asserts that a constant c>0 independent of rho exists such that, for every fixed 0<rho<1, the real PSD rank of the odd-cut matching matrix A_n(rho) is at least 2^(c n) for all sufficiently large even n. This mission does not independently establish the other dependencies of that theorem.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "7dadb73e690526bf92e9122adff0868b97fd355831e04a44b4c203259acc9d5b"
+    },
+    {
+      "claim_id": "C_FOURIER_CORE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "For all finite real row, column, input, and tag types, tagged coefficient multiplication and tagged pointwise square reconstruction satisfy their stated matrix identities. Symmetric idempotent resolutions preserve exact squares; the noncommutative block-trace gap, squared triangle estimate, balanced charging inequality, binary-height constant formula, ordered one-step coefficient, and scalar potential and mass recurrences hold as declared in Main.lean. This is the algebraic core, not a full Lean formalization of Fourier smoothing.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "4e5b3d4b4a781ec7c21ae0beb5ac826e07a4af822a7c7e7cbae4c4fe2d23cc31"
+    },
+    {
+      "claim_id": "C_BALANCED_SPLITTING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "For every a>=1, L=2^a, and every family of L real symmetric PSD matrices on an arbitrary finite-dimensional Euclidean space, there are mutually orthogonal projections P_s summing to I with sum_z sum_(s!=z) ||P_s A_z P_s||_F^2 <= (L/4) sum_(z!=zprime) tr(A_z A_zprime). The right-hand sum is ordered, zero projections are allowed, and the binary constant 1/2 is optimal.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "bb5c2af1f9da1c3ac975feeb519df1ac32ab5dc7570ee7354af4e2676b5b60f8"
+    },
+    {
+      "claim_id": "C_SHARP_FOURIER",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "For arbitrary finite product channels with coordinate sizes L_i=2^(a_i)>=2 satisfying the channel marginal and variance hypotheses with theta_i>=0, any lambda_i>1, and any finite-dimensional real PSD-valued F, exact square reconstruction holds with common row dimension r product_i(L_i |X_i|). For weights w(q,p)=product_i lambda_i^[q_i!=p_i], the expected weighted Gram potential is at most E||F||_F^2 product_i[1+(L_i-1)lambda_i^2(L_i/4)theta_i], and some m has weighted Fourier mass at most (product_i L_i) sqrt(r E||F||_F^2 product_i[1+(L_i-1)lambda_i^2(L_i/4)theta_i]). No variance smallness condition is needed for these general bounds; the original thm:fourier-smoothing follows from its stated parameter condition and tr F<=B.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "25d55367322a9534c9dc16be2b0e0c1b3519550dd22767f1b29421fa28d6a8b6"
+    },
+    {
+      "claim_id": "C_FOURIER_CORE",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "For all finite real row, column, input, and tag types, tagged coefficient multiplication and tagged pointwise square reconstruction satisfy their stated matrix identities. Symmetric idempotent resolutions preserve exact squares; the noncommutative block-trace gap, squared triangle estimate, balanced charging inequality, binary-height constant formula, ordered one-step coefficient, and scalar potential and mass recurrences hold as declared in Main.lean. This is the algebraic core, not a full Lean formalization of Fourier smoothing.",
+      "formal_statement": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace FourierTransfer\n\nvariable {Y X Row OtherRow Col Frequency Label : Type*}\n\ndef frobSq [Fintype Row] [Fintype Col] (A : Matrix Row Col ℝ) : ℝ :=\n  ∑ i, ∑ j, (A i j) ^ 2\n\ntheorem frobSq_nonneg [Fintype Row] [Fintype Col] (A : Matrix Row Col ℝ) :\n    0 ≤ frobSq A := by\n  exact Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => sq_nonneg _\n\ntheorem frobSq_sub_le [Fintype Row] [Fintype Col]\n    (A B : Matrix Row Col ℝ) :\n    frobSq (A - B) ≤ 2 * frobSq A + 2 * frobSq B := by\n  unfold frobSq\n  calc\n    ∑ i, ∑ j, ((A - B) i j) ^ 2 ≤\n        ∑ i, ∑ j, (2 * (A i j) ^ 2 + 2 * (B i j) ^ 2) := by\n      apply Finset.sum_le_sum\n      intro i _\n      apply Finset.sum_le_sum\n      intro j _\n      change (A i j - B i j) ^ 2 ≤ _\n      nlinarith [sq_nonneg (A i j + B i j)]\n    _ = _ := by simp_rw [Finset.sum_add_distrib, Finset.mul_sum]\n\ndef tagCoefficient (normalization : ℝ) (chi : Frequency → Y → ℝ)\n    (s : Y → X → ℝ) (U : X → Matrix Row Col ℝ)\n    (z : Frequency) : Matrix (Y × X × Row) Col ℝ :=\n  fun k j => normalization * chi z k.1 * s k.1 k.2.1 * U k.2.1 k.2.2 j\n\ntheorem tagged_overlap_entry [Fintype Y] [Fintype X] [Fintype Row]\n    (normalization : ℝ) (chi : Frequency → Y → ℝ)\n    (s : Y → X → ℝ) (U : X → Matrix Row Col ℝ)\n    (z z' : Frequency) (j k : Col) :\n    ((tagCoefficient normalization chi s U z).transpose *\n        tagCoefficient normalization chi s U z') j k =\n      normalization ^ 2 *\n        ∑ y, chi z y * chi z' y *\n          ∑ x, (s y x) ^ 2 * ((U x).transpose * U x) j k := by\n  classical\n  simp only [Matrix.mul_apply, Matrix.transpose_apply, tagCoefficient,\n    Fintype.sum_prod_type, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro y _\n  apply Finset.sum_congr rfl\n  intro x _\n  apply Finset.sum_congr rfl\n  intro row _\n  ring\n\ndef taggedStack [DecidableEq Y] (s : Y → X → ℝ)\n    (H : X → Matrix Row Col ℝ) (y : Y) :\n    Matrix (Y × X × Row) Col ℝ :=\n  fun k j => if k.1 = y then s y k.2.1 * H k.2.1 k.2.2 j else 0\n\ntheorem tagged_square_entry [Fintype Y] [Fintype X] [Fintype Row]\n    [DecidableEq Y] (s : Y → X → ℝ) (H : X → Matrix Row Col ℝ)\n    (y : Y) (j k : Col) :\n    ((taggedStack s H y).transpose * taggedStack s H y) j k =\n      ∑ x, (s y x) ^ 2 * ((H x).transpose * H x) j k := by\n  classical\n  simp only [Matrix.mul_apply, Matrix.transpose_apply, taggedStack,\n    Fintype.sum_prod_type]\n  calc\n    _ = ∑ tag : Y, if tag = y then\n          ∑ x, (s y x) ^ 2 * ∑ row, H x row j * H x row k else 0 := by\n      apply Finset.sum_congr rfl\n      intro tag _\n      by_cases htag : tag = y\n      · simp only [htag, if_true, Finset.mul_sum]\n        apply Finset.sum_congr rfl\n        intro x _\n        apply Finset.sum_congr rfl\n        intro row _\n        ring\n      · simp [htag]\n    _ = _ := by simp\n\ntheorem resolution_square [Fintype Row] [Fintype Label] [DecidableEq Row]\n    (P : Label → Matrix Row Row ℝ) (H : Matrix Row Col ℝ)\n    (hsym : ∀ s, (P s).transpose = P s)\n    (hid : ∀ s, P s * P s = P s) (hsum : ∑ s, P s = 1) :\n    ∑ s, (P s * H).transpose * (P s * H) = H.transpose * H := by\n  have hterm (s : Label) :\n      (P s * H).transpose * (P s * H) = H.transpose * P s * H := by\n    calc\n      _ = H.transpose * ((P s).transpose * P s) * H := by\n        simp only [Matrix.transpose_mul, Matrix.mul_assoc]\n      _ = _ := by rw [hsym, hid]\n  simp_rw [hterm]\n  rw [← Matrix.sum_mul, ← Matrix.mul_sum, hsum]\n  simp\n\ntheorem noncommutative_block_gap [Fintype Row] [Fintype OtherRow]\n    (A B : Matrix Row Row ℝ) (C D : Matrix OtherRow OtherRow ℝ) (off : ℝ) :\n    Matrix.trace (A * B) + Matrix.trace (C * D) + 2 * off -\n        (Matrix.trace (B * B) + Matrix.trace (C * C)) =\n      Matrix.trace ((A - B) * B) + Matrix.trace (C * (D - C)) + 2 * off := by\n  simp only [sub_mul, mul_sub, Matrix.trace_sub]\n  ring\n\ntheorem balanced_step (d a b loss : ℝ) (hd : 1 / 2 ≤ d) (ha : 0 ≤ a)\n    (h : loss ≤ (1 + 2 * d) * a + 2 * d * b) :\n    loss ≤ (2 * d) * (2 * a + b) := by\n  nlinarith [mul_nonneg (show 0 ≤ 2 * d - 1 by linarith) ha]\n\nnoncomputable def splitConstant : ℕ → ℝ\n  | 0 => 0\n  | 1 => 1 / 2\n  | n + 2 => 2 * splitConstant (n + 1)\n\ntheorem splitConstant_formula (a : ℕ) :\n    splitConstant (a + 1) = (2 : ℝ) ^ (a + 1) / 4 := by\n  induction a with\n  | zero => norm_num [splitConstant]\n  | succ a ih =>\n      change 2 * splitConstant (a + 1) = (2 : ℝ) ^ (a + 1 + 1) / 4\n      rw [ih, pow_succ]\n      ring\n\ntheorem one_step_factor (L theta lam d mass : ℝ) (hL : L ≠ 0) :\n    L * (L * (mass / L ^ 2) +\n        lam ^ 2 * d * (L * (L - 1) * (theta * mass / L ^ 2))) =\n      (1 + (L - 1) * lam ^ 2 * d * theta) * mass := by\n  field_simp [hL]\n\ntheorem potential_iterate (phi : ℕ → ℝ) (g : ℝ) (hg : 0 ≤ g)\n    (hstep : ∀ n, phi (n + 1) ≤ g * phi n) (n : ℕ) :\n    phi n ≤ g ^ n * phi 0 := by\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      calc\n        phi (n + 1) ≤ g * phi n := hstep n\n        _ ≤ g * (g ^ n * phi 0) := mul_le_mul_of_nonneg_left ih hg\n        _ = g ^ (n + 1) * phi 0 := by rw [pow_succ]; ring\n\ntheorem mass_squared_conversion (mass r N phi initial growth : ℝ)\n    (hr : 0 ≤ r) (hmass : mass ^ 2 ≤ r * N ^ 2 * phi)\n    (hphi : phi ≤ initial * growth) :\n    mass ^ 2 ≤ r * N ^ 2 * (initial * growth) := by\n  exact hmass.trans (mul_le_mul_of_nonneg_left hphi (mul_nonneg hr (sq_nonneg N)))\n\nend FourierTransfer\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "e2bf835e30fee2a94842e74f9083df8aaf37c2b4a185e740cc24a69ca910b401"
+    },
+    {
+      "claim_id": "C_MATCHING_OTHER_DEPENDENCIES",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000126",
+        "content_hash": "8f113ec956de3627d8791d5c8092a677373959f9239678617f492720b3a6b55c"
+      },
+      "natural_statement": "The manuscript main matching theorem additionally depends on its local averaging lemma, PSD-factor normalization, expanding-parity separating functional, matching realization, and truncation/error comparison. These assertions are recorded as unverified dependencies outside the current Fourier-transfer mission, not assumed verified.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "e08b5829f48ebe261e6c396d2fd75579e35568b7d4fd30215191e7e2b71cd1b0"
+    },
+    {
+      "claim_id": "C_SOURCE_SHARP",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_FOURIER",
+        "content_hash": "7d2f9eaee18a11cc4da98ba34c628919df6be2b262c308f2f3d60a27a9b9889e"
+      },
+      "natural_statement": "Under the unchanged hypotheses of manuscript thm:fourier-smoothing, there is an exact square family with expected weighted Gram potential at most B^2 (9/8)^t, and some m has weighted Fourier mass at most L^t sqrt(r) B (9/8)^(t/2). This follows from balanced splitting with constant L/4 and the universal transfer recurrence.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "028a956ee4440f2f618807a635674dc890db0f837155072173fad5f44271d444"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-C_FOURIER_CORE-990677dc28ff",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FOURIER_CORE",
+        "content_hash": "e2bf835e30fee2a94842e74f9083df8aaf37c2b4a185e740cc24a69ca910b401"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/fourier-transfer/lean-evidence/certificates/C_FOURIER_CORE-6075e139f6a7437c.json"
+    },
+    {
+      "evidence_id": "judgement-C_BALANCED_SPLITTING-39dcff5be1ef",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_BALANCED_SPLITTING",
+        "content_hash": "bb5c2af1f9da1c3ac975feeb519df1ac32ab5dc7570ee7354af4e2676b5b60f8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_SHARP_FOURIER-a2466ff0c673",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SHARP_FOURIER",
+        "content_hash": "25d55367322a9534c9dc16be2b0e0c1b3519550dd22767f1b29421fa28d6a8b6"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_SOURCE_SHARP-56aed0b888a4",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SOURCE_SHARP",
+        "content_hash": "028a956ee4440f2f618807a635674dc890db0f837155072173fad5f44271d444"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_SPLITTING-bf02acadc62d",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SPLITTING",
+        "content_hash": "3790e9488365f46a76bfebb363b8d44f33647a5a55fb451520e145d0d968cf8e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_TAGGED_OVERLAP-df395f5587ee",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_TAGGED_OVERLAP",
+        "content_hash": "b1f7a726098af4166d9580321c2988df542cb23497224e736dd5539e40771680"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_ADAPTIVE_INDUCTION-22aad1266274",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ADAPTIVE_INDUCTION",
+        "content_hash": "725e33d6802cec18b34cd2aaf9b0f4021f1095250d580ed1c72081cff345c892"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_FOURIER_RANK-25622a2964c3",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FOURIER_RANK",
+        "content_hash": "e45f80b5e7aa01abdad43ba1bd7c0683fc5a6893b155361467d9be8a494ac918"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_FOURIER_TRANSFER-4e10e6696496",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FOURIER_TRANSFER",
+        "content_hash": "fd09f3299b0a9edac564e8a1188ea092766f6ed1168b9917c8e39336d5f42f75"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_FOURIER_CORE-0c1c0861cbf0",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FOURIER_CORE",
+        "content_hash": "e2bf835e30fee2a94842e74f9083df8aaf37c2b4a185e740cc24a69ca910b401"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/lean-evidence/certificates/C_FOURIER_CORE-6075e139f6a7437c.json"
+    },
+    {
+      "evidence_id": "judgement-C9000126-3d8149f914fe",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C9000126",
+        "content_hash": "95ad8e9e8f505801b0446413cea7cc6194e953de18cd2a5ec4b18f4a7abc32e0"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "engineer:gpt-6.1-sol",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_FOURIER_CORE-3839202ab8ea",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FOURIER_CORE",
+        "content_hash": "e2bf835e30fee2a94842e74f9083df8aaf37c2b4a185e740cc24a69ca910b401"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/lean-evidence/certificates/C_FOURIER_CORE-6075e139f6a7437c.json"
+    },
+    {
+      "evidence_id": "judgement-C_BALANCED_SPLITTING-cdc380720caf",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_BALANCED_SPLITTING",
+        "content_hash": "bb5c2af1f9da1c3ac975feeb519df1ac32ab5dc7570ee7354af4e2676b5b60f8"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_SPLITTING-6cd13c597cc9",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SPLITTING",
+        "content_hash": "3790e9488365f46a76bfebb363b8d44f33647a5a55fb451520e145d0d968cf8e"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_TAGGED_OVERLAP-50ba5ee6ea34",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_TAGGED_OVERLAP",
+        "content_hash": "b1f7a726098af4166d9580321c2988df542cb23497224e736dd5539e40771680"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_ADAPTIVE_INDUCTION-7c3fe4efa855",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_ADAPTIVE_INDUCTION",
+        "content_hash": "725e33d6802cec18b34cd2aaf9b0f4021f1095250d580ed1c72081cff345c892"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_FOURIER_RANK-e7e5c6f83ecf",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FOURIER_RANK",
+        "content_hash": "e45f80b5e7aa01abdad43ba1bd7c0683fc5a6893b155361467d9be8a494ac918"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_SHARP_FOURIER-e8ec65cf4bd0",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SHARP_FOURIER",
+        "content_hash": "25d55367322a9534c9dc16be2b0e0c1b3519550dd22767f1b29421fa28d6a8b6"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_SOURCE_SHARP-4f2aa1c81cad",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SOURCE_SHARP",
+        "content_hash": "028a956ee4440f2f618807a635674dc890db0f837155072173fad5f44271d444"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C_FOURIER_TRANSFER-f0d211ea5e4a",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_FOURIER_TRANSFER",
+        "content_hash": "fd09f3299b0a9edac564e8a1188ea092766f6ed1168b9917c8e39336d5f42f75"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/theorem.md"
+    },
+    {
+      "evidence_id": "judgement-C9000126-aaf67a78d806",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C9000126",
+        "content_hash": "95ad8e9e8f505801b0446413cea7cc6194e953de18cd2a5ec4b18f4a7abc32e0"
+      },
+      "tier": "judgement",
+      "verdict": "inconclusive",
+      "produced_by": "reviewer:f03d2e1f5c37",
+      "artifact": "research/fourier-transfer/theorem.md"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_FOURIER_UNIVERSAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C9000126",
+        "content_hash": "95ad8e9e8f505801b0446413cea7cc6194e953de18cd2a5ec4b18f4a7abc32e0"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_FOURIER_TRANSFER",
+          "content_hash": "fd09f3299b0a9edac564e8a1188ea092766f6ed1168b9917c8e39336d5f42f75"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_FOURIER_TRANSFER_PROOF",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_FOURIER_TRANSFER",
+        "content_hash": "fd09f3299b0a9edac564e8a1188ea092766f6ed1168b9917c8e39336d5f42f75"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_SPLITTING",
+          "content_hash": "3790e9488365f46a76bfebb363b8d44f33647a5a55fb451520e145d0d968cf8e"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_TAGGED_OVERLAP",
+          "content_hash": "b1f7a726098af4166d9580321c2988df542cb23497224e736dd5539e40771680"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_ADAPTIVE_INDUCTION",
+          "content_hash": "725e33d6802cec18b34cd2aaf9b0f4021f1095250d580ed1c72081cff345c892"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_FOURIER_RANK",
+          "content_hash": "e45f80b5e7aa01abdad43ba1bd7c0683fc5a6893b155361467d9be8a494ac918"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_BALANCED_SPLITTING",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_SPLITTING",
+        "content_hash": "3790e9488365f46a76bfebb363b8d44f33647a5a55fb451520e145d0d968cf8e"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_BALANCED_SPLITTING",
+          "content_hash": "bb5c2af1f9da1c3ac975feeb519df1ac32ab5dc7570ee7354af4e2676b5b60f8"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_SHARP_TRANSFER",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_FOURIER_TRANSFER",
+        "content_hash": "fd09f3299b0a9edac564e8a1188ea092766f6ed1168b9917c8e39336d5f42f75"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_SHARP_FOURIER",
+          "content_hash": "25d55367322a9534c9dc16be2b0e0c1b3519550dd22767f1b29421fa28d6a8b6"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_SHARP_FOURIER_PROOF",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_SHARP_FOURIER",
+        "content_hash": "25d55367322a9534c9dc16be2b0e0c1b3519550dd22767f1b29421fa28d6a8b6"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_BALANCED_SPLITTING",
+          "content_hash": "bb5c2af1f9da1c3ac975feeb519df1ac32ab5dc7570ee7354af4e2676b5b60f8"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_TAGGED_OVERLAP",
+          "content_hash": "b1f7a726098af4166d9580321c2988df542cb23497224e736dd5539e40771680"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_ADAPTIVE_INDUCTION",
+          "content_hash": "725e33d6802cec18b34cd2aaf9b0f4021f1095250d580ed1c72081cff345c892"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_FOURIER_RANK",
+          "content_hash": "e45f80b5e7aa01abdad43ba1bd7c0683fc5a6893b155361467d9be8a494ac918"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_SOURCE_SHARP",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_SOURCE_SHARP",
+        "content_hash": "028a956ee4440f2f618807a635674dc890db0f837155072173fad5f44271d444"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_SHARP_FOURIER",
+          "content_hash": "25d55367322a9534c9dc16be2b0e0c1b3519550dd22767f1b29421fa28d6a8b6"
+        }
+      ],
+      "retired_because": ""
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "goal": "C9000060",
+  "routes": [
+    {
+      "name": "R_CYL_FULL_CHARGING",
+      "status": "current",
+      "evidence": "research/cylinder_compactness/report.md",
+      "goal": "C_CYL_UNIFORM",
+      "obligations": [
+        "C_CYL_FILL",
+        "C_CYL_CHAIN"
+      ]
+    },
+    {
+      "name": "R_CYL_BISHOP_SOURCE",
+      "status": "ruled_out",
+      "evidence": "research/cylinder_compactness/report.md",
+      "retired_because": "The original compactness theorem text could not be obtained through the bounded legal access routes tried. A direct Stokes proof replaces the citation; no mathematical refutation of Bishop or Harvey-Shiffman is asserted."
+    }
+  ],
+  "nodes": {
+    "C9000060": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 060 (The Global Spherical Shell conjecture.; papers: Global Spherical Shells on Minimal Surfaces of Class VII; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_CYL_UNIFORM",
+        "C_CYL_APPLICATION"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/cylinder_compactness/report.md"
+      ]
+    },
+    "C_CYL_AREA_LOWER": {
+      "statement": "A relatively compact holomorphic sublevel through q over B(q,s) has Euclidean vertical energy at least pi*s^2, allowing branching and source holes.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/cylinder_compactness/report.md",
+        "research/cylinder_compactness/jacobian_payload.json",
+        "research/cylinder_compactness/jacobian_result.json"
+      ]
+    },
+    "C_CYL_FILL": {
+      "statement": "A holomorphic graph closed in D(0,2R) x B_C2(0,4r), marked at (0,0), with vertical energy <= r^2/65536, fills D(0,R) with image in B(0,r/2).",
+      "status": "open",
+      "depends_on": ["C_CYL_AREA_LOWER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cylinder_compactness/report.md"]
+    },
+    "C_CYL_CHAIN": {
+      "statement": "For P>=4*K^2, the sum of derivative suprema over any finite or one-sided infinite flat chain is <=8*P*K*r; a two-sided infinite chain forces constancy.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cylinder_compactness/report.md"]
+    },
+    "C_CYL_UNIFORM": {
+      "statement": "The explicit universal geometry-only target-slab estimate holds for every admissible proper cylinder-domain map and multiplier, with C*M*E on the full cylinder and C_end*M*(1+E) on a cut end.",
+      "status": "open",
+      "depends_on": ["C_CYL_FILL", "C_CYL_CHAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/cylinder_compactness/report.md",
+        "research/cylinder_compactness/verify.py",
+        "research/cylinder_compactness/exact_certificate.json"
+      ]
+    },
+    "C_CYL_GAUGE": {
+      "statement": "The periodic gauge for a in L1 intersect L2 has uniformly bounded full strip W12 norms and both exponential signs are stripwise Lp-integrable for every fixed finite p; the embedding is proved directly.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cylinder_compactness/report.md"]
+    },
+    "C_CYL_APPLICATION": {
+      "statement": "Conditional on the open manuscript inputs AREA, PLANAR, SECTION, and RESIDUE, the explicit slab theorem and periodic gauge preserve one exponent A and exclude every noncompact normalization.",
+      "status": "open",
+      "depends_on": [
+        "C_CYL_UNIFORM",
+        "C_CYL_GAUGE",
+        "M_AREA",
+        "M_GENUS",
+        "M_SECTION",
+        "M_RESIDUE",
+        "M_WEIGHTED"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": ["research/cylinder_compactness/report.md"]
+    },
+    "M_CYL_ESTIMATE": {
+      "statement": "Literal manuscript cylinder:estimate: geometry-only C0,R0 control the target-slab integral by C0*M*(1+E), also on a cut full end.",
+      "status": "open",
+      "depends_on": ["C_CYL_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/cylinder.tex"
+      ]
+    },
+    "M_AREA": {
+      "statement": "Manuscript curve:area supplies a geometry-only negative-slab area exponent A, common to every reduced component and each fixed deck translate.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/curves.tex"
+      ]
+    },
+    "M_GENUS": {
+      "statement": "Manuscript curve:genus gives genus zero and a conformal embedding of every noncompact component normalization into the sphere.",
+      "status": "open",
+      "depends_on": ["M_AREA", "M_RESIDUE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/curves.tex"
+      ]
+    },
+    "M_SECTION": {
+      "statement": "For the required compact data, manuscript compact:section constructs E,s,D with end limits (1,0) and arbitrary prescribed finite connection-decay rate.",
+      "status": "open",
+      "depends_on": ["M_WEIGHTED", "M_COMPACT_CLASSES"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/weighted.tex"
+      ]
+    },
+    "M_WEIGHTED": {
+      "statement": "Manuscript weighted:currents gives fixed-space finite-dimensionality, scalar vanishing, positive-tail uniqueness for primitives, and order-zero current membership at any exponent below b.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/curves.tex",
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/weighted.tex"
+      ]
+    },
+    "M_RESIDUE": {
+      "statement": "Manuscript curve:residue gives independence of all finite families in a single fixed-bundle weighted space and impossibility even of one admissible scalar differential.",
+      "status": "open",
+      "depends_on": ["M_WEIGHTED"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/curves.tex"
+      ]
+    },
+    "M_CYL_COMPACT": {
+      "statement": "Manuscript cylinder:compactness: every irreducible component of D is compact with rational normalization.",
+      "status": "open",
+      "depends_on": ["C_CYL_APPLICATION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/cylinder.tex"
+      ]
+    },
+    "M_CURVE_COUNT": {
+      "statement": "The manuscript's compact-class Laurent pairing and compact rational divisor components imply at least b2 rational curves, with equality in the no-square-zero case.",
+      "status": "open",
+      "depends_on": ["M_CYL_COMPACT", "M_SECTION", "M_COMPACT_CLASSES"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/conclusion.tex"
+      ]
+    },
+    "M_COMPACT_CLASSES": {
+      "statement": "Manuscript compact:classes constructs d>=n*b2-C0 compact line-bundle classes in one open period, with independent transferred classes, matching pairings, and e_i^2=K_Y.e_i=-m_i<0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/compact-data.tex"
+      ]
+    },
+    "M_REDUCTIONS": {
+      "statement": "The manuscript invokes Enoki and Dloussky-Oeljeklaus-Toma to obtain a shell from a nonzero square-zero effective divisor or exactly b2 rational curves.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/sections/surfaces.tex"
+      ]
+    },
+    "M_GSS_MAIN": {
+      "statement": "Manuscript thm:main: every compact connected minimal class VII complex surface with b2>0 has a global spherical shell with connected complement.",
+      "status": "open",
+      "depends_on": ["M_REDUCTIONS", "M_CURVE_COUNT", "M_SECTION", "M_CYL_COMPACT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Global-Spherical-Shells-on-Minimal-Surfaces-of-Class-VII-September-24-2026/build/paper.tex"
+      ]
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FOURIER_CORE-990677dc28ff",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/126/first-pass/fourier-transfer/lean-evidence/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/126/first-pass/fourier-transfer/lean-evidence/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16003,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/126/first-pass/fourier-transfer/lean-evidence/Main.lean",
+    "source_sha256": "a683234aae74b93dea63707dec0000106ce677294306fb853ddb553b1d96a73d",
+    "statement_fidelity": "families/126/first-pass/fourier-transfer/lean-evidence/statement_fidelity.md",
+    "statement_fidelity_sha256": "28c25d555c2f9c336de69e972d64ba1448b0445b65c44e15c9c3937473aca487",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/fourier-transfer/lean-evidence/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace FourierTransfer\n\nvariable {Y X Row OtherRow Col Frequency Label : Type*}\n\ndef frobSq [Fintype Row] [Fintype Col] (A : Matrix Row Col ℝ) : ℝ :=\n  ∑ i, ∑ j, (A i j) ^ 2\n\ntheorem frobSq_nonneg [Fintype Row] [Fintype Col] (A : Matrix Row Col ℝ) :\n    0 ≤ frobSq A := by\n  exact Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => sq_nonneg _\n\ntheorem frobSq_sub_le [Fintype Row] [Fintype Col]\n    (A B : Matrix Row Col ℝ) :\n    frobSq (A - B) ≤ 2 * frobSq A + 2 * frobSq B := by\n  unfold frobSq\n  calc\n    ∑ i, ∑ j, ((A - B) i j) ^ 2 ≤\n        ∑ i, ∑ j, (2 * (A i j) ^ 2 + 2 * (B i j) ^ 2) := by\n      apply Finset.sum_le_sum\n      intro i _\n      apply Finset.sum_le_sum\n      intro j _\n      change (A i j - B i j) ^ 2 ≤ _\n      nlinarith [sq_nonneg (A i j + B i j)]\n    _ = _ := by simp_rw [Finset.sum_add_distrib, Finset.mul_sum]\n\ndef tagCoefficient (normalization : ℝ) (chi : Frequency → Y → ℝ)\n    (s : Y → X → ℝ) (U : X → Matrix Row Col ℝ)\n    (z : Frequency) : Matrix (Y × X × Row) Col ℝ :=\n  fun k j => normalization * chi z k.1 * s k.1 k.2.1 * U k.2.1 k.2.2 j\n\ntheorem tagged_overlap_entry [Fintype Y] [Fintype X] [Fintype Row]\n    (normalization : ℝ) (chi : Frequency → Y → ℝ)\n    (s : Y → X → ℝ) (U : X → Matrix Row Col ℝ)\n    (z z' : Frequency) (j k : Col) :\n    ((tagCoefficient normalization chi s U z).transpose *\n        tagCoefficient normalization chi s U z') j k =\n      normalization ^ 2 *\n        ∑ y, chi z y * chi z' y *\n          ∑ x, (s y x) ^ 2 * ((U x).transpose * U x) j k := by\n  classical\n  simp only [Matrix.mul_apply, Matrix.transpose_apply, tagCoefficient,\n    Fintype.sum_prod_type, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro y _\n  apply Finset.sum_congr rfl\n  intro x _\n  apply Finset.sum_congr rfl\n  intro row _\n  ring\n\ndef taggedStack [DecidableEq Y] (s : Y → X → ℝ)\n    (H : X → Matrix Row Col ℝ) (y : Y) :\n    Matrix (Y × X × Row) Col ℝ :=\n  fun k j => if k.1 = y then s y k.2.1 * H k.2.1 k.2.2 j else 0\n\ntheorem tagged_square_entry [Fintype Y] [Fintype X] [Fintype Row]\n    [DecidableEq Y] (s : Y → X → ℝ) (H : X → Matrix Row Col ℝ)\n    (y : Y) (j k : Col) :\n    ((taggedStack s H y).transpose * taggedStack s H y) j k =\n      ∑ x, (s y x) ^ 2 * ((H x).transpose * H x) j k := by\n  classical\n  simp only [Matrix.mul_apply, Matrix.transpose_apply, taggedStack,\n    Fintype.sum_prod_type]\n  calc\n    _ = ∑ tag : Y, if tag = y then\n          ∑ x, (s y x) ^ 2 * ∑ row, H x row j * H x row k else 0 := by\n      apply Finset.sum_congr rfl\n      intro tag _\n      by_cases htag : tag = y\n      · simp only [htag, if_true, Finset.mul_sum]\n        apply Finset.sum_congr rfl\n        intro x _\n        apply Finset.sum_congr rfl\n        intro row _\n        ring\n      · simp [htag]\n    _ = _ := by simp\n\ntheorem resolution_square [Fintype Row] [Fintype Label] [DecidableEq Row]\n    (P : Label → Matrix Row Row ℝ) (H : Matrix Row Col ℝ)\n    (hsym : ∀ s, (P s).transpose = P s)\n    (hid : ∀ s, P s * P s = P s) (hsum : ∑ s, P s = 1) :\n    ∑ s, (P s * H).transpose * (P s * H) = H.transpose * H := by\n  have hterm (s : Label) :\n      (P s * H).transpose * (P s * H) = H.transpose * P s * H := by\n    calc\n      _ = H.transpose * ((P s).transpose * P s) * H := by\n        simp only [Matrix.transpose_mul, Matrix.mul_assoc]\n      _ = _ := by rw [hsym, hid]\n  simp_rw [hterm]\n  rw [← Matrix.sum_mul, ← Matrix.mul_sum, hsum]\n  simp\n\ntheorem noncommutative_block_gap [Fintype Row] [Fintype OtherRow]\n    (A B : Matrix Row Row ℝ) (C D : Matrix OtherRow OtherRow ℝ) (off : ℝ) :\n    Matrix.trace (A * B) + Matrix.trace (C * D) + 2 * off -\n        (Matrix.trace (B * B) + Matrix.trace (C * C)) =\n      Matrix.trace ((A - B) * B) + Matrix.trace (C * (D - C)) + 2 * off := by\n  simp only [sub_mul, mul_sub, Matrix.trace_sub]\n  ring\n\ntheorem balanced_step (d a b loss : ℝ) (hd : 1 / 2 ≤ d) (ha : 0 ≤ a)\n    (h : loss ≤ (1 + 2 * d) * a + 2 * d * b) :\n    loss ≤ (2 * d) * (2 * a + b) := by\n  nlinarith [mul_nonneg (show 0 ≤ 2 * d - 1 by linarith) ha]\n\nnoncomputable def splitConstant : ℕ → ℝ\n  | 0 => 0\n  | 1 => 1 / 2\n  | n + 2 => 2 * splitConstant (n + 1)\n\ntheorem splitConstant_formula (a : ℕ) :\n    splitConstant (a + 1) = (2 : ℝ) ^ (a + 1) / 4 := by\n  induction a with\n  | zero => norm_num [splitConstant]\n  | succ a ih =>\n      change 2 * splitConstant (a + 1) = (2 : ℝ) ^ (a + 1 + 1) / 4\n      rw [ih, pow_succ]\n      ring\n\ntheorem one_step_factor (L theta lam d mass : ℝ) (hL : L ≠ 0) :\n    L * (L * (mass / L ^ 2) +\n        lam ^ 2 * d * (L * (L - 1) * (theta * mass / L ^ 2))) =\n      (1 + (L - 1) * lam ^ 2 * d * theta) * mass := by\n  field_simp [hL]\n\ntheorem potential_iterate (phi : ℕ → ℝ) (g : ℝ) (hg : 0 ≤ g)\n    (hstep : ∀ n, phi (n + 1) ≤ g * phi n) (n : ℕ) :\n    phi n ≤ g ^ n * phi 0 := by\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      calc\n        phi (n + 1) ≤ g * phi n := hstep n\n        _ ≤ g * (g ^ n * phi 0) := mul_le_mul_of_nonneg_left ih hg\n        _ = g ^ (n + 1) * phi 0 := by rw [pow_succ]; ring\n\ntheorem mass_squared_conversion (mass r N phi initial growth : ℝ)\n    (hr : 0 ≤ r) (hmass : mass ^ 2 ≤ r * N ^ 2 * phi)\n    (hphi : phi ≤ initial * growth) :\n    mass ^ 2 ≤ r * N ^ 2 * (initial * growth) := by\n  exact hmass.trans (mul_le_mul_of_nonneg_left hphi (mul_nonneg hr (sq_nonneg N)))\n\nend FourierTransfer\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/fourier-transfer/lean-evidence/statement_fidelity.md",
+    "text": "# Statement fidelity: FourierTransfer algebraic core\n\nThe declarations in `Main.lean` are universally quantified over the finite\ntypes and real entries they name. They are not fixed-size rational examples.\n`Row` and `Col` are independent types, so rectangular dimensions are allowed.\nNo commutativity of matrix multiplication is assumed.\n\n* `tagged_overlap_entry` proves (F3) entrywise, with arbitrary finite tag,\n  input, and row sets, arbitrary column and frequency types, real functions\n  `chi` and `s`, real normalization, and arbitrary matrices `U(x)`.\n  Substituting `normalization = 1/L`, `s(y,x) = sqrt(pi_y^m(x))`,\n  and Walsh characters gives exactly the manuscript's tagged-stack overlap\n  identity, with the old weighted coefficient columns included in `Col`.\n  The row index is `Y x (X x Row)`. No cross product between different\n  tags appears in its conclusion.\n* `tagged_square_entry` proves exact pointwise reconstruction (F2).\n  It uses a tag equality test and arbitrary real `s`; the probability\n  specialization again uses `s^2 = pi`.\n* `resolution_square` proves exact square preservation under a finite\n  resolution by symmetric idempotent matrices summing to the identity.\n  Pairwise orthogonality is not needed for this identity.\n* `noncommutative_block_gap` verifies the trace algebra in (S1), with\n  `A,B,C,D` standing for `A11,B11,A22,B22`. The real variable `off`\n  stands for the squared Frobenius norm of the common off-diagonal block.\n  The two diagonal block sizes are independent (`Row` and `OtherRow`).\n  This declaration does not prove that these are spectral blocks, or\n  that any of its terms is nonnegative.\n* `frobSq_sub_le` is the squared triangle inequality for arbitrary finite\n  rectangular real matrices; `frobSq_nonneg` proves nonnegativity.\n* `balanced_step` proves (S4)'s scalar charging implication from explicitly\n  stated hypotheses `d >= 1/2`, `a >= 0`, and the preceding loss bound.\n  `splitConstant_formula` proves the closed form of the binary-height\n  recurrence, namely `splitConstant(a+1) = 2^(a+1)/4`. It does not assert\n  the existence of the matrix projections.\n* `one_step_factor` proves the exact ordered-count simplification in\n  (F7) for arbitrary real parameters with `L != 0`.\n* `potential_iterate` proves the universal homogeneous scalar recurrence.\n  The heterogeneous product recurrence in the mathematical theorem is\n  proved by induction in the accompanying proof, not by this declaration.\n* `mass_squared_conversion` propagates a Gram-potential bound through the\n  squared rank/branch estimate, assuming that estimate explicitly.\n  It does not formalize Cauchy-Schwarz or matrix ranks.\n\nThe full universal theorem, including noncommuting spectral splitting,\ncharacter orthogonality, probability conditioning, selection of projection\nfamilies, matrix Cauchy-Schwarz, and final mass conversion, is proved in\n`research/fourier-transfer/theorem.md`. Those analytic and spectral parts\nare **not fully formalized**. A compiler success supports the claim\n`C_FOURIER_CORE`, not a claim that the entire Fourier theorem or matching\nlower bound has been checked by Lean.\n\nThere are no additional axioms or external theorem declarations in this\nfile. Mathlib's ordinary real-number, matrix, finite-sum, and tactic\ninfrastructure is used. The exact rational Python replays are finite\nregressions, not the proof of the universal quantifiers.\n"
+  },
+  "subject": {
+    "content_hash": "e2bf835e30fee2a94842e74f9083df8aaf37c2b4a185e740cc24a69ca910b401",
+    "kind": "claim",
+    "subject_id": "C_FOURIER_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-V_LPT_L2_STEP-03101316f7c0",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/171/first-pass/late-prefix-transfer/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/171/first-pass/late-prefix-transfer/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15798,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/171/first-pass/late-prefix-transfer/Main.lean",
+    "source_sha256": "ea59235c6d11635d563cf49bee8275679c00e77441fc1ee9b38a6047e3c230d5",
+    "statement_fidelity": "families/171/first-pass/late-prefix-transfer/statement_fidelity.md",
+    "statement_fidelity_sha256": "e9930cd9e234ef571f6f5215dce5c648af385556b131fc253c2a76de24d0a17d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/late-prefix-transfer/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace LatePrefixTransfer\n\ntheorem quadratic_identity (r z : ℝ) :\n    (r * z) ^ 2 = r ^ 2 + 2 * r ^ 2 * (z - 1) + r ^ 2 * (z - 1) ^ 2 := by\n  ring\n\ntheorem pointwise_step (r z a B M e : ℝ)\n    (hdev : (z - 1) ^ 2 ≤ a ^ 2 + M ^ 2 * e)\n    (hbar : r ^ 2 * e ≤ B ^ 2 * e) :\n    (r * z) ^ 2 ≤\n      (1 + a ^ 2) * r ^ 2 + 2 * r ^ 2 * (z - 1) + B ^ 2 * M ^ 2 * e := by\n  have hvar := mul_le_mul_of_nonneg_left hdev (sq_nonneg r)\n  have hexc := mul_le_mul_of_nonneg_left hbar (sq_nonneg M)\n  nlinarith [quadratic_identity r z]\n\ntheorem barrier_on_live_exception (r B e : ℝ) (he : 0 ≤ e)\n    (hlive : e = 0 ∨ (0 ≤ r ∧ r ≤ B)) :\n    r ^ 2 * e ≤ B ^ 2 * e := by\n  rcases hlive with hzero | ⟨hr, hrB⟩\n  · simp [hzero]\n  · have hs : r ^ 2 ≤ B ^ 2 := by nlinarith\n    exact mul_le_mul_of_nonneg_right hs he\n\ntheorem integrated_step {ι : Type*} (s : Finset ι)\n    (p r z e : ι → ℝ) (a B M eps : ℝ)\n    (hp : ∀ i ∈ s, 0 ≤ p i)\n    (hdev : ∀ i ∈ s, (z i - 1) ^ 2 ≤ a ^ 2 + M ^ 2 * e i)\n    (hbar : ∀ i ∈ s, r i ^ 2 * e i ≤ B ^ 2 * e i)\n    (hmean : ∑ i ∈ s, p i * r i ^ 2 * (z i - 1) = 0)\n    (hexc : ∑ i ∈ s, p i * e i ≤ eps) :\n    (∑ i ∈ s, p i * (r i * z i) ^ 2) ≤\n      (1 + a ^ 2) * (∑ i ∈ s, p i * r i ^ 2) + B ^ 2 * M ^ 2 * eps := by\n  calc\n    (∑ i ∈ s, p i * (r i * z i) ^ 2) ≤\n        ∑ i ∈ s, p i * ((1 + a ^ 2) * r i ^ 2 +\n          2 * r i ^ 2 * (z i - 1) + B ^ 2 * M ^ 2 * e i) := by\n      apply Finset.sum_le_sum\n      intro i hi\n      exact mul_le_mul_of_nonneg_left\n        (pointwise_step (r i) (z i) a B M (e i) (hdev i hi) (hbar i hi)) (hp i hi)\n    _ = ∑ i ∈ s, ((1 + a ^ 2) * (p i * r i ^ 2) +\n          2 * (p i * r i ^ 2 * (z i - 1)) + (B ^ 2 * M ^ 2) * (p i * e i)) := by\n      apply Finset.sum_congr rfl\n      intro i hi\n      ring\n    _ = (1 + a ^ 2) * (∑ i ∈ s, p i * r i ^ 2) +\n          2 * (∑ i ∈ s, p i * r i ^ 2 * (z i - 1)) +\n          (B ^ 2 * M ^ 2) * (∑ i ∈ s, p i * e i) := by\n      simp only [Finset.sum_add_distrib, ← Finset.mul_sum]\n    _ ≤ (1 + a ^ 2) * (∑ i ∈ s, p i * r i ^ 2) + B ^ 2 * M ^ 2 * eps := by\n      rw [hmean]\n      have h := mul_le_mul_of_nonneg_left hexc\n        (mul_nonneg (sq_nonneg B) (sq_nonneg M))\n      linarith\n\ntheorem iterated_bound (v : ℕ → ℝ) (q c : ℝ)\n    (hq : 1 ≤ q) (hc : 0 ≤ c) (hzero : v 0 ≤ 1)\n    (hstep : ∀ t, v (t + 1) ≤ q * v t + c) :\n    ∀ t, v t ≤ q ^ t * (1 + (t : ℝ) * c) := by\n  have hq0 : 0 ≤ q := by linarith\n  have hpow : ∀ t : ℕ, 1 ≤ q ^ t := by\n    intro t\n    induction t with\n    | zero => simp\n    | succ t ih =>\n      rw [pow_succ]\n      nlinarith\n  intro t\n  induction t with\n  | zero => simpa using hzero\n  | succ t ih =>\n    calc\n      v (t + 1) ≤ q * v t + c := hstep t\n      _ ≤ q * (q ^ t * (1 + (t : ℝ) * c)) + c := by\n        have h := mul_le_mul_of_nonneg_left ih hq0\n        linarith\n      _ = q ^ (t + 1) * (1 + (t : ℝ) * c) + c := by\n        rw [pow_succ]\n        ring\n      _ ≤ q ^ (t + 1) * (1 + ((t + 1 : ℕ) : ℝ) * c) := by\n        have h := mul_nonneg (sub_nonneg.mpr (hpow (t + 1))) hc\n        push_cast\n        nlinarith\n\nend LatePrefixTransfer\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/late-prefix-transfer/statement_fidelity.md",
+    "text": "# Statement fidelity of the finite weighted likelihood core\n\nClaim: `V_LPT_L2_STEP`. Source: `Main.lean`, namespace\n`LatePrefixTransfer`. Scalar objects are real numbers; indices are\narbitrary types restricted to an arbitrary finite set. Every displayed\nhypothesis is universally quantified. No probability-space or\nindependence assumption is hidden in the Lean declarations.\n\n`quadratic_identity` proves the exact expansion of the updated\nlikelihood square `(r*z)^2` into the previous square, its linear\nincrement, and its quadratic increment.\n\n`pointwise_step` assumes `(z-1)^2 <= a^2 + M^2*e` and the\nexception-local barrier `r^2*e <= B^2*e`. It concludes the precise\npointwise second-moment bound. There is deliberately no global\nassumption `r<=B`, since a previously stopped path may have overshot.\n\n`barrier_on_live_exception` proves that exception-local barrier\nfrom `e>=0` and either `e=0` or `0<=r<=B`. Thus a frozen path\ncan have any likelihood value while its live-exception weight is\nzero.\n\n`integrated_step` takes finite nonnegative weights `p`, the\npointwise variance and exception-local barrier inequalities, a\nzero **integrated** linear term\n`sum p*r^2*(z-1)=0`, and only the integrated exception bound\n`sum p*e<=eps`. Its conclusion is\n\n    sum p*(r*z)^2 <= (1+a^2)*sum p*r^2 + B^2*M^2*eps.\n\nThe weights need not sum to one. In the report they contain the\nraw state probability, the uniform witness probability, and the\nallowed-witness indicator. Here `r` is the previously stopped\nlikelihood, `z` its next stopped multiplier, and `e` is the\nindicator of a live next exception. The martingale property\nsupplies the zero integrated linear term. No hypothesis bounds\nthe conditional exception probability at individual histories.\n\n`iterated_bound` takes a real sequence `v`, `q>=1`, `c>=0`,\n`v(0)<=1`, and the recurrence `v(t+1)<=q*v(t)+c`. For every\nnatural `t` it proves `v(t)<=q^t*(1+t*c)`. Substitution\n`q=1+a^2`, `c=B^2*M^2*eps`, and `t=L` gives the report's\nstopped second-moment bound `H_*`.\n\nThese declarations formalize the algebraic integration and iteration\nneeded in Theorem 1 of `report.md`. They do not encode the\nconditional-probability definitions, the proof that adaptive\ntranscripts are cylinders, the survival estimates, discrepancy,\nthe geometric simulation, Cauchy--Schwarz, or the main Ramsey\ntheorem. Those are proved in the report or explicitly left as\nupstream assumptions. Compiler success must not be described as\nformal verification of those unencoded statements.\n"
+  },
+  "subject": {
+    "content_hash": "c1f768cbfba9ca2e05f769a5ccd77198f016c38ca3ded111c14b39723c35b2f2",
+    "kind": "claim",
+    "subject_id": "V_LPT_L2_STEP"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

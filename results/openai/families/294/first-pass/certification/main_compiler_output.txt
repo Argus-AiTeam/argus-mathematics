@@ -1,0 +1,13 @@
+def OAI.Kaplansky.MainTarget : Prop :=
+∃ A inst,
+  TopologicalSpace.SeparableSpace A ∧
+    (∃ τ, τ.Normalized ∧ τ.IsTwo) ∧
+      ∃ a b,
+        OAI.Kaplansky.PositiveContraction a ∧
+          OAI.Kaplansky.PositiveContraction b ∧
+            ∀ (τ : OAI.Kaplansky.OneQuasitrace A),
+              τ.Normalized → τ.IsTwo → 1 / 144 ≤ (τ.toFun (a + b) - τ.toFun a - τ.toFun b).re
+def OAI.Kaplansky.OneQuasitrace.IsTwo.{u_1} : {A : Type u_1} →
+  [inst : CStarAlgebra A] → OAI.Kaplansky.OneQuasitrace A → Prop :=
+fun {A} [CStarAlgebra A] τ => ∃ σ, ∀ (a : A), σ.toFun (OAI.Kaplansky.upperLeft a) = τ.toFun a
+'Certification294.main' depends on axioms: [propext, Classical.choice, Quot.sound]

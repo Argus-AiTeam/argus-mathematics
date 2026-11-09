@@ -1,0 +1,184 @@
+{
+  "goal": "C9000082",
+  "routes": [
+    {
+      "name": "R_SHARED_FULL",
+      "status": "parked",
+      "evidence": "research/certificates/shared_trace/proof.md",
+      "retired_because": "The original goal version was superseded when the completed formal statement was attached. R_SHARED_KERNEL targets that exact current statement; no mathematical counterexample killed the comparison route."
+    },
+    {
+      "name": "R_SHARED_KERNEL",
+      "status": "current",
+      "evidence": "research/certificates/shared_trace/exact_certificate.json"
+    },
+    {
+      "name": "R_MAXIMAL_MANUSCRIPT",
+      "status": "untried",
+      "evidence": "research/openai_manuscript"
+    },
+    {
+      "name": "R_ANNULAR_MANUSCRIPT",
+      "status": "untried",
+      "evidence": "research/openai_manuscript"
+    },
+    {
+      "name": "R_DYADIC_MANUSCRIPT",
+      "status": "untried",
+      "evidence": "research/openai_manuscript"
+    }
+  ],
+  "nodes": {
+    "C9000082": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 082 (Annular variation and dyadic absolute bounds for the triangular Hilbert transform.; papers: Annular variation of the triangular Hilbert transform at the symmetric point; An L³ bound for the dyadic triangular Hilbert form; The maximal triangular Hilbert transform at the symmetric point; Lean status: Partially/Comparator formalized (lean/docs/082.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_SHARED_MIXED_TRACE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/certificates/shared_trace/exact_certificate.json"
+      ]
+    },
+    "C_SHARED_MIXED_TRACE": {
+      "statement": "The complete dimension-free 5/3 mixed-trace inequality over complex spaces, with unequal dimensions and supported singular Grams.",
+      "status": "open",
+      "depends_on": [
+        "L_SUPPORTED_HESSIAN",
+        "L_HESSIAN_ORDER",
+        "L_COMMON_METRIC",
+        "L_CUBIC_TRACE",
+        "L_COMPLEX_PHASE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/The-maximal-triangular-Hilbert-transform-at-the-symmetric-point-September-24-2026/build/sections/trace.tex",
+        "research/openai_manuscript/Annular-variation-of-the-triangular-Hilbert-transform-at-the-symmetric-point-October-5-2026/build/sections/matrix.tex",
+        "research/openai_manuscript/An-L3-bound-for-the-dyadic-triangular-Hilbert-form-October-5-2026/build/sections/03-trace.tex",
+        "research/certificates/shared_trace/Main.lean",
+        "research/certificates/shared_trace/statement_fidelity.md",
+        "research/certificates/shared_trace/proof.md",
+        "research/certificates/shared_trace/exact_certificate.json",
+        "research/certificates/shared_trace/certificates/C_SHARED_MIXED_TRACE-360b4a74160fb918.json"
+      ]
+    },
+    "L_SUPPORTED_HESSIAN": {
+      "statement": "The supported spectral Hessian formula and its unitary and zero-extension invariance.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/certificates/shared_trace/hessian/Hessian.lean",
+        "research/certificates/shared_trace/proof.md"
+      ]
+    },
+    "L_HESSIAN_ORDER": {
+      "statement": "P <= a Q implies b_P(K) >= a^(-1/2) b_Q(K), on the stated supports.",
+      "status": "open",
+      "depends_on": ["L_SUPPORTED_HESSIAN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/certificates/shared_trace/hessian/Hessian.lean",
+        "research/certificates/shared_trace/proof.md"
+      ]
+    },
+    "L_COMMON_METRIC": {
+      "statement": "The three star costs dominate (1/3)b_(M^2)(MDM), without invertibility.",
+      "status": "open",
+      "depends_on": ["L_SUPPORTED_HESSIAN", "L_HESSIAN_ORDER"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/certificates/shared_trace/assembly/Blocks.lean",
+        "research/certificates/shared_trace/exact_certificate.json"
+      ]
+    },
+    "L_CUBIC_TRACE": {
+      "statement": "The full Hermitian spectral cubic trace estimate |tr((DM)^3)| <= 5 ||D|| Q, including zero and repeated eigenvalues.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/certificates/shared_trace/cubic/SpectralCubic.lean",
+        "research/certificates/shared_trace/assembly/General.lean",
+        "research/certificates/shared_trace/exact_certificate.json"
+      ]
+    },
+    "L_COMPLEX_PHASE": {
+      "statement": "The two triangle orientations are conjugates, and one-edge phase changes preserve all supported star costs.",
+      "status": "open",
+      "depends_on": ["L_SUPPORTED_HESSIAN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/certificates/shared_trace/assembly/Trace.lean",
+        "research/certificates/shared_trace/assembly/Phase.lean",
+        "research/certificates/shared_trace/Main.lean",
+        "research/certificates/shared_trace/exact_certificate.json"
+      ]
+    },
+    "C_MAXIMAL_MAIN": {
+      "statement": "The pointwise hard-truncation maximal L^3 x L^3 -> L^(3/2) estimate.",
+      "status": "open",
+      "depends_on": ["C_SHARED_MIXED_TRACE", "L_HEAT_DISSIPATION", "L_OUTPUT_DEPENDENT_MASKS", "L_ANALYTIC_COMPLETION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-maximal-triangular-Hilbert-transform-at-the-symmetric-point-September-24-2026/build/sections/introduction.tex"]
+    },
+    "C_ANNULAR_VARIATION": {
+      "statement": "The full pointwise annular r-variation L^3 x L^3 -> L^(3/2) estimate for every r > 2.",
+      "status": "open",
+      "depends_on": ["C_SHARED_MIXED_TRACE", "L_HEAT_DISSIPATION", "L_OUTPUT_DEPENDENT_MASKS", "L_FREQUENCY_BLOCK", "L_ANALYTIC_COMPLETION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Annular-variation-of-the-triangular-Hilbert-transform-at-the-symmetric-point-October-5-2026/build/sections/introduction.tex"]
+    },
+    "C_DYADIC_ABSOLUTE": {
+      "statement": "The real dyadic XOR-admissible absolute local-form estimate with constant 40.",
+      "status": "open",
+      "depends_on": ["C_SHARED_MIXED_TRACE", "L_DYADIC_SPLIT", "L_DYADIC_SUMMATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-L3-bound-for-the-dyadic-triangular-Hilbert-form-October-5-2026/build/sections/01-introduction.tex"]
+    },
+    "L_DYADIC_SPLIT": {
+      "statement": "The four XOR-admissible children yield the asserted nonnegative local energy defect.",
+      "status": "open",
+      "depends_on": ["L_SUPPORTED_HESSIAN", "L_HESSIAN_ORDER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-L3-bound-for-the-dyadic-triangular-Hilbert-form-October-5-2026/build/sections/04-dyadic.tex"]
+    },
+    "L_DYADIC_SUMMATION": {
+      "statement": "The weighted energy bound, telescoping, continuity, and density give constant 40.",
+      "status": "open",
+      "depends_on": ["L_DYADIC_SPLIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-L3-bound-for-the-dyadic-triangular-Hilbert-form-October-5-2026/build/sections/05-summation.tex"]
+    },
+    "L_HEAT_DISSIPATION": {
+      "statement": "Gaussian-plane heat dissipation and initial-energy bounds control integrated star costs.",
+      "status": "open",
+      "depends_on": ["L_SUPPORTED_HESSIAN", "L_HESSIAN_ORDER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Annular-variation-of-the-triangular-Hilbert-transform-at-the-symmetric-point-October-5-2026/build/sections/heat.tex"]
+    },
+    "L_OUTPUT_DEPENDENT_MASKS": {
+      "statement": "Output-dependent entry switching and repeated masks have the asserted integrated energy cost.",
+      "status": "open",
+      "depends_on": ["L_HEAT_DISSIPATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-maximal-triangular-Hilbert-transform-at-the-symmetric-point-September-24-2026/build/sections/jumps.tex"]
+    },
+    "L_FREQUENCY_BLOCK": {
+      "statement": "The annular frequency-block estimate is uniform under the exact pointwise square-integral coefficient hypothesis.",
+      "status": "open",
+      "depends_on": ["L_HEAT_DISSIPATION", "L_OUTPUT_DEPENDENT_MASKS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Annular-variation-of-the-triangular-Hilbert-transform-at-the-symmetric-point-October-5-2026/build/sections/frequency.tex"]
+    },
+    "L_ANALYTIC_COMPLETION": {
+      "statement": "Hard-endpoint comparison, count and rank summation, and density complete the analytic assertions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript"]
+    }
+  }
+}

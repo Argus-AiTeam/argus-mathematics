@@ -1,0 +1,223 @@
+SOURCE STATEMENTS ONLY: not a review or certification of their proof bodies.
+Version: supplied MANUSCRIPTS.json revision 4eaee87548250b2682affda7d05d947c05554bae.
+Every file matched its existing reference-manifest hash before extraction.
+Definitions referenced in a statement remain in the named original source.
+
+main.tex:37: \title{Bounded-Step Walks on Gaussian Primes}
+main.tex:38: \author{OpenAI}
+main.tex:39: \date{September 26, 2026}
+
+=== main.tex:63-69 thm:main ===
+\begin{theorem}[Uniform component bound]\label{thm:main}\label{cor:uniform}
+For every finite real $D$ there is a finite $B_D$ such that every
+connected component of $G_D$ has at most $B_D$ vertices.
+The bound is independent of the starting prime and includes primes on
+the coordinate axes. Consequently every sequence of distinct Gaussian
+primes whose successive distances are at most $D$ has at most $B_D$ terms.
+\end{theorem}
+
+=== main.tex:120-125 thm:sieve ===
+\begin{theorem}[Finite sieve obstruction]\label{thm:sieve}
+For every $D\ge1$ there is a finite set $\mathcal P_D$ of rational
+primes congruent to $1$ modulo $4$ such that $\mathcal A(\mathcal P_D)$
+contains no infinite sequence of distinct points with successive distances
+at most $D$. The set $\mathcal P_D$ depends only on $D$.
+\end{theorem}
+
+=== periodicity.tex:8-22 prop:periodic ===
+\begin{proposition}[From a periodic obstruction to a uniform bound]
+\label{prop:periodic}
+Fix $D\ge1$ and a finite set $\mathcal P$ of rational primes congruent
+to $1$ modulo $4$. Suppose that $\mathcal A(\mathcal P)$ contains no
+infinite self-avoiding walk with steps at most $D$. Put
+\[
+ Q=\prod_{p\in\mathcal P}p,\qquad
+ K_D=\#\{v\in\Z[i]:|v|\le D\},
+\]
+and let $E$ be the set of associates of the selected Gaussian factors.
+For every component $C$ of $G_D$,
+\[
+ \#C\le\max\{Q^2,\ |E|+(K_D-1)|E|Q^2\}.
+\]
+\end{proposition}
+
+=== preliminaries.tex:119-131 lem:displacement ===
+\begin{lemma}[Displacement entropy]\label{lem:displacement}
+If \(T_0,T_1\) are jointly distributed finite random times and
+\(|T_1-T_0|\le n\) almost surely, then
+\[
+H(z_{T_1}-z_{T_0})\le2\log(n+1)+O_D(1).
+\]
+The same bound holds conditionally on any event or variable under
+which the time-difference bound still holds.
+If \(F\) is any finite vector of residue maps, then
+\[
+H(F(z_{T_1}))\ge H(F(z_{T_0}))-H(z_{T_1}-z_{T_0}).
+\]
+\end{lemma}
+
+=== preliminaries.tex:142-150 lem:continuity ===
+\begin{lemma}[Continuity]\label{lem:continuity}
+If two laws of \((X,Y)\), on the same finite product alphabet, have
+total variation at most \(\epsilon\le1/2\), and the product alphabet
+has at most \(a\) elements, then
+\[
+|H(X\mid Y)-H(\widetilde X\mid\widetilde Y)|
+\le 2h(\epsilon)+2\epsilon\log a.
+\]
+\end{lemma}
+
+=== preliminaries.tex:162-174 lem:list ===
+\begin{lemma}[A short-list entropy bound]\label{lem:list}
+Let \(X\) have at most \(a\) values, let \(Y\) be finite data, and let
+\(\mathcal L(Y)\) be a list of possible values of \(X\).
+If
+\[
+\Pr\{X\in\mathcal L(Y),\ |\mathcal L(Y)|\le b\}=\rho,
+\qquad 1\le b\le a,
+\]
+then
+\[
+\log a-H(X\mid Y)\ge \rho\log(a/b)-h(\rho).
+\]
+\end{lemma}
+
+=== coverage-transfer.tex:34-47 lem:conditioning ===
+\begin{lemma}[One shared conditioning cost]\label{lem:conditioning}
+Let $(Y,\calH)$ be any pair of finite variables, with $Y$ taking values
+in $\Lambda$, and let $S$ be selected independently as above. If
+\[
+ \E_S H(F_S(Y))\ge(1-\epsilon)s\overline L,
+ \qquad H(\calH)\le\kappa s\overline L,
+\]
+then
+\begin{equation}\label{eq:deficit-upper}
+ \av_c[\log p_c-H(\phi_c(Y)\mid\calH)]
+ \le(\epsilon+\kappa)\overline L.
+\end{equation}
+No independence between $Y$ and $\calH$ is required.
+\end{lemma}
+
+=== coverage-transfer.tex:102-129 thm:transfer ===
+\begin{theorem}[One-step coverage transfer]\label{thm:transfer}
+Use the signed coordinates and the experiment just defined, with
+integers $1\le s\le k$ and $n\ge1$. Let
+\[
+ 0<\tau\le3/8,\quad 0<\delta\le1/64,\quad
+ \tau'=\tau+4\delta,\quad 0<\beta'\le\beta<1,
+ \quad 0<\eta\le1,\quad 0\le\eta'\le1.
+\]
+Suppose that at every $a$ in the support of $A$, all but a fraction at
+most $\eta'$ of the signed coordinates have $(\tau',\beta')$ coverage
+for $\phi_c(y(a)+h_1)$ under the law conditional on $A=a$.
+Assume also
+\begin{align}
+ \E_S H(F_S(Y))&\ge(1-\epsilon)s\overline L,
+ &H(\calH)&\le\kappa s\overline L,\label{eq:transfer-entropy}\\
+ \eta'&\le\eta\delta/100,
+ &\epsilon+\kappa&\le\eta\delta\beta'/16,\label{eq:transfer-budget}
+\end{align}
+where $\epsilon,\kappa\ge0$. Finally, for every coordinate size $p=p_j$,
+assume
+\begin{align}
+ p\exp(-\delta^2np^{-\beta}/2)&\le\delta/100,
+ &\delta^{-1}&<p^{\beta'/2},\label{eq:transfer-size}\\
+ \log(2e/\delta)&\le(\beta'/4)\log T.\label{eq:transfer-log}
+\end{align}
+Then all but a fraction at most $\eta$ of the coordinates have
+$(\tau,\beta)$ coverage for $\phi_c(Z)$.
+\end{theorem}
+
+=== schedule.tex:94-110 lem:future-shift ===
+\begin{lemma}[Future shifts and smoothing]\label{lem:future-shift}
+Let \(V\) be a scheduled scale in a band with parameter \(g\).
+For all sufficiently large \(M\), the maximum total forward time shift
+from the checkpoint before \(V\) to any later checkpoint, including
+\(t_*\), is bounded by a deterministic number \(S_V\) satisfying
+\[
+\log(1+S_V)\le2gV.
+\]
+Consequently the entropy of its physical displacement is \(O_D(gV)\),
+for every starting law.
+Furthermore, conditional on any earlier exact checkpoint start,
+\begin{equation}\label{eq:smoothing}
+\TV\bigl(\mathcal L(t_*),\mathcal L(t_*+a)\bigr)
+\le T_+^{-9}\qquad
+(0\le a\le T_+,\ a\in\Z).
+\end{equation}
+\end{lemma}
+
+=== schedule.tex:406-414 prop:coverage ===
+\begin{proposition}[Terminal residue coverage]\label{prop:coverage}
+For all sufficiently large \(M\), uniformly over the batches,
+\(0\le i\le J\), and all exact start times \(a\ge0\) at \(A_i\),
+all but a fraction at most \(\eta_i\) of the signed primes satisfy
+\begin{equation}\label{eq:coverage}
+ \#\{u\in\Z[i]/(\pi):b_{i,a,\pi}(u)<\tau_i/p\}
+ <p^{1-\beta_i}.
+\end{equation}
+\end{proposition}
+
+=== information.tex:41-55 prop:information-rate ===
+\begin{proposition}[Information cost of one batch]
+\label{prop:information-rate}
+There is a constant \(c_1>0\), depending only on the fixed schedule
+parameters, such that for all sufficiently large \(M\) and every
+batch in \eqref{eq:batches},
+\begin{equation}
+ \frac{1}{L_T}\,
+ \E_{\mathcal C}
+ I\bigl(X'_T;W_{L_T}(t_*)\mid O'_T\bigr)
+ \ge \frac{c_1}{\log T}.
+ \label{eq:information-rate}
+\end{equation}
+The threshold for \(M\) is uniform over all infinite self-avoiding
+\(D\)-step walks in \(\mathcal A(\mathcal P_M)\).
+\end{proposition}
+
+=== information.tex:303-313 lem:telescope ===
+\begin{lemma}[A common-law entropy telescope]
+\label{lem:telescope}
+For every fixed collection \(\mathcal C\) of prime choices,
+\begin{equation}
+ \sum_T\frac{I(X'_T;W_{L_T}(t_*)\mid O'_T)}{L_T}
+ \le\log K_D+o(1),
+ \label{eq:information-telescope}
+\end{equation}
+where the error tends to zero uniformly over the choices and the walks
+as \(M\to\infty\).
+\end{lemma}
+
+=== geometry.tex:16-26 lem:differences ===
+\begin{lemma}[Many differences]\label{lem:differences}
+Let \(E\) consist of the points of a segment of \(n\ge1\) steps of the
+walk. Let \(R\) be its diameter, choose a line through two points
+realizing that diameter, and let \(W\) be the larger of \(1\) and the
+maximum distance of a point of \(E\) from that line. Then, for \(A=RW\),
+\[
+ c n\le A\le D^2n^2,
+ \qquad |E-E|\ge c_D A,
+\]
+where \(c>0\) is absolute and \(c_D>0\) depends only on \(D\).
+\end{lemma}
+
+=== geometry.tex:280-298 lem:enrichment ===
+\begin{lemma}[Entropy enrichment]\label{lem:enrichment}
+Let \(Z=z_\tau\) and \(V\) be the starting point and sampled endpoint
+in the preceding transition for a fixed self-avoiding \(D\)-step walk.
+Set
+\[
+ q=\lfloor U/L_*\rfloor,\qquad b=\lfloor g^2U/L_*\rfloor.
+\]
+Consider any asymptotic family in which \(D\) is fixed,
+\(T\to\infty\), \(q\le k\), and
+\[
+ \frac{g^C U}{\log T}\longrightarrow\infty
+ \quad\text{for every fixed }C>0.
+\]
+Uniformly over the walks, batches, and starting-time laws,
+\begin{equation}\label{eq:enrichment}
+ \frac{f_V(b)}{bL_*}
+ \ge \frac12\left(1+\frac{f_Z(q)}{qL_*}\right)-O_D(g).
+\end{equation}
+\end{lemma}

@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-L_NORM_FORMAL_CORE-eb911e11ead9",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/142/first-pass/norm_solver/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6883,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/142/first-pass/norm_solver/Main.lean",
+    "source_sha256": "4c18e89f6319224255acdab8ea525334ec18ecc705e8e188d8f18fd30b270757",
+    "statement_fidelity": "families/142/first-pass/norm_solver/statement_fidelity.md",
+    "statement_fidelity_sha256": "2d1f0a3f6bd691977fea003ec5226d0c2aa16b112caec29fe1246570b708076c",
+    "status": "syntax_error",
+    "stderr": "",
+    "stdout": "families/142/first-pass/norm_solver/Main.lean:9:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'MvPowerSeries.instMul', which is 'noncomputable'\nfamilies/142/first-pass/norm_solver/Main.lean:12:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'MvPowerSeries.instMul', which is 'noncomputable'\nfamilies/142/first-pass/norm_solver/Main.lean:29:25: error: unexpected identifier; expected '=>'\nfamilies/142/first-pass/norm_solver/Main.lean:27:4: error: Type mismatch\n  PowerSeries.X ^ (2 * m)\nhas type\n  PowerSeries k\nbut is expected to have type\n  Sort u_1\nfamilies/142/first-pass/norm_solver/Main.lean:51:46: error: unexpected token '|'; expected ')', ',' or ':'\nfamilies/142/first-pass/norm_solver/Main.lean:116:7: error: unexpected token '>'; expected term\nfamilies/142/first-pass/norm_solver/Main.lean:121:29: error: unexpected token '>'; expected term\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/norm_solver/Main.lean",
+    "text": "import Mathlib\n\nset_option autoImplicit false\n\nnamespace NormSolver\n\nvariable {k I : Type*} [Field k] [Fintype I]\n\ndef scaledEntry (c w : I -> PowerSeries k) : PowerSeries k :=\n  Finset.univ.sum (fun i => c i * w i)\n\ndef truncatedEntry (r : Nat) (c w : I -> PowerSeries k) : PowerSeries k :=\n  Finset.univ.sum (fun i =>\n    (PowerSeries.trunc r (c i) : PowerSeries k) *\n    (PowerSeries.trunc r (w i) : PowerSeries k))\n\ntheorem coefficient_from_truncations (c w : I -> PowerSeries k)\n    {n r : Nat} (hn : n < r) :\n    PowerSeries.coeff n (scaledEntry c w) =\n      PowerSeries.coeff n (truncatedEntry r c w) := by\n  simp only [scaledEntry, truncatedEntry, map_sum]\n  apply Finset.sum_congr rfl\n  intro i _\n  exact PowerSeries.coeff_mul_eq_coeff_trunc_mul_trunc (c i) (w i) hn\n\ntheorem finite_precision_integrality (m : Nat) (c w : I -> PowerSeries k) :\n    (PowerSeries.X : PowerSeries k) ^ (2 * m) | scaledEntry c w\n      <-> forall n, n < 2 * m ->\n        PowerSeries.coeff n (truncatedEntry (2 * m + 1) c w) = 0 := by\n  rw [PowerSeries.X_pow_dvd_iff]\n  constructor\n  · intro h n hn\n    rw [<- coefficient_from_truncations c w (by omega : n < 2 * m + 1)]\n    exact h n hn\n  · intro h n hn\n    rw [coefficient_from_truncations c w (by omega : n < 2 * m + 1)]\n    exact h n hn\n\ntheorem finite_precision_fiber (m : Nat) (c w : I -> PowerSeries k) :\n    PowerSeries.coeff (2 * m) (scaledEntry c w) =\n      PowerSeries.coeff (2 * m) (truncatedEntry (2 * m + 1) c w) :=\n  coefficient_from_truncations c w (by omega)\n\ntheorem divided_constant_term (m : Nat) (f u : PowerSeries k)\n    (h : f = (PowerSeries.X : PowerSeries k) ^ (2 * m) * u) :\n    PowerSeries.coeff 0 u = PowerSeries.coeff (2 * m) f := by\n  rw [h]\n  simpa using (PowerSeries.coeff_X_pow_mul u (2 * m) 0).symm\n\ntheorem finite_precision_section (m : Nat) (c w : I -> PowerSeries k) :\n    ((PowerSeries.X : PowerSeries k) ^ (2 * m) | scaledEntry c w\n      <-> forall n, n < 2 * m ->\n        PowerSeries.coeff n (truncatedEntry (2 * m + 1) c w) = 0) /\\\n    (forall u : PowerSeries k,\n      scaledEntry c w = (PowerSeries.X : PowerSeries k) ^ (2 * m) * u ->\n      PowerSeries.coeff 0 u =\n        PowerSeries.coeff (2 * m) (truncatedEntry (2 * m + 1) c w)) := by\n  constructor\n  · exact finite_precision_integrality m c w\n  · intro u hu\n    exact (divided_constant_term m (scaledEntry c w) u hu).trans\n      (finite_precision_fiber m c w)\n\nsection Idempotents\n\nvariable {R : Type*} [Monoid R]\n\ntheorem stabilized_powers (b : R) (r : Nat) (h : b ^ (r + 1) = b ^ r)\n    (s : Nat) : b ^ (r + s) = b ^ r := by\n  induction s with\n  | zero => simp\n  | succ s ih =>\n      calc\n        b ^ (r + (s + 1)) = b ^ (r + s) * b := by\n          rw [Nat.add_succ, pow_succ]\n        _ = b ^ r * b := by rw [ih]\n        _ = b ^ (r + 1) := (pow_succ b r).symm\n        _ = b ^ r := h\n\ntheorem stabilized_idempotent (b : R) (r : Nat)\n    (h : b ^ (r + 1) = b ^ r) :\n    b ^ (r + 1) * b ^ (r + 1) = b ^ (r + 1) := by\n  rw [h, <- pow_add]\n  exact stabilized_powers b r h r\n\nend Idempotents\n\nsection Fiber\n\nvariable {n : Nat}\n\ndef outer (v w : Fin n -> k) : Matrix (Fin n) (Fin n) k :=\n  fun i j => v i * w j\n\ntheorem outer_idempotent (v w : Fin n -> k)\n    (h : Finset.univ.sum (fun j => w j * v j) = 1) :\n    outer v w * outer v w = outer v w := by\n  ext i j\n  change Finset.univ.sum (fun t => (v i * w t) * (v t * w j)) = v i * w j\n  calc\n    Finset.univ.sum (fun t => (v i * w t) * (v t * w j)) =\n        v i * (Finset.univ.sum (fun t => w t * v t)) * w j := by\n      simp only [Finset.mul_sum, Finset.sum_mul]\n      apply Finset.sum_congr rfl\n      intro t _\n      ring\n    _ = v i * w j := by rw [h]; simp\n\ntheorem outer_column_formula (v w x : Fin n -> k) (i : Fin n) :\n    Finset.univ.sum (fun j => outer v w i j * x j) =\n      v i * Finset.univ.sum (fun j => w j * x j) := by\n  simp only [outer, Finset.mul_sum, mul_assoc]\n\ntheorem normalized_column_nonzero (v w : Fin n -> k)\n    (h : Finset.univ.sum (fun j => w j * v j) = 1) :\n    v <> 0 := by\n  intro hv\n  simp [hv] at h\n\ntheorem outer_in_block_upper (block : Fin n -> Nat) (v w : Fin n -> k)\n    (hv : forall i, block i <> 0 -> v i = 0) :\n    forall i j, block j < block i -> outer v w i j = 0 := by\n  intro i j hij\n  have hi : block i <> 0 := by omega\n  simp [outer, hv i hi]\n\nend Fiber\n\nend NormSolver\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/norm_solver/statement_fidelity.md",
+    "text": "# Formal statement fidelity\n\n`Main.lean` formalizes the finite-precision bridge and two algebraic parts\nof the fiber lift, not the complete norm solver or any analytic theorem.\n\n## Finite-precision sections\n\nThe coefficient field `k` is arbitrary. `I` is any finite index type.\n`c i` and `w i` are integral formal power series over `k`. They represent,\nrespectively, a standard rational coordinate multiplied by T^m and\na basis matrix entry multiplied by T^m, at one specified entry of one\nlocal model. `scaledEntry c w` is their sum of products, so the actual\nmatrix entry is T^(-2m) times this series. The formal theorem does not\nassume or prove that a particular geometric local model has these\nrepresentatives: that identification is proved in report Sections 2--3.\n\n`coefficient_from_truncations` says, for every natural n<r, that the\nnth coefficient of this sum of products equals the coefficient computed\nfrom both inputs truncated at precision r. `finite_precision_integrality`\nsays that X^(2m) divides the scaled entry if and only if every coefficient\nbelow 2m of the truncated computation is zero. This is precisely local\nintegrality of the unscaled entry. `finite_precision_fiber` identifies\nthe coefficient at 2m using precision 2m+1. `divided_constant_term`\nidentifies that coefficient with the constant term after exact division\nby X^(2m). `finite_precision_section` combines these into an integrality\nequivalence and the correct residue whenever the division is possible.\nAll m, fields, finite index sets, and input series are universally\nquantified, including m=0. No convergence or bounded experiment is used.\n\n## Power and fiber algebra\n\n`stabilized_powers` and `stabilized_idempotent` hold in every monoid.\nThe hypothesis b^(r+1)=b^r is explicit. They prove stabilization and\nidempotence of b^(r+1). For the manuscript use r=q-1, Cayley--Hamilton\nsupplies this hypothesis from the characteristic polynomial\nT^(q-1)(T-1). The formal source does not prove Cayley--Hamilton's\napplication, that characteristic polynomial, or the rank of the\nresulting generic idempotent.\n\nFor arbitrary n and a field k, `outer v w` has entries v_i w_j.\n`outer_idempotent` proves its idempotence assuming sum_j w_j v_j=1.\n`outer_column_formula` gives every column-action value as a scalar\nmultiple of v; `normalized_column_nonzero` proves v is nonzero under\nthe same normalization. Together with the column formula evaluated at\nv, these are the elementary rank-one calculation, but no declaration\nasserts a Mathlib matrix-rank theorem. `outer_in_block_upper` proves\nmembership in a block-upper matrix pattern when v is supported on the\nblock numbered zero and block numbers are natural numbers in increasing\norder. It does not find the trace-pairing kernel or prove the geometric\nblock-upper description.\n\nThe source contains no axioms, placeholders, or `sorry`. Its use of\nMathlib's power-series and finite-sum results is checked by the real\nLean compiler. The certificate is evidence only for these declarations.\nThe uniform local bounds, residue-root algorithm, bundle argument,\ncomplexity analysis, and extraction of h remain mathematical proofs\nto be read independently; a successful compile is not attributed to\nthose unencoded assertions.\n"
+  },
+  "subject": {
+    "content_hash": "548dfdd38cdb35410fe167c8ae954bda25e352c684c310794269462f6dc31110",
+    "kind": "claim",
+    "subject_id": "L_NORM_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

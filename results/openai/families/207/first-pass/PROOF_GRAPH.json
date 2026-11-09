@@ -1,0 +1,125 @@
+{
+  "goal": "C9000207",
+  "routes": {},
+  "nodes": {
+    "C9000207": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 207 (The ℓ¹-Bass conjecture for all discrete groups.; papers: The ℓ¹-Bass Conjecture for Discrete Groups; The Bass trace conjecture and the characteristic-zero Kaplansky idempotent conjecture; Lean status: Partially/Comparator formalized (lean/docs/207.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_OCT_MAIN"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_TERMINAL_ORDER": {
+      "statement": "Two-measure nonatomic order kernels have rank-N approximation error at most combined mass divided by 2N.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_result": "proved; independent analytic review pending",
+      "evidence": [
+        "research/terminal_order_kernel/proof.md",
+        "research/terminal_order_kernel/verify.py",
+        "research/terminal_order_kernel/replay.json"
+      ]
+    },
+    "C_TERMINAL_BUDGET": {
+      "statement": "Mass-adaptive block allocation gives rank at most 2m/x for one contribution and 18m/x for the three truncated-sign contributions.",
+      "status": "open",
+      "depends_on": ["C_TERMINAL_ORDER"],
+      "reviewer_confirmed": false,
+      "engineer_result": "proved for countable block families; independent review pending",
+      "evidence": [
+        "research/terminal_order_kernel/proof.md",
+        "research/terminal_order_kernel/exact_certificate.json"
+      ]
+    },
+    "C_TERMINAL_ALGEBRA": {
+      "statement": "All-dimension bin factorization and rank bound; skewness and identity/involution edge cases of the exact truncated twisted kernel.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "engineer_result": "Lean 4.31.0 exit_code=0, proof_holes=[]; statement-fidelity review pending",
+      "evidence": [
+        "research/terminal_order_kernel/Main.lean",
+        "research/terminal_order_kernel/statement_fidelity.md",
+        "research/terminal_order_kernel/certificates/C_TERMINAL_ALGEBRA-77a05ba43ec0f92f.json"
+      ]
+    },
+    "C_TERMINAL_SVD": {
+      "statement": "Every orthogonal compression of the actual terminal kernel has s_nu <= 4m/nu for a free full-sign action and <= 36m/nu for any truncated-sign permutation.",
+      "status": "open",
+      "depends_on": ["C_TERMINAL_BUDGET", "C_TERMINAL_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "engineer_result": "all-dimension proof with explicit constants 4 and 36; independent review pending",
+      "evidence": [
+        "research/terminal_order_kernel/proof.md",
+        "research/terminal_order_kernel/exact_certificate.json",
+        "research/terminal_order_kernel/replay.json"
+      ]
+    },
+    "C_TERMINAL_PFAFF": {
+      "statement": "All even-degree terminal Pfaffians obey (36mW)^(k/2) product norm(X_i)/sqrt(k!), with zero for rank-deficient spans.",
+      "status": "open",
+      "depends_on": ["C_TERMINAL_SVD"],
+      "reviewer_confirmed": false,
+      "engineer_result": "all positive even degrees with manuscript constant 11 under the explicit Fisher hypotheses; independent review pending",
+      "evidence": [
+        "research/terminal_order_kernel/proof.md",
+        "research/terminal_order_kernel/exact_certificate.json"
+      ]
+    },
+    "C_OCT_MAIN": {
+      "statement": "October thm:main: finite torsion-class support of the l1 Hattori-Stallings trace for every discrete group.",
+      "status": "open",
+      "depends_on": ["C_OCT_TRACE", "C_OCT_CURVATURE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-l1-Bass-Conjecture-for-Discrete-Groups-October-5-2026/build/sections/01-introduction.tex"]
+    },
+    "C_OCT_CHANNEL": {
+      "statement": "Spatial summary and terminal channel mass, concentration and derivative assertions ch:summary and ch:terminal.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-l1-Bass-Conjecture-for-Discrete-Groups-October-5-2026/build/sections/04-channels.tex"]
+    },
+    "C_OCT_CONNECTION": {
+      "statement": "Compatibility, positivity, normalization and Fisher bounds in co:connection.",
+      "status": "open",
+      "depends_on": ["C_OCT_CHANNEL", "C_OCT_CONNECTION_DETAILS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-l1-Bass-Conjecture-for-Discrete-Groups-October-5-2026/build/sections/05-connection.tex"]
+    },
+    "C_OCT_CURVATURE": {
+      "statement": "Full averaged normalized curvature pf:bound, including intermediate stages, raw occupancy and multiscale assembly, remains unverified.",
+      "status": "open",
+      "depends_on": ["C_OCT_CONNECTION", "C_TERMINAL_PFAFF", "C_OCT_OTHER_CURVATURE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-l1-Bass-Conjecture-for-Discrete-Groups-October-5-2026/build/sections/06-curvature.tex"]
+    },
+    "C_OCT_CONNECTION_DETAILS": {
+      "statement": "Regularity, face and cyclic compatibility, telescoping positivity, uniform coefficient control and Fisher estimates remain unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-l1-Bass-Conjecture-for-Discrete-Groups-October-5-2026/build/sections/05-connection.tex"]
+    },
+    "C_OCT_OTHER_CURVATURE": {
+      "statement": "Intermediate-stage estimates, raw-stage occupancy, normalized-curvature expansion and scale assembly remain unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-l1-Bass-Conjecture-for-Discrete-Groups-October-5-2026/build/sections/06-curvature.tex"]
+    },
+    "C_OCT_TRACE": {
+      "statement": "Exponential-moment reduction, cyclic curvature trace identity and weighted summation remain unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-l1-Bass-Conjecture-for-Discrete-Groups-October-5-2026/build/sections/07-conclusion.tex"]
+    }
+  }
+}

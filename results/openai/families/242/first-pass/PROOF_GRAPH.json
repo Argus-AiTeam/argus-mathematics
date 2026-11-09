@@ -1,0 +1,120 @@
+{
+  "goal": "C9000242",
+  "routes": {
+    "AB_UNIVERSAL": {
+      "name": "Universal elliptic-height-to-paired-Pell verification",
+      "status": "current",
+      "evidence": "research/arithmetic-bridge/theorem.md"
+    }
+  },
+  "nodes": {
+    "C9000242": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 242 (Single-fold Diophantine representations and undecidability under an at-most-one-solution promise.; papers: Single-fold Diophantine representations; Lean status: Partially/Comparator formalized (lean/docs/242.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_AB"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_AB": {
+      "statement": "The literal elliptic growth system and its paired-Pell composition have the asserted total outputs and unique complete auxiliary tuples for every natural input.",
+      "status": "in_progress",
+      "depends_on": ["AB_GROWTH", "AB_POWER", "AB_WITNESS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/theorem.md", "research/arithmetic-bridge/exact_certificate.json"]
+    },
+    "AB_RATIONAL": {
+      "statement": "The six-coordinate rational system is a bijective code and fixed rational operations have unique complete witnesses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/Main.lean", "research/arithmetic-bridge/theorem.md"]
+    },
+    "AB_POINT": {
+      "statement": "The seven guarded point-addition cases and all fixed scalar chains have unique complete witnesses, including inactive coordinates.",
+      "status": "open",
+      "depends_on": ["AB_RATIONAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/Main.lean", "research/arithmetic-bridge/theorem.md", "research/arithmetic-bridge/exact_certificate.json"]
+    },
+    "AB_RANK": {
+      "statement": "The chosen curve has E(Q)=Z P direct-sum {O,(0,0),(5,0),(-5,0)}.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Single-fold-Diophantine-representations-September-24-2026/build/rank-one-proof.tex"]
+    },
+    "AB_HEIGHT": {
+      "statement": "For the manuscript's normalization the canonical height is positive on nontorsion rational points, quadratic, and differs uniformly from half the logarithmic x-height.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/primary_sources.md"]
+    },
+    "AB_SEQUENCE": {
+      "statement": "An even scalar kills torsion and yields integer W_j with W_0=1 and log W_j=a_E j^2+epsilon_j, |epsilon_j|<=c_E, strictly increasing after the stated choice of constants.",
+      "status": "open",
+      "depends_on": ["AB_POINT", "AB_RANK", "AB_HEIGHT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/theorem.md", "research/arithmetic-bridge/primary_sources.md"]
+    },
+    "AB_REP": {
+      "statement": "The exact rational inequalities select one and only one representative of every positive absolute index, with all local witnesses fixed.",
+      "status": "open",
+      "depends_on": ["AB_SEQUENCE", "AB_POINT", "AB_RANK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/Main.lean", "research/arithmetic-bridge/theorem.md"]
+    },
+    "AB_WINDOW": {
+      "statement": "The bracket selects k>=1 for every u>=0 and the stated bounded-error multiplicative window selects exactly r=k^2.",
+      "status": "open",
+      "depends_on": ["AB_SEQUENCE", "AB_REP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/Main.lean", "research/arithmetic-bridge/theorem.md"]
+    },
+    "AB_GROWTH": {
+      "statement": "The actual growth graph is total and single-fold, with delta(log u)^2<log g(u)<u log u eventually.",
+      "status": "in_progress",
+      "depends_on": ["AB_WINDOW", "AB_WITNESS", "AB_KERNEL", "AB_SPECIALIZE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/Main.lean", "research/arithmetic-bridge/theorem.md"]
+    },
+    "AB_PELL": {
+      "statement": "All positive Pell solutions have unique indices, the stated residues and size bounds, and the paired ratio estimate for every b,u>=2 and n>=0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/Main.lean", "research/arithmetic-bridge/exact_certificate.json"]
+    },
+    "AB_POWER": {
+      "statement": "For any genuine complete single-fold growth graph with the stated bounds, the literal paired-Pell system has exactly one complete witness for c=b^n and none otherwise.",
+      "status": "in_progress",
+      "depends_on": ["AB_PELL", "AB_WITNESS", "AB_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/Main.lean", "research/arithmetic-bridge/theorem.md"]
+    },
+    "AB_WITNESS": {
+      "statement": "The finite polynomial expansion counts and uniquely fixes all sign parts, denominators, inverses, selectors, slopes, slacks, named values and inactive local coordinates.",
+      "status": "in_progress",
+      "depends_on": ["AB_POINT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Single-fold-Diophantine-representations-September-24-2026/build/witness-ledger.tex", "research/arithmetic-bridge/theorem.md", "research/arithmetic-bridge/exact_certificate.json"]
+    },
+    "AB_KERNEL": {
+      "statement": "The universal bounded-error height/orbit transfer, complete Pell witnesses, and primitive coding kernels compile in Lean 4.31.0; the local expansion and elliptic realization remain explicit premises whose source instantiation is a separate proof.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/certificates/AB_KERNEL-da2dabb7e2f0608b.json", "research/arithmetic-bridge/statement_fidelity.md"]
+    },
+    "AB_SPECIALIZE": {
+      "statement": "The source-linked ordinary proof instantiates the geometric and input-dependent complete-expansion premises from the rank, height and finite arithmetic constructions; it does not add semantic indices to the natural witness.",
+      "status": "in_progress",
+      "depends_on": ["AB_SEQUENCE", "AB_POINT", "AB_WITNESS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/arithmetic-bridge/theorem.md", "research/arithmetic-bridge/primary_sources.md"]
+    }
+  }
+}

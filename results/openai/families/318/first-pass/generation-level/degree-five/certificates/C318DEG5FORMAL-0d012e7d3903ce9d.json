@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C318DEG5FORMAL-418ca687011e",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/318/first-pass/generation-level/degree-five/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/318/first-pass/generation-level/degree-five/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 7813,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/318/first-pass/generation-level/degree-five/Main.lean",
+    "source_sha256": "c68286f26481bc729cd95f897bb8e35c726ba58877925416f7ffc914cc5c8730",
+    "statement_fidelity": "families/318/first-pass/generation-level/degree-five/statement_fidelity.md",
+    "statement_fidelity_sha256": "84dd2b08d00382682add41c018c30df57a951ec52344de5b793e0a62aa106b79",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/generation-level/degree-five/Main.lean",
+    "text": "import Mathlib.LinearAlgebra.Alternating.Basic\nimport Mathlib.LinearAlgebra.Dimension.Constructions\nimport Mathlib.LinearAlgebra.Dimension.Finite\n\nnamespace DegreeFiveKernel\n\nvariable {K : Type*} [Field K]\n\nstructure UpperBlock where\n  kernel : Matrix (Fin 2) (Fin 2) K\n  upper : Fin 2 → K\n  quotient : K\n\ntheorem matrixFiveZero\n    (f : (Matrix (Fin 2) (Fin 2) K) [⋀^Fin 5]→ₗ[K] K)\n    (x : Fin 5 → Matrix (Fin 2) (Fin 2) K) :\n    f x = 0 := by\n  apply f.map_linearDependent\n  intro independent\n  have dimension : Module.finrank K (Matrix (Fin 2) (Fin 2) K) = 4 := by\n    simp [Module.finrank_matrix]\n  have impossible : 5 ≤ 4 := by\n    simpa only [Fintype.card_fin, dimension] using independent.fintype_card_le_finrank\n  exact (Nat.not_succ_le_self 4) impossible\n\ntheorem scalarFiveZero\n    (f : K [⋀^Fin 5]→ₗ[K] K) (x : Fin 5 → K) :\n    f x = 0 := by\n  apply f.map_linearDependent\n  intro independent\n  have impossible : 5 ≤ 1 := by\n    simpa using independent.fintype_card_le_finrank\n  exact (by decide : ¬ (5 ≤ 1)) impossible\n\ntheorem fullParabolicFiveZero\n    (kernelForm : (Matrix (Fin 2) (Fin 2) K) [⋀^Fin 5]→ₗ[K] K)\n    (quotientForm : K [⋀^Fin 5]→ₗ[K] K)\n    (x : Fin 5 → UpperBlock (K := K)) :\n    kernelForm (fun i => (x i).kernel) +\n      quotientForm (fun i => (x i).quotient) = 0 := by\n  rw [matrixFiveZero, scalarFiveZero, add_zero]\n\ntheorem reflectGeometricZero\n    {A W WC D : Type*} [Zero A] [Zero W] [Zero WC] [Zero D]\n    (witt : A → WC) (base : W → WC) (coefficient : W → D)\n    (baseInjective : Function.Injective base)\n    (wittZero : witt 0 = 0) (baseZero : base 0 = 0)\n    (coefficientZero : coefficient 0 = 0)\n    (e : A) (a : W) (unitSquare : witt e = base a)\n    (geometricZero : e = 0) :\n    coefficient a = 0 := by\n  have ha : a = 0 := by\n    apply baseInjective\n    calc\n      base a = witt e := unitSquare.symm\n      _ = 0 := by rw [geometricZero, wittZero]\n      _ = base 0 := baseZero.symm\n  rw [ha, coefficientZero]\n\nend DegreeFiveKernel\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/generation-level/degree-five/statement_fidelity.md",
+    "text": "# Statement fidelity: the degree-five algebraic core\n\nThe claim is C318DEG5FORMAL. The source is `Main.lean`, namespace\n`DegreeFiveKernel`. It imports Mathlib but introduces no axioms or\ntopological assumptions.\n\n`UpperBlock` has an arbitrary 2-by-2 matrix `kernel`, an arbitrary\ntwo-coordinate `upper`, and an arbitrary scalar `quotient`, over an\narbitrary field K. These are precisely the seven coordinates of an\nupper (2,1) block. The structure does not itself define multiplication.\n\n`matrixFiveZero` quantifies over every alternating K-multilinear map\nfrom five 2-by-2 matrices to K, and over every tuple of such matrices.\nIts conclusion is that the value is zero. It uses dimension four,\nnot the false assertion that the five-dimensional Levi has no\ndegree-five cohomology. `scalarFiveZero` proves the analogous\nstatement for five scalar arguments.\n\n`fullParabolicFiveZero` quantifies over both alternating forms and\nevery five-tuple of `UpperBlock` objects. The sum of the kernel-form\nand quotient-form values is zero. No hypothesis restricts the two\nupper coordinates, the quotient scalars, or their relation to the\nkernel matrices. The human proof identifies the alternating trace\nwith exactly this sum by the diagonal-block multiplication formula;\nthe formal theorem does not prove that formula or construct the\ntrace forms. The separate exact script checks the formula on the\nfull parabolic matrix basis and evaluates all its alternating\nfive-wedges.\n\n`reflectGeometricZero` quantifies over four arbitrary types with\nzero, three maps, an injective base-change map, the three zero\npreservation identities, a class and its coefficient image, and\ntheir unit-square identity. If the geometric class is zero, its\nfinal coefficient image is zero. The actual application is to\nrational cohomology, after the human Witt and descent comparisons.\n\nThese declarations do not formalize Lie or group cohomology,\nnonexactness of the source cocycle, a modification stack,\narithmetic equivariance, Witt-vector or Moore towers, spectra,\nthe scalar c, the fracture lift, or a generation level. Their\napplication hypotheses are proved in `proof.md`, not supplied\nby the Lean compiler. In particular neither compilation nor the\nfinite certificate is a machine proof of level_G(X)=2.\n"
+  },
+  "subject": {
+    "content_hash": "b311240392efe98a426b241c4f48c4a4dd3b28431f9277643b3968825e885179",
+    "kind": "claim",
+    "subject_id": "C318DEG5FORMAL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

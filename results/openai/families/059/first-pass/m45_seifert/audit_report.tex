@@ -1,0 +1,962 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,geometry,hyperref}
+\geometry{margin=1in}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\C}{\mathbb C}
+\newcommand{\pr}{\operatorname{pr}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\Tr}{\operatorname{tr}}
+\newcommand{\calH}{\mathcal H}
+\newcommand{\calD}{\mathcal D}
+\title{Integral gluing and ordered fillings for the actual
+four-variable prepared germs in manuscript family 059}
+\author{Campaign 9000059: Engineer proof submitted for independent review}
+\date{November 5, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We identify the integral local Milnor lattice and its ordered filling
+form for each of the two actual prepared germs in M45. The comparison
+with a local page is an integral relative-homology isomorphism, not a
+rank argument. A root-disk calculation, natural under every braid
+and hence under the actual graph covering, determines the mod-four
+extension. We prove both cross-term vanishings and the relative signs
+by geometric fillings. A direct quantitative isolation argument
+avoids curve selection in the degenerating parameter. Compact exact
+certificates check the root-disk index, every four-sheet permutation
+over \(\Z/4\), the cap-boundary signs, and the normal-intersection
+determinants. These computations support, but do not replace, the
+geometric proof. This is not a Lean/kernel verification. Independent
+review and novelty assessment remain outstanding; neither manuscript's
+ambient-equivalence theorem is decided here.
+\end{abstract}
+
+\section{Question, inputs, and conclusion}
+
+M45 denotes the staged September 27, 2026 manuscript
+\emph{Ambiently homeomorphic isolated hypersurface germs in
+\(\C^4\) with multiplicities four and five}.
+We address its \texttt{thm:tube}, not its subsequent arithmetic or
+classification assertions. The two graph maps are
+\[
+\begin{split}
+h(X,T)&=T(X-T^2)(X-2T^2),\\
+q_1(u,w)&=(u-w-w^8)(u-w-2w^8)(u-w^2),\qquad q_2=q_1-u^2,\\
+\pi_0(u,w)&=(u^2+q_1(u,w),u),\\
+\pi_1(x,w)&=(x,u(u-w^2)q_2(u,w)),\qquad u=x+w .
+\end{split}
+\]
+For either graph let \(d=h\circ\pi\), and use the exact monic
+Weierstrass polynomial \(R(p,u)=u^4+\sum_{j<4}A_j(p)u^j\)
+of its graph equation. No analytic unit is removed from the
+definition of the fourfold or its function. Set
+\[
+ R_s(p,w)=s^4R(p,w/s),\quad C_s=\{yz=R_s(p,w)\},\quad
+ f_s=h(p)+w(y^a+z^b).
+\]
+Here \(s>0\), \(a,b\) are the manuscript's common fixed integers, and
+\[
+ \alpha=\frac{4b}{a+b},\quad\beta=\frac{4a}{a+b},\quad
+ \epsilon_a=\frac{(a-2)\alpha}{4}-4>0,\quad
+ \epsilon_b=\frac{(b-2)\beta}{4}-4>0.                 \tag{1}
+\]
+In particular \(a,b>2\). The common arithmetic family in Section 03
+is contained in this range once its integer parameter is sufficiently
+large. Nothing below requires a further arithmetic hypothesis.
+
+The previously independently reviewed claims \texttt{C059BASE},
+\texttt{C059GRADIENT}, and \texttt{C059APPLICATION} give:
+\[
+\begin{gathered}
+\deg\pi=4,\quad A_j(0)=0,\quad
+R=0\text{ is smooth with a unit base derivative},\\
+\mu(h)=6,\quad\mu(d)=51,\quad
+\mu(f_s)=24ab+6a+6b+51.
+\end{gathered}                                      \tag{2}
+\]
+The last equality and local isolation hold for each fixed \(s\ne0\).
+They do not give uniform isolation on a fixed outer tube.
+The reducedness and isolation of the two plane germs follow from
+their finite Jacobian lengths. We reuse these reviewed inputs,
+not the manuscript's plane-form isometry or its monodromy-sector
+claims.
+
+We use the ordinary local Milnor fibration and contractibility of its
+closed disk total, in precisely \cite[Theorem 1.8 and Remark 1.9]{Massey}.
+The isolated-singularity homotopy and Jacobian-number statements are
+recorded in \cite[Section 1, p.~6, items (2)--(5)]{Massey}.
+The actual versioned primary text was obtained and read, and is retained
+beside this report. These statements concern ordinary local tubes:
+their applicability to our custom cuts is proved below.
+All further gluing, braid, and sign arguments are supplied here.
+In particular, no Sakamoto or Kauffman--Neumann product theorem is
+assumed. An earlier landing-page inspection of Sakamoto was not
+verification of a theorem.
+
+Let \(\calH,\calD\) be compact plane pages; put
+\(H=H_1(\calH;\Z)\), \(D=H_1(\calD;\Z)\).
+The graph induces \(P_*=\pi_*:D\to H\) and full-preimage transfer
+\(T_*=\pi^!:H\to D\). A loop may be moved off the finitely many
+branch values. Its full inverse image defines the transfer.
+Moving a loop across a branch value does not change this homology
+class: pull back the generic oriented surface implementing the
+homology, allowing its isolated branch points. Its boundary is
+the difference of the full inverse-image cycles. Thus the transfer
+is well defined, and sheet counting gives
+\[
+ P_*T_*=4I_H,\qquad K=\ker P_*,\qquad
+ \pr(l)=l-\tfrac14T_*P_*l.                          \tag{3}
+\]
+Both plane pages are connected surfaces with boundary and have
+free first homology. These facts also follow from the isolated
+Milnor-fiber statement just cited.
+
+On the cone \(V=\{yz=w^4\}\) put \(P=w(y^a+z^b)\).
+Let \(Q\) be a compact small page of \(P\), \(L\) its weighted link,
+\(E=H_1(Q;\Z)\), and let \(\tau:E\to H_1(L)=\Z/4\) be radial
+projection. Orient the generator of \(H_1(L)\) by a positive
+\(y\)-angle at a fixed nonzero \(w\).
+The cover
+\[
+ (U,V)\longmapsto (U^4,V^4,UV),\qquad
+ \widetilde P=UV(U^{4a}+V^{4b})
+\]
+is unramified off the vertex. Write
+\(\Tr:E\to H_1(\widetilde Q;\Z)\) for its full lift and define
+\[
+ e(v,v')=\tfrac14\widetilde s(\Tr v,\Tr v').         \tag{4}
+\]
+The forms \(s_h,s_d,\widetilde s\) are ordered intersections of
+fillings in their complex-oriented plane totals; the second
+boundary is on the positive neighboring page.
+
+\paragraph{Chain conventions.}
+All homology below is integral unless coefficients are specified.
+The elementary exact sequences used in the proof come from free
+chain complexes, so they retain torsion. For a collared union
+\(A\cup B\), subdivision gives the short exact chain sequence
+\[
+0\longrightarrow C_*(A\cap B)
+\xrightarrow{c\mapsto(c,-c)}C_*(A)\oplus C_*(B)
+\xrightarrow{(a,b)\mapsto a+b}C_*(A\cup B)\longrightarrow0;
+\]
+the relative version is obtained by quotienting the corresponding
+page subcomplexes. Taking cycles and boundaries gives the
+Mayer--Vietoris sequences used here, including (23) and (26).
+Products use the boundary rule
+\(\partial(A\times B)=\partial A\times B+
+(-1)^{\dim A}A\times\partial B\).
+A compact connected surface with nonempty boundary has a graph
+spine. In products with either plane page the cellular complex
+therefore has a free degree-zero part and a free degree-one part,
+both with zero differential; the product homology formulas used
+below follow by tensoring this complex. In particular no
+unmentioned torsion product occurs.
+The quotient cone link has the usual two-solid-torus description
+obtained from \(|U|\le|V|\) and \(|V|\le|U|\) on its covering
+three-sphere. Its meridian attachment wraps the positive \(y\)-circle
+four times. Its one-cell-per-dimension complex consequently has
+\(d_2=4\), \(d_1=d_3=0\); this also computes \(H_2(L)=0\)
+without a duality assertion.
+Finally the coefficient sequence is multiplication by four on
+these free complexes; its connecting map is precisely
+\([\overline C]\mapsto[\partial C/4]\).
+
+\begin{theorem}[Actual integral tube identification]\label{thm:main}
+For either actual prepared graph, every fixed pair satisfying (1),
+and all sufficiently small \(s>0\), the origin is the only critical
+point in a fixed small outer cut. The ordinary local Milnor page
+has, in the coordinates constructed below, exactly the integral image
+\[
+ \Lambda_\pi=
+ \left\{(\pr(l),z):l\in D,\ z\in H\otimes E,\
+       P_*l\bmod4H=(1\otimes\tau)z\right\}
+ \subset K_\Q\oplus(H\otimes E)_\Q .                \tag{5}
+\]
+Its ordered filling form is the restriction of
+\[
+              -s_d|_K\ \perp\ (s_h\otimes e).       \tag{6}
+\]
+There is no unmeasured finite index or torsion quotient in (5).
+\end{theorem}
+
+\section{Uniform isolation without a limiting-arc argument}
+
+The following estimate makes the passage from a germ to a fixed
+outer representative quantitative. Throughout, constants may depend
+on the fixed graph and on \(a,b\), but not on \(s\).
+With \(r=\max(|X|,|T|)\) in a sufficiently small base ball,
+\[
+             \max(|h_X|,|h_T|)\ge c r^4.           \tag{7}
+\]
+Here is an elementary proof, rather than an appeal to an arc criterion.
+If \(|X|\ge20|T|^2\), then
+\(|h_T|\ge(1-9/20-10/400)|X|^2\), which bounds \(r^4\)
+below up to a constant. Otherwise put \(v=X/T^2\), \(|v|\le20\).
+For \(A=2v-3\), \(B=v^2-9v+10\) the exact identity
+\[
+                  4B-(2v-15)A=-5                  \tag{8}
+\]
+gives \(\max(|A|,|B|)\ge5/59\). Since
+\(h_X=T^3A,\ h_T=T^4B\), shrinking the ball proves (7).
+The cases \(T=0\) are included in the first case.
+
+Scale \(w=su,\ y=s^\alpha Y,\ z=s^\beta Z\), and put
+\(\xi=s^{1+a\alpha}>0\). The constraint is \(YZ=R(p,u)\).
+A critical point satisfies, for a complex multiplier \(\chi\),
+\[
+\begin{aligned}
+ h_p&=-\chi R_p,&\xi(Y^a+Z^b)&=-\chi R_u,\\
+ \xi a uY^{a-1}&=\chi Z,&
+ \xi b uZ^{b-1}&=\chi Y.
+\end{aligned}                                      \tag{9}
+\]
+When \(uYZ\ne0\), also \(\chi\ne0\). Multiplying the last two
+equations by \(Y,Z\) and using the second gives
+\[
+ aY^a=bZ^b,\qquad
+ ab\,uR_u+(a+b)R=0.                                \tag{10}
+\]
+The second polynomial has leading coefficient \(4ab+a+b\);
+its coefficient of \(u^j\), \(j<4\), is
+\((jab+a+b)A_j(p)=O(r)\).
+Its roots satisfy \(|u|\le C r^{1/4}\).
+Indeed a root with \(|u|\ge1\) would satisfy
+\(|u|^4\le C r\sum_{j<4}|u|^j\le4Cr|u|^3\),
+impossible for small \(r\); for \(|u|\le1\) the same equation
+gives \(|u|^4\le4Cr\).
+It follows that
+\[
+ |R|\le C r,\quad |Y|\le C r^{\alpha/4},\quad
+ |Z|\le C r^{\beta/4},\quad |\chi|\ge c' r^4.        \tag{11}
+\]
+The last bound uses (7) and the boundedness of \(R_p\) on this
+now bounded \((p,u)\)-set. Thus (9) implies simultaneously
+\[
+ \frac{|Z|}{|Y|}\le C_a\xi r^{1/4+\epsilon_a},\qquad
+ \frac{|Y|}{|Z|}\le C_b\xi r^{1/4+\epsilon_b}.       \tag{12}
+\]
+On a fixed sufficiently small base ball, both right sides are
+less than one for sufficiently small \(s\), a contradiction.
+If \(p=0\), (10) instead gives \(u=0\), already a contradiction
+to \(uYZ\ne0\).
+
+If exactly one of \(Y,Z\) is zero, (9) forces \(\chi=0\),
+and its \(u\)-equation forces the other to vanish.
+If \(u=0\) and \(YZ\ne0\), then \(\chi=0\), \(h_p=0\), and
+the constraint contradicts \(R(0,0)=0\).
+Finally, when \(Y=Z=0\), the remaining equations say exactly that
+\(h|_{R=0}=d\) is critical. Its only critical point in the selected
+root representative is the origin by (2).
+This proves uniform isolation, without assuming that \(w/s\)
+was bounded in advance and without using local isolation to
+assert a uniform statement.
+
+\section{Representatives, continuations, and the local comparison}
+
+We give the analytic details needed by the subsequent chain
+calculation; no homology model is presumed to be a local page.
+
+\subsection{Base cuts and boundary ranks}
+
+Choose a sufficiently small round base ball \(\mathcal B\) and a
+proper finite graph representative over it. The zero curves of \(h\)
+and \(d\) are reduced and isolated. Their finitely many punctured
+branches meet the base sphere, and its inverse image on the root
+surface, transversely when the ball is sufficiently small. To see the
+latter assertion directly, on a root-branch parametrization the
+nonconstant analytic map \(p(t)\) has
+\(|p(t)|^2=c|t|^{2m}(1+O(|t|))\), \(c>0\);
+its radial derivative is positive. Along these branch annuli,
+the respective functions are complex submersions in a normal
+direction. Compactness supplies a small common value disk with
+regular boundaries.
+
+These finite graph cuts have the same acyclic totals as ordinary
+plane tubes. Indeed, take an ordinary small ball inside a graph cut.
+Between its boundary and the cut boundary, the zero curve is the
+disjoint union of the preceding annuli. A field along each annulus
+pointing from the inner boundary to the outer one extends in its
+complex submersion neighborhood to a field preserving the function.
+Outside these neighborhoods the compact intervening region has
+the absolute value of the function bounded away from zero.
+For a sufficiently small value disk the entire intervening tube
+is therefore a value-preserving collar. Attaching it to the ordinary
+contractible total changes no homology. This also supplies
+boundary-respecting trivializations over compact regular-value regions.
+
+Choose \(M>3\) with \(M^{a+b}>1+4\max(a,b)\), and put
+\[
+Y_t=\{|y|\le Mt^\alpha,\ |z|\le Mt^\beta,\ |w|\le t\}.
+\]
+Choose \(\rho\), then \(\varepsilon\), then
+\(0<\delta<\varepsilon/4\), then \(\lambda\ll\rho\) so that
+\(\sup_{Y_\lambda}|P|<\delta/4\), and finally \(s>0\)
+so small that every root of \(R_s(p,\cdot)\) over the compact
+base cut is in \(|w|<\lambda/4\).
+Let
+\[
+\begin{split}
+X_s&=\{p\in\mathcal B,\ |h(p)|\le\varepsilon,\
+               (y,z,w)\in Y_\rho,\ yz=R_s(p,w)\},\\
+\widehat{\mathcal T}_s&=X_s\cap\{|f_s|\le\delta\},\qquad
+\mathcal T_s=X_s\cap\{f_s=c\},\quad |c|=\delta .
+\end{split}                                                     \tag{13}
+\]
+The ambient \(C_s\) is smooth throughout these cuts: when \(y,z\)
+both vanish, the root lies in the chosen graph neighborhood and
+has a unit base derivative; elsewhere a vertical derivative is
+nonzero.
+
+We verify disk-wide rank two on every outer lateral stratum.
+At \(s=0\), the \(y\)- and \(z\)-faces do not meet. On a
+\(y\)-face, eliminate \(z=w^4/y\). Then
+\[
+ |z^b/y^a|\le M^{-(a+b)},\qquad
+ P_w=y^a+(4b+1)z^b\ne0.                            \tag{14}
+\]
+The \(z\)-face is identical with the labels exchanged.
+At a \(y/w\) corner,
+\[
+ |P|\ge \rho^{1+a\alpha}(M^a-M^{-b})>0,             \tag{15}
+\]
+and there is a corresponding \(z/w\) bound.
+Take \(\varepsilon+\delta\) smaller than these fixed bounds.
+On the \(w\)-face near \(P=0\),
+\[
+ dP(\partial_{\log y})=w(ay^a-bz^b)
+                      =w(a+b)y^a\ne0.             \tag{16}
+\]
+Compactness gives a common small-value neighborhood.
+In the nonvertex cone interior, the two derivatives of
+\(\widetilde P\) cannot vanish together: if \(UV\ne0\) their
+coefficient determinant is
+\((4a+1)(4b+1)-1>0\); on either axis the transverse
+derivative is nonzero.
+The estimates on the fixed outer faces persist for small \(s\).
+Their free vertical directions keep \(p\) fixed, so additional
+base faces cause no loss of rank.
+
+For completeness, possible degeneration towards the vertical
+vertex on a stratum with no vertical face needs a separate argument.
+Write
+\(\varrho=\max(|y|^{1/\alpha},|z|^{1/\beta},|w|)\).
+If \(\varrho/s\to\infty\), rescaling by \(\varrho\)
+makes the vertical fiber converge smoothly to a nonvertex
+point of the cone, and the normalized vertical derivative of \(P\)
+is nonzero there. It is already a complex direction tangent
+to every base cut. If \(\varrho/s\) is bounded, use
+\((p,Y,Z,u)\) and (9). The functions converge in \(C^1\)
+on compact sets to \(h\) on \(YZ=R(p,u)\).
+Where \(Y\) or \(Z\) is nonzero, projection to \(p\)
+is a submersion. Where both vanish, the root-graph boundary
+submersion established above supplies the necessary rank.
+The \(|h|=\varepsilon\) face is absent in this limit over
+\(|f_s|\le\delta\), because \(P\to0\) and \(\delta<\varepsilon/4\).
+The remaining base-sphere limits have \(p\ne0\).
+This excludes every possible rank-loss sequence.
+Thus (13) has proper disk-wide stratified submersive outer
+boundary, including all its corners. Section 2 excludes interior
+critical points other than the origin.
+
+\subsection{Compatible inner and outer models}
+
+Cut (13) at \(Y_\lambda\). Write \(W,M_{\rm ext},J\) for the
+inner page, exterior page, and their bicollared interface; hats
+denote disk totals. On the inner part replace \(h+P\) by
+\(h+\theta P\), \(0\le\theta\le1\).
+On its horizontal boundary
+\[
+                  3\delta/4\le |h|\le5\delta/4.    \tag{17}
+\]
+The preceding two-scale argument on this compact annulus, with
+\(\theta\) an additional compact parameter, shows regularity
+of these horizontal boundaries and their lateral intersections.
+At \(s=0\), \(h\) is independent of the cone coordinate; for
+bounded scaled variables the regular root restriction supplies
+the same rank. Decreasing \(\lambda\) first controls the \(C^1\)
+size of \(P\) away from the scaled root region, and decreasing
+\(s\) controls the latter region.
+Consequently the sublevel totals isotope, preserving the complex
+value on the horizontal boundary. This does not claim that the
+interior \(h\)-model is a submersion at value zero.
+
+On the exterior, the ambient family and all boundary constraints
+are smooth down to \(s=0\), so the analogous continuation gives
+an isotopy of exterior total/page pairs. These assertions can be
+proved by choosing local parameter lifts tangent to every active
+face and solving the complex horizontal lift equation.
+The conditions are affine in the lift. A partition of unity
+patches the lifts; a cutoff extends them away from the horizontal
+boundary. The compact domains make the flows complete.
+This is the face-preserving submersion argument, not an inference
+from homology ranks.
+
+We specify an important relative normalization of these isotopies.
+Let \(w_0=\lambda/2\), and choose an \(h\)-page trivialization
+\(\Phi(p_0,q)\) near \(c\), respecting its base boundary.
+For each \(p_0\in\calH_c\) and \(\phi\in\mathbb R/2\pi\Z\),
+set
+\[
+ y=M\lambda^\alpha e^{i\phi},\quad w=w_0,\quad
+ z=R_s(\Phi(p_0,q),w_0)/y,
+\quad q+\theta P(y,z,w_0)=c.                        \tag{18}
+\]
+The last equation has a unique smooth solution near \(c\).
+Its \(q\)-derivative differs from the identity by \(o(1)\):
+every \(p\)-dependent coefficient of \(R_s(p,w_0)\)
+contains a positive power of \(s\).
+The root bound puts the circles strictly away from the other
+vertical faces. The local parameter lifts solving (18) fix
+\(p_0,w_0,\phi\); patch the general lifts to these near the
+compact anchor trace. In the coordinates
+\((p_0,q+\theta P,y,w,s,\theta)\), these anchored lifts
+are parameter coordinate fields.
+Thus the parameter rectangle has isotopic boundary
+identifications relative to the anchored circles, with no
+base-to-circle shear.
+At \(s=0\) the full page interface is explicitly
+\[
+ (p_0,v)\longmapsto(\Phi(p_0,c-P(v)),v),\qquad v\in L.
+                                                                    \tag{19}
+\]
+It is therefore \(\calH_c\times L\), with the prescribed
+base label and positive \(y\)-circle.
+
+\subsection{Acyclic total and integral local comparison}
+
+In the inner \(h\)-model put
+\[
+ G=\calH_c\times\Delta_w,\qquad
+ \calD=\{R_s=0\}\cap G .
+\]
+For a fixed \((p,w)\), balance the hyperbola by decreasing
+\(|y|^2/\sigma^2-\sigma^2|z|^2\) linearly to zero while
+keeping \(yz=R_s\) and the \(y\)-angle, where
+\(\sigma\) is close to \(\lambda^{(\alpha-\beta)/2}\).
+The final moduli are \(\sigma\sqrt{|R_s|}\) and
+\(\sigma^{-1}\sqrt{|R_s|}\). The root bound and \(M>3\)
+keep both strictly inside their cuts. Each modulus stays
+between its initial and final values, also on the axes,
+where the active modulus shrinks to zero.
+This realizes a deformation retraction onto
+\[
+ X(G,\calD)=(G\times S^1)/
+        (\{g\}\times S^1\text{ collapsed for }g\in\calD).
+                                                                    \tag{20}
+\]
+The constant \(y\)-angle section is continuous across the roots.
+It splits off \(G\); quotienting it gives
+\((G/\calD)\wedge S^1\). Hence, integrally,
+\[
+ H_3(W)=K,\quad H_2(W)=H/P_*D,\quad
+ H_3(W;\Z/4)\hookrightarrow D/4D.                  \tag{21}
+\]
+These follow from the relative long exact sequence of \((G,\calD)\);
+there is no rank-only inference.
+
+The same construction for disk totals has acyclic base and root
+totals, so \(\widehat W\) is acyclic.
+At \(s=0\), the weighted contraction
+\[
+ (X,T;y,z,w)\longmapsto
+ (t^{2/5}X,t^{1/5}T;\
+ t^{\alpha/d_P}y,t^{\beta/d_P}z,t^{1/d_P}w),
+ \qquad d_P=1+a\alpha,                              \tag{22}
+\]
+scales \(h,P,f_0\) by \(t\) and preserves every cut.
+Both the cone total and its inner total are contractible.
+Their Mayer--Vietoris sequence says that
+\(\widehat J_0\to\widehat M_{{\rm ext},0}\) is a homology
+equivalence. Exterior continuation transports this fact to \(s>0\).
+Attaching the acyclic \(\widehat W\) shows that
+\(\widehat{\mathcal T}_s\) is acyclic.
+
+Now fix \(s>0\) and choose an ordinary Milnor ball \(B_{\rm m}\)
+strictly inside all the outer cuts, with value radius
+\(0<\delta'\le\delta\). Let \(\widehat N\) be its closed
+Milnor disk total, and let \(\widehat A\) be the intervening
+part of the large total, with intersection
+\(\widehat S=\partial B_{\rm m}\cap f_s^{-1}(D_{\delta'})\).
+On \(\widehat A\) and \(\widehat S\), \(f_s\) is a proper
+submersion on every face over the whole disk: this uses the
+outer boundary proof, the ordinary Milnor-sphere choice,
+and uniform isolation in the intervening interior.
+Lifting contractions of the disk by face-tangent vector fields
+shows that page inclusions
+\(A\to\widehat A\) and \(S\to\widehat S\) are homotopy
+equivalences. Relative Mayer--Vietoris therefore gives an
+integral isomorphism
+\[
+ H_4(\widehat N,N;\Z)\ \xrightarrow{\;\cong\;}\
+ H_4(\widehat{\mathcal T}'_s,\mathcal T'_s;\Z).       \tag{23}
+\]
+The ordinary total is contractible by the cited Milnor theorem.
+Shrinking the large positive value radius from \(\delta\) to
+\(\delta'\) is an isotopy: lift the radial field on the
+annulus of nonzero values, tangent to all outer faces and
+zero near value zero. Thus its disk total stays acyclic.
+The relative connecting maps now identify (23) with an
+integral page isomorphism \(H_3(N)\cong H_3(\mathcal T_s)\).
+An ordinary filling is unchanged inside the larger total.
+Transporting its two boundaries back to radius \(\delta\)
+along disjoint angular rays adds collars with disjoint
+values and no new intersections. Thus (23) also preserves
+the ordered filling form.
+
+\section{Exterior coordinate and its signed boundary}
+
+At \(s=0\) take \(c>0\), write \(q=h\), and cut the exterior
+at \(\operatorname{Re}q=c/2\). Call its pieces \(A,B\).
+On \(A\), \(P=c-q\) stays away from zero; the inner block
+is absent. The compact \(P\)-pages trivialize over the
+convex allowed value region by the boundary estimates.
+Contracting the weighted base and transporting the \(P\)-page
+retracts \(A\) to \(Q\).
+On \(B\), trivialize \(h\) over its convex regular-value
+region, respecting its boundary and the labels in (19).
+For
+\[
+ r(v)=\max((|y|/M)^{1/\alpha},(|z|/M)^{1/\beta},|w|)
+\]
+scale \(v\) by \(t\) from \(1\) to \(\lambda/r(v)\).
+Retain the base-page label and put
+\[
+ q_t=c-t^{d_P}P(v)=(1-t^{d_P})c+t^{d_P}q.            \tag{24}
+\]
+This stays in the same convex base region, respects the exterior
+cut, and retracts \(B\) to the actual \(J\), relative to \(J\).
+The seam is \(\calH\times Q\) times a contractible interval.
+Its map to \(J=\calH\times L\) is the identity on the first
+factor and weighted radial projection on the second.
+
+Consequently the full page has the homotopy pushout, with
+the displayed geometric attachment,
+\[
+                W\ \longleftarrow\ \calH\times Q\
+                   \longrightarrow\ Q.           \tag{25}
+\]
+In particular its integral Mayer--Vietoris sequence is
+\[
+ 0\longrightarrow K\longrightarrow H_3(\mathcal T_s)
+ \xrightarrow{\partial}H\otimes E
+ \xrightarrow{\overline{1\otimes\tau}}H/P_*D.       \tag{26}
+\]
+The corresponding exterior sequence has a single additional
+\(H_3(J)=\Z\), generated by a lens fiber. It maps to zero in
+\(H_3(W)\), since the individual inner fiber has no third
+homology in (20). Thus the exterior image in the full page maps
+isomorphically to \(H\otimes\ker\tau\).
+Here \(H_2(J)=H/4H\); there is no Kunneth torsion involving
+the free group \(H\).
+
+We fix signs at the chain level. Write
+\(\mathfrak S(C)=[S^1_y]\times C\), circle first, so that
+\(\partial\mathfrak S(C)=-\mathfrak S(\partial C)\).
+In (21) the \(K\)-identification and the mod-four injection
+\(\Psi\) are \(-\partial_{\calD}\mathfrak S^{-1}\).
+In degree two use negative circle-first unsuspension.
+Then the base-first torus \([a\times\gamma]\) maps to
+\(+a\) in \(H/P_*D\).
+
+For a full cycle write its chains as \(w+e_A+e_B\), with
+\(\partial w=b_J\), and define \(t_C=-\partial e_A\).
+Then \(\partial e_B=t_C-b_J\).
+The prism of the stopped retraction (24) has boundary
+\(r_{1*}t_C-t_C\). Adding it to \(e_B\) proves
+\[
+ z=[t_C],\qquad [b_J]=(1\otimes\tau)z\in H/4H.       \tag{27}
+\]
+Thus the last arrow of (26) has the positive sign in (27);
+it is not left to a convention chosen later.
+
+\section{The geometric root-disk module and the actual transfer}
+
+\begin{lemma}[Braid-natural Bockstein transfer]\label{lem:transfer}
+With \(\beta[\overline C]=[\partial C/4]\), for any
+\(b\in H/4H=H_2(J)\) and any \(\eta\) with \(\beta\eta=b\),
+\[
+                       \Psi i_*\eta=T_*b\bmod4D.  \tag{28}
+\]
+This identity is for the actual graph family and its actual
+covering monodromy, not for an arbitrarily substituted cover.
+\end{lemma}
+\begin{proof}
+Work first over a regular \(p\in\calH_c\), with four distinct
+roots \(r_1,\ldots,r_4\), all inside \(|w|<\lambda/4\).
+The inner fiber \(F_p=\{yz=R_s(p,w)\}\cap Y_\lambda\)
+has the collapse (20) with base a disk and root set
+\(\{r_1,\ldots,r_4\}\). The anchor \(\gamma_p\) is the
+circle (18) at \(\theta=0\). Balancing carries it
+orientation-preservingly to the core circle at \(w_0\).
+It induces a homotopy equivalence of pairs.
+Adjoin the constant-angle disk section to the relative
+subspace; this changes no relative homology, since that disk
+meets the anchor at one point.
+Relative suspension and the endpoint exact sequence now give
+\[
+ H_2(F_p,\gamma_p)=
+ H_1(\Delta,\{w_0,r_1,\ldots,r_4\})
+ \cong\{(a_1,\ldots,a_4,a_0):\ \sum a_j+a_0=0\}.
+                                                               \tag{29}
+\]
+Let \(T_i\) be the disk swept over an arc from \(w_0\) to \(r_i\),
+with circle-first orientation. Its boundary is \(+\gamma_p\);
+its root coordinate is \(+e_i\). Thus (29) is the actual
+relative root-disk module \(\Z^4\), its boundary is
+\((a_i)\mapsto(\sum a_i)\gamma_p\), and the absolute
+spheres are \(\ker\sum\).
+
+The boundary \(L_p=\partial F_p\) is the lens link obtained
+by continuing the nonvertex cone boundary. The quotient cover
+\((U,V)\mapsto(U^4,V^4,UV)\) identifies one positive \(y\)-turn
+with the deck generator \((U,V)\mapsto(iU,-iV)\).
+Hence \(H_1(L_p)=\Z/4\), generated by \(\gamma_p\), and
+\(H_2(L_p)=0\). The latter also follows from orientability
+and the vanishing of \(H^1(L_p;\Z)\).
+The exact sequence of \((L_p,\gamma_p)\) supplies a unique
+relative class \(S_p\) with \(\partial S_p=4\gamma_p\).
+
+We determine its image in (29), including the possible pure-braid
+ambiguity. Move any four distinct roots inside the inner root
+disk along a braid and put \(Q_t(w)=\prod_i(w-r_i(t))\).
+Choose a disk velocity \(v_t\), supported in that disk, equal
+to \(\dot r_i(t)\) in a neighborhood of each root. The function
+\[
+                 \ell_t=(\dot Q_t+Q_t'v_t)/Q_t
+\]
+extends smoothly at every root. With a real cutoff \(\chi\)
+zero near the \(y\)-face and one near the disjoint \(z\)-face,
+the lift
+\[
+ \dot w=v_t,\qquad
+ \dot y=\chi\operatorname{Re}(\ell_t)y,\qquad
+ \dot z=(\ell_t-\chi\operatorname{Re}(\ell_t))z       \tag{30}
+\]
+preserves \(yz=Q_t(w)\), all active boundary faces, and the
+\(y\)-angle. It fixes \(w_0,y\) on the anchor, transporting
+its \(z\)-coordinate by \(Q_t(w_0)/y\).
+The compact flow realizes transport of the full triples
+\((F_t,L_t,\gamma_t)\). Under (29) its return is precisely
+the permutation of the four endpoint coordinates.
+In particular pure braids add no hidden sphere class.
+
+The unique \(S_p\) is invariant under every such return.
+Every root permutation can be realized by this auxiliary
+deformation of the same fiber triple, so its root coefficients
+are equal. Their sum is four. They are consequently all one:
+\[
+                       S_p\longmapsto
+                  N=(1,1,1,1).                    \tag{31}
+\]
+This use of auxiliary braids computes a single fiber class;
+it does not assert that the actual graph has full symmetric
+monodromy.
+
+Now take an oriented loop \(a\) in the actual \(\calH_c\)
+avoiding the branch values. The actual polynomials
+\(R_s(p,\cdot)\) induce a particular braid, to which (30)
+applies. Sweep a representative \(S_0\) around the cut loop,
+obtaining an interval-first chain \(T_a\) with endpoint \(S_1\).
+The anchor is fixed at the seam. Since \(H_2(L)=0\), choose
+a seam cap \(C_a\) with \(\partial C_a=S_1-S_0\).
+The product boundary formula gives
+\[
+ \partial T_a=S_1-S_0-4(a\times\gamma),\qquad
+ \eta_a=-[(T_a-C_a)\bmod4],\qquad
+ \beta\eta_a=[a\times\gamma].                       \tag{32}
+\]
+Changing the cap adds the reduction of an integral lens
+three-cycle, which dies in \(W\). The same is true of the
+ambiguity in an arbitrary Bockstein lift on \(J\).
+
+Slice away from the seam. For an oriented small base interval \(I_a\)
+and an arc \(I_i\) from \(w_0\) to \(r_i\),
+\[
+ -I_a\times T_i=\mathfrak S(I_a\times I_i),\qquad
+ -\partial_{\calD}(I_a\times I_i)=+[I_{a,i}].
+                                                               \tag{33}
+\]
+Thus (31)--(33) give the positive diagonal vector for
+\(\Psi i_*\eta_a\), with exactly the sign in (28).
+For the actual root permutation \(\sigma\), the components of
+\(\pi^{-1}(a)\) correspond to its orbits. Slicing their oriented
+fundamental cycles gives the orbit-sum vectors in \((\Z/4)^4\).
+These have disjoint supports, so the slice map on
+\(H_1(\pi^{-1}(a);\Z/4)\) is injective, including orbits of
+length two or four. The full actual transfer has the same
+diagonal vector (31). Equality therefore holds already over
+that actual covering loop, not merely in a rational module.
+Naturality under inclusion into the full root page proves (28).
+Such loops generate \(H\).
+\end{proof}
+
+The compact integral matrix
+\[
+ B=\begin{pmatrix}
+ 1&0&0&1\\-1&1&0&1\\0&-1&1&1\\0&0&-1&1
+ \end{pmatrix}                                    \tag{34}
+\]
+has columns \(e_1-e_2,e_2-e_3,e_3-e_4,N\) in (29).
+Its Smith diagonal is \((1,1,1,4)\).
+This certifies the index-four quotient of the actual relative
+root-disk group by the absolute spheres and the lens cap.
+It is not a substitute for the full page lattice.
+The retained Jacobian output gives explicit unimodular left
+and right transformations; \texttt{verify.py} replays them
+with exact integers and separately checks every one of the
+24 possible root permutations over \(\Z/4\).
+
+\section{Exact integral image, not just an index bound}
+
+For \(x\in H_3(\mathcal T_s)\), put \(z=\partial x\).
+Since \(4E\subset\ker\tau\), the exterior image supplies a
+unique class \(x_{\rm ext}(4z)\) with exterior coordinate \(4z\).
+Define
+\[
+             u=4x-x_{\rm ext}(4z)\in K,\qquad
+             x\longmapsto(u/4,z).                  \tag{35}
+\]
+The map is injective: if \(z=0\), (26) puts \(x\) in \(K\)
+and (35) is \((x,0)\).
+Both \(K\) and the image of \(\partial\) are free, so (26)
+also excludes hidden torsion in \(H_3(\mathcal T_s)\).
+
+Write \(x=w+v\), with \(\partial w=b_J\),
+\(\partial v=-b_J\). By (27), \([b_J]=b=(1\otimes\tau)z\).
+Choose an integral chain \(A\) in \(J\) with
+\(\partial A=4b_J\). The two closed chains are
+\[
+                  w_4=4w-i_WA,\qquad
+                  v_4=4v+i_{\rm ext}A.             \tag{36}
+\]
+Their sum is \(4x\), and \(v_4\) represents
+\(x_{\rm ext}(4z)\) in the full page. Reducing the first
+chain modulo four, applying (28), and using
+\(\beta[A\bmod4]=b\), gives the necessary residue
+\[
+                        u\equiv-T_*b\pmod{4D}.     \tag{37}
+\]
+The minus sign comes from subtracting the interface cap,
+not from reversing a chosen transfer.
+
+For any integral lift \(b_H\in H\), set
+\(l=(u+T_*b_H)/4\). Equation (37) says \(l\in D\);
+then (3) gives \(P_*l=b_H\) and \(\pr(l)=u/4\).
+This proves containment in (5).
+
+Conversely, let \(l,z\) satisfy (5). Since \(4H\subset P_*D\),
+the last arrow of (26) kills \(z\). Choose an actual page class
+\(x\) over \(z\), with numerator \(u_x\). Put
+\(u_l=4l-T_*P_*l\in K\).
+Equation (37) gives
+\[
+                  u_x-u_l\in K\cap4D=4K.           \tag{38}
+\]
+The equality is integral: if \(4d\in K\), then \(4P_*d=0\)
+in the torsion-free \(H\), so \(d\in K\).
+Adding \((u_l-u_x)/4\in K\) to \(x\) realizes exactly
+\((\pr(l),z)\). This proves surjectivity onto all of (5).
+It uses the actual geometric exact sequence and the actual
+transfer, not equal ranks or an abstract isometric lattice.
+
+\section{Both orders of the filling form}
+
+\subsection{Cross terms and the exterior summand}
+
+Inner cycles bound in the acyclic \(\widehat W\).
+An exterior page representative of \(H\otimes\ker\tau\)
+need not initially bound in \(\widehat M_{\rm ext}\).
+However, the interface disk total continues to the product
+of the acyclic base total with \(L\); hence
+\[
+ H_3(\widehat J)=H_3(\widehat M_{\rm ext})=\Z .
+\]
+The isomorphism is the actual inclusion, as proved using (22).
+The page lens-fiber generator maps to a generator of this
+group and dies in the full page. Subtracting the requisite
+integer multiple of it from an exterior representative
+makes that representative bound in \(\widehat M_{\rm ext}\).
+This adjustment can be transported over a short value arc.
+Put the inner and exterior fillings on their respective sides
+of the interface bicollar. They are disjoint. This works
+with the inner filling first and also with the exterior
+filling first, proving both ordered cross terms vanish.
+Since \(4E\subset\ker\tau\), these exterior classes span
+the whole rational exterior summand.
+
+Continue the exterior fillings to \(s=0\) and lift them
+fully under the cone cover. All these fillings stay off
+the vertex. Their intersection number upstairs is four
+times the downstairs number, since the cover is
+orientation-preserving and unramified there.
+Embed the lifted fillings in the smooth weighted tube
+of \(h+\widetilde P\). Its disk total is contractible
+by the simultaneous positive weights, so replacing
+fillings with the same boundary changes no intersection
+number.
+
+Here is the product computation without invoking an external
+Seifert-product theorem. For loops \(a,v\) in the two plane
+pages, the join of their weighted radial transports at
+values \(tc,(1-t)c\) is the class whose seam coordinate
+is \(a\otimes v\). The product of the two radial cone
+fillings, restricted to the triangle \(t,t'\ge0,\ t+t'\le1\),
+bounds this join; the edges at a collapsed loop contribute
+no chain boundary. Construct the second filling on the
+positive neighboring ray. Their intersections are localized
+where both factor values vanish and, after relative
+general-position perturbation, their local numbers are
+products of the two plane filling intersection numbers.
+Moving the second real two-dimensional factor past the
+first real two-dimensional factor contributes
+\((-1)^{2\cdot2}=+1\). A common reversal of the join
+orientation occurs in both fillings and cancels.
+Thus the upstairs ordered form is
+\(s_h\otimes\widetilde s\).
+The seam coordinate of a full lift is
+\((1\otimes\Tr)z\). Dividing intersections by four gives
+exactly \(s_h\otimes e\) on the exterior rational summand.
+
+\subsection{The inner summand and its negative normal determinant}
+
+Work in the inner \(h\)-model over the whole value disk.
+Let \(\widehat G\) be the acyclic base total times the
+\(w\)-disk and \(\widehat{\calD}\) its smooth root total.
+For \(l_1,l_2\in K\) on the reference and positive neighboring
+root pages, choose surface fillings
+\(\Sigma_i\subset\widehat{\calD}\) with
+\(\partial\Sigma_i=l_i\).
+The kernel condition gives surface chains
+\(V_i\subset G_{c_i}\) with \(\partial V_i=-l_i\).
+Since \(H_2(\widehat G)=0\), choose three-chains \(\Gamma_i\)
+with
+\[
+                      \partial\Gamma_i=\Sigma_i+V_i.             \tag{39}
+\]
+Prescribe a collar of \(\Sigma_i\) with positive real
+normal coordinate \(R_s=t\). Near \(l_i\), the normal
+can be chosen tangent to \(h=c_i\), since the root page
+is regular. Extend the remaining chains relatively.
+Make the \(\Sigma_i\) transverse in the real four-dimensional
+root total. Generic perturbations of the unprescribed
+parts of \(\Gamma_i\) meet the root in one-dimensional
+chains \(I_i\), disjoint from the other \(\Sigma_j\)
+and from each other: their dimension sums in the root
+total are \(1+2<4\) and \(1+1<4\).
+The distinct page-value collars separate all boundary contacts.
+
+Choose distinct positive balancing parameters \(\sigma_1,\sigma_2\)
+close enough to the value used in (20). Sweep \(\Gamma_i\)
+by the \(y\)-circle at
+\[
+ |y|=\sigma_i\sqrt{|R_s|},\quad
+ |z|=\sigma_i^{-1}\sqrt{|R_s|},\quad z=R_s/y .
+\]
+Give the sweep orientation \(-\mathfrak S(\Gamma_i)\).
+Then
+\[
+ \partial(-\mathfrak S(\Gamma_i))=\mathfrak S(V_i),
+ \qquad -\partial_{\calD}V_i=l_i,                  \tag{40}
+\]
+so these are fillings of the positive \(K\)-classes in our
+fixed convention. They are legitimate integral mapped
+chains, not merely pictures of smooth submanifolds.
+Near a transverse incidental root curve the collapsed
+domain is \(I_i\times\operatorname{cone}(T^2)\).
+The closed oriented torus link makes the top-chain
+boundary cancel; the cone tip is not a codimension-one
+face. At a prescribed root collar the collapse is an
+ordinary disk. These observations justify (40) after a
+compatible triangulation.
+
+Off the root the two swept chains are disjoint, because
+their balancing radii differ. Their only common root
+contacts are \(\Sigma_1\cap\Sigma_2\).
+The incidental cone tips are disjoint from the other
+chain, so local general-position approximations there
+change neither the class nor any intersection number.
+At a prescribed contact, the normal disks in complex
+coordinates \(y,z\) are
+\[
+                         z=\sigma_i^{-2}\overline y.
+\]
+Put \(c_i=\sigma_i^{-2}\). In real coordinates their
+ordered intersection determinant is
+\[
+ \det\begin{pmatrix}
+ 1&0&1&0\\0&1&0&1\\c_1&0&c_2&0\\0&-c_1&0&-c_2
+ \end{pmatrix}
+                    =-(c_2-c_1)^2<0.              \tag{41}
+\]
+The common sweep reversal cancels between the two disks.
+Exchanging a real two-dimensional disk with a real
+two-dimensional root filling contributes \(+1\).
+Thus every root filling intersection is reversed, in
+the fixed neighboring-page order:
+\[
+                  s_{\rm inner}(l_1,l_2)=-s_d(l_1,l_2).            \tag{42}
+\]
+The same determinant is negative in the reverse order;
+no symmetry of the plane Seifert form was assumed.
+Equations (23), (35)--(38), and (42), together with the
+exterior computation, prove Theorem~\ref{thm:main}.
+
+\section{Exact replay, interpretation, and remaining frontier}
+
+Run \texttt{python3 -B research/m45\_seifert/verify.py} from
+the campaign root. It uses exact arithmetic, not numerical
+root tracking, and replays the following compact identities:
+\begin{itemize}
+\item the source polynomial and scaling identities, the gradient
+Bezout identity (8), and the polar polynomial (10);
+\item the geometrically realized root-disk matrix (34), including
+the retained Jacobian unimodular transformations and index four;
+\item orbit-slice injectivity, the norm vector, and full-transfer
+degree for all 24 four-sheet monodromy permutations over \(\Z/4\);
+\item the chain boundaries (32), (36), their mod-four minus sign,
+and the integral saturation argument underlying (38);
+\item the normal determinant (41), its reversed order, and the
+positive exterior product shuffle sign.
+\end{itemize}
+The accompanying certificate records exactly which assertions are
+computations and which require the geometric proof. It makes no
+claim that enumerating permutations proves the existence of the
+local comparison, or that a successful Smith calculation identifies
+the actual Milnor lattice on its own. Actual realization is supplied
+by (18)--(20), (23)--(25), and (29)--(33).
+
+As a consistency check, with \(m=4ab+a+b\) the cone page has
+rank \(m+1\). Indeed the isolated weighted plane polynomial
+\(\widetilde P\) has weights \((b,a)\), degree \(m\), and
+Jacobian length
+\((m-b)(m-a)/(ab)=(4a+1)(4b+1)\); the length follows
+from the two-generator weighted Koszul Hilbert series.
+Its free degree-four page quotient has Euler characteristic
+\((1-\mu(\widetilde P))/4=-m\).
+Equation (5) therefore has rank
+\((51-6)+6(m+1)=24ab+6a+6b+51\), agreeing with
+\texttt{C059APPLICATION}. This equality is a check after the
+integral proof, not a surjectivity argument.
+
+The mathematical improvement over the strongest prior result is
+the integral local comparison, the full realized mod-four
+extension, and the ordered form, together with a uniform
+outer-isolation proof. No isometry between the two resulting
+\(\Lambda_{\pi_i}\) is asserted here. M45's arithmetic congruence
+and classification applications, all independent M23 obligations,
+independent review of this proof, and any claim of publishable
+novelty remain open. No Reviewer verdict is self-recorded.
+
+\begin{thebibliography}{9}
+\bibitem{Massey}
+D. B. Massey, \emph{Non-isolated Hypersurface Singularities and
+L\^e Cycles}, arXiv:1410.3312v2, November 13, 2015.
+Theorem 1.8, Remark 1.9, and Section 1, p.~6, items (2)--(5).
+\end{thebibliography}
+\end{document}

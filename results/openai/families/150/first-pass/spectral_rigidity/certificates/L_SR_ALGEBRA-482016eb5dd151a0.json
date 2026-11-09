@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-L_SR_ALGEBRA-56c7ae0b2903",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/150/first-pass/spectral_rigidity/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6530,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/150/first-pass/spectral_rigidity/Main.lean",
+    "source_sha256": "b92f718976abf86bfe60df4823bd5f18608c5e5d3da78bb14eeda1cb41feab3a",
+    "statement_fidelity": "families/150/first-pass/spectral_rigidity/statement_fidelity.md",
+    "statement_fidelity_sha256": "29adc0492cc0d8ecf5b2d8f1ba1bf48a140d654380b378ec62e32314dddf5f95",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/150/first-pass/spectral_rigidity/Main.lean:77:40: error(lean.invalidField): Invalid field `mp`: The environment does not contain `Function.mp`, so it is not possible to project the field `mp` from an expression\n  mul_le_mul_left ?m.275\nof type\n  ∀ (a : ?m.269), ?m.273 * a ≤ ?m.274 * a\nfamilies/150/first-pass/spectral_rigidity/Main.lean:77:36: error: Application type mismatch: The argument\n  hp\nhas type\n  0 < energy\nbut is expected to have type\n  ?m.273 ≤ ?m.274\nin the application\n  mul_le_mul_left hp\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/spectral_rigidity/Main.lean",
+    "text": "import Mathlib\n\nnamespace SpectralRigidity\n\nopen scoped BigOperators\n\ntheorem finite_difference_telescopes (F : ℤ → ℝ) (m : ℤ) (n : ℕ) :\n    (∑ k ∈ Finset.range n, (F (m + (k : ℤ)) - F (m + (k : ℤ) + 1))) =\n      F m - F (m + (n : ℤ)) := by\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      rw [Finset.sum_range_succ, ih]\n      simp only [Nat.cast_add, Nat.cast_one, add_assoc]\n      ring\n\ntheorem spectral_telescope (D C : ℤ → ℝ) (m : ℤ) (n : ℕ) :\n    (∑ k ∈ Finset.range n,\n      (D (m + (k : ℤ)) - D (m + (k : ℤ) + 2) -\n        C (m + (k : ℤ)) + C (m + (k : ℤ) + 1))) =\n      D m + D (m + 1) - D (m + (n : ℤ)) - D (m + (n : ℤ) + 1) -\n        C m + C (m + (n : ℤ)) := by\n  let F : ℤ → ℝ := fun j => D j + D (j + 1) - C j\n  have hpoint (j : ℤ) :\n      D j - D (j + 2) - C j + C (j + 1) = F j - F (j + 1) := by\n    dsimp [F]\n    have h : j + 1 + 1 = j + 2 := by omega\n    rw [h]\n    ring\n  calc\n    _ = ∑ k ∈ Finset.range n, (F (m + (k : ℤ)) - F (m + (k : ℤ) + 1)) := by\n      apply Finset.sum_congr rfl\n      intro k _\n      exact hpoint _\n    _ = F m - F (m + (n : ℤ)) := finite_difference_telescopes F m n\n    _ = _ := by dsimp [F]; ring\n\ndef innerFirst (z w : ℂ) : ℂ := z * star w\n\ntheorem endpoint_pairing_formula (b a u v : ℂ) (l : ℝ) :\n    innerFirst b (-(l : ℂ) * v - 2 * Complex.I * b) +\n        innerFirst (-a) ((l : ℂ) * u + 2 * Complex.I * a) =\n      2 * Complex.I * ((Complex.normSq b + Complex.normSq a : ℝ) : ℂ) -\n        (l : ℂ) * (innerFirst b v + innerFirst a u) := by\n  apply Complex.ext <;> simp [innerFirst, Complex.normSq] <;> ring\n\ntheorem complex_two_vector_cauchy (b a u v : ℂ) :\n    Complex.normSq (innerFirst b v + innerFirst a u) ≤\n      (Complex.normSq b + Complex.normSq a) *\n        (Complex.normSq v + Complex.normSq u) := by\n  have h :\n      (Complex.normSq b + Complex.normSq a) *\n          (Complex.normSq v + Complex.normSq u) -\n        Complex.normSq (innerFirst b v + innerFirst a u) =\n          Complex.normSq (b * u - a * v) := by\n    simp [innerFirst, Complex.normSq]\n    ring\n  have hn := Complex.normSq_nonneg (b * u - a * v)\n  linarith\n\ntheorem endpoint_scalar_bound (energy mass l re im : ℝ)\n    (henergy : 0 ≤ energy) (hmass : 0 ≤ mass)\n    (hcauchy : re ^ 2 + im ^ 2 ≤ energy * mass)\n    (hpair : 2 * energy = l * im) :\n    energy ≤ l ^ 2 * mass / 4 := by\n  by_cases hz : energy = 0\n  · rw [hz]\n    positivity\n  · have hp : 0 < energy := lt_of_le_of_ne henergy (Ne.symm hz)\n    have hc := mul_le_mul_of_nonneg_left hcauchy (sq_nonneg l)\n    have heq : (2 * energy) ^ 2 = (l * im) ^ 2 :=\n      congrArg (fun x : ℝ => x ^ 2) hpair\n    have hsq : 4 * energy ^ 2 ≤ l ^ 2 * energy * mass := by\n      nlinarith [sq_nonneg (l * re)]\n    have hmul : energy * (4 * energy) ≤ energy * (l ^ 2 * mass) := by\n      nlinarith [hsq]\n    have hbound := (mul_le_mul_left hp).mp hmul\n    linarith\n\ntheorem two_boundary_energy (b a u v : ℂ) (l : ℝ)\n    (hpair :\n      innerFirst b (-(l : ℂ) * v - 2 * Complex.I * b) +\n        innerFirst (-a) ((l : ℂ) * u + 2 * Complex.I * a) = 0) :\n    Complex.normSq b + Complex.normSq a ≤\n      l ^ 2 * (Complex.normSq v + Complex.normSq u) / 4 := by\n  let energy := Complex.normSq b + Complex.normSq a\n  let mass := Complex.normSq v + Complex.normSq u\n  let c := innerFirst b v + innerFirst a u\n  have hformula := endpoint_pairing_formula b a u v l\n  rw [hpair] at hformula\n  have hid : 2 * Complex.I * (energy : ℂ) = (l : ℂ) * c := by\n    exact sub_eq_zero.mp hformula.symm\n  have him : 2 * energy = l * c.im := by\n    have h := congrArg Complex.im hid\n    simpa using h\n  have hc : c.re ^ 2 + c.im ^ 2 ≤ energy * mass := by\n    have h := complex_two_vector_cauchy b a u v\n    change Complex.normSq c ≤ energy * mass at h\n    simpa [Complex.normSq, pow_two] using h\n  exact endpoint_scalar_bound energy mass l c.re c.im\n    (add_nonneg (Complex.normSq_nonneg b) (Complex.normSq_nonneg a))\n    (add_nonneg (Complex.normSq_nonneg v) (Complex.normSq_nonneg u)) hc him\n\ntheorem sharp_energy_forces_transverse_zero (xEnergy yEnergy l mass : ℝ)\n    (hy : 0 ≤ yEnergy) (hx : xEnergy = l ^ 2 * mass)\n    (hsharp : xEnergy + yEnergy ≤ l ^ 2 * mass) :\n    yEnergy = 0 := by\n  linarith\n\nend SpectralRigidity\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/spectral_rigidity/statement_fidelity.md",
+    "text": "# Statement fidelity: spectral algebra, not the analytic theorem\n\nThe declarations in namespace `SpectralRigidity` formalize the algebraic\nclaim `L_SR_ALGEBRA`. They do not formalize Proposition `C_SR`, a\nmeasurable flow, a cone surface, an infinite Fourier series, a weak limit,\nor an integration-by-parts domain.\n\n`finite_difference_telescopes` quantifies over every real-valued sequence\non the integers, every integer initial index, and every natural tail\nlength, including zero. `spectral_telescope` uses the same unrestricted\nindices for arbitrary real sequences D and C. It sums the consecutive,\nnot parity-restricted, spectral summands\n\n    D_j - D_(j+2) - C_j + C_(j+1).\n\nIts right side has exactly the two D endpoints and one C correction at\neach end. Substituting the manuscript's integrated spectral recurrence\ngives its finite energy telescoping formula; existence and decay of the\nanalytic quantities being substituted are not formalized.\n\n`innerFirst z w = z * star w` is the complex scalar inner product linear\nin the first entry. This intentionally matches the manuscript rather\nthan Mathlib's first-conjugate-linear inner-product convention.\n`endpoint_pairing_formula` quantifies over all complex scalars b,a,u,v\nand every real l, with no division by l. It verifies the exact signed\npairing for boundary modes (b,-a) against\n(-l*v-2*i*b,l*u+2*i*a). `complex_two_vector_cauchy` proves the associated\ntwo-dimensional complex Cauchy inequality.\n\n`endpoint_scalar_bound` quantifies over arbitrary real energy, mass, l,\nre and im. Its hypotheses are nonnegative energy and mass, the scalar\nCauchy inequality re^2+im^2 <= energy*mass, and\n2*energy = l*im. Its conclusion is\n\n    energy <= l^2*mass/4.\n\nThis includes energy zero and l zero. This declaration is the\nHilbert-space algebraic reduction: using integrated coefficient norms\nfor energy and mass requires proving the integrated pairing and applying\nHilbert-space Cauchy--Schwarz separately in the report.\n\n`two_boundary_energy` instantiates these facts for arbitrary complex\nscalars with the displayed zero-pairing hypothesis. It is not, by\nitself, a formalization of the infinite-dimensional coefficient-space\napplication. `sharp_energy_forces_transverse_zero` proves the real\nnonnegative-energy implication used after Parseval; Parseval and\nidentification of those energies with weak derivatives remain analytic\nproof obligations.\n\nThere are no explicit axioms, admitted statements, proof holes, or\nfinite numerical tests in this source. Mathematical interpretation and\nthe analytic application require independent human review even when the\nLean compiler accepts every declaration.\n"
+  },
+  "subject": {
+    "content_hash": "4fa11f8afa64c13278bdb7daa76615f3d868a4a4659b7fd7d83e10c4312fc223",
+    "kind": "claim",
+    "subject_id": "L_SR_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

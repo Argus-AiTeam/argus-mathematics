@@ -1,0 +1,167 @@
+{
+  "goal": "C9000351",
+  "routes": {
+    "R_HD_MAIN": {
+      "goal": "C_HD_SCALAR",
+      "obligations": ["C_HD_INPUT", "C_HD_CAP", "C_HD_REACTION", "C_HD_COMPARISON"]
+    },
+    "R_HD_CAP": {
+      "goal": "C_HD_CAP",
+      "obligations": ["C_HD_INPUT", "C_HD_GEOMETRY"]
+    },
+    "R_HD_DERIVATIVES": {
+      "goal": "C_HD_UNIFORM",
+      "obligations": ["C_HD_INPUT", "C_HD_HEAT"]
+    },
+    "R_HD_REACTION": {
+      "goal": "C_HD_REACTION",
+      "obligations": ["C_HD_UNIFORM", "C_HD_CAP"]
+    },
+    "R_HD_SHARP": {
+      "goal": "C_HD_SHARP",
+      "obligations": ["C_HD_UNIFORM"]
+    },
+    "R_HD_REACTION_SHARP": {
+      "goal": "C_HD_REACTION",
+      "obligations": ["C_HD_SHARP", "C_HD_CAP"]
+    },
+    "R_HD_CONTINUOUS": {
+      "goal": "C_HD_CONTINUOUS",
+      "obligations": ["C_HD_CAP", "C_HD_SHARP", "C_HD_COMPARISON"]
+    },
+    "R_HD_OMISSION": {
+      "goal": "C_HD_OMISSION",
+      "obligations": [],
+      "status": "retired",
+      "retired_because": "Definition 3.3 and the proof of Theorem 4.3 explicitly propagate the inner barriers; omission from Definition 4.1 alone does not invalidate their use.",
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/literature/stolarski-inner/theorem-4.3-inner-propagation.tex"
+      ]
+    }
+  },
+  "nodes": {
+    "C9000351": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 351 (Scalar curvature and finite-time Ricci-flow singularities.; papers: A closed Ricci flow with bounded scalar curvature and finite-time curvature blowup; Bounded scalar curvature and smooth extension of four-dimensional Ricci flow; Path selection and an elliptic inequality on degenerating Ricci-flat trees; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_HD_SCALAR"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_HD_INPUT": {
+      "statement": "The exact Stolarski v1 construction supplies the stated weighted profiles and inner barriers with sequential tolerance, cutoff, and starting-time choices.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/literature/stolarski-profiles/REPORT.md",
+        "research/certificates/highdim-ricci-scalar/literature/stolarski-inner/definition-3.3.tex",
+        "research/certificates/highdim-ricci-scalar/literature/stolarski-inner/appendix-B.tex"
+      ]
+    },
+    "C_HD_GEOMETRY": {
+      "statement": "The construction implies bounded warping slopes, a scalar lower bound, a global positive radius ratio, strict inner cone separation, and fixed-parabolic-annulus Ricci decay.",
+      "status": "open",
+      "depends_on": ["C_HD_INPUT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/exact_certificate.json"
+      ]
+    },
+    "C_HD_HEAT": {
+      "statement": "A one-dimensional heat equation with diffusion uniformly close to one and bounded solution, drift, and source has a bounded interior spatial derivative without coefficient derivative bounds.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/literature/krylov/source.tex"
+      ]
+    },
+    "C_HD_CAP": {
+      "statement": "The stated inputs imply a flow-dependent global bound (r^2+theta^2)|Rm| <= C.",
+      "status": "open",
+      "depends_on": ["C_HD_INPUT", "C_HD_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/literature/cao-zhu/source.pdf"
+      ]
+    },
+    "C_HD_UNIFORM": {
+      "statement": "The moving cylinders give |r z_r| <= C/sqrt(q) and r^2 |u_rr| <= C sqrt(q), with C independent of q and k.",
+      "status": "open",
+      "depends_on": ["C_HD_INPUT", "C_HD_HEAT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/exact_certificate.json"
+      ]
+    },
+    "C_HD_REACTION": {
+      "statement": "The invariant Ricci reaction quotient is at most [2(q-1)+C sqrt(q)]/r^2 with C independent of q,k, and has the separate flow-dependent cap and global radius bounds.",
+      "status": "open",
+      "depends_on": ["C_HD_SHARP", "C_HD_CAP"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/exact_certificate.json"
+      ]
+    },
+    "C_HD_COMPARISON": {
+      "statement": "The quantified reaction, cap, and annular estimates and positive diffusion margin imply a global uniform scalar bound under a>2, L>0, e=a-L/sigma in (0,1), nu>1, sigma>1/2, and nu-1-L+a/2 >= 0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/exact_certificate.json"
+      ]
+    },
+    "C_HD_SCALAR": {
+      "statement": "For sufficiently large q followed by sufficiently large even k and the stated sequential construction choices, the constructed flow has uniformly bounded scalar curvature and finite-time full-curvature blowup.",
+      "status": "open",
+      "depends_on": ["C_HD_INPUT", "C_HD_CAP", "C_HD_REACTION", "C_HD_COMPARISON"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/exact_certificate.json",
+        "research/certificates/highdim-ricci-scalar/verify.py"
+      ]
+    },
+    "C_HD_SHARP": {
+      "statement": "For a universal derivative constant K and all sufficiently large q>=K+10, c <= [2(q-1)+C_sharp]/r^2 with C_sharp=8+4((6K+16)^2+64), independent of q and k.",
+      "status": "open",
+      "depends_on": ["C_HD_UNIFORM"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/exact_certificate.json",
+        "research/certificates/highdim-ricci-scalar/verify.py"
+      ]
+    },
+    "C_HD_CONTINUOUS": {
+      "statement": "Under the explicitly quantified geometric and annular hypotheses, sigma>1/2 and nu>max(1,sigma) imply uniformly bounded scalar curvature for sufficiently large q; no continuous-exponent existence theorem is asserted.",
+      "status": "open",
+      "depends_on": ["C_HD_CAP", "C_HD_SHARP", "C_HD_COMPARISON"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/HIGHDIM_AUDIT.md",
+        "research/certificates/highdim-ricci-scalar/exact_certificate.json",
+        "research/certificates/highdim-ricci-scalar/verify.py"
+      ]
+    },
+    "C_HD_OMISSION": {
+      "statement": "The omission of inner barriers from Stolarski Definition 4.1 alone invalidates their invocation in the staged manuscript.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/HIGHDIM_AUDIT.md"]
+    }
+  }
+}

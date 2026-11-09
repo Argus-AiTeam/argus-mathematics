@@ -1,0 +1,93 @@
+{
+  "goal": "C9000256",
+  "routes": {},
+  "nodes": {
+    "C9000256": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 256 (Nonsingular systems of equations over arbitrary groups.; papers: Nonsingular systems of equations over arbitrary groups; The Kervaire theorem for groups; Lean status: Partially/Comparator formalized (lean/docs/256.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_FS"],
+      "reviewer_confirmed": false,
+      "remaining": "Independent review and campaign-level novelty/significance assessment. This fixed-space audit route does not certify the full arbitrary-group theorem.",
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_FS": {
+      "statement": "The October simultaneous fixed-space theorem, with arbitrary positive block sizes, signed repeated occurrences, rational row rank, and arbitrary fixed unitary matrices.",
+      "status": "open",
+      "depends_on": ["L_FS_MINOR", "L_FS_PRIMITIVE", "L_FS_INCIDENCE", "L_FS_ALG", "L_FS_INTERSECTION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Nonsingular-systems-of-equations-over-arbitrary-groups-October-5-2026/build/sections/fixed-space.tex",
+        "research/fixed_space_audit/report.md"
+      ],
+      "remaining": "Independent Reviewer assessment of the universal proof and statement fidelity; canonical citation attribution belongs to review."
+    },
+    "L_FS_MINOR": {
+      "statement": "Full row rank gives nested nonzero initial-row minors and feasible target dimensions, including unequal sizes.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fixed_space_audit/report.md"]
+    },
+    "L_FS_PRIMITIVE": {
+      "statement": "Compatible primitive rational unitary-group generators give the stated signed-occurrence pullback formula.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fixed_space_audit/report.md", "research/fixed_space_audit/literature.md"]
+    },
+    "L_FS_INCIDENCE": {
+      "statement": "The compact oriented incidence resolution has a nonzero maximal-length exterior coefficient, including l=0 and l=d.",
+      "status": "open",
+      "depends_on": ["L_FS_PRIMITIVE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fixed_space_audit/report.md", "research/fixed_space_audit/verify.py"]
+    },
+    "L_FS_ALG": {
+      "statement": "All shorter terms vanish in top degree and the surviving coefficient is, up to orientation sign, the incidence coefficients times the product of nested minors.",
+      "status": "open",
+      "depends_on": ["L_FS_FORMAL", "L_FS_MINOR", "L_FS_PRIMITIVE", "L_FS_INCIDENCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fixed_space_audit/report.md", "research/fixed_space_audit/Main.lean"]
+    },
+    "L_FS_FORMAL": {
+      "statement": "Universal machine-checked filtered determinant factorization and its nonvanishing implication.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fixed_space_audit/Main.lean", "research/fixed_space_audit/statement_fidelity.md"],
+      "remaining": "The compiler certifies the algebra; independent statement-fidelity approval has not been supplied."
+    },
+    "L_FS_INTERSECTION": {
+      "statement": "A nonzero top intersection pairing forces an actual common point of the compact maps, without assuming the incidence image is a submanifold.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fixed_space_audit/report.md", "research/fixed_space_audit/literature.md"]
+    },
+    "C_FS_LAYER": {
+      "statement": "For continuous maps between the stated products of unitary groups, matching size profiles, linear primitive pullbacks, and nonsingular matrices at every layer force simultaneous prescribed fixed subspaces, even when coefficients vary with the layer.",
+      "status": "open",
+      "depends_on": ["L_FS_PRIMITIVE", "L_FS_INCIDENCE", "L_FS_FORMAL", "L_FS_INTERSECTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/fixed_space_audit/report.md"],
+      "remaining": "Independent mathematical review and any novelty or significance assessment; novelty is not asserted."
+    },
+    "C_MAIN_BRIDGES": {
+      "statement": "The spectral-phase, planar-operator, and relation-to-surface arguments connecting fixed spaces to injectivity for arbitrary groups remain outside this scoped mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C_MAIN_GROUPS": {
+      "statement": "For every group G and every finite system of words over G with rationally independent exponent-sum rows, the coefficient map into the quotient by the relators is injective.",
+      "status": "open",
+      "depends_on": ["C_FS", "C_MAIN_BRIDGES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Nonsingular-systems-of-equations-over-arbitrary-groups-October-5-2026/build/sections/introduction.tex"],
+      "remaining": "The fixed-space input alone does not establish the phase, planar, or kernel bridges."
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "goal": "C9000037",
+  "routes": [
+    {
+      "name": "adjoint-jet-verification",
+      "status": "current",
+      "evidence": "research/adjoint_jet_lifting/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000037": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 037 (The ordinary-double-point volume gap.; papers: The ordinary-double-point gap in every dimension; The normalized-volume gap in dimension four; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_AJL_LIFT",
+        "C_AJL_SAT"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_GAP_MAIN": {
+      "statement": "For every singular boundary-zero klt complex algebraic n-fold germ, n>=2, normalized volume is at most 2(n-1)^n, with equality exactly at the ordinary double point.",
+      "status": "open",
+      "depends_on": ["C_FOURFOLD_MAIN", "C_GAP_CONE", "C_GAP_SMALL", "C_GAP_INTERIOR", "C_AJL_LIFT", "C_AJL_SAT", "C_GAP_FILTRATIONS", "C_GAP_BOOTSTRAP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-ordinary-double-point-gap-in-every-dimension-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "C_GAP_CONE": {
+      "statement": "Under the induction and density hypotheses, stable degeneration gives a singular K-polystable Gorenstein cone with smooth puncture, preserving volume and controlling embedding dimension; primitive integral gradings approximate its minimizing Reeb ray.",
+      "status": "open",
+      "depends_on": ["C_FOURFOLD_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-ordinary-double-point-gap-in-every-dimension-September-24-2026/build/sections/02-cone-reduction.tex"]
+    },
+    "C_GAP_SMALL": {
+      "statement": "The small-stabilizer branch is classified as projective space or a smooth quadric for sufficiently far gradings, including an exact rational grading.",
+      "status": "open",
+      "depends_on": ["C_GAP_CONE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-ordinary-double-point-gap-in-every-dimension-September-24-2026/build/sections/03-small-stabilizers.tex"]
+    },
+    "C_GAP_INTERIOR": {
+      "statement": "Under the fixed-cone density hypothesis and m>=r/N, the canonical vector (r,1,...,1) lies in the interior for sufficiently far gradings, or for the exact rational minimizing grading.",
+      "status": "open",
+      "depends_on": ["C_GAP_CONE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-ordinary-double-point-gap-in-every-dimension-September-24-2026/build/sections/04-jet-interiority.tex"]
+    },
+    "C_AJL_LIFT": {
+      "statement": "For the exact orbifold jet data, q in Lambda and q+c in Int K imply q in Gamma, without assuming c in Int K.",
+      "status": "open",
+      "depends_on": ["C_AJL_GENERAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/adjoint_jet_lifting/report.md", "research/adjoint_jet_lifting/exact_certificate.json"]
+    },
+    "C_AJL_GENERAL": {
+      "statement": "For a smooth integral effective proper complex orbifold B of dimension at least two with projective coarse space, ample L, and the specified faithful cyclic local character data, let M be a line bundle and t>0 rational with M-K_B-tL nef. Every nonnegative integral alpha compatible with the M fiber character and satisfying (t,alpha+1) in Int K(L) is the Taylor initial of a global section of M.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/adjoint_jet_lifting/report.md", "research/adjoint_jet_lifting/exact_certificate.json"]
+    },
+    "C_AJL_SAT": {
+      "statement": "Assuming c in Int K, adjoint lifting forces rational polyhedrality, primitive facet height one, exact saturation, and interior translation.",
+      "status": "open",
+      "depends_on": ["C_AJL_LIFT", "C_AJL_POLYHEDRAL", "C_AJL_FACET_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/adjoint_jet_lifting/report.md", "research/adjoint_jet_lifting/exact_certificate.json"]
+    },
+    "C_AJL_POLYHEDRAL": {
+      "statement": "For any proper full-dimensional closed convex cone C in a finite-dimensional real vector space with full lattice Lambda and c in Int C intersect Lambda, if (Int C-c) intersect Lambda is contained in C, then C is rational polyhedral and every primitive facet form has value one at c.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/adjoint_jet_lifting/report.md"]
+    },
+    "C_AJL_FACET_KERNEL": {
+      "statement": "For finitely many integral additive support forms of value one at c, strict shifted lifting and containment imply equality with the closed lattice halfspaces and exact translation of their strict lattice halfspaces.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/adjoint_jet_lifting/Main.lean", "research/adjoint_jet_lifting/statement_fidelity.md", "research/adjoint_jet_lifting/certificates/C_AJL_FACET_KERNEL-1ade0225935d5908.json"]
+    },
+    "C_GAP_FILTRATIONS": {
+      "statement": "The saturated Taylor semigroup gives the normal Gorenstein first degeneration and the second filtration and stabilizer data required by the bootstrap.",
+      "status": "open",
+      "depends_on": ["C_AJL_SAT", "C_GAP_INTERIOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-ordinary-double-point-gap-in-every-dimension-September-24-2026/build/sections/06-filtrations.tex"]
+    },
+    "C_GAP_BOOTSTRAP": {
+      "statement": "The second-stabilizer and character-length bootstrap yields the higher-dimensional bound and identifies its equality cone; embedding-dimension control transfers equality to the original germ.",
+      "status": "open",
+      "depends_on": ["C_GAP_FILTRATIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-ordinary-double-point-gap-in-every-dimension-September-24-2026/build/sections/07-bootstrap.tex", "research/openai_manuscript/The-ordinary-double-point-gap-in-every-dimension-September-24-2026/build/sections/08-conclusion.tex"]
+    },
+    "C_FOURFOLD_MAIN": {
+      "statement": "For every singular boundary-zero klt normal complex algebraic fourfold germ with Q-Cartier canonical class, normalized volume is at most 162, with equality exactly at the ordinary double point.",
+      "status": "open",
+      "depends_on": ["C_FOURFOLD_CONE", "C_FOURFOLD_SHORT", "C_FOURFOLD_THRESHOLD", "C_FOURFOLD_SECTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-normalized-volume-gap-in-dimension-four-September-24-2026/build/paper.tex"]
+    },
+    "C_FOURFOLD_CONE": {
+      "statement": "At volume at least 162 stable degeneration gives a Gorenstein fourfold cone with smooth puncture, embedding-dimension control, and primitive divisors at the vertex of discrepancy at least three.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-normalized-volume-gap-in-dimension-four-September-24-2026/build/paper.tex"]
+    },
+    "C_FOURFOLD_SHORT": {
+      "statement": "With canonical weight 5/2 the Hilbert-series argument gives a nonzero homogeneous function of weight between zero and 5/3, also on the required low-dimensional graded centers.",
+      "status": "open",
+      "depends_on": ["C_FOURFOLD_CONE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-normalized-volume-gap-in-dimension-four-September-24-2026/build/paper.tex"]
+    },
+    "C_FOURFOLD_THRESHOLD": {
+      "statement": "Short-weight nonvanishing and affine subadjunction imply lct_o(C;m_o)>3/2.",
+      "status": "open",
+      "depends_on": ["C_FOURFOLD_SHORT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-normalized-volume-gap-in-dimension-four-September-24-2026/build/paper.tex"]
+    },
+    "C_FOURFOLD_SECTION": {
+      "statement": "A general hyperplane section is a terminal Gorenstein threefold, giving embedding dimension at most five, after which the known lci gap theorem applies.",
+      "status": "open",
+      "depends_on": ["C_FOURFOLD_CONE", "C_FOURFOLD_THRESHOLD"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-normalized-volume-gap-in-dimension-four-September-24-2026/build/paper.tex"]
+    }
+  }
+}

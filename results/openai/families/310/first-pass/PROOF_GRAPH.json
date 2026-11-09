@@ -1,0 +1,132 @@
+{
+  "goal": "C9000310",
+  "routes": [
+    {
+      "name": "frame-kernel-certification",
+      "status": "current",
+      "evidence": "research/frame_kernel/REPORT.md"
+    }
+  ],
+  "nodes": {
+    "C9000310": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 310 (Quillen's conjecture in rational homology.; papers: Rational homology and Quillen's conjecture; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "in_progress",
+      "is_goal": true,
+      "depends_on": [
+        "C_FK_MARKED",
+        "C_FK_LOG"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_FK_PBW": {
+      "statement": "Positive rational graded PBW, with the supporting-subspace grading retained.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/frame_kernel/pbw_source.md"]
+    },
+    "C_FK_RELATION": {
+      "statement": "The manuscript's actual plane presentation has the support-graded exact generator-relation complex and Euler identity U(1-v+w)=1+C.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/frame_kernel/REPORT.md", "research/frame_kernel/verification_result.json"]
+    },
+    "C_FK_INITIAL": {
+      "statement": "The induced PBW filtration embeds gr C as a support-homogeneous submodule, and independent factor multiplication preserves its leading monomials.",
+      "status": "in_progress",
+      "depends_on": ["C_FK_PBW"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/frame_kernel/REPORT.md"]
+    },
+    "C_FK_MARKING": {
+      "statement": "An explicit factor-insertion marking map is injective on fresh inputs; weighted input count is bounded by the total factor weight of its output family.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/frame_kernel/Main.lean",
+        "research/frame_kernel/statement_fidelity.md",
+        "research/frame_kernel/certificates/C_FK_MARKING-06e02dc2f116a05b.json"
+      ]
+    },
+    "C_FK_MARKED": {
+      "statement": "For every allowed support W, sum over W=A direct-sum B of dim(A) dim(P(A)) dim(C(B)) is at most (dim(W)-2) dim(C(W)) when dim(W)>=2; in particular D C >= (D P) C.",
+      "status": "in_progress",
+      "depends_on": ["C_FK_INITIAL", "C_FK_MARKING"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/frame_kernel/REPORT.md",
+        "research/frame_kernel/verify.py",
+        "research/frame_kernel/exact_certificate.json",
+        "research/frame_kernel/verification_result.json"
+      ]
+    },
+    "C_FK_LOG": {
+      "statement": "For J=-log(1-v+w), the PBW and Euler identities and the marked-factor inequality imply D P >= D J coefficientwise whenever D J is coefficientwise nonnegative.",
+      "status": "in_progress",
+      "depends_on": ["C_FK_PBW", "C_FK_RELATION", "C_FK_MARKED"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/frame_kernel/REPORT.md", "research/frame_kernel/Main.lean"]
+    },
+    "C_FRAME_COEFFICIENT": {
+      "statement": "The manuscript's actual merger-flag coefficient space Z(W) has dimension dim(P(W)).",
+      "status": "open",
+      "depends_on": ["C_FK_PBW"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rational-homology-and-Quillens-conjecture-September-24-2026/build/sections/04-frames.tex"]
+    },
+    "C_FRAME_CONSTANTS": {
+      "statement": "The plane counts give the asserted typewise nonnegative coefficients and quantitative constants for D J in the stated field ranges.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rational-homology-and-Quillens-conjecture-September-24-2026/build/sections/04-frames.tex"]
+    },
+    "C_FRAME_BOUND": {
+      "statement": "Theorem frame-bound: the stated uniform lower bounds hold for each individual allowed isometry type.",
+      "status": "open",
+      "depends_on": ["C_FK_LOG", "C_FRAME_COEFFICIENT", "C_FRAME_CONSTANTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rational-homology-and-Quillens-conjecture-September-24-2026/build/sections/04-frames.tex"]
+    },
+    "C_MAIN_THEOREM": {
+      "statement": "For every finite group G and prime p, O_p(G)=1 implies nonzero augmented rational homology of A_p(G).",
+      "status": "open",
+      "depends_on": ["C_FRAME_BOUND", "C_GLOBAL_REDUCTIONS", "C_GLOBAL_PROPAGATION", "C_GLOBAL_CLASSICAL", "C_GLOBAL_EXCEPTIONAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rational-homology-and-Quillens-conjecture-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "C_GLOBAL_REDUCTIONS": {
+      "statement": "All cited component and odd-prime reductions apply with the hypotheses required by this manuscript.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rational-homology-and-Quillens-conjecture-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "C_GLOBAL_PROPAGATION": {
+      "statement": "Decoration, restriction, faithful-extension maximality, and propagation preserve a detecting nonbounding coefficient.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rational-homology-and-Quillens-conjecture-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "C_GLOBAL_CLASSICAL": {
+      "statement": "The remaining classical-group constructions meet all coefficient, rank, and faithfulness conditions.",
+      "status": "open",
+      "depends_on": ["C_FRAME_BOUND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rational-homology-and-Quillens-conjecture-September-24-2026/build/sections/01-introduction.tex"]
+    },
+    "C_GLOBAL_EXCEPTIONAL": {
+      "statement": "The field-five color argument and exceptional PSL_4(5) branches close the remaining orthogonal cases.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rational-homology-and-Quillens-conjecture-September-24-2026/build/sections/01-introduction.tex"]
+    }
+  }
+}

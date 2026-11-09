@@ -1,0 +1,84 @@
+{
+  "protocol_version": "2025-11-25",
+  "request": {
+    "request": {
+      "op": "inspect",
+      "operation_id": "root_system.positive_roots.compute"
+    }
+  },
+  "result": {
+    "kind": "operation",
+    "operation": {
+      "description": "Compute all positive roots of a finite crystallographic root system from its Cartan matrix, using closure under simple reflections. Returns simple and positive roots plus highest-root and Coxeter data for each irreducible component.",
+      "examples": [
+        {
+          "description": "Compute root system data for A2; the matrix must be a valid finite-type Cartan matrix.",
+          "input": {"matrix": [[2, -1], [-1, 2]]},
+          "name": "a2_cartan"
+        }
+      ],
+      "input_schema": {
+        "additionalProperties": false,
+        "description": "A bounded finite-type Cartan matrix.",
+        "properties": {
+          "matrix": {
+            "description": "Finite-type generalized Cartan matrix of rank 1 through 8: square, diagonal entries 2, non-positive off-diagonal entries with paired products in {0, 1, 2, 3}, and positive-definite symmetrization.",
+            "items": {"items": {"type": "integer"}, "type": "array"},
+            "title": "Matrix",
+            "type": "array"
+          }
+        },
+        "required": ["matrix"],
+        "title": "CartanMatrixRequest",
+        "type": "object"
+      },
+      "operation_id": "root_system.positive_roots.compute",
+      "output_schema": {
+        "$defs": {
+          "RootComponentData": {
+            "additionalProperties": false,
+            "properties": {
+              "coxeter_number": {"title": "Coxeter Number", "type": "integer"},
+              "highest_root": {"items": {"type": "integer"}, "title": "Highest Root", "type": "array"},
+              "marks": {"items": {"type": "integer"}, "title": "Marks", "type": "array"},
+              "positive_roots": {"items": {"items": {"type": "integer"}, "type": "array"}, "title": "Positive Roots", "type": "array"},
+              "simple_root_indices": {"items": {"type": "integer"}, "title": "Simple Root Indices", "type": "array"}
+            },
+            "required": ["simple_root_indices", "positive_roots", "highest_root", "marks", "coxeter_number"],
+            "title": "RootComponentData",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Complete root system data from a Cartan matrix.",
+        "properties": {
+          "cartan_matrix": {"items": {"items": {"type": "integer"}, "type": "array"}, "title": "Cartan Matrix", "type": "array"},
+          "components": {"items": {"$ref": "#/$defs/RootComponentData"}, "title": "Components", "type": "array"},
+          "negative_roots": {"items": {"items": {"type": "integer"}, "type": "array"}, "title": "Negative Roots", "type": "array"},
+          "num_positive_roots": {"title": "Num Positive Roots", "type": "integer"},
+          "positive_roots": {"items": {"items": {"type": "integer"}, "type": "array"}, "title": "Positive Roots", "type": "array"},
+          "rank": {"title": "Rank", "type": "integer"},
+          "simple_roots": {"items": {"items": {"type": "integer"}, "type": "array"}, "title": "Simple Roots", "type": "array"}
+        },
+        "required": ["rank", "cartan_matrix", "positive_roots", "negative_roots", "simple_roots", "num_positive_roots", "components"],
+        "title": "RootSystemDataResult",
+        "type": "object"
+      },
+      "read_only": true,
+      "tags": ["algebra", "root-system", "exact"],
+      "title": "Compute positive roots from a Cartan matrix"
+    }
+  },
+  "schema_version": 1,
+  "server": {
+    "description": "Search and run atomic, composable Jacobian tools for higher mathematics.",
+    "icons": null,
+    "name": "jacobian",
+    "title": "Jacobian Mathematical Workbench",
+    "version": "0.14.0",
+    "websiteUrl": null
+  },
+  "tool": "math.find",
+  "tools": ["math.find", "math.run"],
+  "transport": "mcp-stdio"
+}

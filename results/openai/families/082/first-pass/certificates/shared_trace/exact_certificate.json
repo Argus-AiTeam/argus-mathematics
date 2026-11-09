@@ -1,0 +1,517 @@
+{
+  "claim_id": "C_SHARED_MIXED_TRACE",
+  "result_class": "formal_verification",
+  "theorem": "SharedTrace.mixed_trace_estimate",
+  "statement": "|tr(D0 W0 D1 W1 D2 W2)| <= (5/3) D_star sum_v b_(R_v^* R_v)(R_v^* D_v R_v)",
+  "field": "complex",
+  "dimensions": "arbitrary independent finite index types, including empty types",
+  "hypotheses": [
+    "D0 Hermitian",
+    "D1 Hermitian",
+    "D2 Hermitian"
+  ],
+  "singular_grams_allowed": true,
+  "supported_hessian": "exact positive-spectrum definition; see b_spectral_positive",
+  "literal_sources": [
+    {
+      "directory": "The-maximal-triangular-Hilbert-transform-at-the-symmetric-point-September-24-2026",
+      "file": "build/sections/trace.tex",
+      "label": "lem:mixed-trace",
+      "domain": "complex"
+    },
+    {
+      "directory": "Annular-variation-of-the-triangular-Hilbert-transform-at-the-symmetric-point-October-5-2026",
+      "file": "build/sections/matrix.tex",
+      "label": "lem:mixed-trace",
+      "domain": "complex"
+    },
+    {
+      "directory": "An-L3-bound-for-the-dyadic-triangular-Hilbert-form-October-5-2026",
+      "file": "build/sections/03-trace.tex",
+      "label": "prop:trace",
+      "domain": "real contractions"
+    }
+  ],
+  "completed_at": "2026-11-05T23:00:00.932098+00:00",
+  "compiler_version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)",
+  "source_sha256": {
+    "research/certificates/shared_trace/cubic/SpectralCubic.lean": "e7330470ccaddf83fbc418821928acc8d4bb512bbf0ecb0873fb358fd6adca84",
+    "research/certificates/shared_trace/hessian/Hessian.lean": "5d414432c7888bf59bc4ce5f99faf57600f2d3c8f0ec9e2f54b2f848b9558f1c",
+    "research/certificates/shared_trace/assembly/General.lean": "dc7be82418abe087cba410dc082cd7d895c32c5c473a089cb230390cfdc3c665",
+    "research/certificates/shared_trace/assembly/Blocks.lean": "65c9de7a432f9e90ef85cf19169c591a63c71b17e524136cfdf558f42ac52748",
+    "research/certificates/shared_trace/assembly/Trace.lean": "a3c5224ad832a09dac86b568b1693d71fcdf18ee752444e7d0910f76fb67718b",
+    "research/certificates/shared_trace/assembly/Phase.lean": "9379188555035ed348bf467b59f7bc00eea52d7ba8b6a43082d055beac2c4594",
+    "research/certificates/shared_trace/assembly/Projections.lean": "9812339a38199900586db6330eb4ce7fd294a15c7b9c71811d494e42ec00eab8",
+    "research/certificates/shared_trace/Main.lean": "7aca6b715b59940b5e36cfb9910a718b041e2ec29a2023236b7d768e74053859"
+  },
+  "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "official_lean_evidence": {
+    "schema_version": 1,
+    "status": "success",
+    "source": "families/082/first-pass/certificates/shared_trace/Main.lean",
+    "tool": "lake",
+    "tools": {
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      }
+    },
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/082/first-pass/certificates/shared_trace/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "exit_code": 0,
+    "stdout": "SharedTrace.mixed_trace_estimate.{u_1, u_2, u_3} {n0 : Type u_1} {n1 : Type u_2} {n2 : Type u_3} [Fintype n0]\n  [Fintype n1] [Fintype n2] [DecidableEq n0] [DecidableEq n1] [DecidableEq n2] (W0 : Matrix n0 n1 \u2102)\n  (W1 : Matrix n1 n2 \u2102) (W2 : Matrix n2 n0 \u2102) (D0 : Matrix n0 n0 \u2102) (D1 : Matrix n1 n1 \u2102) (D2 : Matrix n2 n2 \u2102)\n  (h0 : D0.IsHermitian) (h1 : D1.IsHermitian) (h2 : D2.IsHermitian) :\n  have R0 := W0.fromCols W2\u1d34;\n  have R1 := W1.fromCols W0\u1d34;\n  have R2 := W2.fromCols W1\u1d34;\n  \u2016(D0 * W0 * D1 * W1 * D2 * W2).trace\u2016 \u2264\n    5 / 3 * max \u2016toEuclideanCLM D0\u2016 (max \u2016toEuclideanCLM D1\u2016 \u2016toEuclideanCLM D2\u2016) *\n      (SharedTraceHessian.b \u22ef (R0\u1d34 * D0 * R0) + SharedTraceHessian.b \u22ef (R1\u1d34 * D1 * R1) +\n        SharedTraceHessian.b \u22ef (R2\u1d34 * D2 * R2))\n'SharedTrace.mixed_trace_estimate' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "stderr": "",
+    "proof_holes": [],
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/082/first-pass/certificates/shared_trace/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stdout": "",
+    "audit_stderr": "",
+    "duration_ms": 15310,
+    "source_sha256": "7aca6b715b59940b5e36cfb9910a718b041e2ec29a2023236b7d768e74053859",
+    "statement_fidelity": "families/082/first-pass/certificates/shared_trace/statement_fidelity.md",
+    "statement_fidelity_sha256": "992525b3e2ce8f4a8b4558421f089134948880b7da3b4bd371aad4108f4fe7a8",
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "environment_failure": "",
+    "kernel": {
+      "recorded": {
+        "evidence_id": "lean-C_SHARED_MIXED_TRACE-89b0df8a3b8b",
+        "subject": {
+          "kind": "claim",
+          "subject_id": "C_SHARED_MIXED_TRACE",
+          "content_hash": "0bda42c473e39f14d9f76c0c79fd602db950136e90e36816157c66cd0425f0f4"
+        },
+        "tier": "mechanical",
+        "verdict": "supports",
+        "produced_by": "lean_evidence/lean 4.31.0",
+        "artifact": "research/certificates/shared_trace/certificates/C_SHARED_MIXED_TRACE-360b4a74160fb918.json"
+      },
+      "changed": true,
+      "refusals": [],
+      "statement_fidelity": {
+        "document": "research/certificates/shared_trace/statement_fidelity.md",
+        "verified_by": null,
+        "note": "a proof kernel established the formal statement recorded on this claim; nothing has checked that the formal statement says what the natural statement says, and no tier in this schema encodes that it has"
+      }
+    }
+  },
+  "campaign_checks": {
+    "project_root": "campaigns/9000082",
+    "math_state": {
+      "exit_code": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"issues\": []\n}\n",
+      "stderr": ""
+    },
+    "proof_graph_check": {
+      "exit_code": 0,
+      "stdout": "proof graph valid: 16 node(s)\n",
+      "stderr": ""
+    }
+  },
+  "finite_calibration_only": [
+    {
+      "name": "purely_imaginary_triangle",
+      "dimensions": [
+        1,
+        1,
+        1
+      ],
+      "tau": {
+        "real": "0",
+        "imag": "1"
+      },
+      "tau_abs": "1",
+      "aligning_phase": {
+        "real": "0",
+        "imag": "-1"
+      },
+      "D_star": "1",
+      "supported_spectral_costs": [
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 2,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 2,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 2,
+          "gram_rank": 1
+        }
+      ],
+      "rhs_exact_rational_lower_bound": "15/2"
+    },
+    {
+      "name": "unequal_singular_complex_insertions",
+      "dimensions": [
+        2,
+        3,
+        1
+      ],
+      "tau": {
+        "real": "192/125",
+        "imag": "-144/125"
+      },
+      "tau_abs": "48/25",
+      "aligning_phase": {
+        "real": "4/5",
+        "imag": "3/5"
+      },
+      "D_star": "1",
+      "supported_spectral_costs": [
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "864/625",
+          "gram_dimension": 4,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "5",
+          "coefficient_of_sqrt_eigenvalue": "15/4",
+          "gram_dimension": 3,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "5",
+          "coefficient_of_sqrt_eigenvalue": "15/4",
+          "gram_dimension": 5,
+          "gram_rank": 1
+        }
+      ],
+      "rhs_exact_rational_lower_bound": "3413/125"
+    },
+    {
+      "name": "zero_grams",
+      "dimensions": [
+        2,
+        3,
+        1
+      ],
+      "tau": {
+        "real": "0",
+        "imag": "0"
+      },
+      "tau_abs": "0",
+      "aligning_phase": {
+        "real": "1",
+        "imag": "0"
+      },
+      "D_star": "1",
+      "supported_spectral_costs": [
+        {
+          "positive_eigenvalue": "0",
+          "coefficient_of_sqrt_eigenvalue": "0",
+          "gram_dimension": 4,
+          "gram_rank": 0
+        },
+        {
+          "positive_eigenvalue": "0",
+          "coefficient_of_sqrt_eigenvalue": "0",
+          "gram_dimension": 3,
+          "gram_rank": 0
+        },
+        {
+          "positive_eigenvalue": "0",
+          "coefficient_of_sqrt_eigenvalue": "0",
+          "gram_dimension": 5,
+          "gram_rank": 0
+        }
+      ],
+      "rhs_exact_rational_lower_bound": "0"
+    },
+    {
+      "name": "unit_phase_0",
+      "dimensions": [
+        2,
+        3,
+        1
+      ],
+      "tau": {
+        "real": "-24/25",
+        "imag": "0"
+      },
+      "tau_abs": "24/25",
+      "aligning_phase": {
+        "real": "-1",
+        "imag": "0"
+      },
+      "D_star": "1",
+      "supported_spectral_costs": [
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "864/625",
+          "gram_dimension": 4,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 3,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 5,
+          "gram_rank": 1
+        }
+      ],
+      "rhs_exact_rational_lower_bound": "913/125"
+    },
+    {
+      "name": "unit_phase_1",
+      "dimensions": [
+        2,
+        3,
+        1
+      ],
+      "tau": {
+        "real": "24/25",
+        "imag": "0"
+      },
+      "tau_abs": "24/25",
+      "aligning_phase": {
+        "real": "1",
+        "imag": "0"
+      },
+      "D_star": "1",
+      "supported_spectral_costs": [
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "864/625",
+          "gram_dimension": 4,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 3,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 5,
+          "gram_rank": 1
+        }
+      ],
+      "rhs_exact_rational_lower_bound": "913/125"
+    },
+    {
+      "name": "unit_phase_2",
+      "dimensions": [
+        2,
+        3,
+        1
+      ],
+      "tau": {
+        "real": "0",
+        "imag": "-24/25"
+      },
+      "tau_abs": "24/25",
+      "aligning_phase": {
+        "real": "0",
+        "imag": "1"
+      },
+      "D_star": "1",
+      "supported_spectral_costs": [
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "864/625",
+          "gram_dimension": 4,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 3,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 5,
+          "gram_rank": 1
+        }
+      ],
+      "rhs_exact_rational_lower_bound": "913/125"
+    },
+    {
+      "name": "unit_phase_3",
+      "dimensions": [
+        2,
+        3,
+        1
+      ],
+      "tau": {
+        "real": "0",
+        "imag": "24/25"
+      },
+      "tau_abs": "24/25",
+      "aligning_phase": {
+        "real": "0",
+        "imag": "-1"
+      },
+      "D_star": "1",
+      "supported_spectral_costs": [
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "864/625",
+          "gram_dimension": 4,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 3,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 5,
+          "gram_rank": 1
+        }
+      ],
+      "rhs_exact_rational_lower_bound": "913/125"
+    },
+    {
+      "name": "unit_phase_4",
+      "dimensions": [
+        2,
+        3,
+        1
+      ],
+      "tau": {
+        "real": "-72/125",
+        "imag": "-96/125"
+      },
+      "tau_abs": "24/25",
+      "aligning_phase": {
+        "real": "-3/5",
+        "imag": "4/5"
+      },
+      "D_star": "1",
+      "supported_spectral_costs": [
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "864/625",
+          "gram_dimension": 4,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 3,
+          "gram_rank": 1
+        },
+        {
+          "positive_eigenvalue": "2",
+          "coefficient_of_sqrt_eigenvalue": "3/2",
+          "gram_dimension": 5,
+          "gram_rank": 1
+        }
+      ],
+      "rhs_exact_rational_lower_bound": "913/125"
+    }
+  ],
+  "archived_jacobian_calibration": {
+    "protocol_version": "2025-11-25",
+    "request": {
+      "operation_id": "matrix.determinant.compute",
+      "payload": {
+        "matrix": {
+          "domain": "QQ",
+          "entries": [
+            [
+              {
+                "den": "1",
+                "num": "1"
+              },
+              {
+                "den": "1",
+                "num": "1"
+              }
+            ],
+            [
+              {
+                "den": "1",
+                "num": "1"
+              },
+              {
+                "den": "1",
+                "num": "1"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "result": {
+      "operation_id": "matrix.determinant.compute",
+      "output": {
+        "determinant": {
+          "den": "1",
+          "num": "0"
+        },
+        "method": "FRACTION_FREE_BAREISS"
+      },
+      "runtime_ms": 1
+    },
+    "schema_version": 1,
+    "server": {
+      "description": "Search and run atomic, composable Jacobian tools for higher mathematics.",
+      "icons": null,
+      "name": "jacobian",
+      "title": "Jacobian Mathematical Workbench",
+      "version": "0.14.0",
+      "websiteUrl": null
+    },
+    "tool": "math.run",
+    "tools": [
+      "math.find",
+      "math.run"
+    ],
+    "transport": "mcp-stdio"
+  },
+  "independent_review_required": true,
+  "not_claimed": [
+    "independent Reviewer acceptance or verified mathematical novelty",
+    "a counterexample to any manuscript assertion",
+    "an optimal coefficient or a new inequality statement",
+    "any downstream maximal, variation, or dyadic analytic theorem"
+  ]
+}

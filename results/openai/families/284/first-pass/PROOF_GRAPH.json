@@ -1,0 +1,130 @@
+{
+  "goal": "C9000284",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "routes": {},
+  "nodes": {
+    "C9000284": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 284 (The optimal quartic separation between randomized and quantum queries.; papers: A Nearly Quartic Separation Between Randomized and Quantum Query Complexity; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C284_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C284_MAIN": {
+      "statement": "Theorem thm:main: alpha_tot=4, with the stated total family having Q<=C_k sqrt(m) log(m)^b_k and R>=c_k m^(2-1/k)/log(m)^2.",
+      "status": "open",
+      "depends_on": ["C284_TOTALITY", "C284_QUANTUM", "C284_CLASSICAL", "C284_UNIVERSAL", "C284_EXPONENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Nearly-Quartic-Separation-Between-Randomized-and-Quantum-Query-Complexity-October-5-2026/build/sections/01-introduction.tex"]
+    },
+    "C284_TOTALITY": {
+      "statement": "The addressed-certificate construction is total, has at most one winner, and admits the exact local tests of lem:local-tests.",
+      "status": "open",
+      "depends_on": ["C284_FORRELATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-Nearly-Quartic-Separation-Between-Randomized-and-Quantum-Query-Complexity-October-5-2026/build/sections/02-construction.tex"]
+    },
+    "C284_FORRELATION": {
+      "statement": "Lemma lem:forrelation: the specified partial function has the stated classical hardness, coherent quantum decoder, and exact small Boolean circuit.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C284_QUANTUM": {
+      "statement": "Proposition prop:quantum: Q(F_{k,m})<=sqrt(m)(log m)^{O_k(1)} on all inputs with worst-case branchwise query caps.",
+      "status": "open",
+      "depends_on": ["C284_TOURNAMENT", "C284_COMPARE_VERIFY", "C284_TOTALITY"],
+      "reviewer_confirmed": false
+    },
+    "C284_TOURNAMENT": {
+      "statement": "Proposition prop:tournament with T=ceil(log_2(1000m)), epsilon=1/(1000T), success>=1-2m/2^T-T epsilon and branchwise O(c sqrt(m) T^2 log T) queries.",
+      "status": "open",
+      "depends_on": ["C284_FINITE_SEARCH", "C284_SAMPLING", "C284_AMPLIFICATION", "C284_QUERY_CAP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tournament/report.md", "research/tournament/exact_certificate.json"],
+      "review_status": "Engineer proof complete; Host-invoked independent review pending."
+    },
+    "C284_FINITE_SEARCH": {
+      "statement": "For arbitrary real complementary comparisons, T epsilon<=1/2 implies adaptive exact weighted sampling misses a dominant candidate with probability at most 2m/2^T+T eta; sampler failures may depend on the entire history.",
+      "status": "open",
+      "depends_on": ["C284_REAL_DRIFT", "C284_SURVIVAL"],
+      "reviewer_confirmed": false,
+      "mechanical_status": "closed_kernel",
+      "evidence": [
+        "research/tournament/Main.lean",
+        "research/tournament/statement_fidelity.md",
+        "research/tournament/certificates/C284_FINITE_SEARCH-772475346f423b21.json"
+      ],
+      "review_status": "The finite stochastic theorem compiled with no proof holes; statement-fidelity review remains pending."
+    },
+    "C284_REAL_DRIFT": {
+      "statement": "For nonnegative weights and W>0, the weighted next total has expectation (W^2-sum_i w_i^2)/(2W)<=W/2, using only complementarity and a_ii=0.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tournament/report.md", "research/tournament/exact_certificate.json"]
+    },
+    "C284_SURVIVAL": {
+      "statement": "Along any history omitting the distinguished candidate, its product weight is at least 1-|h| epsilon; in particular it is at least 1/2 through horizon T when T epsilon<=1/2.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tournament/Main.lean", "research/tournament/report.md"]
+    },
+    "C284_SAMPLING": {
+      "statement": "Fresh retained comparison workspaces give success probability W/m and, conditioned on success, exactly w_i/W; amplification preserves the full successful state including garbage.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tournament/report.md", "research/tournament/exact_certificate.json"]
+    },
+    "C284_AMPLIFICATION": {
+      "statement": "Lemma lem:amplification preserves the normalized successful state exactly, fails with probability <=eta if p>=gamma, always fails if p=0, and uses O(gamma^(-1/2) log(1/eta)) calls on every branch.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tournament/report.md", "research/tournament/amplitude_source.txt", "research/tournament/exact_certificate.json"]
+    },
+    "C284_QUERY_CAP": {
+      "statement": "With M=ceil(10 sqrt(2m)) and R=ceil(log(1/eta)/log(40/31)), every branch makes at most c R (2M-1) T(T-1)/2 bit queries, whether or not a dominant candidate exists.",
+      "status": "open",
+      "depends_on": ["C284_AMPLIFICATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tournament/report.md", "research/tournament/exact_certificate.json"]
+    },
+    "C284_COMPARE_VERIFY": {
+      "statement": "Construction-specific comparisons favor a genuine winner regardless of off-promise opponents, and exact local-test search verifies the returned list at the stated cost.",
+      "status": "open",
+      "depends_on": ["C284_FORRELATION", "C284_TOTALITY"],
+      "reviewer_confirmed": false
+    },
+    "C284_CLASSICAL": {
+      "statement": "Proposition prop:classical: R(F_{k,m})>floor(mL/100), with L=floor(m^(1-1/k)/(log_2 m)^2), for sufficiently large powers of four.",
+      "status": "open",
+      "depends_on": ["C284_FORRELATION", "C284_ADAPTIVE_PRODUCT", "C284_TOTALITY"],
+      "reviewer_confirmed": false
+    },
+    "C284_ADAPTIVE_PRODUCT": {
+      "statement": "Lemma lem:adaptive-product: independent inputs, at most L queries per input, and per-input success <=beta imply vector success <=beta^r even with adaptive interleaving and independent side information.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C284_UNIVERSAL": {
+      "statement": "The known universal upper bound R(f)<=D(f)=O((1+Q(f))^4) holds for total Boolean functions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C284_EXPONENT": {
+      "statement": "The family bounds rule out every exponent alpha<4 by choosing fixed k large enough and then letting m grow.",
+      "status": "open",
+      "depends_on": ["C284_QUANTUM", "C284_CLASSICAL"],
+      "reviewer_confirmed": false
+    }
+  }
+}

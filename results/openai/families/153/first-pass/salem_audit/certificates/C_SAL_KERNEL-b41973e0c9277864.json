@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_SAL_KERNEL-cf2b3fa55717",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/153/first-pass/salem_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/153/first-pass/salem_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16319,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/153/first-pass/salem_audit/Main.lean",
+    "source_sha256": "8a820c00912caaf07a9a86a56f02059ccf93436f6088e008b8b17701894f91f4",
+    "statement_fidelity": "families/153/first-pass/salem_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "b005e8f78791ed7a42ea1f142e6e3097eb2d97731476c83f48d4129737db255b",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/153/first-pass/salem_audit/Main.lean:105:4: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/salem_audit/Main.lean",
+    "text": "import Mathlib\n\nopen Filter Finset\n\nnamespace SalemAudit\n\nnoncomputable def r : ℝ := 20301 / 10000\nnoncomputable def g : ℝ := 21 / 10\n\ntheorem rates : 1 < r ∧ r < g := by\n  norm_num [r, g]\n\ntheorem bias_identity (p c s : ℝ) :\n    (p * c + (1 - p) * c) ^ 2 +\n        (p * s - (1 - p) * s) ^ 2 =\n      c ^ 2 + ((2 * p - 1) * s) ^ 2 := by\n  ring\n\ntheorem bias_bounds (p c s : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)\n    (hcircle : c ^ 2 + s ^ 2 = 1) :\n    c ^ 2 ≤ c ^ 2 + ((2 * p - 1) * s) ^ 2 ∧\n      c ^ 2 + ((2 * p - 1) * s) ^ 2 ≤ 1 := by\n  have hm : (2 * p - 1) ^ 2 ≤ 1 := by\n    nlinarith [mul_nonneg hp0 (sub_nonneg.mpr hp1)]\n  constructor\n  · nlinarith [sq_nonneg ((2 * p - 1) * s)]\n  · nlinarith [mul_nonneg (sub_nonneg.mpr hm) (sq_nonneg s)]\n\ntheorem finite_bias_product (n : ℕ) (p c s : ℕ → ℝ) :\n    (∏ i ∈ range n, c i ^ 2) ≤\n      ∏ i ∈ range n, (c i ^ 2 + ((2 * p i - 1) * s i) ^ 2) := by\n  apply Finset.prod_le_prod\n  · intro i hi\n    exact sq_nonneg (c i)\n  · intro i hi\n    nlinarith [sq_nonneg ((2 * p i - 1) * s i)]\n\ntheorem centered_sign_variance (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) :\n    p * (1 - (2 * p - 1)) ^ 2 +\n        (1 - p) * (-1 - (2 * p - 1)) ^ 2 =\n      4 * p * (1 - p) ∧\n      0 ≤ 4 * p * (1 - p) ∧ 4 * p * (1 - p) ≤ 1 := by\n  constructor\n  · ring\n  constructor\n  · positivity\n  · nlinarith [sq_nonneg (2 * p - 1)]\n\ntheorem floor_partial_sum (a d : ℕ → ℝ)\n    (hstep : ∀ n, a n - d n ≤ a (n + 1)) :\n    ∀ n, a 0 - ∑ i ∈ range n, d i ≤ a n := by\n  intro n\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      rw [sum_range_succ]\n      linarith [hstep n]\n\ntheorem uniform_floor (a d : ℕ → ℝ)\n    (hstep : ∀ n, a n - d n ≤ a (n + 1))\n    (hbudget : ∀ n, (∑ i ∈ range n, d i) ≤ a 0 / 2) :\n    ∀ n, a 0 / 2 ≤ a n := by\n  intro n\n  linarith [floor_partial_sum a d hstep n, hbudget n]\n\ntheorem affine_iteration (s : ℕ → ℝ) (R C B : ℝ) (hR : 0 ≤ R)\n    (hshift : C + B ≤ R * B)\n    (hstep : ∀ n, s (n + 1) ≤ R * s n + C) :\n    ∀ n, s n + B ≤ R ^ n * (s 0 + B) := by\n  intro n\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      calc\n        s (n + 1) + B ≤ R * s n + C + B := by linarith [hstep n]\n        _ ≤ R * (s n + B) := by nlinarith\n        _ ≤ R * (R ^ n * (s 0 + B)) :=\n          mul_le_mul_of_nonneg_left ih hR\n        _ = R ^ (n + 1) * (s 0 + B) := by rw [pow_succ]; ring\n\ntheorem growth_iteration (L : ℕ → ℝ) (G : ℝ) (hG : 0 ≤ G)\n    (hstep : ∀ n, G * L n ≤ L (n + 1)) :\n    ∀ n, G ^ n * L 0 ≤ L n := by\n  intro n\n  induction n with\n  | zero => simp\n  | succ n ih =>\n      calc\n        G ^ (n + 1) * L 0 = G * (G ^ n * L 0) := by rw [pow_succ]; ring\n        _ ≤ G * L n := mul_le_mul_of_nonneg_left ih hG\n        _ ≤ L (n + 1) := hstep n\n\ntheorem normalized_loss_bound (s L : ℕ → ℝ) (R G C : ℝ)\n    (hR : 1 < R) (hG : 0 < G) (hC : 0 ≤ C)\n    (hs : ∀ n, 0 ≤ s n) (hL0 : 0 < L 0)\n    (hsstep : ∀ n, s (n + 1) ≤ R * s n + C)\n    (hLstep : ∀ n, G * L n ≤ L (n + 1)) :\n    ∀ n, 0 ≤ s n / L n ∧\n      s n / L n ≤ (R / G) ^ n * ((s 0 + C / (R - 1)) / L 0) := by\n  let B := C / (R - 1)\n  have hB : 0 ≤ B := div_nonneg hC (by linarith)\n  have hRB : C + B = R * B := by\n    dsimp [B]\n    field_simp [show R - 1 ≠ 0 by linarith]\n    <;> ring\n  have hS := affine_iteration s R C B (by linarith) hRB.le hsstep\n  have hL := growth_iteration L G hG.le hLstep\n  intro n\n  have hD : 0 < G ^ n * L 0 := mul_pos (pow_pos hG n) hL0\n  have hLn : 0 < L n := lt_of_lt_of_le hD (hL n)\n  have hSn : s n ≤ R ^ n * (s 0 + B) := by linarith [hS n]\n  have hnum : 0 ≤ R ^ n * (s 0 + B) :=\n    mul_nonneg (pow_nonneg (by linarith) n) (add_nonneg (hs 0) hB)\n  constructor\n  · exact div_nonneg (hs n) hLn.le\n  · calc\n      s n / L n ≤ (R ^ n * (s 0 + B)) / L n :=\n        (div_le_div_iff_of_pos_right hLn).mpr hSn\n      _ ≤ (R ^ n * (s 0 + B)) / (G ^ n * L 0) :=\n        div_le_div_of_nonneg_left hnum hD (hL n)\n      _ = (R / G) ^ n * ((s 0 + C / (R - 1)) / L 0) := by\n        rw [div_pow]\n        dsimp [B]\n        ring\n\ntheorem normalized_loss_tends_to_zero (s L : ℕ → ℝ) (R G C : ℝ)\n    (hR : 1 < R) (hRG : R < G) (hC : 0 ≤ C)\n    (hs : ∀ n, 0 ≤ s n) (hL0 : 0 < L 0)\n    (hsstep : ∀ n, s (n + 1) ≤ R * s n + C)\n    (hLstep : ∀ n, G * L n ≤ L (n + 1)) :\n    Tendsto (fun n => s n / L n) atTop (nhds 0) := by\n  have hG : 0 < G := by linarith\n  have hb := normalized_loss_bound s L R G C hR hG hC hs hL0 hsstep hLstep\n  have hq : 0 ≤ R / G := div_nonneg (by linarith) hG.le\n  have hq1 : R / G < 1 := (div_lt_one hG).mpr hRG\n  have ht := (tendsto_pow_atTop_nhds_zero_of_lt_one hq hq1).mul_const\n    ((s 0 + C / (R - 1)) / L 0)\n  apply squeeze_zero (fun n => (hb n).1) (fun n => (hb n).2)\n  simpa using ht\n\ntheorem manuscript_loss_limit (s L : ℕ → ℝ) (C : ℝ)\n    (hC : 0 ≤ C) (hs : ∀ n, 0 ≤ s n) (hL0 : 0 < L 0)\n    (hsstep : ∀ n, s (n + 1) ≤ r * s n + C)\n    (hLstep : ∀ n, g * L n ≤ L (n + 1)) :\n    Tendsto (fun n => s n / L n) atTop (nhds 0) :=\n  normalized_loss_tends_to_zero s L r g C rates.1 rates.2 hC hs hL0\n    hsstep hLstep\n\ntheorem bootstrap_margins (L X L' : ℝ) (hL : 100 ≤ L) :\n    ((29 / 10 : ℝ) * L - 3 ≤ L' → (14 / 5 : ℝ) * L ≤ L') ∧\n    (X ≤ (11 / 10 : ℝ) * L →\n      (29 / 10 : ℝ) * L - X - 4 ≤ L' → (7 / 4 : ℝ) * L ≤ L') ∧\n    (X ≤ (3 / 4 : ℝ) * L →\n      (29 / 10 : ℝ) * L - X - 4 ≤ L' → (21 / 10 : ℝ) * L ≤ L') := by\n  constructor\n  · intro h\n    linarith\n  constructor <;> intro hX h <;> linarith\n\ntheorem linear_term_absorption (D x : ℝ) (hD : 0 ≤ D)\n    (hx : 16 * (D + 1) ≤ x) :\n    D * x + 1 ≤ (9 / 64 : ℝ) * x ^ 2 := by\n  have hx0 : 16 ≤ x := by linarith\n  have hmul := mul_nonneg (sub_nonneg.mpr hx) (show 0 ≤ x by linarith)\n  nlinarith\n\nend SalemAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/salem_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: SalemAudit universal core\n\nThis file describes `research/salem_audit/Main.lean`. It does not claim that\nthe whole singularity theorem has been encoded in Lean. The full analytic\nproof is in `report.md` and requires independent human review.\n\nAll numerical constants in the Lean source are exact real rational numbers.\n`r = 20301/10000` and `g = 21/10`; natural-number powers are ordinary powers.\n\n## Independent, possibly biased signs\n\n`bias_identity` identifies the squared modulus of\np(c+is)+(1-p)(c-is) with c^2+((2p-1)s)^2 for arbitrary real p,c,s.\n`bias_bounds` assumes 0 <= p <= 1 and c^2+s^2=1 and proves that this\nsquared modulus is between c^2 and 1.\n`finite_bias_product` proves the lower product inequality for every finite\nlength n and arbitrary real sequences p,c,s. It does not assert independence\nor convergence; those hypotheses are supplied when applying the finite\nproduct calculation to characteristic functions in the report.\n`centered_sign_variance` assumes 0 <= p <= 1 and computes exactly the variance\nof a sign of mean 2p-1 as 4p(1-p), including its bounds between zero and one.\nEndpoints p=0 and p=1 are included.\n\n## Uniform floor and infinite recurrence\n\n`floor_partial_sum` is for arbitrary real sequences a,d indexed by all natural\nnumbers. If a(n+1) >= a(n)-d(n) for every n, it proves\na(n) >= a(0)-sum_(i<n)d(i).\n`uniform_floor` adds the uniform partial-sum bound\nsum_(i<n)d(i) <= a(0)/2, for every n, and concludes a(n) >= a(0)/2\nfor every n. Positivity of a(0) is not encoded because this is an inequality;\nthe application has a(0)=gamma_1>0. The report, not this theorem, establishes\nthe summability of the actual cosine decrements.\n\n`affine_iteration` and `growth_iteration` prove universal induction bounds,\nnot bounds at a tested finite horizon.\n`normalized_loss_bound` quantifies over all real sequences s,L and all\nR,G,C with R>1, G>0, C>=0, s(n)>=0, and L(0)>0. Its two recurrences are\ns(n+1) <= R*s(n)+C and L(n+1) >= G*L(n), for every n.\nIt proves, for every n,\n\n    0 <= s(n)/L(n)\n       <= (R/G)^n * (s(0)+C/(R-1))/L(0).\n\n`normalized_loss_tends_to_zero` adds R<G and proves the real limit\ns(n)/L(n) -> 0 as n tends to infinity. In particular,\n`manuscript_loss_limit` instantiates R=2.0301 and G=2.1.\nFor the manuscript application the sequences start at m=3, so s(n)=S_(n+3)\nand L(n)=L_(n+3); the finite step from m=2 does not affect the limit.\nNeither theorem assumes the conclusion, a bounded search horizon, or an\nunproved external mathematical axiom.\n\n## Construction thresholds\n\n`bootstrap_margins` quantifies over real L,X,L' with L>=100.\nIt verifies both initial branches and the improved branch of the return-time\nconstruction from their explicit logarithmic lower estimates.\nHere X represents log K, not K. The theorem does not prove Dirichlet's\npigeonhole assertion, which is proved directly in the report.\n`linear_term_absorption` quantifies over D>=0 and x>=16(D+1), proving\nDx+1 <= 9x^2/64. Together with exp(3x/4) >= (3x/4)^2/2, this absorbs the\nlinear contribution to K. The exponential inequality is proved/used in the\nreport and is not part of this polynomial declaration.\n\nThe source contains no assertion about the arithmetic classification or the\ndegree-31 example. A successful compiler run certifies only these named\nuniversal cores. Statement fidelity and the application of these cores to the\nmanuscript are separate, reviewable mathematical responsibilities.\n"
+  },
+  "subject": {
+    "content_hash": "5a1ba1cb5a7bc9120b8fad14036321776239fd97aca49f20c8a3672f9988d604",
+    "kind": "claim",
+    "subject_id": "C_SAL_KERNEL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

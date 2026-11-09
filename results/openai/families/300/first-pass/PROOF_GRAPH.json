@@ -1,0 +1,162 @@
+{
+  "goal": "C9000300",
+  "routes": [
+    {
+      "name": "universal-weighted-pinning",
+      "status": "current",
+      "evidence": "research/pinning/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000300": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 300 (Approximation and quadratic strong-operator paving.; papers: Approximation Paving over Arbitrary Maximal Abelian Subalgebras; Quadratic Strong-Operator Paving over Arbitrary Maximal Abelian Subalgebras; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PINNING_UNIVERSAL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "Q_MAIN": {
+      "statement": "Quadratic main theorem: arbitrary masas admit so-paving with r_epsilon <= 500000000 epsilon^-2, with no expectation or separability hypothesis.",
+      "status": "open",
+      "depends_on": ["Q_ENDPOINTS", "Q_COLORING", "Q_KERNELS", "Q_TRANSFER", "Q_COMPLETION", "Q_REDUCTIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quadratic-Strong-Operator-Paving-over-Arbitrary-Maximal-Abelian-Subalgebras-September-25-2026/build/source/sections/introduction.tex"]
+    },
+    "Q_QUOTIENTS": {
+      "statement": "Polynomial quotients have nonnegative arrow residues, a common deletion spectrum, and probability-averaged conditioned residues.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quadratic-Strong-Operator-Paving-over-Arbitrary-Maximal-Abelian-Subalgebras-September-25-2026/build/source/sections/polynomials.tex"]
+    },
+    "Q_MIXED_BOUNDS": {
+      "statement": "The mixed determinantal upper root bound and two-sign norm lower bound hold with the manuscript's normalization.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Quadratic-Strong-Operator-Paving-over-Arbitrary-Maximal-Abelian-Subalgebras-September-25-2026/build/source/sections/polynomials.tex"]
+    },
+    "Q_ENDPOINTS": {
+      "statement": "Finite-cost endpoints: all-unassigned zero cost and fully-assigned detection of excessive norm.",
+      "status": "open",
+      "depends_on": ["Q_MIXED_BOUNDS", "Q_QUOTIENTS"],
+      "reviewer_confirmed": false
+    },
+    "Q_ASSIGNMENT": {
+      "statement": "For every permitted finite datum, some permanent color at beta=80 has d_v^i-d_v <= 24m_v.",
+      "status": "open",
+      "depends_on": ["Q_QUOTIENTS", "C_PINNING_UNIVERSAL"],
+      "reviewer_confirmed": false
+    },
+    "C_PINNING_UNIVERSAL": {
+      "statement": "For arbitrary finite arrow spectra and probability-averaged nonnegative residues, beta>=12 admits a child with positive-trace increase at most 23 times the old first-coordinate positive spectral mass.",
+      "status": "open",
+      "depends_on": ["P_SPECTRAL_COMPARISON", "P_RESIDUE_TESTS", "P_AVERAGING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pinning/report.md", "research/pinning/Main.lean", "research/pinning/statement_fidelity.md", "research/pinning/exact_certificate.json"]
+    },
+    "P_SPECTRAL_COMPARISON": {
+      "statement": "Prove the two side-arrow trace bounds, positive-trace subadditivity, and diagonal Lipschitz bound, including singular boundaries.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pinning/Main.lean"]
+    },
+    "P_RESIDUE_TESTS": {
+      "statement": "Derive both variable-buffer residue tests from positive/negative spectral parts without assuming the target estimate.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pinning/Main.lean"]
+    },
+    "P_AVERAGING": {
+      "statement": "Two nonnegative finite probability-averaged tests admit a common positive-probability choice at twice their mean bounds, including zero means.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pinning/Main.lean"]
+    },
+    "Q_INVARIANT": {
+      "statement": "Invariant finite-cost limits and rank/deletion comparisons justify weight-cutoff removal.",
+      "status": "open",
+      "depends_on": ["Q_QUOTIENTS"],
+      "reviewer_confirmed": false
+    },
+    "Q_COLORING": {
+      "statement": "Nonsingular Bernoulli coloring has uniform conditional marginals and the claimed high-probability local norm control.",
+      "status": "open",
+      "depends_on": ["Q_ASSIGNMENT", "Q_ENDPOINTS", "Q_INVARIANT"],
+      "reviewer_confirmed": false
+    },
+    "Q_KERNELS": {
+      "statement": "Off-normalizer operators give atomless kernels under the faithful central-state hypotheses.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "Q_TRANSFER": {
+      "statement": "Free compression and mixed moment transfer to actual masa projections hold with modular controls.",
+      "status": "open",
+      "depends_on": ["Q_KERNELS"],
+      "reviewer_confirmed": false
+    },
+    "Q_COMPLETION": {
+      "statement": "Clipping, continuous calculus, and a spectral cut convert local estimates into the expected-corner so-paving conclusion.",
+      "status": "open",
+      "depends_on": ["Q_COLORING", "Q_TRANSFER"],
+      "reviewer_confirmed": false
+    },
+    "Q_REDUCTIONS": {
+      "statement": "Central-state corner reduction, complementary-corner paving, separable reduction and disjoint-palette assembly preserve the universal count.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "A_MAIN": {
+      "statement": "Independent approximation theorem: R(epsilon)<=C_ap epsilon^-6, ||y||<=3||x||, strong approximation and norm paving relative to ||y|| for arbitrary masas.",
+      "status": "open",
+      "depends_on": ["A_MEASURED", "A_EXPECTED", "A_GENERAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Approximation-Paving-over-Arbitrary-Maximal-Abelian-Subalgebras-September-25-2026/build/source/sections/introduction.tex"]
+    },
+    "A_POLYNOMIALS": {
+      "statement": "Stable nonuniform expected determinants have local rooted spectral probabilities and spectral-shift costs.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "A_INITIAL_ROOT": {
+      "statement": "The zero-diagonal contraction uniform-color expected polynomial has largest root <=2sqrt(2/r)+2/r.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "A_BUFFERED_PIN": {
+      "statement": "Buffered pinning controls child deletion length by old length plus a universal multiple of rooted mass.",
+      "status": "open",
+      "depends_on": ["A_POLYNOMIALS"],
+      "reviewer_confirmed": false
+    },
+    "A_MEASURED": {
+      "statement": "Slab comparisons, coherent color choices, sparse updates and deletion yield one-sided measured paving.",
+      "status": "open",
+      "depends_on": ["A_BUFFERED_PIN", "A_INITIAL_ROOT"],
+      "reviewer_confirmed": false
+    },
+    "A_EXPECTED": {
+      "statement": "Central-state masa approximation paving follows from measured paving, atomless kernels, nontracial random freeness and free compression.",
+      "status": "open",
+      "depends_on": ["A_MEASURED"],
+      "reviewer_confirmed": false
+    },
+    "A_GENERAL": {
+      "statement": "Separable and three-corner reductions remove expectation assumptions while norming and clipping preserve relative error against the approximant's own norm.",
+      "status": "open",
+      "depends_on": ["A_EXPECTED"],
+      "reviewer_confirmed": false
+    }
+  }
+}

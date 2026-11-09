@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_RIGIDITY047-75cfd3ef3fdd",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/047/first-pass/rigidity/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/047/first-pass/rigidity/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 11275,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/047/first-pass/rigidity/Main.lean",
+    "source_sha256": "1220b938e03e582d5b16aa09bfb69ea09e16d3e82e37d0152b07b868a025f227",
+    "statement_fidelity": "families/047/first-pass/rigidity/statement_fidelity.md",
+    "statement_fidelity_sha256": "fd85f988855e6649d3ddc129796aef3cb3f1b21ecf90bbaf9d790aef2b69ab44",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/rigidity/Main.lean",
+    "text": "import Mathlib.NumberTheory.FLT.MasonStothers\nimport Mathlib.FieldTheory.RatFunc.Degree\nimport Mathlib.Tactic\n\nnamespace Rigidity047\n\nopen Polynomial UniqueFactorizationMonoid\nopen scoped Classical\n\ntheorem determinant_coefficients {R : Type*} [CommRing R]\n    (a d b c x y : R) (hdet : a * c - b * d = 1) (hrel : a * y = d * x) :\n    a * (c * x - b * y) = x ∧ d * (c * x - b * y) = y := by\n  constructor\n  · linear_combination x * hdet - b * hrel\n  · linear_combination y * hdet - c * hrel\n\ntheorem ratFunc_neg_X_cube_not_square (F : Type*) [Field F] :\n    ¬ IsSquare (-(RatFunc.X : RatFunc F) ^ 3) := by\n  rintro ⟨r, hr⟩\n  have hx : (RatFunc.X : RatFunc F) ≠ 0 := RatFunc.X_ne_zero\n  have hr0 : r ≠ 0 := by\n    intro h\n    have : -(RatFunc.X : RatFunc F) ^ 3 = 0 := by simpa [h] using hr\n    exact (neg_ne_zero.mpr (pow_ne_zero 3 hx)) this\n  have hcube : ((RatFunc.X : RatFunc F) ^ 3).intDegree = 3 := by\n    rw [show (RatFunc.X : RatFunc F) ^ 3 =\n      (RatFunc.X * RatFunc.X) * RatFunc.X by ring,\n      RatFunc.intDegree_mul (mul_ne_zero hx hx) hx, RatFunc.intDegree_mul hx hx]\n    norm_num\n  have hd : (3 : ℤ) = r.intDegree + r.intDegree := by\n    calc\n      3 = (-(RatFunc.X : RatFunc F) ^ 3).intDegree := by\n        rw [RatFunc.intDegree_neg, hcube]\n      _ = r.intDegree + r.intDegree := by rw [hr, RatFunc.intDegree_mul hr0 hr0]\n  omega\n\nsection PolynomialOrbit\n\nvariable {K : Type*} [Field K]\n\ntheorem low_degree_coprime (A D U : K[X]) (hD : D ≠ 0)\n    (hN : D ^ 2 + A ^ 2 * U ^ 3 ≠ 0)\n    (hdeg : (D ^ 2 + A ^ 2 * U ^ 3).natDegree ≤ 1) :\n    IsCoprime D (A * U) := by\n  classical\n  let g := EuclideanDomain.gcd D (A * U)\n  have hgD : g ∣ D := EuclideanDomain.gcd_dvd_left _ _\n  have hgAU : g ∣ A * U := EuclideanDomain.gcd_dvd_right _ _\n  have hgsq : g ^ 2 ∣ D ^ 2 + A ^ 2 * U ^ 3 := by\n    apply dvd_add (pow_dvd_pow_of_dvd hgD 2)\n    have h := dvd_mul_of_dvd_left (pow_dvd_pow_of_dvd hgAU 2) U\n    convert h using 1\n    ring\n  have hgdeg := Polynomial.natDegree_le_of_dvd hgsq hN\n  rw [Polynomial.natDegree_pow] at hgdeg\n  have hgzero : g.natDegree = 0 := by omega\n  have hgnz : g ≠ 0 := by\n    intro h\n    exact hD (zero_dvd_iff.mp (h ▸ hgD))\n  apply EuclideanDomain.gcd_isUnit_iff.mp\n  apply Polynomial.isUnit_iff_degree_eq_zero.mpr\n  rw [Polynomial.degree_eq_natDegree hgnz, hgzero]\n  rfl\n\ntheorem radical_mul_degree_le (P Q : K[X]) :\n    (radical (P * Q)).natDegree ≤\n      (radical P).natDegree + (radical Q).natDegree := by\n  classical\n  calc\n    _ ≤ (radical P * radical Q).natDegree :=\n      Polynomial.natDegree_le_of_dvd radical_mul_dvd\n        (mul_ne_zero radical_ne_zero radical_ne_zero)\n    _ = _ := Polynomial.natDegree_mul radical_ne_zero radical_ne_zero\n\ntheorem orbit_radical_degree_le (A D U N : K[X]) :\n    (radical (D ^ 2 * (A ^ 2 * U ^ 3) * (-N))).natDegree ≤\n      D.natDegree + A.natDegree + U.natDegree + N.natDegree := by\n  classical\n  have h₁ := radical_mul_degree_le (D ^ 2 * (A ^ 2 * U ^ 3)) (-N)\n  have h₂ := radical_mul_degree_le (D ^ 2) (A ^ 2 * U ^ 3)\n  have h₃ := radical_mul_degree_le (A ^ 2) (U ^ 3)\n  rw [UniqueFactorizationDomain.radical_neg] at h₁\n  rw [radical_pow D (by decide)] at h₂\n  rw [radical_pow A (by decide), radical_pow U (by decide)] at h₃\n  have hD := natDegree_radical_le (a := D)\n  have hA := natDegree_radical_le (a := A)\n  have hU := natDegree_radical_le (a := U)\n  have hN := natDegree_radical_le (a := N)\n  omega\n\ntheorem orbit_polynomials_constant [CharZero K]\n    (A D U : K[X]) (u0 : K)\n    (hA : A ≠ 0) (hD : D ≠ 0) (hU : U ≠ 0)\n    (hU0 : U.eval 0 = u0) (hns : ¬ IsSquare (-u0 ^ 3))\n    (hN : D ^ 2 + A ^ 2 * U ^ 3 ≠ 0)\n    (hdeg : (D ^ 2 + A ^ 2 * U ^ 3).natDegree ≤ 1) :\n    A.natDegree = 0 ∧ D.natDegree = 0 ∧ U.natDegree = 0 := by\n  classical\n  have hD2 : D ^ 2 ≠ 0 := pow_ne_zero 2 hD\n  have hA2U3 : A ^ 2 * U ^ 3 ≠ 0 :=\n    mul_ne_zero (pow_ne_zero 2 hA) (pow_ne_zero 3 hU)\n  have hc := low_degree_coprime A D U hD hN hdeg\n  have hcoprime : IsCoprime (D ^ 2) (A ^ 2 * U ^ 3) :=\n    hc.of_mul_right_left.pow.mul_right hc.of_mul_right_right.pow\n  have hsum : D ^ 2 + A ^ 2 * U ^ 3 + (-(D ^ 2 + A ^ 2 * U ^ 3)) = 0 := by ring\n  rcases Polynomial.abc hD2 hA2U3 (neg_ne_zero.mpr hN) hcoprime hsum with habc | hder\n  · have hrad := orbit_radical_degree_le A D U (D ^ 2 + A ^ 2 * U ^ 3)\n    have hd := habc.1.trans hrad\n    have hau := habc.2.1.trans hrad\n    rw [Polynomial.natDegree_pow] at hd\n    rw [Polynomial.natDegree_mul (pow_ne_zero 2 hA) (pow_ne_zero 3 hU),\n      Polynomial.natDegree_pow, Polynomial.natDegree_pow] at hau\n    have hu : U.natDegree = 0 := by omega\n    have hda : D.natDegree = A.natDegree := by omega\n    have hUc : U = C u0 := by\n      have h := Polynomial.eq_C_of_natDegree_eq_zero hu\n      rw [← Polynomial.coeff_zero_eq_eval_zero] at hU0\n      exact h.trans (congrArg C hU0)\n    have hlc :\n        (D ^ 2).leadingCoeff + (A ^ 2 * U ^ 3).leadingCoeff ≠ 0 := by\n      rw [Polynomial.leadingCoeff_pow, Polynomial.leadingCoeff_mul,\n        Polynomial.leadingCoeff_pow, Polynomial.leadingCoeff_pow, hUc,\n        Polynomial.leadingCoeff_C]\n      intro hz\n      apply hns\n      apply (isSquare_iff_exists_sq _).mpr\n      refine ⟨D.leadingCoeff / A.leadingCoeff, ?_⟩\n      rw [div_pow, eq_div_iff (pow_ne_zero 2 (Polynomial.leadingCoeff_ne_zero.mpr hA))]\n      linear_combination -hz\n    have heqdeg : (D ^ 2).degree = (A ^ 2 * U ^ 3).degree := by\n      rw [Polynomial.degree_eq_natDegree hD2, Polynomial.degree_eq_natDegree hA2U3,\n        Polynomial.natDegree_pow,\n        Polynomial.natDegree_mul (pow_ne_zero 2 hA) (pow_ne_zero 3 hU),\n        Polynomial.natDegree_pow, Polynomial.natDegree_pow, hu, hda]\n      simp\n    have hndeg :\n        (D ^ 2 + A ^ 2 * U ^ 3).natDegree = (D ^ 2).natDegree := by\n      apply Polynomial.natDegree_eq_of_degree_eq\n      rw [Polynomial.degree_add_eq_of_leadingCoeff_add_ne_zero hlc, ← heqdeg, max_self]\n    rw [hndeg, Polynomial.natDegree_pow] at hdeg\n    exact ⟨by omega, by omega, hu⟩\n  · have hd := Polynomial.derivative_eq_zero.mp hder.1\n    have hau := Polynomial.derivative_eq_zero.mp hder.2.1\n    rw [Polynomial.natDegree_pow] at hd\n    rw [Polynomial.natDegree_mul (pow_ne_zero 2 hA) (pow_ne_zero 3 hU),\n      Polynomial.natDegree_pow, Polynomial.natDegree_pow] at hau\n    exact ⟨by omega, by omega, by omega⟩\n\ntheorem ratFunc_orbit_polynomials_constant (F : Type*) [Field F] [CharZero F]\n    (A D U : (RatFunc F)[X])\n    (hA : A ≠ 0) (hD : D ≠ 0) (hU : U ≠ 0)\n    (hU0 : U.eval 0 = RatFunc.X)\n    (hN : D ^ 2 + A ^ 2 * U ^ 3 ≠ 0)\n    (hdeg : (D ^ 2 + A ^ 2 * U ^ 3).natDegree ≤ 1) :\n    A.natDegree = 0 ∧ D.natDegree = 0 ∧ U.natDegree = 0 :=\n  orbit_polynomials_constant A D U RatFunc.X hA hD hU hU0\n    (ratFunc_neg_X_cube_not_square F) hN hdeg\n\nend PolynomialOrbit\n\nend Rigidity047\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/rigidity/statement_fidelity.md",
+    "text": "# Statement fidelity: campaign 9000047 polynomial-orbit core\n\n## Scope and ledger relationship\n\n`research/rigidity/Main.lean` formalizes the decisive polynomial-orbit core of\n`C_RIGIDITY047`, rational-function nonsquareness over the original kind of\ncoefficient field, and two determinant coefficient identities. It is **not**\na full formalization of arbitrary locally nilpotent derivations, gradings,\nhighest auxiliary components, localization/coefficient intersection, or\ncancellation. No assertion about full cancellation, novelty, or Reviewer\nacceptance is made.\n\nThe natural-language claim `C_RIGIDITY047` remains the homogeneous-derivation\nrigidity claim in `CTX_RIGIDITY047`. Its explicit external assumption\n`A_PROSE_BRIDGE047` must remain: the passage from that claim to this\npolynomial-orbit problem, together with the determinant-ring domain/chart and\nlocalization-intersection arguments, is prose rather than Lean. Attaching\nthis formal file records exactly this core, not a fully formal proof of the\nentire natural-language claim.\n\n## All declarations\n\nAll seven declarations below are in namespace `Rigidity047`.\n\n1. **`determinant_coefficients`**: for any commutative ring `R` and elements\n   `a d b c x y`, from `a*c-b*d=1` and `a*y=d*x`, proves\n   `a*(c*x-b*y)=x` and `d*(c*x-b*y)=y`. This needs no field or domain\n   hypothesis and does not by itself prove a localization-intersection\n   assertion.\n\n2. **`ratFunc_neg_X_cube_not_square`**: for every field `F`, proves\n   `¬ IsSquare (-(RatFunc.X : RatFunc F)^3)`. This is stronger than the\n   requested characteristic-zero statement. The proof uses the actual\n   rational-function integer degree: a nonzero square has degree twice an\n   integer, whereas `-X^3` has degree three. There is no algebraic-closure\n   hypothesis.\n\n3. **`low_degree_coprime`**: for a field `K` and `A D U : K[X]`, assuming\n   `D ≠ 0`, `D^2+A^2*U^3 ≠ 0`, and\n   `(D^2+A^2*U^3).natDegree ≤ 1`, proves `IsCoprime D (A*U)`.\n   If `g = gcd D (A*U)`, then `g^2` divides the displayed nonzero sum.\n   The degree bound forces `g.natDegree=0`, hence `g` is a unit.\n   Coprimality is therefore derived, not assumed.\n\n4. **`radical_mul_degree_le`**: for all field polynomials `P Q`, proves\n   `natDegree(radical(P*Q)) ≤ natDegree(radical P)+natDegree(radical Q)`\n   using radical divisibility and nonvanishing.\n\n5. **`orbit_radical_degree_le`**: for all field polynomials `A D U N`, proves\n   `natDegree(radical(D^2*(A^2*U^3)*(-N)))`\n   `≤ D.natDegree+A.natDegree+U.natDegree+N.natDegree`.\n   It uses the preceding radical bound, invariance under positive powers\n   and negation, and `natDegree(radical P) ≤ P.natDegree`.\n\n6. **`orbit_polynomials_constant`**: for **any characteristic-zero field**\n   `K`, nonzero `A D U : K[X]`, and `u0 : K`, assuming only\n   ```\n   U.eval 0 = u0\n   ¬ IsSquare (-u0^3)\n   D^2+A^2*U^3 ≠ 0\n   (D^2+A^2*U^3).natDegree ≤ 1,\n   ```\n   proves\n   ```\n   A.natDegree = 0 ∧ D.natDegree = 0 ∧ U.natDegree = 0.\n   ```\n   These conclusions say that all three polynomials are constant. The\n   theorem does **not** assume orbit constancy, vanishing of a derivation,\n   coprimality, or any numerical polynomial-abc inequality.\n\n   Its proof invokes the proved Mathlib theorem `Polynomial.abc`, imported\n   from `Mathlib.NumberTheory.FLT.MasonStothers`, on\n   `D^2`, `A^2*U^3`, and `-(D^2+A^2*U^3)`. Coprimality comes from\n   `low_degree_coprime`. In the derivative-zero branch, characteristic zero\n   implies that the degrees vanish. In the degree-bound branch,\n   Mason--Stothers and the radical bound force `U.natDegree=0` and\n   `D.natDegree=A.natDegree`. Thus `U=C u0`. Cancellation of the two leading\n   coefficients would make\n   `-u0^3 = (D.leadingCoeff/A.leadingCoeff)^2`, contrary to nonsquareness.\n   Their sum therefore has the same degree as `D^2`; the assumed degree\n   bound then forces both remaining degrees to be zero.\n\n7. **`ratFunc_orbit_polynomials_constant`**: for any characteristic-zero\n   field `F` and nonzero `A D U : (RatFunc F)[X]`, assuming\n   ```\n   U.eval 0 = RatFunc.X\n   D^2+A^2*U^3 ≠ 0\n   (D^2+A^2*U^3).natDegree ≤ 1,\n   ```\n   proves that the three natural degrees are zero. This applies the two\n   main theorems without a supplied nonsquareness assumption. Taking\n   `F = C(a,d,b)` gives the intended coefficient field `F(u)`, with\n   `RatFunc.X` representing `u`. This mathematical identification is not a\n   formal determinant-ring/fraction-field construction in this file.\n\n## Formal trust boundary\n\nThe source contains no new axioms or proof placeholders and uses Mathlib's\nproved Mason--Stothers theorem, rather than a postulated abc bound.\nClassical choice is used for ordinary field-polynomial gcd/radical\ninstances; it is not an algebraic-closure assumption. Lean certification\nchecks the displayed universal theorems and their auxiliary lemmas.\nIt does not discharge `A_PROSE_BRIDGE047` or certify the unformalized\nderivation-to-orbit bridge.\n"
+  },
+  "subject": {
+    "content_hash": "e5a7972f9f5bb88833ef6bd0ff1c7b5373bba8593958c5f5eb429f9306638caf",
+    "kind": "claim",
+    "subject_id": "C_RIGIDITY047"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

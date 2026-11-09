@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-S_MERIDIAN_KERNEL-dd96ff13a8ba",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/046/first-pass/surface_geometry_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/046/first-pass/surface_geometry_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 6883,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/046/first-pass/surface_geometry_audit/Main.lean",
+    "source_sha256": "14663c83a2aa06237e1acb5e246d7069650eae9983572f0c344773e9bcc34911",
+    "statement_fidelity": "families/046/first-pass/surface_geometry_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "ea43fb059e89a0493e4215fc5534ff239cfe66e98fab7065cc1c831a4a5c9f4a",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/surface_geometry_audit/Main.lean",
+    "text": "import Mathlib.GroupTheory.QuotientGroup.Basic\n\nnamespace SurfaceGeometry\n\nuniverse u v w z\n\nvariable {G : Type u} {Q : Type v} {P : Type w} {I : Type z}\nvariable [Group G] [Group Q] [Group P]\n\ntheorem local_kernel_agreement\n    (f : G →* Q) (p : Q →* P) (A : Subgroup Q)\n    (himage : ∀ g, f g ∈ A)\n    (hdetect : Set.InjOn p (A : Set Q)) :\n    (p.comp f).ker = f.ker := by\n  ext g\n  change p (f g) = 1 ↔ f g = 1\n  constructor\n  · intro h\n    exact hdetect (himage g) A.one_mem (by simpa using h)\n  · intro h\n    simp [h]\n\ntheorem conjugate_kernel_trivial\n    (p : Q →* P) (A : Subgroup Q)\n    (hdetect : Set.InjOn p (A : Set Q))\n    {a : Q} (ha : a ∈ A) (g : Q)\n    (h : p (g * a * g⁻¹) = 1) :\n    g * a * g⁻¹ = 1 := by\n  have hp : p a = 1 := by\n    have h' := congrArg (fun t : P => (p g)⁻¹ * t * p g) h\n    simpa [map_mul, map_inv, mul_assoc] using h'\n  have haone : a = 1 :=\n    hdetect ha A.one_mem (by simpa using hp)\n  simp [haone]\n\ntheorem normal_closure_killed\n    (rho : G →* Q) (p : Q →* P) (A : I → Subgroup Q)\n    (S : Set G)\n    (hdetect : ∀ i, Set.InjOn p (A i : Set Q))\n    (hlocal : ∀ s ∈ S, ∃ i a g, a ∈ A i ∧ rho s = g * a * g⁻¹)\n    (hfinite : ∀ s ∈ S, p (rho s) = 1) :\n    Subgroup.normalClosure S ≤ rho.ker := by\n  apply Subgroup.normalClosure_le_normal\n  intro s hs\n  change rho s = 1\n  rcases hlocal s hs with ⟨i, a, g, ha, heq⟩\n  rw [heq]\n  apply conjugate_kernel_trivial p (A i) (hdetect i) ha g\n  rw [← heq]\n  exact hfinite s hs\n\ntheorem descent_exists\n    (rho : G →* Q) (p : Q →* P) (A : I → Subgroup Q)\n    (S : Set G)\n    (hdetect : ∀ i, Set.InjOn p (A i : Set Q))\n    (hlocal : ∀ s ∈ S, ∃ i a g, a ∈ A i ∧ rho s = g * a * g⁻¹)\n    (hfinite : ∀ s ∈ S, p (rho s) = 1) :\n    ∃ descended : G ⧸ Subgroup.normalClosure S →* Q,\n      ∀ g, descended (QuotientGroup.mk g) = rho g := by\n  have hker := normal_closure_killed rho p A S hdetect hlocal hfinite\n  refine ⟨QuotientGroup.lift (Subgroup.normalClosure S) rho hker, ?_⟩\n  intro g\n  rfl\n\nend SurfaceGeometry\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/surface_geometry_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: the universal descent core\n\nThe claim is `S_MERIDIAN_KERNEL`, not the surface theorem. The source is\n`Main.lean` in this directory, namespace `SurfaceGeometry`.\n\nAll three groups `G`, `Q`, and `P` are arbitrary groups, in arbitrary\nuniverses. They are not assumed finite, abelian, topological, or realizable\nas fundamental groups. `I` is an arbitrary index type and `A i` are\nsubgroups of `Q`. The maps `rho : G -> Q` and `p : Q -> P` are group\nhomomorphisms. `S` is an arbitrary set of elements of `G`.\n\n`local_kernel_agreement` quantifies over an additional homomorphism\n`f : G -> Q` and one subgroup `A`. Its hypotheses are that all `f g`\nbelong to `A` and that the restriction of `p` to `A` is injective.\nIts conclusion is equality of the kernels of `p` composed with `f`\nand of `f`, without any bound on orders or on the number of generators.\n\n`conjugate_kernel_trivial` assumes injectivity on `A`, `a` in `A`,\nan arbitrary conjugating element `g` of `Q`, and\n`p(g*a*g^(-1))=1`. It concludes `g*a*g^(-1)=1`. Thus injectivity\non representatives suffices for arbitrary conjugates.\n\n`normal_closure_killed` assumes injectivity of `p` on every `A i`.\nFor every `s` in `S` it assumes the existence of `i,a,g` with\n`a` in `A i` and `rho(s)=g*a*g^(-1)`. It also assumes\n`p(rho(s))=1` for every such `s`. It concludes that the normal\nclosure of `S` in `G` is contained in the kernel of `rho`.\n\n`descent_exists` has exactly those hypotheses and constructs a\nhomomorphism from `G / normalClosure(S)` to `Q`, agreeing with\n`rho` on every quotient representative.\n\nIn the geometric application `G=pi_1(U')`, `S` is the set of all\ncompactification meridians, including exceptional ones, and the\nquotient is identified with `pi_1(X)` by a separate transversality\nargument. The image of each meridian is local and is killed by the\nfinite quotient because its lift is closed. Those geometric facts,\nthe existence of the separating finite quotient, algebraization,\nresolution, rationality, specialization, and holomorphic convexity\nare **not** encoded or proved by this Lean source. They are proved\nin `REPORT.md` and require independent mathematical review.\n\nNo unproved external proposition is assumed by these declarations.\nThe kernel checks standard group theory imported from Mathlib;\nit does not check this document's identification with geometry.\n"
+  },
+  "subject": {
+    "content_hash": "e5359243b3c78e547cd6633c943d53c7192eacdb8243966d7dbb37d936d6b123",
+    "kind": "claim",
+    "subject_id": "S_MERIDIAN_KERNEL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

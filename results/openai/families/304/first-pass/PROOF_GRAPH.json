@@ -1,0 +1,142 @@
+{
+  "goal": "C9000304",
+  "routes": {},
+  "nodes": {
+    "C9000304": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 304 (The Hilbert–Smith conjecture in every dimension.; papers: The Hilbert–Smith conjecture in every finite dimension; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "M304_MAIN"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ],
+      "scope_note": "The dependencies below are the manuscript-verification branch. A certified refutation would be a different successful audit route; none is asserted here."
+    },
+    "M304_MAIN": {
+      "statement": "thm:main: every continuous Z_p action on a connected finite-dimensional manifold as specified has nonzero kernel.",
+      "status": "open",
+      "depends_on": ["M304_CHART_REDUCTION", "M304_CONTRADICTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Hilbert-Smith-conjecture-in-every-finite-dimension-September-23-2026/build/sections/01-introduction.tex"]
+    },
+    "M304_CHART_REDUCTION": {
+      "statement": "prop:chart-reduction produces a faithful orientation-preserving action on a connected invariant chart subset from a faithful manifold action.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "M304_CONTRADICTION": {
+      "statement": "thm:contradiction obtains equal rational character parts of total 4u in a fixed denominator lattice, contradicting m>4L_d.",
+      "status": "open",
+      "depends_on": ["M304_SPHERE_LATTICE", "M304_CHARACTER_PACKAGE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Hilbert-Smith-conjecture-in-every-finite-dimension-September-23-2026/build/sections/06-character-classes.tex"]
+    },
+    "M304_CHARACTER_PACKAGE": {
+      "statement": "The action-derived integral character classes exist, are covariant and homotopy invariant, have the stated sum and equal parts, and the moved test has nonzero degree.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "scope_note": "Sections 5-6 and the degree/test-moving inputs remain outside this bounded localization proof."
+    },
+    "M304_SPHERE_LATTICE": {
+      "statement": "thm:sphere-lattice: the rational degree-d sphere group has the orientation line and its integral image lies in one fixed 2-power denominator lattice.",
+      "status": "open",
+      "depends_on": ["C304_BOUND", "M304_SPHERE_RANK", "M304_GENERIC_SIGNATURE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Hilbert-Smith-conjecture-in-every-finite-dimension-September-23-2026/build/sections/04-lattice.tex"]
+    },
+    "M304_SPHERE_RANK": {
+      "statement": "prop:sphere-rank gives the rational sphere splitting in every degree.",
+      "status": "open",
+      "depends_on": ["L304_OPEN_COVER", "M304_DENSE_DOUBLING", "M304_WITT_LOCALIZATION", "M304_HOMOTOPY_POINT"],
+      "reviewer_confirmed": false
+    },
+    "M304_GENERIC_SIGNATURE": {
+      "statement": "prop:generic-signature identifies the integral image on the semialgebraic rational orientation line with Z.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "C304_BOUND": {
+      "statement": "Conditional refinement of thm:bounded-comparison: every sphere comparison has a two-sided 2^j-transfer, hence kernel and cokernel killed by 2^j, uniformly in the Witt degree.",
+      "status": "open",
+      "depends_on": ["C304_LOCALIZATION", "C304_TRANSFER", "M304_HOMOTOPY_POINT", "M304_WITT_LOCALIZATION", "M304_DENSE_DOUBLING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/generated_excision_audit/proof.md", "research/generated_excision_audit/Main.lean"]
+    },
+    "C304_TRANSFER": {
+      "statement": "Natural dense-doubling squares carry a two-sided q-transfer to a two-sided 2q-transfer; an arbitrary abelian-group tower therefore has 2^j-transfers.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "scope_note": "Lean 4.31.0 compiled the universal group theorem with zero proof holes. Independent statement-fidelity review is still required.",
+      "evidence": ["research/generated_excision_audit/Main.lean", "research/generated_excision_audit/statement_fidelity.md", "research/generated_excision_audit/lean_verify_output.json"]
+    },
+    "C304_LOCALIZATION": {
+      "statement": "The full lem:cutoff, thm:germs, and prop:open-cover statements hold in the actual generated categories.",
+      "status": "open",
+      "depends_on": ["L304_CUTOFF", "L304_SUPPORT", "L304_GERMS", "L304_OPEN_COVER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/generated_excision_audit/proof.md"]
+    },
+    "L304_CUTOFF": {
+      "statement": "lem:cutoff for every object of B_0(X), every closed K contained in open O, and arbitrary derived cone morphisms.",
+      "status": "open",
+      "depends_on": ["M304_CATEGORY_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/generated_excision_audit/proof.md"]
+    },
+    "L304_SUPPORT": {
+      "statement": "prop:compact-support recognizes the open extension image, including arbitrary actual summands.",
+      "status": "open",
+      "depends_on": ["L304_CUTOFF", "M304_CATEGORY_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/generated_excision_audit/proof.md"]
+    },
+    "L304_GERMS": {
+      "statement": "thm:germs identifies all ordinary Verdier-quotient morphisms with ambient derived germs, including summand sources and roofs.",
+      "status": "open",
+      "depends_on": ["L304_CUTOFF", "L304_SUPPORT", "M304_CATEGORY_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/generated_excision_audit/proof.md"]
+    },
+    "L304_OPEN_COVER": {
+      "statement": "prop:open-cover is fully faithful, exact, duality preserving, dense by actual summands, and compatible with P to T.",
+      "status": "open",
+      "depends_on": ["L304_CUTOFF", "L304_SUPPORT", "L304_GERMS", "M304_CATEGORY_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/generated_excision_audit/proof.md"]
+    },
+    "M304_CATEGORY_INPUTS": {
+      "statement": "The actual section-2 categories have compact support, full ambient derived Hom, actual summands, bounded reflexive duality, and fully faithful compactly supported open extension.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/generated_excision_audit/proof.md", "research/generated_excision_audit/sources/primary_excerpts.md"]
+    },
+    "M304_HOMOTOPY_POINT": {
+      "statement": "thm:homotopy and lat:point-groups apply naturally to the possibly nonproper allowed pole-cover homotopies and give point and S^0 comparison isomorphisms.",
+      "status": "open",
+      "depends_on": ["M304_CATEGORY_INPUTS"],
+      "reviewer_confirmed": false
+    },
+    "M304_WITT_LOCALIZATION": {
+      "statement": "thm:witt-localization supplies natural integral long exact sequences for the ordinary quotients, in every shifted degree.",
+      "status": "open",
+      "depends_on": ["L304_SUPPORT", "M304_CATEGORY_INPUTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/generated_excision_audit/sources/primary_excerpts.md"]
+    },
+    "M304_DENSE_DOUBLING": {
+      "statement": "The explicit dense-doubling map is well defined, has both composites equal to 2, and is natural for exact duality-preserving comparison functors.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/generated_excision_audit/proof.md", "research/generated_excision_audit/sources/primary_excerpts.md"]
+    }
+  }
+}

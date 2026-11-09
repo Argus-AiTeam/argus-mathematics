@@ -1,0 +1,140 @@
+{
+  "goal": "C9000265",
+  "routes": [
+    {
+      "name": "Quantitative uniform nonlinear symbol verification and sharpness",
+      "status": "current",
+      "evidence": "research/replica_symbol_audit/theorem.md"
+    },
+    {
+      "name": "Fixed-copy Husimi approximation alone",
+      "status": "ruled_out",
+      "retired_because": "Fixed-copy estimates alone do not control replica-dependent inverse ratios or multiplication after symmetric compression.",
+      "evidence": "research/replica_symbol_audit/theorem.md"
+    }
+  ],
+  "nodes": {
+    "C9000265": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 265 (Area laws and tensor networks for two-dimensional gapped systems.; papers: A two-dimensional area law from a global spectral gap; Polynomial PEPS approximation of gapped square-grid ground states; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_SYMBOL_UNIFORM",
+        "C_SYMBOL_HALF_SHARP"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SYMBOL_UNIFORM": {
+      "statement": "For fixed 0<t<1/2, full uniform polynomial and absolute-value Husimi calculus for the common gamma replica metrics, without a lower marginal eigenvalue bound; polynomial error O((log k)^-min(t/2,(1-2t)/6)). This includes the manuscript range 0<t<1/4.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SYMBOL_RATIO", "C_SYMBOL_COLLISION"],
+      "evidence": ["research/replica_symbol_audit/theorem.md", "research/replica_symbol_audit/verify.py"],
+      "review_note": "Engineer analytic proof available; independent review pending."
+    },
+    "C_SYMBOL_RATIO": {
+      "statement": "Uniform full-space forward gamma-ratio estimate and symmetric-input inverse clipping estimate for every fixed 0<t<1/2.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SYMBOL_SCHUR_FOUNDATION"],
+      "evidence": ["research/replica_symbol_audit/theorem.md"]
+    },
+    "C_SYMBOL_COLLISION": {
+      "statement": "Distinct-donor averaging, disjoint centers after compression, and finite-Husimi bounds with explicit coefficient growth for logarithmic polynomial degree.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SYMBOL_FIXED_COPY", "C_SYMBOL_FORMAL_CORE"],
+      "evidence": ["research/replica_symbol_audit/theorem.md", "research/replica_symbol_audit/verify.py"]
+    },
+    "C_SYMBOL_FIXED_COPY": {
+      "statement": "Known fixed-copy Husimi approximation, reconstructed directly; not sufficient alone for the singular nonlinear calculus.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/replica_symbol_audit/theorem.md"]
+    },
+    "C_SYMBOL_FORMAL_CORE": {
+      "statement": "Universal finite-list collision inequality and arbitrary-real 2x2 nilpotent self-commutator identities. This is not a formalization of the full analytic theorem.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/replica_symbol_audit/Main.lean", "research/replica_symbol_audit/statement_fidelity.md"]
+    },
+    "C_SYMBOL_HALF_SHARP": {
+      "statement": "Three-qubit symmetric standard-standard sector has reducing nilpotent block with alpha_k tending to 512/(1225*pi)>0 at t=1/2; no scalar polynomial calculus at that endpoint and no boundedness for t>1/2. This does not refute the manuscript.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SYMBOL_FORMAL_CORE", "C_SYMBOL_SCHUR_FOUNDATION"],
+      "evidence": ["research/replica_symbol_audit/theorem.md", "research/replica_symbol_audit/exact_certificate.json"]
+    },
+    "C_SYMBOL_SCHUR_FOUNDATION": {
+      "statement": "Classical complex Schur-Weyl decomposition, Weyl characters, multiplicity-one one-box branching, and Jucys-Murphy contents. Canonical source assumptions are explicit in MATH_STATE; source passages were obtained but official independent citation attribution remains outstanding.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": [
+        "research/replica_symbol_audit/sources/etingof_excerpt.txt",
+        "research/replica_symbol_audit/sources/vershik_okounkov_excerpt.txt"
+      ]
+    },
+    "C_SYMBOL_ENDPOINT_BOUNDED": {
+      "statement": "For every fixed system and h, the gamma-metric similarities remain uniformly bounded at t=1/2. The endpoint failure is of scalar polynomial calculus, not of boundedness.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SYMBOL_SCHUR_FOUNDATION"],
+      "evidence": ["research/replica_symbol_audit/theorem.md"]
+    },
+    "C_SYMBOL_COST": {
+      "statement": "The original transport:symbol-cost bound follows from the uniform absolute-value bridge together with the original one-copy skew estimate and its support/exponent hypotheses.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SYMBOL_UNIFORM", "C_ONE_COPY_SKEW"],
+      "evidence": ["research/openai_manuscript/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/06-transport.tex"]
+    },
+    "C_ONE_COPY_SKEW": {
+      "statement": "The manuscript's one-copy entropy-controlled skew bound, including its designated-support and small-exponent hypotheses; outside this mission's verification.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/04-conditional.tex"]
+    },
+    "C_AREA_REST": {
+      "statement": "Other manuscript obligations: conditional movement and coherent pins, matrix-mean transport, norm comparisons, randomized scanner, amplification, and entropy-cancellation geometry. Not certified by this bridge audit.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/00-introduction.tex"]
+    },
+    "C_COLLAR_AMPLIFICATION": {
+      "statement": "The area-law manuscript's quantitative collar and amplification estimates imported by the PEPS companion.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SYMBOL_COST", "C_AREA_REST"],
+      "evidence": ["research/openai_manuscript/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/00-introduction.tex"]
+    },
+    "C_AREA_MAIN": {
+      "statement": "For fixed q,R,J,Delta, every finite induced square-lattice Hamiltonian with a unique globally gapped ground vector satisfies S(A)<=C|boundary A| uniformly in the domain and A. Original theorem thm:area; not certified here.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_COLLAR_AMPLIFICATION", "C_AREA_REST"],
+      "evidence": ["research/openai_manuscript/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/00-introduction.tex"]
+    },
+    "C_PEPS_REST": {
+      "statement": "Companion-specific information, patch encodings, communication compression, and geometric assembly obligations; outside this mission.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex"]
+    },
+    "C_PEPS_MAIN": {
+      "statement": "For fixed q>=2,J,Delta, each unique globally gapped ground vector on an open L by L square has a nonzero PEPS of bond dimension <=C L^c and normalized global error <=L^-1. Original companion thm:main; not certified here.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_AREA_MAIN", "C_COLLAR_AMPLIFICATION", "C_PEPS_REST"],
+      "evidence": ["research/openai_manuscript/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex"]
+    }
+  }
+}

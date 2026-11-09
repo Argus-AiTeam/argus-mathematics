@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_INTERVAL-71560225dfe1",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/253/first-pass/partition_transport/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/253/first-pass/partition_transport/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 7126,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/253/first-pass/partition_transport/Main.lean",
+    "source_sha256": "2b689431b16bb07d963284704155ce8011438f99766274633cee08a16a4024c3",
+    "statement_fidelity": "families/253/first-pass/partition_transport/statement_fidelity.md",
+    "statement_fidelity_sha256": "f078a89cdc854023cbfe6df52b57d56258bb6b92f7904dc36c219e404af33418",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/partition_transport/Main.lean",
+    "text": "import Mathlib.Data.Real.Basic\nimport Mathlib.Order.Interval.Set.Basic\nimport Mathlib.Tactic.Linarith\n\nnamespace PartitionTransport\n\nvariable {α : Type*} [LinearOrder α]\n\ndef Consecutive (marks : Set α) (p q : α) : Prop :=\n  p ∈ marks ∧ q ∈ marks ∧ p < q ∧\n    ∀ r, r ∈ marks → p < r → r < q → False\n\ndef Barrier (marks : Set α) (active : α → Prop) (x : α) : Prop :=\n  ∃ p q, Consecutive marks p q ∧ p ≤ x ∧ x ≤ q ∧ active p\n\ntheorem consecutive_in_chart\n    {marks : Set α} {a b p q x : α}\n    (ha : a ∈ marks) (hb : b ∈ marks)\n    (hx : a < x ∧ x < b)\n    (hpq : Consecutive marks p q)\n    (hpx : p ≤ x) (hxq : x ≤ q) :\n    a ≤ p ∧ q ≤ b := by\n  rcases hpq with ⟨_, _, _, hgap⟩\n  constructor\n  · by_contra h\n    exact hgap a ha (lt_of_not_ge h) (lt_of_lt_of_le hx.1 hxq)\n  · by_contra h\n    exact hgap b hb (lt_of_le_of_lt hpx hx.2) (lt_of_not_ge h)\n\ntheorem consecutive_transfer\n    {marks marks' : Set α} {a b p q : α}\n    (hmarks : ∀ z, a ≤ z → z ≤ b → (z ∈ marks ↔ z ∈ marks'))\n    (hap : a ≤ p) (hqb : q ≤ b)\n    (hpq : Consecutive marks p q) :\n    Consecutive marks' p q := by\n  rcases hpq with ⟨hp, hq, hpq, hgap⟩\n  refine ⟨(hmarks p hap (le_trans (le_of_lt hpq) hqb)).mp hp,\n    (hmarks q (le_trans hap (le_of_lt hpq)) hqb).mp hq, hpq, ?_⟩\n  intro r hr hpr hrq\n  exact hgap r\n    ((hmarks r (le_trans hap (le_of_lt hpr))\n      (le_trans (le_of_lt hrq) hqb)).mpr hr) hpr hrq\n\ntheorem barrier_transfer\n    {marks marks' : Set α} {active active' : α → Prop} {a b x : α}\n    (ha : a ∈ marks) (hb : b ∈ marks)\n    (hmarks : ∀ z, a ≤ z → z ≤ b → (z ∈ marks ↔ z ∈ marks'))\n    (hactive : ∀ z, a ≤ z → z < b → (active z ↔ active' z))\n    (hx : a < x ∧ x < b)\n    (hbarrier : Barrier marks active x) :\n    Barrier marks' active' x := by\n  rcases hbarrier with ⟨p, q, hpq, hpx, hxq, hp⟩\n  have hbounds := consecutive_in_chart ha hb hx hpq hpx hxq\n  exact ⟨p, q, consecutive_transfer hmarks hbounds.1 hbounds.2 hpq,\n    hpx, hxq, (hactive p hbounds.1 (lt_of_le_of_lt hpx hx.2)).mp hp⟩\n\ntheorem barrier_transport\n    {marks marks' : Set α} {active active' : α → Prop} {a b x : α}\n    (ha : a ∈ marks) (hb : b ∈ marks)\n    (hmarks : ∀ z, a ≤ z → z ≤ b → (z ∈ marks ↔ z ∈ marks'))\n    (hactive : ∀ z, a ≤ z → z < b → (active z ↔ active' z))\n    (hx : a < x ∧ x < b) :\n    Barrier marks active x ↔ Barrier marks' active' x := by\n  have hab : a ≤ b := le_of_lt (lt_trans hx.1 hx.2)\n  have ha' : a ∈ marks' := (hmarks a le_rfl hab).mp ha\n  have hb' : b ∈ marks' := (hmarks b hab le_rfl).mp hb\n  constructor\n  · exact barrier_transfer ha hb hmarks hactive hx\n  · exact barrier_transfer ha' hb'\n      (fun z hz hzb => (hmarks z hz hzb).symm)\n      (fun z hz hzb => (hactive z hz hzb).symm) hx\n\ntheorem tangent_flag_of_entry\n    (d s w : ℝ) (hd : 0 ≤ d)\n    (hentry : ∃ t : ℝ, 0 < t ∧ 0 < d + t * s) :\n    0 < d ∨ (d = 0 ∧ (0 < s ∨ (s = 0 ∧ 0 < w))) := by\n  by_cases hpos : 0 < d\n  · exact Or.inl hpos\n  · have hz : d = 0 := by linarith\n    refine Or.inr ⟨hz, Or.inl ?_⟩\n    rcases hentry with ⟨t, ht, hvalue⟩\n    by_contra hs\n    have hprod : t * s ≤ 0 :=\n      mul_nonpos_of_nonneg_of_nonpos (le_of_lt ht) (le_of_not_gt hs)\n    nlinarith\n\ntheorem inactive_cutoff_buffer\n    (N Q c c' : ℝ) (hN : Q < N)\n    (hshift : |c' - c| ≤ Q) (hmissing : ¬ |c'| ≤ 4 * N) :\n    3 * N < |c| := by\n  have hc : -|c| ≤ c ∧ c ≤ |c| := abs_le.mp (le_refl |c|)\n  have hs := abs_le.mp hshift\n  have htriangle : |c'| ≤ |c| + Q := abs_le.mpr ⟨by linarith, by linarith⟩\n  have hlarge : 4 * N < |c'| := lt_of_not_ge hmissing\n  linarith\n\nend PartitionTransport\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/partition_transport/statement_fidelity.md",
+    "text": "# Statement fidelity: the oriented-interval transport core\n\nThe claim recorded for this source is `C_INTERVAL`, in context `CTX_PT`.\nThe principal declaration is `PartitionTransport.barrier_transport`.\n\nObjects and quantifiers: `alpha` is an arbitrary linearly ordered type, not a\nbounded list of sample coordinates. `marks` and `marks'` are arbitrary sets in\nthat type. `active` and `active'` are arbitrary predicates. The endpoints\n`a,b` and tested point `x` are universally quantified. No finiteness,\ngeneric-position, or distinct-vertex assumption is used.\n\n`Consecutive marks p q` says that BOTH endpoints are in the marked set,\n`p < q`, and there is no marked point strictly between them. The marked set\nincludes geometric square endpoints as well as field-selected points.\n`Barrier marks active x` says that some such closed interval `[p,q]` contains\n`x` and its INITIAL endpoint satisfies `active p`. It does not use `active q`.\n\nHypotheses of `barrier_transport`: `a,b` belong to the first marked set;\nthe two sets agree at EVERY point of the closed interval `[a,b]`; the\nactivation predicates agree at EVERY point of `[a,b)`; and `a < x < b`.\nThe endpoint hypotheses and closed-interval agreement imply that `a,b`\nalso belong to the second set. There is NO agreement hypothesis at `b`\nfor activation and NO constraint on marks or activation outside `[a,b]`.\n\nConclusion: membership of `x` in the two unions of activated consecutive\nclosed intervals is equivalent. This is pointwise equality on the entire\nopen chart interval, including interior marked points. Translation is\nrepresented by pulling the destination data back to the same oriented\nline parameter; it is not assumed to preserve a terminal endpoint's flag.\n\n`consecutive_in_chart`, `consecutive_transfer`, and `barrier_transfer` are\nthe supporting declarations. They establish the clipping step and\ntransfer consecutive intervals without assuming their endpoints match\nin advance.\n\nTwo further universally quantified real-number lemmas encode other\nload-bearing steps of the same proof:\n\n* `tangent_flag_of_entry`: if a defining affine inequality has value\n  `d >= 0` at an endpoint and `d + t*s > 0` for some `t > 0`, then\n  the lexicographic flag `(d,s,w)` is positive, for arbitrary `w`.\n  Applied separately to every strict half-plane defining a convex chart,\n  this proves that the positive tangent flag selects the chart entered.\n  At a coincident boundary with `d=s=0` the entry hypothesis cannot hold;\n  such lines do not enter the open chart.\n* `inactive_cutoff_buffer`: for arbitrary real `N,Q,c,c'`, if `Q < N`,\n  `abs(c'-c) <= Q`, and `abs(c') > 4*N`, then `abs(c) > 3*N`.\n  This is the universal mismatch inequality, not a check at one value of N.\n\nLimits: Lean does NOT formalize the polygon algebra, the geometric reduction\nfrom chart crossings to endpoint hypotheses, lattice finiteness, the random\nfield law, probability estimates, amenability, or the main group theorem.\nThose are not conclusions of this source. The full deterministic geometric\nverification is the prose theorem in `transport_theorem.md`; the exact\nPython fixtures exercise its reduction but do not replace its proof.\nThe host's independent Reviewer must check this interpretation and the\nremaining prose geometry. Kernel compilation alone does not do that.\n"
+  },
+  "subject": {
+    "content_hash": "63c1db7b7c9acf465173c93ba962a040ae972ac3519b6fcd8c62f8c38c8790c2",
+    "kind": "claim",
+    "subject_id": "C_INTERVAL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

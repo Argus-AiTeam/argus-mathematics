@@ -1,0 +1,602 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX9000155",
+      "version": 1,
+      "statement": "OpenAI Math Audit #155: A counterexample to periodic tiling in dimension three.",
+      "definitions": {
+        "openai_family": "155"
+      },
+      "content_hash": "1127c45ba97400c11ae96abf8030eee4baecd00c8ddb958f29602892a6674932"
+    },
+    {
+      "context_id": "CTX_SHARED_SEED",
+      "version": 1,
+      "statement": "Universal indexed activation maps from sections 04 and 05 of staged manuscript family 155, with one common cyclic output and arbitrary permitted integer lifts.",
+      "definitions": {
+        "labelled_blocks": "arbitrary set partitions with bijective cyclic labels, not additive subgroups",
+        "shift_indices": "distinct indices even when their output shifts repeat",
+        "shared_output": "lambda(R(x1)s(x)), with no extra S factor in V"
+      },
+      "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C9000155",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000155",
+        "content_hash": "1127c45ba97400c11ae96abf8030eee4baecd00c8ddb958f29602892a6674932"
+      },
+      "natural_statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 155 (A counterexample to periodic tiling in dimension three.; papers: A translational tile with no fully periodic tiling in dimension three; Lean status: Partially/Comparator formalized (lean/docs/155.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d64250aa5aeb206bb791a9eae2924de151e4396c44f53474770a91319190c4bc"
+    },
+    {
+      "claim_id": "C_SHARED_SEED",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "For all labelled a/b block partitions, indexed shifts with the two prescribed fibre orderings, three seed label-space regions, arbitrary cyclic-output labelling, and all offset functions satisfying the manuscript congruences, the ordinary activation maps and both seed activation maps are bijective with the same shared output. Both explicit inverse compositions hold; negative integer coordinates and all permitted CRT lifts are included.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "d9cd46843f4bc284b6ec81bc9f7f3d1b8c2984281faefe4777929a35b4fcfbf7"
+    },
+    {
+      "claim_id": "C_SHARED_SEED",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "For all labelled a/b block partitions, indexed shifts with the two prescribed fibre orderings, three seed label-space regions, arbitrary cyclic-output labelling, and all offset functions satisfying the manuscript congruences, the ordinary activation maps and both seed activation maps are bijective with the same shared output. Both explicit inverse compositions hold; negative integer coordinates and all permitted CRT lifts are included.",
+      "formal_statement": "import Mathlib\n\nnamespace SharedSeed\n\nstructure Shifts (a b : ℕ) (Δ : Type*) where\n  ea : Δ → ZMod a\n  eb : Δ → ZMod b\n  orderA : Δ ≃ ZMod b × ZMod a\n  orderB : Δ ≃ ZMod a × ZMod b\n  orderA_fst : ∀ δ, (orderA δ).1 = eb δ\n  orderB_fst : ∀ δ, (orderB δ).1 = ea δ\n\nnamespace Shifts\n\nvariable {a b : ℕ} {Δ : Type*} (d : Shifts a b Δ)\n\ndef rhoA (δ : Δ) : ZMod a := (d.orderA δ).2 - d.ea δ\ndef rhoB (δ : Δ) : ZMod b := (d.orderB δ).2 - d.eb δ\n\ndef aMap (x : ℤ) (v : Δ × ZMod a) :\n    (ZMod a × ZMod b) × ZMod a :=\n  ((v.2 + d.ea v.1, d.eb v.1), v.2 + (x : ZMod a) - d.rhoA v.1)\n\ndef aInverse (x : ℤ) (v : (ZMod a × ZMod b) × ZMod a) :\n    Δ × ZMod a :=\n  let δ := d.orderA.symm (v.1.2, v.1.1 + (x : ZMod a) - v.2)\n  (δ, v.1.1 - d.ea δ)\n\ntheorem a_left (x : ℤ) : Function.LeftInverse (d.aInverse x) (d.aMap x) := by\n  rintro ⟨δ, y⟩\n  have hp :\n      (d.eb δ, y + d.ea δ + (x : ZMod a) -\n        (y + (x : ZMod a) - d.rhoA δ)) = d.orderA δ := by\n    apply Prod.ext\n    · exact (d.orderA_fst δ).symm\n    · dsimp [rhoA]\n      ring\n  simp only [aInverse, aMap, hp, Equiv.symm_apply_apply]\n  simp\n\ntheorem a_right (x : ℤ) : Function.RightInverse (d.aInverse x) (d.aMap x) := by\n  rintro ⟨⟨α, ξ⟩, q⟩\n  let δ := d.orderA.symm (ξ, α + (x : ZMod a) - q)\n  have he := d.orderA.apply_symm_apply (ξ, α + (x : ZMod a) - q)\n  have hb : d.eb δ = ξ := by\n    simpa only [δ, d.orderA_fst] using congrArg Prod.fst he\n  have hq : (d.orderA δ).2 = α + (x : ZMod a) - q :=\n    congrArg Prod.snd he\n  change ((α - d.ea δ + d.ea δ, d.eb δ),\n    α - d.ea δ + (x : ZMod a) - d.rhoA δ) = ((α, ξ), q)\n  rw [hb]\n  apply Prod.ext\n  · simp\n  · dsimp [rhoA]\n    rw [hq]\n    ring\n\ndef aEquiv (x : ℤ) : Δ × ZMod a ≃ (ZMod a × ZMod b) × ZMod a where\n  toFun := d.aMap x\n  invFun := d.aInverse x\n  left_inv := d.a_left x\n  right_inv := d.a_right x\n\ndef bMap (x : ℤ) (v : Δ × ZMod b) :\n    (ZMod a × ZMod b) × ZMod b :=\n  ((d.ea v.1, v.2 + d.eb v.1), v.2 + (x : ZMod b) - d.rhoB v.1)\n\ndef bInverse (x : ℤ) (v : (ZMod a × ZMod b) × ZMod b) :\n    Δ × ZMod b :=\n  let δ := d.orderB.symm (v.1.1, v.1.2 + (x : ZMod b) - v.2)\n  (δ, v.1.2 - d.eb δ)\n\ntheorem b_left (x : ℤ) : Function.LeftInverse (d.bInverse x) (d.bMap x) := by\n  rintro ⟨δ, y⟩\n  have hp :\n      (d.ea δ, y + d.eb δ + (x : ZMod b) -\n        (y + (x : ZMod b) - d.rhoB δ)) = d.orderB δ := by\n    apply Prod.ext\n    · exact (d.orderB_fst δ).symm\n    · dsimp [rhoB]\n      ring\n  simp only [bInverse, bMap, hp, Equiv.symm_apply_apply]\n  simp\n\ntheorem b_right (x : ℤ) : Function.RightInverse (d.bInverse x) (d.bMap x) := by\n  rintro ⟨⟨α, ξ⟩, q⟩\n  let δ := d.orderB.symm (α, ξ + (x : ZMod b) - q)\n  have he := d.orderB.apply_symm_apply (α, ξ + (x : ZMod b) - q)\n  have ha : d.ea δ = α := by\n    simpa only [δ, d.orderB_fst] using congrArg Prod.fst he\n  have hq : (d.orderB δ).2 = ξ + (x : ZMod b) - q :=\n    congrArg Prod.snd he\n  change ((d.ea δ, ξ - d.eb δ + d.eb δ),\n    ξ - d.eb δ + (x : ZMod b) - d.rhoB δ) = ((α, ξ), q)\n  rw [ha]\n  apply Prod.ext\n  · simp\n  · dsimp [rhoB]\n    rw [hq]\n    ring\n\ndef bEquiv (x : ℤ) : Δ × ZMod b ≃ (ZMod a × ZMod b) × ZMod b where\n  toFun := d.bMap x\n  invFun := d.bInverse x\n  left_inv := d.b_left x\n  right_inv := d.b_right x\n\nend Shifts\n\ndef attach {B L Δ P : Type*} (e : Δ × L ≃ P × L) :\n    (B × L) × Δ ≃ P × (B × L) where\n  toFun v := let w := e (v.2, v.1.2); (w.1, (v.1.1, w.2))\n  invFun w := let v := e.symm (w.1, w.2.2); ((w.2.1, v.2), v.1)\n  left_inv := by\n    rintro ⟨⟨b, y⟩, δ⟩\n    simp\n  right_inv := by\n    rintro ⟨p, b, q⟩\n    simp\n\nabbrev Blocks (a b : ℕ) (A B : Type*) := (A × ZMod a) ⊕ (B × ZMod b)\n\ndef useful {a b : ℕ} {K A B : Type*} (chart : K ≃ Blocks a b A B)\n    (k : K) : ZMod a × ZMod b :=\n  match chart k with\n  | .inl (_, y) => (y, 0)\n  | .inr (_, y) => (0, y)\n\ndef blockRotate {a b : ℕ} {K A B : Type*} (chart : K ≃ Blocks a b A B)\n    (t : ℤ) (k : K) : K :=\n  chart.symm (match chart k with\n    | .inl (c, y) => .inl (c, y + (t : ZMod a))\n    | .inr (c, y) => .inr (c, y + (t : ZMod b)))\n\ndef blockEquiv {a b : ℕ} {K A B Δ : Type*} (d : Shifts a b Δ)\n    (chart : K ≃ Blocks a b A B) (x : ℤ) :\n    K × Δ ≃ (ZMod a × ZMod b) × K :=\n  (Equiv.prodCongr chart (Equiv.refl Δ)).trans\n    ((Equiv.sumProdDistrib (A × ZMod a) (B × ZMod b) Δ).trans\n      ((Equiv.sumCongr (attach (d.aEquiv x)) (attach (d.bEquiv x))).trans\n        ((Equiv.prodSumDistrib (ZMod a × ZMod b)\n          (A × ZMod a) (B × ZMod b)).symm.trans\n          (Equiv.prodCongr (Equiv.refl _) chart.symm))))\n\ntheorem block_lift_independent {a b : ℕ} {K A B Δ : Type*}\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B)\n    (x : ℤ) (H : K × Δ → ℤ)\n    (ha : ∀ v, (H v : ZMod a) = d.rhoA v.2)\n    (hb : ∀ v, (H v : ZMod b) = d.rhoB v.2) (v : K × Δ) :\n    (useful chart v.1 + (d.ea v.2, d.eb v.2),\n      blockRotate chart (x - H v) v.1) = blockEquiv d chart x v := by\n  rcases v with ⟨k, δ⟩\n  rcases hk : chart k with ⟨c, y⟩ | ⟨c, y⟩\n  · simp [useful, blockRotate, blockEquiv, attach, Shifts.aEquiv,\n      Shifts.aMap, hk, Int.cast_sub, ha, add_sub_assoc]\n  · simp [useful, blockRotate, blockEquiv, attach, Shifts.bEquiv,\n      Shifts.bMap, hk, Int.cast_sub, hb, add_sub_assoc]\n\ndef inactiveEquiv {K Δ L P B : Type*} (e : Δ × L ≃ P × L)\n    (r : B ≃ B) : (K × Δ) × (B × L) ≃ (P × K) × (B × L) where\n  toFun v := let w := e (v.1.2, v.2.2); ((w.1, v.1.1), (r v.2.1, w.2))\n  invFun w := let v := e.symm (w.1.1, w.2.2)\n             ((w.1.2, v.1), (r.symm w.2.1, v.2))\n  left_inv := by\n    rintro ⟨⟨k, δ⟩, b, y⟩\n    simp\n  right_inv := by\n    rintro ⟨⟨p, k⟩, b, q⟩\n    simp\n\ndef seedEquiv {a b : ℕ} {K A B Δ U W : Type*}\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B) (x : ℤ)\n    (ar : U ≃ U) (ir : W ≃ W) :\n    (K × Δ) × (U ⊕ (W × ZMod a)) ≃\n      ((ZMod a × ZMod b) × K) × (U ⊕ (W × ZMod a)) :=\n  (Equiv.prodSumDistrib (K × Δ) U (W × ZMod a)).trans\n    ((Equiv.sumCongr (Equiv.prodCongr (blockEquiv d chart x) ar)\n      (inactiveEquiv (d.aEquiv x) ir)).trans\n        (Equiv.prodSumDistrib ((ZMod a × ZMod b) × K) U (W × ZMod a)).symm)\n\ndef translate {n : ℕ} (t : ZMod n) : ZMod n ≃ ZMod n where\n  toFun y := y + t\n  invFun y := y - t\n  left_inv := by intro y; simp\n  right_inv := by intro y; simp\n\nabbrev World (a c : ℕ) (C₁ C₂ C₀ : Type*) :=\n  (C₁ × ZMod c) ⊕ ((C₂ × ZMod a) ⊕ (C₀ × (ZMod a × ZMod c)))\n\ndef worldRotate {a c : ℕ} {C₁ C₂ C₀ : Type*} (t : ℤ) :\n    World a c C₁ C₂ C₀ ≃ World a c C₁ C₂ C₀ :=\n  Equiv.sumCongr (Equiv.prodCongr (Equiv.refl C₁) (translate (t : ZMod c)))\n    (Equiv.sumCongr (Equiv.prodCongr (Equiv.refl C₂) (translate (t : ZMod a)))\n      (Equiv.prodCongr (Equiv.refl C₀)\n        (Equiv.prodCongr (translate (t : ZMod a)) (translate (t : ZMod c)))))\n\ndef viewOne {a c : ℕ} {C₁ C₂ C₀ : Type*} :\n    World a c C₁ C₂ C₀ ≃\n      (C₁ × ZMod c) ⊕ ((C₂ ⊕ (C₀ × ZMod c)) × ZMod a) where\n  toFun s := match s with\n    | .inl u => .inl u\n    | .inr (.inl (r, y)) => .inr (.inl r, y)\n    | .inr (.inr (r, y, z)) => .inr (.inr (r, z), y)\n  invFun s := match s with\n    | .inl u => .inl u\n    | .inr (.inl r, y) => .inr (.inl (r, y))\n    | .inr (.inr (r, z), y) => .inr (.inr (r, y, z))\n  left_inv := by rintro (u | (⟨r, y⟩ | ⟨r, y, z⟩)) <;> rfl\n  right_inv := by\n    rintro (u | ⟨w, y⟩)\n    · rfl\n    · rcases w with r | ⟨r, z⟩ <;> rfl\n\ndef viewTwo {a c : ℕ} {C₁ C₂ C₀ : Type*} :\n    World a c C₁ C₂ C₀ ≃\n      (C₂ × ZMod a) ⊕ ((C₁ ⊕ (C₀ × ZMod a)) × ZMod c) where\n  toFun s := match s with\n    | .inl (r, z) => .inr (.inl r, z)\n    | .inr (.inl u) => .inl u\n    | .inr (.inr (r, y, z)) => .inr (.inr (r, y), z)\n  invFun s := match s with\n    | .inl u => .inr (.inl u)\n    | .inr (.inl r, z) => .inl (r, z)\n    | .inr (.inr (r, y), z) => .inr (.inr (r, y, z))\n  left_inv := by rintro (⟨r, z⟩ | (u | ⟨r, y, z⟩)) <;> rfl\n  right_inv := by\n    rintro (u | ⟨w, z⟩)\n    · rfl\n    · rcases w with r | ⟨r, y⟩ <;> rfl\n\ndef activeRotation {n : ℕ} {C : Type*} (x : ℤ) :\n    C × ZMod n ≃ C × ZMod n :=\n  Equiv.prodCongr (Equiv.refl C) (translate (x : ZMod n))\n\ndef inactiveRotation {n : ℕ} {C B : Type*} (x : ℤ) :\n    B ⊕ (C × ZMod n) ≃ B ⊕ (C × ZMod n) :=\n  Equiv.sumCongr (Equiv.refl B) (activeRotation x)\n\ntheorem world_view_one {a c : ℕ} {C₁ C₂ C₀ : Type*}\n    (x h : ℤ) (ρ : ZMod a) (s : World a c C₁ C₂ C₀)\n    (ha : (h : ZMod a) = ρ) (hc : (h : ZMod c) = 0) :\n    viewOne (worldRotate (x - h) s) =\n      match viewOne s with\n      | .inl u => .inl (activeRotation x u)\n      | .inr (w, y) => .inr (inactiveRotation x w, y + (x : ZMod a) - ρ) := by\n  rcases s with (⟨r, z⟩ | (⟨r, y⟩ | ⟨r, y, z⟩))\n  all_goals\n    simp [viewOne, worldRotate, translate, activeRotation, inactiveRotation,\n      Int.cast_sub, ha, hc, add_sub_assoc]\n\ntheorem world_view_two {a c : ℕ} {C₁ C₂ C₀ : Type*}\n    (x h : ℤ) (ρ : ZMod c) (s : World a c C₁ C₂ C₀)\n    (hc : (h : ZMod c) = ρ) (ha : (h : ZMod a) = 0) :\n    viewTwo (worldRotate (x - h) s) =\n      match viewTwo s with\n      | .inl u => .inl (activeRotation x u)\n      | .inr (w, y) => .inr (inactiveRotation x w, y + (x : ZMod c) - ρ) := by\n  rcases s with (⟨r, z⟩ | (⟨r, y⟩ | ⟨r, y, z⟩))\n  all_goals\n    simp [viewTwo, worldRotate, translate, activeRotation, inactiveRotation,\n      Int.cast_sub, ha, hc, add_sub_assoc]\n\ndef seedOneEquiv {a b c : ℕ} {K A B Δ C₁ C₂ C₀ : Type*}\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B) (x : ℤ) :\n    (K × Δ) × World a c C₁ C₂ C₀ ≃\n      ((ZMod a × ZMod b) × K) × World a c C₁ C₂ C₀ :=\n  (Equiv.prodCongr (Equiv.refl _) viewOne).trans\n    ((seedEquiv d chart x (activeRotation x) (inactiveRotation x)).trans\n      (Equiv.prodCongr (Equiv.refl _) viewOne.symm))\n\ndef seedTwoEquiv {a b c : ℕ} {K A B Δ C₁ C₂ C₀ : Type*}\n    (d : Shifts c b Δ) (chart : K ≃ Blocks c b A B) (x : ℤ) :\n    (K × Δ) × World a c C₁ C₂ C₀ ≃\n      ((ZMod c × ZMod b) × K) × World a c C₁ C₂ C₀ :=\n  (Equiv.prodCongr (Equiv.refl _) viewTwo).trans\n    ((seedEquiv d chart x (activeRotation x) (inactiveRotation x)).trans\n      (Equiv.prodCongr (Equiv.refl _) viewTwo.symm))\n\ndef seedOneRaw {a b c : ℕ} {K A B Δ C₁ C₂ C₀ : Type*}\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B) (x : ℤ)\n    (H : (K × Δ) × World a c C₁ C₂ C₀ → ℤ)\n    (v : (K × Δ) × World a c C₁ C₂ C₀) :\n    ((ZMod a × ZMod b) × K) × World a c C₁ C₂ C₀ :=\n  (match viewOne v.2 with\n    | .inl _ => (useful chart v.1.1 + (d.ea v.1.2, d.eb v.1.2),\n        blockRotate chart (x - H v) v.1.1)\n    | .inr (_, y) => ((y + d.ea v.1.2, d.eb v.1.2), v.1.1),\n   worldRotate (x - H v) v.2)\n\ndef seedTwoRaw {a b c : ℕ} {K A B Δ C₁ C₂ C₀ : Type*}\n    (d : Shifts c b Δ) (chart : K ≃ Blocks c b A B) (x : ℤ)\n    (H : (K × Δ) × World a c C₁ C₂ C₀ → ℤ)\n    (v : (K × Δ) × World a c C₁ C₂ C₀) :\n    ((ZMod c × ZMod b) × K) × World a c C₁ C₂ C₀ :=\n  (match viewTwo v.2 with\n    | .inl _ => (useful chart v.1.1 + (d.ea v.1.2, d.eb v.1.2),\n        blockRotate chart (x - H v) v.1.1)\n    | .inr (_, y) => ((y + d.ea v.1.2, d.eb v.1.2), v.1.1),\n   worldRotate (x - H v) v.2)\n\ntheorem seedOne_lift_independent {a b c : ℕ} {K A B Δ C₁ C₂ C₀ : Type*}\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B) (x : ℤ)\n    (H : (K × Δ) × World a c C₁ C₂ C₀ → ℤ)\n    (ha : ∀ v, (H v : ZMod a) = d.rhoA v.1.2)\n    (hb : ∀ v, (H v : ZMod b) = d.rhoB v.1.2)\n    (hc : ∀ v, (H v : ZMod c) = 0)\n    (v : (K × Δ) × World a c C₁ C₂ C₀) :\n    seedOneRaw d chart x H v = seedOneEquiv d chart x v := by\n  rcases v with ⟨⟨k, δ⟩, s⟩\n  rcases s with (⟨r, z⟩ | (⟨r, y⟩ | ⟨r, y, z⟩))\n  · rcases hk : chart k with ⟨q, w⟩ | ⟨q, w⟩\n    all_goals\n      simp [seedOneRaw, seedOneEquiv, seedEquiv, viewOne, worldRotate,\n        translate, activeRotation, inactiveRotation, blockEquiv, attach,\n        useful, blockRotate, Shifts.aEquiv, Shifts.aMap, Shifts.bEquiv,\n        Shifts.bMap, hk, Int.cast_sub, ha, hb, hc, add_sub_assoc]\n  all_goals\n    simp [seedOneRaw, seedOneEquiv, seedEquiv, viewOne, worldRotate,\n      translate, activeRotation, inactiveRotation, inactiveEquiv,\n      Shifts.aEquiv, Shifts.aMap, Int.cast_sub, ha, hc, add_sub_assoc]\n\ntheorem seedTwo_lift_independent {a b c : ℕ} {K A B Δ C₁ C₂ C₀ : Type*}\n    (d : Shifts c b Δ) (chart : K ≃ Blocks c b A B) (x : ℤ)\n    (H : (K × Δ) × World a c C₁ C₂ C₀ → ℤ)\n    (hc : ∀ v, (H v : ZMod c) = d.rhoA v.1.2)\n    (hb : ∀ v, (H v : ZMod b) = d.rhoB v.1.2)\n    (ha : ∀ v, (H v : ZMod a) = 0)\n    (v : (K × Δ) × World a c C₁ C₂ C₀) :\n    seedTwoRaw d chart x H v = seedTwoEquiv d chart x v := by\n  rcases v with ⟨⟨k, δ⟩, s⟩\n  rcases s with (⟨r, z⟩ | (⟨r, y⟩ | ⟨r, y, z⟩))\n  · simp [seedTwoRaw, seedTwoEquiv, seedEquiv, viewTwo, worldRotate,\n      translate, activeRotation, inactiveRotation, inactiveEquiv,\n      Shifts.aEquiv, Shifts.aMap, Int.cast_sub, ha, hc, add_sub_assoc]\n  · rcases hk : chart k with ⟨q, w⟩ | ⟨q, w⟩\n    all_goals\n      simp [seedTwoRaw, seedTwoEquiv, seedEquiv, viewTwo, worldRotate,\n        translate, activeRotation, inactiveRotation, blockEquiv, attach,\n        useful, blockRotate, Shifts.aEquiv, Shifts.aMap, Shifts.bEquiv,\n        Shifts.bMap, hk, Int.cast_sub, ha, hb, hc, add_sub_assoc]\n  · simp [seedTwoRaw, seedTwoEquiv, seedEquiv, viewTwo, worldRotate,\n      translate, activeRotation, inactiveRotation, inactiveEquiv,\n      Shifts.aEquiv, Shifts.aMap, Int.cast_sub, ha, hc, add_sub_assoc]\n\ndef reflection {K : Type*} [AddCommGroup K] (k : K) : K ≃ K where\n  toFun l := k - l\n  invFun l := k - l\n  left_inv := by intro l; exact sub_sub_cancel k l\n  right_inv := by intro l; exact sub_sub_cancel k l\n\ndef ordinaryEquiv {a b : ℕ} {K A B Δ : Type*} [AddCommGroup K]\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B) (x : ℤ) (k : K) :\n    K × Δ ≃ (ZMod a × ZMod b) × K :=\n  (Equiv.prodCongr (reflection k) (Equiv.refl Δ)).trans (blockEquiv d chart x)\n\ndef ordinaryMap {a b : ℕ} {K A B Δ : Type*} [AddCommGroup K]\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B)\n    (x : ℤ) (k : K) (H : K × Δ → ℤ) (v : K × Δ) :\n    (ZMod a × ZMod b) × K :=\n  (useful chart (k - v.1) + (d.ea v.2, d.eb v.2),\n    blockRotate chart (x - H v) (k - v.1))\n\ntheorem ordinary_eq_equiv {a b : ℕ} {K A B Δ : Type*} [AddCommGroup K]\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B)\n    (x : ℤ) (k : K) (H : K × Δ → ℤ)\n    (ha : ∀ v, (H v : ZMod a) = d.rhoA v.2)\n    (hb : ∀ v, (H v : ZMod b) = d.rhoB v.2) :\n    ordinaryMap d chart x k H = ordinaryEquiv d chart x k := by\n  funext v\n  rcases v with ⟨l, δ⟩\n  have h := block_lift_independent d chart x\n    (fun w => H (k - w.1, w.2))\n    (fun w => ha (k - w.1, w.2)) (fun w => hb (k - w.1, w.2))\n    (k - l, δ)\n  simpa [ordinaryMap, ordinaryEquiv, reflection] using h\n\ntheorem ordinary_inverse_compositions {a b : ℕ} {K A B Δ : Type*}\n    [AddCommGroup K] (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B)\n    (x : ℤ) (k : K) (H : K × Δ → ℤ)\n    (ha : ∀ v, (H v : ZMod a) = d.rhoA v.2)\n    (hb : ∀ v, (H v : ZMod b) = d.rhoB v.2) :\n    Function.LeftInverse (ordinaryEquiv d chart x k).symm\n      (ordinaryMap d chart x k H) ∧\n    Function.RightInverse (ordinaryEquiv d chart x k).symm\n      (ordinaryMap d chart x k H) := by\n  rw [ordinary_eq_equiv d chart x k H ha hb]\n  exact ⟨(ordinaryEquiv d chart x k).left_inv,\n    (ordinaryEquiv d chart x k).right_inv⟩\n\ndef sourceReindex {a c : ℕ} {K Δ S C₁ C₂ C₀ : Type*}\n    [AddCommGroup K] [AddCommGroup S]\n    (layout : S ≃ World a c C₁ C₂ C₀) (k : K) (s : S) :\n    (K × Δ) × S ≃ (K × Δ) × World a c C₁ C₂ C₀ :=\n  Equiv.prodCongr (Equiv.prodCongr (reflection k) (Equiv.refl Δ))\n    ((reflection s).trans layout)\n\ndef targetReindex {a c D : ℕ} {K P S C₁ C₂ C₀ : Type*}\n    (layout : S ≃ World a c C₁ C₂ C₀) (label : S ≃ ZMod D) :\n    (P × K) × World a c C₁ C₂ C₀ ≃ (P × K) × ZMod D :=\n  Equiv.prodCongr (Equiv.refl _) (layout.symm.trans label)\n\ndef sharedOutput {a c D : ℕ} {S C₁ C₂ C₀ : Type*}\n    (layout : S ≃ World a c C₁ C₂ C₀) (label : S ≃ ZMod D)\n    (t : ℤ) (s : S) : ZMod D :=\n  label (layout.symm (worldRotate t (layout s)))\n\ndef manuscriptOneEquiv {a b c D : ℕ} {K A B Δ S C₁ C₂ C₀ : Type*}\n    [AddCommGroup K] [AddCommGroup S]\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B)\n    (layout : S ≃ World a c C₁ C₂ C₀) (label : S ≃ ZMod D)\n    (x : ℤ) (k : K) (s : S) : (K × Δ) × S ≃ ((ZMod a × ZMod b) × K) × ZMod D :=\n  (sourceReindex layout k s).trans\n    ((seedOneEquiv d chart x).trans (targetReindex layout label))\n\ndef manuscriptTwoEquiv {a b c D : ℕ} {K A B Δ S C₁ C₂ C₀ : Type*}\n    [AddCommGroup K] [AddCommGroup S]\n    (d : Shifts c b Δ) (chart : K ≃ Blocks c b A B)\n    (layout : S ≃ World a c C₁ C₂ C₀) (label : S ≃ ZMod D)\n    (x : ℤ) (k : K) (s : S) : (K × Δ) × S ≃ ((ZMod c × ZMod b) × K) × ZMod D :=\n  (sourceReindex layout k s).trans\n    ((seedTwoEquiv d chart x).trans (targetReindex layout label))\n\ndef manuscriptOneMap {a b c D : ℕ} {K A B Δ S C₁ C₂ C₀ : Type*}\n    [AddCommGroup K] [AddCommGroup S]\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B)\n    (layout : S ≃ World a c C₁ C₂ C₀) (label : S ≃ ZMod D)\n    (x : ℤ) (k : K) (s : S) (H : (K × Δ) × S → ℤ)\n    (v : (K × Δ) × S) : ((ZMod a × ZMod b) × K) × ZMod D :=\n  (match viewOne (layout (s - v.2)) with\n    | .inl _ => (useful chart (k - v.1.1) + (d.ea v.1.2, d.eb v.1.2),\n        blockRotate chart (x - H v) (k - v.1.1))\n    | .inr (_, y) => ((y + d.ea v.1.2, d.eb v.1.2), k - v.1.1),\n   sharedOutput layout label (x - H v) (s - v.2))\n\ndef manuscriptTwoMap {a b c D : ℕ} {K A B Δ S C₁ C₂ C₀ : Type*}\n    [AddCommGroup K] [AddCommGroup S]\n    (d : Shifts c b Δ) (chart : K ≃ Blocks c b A B)\n    (layout : S ≃ World a c C₁ C₂ C₀) (label : S ≃ ZMod D)\n    (x : ℤ) (k : K) (s : S) (H : (K × Δ) × S → ℤ)\n    (v : (K × Δ) × S) : ((ZMod c × ZMod b) × K) × ZMod D :=\n  (match viewTwo (layout (s - v.2)) with\n    | .inl _ => (useful chart (k - v.1.1) + (d.ea v.1.2, d.eb v.1.2),\n        blockRotate chart (x - H v) (k - v.1.1))\n    | .inr (_, y) => ((y + d.ea v.1.2, d.eb v.1.2), k - v.1.1),\n   sharedOutput layout label (x - H v) (s - v.2))\n\ntheorem manuscript_one_eq_equiv {a b c D : ℕ} {K A B Δ S C₁ C₂ C₀ : Type*}\n    [AddCommGroup K] [AddCommGroup S]\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B)\n    (layout : S ≃ World a c C₁ C₂ C₀) (label : S ≃ ZMod D)\n    (x : ℤ) (k : K) (s : S) (H : (K × Δ) × S → ℤ)\n    (ha : ∀ v, (H v : ZMod a) = d.rhoA v.1.2)\n    (hb : ∀ v, (H v : ZMod b) = d.rhoB v.1.2)\n    (hc : ∀ v, (H v : ZMod c) = 0) :\n    manuscriptOneMap d chart layout label x k s H =\n      manuscriptOneEquiv d chart layout label x k s := by\n  funext v\n  let e := sourceReindex (Δ := Δ) layout k s\n  have he := seedOne_lift_independent d chart x (fun w => H (e.symm w))\n    (fun w => ha (e.symm w)) (fun w => hb (e.symm w))\n    (fun w => hc (e.symm w)) (e v)\n  simp only [seedOneRaw, Equiv.symm_apply_apply] at he\n  have h := congrArg (targetReindex (K := K) (P := ZMod a × ZMod b) layout label) he\n  simpa [e, manuscriptOneMap, manuscriptOneEquiv, seedOneRaw, sourceReindex,\n    targetReindex, sharedOutput, reflection] using h\n\ntheorem manuscript_two_eq_equiv {a b c D : ℕ} {K A B Δ S C₁ C₂ C₀ : Type*}\n    [AddCommGroup K] [AddCommGroup S]\n    (d : Shifts c b Δ) (chart : K ≃ Blocks c b A B)\n    (layout : S ≃ World a c C₁ C₂ C₀) (label : S ≃ ZMod D)\n    (x : ℤ) (k : K) (s : S) (H : (K × Δ) × S → ℤ)\n    (hc : ∀ v, (H v : ZMod c) = d.rhoA v.1.2)\n    (hb : ∀ v, (H v : ZMod b) = d.rhoB v.1.2)\n    (ha : ∀ v, (H v : ZMod a) = 0) :\n    manuscriptTwoMap d chart layout label x k s H =\n      manuscriptTwoEquiv d chart layout label x k s := by\n  funext v\n  let e := sourceReindex (Δ := Δ) layout k s\n  have he := seedTwo_lift_independent d chart x (fun w => H (e.symm w))\n    (fun w => hc (e.symm w)) (fun w => hb (e.symm w))\n    (fun w => ha (e.symm w)) (e v)\n  simp only [seedTwoRaw, Equiv.symm_apply_apply] at he\n  have h := congrArg (targetReindex (K := K) (P := ZMod c × ZMod b) layout label) he\n  simpa [e, manuscriptTwoMap, manuscriptTwoEquiv, seedTwoRaw, sourceReindex,\n    targetReindex, sharedOutput, reflection] using h\n\ndef shear (r : ℕ) (x : ℤ) (k β : ZMod r) : ZMod (r * r) :=\n  (x : ZMod (r * r)) + ((k - (x : ZMod r)).val : ℕ) +\n    (r : ZMod (r * r)) * (β.val : ℕ)\n\ntheorem shear_carry (r : ℕ) (x h : ℤ) (k l β : ZMod r)\n    (hl : (h : ZMod r) = l) :\n    shear r (x - h) (k - l) β + (h : ZMod (r * r)) = shear r x k β := by\n  have hk : k - l - ((x - h : ℤ) : ZMod r) = k - (x : ZMod r) := by\n    rw [Int.cast_sub, hl]\n    ring\n  unfold shear\n  rw [hk]\n  simp only [Int.cast_sub]\n  ring\n\ndef horizontalResidue (m : ℕ) (x₁ x₂ : ℤ) : ZMod m × ZMod m :=\n  ((x₁ : ZMod m), (x₂ : ZMod m))\n\ntheorem horizontal_source (m : ℕ) (x₁ x₂ h₁ h₂ : ℤ)\n    (τ : ZMod m × ZMod m) (hτ : horizontalResidue m h₁ h₂ = τ) :\n    horizontalResidue m (x₁ - h₁) (x₂ - h₂) =\n      horizontalResidue m x₁ x₂ - τ := by\n  rw [← hτ]\n  ext <;> simp [horizontalResidue, Int.cast_sub]\n\ndef rectangleShifts (a b : ℕ) : Shifts a b (ZMod a × ZMod b) where\n  ea δ := (Equiv.swap (1, 0) (0, 1) δ).1\n  eb δ := δ.2\n  orderA := Equiv.prodComm _ _\n  orderB := Equiv.swap (1, 0) (0, 1)\n  orderA_fst := by intro δ; rfl\n  orderB_fst := by intro δ; rfl\n\ntheorem ordinary_bijective {a b : ℕ} {K A B Δ : Type*} [AddCommGroup K]\n    (d : Shifts a b Δ) (chart : K ≃ Blocks a b A B)\n    (x : ℤ) (k : K) (H : K × Δ → ℤ)\n    (ha : ∀ v, (H v : ZMod a) = d.rhoA v.2)\n    (hb : ∀ v, (H v : ZMod b) = d.rhoB v.2) :\n    Function.Bijective (ordinaryMap d chart x k H) := by\n  rw [ordinary_eq_equiv d chart x k H ha hb]\n  exact (ordinaryEquiv d chart x k).bijective\n\ntheorem line_invariance {J : Type*} (f : ℤ → J) (n x₁ x₂ h : ℤ) :\n    f ((x₂ + n * h) + n * (x₁ - h)) = f (x₂ + n * x₁) := by\n  congr 1\n  ring\n\nsection Simultaneous\n\nvariable {a c b₁ b₂ D : ℕ}\n  {K₁ K₂ A₁ B₁ A₂ B₂ Δ₁ Δ₂ S C₁ C₂ C₀ : Type*}\n  [AddCommGroup K₁] [AddCommGroup K₂] [AddCommGroup S]\n  (d₁ : Shifts a b₁ Δ₁) (d₂ : Shifts c b₂ Δ₂)\n  (chart₁ : K₁ ≃ Blocks a b₁ A₁ B₁) (chart₂ : K₂ ≃ Blocks c b₂ A₂ B₂)\n  (layout : S ≃ World a c C₁ C₂ C₀) (label : S ≃ ZMod D)\n  (x : ℤ) (k₁ : K₁) (k₂ : K₂) (s : S)\n  (H₁ : (K₁ × Δ₁) × S → ℤ) (H₂ : (K₂ × Δ₂) × S → ℤ)\n  (h₁a : ∀ v, (H₁ v : ZMod a) = d₁.rhoA v.1.2)\n  (h₁b : ∀ v, (H₁ v : ZMod b₁) = d₁.rhoB v.1.2)\n  (h₁c : ∀ v, (H₁ v : ZMod c) = 0)\n  (h₂c : ∀ v, (H₂ v : ZMod c) = d₂.rhoA v.1.2)\n  (h₂b : ∀ v, (H₂ v : ZMod b₂) = d₂.rhoB v.1.2)\n  (h₂a : ∀ v, (H₂ v : ZMod a) = 0)\n\ninclude h₁a h₁b h₁c h₂c h₂b h₂a\n\ntheorem simultaneous_activation :\n    Function.Bijective (manuscriptOneMap d₁ chart₁ layout label x k₁ s H₁) ∧\n    Function.Bijective (manuscriptTwoMap d₂ chart₂ layout label x k₂ s H₂) ∧\n    (Function.LeftInverse (manuscriptOneEquiv d₁ chart₁ layout label x k₁ s).symm\n        (manuscriptOneMap d₁ chart₁ layout label x k₁ s H₁) ∧\n      Function.RightInverse (manuscriptOneEquiv d₁ chart₁ layout label x k₁ s).symm\n        (manuscriptOneMap d₁ chart₁ layout label x k₁ s H₁)) ∧\n    (Function.LeftInverse (manuscriptTwoEquiv d₂ chart₂ layout label x k₂ s).symm\n        (manuscriptTwoMap d₂ chart₂ layout label x k₂ s H₂) ∧\n      Function.RightInverse (manuscriptTwoEquiv d₂ chart₂ layout label x k₂ s).symm\n        (manuscriptTwoMap d₂ chart₂ layout label x k₂ s H₂)) := by\n  rw [manuscript_one_eq_equiv d₁ chart₁ layout label x k₁ s H₁ h₁a h₁b h₁c,\n    manuscript_two_eq_equiv d₂ chart₂ layout label x k₂ s H₂ h₂c h₂b h₂a]\n  exact ⟨(manuscriptOneEquiv d₁ chart₁ layout label x k₁ s).bijective,\n    (manuscriptTwoEquiv d₂ chart₂ layout label x k₂ s).bijective,\n    ⟨(manuscriptOneEquiv d₁ chart₁ layout label x k₁ s).left_inv,\n      (manuscriptOneEquiv d₁ chart₁ layout label x k₁ s).right_inv⟩,\n    ⟨(manuscriptTwoEquiv d₂ chart₂ layout label x k₂ s).left_inv,\n      (manuscriptTwoEquiv d₂ chart₂ layout label x k₂ s).right_inv⟩⟩\n\nend Simultaneous\n\ntheorem manuscript_specialization {p b₁ b₂ r₁ r₂ : ℕ}\n    {A₁ B₁ A₂ B₂ Δ₁ Δ₂ : Type*}\n    (d₁ : Shifts 2 b₁ Δ₁) (d₂ : Shifts 3 b₂ Δ₂)\n    (chart₁ : ZMod r₁ ≃ Blocks 2 b₁ A₁ B₁)\n    (chart₂ : ZMod r₂ ≃ Blocks 3 b₂ A₂ B₂)\n    (layout : (ZMod (p ^ 2) × ZMod (p ^ 2)) ≃\n      World 2 3 PUnit (Fin 2) (Fin ((p ^ 4 - 7) / 6)))\n    (label : (ZMod (p ^ 2) × ZMod (p ^ 2)) ≃ ZMod (p ^ 4))\n    (x : ℤ) (k₁ : ZMod r₁) (k₂ : ZMod r₂)\n    (s : ZMod (p ^ 2) × ZMod (p ^ 2))\n    (H₁ : (ZMod r₁ × Δ₁) × (ZMod (p ^ 2) × ZMod (p ^ 2)) → ℤ)\n    (H₂ : (ZMod r₂ × Δ₂) × (ZMod (p ^ 2) × ZMod (p ^ 2)) → ℤ)\n    (h₁a : ∀ v, (H₁ v : ZMod 2) = d₁.rhoA v.1.2)\n    (h₁b : ∀ v, (H₁ v : ZMod b₁) = d₁.rhoB v.1.2)\n    (h₁c : ∀ v, (H₁ v : ZMod 3) = 0)\n    (h₂c : ∀ v, (H₂ v : ZMod 3) = d₂.rhoA v.1.2)\n    (h₂b : ∀ v, (H₂ v : ZMod b₂) = d₂.rhoB v.1.2)\n    (h₂a : ∀ v, (H₂ v : ZMod 2) = 0) :\n    Function.Bijective (manuscriptOneMap d₁ chart₁ layout label x k₁ s H₁) ∧\n    Function.Bijective (manuscriptTwoMap d₂ chart₂ layout label x k₂ s H₂) ∧\n    (Function.LeftInverse (manuscriptOneEquiv d₁ chart₁ layout label x k₁ s).symm\n        (manuscriptOneMap d₁ chart₁ layout label x k₁ s H₁) ∧\n      Function.RightInverse (manuscriptOneEquiv d₁ chart₁ layout label x k₁ s).symm\n        (manuscriptOneMap d₁ chart₁ layout label x k₁ s H₁)) ∧\n    (Function.LeftInverse (manuscriptTwoEquiv d₂ chart₂ layout label x k₂ s).symm\n        (manuscriptTwoMap d₂ chart₂ layout label x k₂ s H₂) ∧\n      Function.RightInverse (manuscriptTwoEquiv d₂ chart₂ layout label x k₂ s).symm\n        (manuscriptTwoMap d₂ chart₂ layout label x k₂ s H₂)) :=\n  simultaneous_activation d₁ d₂ chart₁ chart₂ layout label x k₁ k₂ s H₁ H₂\n    h₁a h₁b h₁c h₂c h₂b h₂a\n\nend SharedSeed\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "b4b380eef2cdd3b6036d42248c7b2d786cf8e44b19866bc2ee4a6437eb360e02"
+    },
+    {
+      "claim_id": "L_BLOCK_INVERSE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "The indexed a-block and b-block maps have the explicit two-sided inverse formulas, and conjugation by any labelled set-partition chart gives a block activation equivalence.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "30de1a7086f84ee2e83c22735298f8411621fd80012b1c9b2aae80eab1d0417c"
+    },
+    {
+      "claim_id": "L_SEED_INVERSE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "For arbitrary three-region label spaces, the two seed activation maps have explicit two-sided inverses using the same cyclic-output labelling; arbitrary offset functions with the prescribed residues equal these equivalences.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "788d63c39ce873156af10a917e5d9b7e40171307677818baddba1b52b3060845"
+    },
+    {
+      "claim_id": "L_COORDINATE_TRANSPORT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "Horizontal source residues, ordinary line coordinates and the nonsplit high-coordinate shear obey the manuscript transport identities for every integer lift, including negative values.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "b205da50d2011d377bcc8bff462ff538c411a7f7f4d5fe3efcdfa1bf5bf08125"
+    },
+    {
+      "claim_id": "C_SOURCE_INPUTS",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "The labelled partitions, indexed fibre orderings, three-region seed layout and single cyclic-output labelling prescribed in manuscript sections 03-05 are exactly the input data of the universal activation theorem. No activation bijection is assumed.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "19e64eaf290f847f0cd18151b635966e5e2353274ad305d2d6790979bca85ebe"
+    },
+    {
+      "claim_id": "C_SOURCE_INPUTS",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "The labelled partitions, indexed fibre orderings, three-region seed layout and single cyclic-output labelling prescribed in manuscript sections 03-05 are exactly the input data of the universal activation theorem. No activation bijection is assumed.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "INPUT_BLOCK_CHARTS",
+          "statement": "Each input digit has a set partition into cyclically labelled subsets of the stated a_i and b_i sizes, copied over the other digits; these labels are not group coordinates.",
+          "source": "Staged September 23 2026 manuscript, sections/03-cyclic-encoding.tex enc:digit-partition and sections/05-common-solution.tex Labelled blocks and their inverse map; local primary-source definitions.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "b003927dccf2088abf2ae1fdd393bc29ba66774d935bd891e621f31ec3039ddd"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "19e64eaf290f847f0cd18151b635966e5e2353274ad305d2d6790979bca85ebe"
+    },
+    {
+      "claim_id": "C_SOURCE_INPUTS",
+      "version": 3,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "The labelled partitions, indexed fibre orderings, three-region seed layout and single cyclic-output labelling prescribed in manuscript sections 03-05 are exactly the input data of the universal activation theorem. No activation bijection is assumed.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "INPUT_BLOCK_CHARTS",
+          "statement": "Each input digit has a set partition into cyclically labelled subsets of the stated a_i and b_i sizes, copied over the other digits; these labels are not group coordinates.",
+          "source": "Staged September 23 2026 manuscript, sections/03-cyclic-encoding.tex enc:digit-partition and sections/05-common-solution.tex Labelled blocks and their inverse map; local primary-source definitions.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "b003927dccf2088abf2ae1fdd393bc29ba66774d935bd891e621f31ec3039ddd"
+        },
+        {
+          "assumption_id": "INPUT_FIBRE_ORDERINGS",
+          "statement": "Distinct shift-list indices with repeated useful shifts are equipped with the two per-fibre bijections in act:fibre-orderings; these are chosen data, not bijectivity of an activation map.",
+          "source": "Staged September 23 2026 manuscript, sections/04-activation.tex act:fibre-orderings; local primary-source definitions.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "4e68061ad69d61a95a73fc7e5d4f5659a03007a44c063d84f067d5dc9de03e89"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "19e64eaf290f847f0cd18151b635966e5e2353274ad305d2d6790979bca85ebe"
+    },
+    {
+      "claim_id": "C_SOURCE_INPUTS",
+      "version": 4,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "The labelled partitions, indexed fibre orderings, three-region seed layout and single cyclic-output labelling prescribed in manuscript sections 03-05 are exactly the input data of the universal activation theorem. No activation bijection is assumed.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "INPUT_BLOCK_CHARTS",
+          "statement": "Each input digit has a set partition into cyclically labelled subsets of the stated a_i and b_i sizes, copied over the other digits; these labels are not group coordinates.",
+          "source": "Staged September 23 2026 manuscript, sections/03-cyclic-encoding.tex enc:digit-partition and sections/05-common-solution.tex Labelled blocks and their inverse map; local primary-source definitions.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "b003927dccf2088abf2ae1fdd393bc29ba66774d935bd891e621f31ec3039ddd"
+        },
+        {
+          "assumption_id": "INPUT_FIBRE_ORDERINGS",
+          "statement": "Distinct shift-list indices with repeated useful shifts are equipped with the two per-fibre bijections in act:fibre-orderings; these are chosen data, not bijectivity of an activation map.",
+          "source": "Staged September 23 2026 manuscript, sections/04-activation.tex act:fibre-orderings; local primary-source definitions.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "4e68061ad69d61a95a73fc7e5d4f5659a03007a44c063d84f067d5dc9de03e89"
+        },
+        {
+          "assumption_id": "INPUT_SHARED_LAYOUT",
+          "statement": "The three seed regions carry the label-space table with sizes 3, 4 and D-7, and lambda is one arbitrary set bijection from S to ZMod D. S is not an additional finite group factor.",
+          "source": "Staged September 23 2026 manuscript, sections/05-common-solution.tex model:seed-regions and model:shared-output, and sections/03-cyclic-encoding.tex enc:ambient; local primary-source definitions.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "92e9315f4eb8c30d8b27db49f72e644f2983c3cf39f886245dbeb955b13322bb"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "19e64eaf290f847f0cd18151b635966e5e2353274ad305d2d6790979bca85ebe"
+    },
+    {
+      "claim_id": "C_SOURCE_INPUTS",
+      "version": 5,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_SHARED_SEED",
+        "content_hash": "73bd60412fe3db2d56bdcc59a9f23b1dbe28591797b9f71cd38e13466016af21"
+      },
+      "natural_statement": "The labelled partitions, indexed fibre orderings, three-region seed layout and single cyclic-output labelling prescribed in manuscript sections 03-05 are exactly the input data of the universal activation theorem. No activation bijection is assumed.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "INPUT_BLOCK_CHARTS",
+          "statement": "Each input digit has a set partition into cyclically labelled subsets of the stated a_i and b_i sizes, copied over the other digits; these labels are not group coordinates.",
+          "source": "Staged September 23 2026 manuscript, sections/03-cyclic-encoding.tex enc:digit-partition and sections/05-common-solution.tex Labelled blocks and their inverse map; local primary-source definitions.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "b003927dccf2088abf2ae1fdd393bc29ba66774d935bd891e621f31ec3039ddd"
+        },
+        {
+          "assumption_id": "INPUT_FIBRE_ORDERINGS",
+          "statement": "Distinct shift-list indices with repeated useful shifts are equipped with the two per-fibre bijections in act:fibre-orderings; these are chosen data, not bijectivity of an activation map.",
+          "source": "Staged September 23 2026 manuscript, sections/04-activation.tex act:fibre-orderings; local primary-source definitions.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "4e68061ad69d61a95a73fc7e5d4f5659a03007a44c063d84f067d5dc9de03e89"
+        },
+        {
+          "assumption_id": "INPUT_SHARED_LAYOUT",
+          "statement": "The three seed regions carry the label-space table with sizes 3, 4 and D-7, and lambda is one arbitrary set bijection from S to ZMod D. S is not an additional finite group factor.",
+          "source": "Staged September 23 2026 manuscript, sections/05-common-solution.tex model:seed-regions and model:shared-output, and sections/03-cyclic-encoding.tex enc:ambient; local primary-source definitions.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "92e9315f4eb8c30d8b27db49f72e644f2983c3cf39f886245dbeb955b13322bb"
+        },
+        {
+          "assumption_id": "INPUT_ACTUAL_OFFSETS",
+          "statement": "Offsets are predetermined per batch and satisfy act:ordinary-crt and act:seed-crt, with distinct horizontal offsets within each tile. The resulting source low and horizontal coordinates are those of act:source-base.",
+          "source": "Staged September 23 2026 manuscript, sections/04-activation.tex act:ordinary-crt, act:seed-crt and act:source-base; local primary-source hypotheses.",
+          "source_id": "",
+          "locator": "",
+          "filed_by": "engineer:copilot",
+          "content_hash": "647e28c62f5e4f287091b243e0734771e973946dec098dd63cd4c9623a73bccf"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "19e64eaf290f847f0cd18151b635966e5e2353274ad305d2d6790979bca85ebe"
+    },
+    {
+      "claim_id": "M_WORD_RULE",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000155",
+        "content_hash": "1127c45ba97400c11ae96abf8030eee4baecd00c8ddb958f29602892a6674932"
+      },
+      "natural_statement": "The manuscript word rule admits a nonconstant-column model and excludes vertically periodic admissible arrays; outside the current bounded verification.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "8101b748f5bdb1e374b17957a87c35e1756290e4e80df02c702c6c2b2a5c3a27"
+    },
+    {
+      "claim_id": "M_CYCLIC_ENCODING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000155",
+        "content_hash": "1127c45ba97400c11ae96abf8030eee4baecd00c8ddb958f29602892a6674932"
+      },
+      "natural_statement": "The manuscript graph, dependence and cycle-exclusion equations encode functional constraints with a cyclic finite factor; outside the current bounded verification.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "e61d837aedcd600c67ec48c37060a432651912711a71de269db8481093005cda"
+    },
+    {
+      "claim_id": "M_ACTIVATION_OBSTRUCTION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000155",
+        "content_hash": "1127c45ba97400c11ae96abf8030eee4baecd00c8ddb958f29602892a6674932"
+      },
+      "natural_statement": "The manuscript activation equations force all required activity and exclude finite-index periodic common solutions; outside the current bounded verification.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "422df30612a37b5e7e218582a3938d8ce4760a73739a4c1dc03f277c23d86bad"
+    },
+    {
+      "claim_id": "M_COMMON_SOLUTION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000155",
+        "content_hash": "1127c45ba97400c11ae96abf8030eee4baecd00c8ddb958f29602892a6674932"
+      },
+      "natural_statement": "The manuscript explicit graph simultaneously solves all graph, dependence, exclusion and activation equations; only its activation core is currently formalized.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "19b181f98bbcbb90ce848cbf54c1f76d528e57a0b3bed80809e695dc3c8bedb3"
+    },
+    {
+      "claim_id": "M_STACKING",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000155",
+        "content_hash": "1127c45ba97400c11ae96abf8030eee4baecd00c8ddb958f29602892a6674932"
+      },
+      "natural_statement": "The manuscript stacking construction converts simultaneous equations into one finite tile while retaining cyclicity and periodicity obstruction; outside the current bounded verification.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "8d712d8be0d7ba198d6466ff1a51594686d00ede3cd176f722171da78268d661"
+    },
+    {
+      "claim_id": "M_GEOMETRY",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000155",
+        "content_hash": "1127c45ba97400c11ae96abf8030eee4baecd00c8ddb958f29602892a6674932"
+      },
+      "natural_statement": "The manuscript quotient lift and rigidification give the lattice and arbitrary-real-translation conclusions in dimension three; outside the current bounded verification.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "07e19b57e965388be3a9b4aeb417479f04019b24eddc3b095fec7cdc64ee730a"
+    },
+    {
+      "claim_id": "M_FULL_THEOREM",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000155",
+        "content_hash": "1127c45ba97400c11ae96abf8030eee4baecd00c8ddb958f29602892a6674932"
+      },
+      "natural_statement": "The manuscript constructs a finite translational tile in dimension three that admits a tiling but no fully periodic tiling, including the asserted Euclidean arbitrary-real-translation conclusion; not settled by the current bounded core verification.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "6b0f7ea7b1f5d3d8095617c48a883c93836b3741759c9688007e485dc579d7ad"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-C_SHARED_SEED-f9ae019a900b",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SHARED_SEED",
+        "content_hash": "b4b380eef2cdd3b6036d42248c7b2d786cf8e44b19866bc2ee4a6437eb360e02"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/shared_seed/certificates/C_SHARED_SEED-ff90000428962f7c.json"
+    },
+    {
+      "evidence_id": "judgement-C_SHARED_SEED-14cba47cc211",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SHARED_SEED",
+        "content_hash": "b4b380eef2cdd3b6036d42248c7b2d786cf8e44b19866bc2ee4a6437eb360e02"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/shared_seed/certificates/C_SHARED_SEED-ff90000428962f7c.json"
+    },
+    {
+      "evidence_id": "judgement-C_SOURCE_INPUTS-9fbdf3045218",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SOURCE_INPUTS",
+        "content_hash": "19e64eaf290f847f0cd18151b635966e5e2353274ad305d2d6790979bca85ebe"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/shared_seed/statement_fidelity.md"
+    },
+    {
+      "evidence_id": "judgement-L_BLOCK_INVERSE-25722f32fb6f",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_BLOCK_INVERSE",
+        "content_hash": "30de1a7086f84ee2e83c22735298f8411621fd80012b1c9b2aae80eab1d0417c"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/shared_seed/statement_fidelity.md"
+    },
+    {
+      "evidence_id": "judgement-L_SEED_INVERSE-3f5a97f6e6bb",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_SEED_INVERSE",
+        "content_hash": "788d63c39ce873156af10a917e5d9b7e40171307677818baddba1b52b3060845"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/shared_seed/statement_fidelity.md"
+    },
+    {
+      "evidence_id": "judgement-L_COORDINATE_TRANSPORT-0f93d88c7bfd",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_COORDINATE_TRANSPORT",
+        "content_hash": "b205da50d2011d377bcc8bff462ff538c411a7f7f4d5fe3efcdfa1bf5bf08125"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "engineer:copilot",
+      "artifact": "research/shared_seed/statement_fidelity.md"
+    },
+    {
+      "evidence_id": "judgement-C_SHARED_SEED-c218012dc269",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SHARED_SEED",
+        "content_hash": "b4b380eef2cdd3b6036d42248c7b2d786cf8e44b19866bc2ee4a6437eb360e02"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:252b8adbed37",
+      "artifact": "research/shared_seed/certificates/C_SHARED_SEED-ff90000428962f7c.json"
+    },
+    {
+      "evidence_id": "judgement-C_SOURCE_INPUTS-d069a0e8d5ea",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_SOURCE_INPUTS",
+        "content_hash": "19e64eaf290f847f0cd18151b635966e5e2353274ad305d2d6790979bca85ebe"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:252b8adbed37",
+      "artifact": "research/shared_seed/statement_fidelity.md"
+    },
+    {
+      "evidence_id": "judgement-L_BLOCK_INVERSE-d01f5305b875",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_BLOCK_INVERSE",
+        "content_hash": "30de1a7086f84ee2e83c22735298f8411621fd80012b1c9b2aae80eab1d0417c"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:252b8adbed37",
+      "artifact": "research/shared_seed/statement_fidelity.md"
+    },
+    {
+      "evidence_id": "judgement-L_COORDINATE_TRANSPORT-874999405b31",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_COORDINATE_TRANSPORT",
+        "content_hash": "b205da50d2011d377bcc8bff462ff538c411a7f7f4d5fe3efcdfa1bf5bf08125"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:252b8adbed37",
+      "artifact": "research/shared_seed/statement_fidelity.md"
+    },
+    {
+      "evidence_id": "judgement-L_SEED_INVERSE-8a09dae63f46",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "L_SEED_INVERSE",
+        "content_hash": "788d63c39ce873156af10a917e5d9b7e40171307677818baddba1b52b3060845"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:252b8adbed37",
+      "artifact": "research/shared_seed/statement_fidelity.md"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_SHARED_SEED_UNIVERSAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_SHARED_SEED",
+        "content_hash": "b4b380eef2cdd3b6036d42248c7b2d786cf8e44b19866bc2ee4a6437eb360e02"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "L_BLOCK_INVERSE",
+          "content_hash": "30de1a7086f84ee2e83c22735298f8411621fd80012b1c9b2aae80eab1d0417c"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "L_SEED_INVERSE",
+          "content_hash": "788d63c39ce873156af10a917e5d9b7e40171307677818baddba1b52b3060845"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "L_COORDINATE_TRANSPORT",
+          "content_hash": "b205da50d2011d377bcc8bff462ff538c411a7f7f4d5fe3efcdfa1bf5bf08125"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_SOURCE_INPUTS",
+          "content_hash": "19e64eaf290f847f0cd18151b635966e5e2353274ad305d2d6790979bca85ebe"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_MANUSCRIPT_FULL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "M_FULL_THEOREM",
+        "content_hash": "6b0f7ea7b1f5d3d8095617c48a883c93836b3741759c9688007e485dc579d7ad"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "M_WORD_RULE",
+          "content_hash": "8101b748f5bdb1e374b17957a87c35e1756290e4e80df02c702c6c2b2a5c3a27"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "M_CYCLIC_ENCODING",
+          "content_hash": "e61d837aedcd600c67ec48c37060a432651912711a71de269db8481093005cda"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "M_ACTIVATION_OBSTRUCTION",
+          "content_hash": "422df30612a37b5e7e218582a3938d8ce4760a73739a4c1dc03f277c23d86bad"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "M_COMMON_SOLUTION",
+          "content_hash": "19b181f98bbcbb90ce848cbf54c1f76d528e57a0b3bed80809e695dc3c8bedb3"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "M_STACKING",
+          "content_hash": "8d712d8be0d7ba198d6466ff1a51594686d00ede3cd176f722171da78268d661"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "M_GEOMETRY",
+          "content_hash": "07e19b57e965388be3a9b4aeb417479f04019b24eddc3b095fec7cdc64ee730a"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_AUDIT_SHARED_SEED",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C9000155",
+        "content_hash": "d64250aa5aeb206bb791a9eae2924de151e4396c44f53474770a91319190c4bc"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_SHARED_SEED",
+          "content_hash": "b4b380eef2cdd3b6036d42248c7b2d786cf8e44b19866bc2ee4a6437eb360e02"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "C_SOURCE_INPUTS",
+          "content_hash": "19e64eaf290f847f0cd18151b635966e5e2353274ad305d2d6790979bca85ebe"
+        }
+      ],
+      "retired_because": ""
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+-- DRAFT ONLY: not elaborated, compiled, or certified.
+-- Public upstream source is pinned in dependency_manifest.json.
+-- This file deliberately does not have a .lean extension.
+import OAI.CategoryTheory.Thomason.RankedFaithfulness
+
+noncomputable section
+universe u
+
+open CategoryTheory CategoryTheory.Limits
+open OAI.Thomason
+
+namespace CouniversalityAudit
+
+noncomputable def publicInterval : RightIntervalExtension.{u} :=
+  GrayRecursive.IntervalHom.intervalExtensionOfSimplexIsIso
+    (GrayRecursive.IntervalHom.simplexComparison_isIso_of_standard
+      GrayRecursive.IntervalHom.standardSimplexComparison_isIso)
+
+theorem finite_couniversal
+    (n : ℕ) (hn : 1 ≤ n) {E : Type u} [PartialOrder E]
+    (A : Set E) (hA : IsLowerSet A) (r : E →o A)
+    (hadj : ∀ (a : A) (e : E), a.val ≤ e ↔ a ≤ r e)
+    {X Y : OmegaCategory.NCategory.{u} n}
+    {a : AttachmentComparison.posetObj n A ⟶ X}
+    {j : X ⟶ Y} {v : AttachmentComparison.posetObj n E ⟶ Y}
+    (sq : IsPushout a (AttachmentComparison.inc n A) j v) :
+    simplicialWeakEquivalences ((streetNerveFinite n).map j) := by
+  let T := publicInterval.{u}
+  letI : T.tensor.IsLeftAdjoint := T.rightAdjoint
+  exact Couniversality.poset_couniversal T T.tensor.rightAdjoint
+    (Adjunction.ofIsLeftAdjoint T.tensor) n hn A hA r hadj sq
+
+theorem finite_actual_pushout
+    (n : ℕ) (hn : 1 ≤ n) {E : Type u} [PartialOrder E]
+    (A : Set E) (hA : IsLowerSet A) (r : E →o A)
+    (hadj : ∀ (a : A) (e : E), a.val ≤ e ↔ a ≤ r e)
+    {X : OmegaCategory.NCategory.{u} n}
+    (a : AttachmentComparison.posetObj n A ⟶ X) :
+    simplicialWeakEquivalences ((streetNerveFinite n).map
+      (pushout.inl a (AttachmentComparison.inc n A))) := by
+  exact finite_couniversal n hn A hA r hadj
+    (IsPushout.of_hasPushout a (AttachmentComparison.inc n A))
+
+theorem omega_couniversal
+    {E : Type u} [PartialOrder E]
+    (A : Set E) (hA : IsLowerSet A) (r : E →o A)
+    (hadj : ∀ (a : A) (e : E), a.val ≤ e ↔ a ≤ r e)
+    {X Y : OmegaCategory.{u}}
+    {a : categorification.obj (nerve A) ⟶ X}
+    {j : X ⟶ Y} {v : categorification.obj (nerve E) ⟶ Y}
+    (sq : IsPushout a
+      (categorification.map
+        (nerveMap (OrderEmbedding.subtype A).toOrderHom.toFunctor)) j v) :
+    simplicialWeakEquivalences (streetNerveFunctor.map j) := by
+  exact Couniversality.omega_poset_couniversal publicInterval.{u}
+    A hA r hadj sq
+
+theorem omega_actual_pushout
+    {E : Type u} [PartialOrder E]
+    (A : Set E) (hA : IsLowerSet A) (r : E →o A)
+    (hadj : ∀ (a : A) (e : E), a.val ≤ e ↔ a ≤ r e)
+    {X : OmegaCategory.{u}}
+    (a : categorification.obj (nerve A) ⟶ X) :
+    simplicialWeakEquivalences (streetNerveFunctor.map
+      (pushout.inl a
+        (categorification.map
+          (nerveMap (OrderEmbedding.subtype A).toOrderHom.toFunctor)))) := by
+  exact omega_couniversal A hA r hadj
+    (IsPushout.of_hasPushout a
+      (categorification.map
+        (nerveMap (OrderEmbedding.subtype A).toOrderHom.toFunctor)))
+
+end CouniversalityAudit
+
+end

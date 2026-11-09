@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "claim": "C_K1_FLAT_DENSITY",
+  "result_class": "new_reduction",
+  "research_target_level": "publishable",
+  "math_objective_mode": "exploratory",
+  "certification_status": "engineer_proof_pending_independent_review",
+  "novelty_status": "unverified",
+  "manuscript_refutations": [],
+  "parameters": {
+    "m": 2,
+    "w": ["1", "4000000", "100000000000000"],
+    "v0": "2",
+    "sigma": "1/100",
+    "L0": 4,
+    "C_star": "640000"
+  },
+  "configurations": [
+    {
+      "name": "manuscript_admissible",
+      "theta": "3/5",
+      "centers": [["1", "0", "0"], ["1", "3", "6"]],
+      "flat_counts": {"1": 1, "2": 1, "1,2": 2},
+      "total_volume_ratio": "9/25",
+      "fiber_volume_ratio": "18/25",
+      "minimum_separation_ratio": "1200000",
+      "separation_pairs": 6,
+      "original_hypotheses": true
+    },
+    {
+      "name": "coordinate_collision_grid",
+      "theta": "2/5",
+      "centers": [["1", "0", "0"], ["1", "0", "1"], ["1", "1", "0"], ["1", "1", "1"]],
+      "flat_counts": {"1": 2, "2": 2, "1,2": 4},
+      "total_volume_ratio": "8/25",
+      "fiber_volume_ratio": "16/25",
+      "minimum_separation_ratio": "800000",
+      "separation_pairs": 6,
+      "original_hypotheses": false
+    },
+    {
+      "name": "multiple_Y_fibers",
+      "theta": "3/5",
+      "centers": [["1", "0", "0"], ["1", "1", "1"], ["2", "0", "0"]],
+      "flat_counts": {"1": 1, "2": 1, "1,2": 2},
+      "total_volume_ratio": "27/50",
+      "fiber_volume_ratio": "27/25",
+      "minimum_separation_ratio": "1200000",
+      "separation_pairs": 6,
+      "original_hypotheses": false
+    }
+  ],
+  "curves": [
+    {
+      "name": "nodal_two_branch_curve",
+      "configuration": "manuscript_admissible",
+      "coordinates_low_to_high": [["1"], ["-1", "0", "1"], ["0", "-1", "0", "1"]],
+      "normalization_inverse": "X2/X1",
+      "branches": [
+        {"center": 0, "parameter": "-1", "orders": [null, 1, 1]},
+        {"center": 0, "parameter": "1", "orders": [null, 1, 1]},
+        {"center": 1, "parameter": "2", "orders": [null, 1, 1]}
+      ],
+      "only_pole": "infinity",
+      "pole_orders": [0, -2, -3],
+      "weighted_degree": "1/2000000",
+      "total_contact": "9/500000000000000"
+    },
+    {
+      "name": "nonconstant_Y_logarithmic_contact",
+      "configuration": "manuscript_admissible",
+      "coordinates_low_to_high": [["1", "1"], ["0", "1"], ["0", "1", "-1/2"]],
+      "normalization_inverse": "Y-1",
+      "branches": [
+        {"center": 0, "parameter": "0", "orders": [1, 2, 3]}
+      ],
+      "only_pole": "infinity",
+      "pole_orders": [-1, -1, -2],
+      "weighted_degree": "1",
+      "total_contact": "9/500000000000000"
+    }
+  ],
+  "excluded_collision_obstruction": {
+    "theta": "3/5",
+    "centers": [["1", "0", "0"], ["1", "1", "0"]],
+    "free_coordinates": [1],
+    "density": "6/5",
+    "H": "5*l*w1",
+    "source_dimension_coefficients": [1, 5],
+    "target_dimension_coefficients": [0, 6],
+    "defect_coefficients": [-1, 1],
+    "valid_for_all_integer_l_at_least": 2,
+    "not_a_manuscript_counterexample": true
+  },
+  "local_count_regressions": {
+    "cost_vectors": [["1/2"], ["2"], ["7/3"], ["1/2", "3/2"], ["2", "5/3"], ["1", "2", "3"]],
+    "thresholds": ["1/3", "1", "2", "7/3", "5"],
+    "expected_cases": 30,
+    "classification": "finite_regression_not_a_proof_of_the_universal_volume_bound"
+  },
+  "jacobian": {
+    "operation_id": "matrix.symbolic.rank.compute",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "request": "jacobian/request.json",
+    "response": "jacobian/response.json",
+    "adapter_exit_code": 0,
+    "error": null,
+    "timeout": false,
+    "expected_output": {"method": "EXACT_SYMBOLIC_ROW_REDUCTION", "rank": 2, "pivot_columns": [0, 1]},
+    "capability_limit": "At most eight rows/columns; a finite symbolic rank result cannot settle curve valuations or eventual jet surjectivity."
+  },
+  "lean": {
+    "claim": "C_K1_NORMAL_HYPERPLANE_CORE",
+    "version": "4.31.0",
+    "source": "lean/Main.lean",
+    "statement_fidelity": "lean/statement_fidelity.md",
+    "result": "lean/lean_check.json",
+    "expected_exit_code": 0,
+    "expected_proof_holes": []
+  },
+  "limitations": [
+    "The full geometric interpolation theorem is a written proof using explicit external assumptions, not a fully formalized theorem.",
+    "Finite configurations and local-count regressions are not extrapolated to arbitrary centers or degrees.",
+    "No statement about the final pi irrationality theorem is certified here.",
+    "Independent Reviewer reproduction, statement-fidelity review, citation attribution, significance, and novelty assessment remain outstanding.",
+    "The citation archive CLI writes outside this mission's owned paths; no out-of-scope archive was created."
+  ]
+}

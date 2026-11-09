@@ -1,0 +1,45 @@
+families/114/first-pass/root-direction-counts/Main.lean:726:21: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+def RootDirectionCounts.BasePairs.{u_1} : {E : Type u_1} →
+  [Fintype E] → [DecidableEq E] → (Finset E → ℤ) → (Finset E → ℤ) → (E → ℤ) → Type (max 0 u_1) :=
+fun {E} [Fintype E] [DecidableEq E] f₁ f₂ δ =>
+  { p // RankSignatures.InBase f₁ p.1 ∧ RankSignatures.InBase f₂ p.2 ∧ ∀ (e : E), p.1 e - p.2 e = δ e }
+def RootDirectionCounts.pairCount.{u_1} : {E : Type u_1} →
+  [Fintype E] → [DecidableEq E] → (Finset E → ℤ) → (Finset E → ℤ) → (E → ℤ) → E → E → ℤ → ℕ :=
+fun {E} [Fintype E] [DecidableEq E] f₁ f₂ d j k t => Nat.card (BasePairs f₁ f₂ (rootShift d j k t))
+RootDirectionCounts.boxPairEquiv.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (D n : ℕ) (g : Fin n ≃ E)
+  (f₁ f₂ : Finset E → ℤ) (L δ : E → ℤ)
+  (hbox : ∀ (x : E → ℤ), RankSignatures.InBase f₂ x → ∀ (e : E), L e ≤ x e ∧ x e ≤ L e + ↑D) :
+  { v // GoodChoice D n g f₁ f₂ L δ v } ≃ BasePairs f₁ f₂ δ
+RootDirectionCounts.basePairs_finite.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f₁ f₂ : Finset E → ℤ)
+  (δ : E → ℤ) : Finite (BasePairs f₁ f₂ δ)
+RootDirectionCounts.rootShift_eq_root_direction.{u_1} {E : Type u_1} [DecidableEq E] (d : E → ℤ) (j k : E) (t : ℤ) :
+  rootShift d j k t = d + t • (Pi.single j 1 - Pi.single k 1)
+RootDirectionCounts.pairCount_interpolation.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f₁ f₂ : Finset E → ℤ)
+  (hf₁ : RankSignatures.Submodular f₁) (hf₂ : RankSignatures.Submodular f₂) (h₁ : f₁ ∅ = 0) (h₂ : f₂ ∅ = 0) (d : E → ℤ)
+  (j k : E) (a t b : ℤ) (hat : a < t) (htb : t < b) :
+  pairCount f₁ f₂ d j k a ^ (b - t).toNat * pairCount f₁ f₂ d j k b ^ (t - a).toNat ≤
+    pairCount f₁ f₂ d j k t ^ (b - a).toNat
+RootDirectionCounts.root_direction_logconcavity.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E] (f₁ f₂ : Finset E → ℤ)
+  (hf₁ : RankSignatures.Submodular f₁) (hf₂ : RankSignatures.Submodular f₂) (h₁ : f₁ ∅ = 0) (h₂ : f₂ ∅ = 0) (d : E → ℤ)
+  (j k : E) (_hjk : j ≠ k) :
+  {t | 0 < pairCount f₁ f₂ d j k t}.OrdConnected ∧
+    ∀ (a t b : ℤ),
+      a < t →
+        t < b →
+          0 < pairCount f₁ f₂ d j k a →
+            0 < pairCount f₁ f₂ d j k b →
+              pairCount f₁ f₂ d j k a ^ (b - t).toNat * pairCount f₁ f₂ d j k b ^ (t - a).toNat ≤
+                pairCount f₁ f₂ d j k t ^ (b - a).toNat
+RootDirectionCounts.root_direction_real_interpolation.{u_1} {E : Type u_1} [Fintype E] [DecidableEq E]
+  (f₁ f₂ : Finset E → ℤ) (hf₁ : RankSignatures.Submodular f₁) (hf₂ : RankSignatures.Submodular f₂) (h₁ : f₁ ∅ = 0)
+  (h₂ : f₂ ∅ = 0) (d : E → ℤ) (j k : E) (a t b : ℤ) (hat : a < t) (htb : t < b) (ha : 0 < pairCount f₁ f₂ d j k a)
+  (hb : 0 < pairCount f₁ f₂ d j k b) :
+  ↑(pairCount f₁ f₂ d j k a) ^ ((↑b - ↑t) / (↑b - ↑a)) * ↑(pairCount f₁ f₂ d j k b) ^ ((↑t - ↑a) / (↑b - ↑a)) ≤
+    ↑(pairCount f₁ f₂ d j k t)
+'RootDirectionCounts.boxPairEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RootDirectionCounts.basePairs_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RootDirectionCounts.pairCount_interpolation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RootDirectionCounts.root_direction_logconcavity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RootDirectionCounts.root_direction_real_interpolation' depends on axioms: [propext, Classical.choice, Quot.sound]

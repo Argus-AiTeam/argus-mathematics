@@ -1,0 +1,885 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{hyperref}
+\setlength{\emergencystretch}{2em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\pr}{\operatorname{pr}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\Spin}{\operatorname{Spin}}
+\newcommand{\SU}{\operatorname{SU}}
+\title{The actual M45 integral Seifert congruence\\
+An independent proof with compact exact checks}
+\author{Campaign 9000059: Engineer submission}
+\date{November 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Result and certification boundary.}
+This submission proves the integral-congruence proposition in Section 9
+of the staged four/five manuscript, using its \emph{actual} lattices.
+The previously independently supported claims \texttt{C059BASE},
+\texttt{C059APPLICATION}, and \texttt{M45:thm:tube} are inputs;
+their local-algebra and tube arguments are not reopened.
+The new work supplies the plane isometry, two-sided transfer adjunction,
+the required semisimplicity, and the complete arithmetic passage.
+In particular, it does not replace the integral tube lattice by its
+rational orthogonal sum.
+
+The proof is mathematical prose, with exact supporting calculations in
+\texttt{verify.py}. It is neither a Lean proof nor a computation of a
+huge integral Seifert matrix. Strong approximation gives an existence
+proof, not an explicit matrix. Independent Reviewer acceptance and
+independent attribution of the new literature inputs remain required.
+Neither ambient equivalence, the separate two/three construction,
+verified novelty, nor campaign completion is asserted here.
+
+\section{Precise statement and retained inputs}
+
+Fix an integer \(r\ge4\) and an integer \(n_0\) such that
+\[
+ n_0>5\cdot2^r,\qquad n_0\equiv1\pmod{2^r},\qquad n_0\equiv2\pmod5.
+\]
+Put
+\[
+ n_1=n_0+5\cdot2^r,\quad
+ a=(n_0^2-1)/4,\quad b=(n_1^2-1)/4,\quad
+ g=\gcd(a,b),\quad m=4ab+a+b.
+\]
+These choices satisfy the manuscript's strict tube inequalities.
+Indeed \(n_0<n_1<2n_0\) gives \(a<b<4a\), so comparability is
+uniform, and \(a>12\). For the manuscript's
+\(\alpha=4b/(a+b)\), \(\beta=4a/(a+b)\), one has
+\(\alpha+\beta=4\), \(a\alpha=b\beta\), and
+\((ab-2b)/(a+b)>a/2-2>4\), with the other inequality identical
+after interchanging the subtracted variable. Choose the common positive
+\(s\) sufficiently small for the reviewed tube identification.
+The Weierstrass units in the actual four-variable germs are retained.
+
+Here are the plane maps, with no change of their projection data:
+\[
+\begin{split}
+ h(X,T)&=T(X-T^2)(X-2T^2),\\
+ q_1(u,w)&=(u-w-w^8)(u-w-2w^8)(u-w^2),\quad q_2=q_1-u^2,\\
+ \pi_0(u,w)&=(u^2+q_1(u,w),u),\\
+ \pi_1(x,w)&=(x,u(u-w^2)q_2(u,w)),\qquad u=x+w,\\
+ d_\nu&=h\circ\pi_\nu.
+\end{split}                                                    \tag{1}
+\]
+Let \(H=H_1(F_h;\Z)\), \(D_\nu=H_1(F_{d_\nu};\Z)\),
+\(P_\nu=\pi_{\nu*}\), \(T_\nu=\pi_\nu^!\), and \(K_\nu=\ker P_\nu\).
+The accepted base calculation gives degree four for both maps, rank
+six for \(H\), and rank 51 for each \(D_\nu\).
+All Seifert forms below have the same ordered positive-neighbor
+filling convention as the reviewed tube result.
+
+For the cone \(yz=w^4\), put \(P=w(y^a+z^b)\),
+\(E=H_1(F_P;\Z)\), and let \(\tau:E\to\Z/4\) be the positive
+\(y\)-angle class. The rational pairing \(e\) is one fourth the
+upstairs Seifert pairing of full transfers. The accepted tube theorem
+identifies the actual lattices with
+\[
+\begin{split}
+ F_\nu&=K_{\nu,\Q}\oplus(H\otimes E)_\Q,\\
+ s_\nu&=(-s_{d_\nu}|K_\nu)\perp(s_h\otimes e),\\
+ \Lambda_\nu&=\{(\pr_\nu l,z):l\in D_\nu,\ z\in H\otimes E,\
+        P_\nu l\equiv(1\otimes\tau)z\pmod{4H}\},\\
+ \pr_\nu&=1-\tfrac14 T_\nu P_\nu. 
+\end{split}                                                    \tag{2}
+\]
+
+\begin{theorem}\label{thm:result}
+For every parameter choice just specified and both actual prepared
+germs to which the reviewed tube theorem applies,
+\((\Lambda_0,s_0)\) and \((\Lambda_1,s_1)\) are integrally isometric.
+No compatibility of the plane isometry with \(P_0,P_1\) is assumed.
+\end{theorem}
+
+\section{The plane comparison, without identifying the projections}
+
+\begin{lemma}\label{lem:plane}
+There is an integral ordered Seifert isometry
+\(I:(D_0,s_{d_0})\to(D_1,s_{d_1})\).
+On \(H_\Q\) the monodromy is the sum of two trivial representations
+and one copy of the four-dimensional fifth cyclotomic representation.
+On either \(D_{\nu,\C}\), monodromy is semisimple at \(1\) and at
+the primitive fifth roots.
+\end{lemma}
+
+\begin{proof}
+In the first graph use \(t=u,\ x=u-w\); in the second use \(t=x+w\).
+The six branches in either case have the following descriptions:
+\[
+ \begin{aligned}
+ x&=A_e(t)=e t^8+O(t^9)\quad(e=1,2),\\
+ t&=B_f(x)=f x^2+O(x^3)
+ \quad\left(f=0,1,\frac{1+\sqrt{-3}}2,\frac{1-\sqrt{-3}}2\right).
+ \end{aligned}
+                                                               \tag{3}
+\]
+For the first graph the two \(A\)-remainders actually start at order
+15. To check the only less immediate branches, substitute
+\(u=v w^2\) in \(q_2\):
+\[
+ q_2(vw^2,w)=-(v^2-v+1)w^4+O(w^5),\qquad
+ q_2(u,0)=u^2(u-1).
+\]
+The two simple roots give exactly the two remaining local branches.
+In the second graph \(\psi(0,w)=-w^4+O(w^5)\); the factors
+\(x-e\psi^2\) have a unique smooth branch by the implicit function
+theorem and give the two \(A\)-branches in (3).
+The other four branches are those of \(u(u-w^2)q_2\).
+Thus both functions are a unit times the product in (3).
+
+Here is a concrete justification that discarding the higher terms in
+(3) preserves the \emph{integral ordered} form. Interpolate each
+remainder to zero and interpolate the units through nonvanishing
+units. Compactness of the interpolation interval makes all the
+displayed order estimates uniform. Blow up the origin. The two
+different tangent directions separate the two clusters. In the first
+cluster the successive charts are \(x=t^k \xi_k\), \(1\le k\le8\).
+Until the last chart the two strict transforms have the same section;
+in the last chart they meet the exceptional divisor at \(1\) and \(2\).
+In the other cluster the charts \(t=x^k\eta_k\), \(1\le k\le2\),
+end at the four distinct values of \(f\) in (3).
+All centres, transverse intersections, and component multiplicities
+therefore persist throughout the interpolation. This is a simultaneous
+normal-crossing resolution, not merely equality of Milnor numbers.
+
+For clarity, the topological consequence used here can be seen in
+these charts. Take small normal disk bundles around the exceptional
+components, joined by bidisks at their crossings. Near a crossing
+the total transform is \(u_\theta z_1^c z_2^d\), where \(u_\theta\)
+is a unit and the positive integers \(c,d\) are independent of the
+interpolation parameter \(\theta\). Away from crossings it is
+\(u_\theta z_1^c\). Trivialize the moving transverse sections in
+the disk bundles. The change in the argument of a unit on a small
+chart has a continuous logarithm, so an angular coordinate corrects
+it without changing the positive meridian degree. On overlaps the
+correction fields are tangent to the normal-crossing strata; a
+partition of unity combines fields satisfying the same linear
+equation for the phase derivative. Their flows give the
+value-angle fibration on the boundary of this plumbed neighborhood,
+with positive binding meridians, throughout \(\theta\).
+The transverse branch annuli between this boundary and an ordinary
+Milnor boundary give collars: a level-tangent field extends an
+outward field on each annulus, and away from these annuli the
+absolute value of the function has a positive minimum.
+Shrinking the value disk removes the remaining compact region.
+Consequently these boundary fibrations are the ordinary Milnor
+open books. The resulting oriented identification preserves linking
+with a positive neighboring page, hence the integral ordered
+Seifert form. It proves the assertion about \(I\) without saying
+anything about its relation to the two projections.
+
+The order-five action on the base page is
+\((X,T)\mapsto(\zeta^2X,\zeta T)\). Every nonidentity element acts
+freely. A cell structure lifted from the quotient has chain trace
+zero for each such element. The alternating trace on homology
+equals the chain trace, \(H_0\) has trace one, and \(H_2=0\).
+Thus the trace on \(H_1\) is one. Rank six, together with the
+rational irreducibles of \(C_5\), gives
+\(u+4v=6,\ u-v=1\), or \(u=2,\ v=1\).
+
+It remains to justify the Jordan assertion rather than infer it
+from an eigenvalue count. Use the leading product
+\[
+ d_*=(x-t^8)(x-2t^8)t(t-x^2)(t^2-tx^2+x^4).
+                                                               \tag{4}
+\]
+On the \(t\)-side its phase has weighted model
+\(t^4(x-t^8)(x-2t^8)\), and on the \(x\)-side its weighted model
+is \(x^2t(t-x^2)(t^2-tx^2+x^4)\).
+The respective angular velocities, in turns per phase circuit, are
+\((8,1)/20\) and \((1,2)/10\).
+The correction factors are \(1+O(|x|^2/|t|)\) in
+\(|x|\le2|t|\) and \(1+O(|t|^8/|x|)\) in \(|t|\le2|x|\);
+their angular derivatives are uniformly small.
+Logarithms and radial-ratio cutoffs straighten the phase in the
+overlap to \(2\theta_x+4\theta_t\).
+Both velocity fields differentiate this phase at rate one.
+Their angular convex interpolation is therefore still transverse;
+normalizing a small perturbation preserves this strict positivity.
+Near the binding use the appropriate weighted field, which is
+tangent to its branch. This verifies that the straightening is an
+isotopy of open books, not just of their binding links.
+
+The level \(2\theta_x+4\theta_t=\mathrm{constant}\) has two annuli.
+Orient both cores \(\gamma_1,\gamma_2\) by increasing \(\theta_t\);
+one circuit exchanges them without reversing these orientations.
+After twenty circuits the rotations at the two ends are
+\((8,1)\) and \((2,4)\). Their difference is
+\((-6,3)=3(-2,1)\), three times the primitive phase-kernel circle.
+Thus the twentieth return is the same signed threefold twist on
+each joining annulus, modulo twists around actual page boundaries.
+This statement follows directly by following the free angle across
+each product annulus; the two annuli have identical oriented
+coordinates. Boundary twists act trivially on first homology.
+
+The oriented boundary of the \(t\)-side subsurface shows that
+\(\gamma_1+\gamma_2\) is a sum of page-boundary classes and hence
+is in the radical of intersection. The elementary crossing formula
+for an annular twist is \(x\mapsto x+k(x\cdot\gamma)\gamma\):
+each crossing acquires \(k\) copies of the annulus core.
+Since the two \(k\)'s agree, it follows that, for the monodromy \(M\),
+\[
+ \operatorname{im}(M^{20}-1)\subset
+   \Q(\gamma_1-\gamma_2),\qquad
+ M(\gamma_1-\gamma_2)=-(\gamma_1-\gamma_2).
+                                                               \tag{5}
+\]
+In particular \((M+1)(M^{20}-1)=0\).
+The polynomial \((t+1)(t^{20}-1)\) has a repeated root only at
+\(-1\). It has simple roots at \(1\) and all primitive fifth roots,
+which proves the required semisimplicity.
+\end{proof}
+
+\begin{lemma}\label{lem:adjunction}
+For the actual finite maps,
+\[
+ P_\nu T_\nu=4,\qquad
+ s_{d_\nu}(T_\nu a,l)=s_h(a,P_\nu l),\qquad
+ s_{d_\nu}(l,T_\nu a)=s_h(P_\nu l,a).              \tag{6}
+\]
+Hence \(D_{\nu,\Q}=K_{\nu,\Q}\perp T_\nu H_\Q\), in both
+orders, and the projection is exactly the one in (2).
+\end{lemma}
+
+\begin{proof}
+Use finite proper graph representatives over a sufficiently small
+base cut. These cuts need not initially be balls. Put an ordinary
+Milnor ball inside each. The six branch parametrizations above
+give disjoint transverse annuli in the intervening closed region.
+An outward annular field extends, by the normal complex
+submersion, to a field tangent to nearby function levels.
+Outside the resulting collars the function has a positive absolute
+minimum. A smaller value disk therefore makes the larger tube an
+ordinary acyclic tube with collars attached. This supplies acyclic
+totals for the filling definition; acyclicity is not inferred just
+from finiteness of the map.
+
+A base cycle can be represented by loops avoiding the finitely
+many branch values on a page. Their full preimage defines \(T_\nu\).
+When a loop crosses a branch value, the full preimage of a small
+disk supplies the bounding chain, so the construction depends only
+on its homology class. Equivalently, it is the oriented surface
+transfer dual to pullback on relative cohomology. Counting sheets
+gives \(P_\nu T_\nu=4\).
+
+Fill \(a\) in the base total and fill the positive transport of \(l\)
+in the source total. Pull back the first filling and push forward
+the second. A generic first filling avoids singular points of the
+branch curve and meets its smooth part in finitely many transverse
+points. Its full inverse image is an oriented branched surface
+chain with no new boundary at those points. Move the other filling
+off their preimages. Every intersection contributing to the ordered
+pairing is now in the unramified locus. There the holomorphic map
+preserves orientation, and the intersection projection formula is
+the direct equality of signed local intersections on its sheets.
+Because the map is over the value disk, pushforward also respects
+positive nearby-page transport. This proves the first pairing
+identity. Putting the pulled-back filling on the neighboring page
+instead proves the second, with no transpose substitution.
+The restriction to \(T_\nu H_\Q\) is \(4s_h\); nondegeneracy and
+(6) give the asserted two-sided complement and projection.
+\end{proof}
+
+\section{Boundary vectors and the full local lattice}
+
+The degree-four cover
+\[
+ (U,V)\longmapsto(U^4,V^4,UV),\qquad
+ (U,V)\longmapsto(\omega U,\omega^{-1}V),\quad \omega^4=1,
+\]
+turns the cone function into
+\(\widetilde P=UV(U^{4a}+V^{4b})\).
+Let \(b_0\) be the complex-oriented boundary of \(V=0\), and let
+\(b_1\) be the oppositely oriented boundary of \(U=0\), downstairs.
+The two lens classes are both \(1\): their upstairs complex
+orientations give respectively the two inverse deck generators,
+and the second orientation was reversed.
+
+\begin{lemma}\label{lem:boundary}
+The form \(e\) is nondegenerate, its Seifert operator has finite
+order, both \(b_j\) are fixed, and
+\[
+ \tau(b_j)=1,\quad e(b_j,b_j)=-n_j^2/4,\quad
+ e(b_0,b_1)=-1/4,\quad
+ 4e(b_j,x)\equiv-\tau(x)\pmod4.                 \tag{7}
+\]
+The same boundary pairings hold in the reversed order.
+\end{lemma}
+
+\begin{proof}
+The full transfer of an axis boundary is a single upstairs circle.
+Different complex-oriented branch boundaries have pairing their
+positive intersection number: fill them by their oriented complex
+branches and use a small positive push. The sum of all boundary
+classes on the page is zero. The first axis meets the other axis
+once and \(U^{4a}+V^{4b}\) with total multiplicity \(4a\).
+Its self-pairing is therefore \(-(1+4a)=-n_0^2\);
+the second is \(-n_1^2\). Reversing the second boundary gives
+mixed value \(-1\). Division by four proves the rational values.
+
+The upstairs pairing of transfers is integral. If \(\tau(x)=0\),
+represent \(x\) by a based loop with trivial deck monodromy.
+Its transfer is the sum of four deck translates of a closed lift.
+The transferred axis is deck invariant, so its four pairings with
+these translates are equal. Thus \(4e(b_j,x)\) is divisible by four.
+Evaluation at \(b_j\), together with \(n_j^2\equiv1\pmod4\),
+identifies the induced functional on \(\Z/4\) as minus the identity.
+
+Rational transfer identifies \(E_\Q\) with the deck invariants in
+upstairs homology. Deck transformations preserve the upstairs
+Seifert form. Averaging over them is self-adjoint in both orders,
+so its image is nondegenerate and orthogonal to its kernel.
+This proves nondegeneracy of \(e\).
+Weighted rotation, with weights \(b/m,a/m\), has finite order
+and commutes with the deck group. Its Seifert operator is this
+rotation or its inverse, with the same convention as for \(h\).
+It fixes each axis class. For any bilinear form \(s\) with
+\(A=s^{-1}s^{\mathsf t}\), an \(A\)-fixed vector pairs
+symmetrically with every vector. This gives the last assertion.
+\end{proof}
+
+The parameter arithmetic is exact:
+\[
+ \gcd(n_0,n_1)=1,\quad n_j\equiv1\pmod4,\quad
+ a,b\equiv2\pmod5,\quad 5\nmid g,\quad 2^{r-1}\mid g,\quad g>5.
+                                                               \tag{8}
+\]
+A common divisor of the \(n_j\) divides \(5\cdot2^r\), while neither
+integer is even or divisible by five. The other assertions follow
+by factoring \(n_j^2-1\).
+
+Set \(v_j=b_j/n_j\). For any prime \(\ell\nmid n_j\), (7) gives
+\[
+ c_j(x)=-4e(v_j,x)\in\Z_\ell,\quad
+ c_j(v_j)=1,\quad
+ \tau(v_j)=1,\quad c_j(x)\equiv\tau(x)\pmod{4\Z_\ell}.             \tag{9}
+\]
+At odd primes the residue target is zero. At two, both last
+equalities use \(n_j\equiv1\pmod4\), not merely that \(n_j\) is odd.
+In particular
+\[
+ E_{\Z_\ell}=\Z_\ell v_j\perp U_{j,\ell},\qquad
+ U_{j,\ell}=\ker c_j\subset\ker\tau.                             \tag{10}
+\]
+The kernel and coefficient are integral, although \(e\) itself
+need not be integral over \(\Z_2\).
+
+The localized version of (2) is exact, not an additional lattice
+assumption. Write its congruence as the kernel of
+\(D_\nu\oplus(H\otimes E)\to H/4H\), then take the image under
+\((l,z)\mapsto(\pr_\nu l,z)\). Clearing the denominator four
+makes the latter a map between finitely generated integer modules.
+Smith normal form shows that tensoring these kernel and image
+descriptions with \(\Z_\ell\) preserves them: \(\Z_\ell\) is
+torsion-free over the principal ideal domain \(\Z\).
+Thus (2) holds with exactly the same residue condition over
+\(\Z_\ell\), including \(\ell=2\).
+
+\begin{proposition}\label{prop:local}
+For every \(\ell\nmid n_j\), and also over \(\Q\), the map
+\[
+ \alpha_{\nu,j}:(D_\nu,-s_{d_\nu})_{\Z_\ell}
+       \perp(H\otimes U_{j,\ell},s_h\otimes e)
+       \longrightarrow(\Lambda_\nu,s_\nu)_{\Z_\ell},\qquad
+ (l,u)\longmapsto(\pr_\nu l,P_\nu l\otimes v_j+u)                 \tag{11}
+\]
+is an onto integral Seifert isometry.
+\end{proposition}
+
+\begin{proof}
+Its image satisfies (2) by (9). Conversely decompose the second
+coordinate of an arbitrary element of (2) as \(x\otimes v_j+u\).
+The residue condition says \(x-P_\nu l\in4H_{\Z_\ell}\).
+Replace \(l\) by
+\[
+ l'=l+T_\nu((x-P_\nu l)/4).
+                                                               \tag{12}
+\]
+This is integral even at two: the numerator has already been
+proved divisible by four. It has the same \(\pr_\nu l\) and
+\(P_\nu l'=x\). Thus (11) is onto. Its rational kernel is zero
+by \(P_\nu T_\nu=4\), proving injectivity.
+
+Both cross terms vanish. From the two identities (6),
+\[
+ s_{d_\nu}(\pr_\nu l,\pr_\nu l')
+   =s_{d_\nu}(l,l')-\tfrac14s_h(P_\nu l,P_\nu l').
+ \]
+The \(v_j\)-contribution is \(-\tfrac14s_h(P_\nu l,P_\nu l')\).
+The leading minus sign on \(K_\nu\) in (2) makes their sum
+exactly \(-s_{d_\nu}(l,l')\), with the given argument order.
+\end{proof}
+
+Use the abstract isometry \(I\) from Lemma~\ref{lem:plane} to define
+\[
+ J_j=\alpha_{1,j}(I\oplus1)\alpha_{0,j}^{-1}:F_0\longrightarrow F_1.
+                                                               \tag{13}
+\]
+These are rational Seifert isometries, integral at every
+\(\ell\nmid n_j\). Equation (12), not a rank or determinant count,
+establishes that these are isometries of the full localized lattices.
+
+\section{Discrepancy and a rational Clifford lift}
+
+Write \(A_\nu=s_\nu^{-1}s_\nu^{\mathsf t}\) and
+\(B_\nu=s_\nu+s_\nu^{\mathsf t}=s_\nu(1+A_\nu)\).
+The two-sided decomposition in (6) makes \(K_\nu\) invariant.
+Lemma~\ref{lem:plane} and the finite order of the two operators on
+\(H\otimes E\) imply that \(A_\nu\) is semisimple at \(1\) and
+the primitive fifth roots. Thus
+\[
+ F_{\nu,1}=\ker(A_\nu-1),\qquad
+ F_{\nu,5}=\ker\Phi_5(A_\nu)
+                                                               \tag{14}
+\]
+are rational two-sided orthogonal primary summands.
+Indeed an isometry pairs generalized eigenvectors only at reciprocal
+eigenvalues, as follows by applying its minimal polynomials in the
+two arguments. Both sets of roots in (14) are inversion-stable.
+On them \(1+A_\nu\) is invertible, so \(B_\nu\) is nondegenerate.
+
+Let \(L=\Q(\zeta_5)\), \(L^+=\Q(\zeta_5+\zeta_5^{-1})\), acting
+on \(F_{\nu,5}\) by \(\zeta_5=A_\nu\). Trace duality defines
+the nondegenerate Hermitian form \(h_{\nu,5}\) by
+\[
+ \Tr_{L/\Q}(c\,h_{\nu,5}(x,y))=B_\nu(cx,y)\quad(c\in L).          \tag{15}
+\]
+The \(B_\nu\)-adjoint of \(c\) is \(\bar c\). This proves
+sesquilinearity, Hermitian symmetry, and the equivalence of
+\(L\)-linear \(B_\nu\)-isometries with isometries of (15).
+
+\begin{lemma}\label{lem:lift}
+For \(\Delta=J_0^{-1}J_1\), the action outside
+\(F_{0,1}\oplus F_{0,5}\) is the identity.
+Its first restriction has a rational Spin lift; its second lies
+in \(\SU(F_{0,5},h_{0,5})(L^+)\).
+\end{lemma}
+
+\begin{proof}
+Put \(w=v_0-v_1\). Equations (7) give
+\[
+ e(w,w)=-\tfrac12(1-1/(n_0n_1))\ne0.
+ \]
+The \(e\)-reflection
+\(R(x)=x-2e(x,w)w/e(w,w)\) exchanges \(v_0,v_1\), preserves
+\(e\), and commutes with its operator, since \(w\) is fixed.
+Let \(\rho_\nu=1\) on \(K_\nu\) and \(1_H\otimes R\) on
+\(H\otimes E\). In the coordinates (11), \(\rho_\nu\) is
+the identity on the \(D_\nu\) coordinate and sends \(U_0\) to
+\(U_1\) by the same \(R\) on both sides. Explicitly,
+\(\rho_\nu\alpha_{\nu,0}(l,u)=\alpha_{\nu,1}(l,(1_H\otimes R)u)\).
+The domain maps commute with \(I\oplus1\), so
+\[
+ J_1=\rho_1J_0\rho_0,\qquad
+ \Delta=(J_0^{-1}\rho_1J_0)\rho_0.                              \tag{16}
+\]
+The identity follows from (11) on every \(l\) and \(u\);
+it does not require \(P_1I=P_0\) or any transfer compatibility.
+
+The minus space of \(\rho_\nu\) is
+\(W_\nu=H_\Q\otimes\Q w\), with restricted form \(e(w,w)s_h\).
+It has only the primary types \(1,5\).
+Each involution fixes the two-sided orthogonal complement of
+its minus space, giving the support assertion in (16).
+The natural map \(x\otimes w\mapsto x\otimes w\) identifies the
+minus spaces on the two sides, separately on each primary sector.
+Composing it with \(J_0^{-1}\) identifies the minus spaces of
+the two factors in (16), without identifying their embeddings.
+Their dimensions are two over \(\Q\) on the first sector and
+one over \(L\) on the fifth sector. They are nondegenerate,
+because \(e(w,w)\ne0\) and the corresponding symmetric base
+forms are nondegenerate.
+
+The two determinants on the fifth sector are both \(-1\);
+their product is one. By (15) this is exactly a special-unitary
+element over \(L^+\).
+
+There is also a direct rational lift on the first sector, so no
+local spinor-norm computation is being substituted for a rational
+lift. Put \(q(x)=B_0(x,x)\) on that sector. Choose a rational
+orthogonal basis \(u_1,u_2\) of the minus space of \(\rho_0\),
+and let \(u'_1,u'_2\) be its images in the minus space of
+\(J_0^{-1}\rho_1J_0\) under the isometry just constructed.
+Write \(q(u_i)=q(u'_i)=q_i\ne0\).
+An involution with this minus space is the product of the
+reflections in its two basis vectors. In the Clifford algebra
+with \(v^2=q(v)\), the even element
+\[
+ z=\frac{u'_1u'_2u_1u_2}{q_1q_2}                               \tag{17}
+\]
+therefore acts as the first restriction of \(\Delta\).
+Reversing the four factors shows directly that its Clifford norm
+is \(q_1^2q_2^2/(q_1q_2)^2=1\). It normalizes the vector space,
+as a product of four nonisotropic vectors, and thus belongs to
+\(\Spin(q)(\Q)\). Scaling the quadratic form by a nonzero constant
+does not change the required orthogonal action; our convention
+uses \(q=B_0(x,x)\) throughout.
+\end{proof}
+
+\section{Real indefiniteness from actual holomorphic forms}
+
+\begin{lemma}\label{lem:indices}
+For each \(q\in\{1,4\}\) there are positive \(i,j\) such that
+\[
+ i\equiv j\pmod4,\qquad bi+aj=qm/5.                            \tag{18}
+\]
+They can be chosen with \(j\le4b/g\). Every such positive solution
+has \(i<4a+1,\ j<4b+1\).
+\end{lemma}
+
+\begin{proof}
+Set \(a=gA,b=gB\), where \(\gcd(A,B)=1\).
+Let \(d=\gcd(A+B,4B)\); then \(d\mid4\).
+Also \(5\mid m/g\), since \(a,b\equiv2\pmod5\) and \(5\nmid g\).
+Since \(d\mid 4gAB+A+B=m/g\), coprimality with five gives
+\(d\mid m/(5g)\).
+Solve
+\[
+ (A+B)j+4Bt=qm/(5g),\qquad i=j+4t.
+ \]
+Choose \(1\le j\le4B/d\). The inequality
+\[
+ m/(5g)-4AB=\{4(g-5)AB+A+B\}/5>0
+ \]
+makes \(i=(qm/(5g)-Aj)/B\) positive. Finally
+\[
+ bi\le4m/5-a=b(4a+1)-m/5<b(4a+1),
+ \]
+and the symmetric calculation bounds \(j\).
+\end{proof}
+
+\begin{lemma}\label{lem:forms}
+Each of the primitive \(\zeta_5,\zeta_5^{-1}\) eigenspaces of
+\(E_\C\) has both signs for the Hermitian intersection form.
+\end{lemma}
+
+\begin{proof}
+On the smooth affine curve
+\[
+ C:\quad UV(U^{4a}+V^{4b})=1
+ \]
+both \(U,V\) are nonzero. The weighted Euler identity proves
+smoothness. For each of the two pairs in Lemma~\ref{lem:indices}
+the differential
+\[
+ \omega_{i,j}
+   =U^{i-1}V^{j-1}\frac{dU}{\partial_V\widetilde P}
+   =-U^{i-1}V^{j-1}\frac{dV}{\partial_U\widetilde P}              \tag{19}
+\]
+is regular and not identically zero: the two expressions cover
+the curve, and at a point where the first denominator is nonzero
+the coordinate \(U\) is a local parameter. Its deck character is
+\(\omega^{i-j}=1\). Weighted rotation has character
+\(\exp(2\pi i(bi+aj)/m)=\zeta_5^q\).
+
+We check every point at infinity on the smooth compactification
+of \(C\), rather than assume that a regular affine differential
+is a holomorphic cohomology class. Write \(u=\operatorname{ord}U\),
+\(v=\operatorname{ord}V\). At least one coordinate has a pole:
+otherwise the point would belong to the already smooth affine
+curve. If \(4au<4bv\), the equation gives
+\(u<0,\ v=-(4a+1)u\); the order of (19) is
+\[
+ (i-(4a+1)j)u-1\ge0.                                         \tag{20}
+\]
+This uses \(i<4a+1\) and \(j\ge1\), not a numerical estimate
+at a sample parameter. The case \(4bv<4au\) is symmetric,
+using the second expression in (19).
+In the remaining case \(4au=4bv<0\), write
+\((u,v)=-c(B,A)\), \(c\) a positive integer.
+The leading cancellation in \(U^{4a}+V^{4b}\) does not cancel
+\(\partial_V\widetilde P=U(U^{4a}+(4b+1)V^{4b})\);
+its order is \(u+4bv\). Thus the order of (19) is
+\[
+ (i-1)u+(j-1-4b)v-1
+   =c(1-q/5)m/g-1\ge0,                                      \tag{21}
+\]
+because \(m/(5g)\) is a positive integer. These three cases
+exhaust all ends. Both differentials are therefore nonzero
+holomorphic differentials on the compactification.
+
+No Hodge decomposition theorem is needed for the signs.
+For a nonzero holomorphic differential \(\omega=f(z)\,dz\),
+\(i\omega\wedge\bar\omega=2|f(z)|^2\,dx\wedge dy\) has strictly
+positive integral. Its period class is nonzero: if exact, Stokes'
+theorem would make that integral zero. Cutting the surface along
+a symplectic basis and applying Stokes to a primitive on the cut
+polygon identifies this integral with the Hermitian cup pairing
+of the periods. Complex conjugation reverses its sign.
+Accordingly the holomorphic form of character \(\zeta_5\) and
+the conjugate of the holomorphic form of character
+\(\zeta_5^{-1}\) give opposite signs in the same character;
+the other character is handled the same way. Passing by the
+nondegenerate surface intersection pairing to homology changes
+characters reciprocally and a common sign, neither of which
+removes the two signs.
+
+The compactification is a compact oriented surface with finitely
+many punctures removed to obtain \(C\).
+Inclusion induces an onto homology map preserving intersections;
+its kernel consists of puncture-boundary classes.
+The finite group generated by deck transformations and weighted
+rotation acts on this map. Average any linear section over that
+group, so the lifted classes have the prescribed characters and
+unchanged intersection numbers. Rational transfer to the deck
+invariants identifies these with classes in \(E_\C\), with a
+positive covering-degree factor on intersection.
+To identify the affine homology with the local weighted page,
+positive weighted scaling takes a small nonzero fiber to \(C\);
+as the value decreases its cut exhausts \(C\).
+Outside a compact core every end is an annulus, so such a cut
+induces precisely the same first homology and intersections.
+This also makes the weighted rotation action the local one.
+Thus the claimed two signs occur in the actual cone-page group.
+\end{proof}
+
+\begin{proposition}\label{prop:real}
+\(B_\nu|F_{\nu,1}\) is indefinite and has dimension at least six.
+The Hermitian space in (15) has \(L\)-dimension at least four
+and is indefinite at the real place of \(L^+\) corresponding to
+\(\{\zeta_5,\zeta_5^{-1}\}\).
+\end{proposition}
+
+\begin{proof}
+Let \(\lambda\) be \(\zeta_5\) or its inverse, in the chosen
+Seifert-operator convention. Choose a nonzero base vector
+\(x\in H_\C\) with \(A_hx=\lambda x\), and a cone vector
+\(y\) with \(A_ey=\lambda^{-1}y\). Put
+\[
+ I_H=i(s_h-s_h^{\mathsf t})(x,\bar x),\qquad
+ I_E=i(e-e^{\mathsf t})(y,\bar y).
+ \]
+The base eigenspace is one-dimensional and pairs nondegenerately
+with its inverse, so \(I_H\) is real and nonzero.
+Lemma~\ref{lem:forms} supplies both signs of the real number \(I_E\).
+Using \(s^{\mathsf t}=sA\) in both factors gives exactly
+\[
+ B_\nu(x\otimes y+\bar x\otimes\bar y,\
+             x\otimes y+\bar x\otimes\bar y)
+   =-\frac{4I_HI_E}{(1-\lambda)(1-\lambda^{-1})}.                \tag{22}
+\]
+The denominator is \(|1-\lambda|^2>0\). These are real fixed
+vectors, so both quadratic signs occur.
+The two signs in one complex cone eigenspace force its dimension
+to be at least two; tensors with the base line and their conjugates
+give at least four real dimensions. The independent fixed tensor
+subspace \(H^{(1)}\otimes\Q b_0\) gives two more.
+
+Choose a rational fixed base vector \(x_0\) with
+\(s_h(x_0,x_0)\ne0\), possible because its symmetric restriction
+on the two-dimensional fixed subspace is nondegenerate.
+On a cone eigenspace with eigenvalue \(\lambda\),
+\[
+ (e+e^{\mathsf t})(y,\bar y)=
+  \frac{1+\lambda^{-1}}{i(1-\lambda^{-1})}
+          i(e-e^{\mathsf t})(y,\bar y).                         \tag{23}
+\]
+The ratio is real and nonzero, since \(\lambda\ne1,-1\).
+Tensoring with \(x_0\) thus gives both signs for \(B_\nu\)
+in the desired primitive component. Trace duality (15) identifies
+this with the Hermitian form at that real place, up to its positive
+trace normalization. It is indefinite. Moreover the whole
+two-dimensional fixed base space tensor the cone eigenspace of
+dimension at least two embeds in this primitive component.
+Its complex dimension, and hence the \(L\)-dimension in (15),
+is at least four.
+\end{proof}
+
+\section{The global correction preserves the full lattice}
+
+We state exactly the new external input. Rapinchuk's versioned
+primary text \cite[Theorem 2.3]{rapinchuk} says: for a connected
+absolutely almost simple group over a global field and a finite
+set \(S\) of places, strong approximation away from \(S\) holds
+if and only if the group is simply connected and
+\(\prod_{v\in S}G(K_v)\) is noncompact. We use only number fields
+and omit all archimedean places.
+
+Consider
+\[
+ G_1=\Spin(F_{0,1},B_0)\quad\hbox{over }\Q,\qquad
+ G_5=\SU(F_{0,5},h_{0,5})\quad\hbox{over }L^+.
+ \]
+The classical-group facts are primary-text inspected, with their
+precise scope recorded in the accompanying excerpts:
+\begin{itemize}
+\item Conrad's nondegenerate quadratic-space results give the
+simply connected central cover \(\Spin(q)\to\mathrm{SO}(q)\)
+with kernel \(\mu_2\). Over the algebraic closure, its root
+system is \(B_m\) for dimension \(2m+1\), or \(D_m\) for
+dimension \(2m\) \cite[C.3.10, C.4.1, C.4.10]{conrad}.
+In dimension at least five these systems are irreducible;
+dimension six is \(D_3=A_3\), not the excluded \(D_2\) case
+\cite[C.6.6]{conrad}. Thus \(G_1\) is connected, simply
+connected, and absolutely almost simple.
+\item For a nondegenerate Hermitian space take
+\(\operatorname{End}_L(V)\) with its adjoint involution.
+After algebraic closure of \(L^+\) it is a product of two matrix
+algebras with exchange-transpose involution
+\cite[24.40(b)]{milne}.
+The unitary equations give \(Y=(X^{\mathsf t})^{-1}\);
+the determinant-one condition gives \(X\in\mathrm{SL}_d\).
+The actual bound \(d\ge4\) also meets the \(n>2\) heading of
+the subsection containing Milne's equation (158); no rank-two
+outer-form classification is needed. The displayed equations
+and the assertion for \(\mathrm{SL}_d\) in Summary 21.96 give connectedness,
+simple connectedness and absolute almost simplicity of \(G_5\).
+\end{itemize}
+Noncompactness is not a citation inference. An indefinite real
+quadratic space contains orthogonal \(u,v\) with \(q(u)=1\),
+\(q(v)=-1\); then \(uv\) squares to \(1\).
+The Clifford elements
+\(\cosh(t/2)+\sinh(t/2)uv\) have norm one and act by
+unbounded boosts. This proves \(G_1(\R)\) noncompact.
+An indefinite complex Hermitian space contains a
+\(\operatorname{diag}(1,-1)\) plane. The matrices
+\(\left(\begin{smallmatrix}\cosh t&\sinh t\\
+\sinh t&\cosh t\end{smallmatrix}\right)\), extended by the identity,
+belong to its special unitary group and are unbounded.
+Proposition~\ref{prop:real} supplies this plane at the required
+real place of \(L^+\).
+
+Apply Rapinchuk's theorem separately over \(\Q\) and \(L^+\).
+Restriction of scalars and a finite product give density of
+\[
+ G(\Q)\text{ in }G(\mathbb A_f),\qquad
+ G=G_1\times\operatorname{Res}_{L^+/\Q}G_5.                     \tag{24}
+\]
+This does not incorrectly call \(G\) absolutely almost simple
+over \(\Q\). The adelic identification for the restriction of
+scalars follows place by place from
+\(L^+\otimes\Q_\ell=\prod_{v\mid\ell}L^+_v\).
+
+Let \(\rho\) be the action of \(G\) on the two primary spaces,
+extended as the identity on the two-sided primary complement.
+It preserves \(B_0\) and commutes with \(A_0\); since
+\(s_0=B_0(1+A_0)^{-1}\) on these sectors, it preserves \(s_0\).
+Lemma~\ref{lem:lift} gives
+\(\widetilde\Delta\in G(\Q)\) mapping to \(\Delta\).
+At each rational prime define
+\[
+ a_\ell=\begin{cases}\widetilde\Delta&\ell\mid n_0,\\1&\ell\nmid n_0.
+ \end{cases}
+ \qquad
+ C_\ell=\{\gamma\in G(\Q_\ell):
+       \rho(\gamma)\Lambda_{0,\Z_\ell}=\Lambda_{0,\Z_\ell}\}.
+                                                               \tag{25}
+\]
+Here \(C_\ell\) is the stabilizer of the \emph{whole} lattice (2).
+No integral primary decomposition is assumed.
+
+We give the required adelic neighborhood explicitly enough to
+exclude an implicit integrality gap. Choose a faithful rational
+matrix representation \(G\subset\mathrm{GL}_N\) and a basis
+of \(\Lambda_0\). The entries of \(\rho\) and \(\rho^{-1}\)
+are regular functions in the group coordinates. Clearing their
+finitely many rational coefficients, including those of a
+presentation of \(G\), gives an integer \(D\) such that
+\[
+ K_\ell^0=G(\Q_\ell)\cap\mathrm{GL}_N(\Z_\ell)\subset C_\ell
+ \quad(\ell\nmid D).
+ \]
+These are the standard compact opens for this faithful
+representation. At each of the finitely many remaining primes,
+\(C_\ell\) is open by continuity of \(\rho\) and contains the
+identity. A sufficiently small matrix congruence subgroup
+\(K_\ell\subset K_\ell^0\) therefore lies in \(C_\ell\).
+Use \(K_\ell=K_\ell^0\) at all other primes. Then
+\(\mathcal K=\prod_\ell K_\ell\) is compact open in \(G(\mathbb A_f)\).
+This argument only needs compact opens \emph{inside} \(C_\ell\);
+it does not assume a faithful Spin action on \(F_{0,1}\).
+
+The finite-support tuple \(\mathbf a=(a_\ell)_\ell\) is adelic,
+and \(\mathbf a\mathcal K\) is a nonempty open set. By (24)
+choose \(g_{\rm rat}\in G(\Q)\cap\mathbf a\mathcal K\).
+For \(\ell\nmid n_0\), \(J_0\) is integral by
+Proposition~\ref{prop:local}. For \(\ell\mid n_0\),
+coprimality in (8) makes \(J_1\) integral and
+\(J_0\rho(a_\ell)=J_0\Delta=J_1\).
+Writing \(g_{{\rm rat},\ell}=a_\ell k_\ell\) with \(k_\ell\in K_\ell\),
+at every prime we have
+\[
+ J_0\rho(g_{\rm rat})\Lambda_{0,\Z_\ell}
+     =J_0\rho(a_\ell)\rho(k_\ell)\Lambda_{0,\Z_\ell}
+     =\Lambda_{1,\Z_\ell}.                                    \tag{26}
+\]
+In particular the correction at two lies in the full-lattice
+stabilizer, preserving the mod-four residue condition.
+Finally a rational vector in every localization of a full
+integer lattice has integral coordinates in an integer basis:
+each rational coordinate has no prime in its denominator.
+Intersecting (26) at all primes proves
+\[
+                    J_0\rho(g_{\rm rat})\Lambda_0=\Lambda_1.
+ \]
+This is an onto integral Seifert isometry and proves
+Theorem~\ref{thm:result}.
+
+\section{What the exact replay does, and does not, certify}
+
+Run \texttt{python3 research/m45\_arithmetic/verify.py}.
+The replay checks the source-bound polynomial and branch identities,
+the annihilating-polynomial implication in (5), the boundary Gram
+matrix and reflection, the local pairing cancellation, Clifford
+norm cancellation in (17), the eigenform order identities, and
+the sign identities (22)--(23). It also constructs positive indices
+for bounded admissible parameter examples and checks the first
+nontrivial pair exactly. Those examples are regression checks,
+not the proof of the universally quantified arithmetic lemma.
+The largest actual matrix in these checks is two by two.
+
+The Jacobian adapter was inspected before use. Its one bounded
+operation was
+\begin{center}
+\small\texttt{matrix.symbolic.characteristic\_polynomial.compute}
+\end{center}
+on the actual two-boundary Gram matrix
+\(-\tfrac14\left(\begin{smallmatrix}n_0^2&1\\1&n_1^2\end{smallmatrix}\right)\).
+The exact payload, typed output, server/protocol metadata and exit
+status are retained in the dedicated \texttt{jacobian\_boundary}
+JSON files. The local replay independently recomputes that result;
+no timeout or unknown result is counted as mathematical evidence.
+
+The following are \emph{prose proof obligations}, not conclusions
+of a finite matrix experiment: the simultaneous plane resolution
+and ordered-form transport; the branched two-sided intersection
+projection formula; the two-annulus monodromy construction;
+identification of the actual boundary classes and transfer;
+exhaustion of all compactification ends and nonzero period classes;
+the classical-group facts from the inspected primary sources;
+the applicability of strong approximation and the full-lattice
+adelic intersection argument. Their proofs and precise inputs
+are given above so that an independent Reviewer can assess them.
+
+Relative to the strongest prior result, this supplies the missing
+comparison \emph{between} the two reviewed integral tube lattices.
+It does not replace the outstanding classification application
+by equality of Milnor numbers, by local equivalence, or by this
+compact computational certificate.
+
+\begin{thebibliography}{9}
+\bibitem{rapinchuk}
+A. S. Rapinchuk, \emph{On strong approximation for algebraic groups},
+arXiv:1207.4425v1, Theorem 2.3,
+\url{https://arxiv.org/html/1207.4425v1}.
+\bibitem{conrad}
+B. Conrad, \emph{Reductive group schemes}, 2014 author manuscript,
+Appendix C, especially C.3.10, C.4.1, C.4.10 and C.6.6,
+\url{https://math.stanford.edu/~conrad/papers/luminysga3.pdf}.
+\bibitem{milne}
+J. S. Milne, \emph{Algebraic Groups}, corrected 2022 CUP reprint,
+Proposition 24.40(b), equation (158), Summary 21.96, and the
+Hermitian adjoint construction on printed p.~538,
+\url{https://www.jmilne.org/math/Books/iAG2022.pdf}.
+\end{thebibliography}
+\end{document}

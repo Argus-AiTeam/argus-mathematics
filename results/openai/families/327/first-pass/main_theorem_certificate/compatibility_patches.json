@@ -1,0 +1,23 @@
+{
+  "LatticeCubes": [
+    {
+      "old": "  simp [LatticeCube, Fintype.card_pi, hinterval]",
+      "new": "  change Fintype.card (J → Set.Icc (-(R : ℤ)) (R : ℤ)) = _\n  rw [Fintype.card_fun, hinterval]",
+      "reason": "Explicitly expose the cube's function type before applying the Lean 4.31 cardinality lemma, keeping its Fintype instance well typed under tactic transparency; the statement is unchanged."
+    }
+  ],
+  "DyadicTreeMartingale": [
+    {
+      "old": "  induction n with\n  | zero => simp [descendant, FiniteLaw.expect_const]\n  | succ n ih =>\n      rw [Fin.sum_univ_castSucc]\n      simp only [Fin.val_castSucc, Fin.val_last]\n      have hstep := expected_energy_step hp t n\n      linarith",
+      "new": "  let A : ℕ → ℝ := fun k =>\n    (dyadicLaw k).expect (fun α => energy p (descendant t k α))\n  let B : ℕ → ℝ := fun k =>\n    (dyadicLaw k).expect (fun α => ‖splitCoefficient (descendant t k α)‖ ^ p)\n  change A n + (∑ j : Fin n, B j.val) = energy p t\n  induction n with\n  | zero => simp [A, descendant, FiniteLaw.expect_const]\n  | succ n ih =>\n      rw [Fin.sum_univ_castSucc]\n      simp only [Fin.val_castSucc, Fin.val_last]\n      have hstep : A (n + 1) + B n = A n := expected_energy_step hp t n\n      linarith",
+      "reason": "Rewrite the finite telescope at the scalar-sequence level before expanding dependent word expectations. This avoids Lean 4.31 producing mismatched Fintype instances under Fin.castSucc rewriting; the energy identity and hypotheses are unchanged."
+    }
+  ],
+  "FiniteConditionalAverage": [
+    {
+      "old": "  rw [μ.fiberSum_eq_vexpect_indicator, μ.fiberSum_eq_vexpect_indicator]\n  simpa only [Function.comp_apply, ite_smul, one_smul, zero_smul] using\n    μ.vexpect_key_smul_conditionalAverage key F\n      (fun b => if parent b = a then 1 else 0)",
+      "new": "  have indicator (H : Ω → E) :\n      μ.fiberSum (parent ∘ key) H a =\n        μ.vexpect (fun ω => (if parent (key ω) = a then (1 : ℝ) else 0) • H ω) := by\n    rw [μ.fiberSum_eq_vexpect_indicator]\n    apply congrArg μ.vexpect\n    funext ω\n    by_cases h : parent (key ω) = a <;> simp [Function.comp_apply, h]\n  calc\n    μ.fiberSum (parent ∘ key) (μ.conditionalAverage key F) a =\n        μ.vexpect (fun ω =>\n          (if parent (key ω) = a then (1 : ℝ) else 0) • μ.conditionalAverage key F ω) :=\n      indicator _\n    _ = μ.vexpect (fun ω => (if parent (key ω) = a then (1 : ℝ) else 0) • F ω) :=\n      μ.vexpect_key_smul_conditionalAverage key F\n        (fun b => if parent b = a then 1 else 0)\n    _ = μ.fiberSum (parent ∘ key) F a := (indicator F).symm",
+      "reason": "Prove the indicator-function equality pointwise and compose it with the existing conditional-average identity, avoiding a Lean 4.31 simpa elaboration mismatch. No theorem statement or decision-instance hypothesis changes."
+    }
+  ]
+}

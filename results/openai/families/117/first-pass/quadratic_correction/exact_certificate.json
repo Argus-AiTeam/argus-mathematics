@@ -1,0 +1,115 @@
+{
+  "format_version": 1,
+  "claim_id": "Q_GENERAL",
+  "manuscript_claim_id": "H_QC",
+  "result_class": "new_theorem",
+  "proof_kind": "parameterized_mathematical_proof_with_exact_algebra_replay",
+  "independent_review": "pending_host",
+  "novelty_status": "unresolved",
+  "significance_status": "unreviewed",
+  "proof_file": "report.md",
+  "scope": {
+    "dimension": "every finite dimension, including zero",
+    "field": "every finite field F_q",
+    "degree": "every integer 0 <= d < q-1",
+    "direction_law": "scalar-invariant; zero direction permitted",
+    "spectral_premise": "for every nonempty E, conditional internal-edge probability <= mu(E)+lambda",
+    "conclusion": "one global correction with disagreement <=2epsilon/alpha and one scalar-invariant H with direction mass >=1-epsilon/beta, degree <=d on every H-line at every base",
+    "not_claimed": ["full hardness theorem", "total-degree bound outside H", "independent acceptance", "verified novelty"]
+  },
+  "hypotheses": [
+    "epsilon >= 0; alpha,beta,gamma > 0; lambda >= 0; rho=epsilon/beta; r=d+1",
+    "complete-line degree-d failure probability <=epsilon",
+    "2epsilon/alpha+lambda < gamma/2",
+    "1-(d+2)(alpha+gamma)-d/(q-1) > beta+lambda",
+    "(2r^2+3r)gamma+3rho < 1"
+  ],
+  "source": {
+    "path": "research/openai_manuscript/Constant-factor-hardness-of-uniform-sparsest-cut-September-24-2026/build/source/sections/02-bit-tests.tex",
+    "label": "lem:quadratic-correction",
+    "required_fragments": [
+      "Put $\\gamma=10^{-3}$.",
+      "fails with probability at most $\\delta^2$",
+      "2\\delta+\\lambda_1&<\\gamma/2",
+      "1-4\\gamma-4\\delta-2/(q-1)&>\\delta+\\lambda_1",
+      "27\\gamma+5\\delta&<1",
+      "There is a scalar-invariant set $H$",
+      "$\\mathsf D$-mass at least $1-\\delta$",
+      "from $P$ on at most $2\\delta$",
+      "for every $A$ and $h\\in H$"
+    ],
+    "specialization": {
+      "degree": 2,
+      "r": 3,
+      "epsilon": "delta^2",
+      "alpha": "delta",
+      "beta": "delta",
+      "rho": "delta",
+      "lambda": "lambda_1",
+      "original_completion_rho_coefficient": 5,
+      "verified_completion_rho_coefficient": 3
+    }
+  },
+  "budget_polynomials": {
+    "coefficient_order": "ascending powers of r",
+    "collision_gamma": [0, 2, 1],
+    "collision_rho": 2,
+    "completion_gamma": [0, 3, 2],
+    "completion_rho": 3,
+    "quadratic_collision_gamma": 15,
+    "quadratic_completion_gamma": 27
+  },
+  "source_parameter_box": {
+    "gamma": "1/1000",
+    "delta_upper": "1/16000",
+    "lambda_upper": "1/1000000",
+    "inverse_q_minus_one_upper": "1/1048575",
+    "cleanup_margin_lower": "187/500000",
+    "propagation_margin_lower": "83523997739/83886000000",
+    "source_completion_margin_lower": "15563/16000",
+    "improved_completion_margin_lower": "3113/3200"
+  },
+  "all_degree_nonvacuity": {
+    "gamma": "1/(8(2r^2+3r))",
+    "delta_upper": "gamma/16",
+    "lambda_upper": "gamma/4",
+    "root_fraction_upper": "1/4",
+    "cleanup_margin_lower": "gamma/8",
+    "propagation_numerator": [-22, 271, 192],
+    "completion_numerator": [-3, 336, 224],
+    "propagation_after_r_equals_s_plus_one": [441, 655, 192],
+    "completion_after_r_equals_s_plus_one": [557, 784, 224],
+    "common_denominator": "128(2r^2+3r)"
+  },
+  "finite_algebra_checks": [
+    {"order": 4, "binary_modulus": 7, "max_degree": 2},
+    {"order": 8, "binary_modulus": 11, "max_degree": 3},
+    {"order": 16, "binary_modulus": 19, "max_degree": 2},
+    {"order": 5, "binary_modulus": null, "max_degree": 3},
+    {"order": 7, "binary_modulus": null, "max_degree": 3}
+  ],
+  "jacobian": {
+    "operation_id": "polynomial.box.enclosure.compute",
+    "request_file": "jacobian_request.json",
+    "output_file": "jacobian_result.json",
+    "status_file": "jacobian_status.json",
+    "expected_lower": "187/500000",
+    "expected_upper": "1/2000"
+  },
+  "formal_core": {
+    "claim_id": "Q_KERNEL",
+    "source": "Main.lean",
+    "statement_fidelity": "statement_fidelity.md",
+    "certificate_file": "certificates/Q_KERNEL-9dabfbe65d434cae.json",
+    "compiler": "Lean 4.31.0",
+    "exit_code": 0,
+    "proof_holes": [],
+    "scope": "finite weighted-grid identities, finite modal collision inequality, and exact budget and margin algebra; not the full correction theorem"
+  },
+  "limitations": [
+    "The complete all-dimension proof is in report.md; Python is an exact algebra and source-fidelity replay, not a theorem prover for the finite induction.",
+    "Small-field checks test interpolation and root-count algebra only. They are not counterexamples or confirmation of correction hypotheses.",
+    "The actual matrix-walk internal-edge estimate remains an explicit dependency of the manuscript corollary.",
+    "Host-invoked independent review and any verified-new or publishable classification remain outstanding."
+  ]
+}

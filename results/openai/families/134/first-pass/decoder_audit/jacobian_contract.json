@@ -1,0 +1,32 @@
+{
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "operation_id": "integer.counting.congruence_box.compute",
+  "description": "Count lattice points in a bounded box satisfying u*x + v*y = c (mod modulus).",
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "c": {"type": "integer"},
+      "modulus": {"maximum": 10000, "minimum": 1, "type": "integer"},
+      "u": {"type": "integer"},
+      "v": {"type": "integer"},
+      "x_hi": {"maximum": 10000, "minimum": -10000, "type": "integer"},
+      "x_lo": {"maximum": 10000, "minimum": -10000, "type": "integer"},
+      "y_hi": {"maximum": 10000, "minimum": -10000, "type": "integer"},
+      "y_lo": {"maximum": 10000, "minimum": -10000, "type": "integer"}
+    },
+    "required": ["x_lo", "x_hi", "y_lo", "y_hi", "u", "v", "c", "modulus"],
+    "type": "object"
+  },
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "count": {"minimum": 0, "type": "integer"},
+      "modulus": {"exclusiveMinimum": 0, "type": "integer"}
+    },
+    "required": ["count", "modulus"],
+    "type": "object"
+  },
+  "mathematical_scope": "Finite diagnostic only: N=2 gives B=540, r_1=17, r_2=36, and displacement residues +/-19. Count congruence collisions in [-19,19]^2. This does not certify the universal decoder theorem or a legal full episode."
+}

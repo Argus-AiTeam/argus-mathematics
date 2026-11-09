@@ -1,0 +1,159 @@
+{
+  "goal": "C9000357",
+  "routes": [
+    {
+      "name": "Independent verification of the manuscript's load-bearing implications and main theorem",
+      "status": "current",
+      "evidence": "research/sharp-projection-audit/report.md",
+      "scope": "Only conditional sharp projection has an Engineer proof. The depends_on DAG describes this verification route, not a requirement to prove the main theorem in order to refute a false assertion."
+    },
+    {
+      "name": "Hypothesis-complete exact refutation of a load-bearing manuscript assertion",
+      "status": "untried",
+      "evidence": "OBJECTIVE.md",
+      "scope": "An alternative campaign outcome; no false literal assertion was established by the current bounded audit."
+    }
+  ],
+  "nodes": {
+    "C9000357": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 357 (Bi-Lipschitz coordinates at every regular RCD point.; papers: Bi-Lipschitz Coordinates at Regular Points of Noncollapsed RCD Spaces; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "O_MAIN_THEOREM"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "O_MAIN_THEOREM": {
+      "statement": "Verification route only: every regular point in the stated noncollapsed RCD(K,n) setting has an ambient-open dimensionally bi-Lipschitz chart. This remains open in this bounded audit.",
+      "status": "open",
+      "depends_on": [
+        "O_COORDINATES",
+        "O_DIRECTIONAL_PINCHING",
+        "O_VALUE_ITERATION"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Bi-Lipschitz-Coordinates-at-Regular-Points-of-Noncollapsed-RCD-Spaces-September-25-2026/build/source/introduction.tex"
+      ]
+    },
+    "O_COORDINATES": {
+      "statement": "Upstream all-center/all-scale harmonic normalization and open harmonic coordinate domain.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "O_DIRECTIONAL_PINCHING": {
+      "statement": "Summable directional Bochner-mass estimate pi:directional-pinching.",
+      "status": "open",
+      "depends_on": [
+        "O_POISSON",
+        "O_RADIAL_INVARIANCE",
+        "O_COMMUTATOR",
+        "C_SP"
+      ],
+      "reviewer_confirmed": false
+    },
+    "O_VALUE_ITERATION": {
+      "statement": "Cumulative matrix comparison and inverse-transpose value-space iteration yield the open bi-Lipschitz chart.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "O_POISSON": {
+      "statement": "Imported equal-source Poisson replacements, squared-defect Hessian and gradient estimates.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "O_RADIAL_INVARIANCE": {
+      "statement": "Imported summable radial-invariance estimate pi:radial-invariance with a common normalization.",
+      "status": "open",
+      "depends_on": [
+        "O_COORDINATES",
+        "O_POISSON"
+      ],
+      "reviewer_confirmed": false
+    },
+    "O_COMMUTATOR": {
+      "statement": "The two-center commutator identifies the directional coefficient; its conclusion is not used to prove C_SP.",
+      "status": "open",
+      "depends_on": [
+        "O_RADIAL_INVARIANCE",
+        "O_POISSON"
+      ],
+      "reviewer_confirmed": false
+    },
+    "C_SP": {
+      "statement": "Conditional uniform sharp projection: |b|<=C and ||grad(v-b.U)||_L2(B_(2L+4)(y))<=C sqrt(E_i(x)+E_i(z)).",
+      "status": "in_progress",
+      "depends_on": [
+        "O_COORDINATES",
+        "O_POISSON",
+        "O_RADIAL_INVARIANCE",
+        "C_EUL",
+        "C_RT",
+        "C_NORM"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/sharp-projection-audit/report.md",
+        "research/sharp-projection-audit/statement_fidelity.md",
+        "research/sharp-projection-audit/exact_certificate.json",
+        "research/sharp-projection-audit/verify.py"
+      ]
+    },
+    "C_EUL": {
+      "statement": "The affine projection residual satisfies its Euler equation, with forcing coefficients bounded by C(alpha+s).",
+      "status": "in_progress",
+      "depends_on": [
+        "O_COORDINATES",
+        "O_POISSON",
+        "O_RADIAL_INVARIANCE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/sharp-projection-audit/report.md"
+      ]
+    },
+    "C_RT": {
+      "statement": "Unnormalized radial transport gives ||w||_L2(B_2R)<=C(alpha+s) without an inverse power of alpha.",
+      "status": "in_progress",
+      "depends_on": [
+        "O_POISSON"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/sharp-projection-audit/report.md",
+        "research/sharp-projection-audit/jacobian_output.json"
+      ]
+    },
+    "C_NORM": {
+      "statement": "Uniform interior harmonic compactness, orthogonality and Euler rigidity imply alpha<=C s.",
+      "status": "in_progress",
+      "depends_on": [
+        "C_EUL",
+        "C_RT",
+        "C_RIG",
+        "O_COORDINATES"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/sharp-projection-audit/report.md",
+        "research/sharp-projection-audit/ah18-excerpts.md"
+      ]
+    },
+    "C_RIG": {
+      "statement": "A C2 Euclidean solution of X.grad h=h+ell.X+k is affine; affine orthogonality forces zero.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/sharp-projection-audit/report.md"
+      ]
+    }
+  }
+}

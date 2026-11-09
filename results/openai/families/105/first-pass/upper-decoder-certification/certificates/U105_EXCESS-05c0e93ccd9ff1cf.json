@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-U105_EXCESS-b970606637b1",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/105/first-pass/upper-decoder-certification/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/105/first-pass/upper-decoder-certification/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15730,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/105/first-pass/upper-decoder-certification/Main.lean",
+    "source_sha256": "4c4b70381405d596216010bd3e53d491f5c0527641ebf516a96e11cc794fba21",
+    "statement_fidelity": "families/105/first-pass/upper-decoder-certification/statement_fidelity.md",
+    "statement_fidelity_sha256": "1b56a86b7d02adf9f753873b4abc4a4d737bf2ceab37bdb07a4caacec5ef9d02",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/upper-decoder-certification/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace UpperDecoder\n\ntheorem two_response_fiber (a b : ℝ) :\n    (a + b) ^ 2 / 2 ≤ a ^ 2 + b ^ 2 := by\n  nlinarith [sq_nonneg (a - b)]\n\ntheorem slice_mass (p h u lam : ℝ)\n    (hp : u - lam ≤ p) (hu : h ≤ u) (hlam : lam ≤ h / 2) :\n    h / 2 ≤ p := by\n  linarith\n\ntheorem positive_difference (k alpha q h v : ℝ)\n    (hk : 0 ≤ k) (ha : 0 ≤ alpha) (ha1 : alpha ≤ 1)\n    (hq : 0 ≤ q) (hh : q ≤ h) (hv : v ≤ alpha * q / 16) :\n    k * alpha * q / 4 ≤\n      (k * alpha - k * alpha / 4) * h - (k + k * alpha / 4) * v := by\n  have hmargin :\n      0 ≤ (3 / 4 : ℝ) * k * alpha * (h - q) +\n        k * (1 + alpha / 4) * (alpha * q / 16 - v) +\n        k * alpha * q * (28 - alpha) / 64 := by\n    have : 0 ≤ h - q := sub_nonneg.mpr hh\n    have : 0 ≤ alpha * q / 16 - v := sub_nonneg.mpr hv\n    have : 0 ≤ 28 - alpha := by linarith\n    positivity\n  nlinarith only [hmargin]\n\ntheorem heavy_list_bound (m tau lam : ℝ)\n    (hm : 0 < m) (htau : 0 < tau)\n    (hlam : lam ≤ tau ^ 2 / 2)\n    (hgram : m ^ 2 * tau ^ 2 ≤ m + m ^ 2 * lam) :\n    m ≤ 2 / tau ^ 2 := by\n  have hslack : 0 ≤ m ^ 2 * (tau ^ 2 / 2 - lam) :=\n    mul_nonneg (sq_nonneg m) (sub_nonneg.mpr hlam)\n  have hbound : m * tau ^ 2 ≤ 2 := by\n    by_contra hn\n    have hprod : 0 < m * (m * tau ^ 2 - 2) :=\n      mul_pos hm (sub_pos.mpr (lt_of_not_ge hn))\n    nlinarith only [hgram, hslack, hprod]\n  exact (le_div_iff₀ (sq_pos_of_pos htau)).mpr hbound\n\ntheorem excess_domination (p q rho productive : ℝ)\n    (hp : 0 ≤ p) (hp1 : p ≤ 1) (ht : 0 ≤ productive)\n    (hq : q - rho ≤ productive) :\n    p * (q - rho) ≤ productive := by\n  by_cases h : q ≤ rho\n  · exact le_trans (mul_nonpos_of_nonneg_of_nonpos hp (sub_nonpos.mpr h)) ht\n  · calc\n      p * (q - rho) ≤ 1 * (q - rho) :=\n        mul_le_mul_of_nonneg_right hp1 (sub_nonneg.mpr (le_of_not_ge h))\n      _ ≤ productive := by simpa using hq\n\ntheorem productive_characters {ι : Type*} [DecidableEq ι]\n    (s : Finset ι) (bad : ι → Prop) [DecidablePred bad]\n    (corr : ι → ℝ) (p q rho threshold : ℝ)\n    (hn : 0 < (s.card : ℝ))\n    (hp : 0 ≤ p) (hp1 : p ≤ 1) (hthreshold : 0 ≤ threshold)\n    (hcorr : ∀ i ∈ s, |corr i| ≤ 1)\n    (haverage : q * (s.card : ℝ) ≤ ∑ i ∈ s, |corr i|)\n    (hbad : ((s.filter bad).card : ℝ) + threshold * (s.card : ℝ) ≤\n      rho * (s.card : ℝ)) :\n    p * (q - rho) ≤\n      ((s.filter fun i => ¬bad i ∧ threshold ≤ |corr i|).card : ℝ) /\n        (s.card : ℝ) := by\n  classical\n  let productive : ι → Prop := fun i => ¬bad i ∧ threshold ≤ |corr i|\n  have hpoint (i : ι) (hi : i ∈ s) :\n      |corr i| ≤ (if bad i then (1 : ℝ) else 0) +\n        (if productive i then (1 : ℝ) else 0) + threshold := by\n    by_cases hb : bad i\n    · simp only [productive, hb, not_true_eq_false, false_and, if_true, if_false]\n      linarith [hcorr i hi]\n    · by_cases ht : threshold ≤ |corr i|\n      · simp only [productive, hb, ht, not_false_eq_true, true_and, if_true, if_false]\n        linarith [hcorr i hi]\n      · simp only [productive, hb, ht, not_false_eq_true, true_and, if_false]\n        simpa using le_of_lt (lt_of_not_ge ht)\n  have hcount (test : ι → Prop) [DecidablePred test] :\n      (∑ i ∈ s, if test i then (1 : ℝ) else 0) =\n        ((s.filter test).card : ℝ) := by\n    rw [← Finset.sum_filter]\n    simp\n  have hsum : (∑ i ∈ s, |corr i|) ≤\n      ((s.filter bad).card : ℝ) +\n      ((s.filter productive).card : ℝ) + threshold * (s.card : ℝ) := by\n    calc\n      _ ≤ ∑ i ∈ s, ((if bad i then (1 : ℝ) else 0) +\n          (if productive i then (1 : ℝ) else 0) + threshold) :=\n        Finset.sum_le_sum hpoint\n      _ = _ := by\n        simp only [Finset.sum_add_distrib]\n        rw [hcount bad, hcount productive]\n        simp [mul_comm]\n  have hraw : (q - rho) * (s.card : ℝ) ≤\n      ((s.filter productive).card : ℝ) := by\n    linarith\n  have hquot : q - rho ≤\n      ((s.filter productive).card : ℝ) / (s.card : ℝ) :=\n    (le_div_iff₀ hn).mpr hraw\n  exact excess_domination p q rho _ hp hp1\n    (div_nonneg (Nat.cast_nonneg _) (le_of_lt hn)) hquot\n\ntheorem averaged_decoder_bound {D : Type*} [DecidableEq D]\n    (ds : Finset D) (weight p q productive success : D → ℝ)\n    (rho b hit : ℝ)\n    (hw : ∀ d ∈ ds, 0 ≤ weight d) (hhit : 0 ≤ hit)\n    (hdom : ∀ d ∈ ds, p d * (q d - rho) ≤ productive d)\n    (hdecoder : ∀ d ∈ ds, productive d * hit ≤ success d)\n    (hexcess : b ≤ ∑ d ∈ ds, weight d * (p d * (q d - rho))) :\n    b * hit ≤ ∑ d ∈ ds, weight d * success d := by\n  calc\n    b * hit ≤ (∑ d ∈ ds, weight d * (p d * (q d - rho))) * hit :=\n      mul_le_mul_of_nonneg_right hexcess hhit\n    _ = ∑ d ∈ ds, weight d * ((p d * (q d - rho)) * hit) := by\n      rw [Finset.sum_mul]\n      apply Finset.sum_congr rfl\n      intro d hd\n      ring\n    _ ≤ ∑ d ∈ ds, weight d * success d := by\n      apply Finset.sum_le_sum\n      intro d hd\n      apply mul_le_mul_of_nonneg_left _ (hw d hd)\n      exact le_trans (mul_le_mul_of_nonneg_right (hdom d hd) hhit) (hdecoder d hd)\n\ntheorem bias_from_bit_balance (p : ℝ)\n    (hp : (1 / 16 : ℝ) ≤ p) (hp1 : p ≤ 15 / 16) :\n    |1 - 2 * p| ≤ (7 / 8 : ℝ) := by\n  rw [abs_le]\n  constructor <;> linarith\n\nend UpperDecoder\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/upper-decoder-certification/statement_fidelity.md",
+    "text": "# Statement fidelity: the universal arithmetic and character-counting core\n\n`Main.lean` uses Lean 4.31.0 and Mathlib. All scalar quantities below are\narbitrary real numbers, and all indexing sets are arbitrary finite sets.\nThere are no assumptions about a bounded source alphabet, a bounded column\ndimension, or a particular numerical instance.\n\nThe unqualified declaration names are `two_response_fiber`, `slice_mass`,\n`positive_difference`, `heavy_list_bound`, `excess_domination`,\n`productive_characters`, `averaged_decoder_bound`, and\n`bias_from_bit_balance`, all in the namespace `UpperDecoder`.\n\n`UpperDecoder.productive_characters` is the main new formal statement.\n`s` is the full finite set of output characters; `bad` is the predicate\n\"annihilates W\"; `corr` is the signed conditional Fourier correlation on\na fixed compatible slice. Its hypotheses are exactly:\n\n- `s` has positive cardinality;\n- `0 <= p <= 1` is the slice probability;\n- the nonnegative threshold bounds what counts as a productive correlation;\n- every correlation has absolute value at most one;\n- `q * |s| <= sum |corr|`, which follows from Fourier expansion of equality;\n- `|bad| + threshold * |s| <= rho * |s|`.\n\nThe conclusion is\n\n`p * (q-rho) <= |{sigma : not bad sigma and threshold <= |corr sigma|}| / |s|`.\n\nIn the manuscript specialization `threshold = rho/2` and\n`|bad|/|s| <= 2^(-(ell-r)) < rho/8`, so its last hypothesis holds.\nThe theorem does not assume that `q >= rho`; negative contributions are\nhandled explicitly. This is why the full positive excess survives averaging\nwithout selecting a single character or a favorable exposure first.\n\n`UpperDecoder.averaged_decoder_bound` quantifies over arbitrary finite\nexposure sets and arbitrary nonnegative weights. It takes the preceding\npointwise domination, a per-exposure decoder hit bound, a nonnegative hit\nfactor, and the positive-excess inequality as hypotheses. It concludes the\nweighted decoder success is at least `b * hit`. In this application,\n`hit = tau^2/2 * 2^(-r)`. Probability normalization of the weights is not\nneeded for the algebraic implication. This declaration does not assume or\nderive any conditional independence.\n\n`UpperDecoder.heavy_list_bound` proves `m <= 2/tau^2` from positive `m,tau`,\n`lambda <= tau^2/2`, and the Gram inequality\n`m^2*tau^2 <= m + m^2*lambda`. The Gram inequality is a hypothesis here;\nits proof from unconditional character biases is given in `theorem.md`.\n\n`UpperDecoder.positive_difference` verifies the manuscript's exact error\nbudget with `rho=k*alpha/4`, `b=k*alpha*q/4`,\n`h>=q>=0`, `0<=alpha<=1`, `k>=0`, and `v<=alpha*q/16`.\n`UpperDecoder.slice_mass` proves the lower bound on slice mass from the\nthree displayed scalar bounds. `UpperDecoder.two_response_fiber` verifies\nthe exact two-value collision inequality. `UpperDecoder.excess_domination`\nhandles multiplying a possibly negative excess by a probability.\n`UpperDecoder.bias_from_bit_balance` checks the conversion of a bit\nprobability in `[1/16,15/16]` to character bias at most `7/8`.\n\nThis file deliberately does NOT claim a formalization of the entire\nProposition prop:upper. The finite-group Fourier identities, tensor/coset\nidentifications, joint partition legality, common-observation maps,\nfresh-tape conditional independence, and the external Grassmann theorem\nare proved or cited in `theorem.md`, and require independent mathematical\nreview. The compiler checks the universal implications above, not that\nthe manuscript's data satisfy their hypotheses.\n"
+  },
+  "subject": {
+    "content_hash": "46a342855b2a50da4824054428a8060e2df4daa93c2470d0a7a61f6f7b9139fa",
+    "kind": "claim",
+    "subject_id": "U105_EXCESS"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

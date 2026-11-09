@@ -1,0 +1,66 @@
+{
+  "goal": "C9000125",
+  "routes": {
+    "R_FINITE_CERTIFY": {
+      "goal": "C_FINITE",
+      "obligations": ["C_ANALYTIC", "C_SCALAR", "C_DIRECTED", "C_PARAMETER"]
+    },
+    "R_STRENGTHENED": {
+      "goal": "C_STRENGTHENED",
+      "obligations": ["C_ANALYTIC", "C_STRONG_SCALAR", "C_DIRECTED", "C_PARAMETER"]
+    },
+    "R_FINITE_FROM_STRONG": {
+      "goal": "C_FINITE",
+      "obligations": ["C_STRENGTHENED"]
+    }
+  },
+  "nodes": {
+    "C9000125": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 125 (The metric <i>k</i>-median approximation threshold and recovery.; papers: Single-exponential recovery and bounded-price strictness for metric k-median; The approximation threshold for metric k-median; Lean status: Partially/Comparator formalized (lean/docs/125.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_FINITE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_FINITE": {
+      "statement": "Literal thm:finite-inequality for every finite weighted probability space, directed q, zero weights/distances, q=1, x in [0,1], and 0<y<=1.",
+      "status": "open",
+      "depends_on": ["C_ANALYTIC", "C_SCALAR", "C_DIRECTED", "C_PARAMETER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Approximation-Threshold-for-Metric-k-Median-September-24-2026/build/sections/inequality.tex", "research/finite_comparison/report.md", "research/finite_comparison/verification.json"]
+    },
+    "C_ANALYTIC": {"statement": "Integral identities, positive denominators, rational approximation errors, and k-envelope.", "status": "open", "depends_on": [], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/report.md", "research/finite_comparison/verify.py"]},
+    "C_SCALAR": {"statement": "All five groups of lem:scalar-bounds over their complete domains.", "status": "open", "depends_on": ["C_TABLES", "C_ANALYTIC"], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/report.md", "research/finite_comparison/verification.json"]},
+    "C_TABLES": {"statement": "Printed coefficient minorants, Bernstein bounds, tail blocks, degrees, and eta identities.", "status": "open", "depends_on": [], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/verify.py", "research/finite_comparison/exact_certificate.json"]},
+    "C_DIRECTED": {"statement": "Centered majorant, positive-row charges, negative-row payment, and cancellation without symmetry for beta=1.6 and beta=1.59.", "status": "open", "depends_on": ["C_SCALAR", "C_STRONG_SCALAR", "C_CHARGE_CORE"], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/report.md", "research/finite_comparison/lean/Main.lean"]},
+    "C_CHARGE_CORE": {"statement": "Finite weighted outgoing/incoming charge cancellation with disjoint positive and receiving sets.", "status": "open", "depends_on": [], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/lean/certificates/C_CHARGE_CORE-fd50bbccce36b527.json", "research/finite_comparison/lean/statement_fidelity.md"]},
+    "C_PARAMETER": {"statement": "Monotonic y reduction, binary-s reduction, zero-probability deletion, and endpoints.", "status": "open", "depends_on": [], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/report.md"]},
+    "C_STRENGTHENED": {"statement": "Under precisely thm:finite-inequality's hypotheses, its left side is at most (199/100) P(max(y-x,0))^2, hence at most (199/100) Theta. This strengthens the printed factor 2; independent review and literature novelty assessment remain pending.", "status": "open", "depends_on": ["C_ANALYTIC", "C_STRONG_SCALAR", "C_DIRECTED", "C_PARAMETER"], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/verify.py", "research/finite_comparison/exact_certificate.json", "research/finite_comparison/report.md"]},
+    "C_STRONG_SCALAR": {"statement": "All five scalar groups remain valid with beta=159/100 replacing 1.6 throughout K, the charge expression, and the final two scalar bounds, leaving alpha=.4 and all other analytic parameters fixed.", "status": "open", "depends_on": ["C_ANALYTIC", "C_STRONG_POLYNOMIALS"], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/report.md", "research/finite_comparison/verify.py"]},
+    "C_STRONG_POLYNOMIALS": {"statement": "Full rational-polynomial Bernstein sign certificates on 656 closed cells establish the beta=159/100 scalar reductions with their complete approximation budgets.", "status": "open", "depends_on": [], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/verify.py", "research/finite_comparison/exact_certificate.json"]},
+    "C_NORMALIZATION": {"statement": "rounding.tex eq:rnd-normalization and normalized radius comparison, conditional on its geometric inputs.", "status": "open", "depends_on": [], "reviewer_confirmed": false, "evidence": ["research/finite_comparison/report.md", "research/finite_comparison/verify.py"]},
+    "C_THRESHOLD": {"statement": "For each fixed epsilon>0 a deterministic polynomial-time (1+2/e+epsilon)-approximation using at most k facilities.", "status": "open", "depends_on": ["C_PSEUDO", "C_LS"], "reviewer_confirmed": false},
+    "C_THRESHOLD_HARDNESS": {"statement": "Matching 1+2/e threshold under P!=NP via coverage hardness and the 1/2/3 metric reduction.", "status": "open", "depends_on": ["C_THRESHOLD", "C_COVER_HARDNESS"], "reviewer_confirmed": false},
+    "C_PSEUDO": {"statement": "Deterministic additive-surplus LP pseudo-approximation with ratio 1+2/e+epsilon.", "status": "open", "depends_on": ["C_PREPARATION", "C_GRID", "C_DERANDOM"], "reviewer_confirmed": false},
+    "C_PREPARATION": {"statement": "Grid preparation increases mass by at most 3g and expected individual costs by at most 1+eta.", "status": "open", "depends_on": ["C_DEP_ROUND"], "reviewer_confirmed": false},
+    "C_DEP_ROUND": {"statement": "Weighted dependent rounding preserves first moments and needed pair/variance inequalities.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C_GRID": {"statement": "thm:grid-rounding: at most M+C openings and expected per-client factor 1+2/e+tau.", "status": "open", "depends_on": ["C_BATCH", "C_GRAPH_AVG", "C_POTENTIAL", "C_FINITE", "C_NORMALIZATION"], "reviewer_confirmed": false},
+    "C_BATCH": {"statement": "Physical batches, chunks, forced resets, count variance, and completion/count conditioning.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C_GRAPH_AVG": {"statement": "Directed graph marginals, taper, graph averaging, and kernel bounds.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C_POTENTIAL": {"statement": "Client potential, exact ideal-generator drift, physical-generator errors, and time integration.", "status": "open", "depends_on": ["C_GRAPH_AVG"], "reviewer_confirmed": false},
+    "C_DERANDOM": {"statement": "Finite support compression, moment lists, rational implementation, and deterministic conditioning.", "status": "open", "depends_on": ["C_TCHAKALOFF"], "reviewer_confirmed": false},
+    "C_TCHAKALOFF": {"statement": "Affine finite-support reduction attributed to Bayer-Teichmann (2005); not audited here.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C_LS": {"statement": "Li-Svensson constant-surplus reduction cited as Theorem 4 of the 2014 manuscript; not audited here.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C_COVER_HARDNESS": {"statement": "Feige/Anand-Lee coverage hardness inputs and their exact applicability; not audited here.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C_RECOVERY": {"statement": "Proxy recovery with m<=L0 log N bad centers, injective good proxies, and cost <=(1+2/e+epsilon)P with probability 1-zeta.", "status": "open", "depends_on": ["C_SAMPLING", "C_COMPLETION"], "reviewer_confirmed": false},
+    "C_SAMPLING": {"statement": "Radii, dummy metric/ties, adaptive sampling, near witnesses, mass bounds, and successful prefix.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C_COMPLETION": {"statement": "Categorical continuous greedy, surrogate realization/submodularity, and prefix completion.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C_RECOVERY_197": {"statement": "Proxy error P/100 gives 1.97P recovery in exp(O(M0)) poly(N) log(2/zeta).", "status": "open", "depends_on": ["C_RECOVERY"], "reviewer_confirmed": false},
+    "C_COMPATIBLE": {"statement": "Imported CGLSS valid sequences and one compatible replay with h regular facilities and O(log N) free copies.", "status": "open", "depends_on": [], "reviewer_confirmed": false},
+    "C_STRICTNESS": {"statement": "For B=T+2, rho=1/(200B), c(T)=rho^2/100, bounded price lambda<=T P_C implies sum alpha<=lambda+(2-c(T)/2)P_C.", "status": "open", "depends_on": ["C_COMPATIBLE"], "reviewer_confirmed": false},
+    "C_SUBTWO": {"statement": "Companion's randomized polynomial-time (2-sigma)-approximation, always at most k facilities, high probability and expectation.", "status": "open", "depends_on": ["C_RECOVERY_197", "C_COMPATIBLE", "C_STRICTNESS"], "reviewer_confirmed": false}
+  }
+}

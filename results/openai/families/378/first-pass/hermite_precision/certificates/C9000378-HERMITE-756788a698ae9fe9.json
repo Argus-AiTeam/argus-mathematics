@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C9000378-HERMITE-e74566e51543",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/378/first-pass/hermite_precision/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/378/first-pass/hermite_precision/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 17423,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/378/first-pass/hermite_precision/Main.lean",
+    "source_sha256": "00287b1f0c71308d915f46ee61d0110c0c1c20869639933917143431cbd28bad",
+    "statement_fidelity": "families/378/first-pass/hermite_precision/statement_fidelity.md",
+    "statement_fidelity_sha256": "26f0caf9f01c6681afe97f5e012db027f1f1ceda718e0893788469c8303c4d6f",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/hermite_precision/Main.lean",
+    "text": "import Mathlib\n\nnamespace TaperedHermite\n\nopen Finset\n\ndef loss : ℕ → ℕ → ℕ\n  | 0, _ => 0\n  | n + 1, k => 2 * loss n k + (n + 1) * min (n + 1) k\n\ntheorem loss_saturated (n k : ℕ) (hk : n ≤ k) :\n    loss n k = loss n n := by\n  induction n generalizing k with\n  | zero => rfl\n  | succ n ih =>\n      simp only [loss]\n      rw [ih k (by omega), ih (n + 1) (by omega)]\n      simp [min_eq_left hk]\n\ntheorem loss_diagonal (n : ℕ) :\n    loss n n + n ^ 2 + 4 * n + 6 = 6 * 2 ^ n := by\n  induction n with\n  | zero => norm_num [loss]\n  | succ n ih =>\n      simp only [loss, min_self, pow_succ]\n      rw [loss_saturated n (n + 1) (by omega)]\n      nlinarith\n\ntheorem loss_closed_add (k r : ℕ) :\n    loss (k + r) k + (2 * k + 6) * 2 ^ r + k * (k + r + 2)\n      = 6 * 2 ^ (k + r) := by\n  induction r with\n  | zero =>\n      simpa only [add_zero, pow_zero, mul_one] using\n        (show loss k k + (2 * k + 6) + k * (k + 2) = 6 * 2 ^ k by\n          nlinarith [loss_diagonal k])\n  | succ r ih =>\n      rw [show k + (r + 1) = (k + r) + 1 by omega, loss,\n        min_eq_right (by omega : k ≤ k + r + 1)]\n      simp only [pow_succ]\n      nlinarith\n\ntheorem loss_closed (n k : ℕ) (hk : k ≤ n) :\n    loss n k + (2 * k + 6) * 2 ^ (n - k) + k * (n + 2)\n      = 6 * 2 ^ n := by\n  simpa only [Nat.add_sub_of_le hk] using loss_closed_add k (n - k)\n\ntheorem loss_le (n k : ℕ) : loss n k ≤ 6 * 2 ^ n := by\n  by_cases hk : k ≤ n\n  · have := loss_closed n k hk\n    omega\n  · rw [loss_saturated n k (by omega)]\n    have := loss_diagonal n\n    omega\n\ntheorem loss_sum (n k : ℕ) :\n    loss n k = ∑ j ∈ range (n + 1), j * min j k * 2 ^ (n - j) := by\n  induction n with\n  | zero => simp [loss]\n  | succ n ih =>\n      rw [sum_range_succ, loss, ih]\n      have hs :\n          (∑ j ∈ range (n + 1), j * min j k * 2 ^ (n + 1 - j))\n            = 2 * ∑ j ∈ range (n + 1), j * min j k * 2 ^ (n - j) := by\n        rw [mul_sum]\n        apply sum_congr rfl\n        intro j hj\n        have hjn : j ≤ n := by simpa using mem_range.mp hj\n        rw [show n + 1 - j = (n - j) + 1 by omega, pow_succ]\n        ring\n      simpa only [Nat.sub_self, pow_zero, mul_one] using congrArg\n        (fun z => z + (n + 1) * min (n + 1) k) hs.symm\n\ndef ceilThree (M u : ℕ) : ℕ := (3 * M + u - 1) / u\n\ntheorem multiplicity_bound (M u : ℕ) (hu : 1 ≤ u) (hM : u ≤ M) :\n    ceilThree M u * u ≤ 4 * M := by\n  have hd := Nat.div_mul_le_self (3 * M + u - 1) u\n  dsimp [ceilThree]\n  omega\n\nlocal instance : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩\n\ndef bounded (b : ℤ) (x : ℚ) : Prop := padicNorm 2 x ≤ (2 : ℚ) ^ b\n\ntheorem bounded_zero (b : ℤ) : bounded b 0 := by\n  simp only [bounded, padicNorm.zero]\n  positivity\n\ntheorem bounded_mono {b c : ℤ} {x : ℚ}\n    (hx : bounded b x) (hbc : b ≤ c) : bounded c x := by\n  exact hx.trans (zpow_le_zpow_right₀ (by norm_num : (1 : ℚ) ≤ 2) hbc)\n\ntheorem bounded_mul {b c : ℤ} {x y : ℚ}\n    (hx : bounded b x) (hy : bounded c y) : bounded (b + c) (x * y) := by\n  unfold bounded at *\n  rw [padicNorm.mul, zpow_add₀ (by norm_num : (2 : ℚ) ≠ 0)]\n  exact mul_le_mul hx hy (padicNorm.nonneg y) (by positivity)\n\ntheorem bounded_pow {b : ℤ} {x : ℚ} (hx : bounded b x) (j : ℕ) :\n    bounded ((j : ℤ) * b) (x ^ j) := by\n  induction j with\n  | zero => norm_num [bounded, padicNorm.one]\n  | succ j ih =>\n      have h := bounded_mul ih hx\n      simpa only [pow_succ, Nat.cast_add, Nat.cast_one, add_mul, one_mul] using h\n\ntheorem bounded_sum {ι : Type*} (s : Finset ι) {b : ℤ} (f : ι → ℚ)\n    (hf : ∀ j ∈ s, bounded b (f j)) : bounded b (∑ j ∈ s, f j) := by\n  exact padicNorm.sum_le' hf (by positivity)\n\ntheorem integral_inverse (e b : ℕ → ℚ)\n    (he : ∀ j, bounded 0 (e j))\n    (hb0 : b 0 = 1)\n    (hb : ∀ n, b (n + 1) = -∑ j ∈ range (n + 1), e (n + 1 - j) * b j) :\n    ∀ j, bounded 0 (b j) := by\n  intro j\n  induction j using Nat.strong_induction_on with\n  | h j ih =>\n      cases j with\n      | zero => norm_num [hb0, bounded, padicNorm.one]\n      | succ n =>\n          rw [hb]\n          simp only [bounded, padicNorm.neg]\n          apply bounded_sum\n          intro j hj\n          simpa using bounded_mul (he (n + 1 - j)) (ih j (mem_range.mp hj))\n\ndef node (E x : ℚ) (q : ℕ) (b f : ℕ → ℚ) : ℚ :=\n  E * ∑ j ∈ range q, (∑ r ∈ range (j + 1), f r * b (j - r)) * x ^ j\n\ntheorem node_linear (E x : ℚ) (q : ℕ) (b f g : ℕ → ℚ) :\n    node E x q b f - node E x q b g =\n      node E x q b (fun r => f r - g r) := by\n  unfold node\n  rw [← mul_sub, ← sum_sub_distrib]\n  congr 1\n  apply sum_congr rfl\n  intro j _\n  rw [← sub_mul, ← sum_sub_distrib]\n  congr 1\n  apply sum_congr rfl\n  intro r _\n  ring\n\ntheorem node_precision_exact\n    (E x : ℚ) (q p s v : ℕ) (b f : ℕ → ℚ)\n    (hE : bounded (s : ℤ) E)\n    (hx : bounded (v : ℤ) x)\n    (hb : ∀ j, bounded 0 (b j))\n    (hf : ∀ r < q, bounded (-(p + s + (q - 1) * v : ℕ) : ℤ) (f r)) :\n    bounded (-(p : ℤ)) (node E x q b f) := by\n  unfold node\n  rw [mul_sum]\n  apply bounded_sum\n  intro j hj\n  have hjq : j < q := mem_range.mp hj\n  have hc : bounded (-(p + s + (q - 1) * v : ℕ) : ℤ)\n      (∑ r ∈ range (j + 1), f r * b (j - r)) := by\n    apply bounded_sum\n    intro r hr\n    have hrq : r < q := by have := mem_range.mp hr; omega\n    simpa using bounded_mul (hf r hrq) (hb (j - r))\n  have h := bounded_mul hE (bounded_mul hc (bounded_pow hx j))\n  apply bounded_mono h\n  have hjle : j ≤ q - 1 := by omega\n  have hv : (j : ℤ) * (v : ℤ) ≤ ((q - 1 : ℕ) : ℤ) * (v : ℤ) :=\n    mul_le_mul_of_nonneg_right (by exact_mod_cast hjle) (by positivity)\n  push_cast\n  omega\n\ntheorem node_precision_paper\n    (E x : ℚ) (q p h n k M a : ℕ) (b f : ℕ → ℚ)\n    (hq : q ≤ 4 * M)\n    (hE : bounded (h * loss n k : ℕ) E)\n    (hx : bounded (a + 1 : ℕ) x)\n    (hb : ∀ j, bounded 0 (b j))\n    (hf : ∀ r < q,\n      bounded (-(p + 8 * h * 2 ^ n + 8 * M * (a + 1) : ℕ) : ℤ) (f r)) :\n    bounded (-(p : ℤ)) (node E x q b f) := by\n  apply node_precision_exact E x q p (h * loss n k) (a + 1) b f hE hx hb\n  intro r hr\n  apply bounded_mono (hf r hr)\n  have hl := Nat.mul_le_mul_left h (loss_le n k)\n  have hj : q - 1 ≤ 4 * M := by omega\n  have hjv := Nat.mul_le_mul_right (a + 1) hj\n  have hp :\n      p + h * loss n k + (q - 1) * (a + 1)\n        ≤ p + 8 * h * 2 ^ n + 8 * M * (a + 1) := by\n    nlinarith\n  exact neg_le_neg (Int.ofNat_le.mpr hp)\n\ntheorem coordinatewise_precision\n    {ι κ : Type*} (nodes : Finset ι) (q n k : ι → ℕ)\n    (p h M a : ℕ) (E x : ι → ℚ) (b : ι → ℕ → ℚ)\n    (f : ι → ℕ → κ → ℚ)\n    (hq : ∀ t ∈ nodes, q t ≤ 4 * M)\n    (hE : ∀ t ∈ nodes, bounded (h * loss (n t) (k t) : ℕ) (E t))\n    (hx : ∀ t ∈ nodes, bounded (a + 1 : ℕ) (x t))\n    (hb : ∀ t ∈ nodes, ∀ j, bounded 0 (b t j))\n    (hf : ∀ t ∈ nodes, ∀ r < q t, ∀ c,\n      bounded (-(p + 8 * h * 2 ^ n t + 8 * M * (a + 1) : ℕ) : ℤ) (f t r c)) :\n    ∀ c, bounded (-(p : ℤ))\n      (∑ t ∈ nodes, node (E t) (x t) (q t) (b t) (fun r => f t r c)) := by\n  intro c\n  apply bounded_sum\n  intro t ht\n  exact node_precision_paper (E t) (x t) (q t) p h (n t) (k t) M a\n    (b t) (fun r => f t r c) (hq t ht) (hE t ht) (hx t ht) (hb t ht)\n    (fun r hr => hf t ht r hr c)\n\nend TaperedHermite\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/hermite_precision/statement_fidelity.md",
+    "text": "# Statement fidelity: C9000378-HERMITE\n\n`Main.lean` is a universal arithmetic and modular-stability core of the\ntapered Hermite proof. It is not a formalization of the entire manuscript,\nnor a kernel proof of all the grid instantiation and interpolation arguments.\nThe full recovery theorem is the separate written claim\n`C9000378-HERMITE-FULL` in `proof.md`.\n\n## Objects and quantifiers\n\nAll parameters are universally quantified natural numbers unless specified\notherwise. Rational numbers use Mathlib's exact `Rat` type. `bounded b x`\nmeans `padicNorm 2 x <= 2^b`, with the exponent `b` an integer; it is not the\nordinary absolute value. Thus `bounded (-p) x` is precisely rational\ncoordinate error of 2-adic valuation at least `p`, with zero included.\n\n`loss n k` is defined by a finite recurrence. `loss_sum` proves that it is\nthe sum of `j min(j,k) 2^(n-j)` for `0 <= j <= n`; the zero term vanishes.\nIt is the `B(n,k)` in the written proof.\n\n`loss_closed` proves\n\n    B(n,k) + (2k+6)2^(n-k) + k(n+2) = 6*2^n\n\nunder the sole hypothesis `k <= n`. The natural subtraction in `n-k`\nis therefore exact. `loss_le` proves `B(n,k) <= 6*2^n` for every `n,k`,\nincluding `k>n`. `loss_saturated`, `loss_diagonal`, and `loss_closed_add`\nare the finite identities used to prove those statements.\n\n`ceilThree M u` is `(3M+u-1)/u`, using natural integer division.\n`multiplicity_bound` proves `ceilThree M u * u <= 4M` under `1<=u<=M`.\nThe lower bound on the number of jets is in the written proof, not this\ndeclaration.\n\n## Integral reciprocals and the exact recovery functional\n\n`integral_inverse` quantifies over arbitrary rational sequences `e,b`.\nIts hypotheses are integrality of all `e_j`, `b_0=1`, and the usual\nunit-constant inverse recurrence\n\n    b_(n+1) = -sum_{j=0}^n e_(n+1-j) b_j.\n\nIt proves integrality of every `b_j`. It does not assert existence of\nthese sequences or prove the convolution inverse identity. Those\nelementary algebraic points are supplied in `proof.md`.\n\n`node E x q b f` is exactly\n\n    E * sum_{0<=j<q} (sum_{0<=r<=j} f_r b_(j-r)) x^j.\n\nHere `E` is the rational scalar `E_t(0)`, `x=-t/alpha`, `b` the\nreciprocal coefficient sequence, and `f` the error in the raw local\nTaylor coefficients. `node_linear` proves that applying this expression\nto the difference of two data sequences is the difference of the\nexpressions. It is ordinary linear algebra over `Q`.\n\n`node_precision_exact` has hypotheses\n\n    |E|_2 <= 2^s, |x|_2 <= 2^v, |b_j|_2 <= 1,\n    |f_r|_2 <= 2^(-(p+s+(q-1)v)) for r<q.\n\nIt proves `|node E x q b f|_2 <= 2^(-p)`. For a retained manuscript\nnode one instantiates `s=hB(a-i,u-i)` and `v=a+1-i`. There is no\nassumption about the desired output error among the hypotheses.\n\n`node_precision_paper` instantiates the loss bound with `s=hB(n,k)`\nand `v=a+1`. Under `q<=4M`, the scalar norm bound\n`|E|_2<=2^(hB(n,k))`, `|x|_2<=2^(a+1)`, and integral `b_j`,\nit proves that errors of precision\n\n    p + 8h2^n + 8M(a+1)\n\nproduce error of precision `p`. In particular it checks the actual\nconstants 8 and 8, not merely an unspecified asymptotic bound.\n\n`coordinatewise_precision` quantifies over an arbitrary finite node\nset of an arbitrary type, and an arbitrary coordinate index type.\nAll the node hypotheses are as above, with node-dependent `n,k,q`,\nand the input bound is required for every coordinate. It proves the\nsame output precision for every coordinate of the sum of all nodes.\nNo dimension bound, field multiplication on the coefficient module,\nor reducedness hypothesis is assumed.\n\n## What remains a written mathematical argument\n\nThe compiler does not verify that the concrete grid has the claimed\ntranslated shell counts, that its rational product `E_t(0)` has\nvaluation `-hB(a-i,u-i)`, or that the Hermite identity reconstructs\n`F(0)` when its degree is below the total multiplicity. These are\nproved explicitly in `proof.md`. Finite exact checks in `verify.py`\nare useful regressions for them, not universal formal proofs.\n\nLikewise, the identification of the original\n`Z_(2)[U,V]/(f,V^ell)` with its free coordinate module, and its embedding\nin the rational scalar extension, is the monic-normal-form argument in\n`proof.md`. Once identified, it is covered by the universal coordinate\nindex in `coordinatewise_precision`; no field theorem is applied to\nthat ring. The bit complexity and the downstream conditional\nasymptotic deductions are also written arguments.\n\nNo independent statement-fidelity approval, novelty determination,\nor Reviewer acceptance is claimed by this document or by successful\ncompilation. The mechanical evidence belongs only to\n`C9000378-HERMITE`, whose statement explicitly has this core scope.\n"
+  },
+  "subject": {
+    "content_hash": "be405ec439450576637444f57017ec7ca389b2e392d98574b2db9343e6519466",
+    "kind": "claim",
+    "subject_id": "C9000378-HERMITE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,150 @@
+{
+  "goal": "C9000042",
+  "routes": [
+    {
+      "name": "Uniform exact annular sewing verification",
+      "status": "current",
+      "evidence": "research/sewing-audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000042": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 042 (Oka classification for minimal compact complex surfaces: Kodaira dimension zero and class VII.; papers: Every complex K3 surface is Oka; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_SEW_CHAIN"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_SEW_CHAIN": {
+      "statement": "The complete hypotheses of manuscript sew:chain imply sewing with a positive transverse radius uniform in every block length and the number of blocks.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SEW_LINEARIZE", "C_SEW_SPLIT", "C_SEW_NEWTON", "C_SEW_MARGINS", "C_SEW_COVER"],
+      "evidence": ["research/sewing-audit/report.md", "research/sewing-audit/exact_certificate.json", "research/sewing-audit/verify.py"]
+    },
+    "C_SEW_LINEARIZE": {
+      "statement": "Exactness makes the transverse mean quadratic and gives the Hamiltonian-plus-shear decomposition in sew:linearize.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Every-complex-K3-surface-is-Oka-September-23-2026/build/sections/sewing.tex", "research/sewing-audit/report.md", "research/sewing-audit/verify.py"]
+    },
+    "C_SEW_SPLIT": {
+      "statement": "The Fourier right inverse on the whole chain has bounds independent of all block lengths and chart count.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/openai_manuscript/Every-complex-K3-surface-is-Oka-September-23-2026/build/sections/sewing.tex", "research/sewing-audit/report.md", "research/sewing-audit/verify.py"]
+    },
+    "C_SEW_NEWTON": {
+      "statement": "Shear-conjugated Hamiltonian corrections cancel every first-order nonzero mode and leave a uniform quadratic normalized error.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SEW_LINEARIZE", "C_SEW_SPLIT"],
+      "evidence": ["research/openai_manuscript/Every-complex-K3-surface-is-Oka-September-23-2026/build/sections/sewing.tex", "research/sewing-audit/report.md", "research/sewing-audit/verify.py"]
+    },
+    "C_SEW_MARGINS": {
+      "statement": "The Newton majorant preserves positive common margins and yields convergent corrections uniformly over all blocks.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SEW_NEWTON"],
+      "evidence": ["research/openai_manuscript/Every-complex-K3-surface-is-Oka-September-23-2026/build/sections/sewing.tex", "research/sewing-audit/report.md", "research/sewing-audit/verify.py"]
+    },
+    "C_SEW_COVER": {
+      "statement": "The corrected translated blocks cover the entire cylinder times one common transverse disc, with only adjacent overlaps.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SEW_MARGINS"],
+      "evidence": ["research/openai_manuscript/Every-complex-K3-surface-is-Oka-September-23-2026/build/sections/sewing.tex", "research/sewing-audit/report.md", "research/sewing-audit/verify.py"]
+    },
+    "C_SEW_EFFECTIVE_PARAMETRIC": {
+      "statement": "The same exact chain theorem holds jointly holomorphically with arbitrary passive complex parameters and uniform bounds, with b=r/4 and the explicit conservative threshold in report.md.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_SEW_CHAIN", "C_SEW_PASSIVE_HOLO"],
+      "evidence": ["research/sewing-audit/report.md", "research/sewing-audit/exact_certificate.json", "research/sewing-audit/verify.py"]
+    },
+    "C_SEW_PASSIVE_HOLO": {
+      "statement": "With uniform active-coordinate bounds, all sewing primitives, Fourier sums, flows, limits and global chart identifications are jointly holomorphic in arbitrary passive complex parameters.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_K3_OKA": {
+      "statement": "Manuscript thm:main: every complex K3 surface is Oka; this remains outside the conclusion of the sewing audit.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_GEOMETRIC_L", "C_PROPERTY_L_CAP"],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_GEOMETRIC_L": {
+      "statement": "The manuscript's projective, degeneration, rational-direction, and dynamics arguments supply the two-family property L hypotheses at every K3 point.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_DEG_SEAMS", "C_RATIONAL_STRIPS", "C_SEW_CENTERS", "C_SEW_CHAIN", "C_TWO_FAMILIES_L", "C_SCOPE_EXTERNAL"],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_DEG_SEAMS": {
+      "statement": "Manuscript deg:seams supplies uniform degree-one core/neck transitions satisfying sewing domains except exactness.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_RATIONAL_STRIPS": {
+      "statement": "Manuscript rat:strips supplies buffered periodic symplectic strips under its stated deformation.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_SEW_CENTERS": {
+      "statement": "Manuscript sew:centers adjusts periods exactly while updated centers admit uniform buffered chart choices.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_TWO_FAMILIES_L": {
+      "statement": "Manuscript loc:criterion converts the stated two-family or long-disc hypotheses to property L.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_PROPERTY_L_CAP": {
+      "statement": "Manuscript ana:cap promotes property L everywhere to CAP in every source dimension.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_POLYDISC", "C_TRACE_GLUE"],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_POLYDISC": {
+      "statement": "Manuscript ana:polydisc provides finite-radius approximation on successively larger polydiscs.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": ["C_TRACE_GLUE"],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_TRACE_GLUE": {
+      "statement": "Manuscript glue:trace supplies nonlinear interface splitting without a positive complex-normal-thickness bound.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/sewing-audit/report.md"]
+    },
+    "C_SCOPE_EXTERNAL": {
+      "statement": "The genus-one and dense-period propositions cited in the broader manuscript are source-checking obligations, not black boxes in the sewing proof.",
+      "status": "open",
+      "reviewer_confirmed": false,
+      "depends_on": [],
+      "evidence": ["research/sewing-audit/report.md"]
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_SUFFIX_CORE-44bf09b8ef2b",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/188/first-pass/collision_certificate/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/188/first-pass/collision_certificate/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14480,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/188/first-pass/collision_certificate/Main.lean",
+    "source_sha256": "780ba21aeef6c8643e10c96c6d86e9ec1b16e6bca00a4fb2e00732fe80ad7d19",
+    "statement_fidelity": "families/188/first-pass/collision_certificate/statement_fidelity.md",
+    "statement_fidelity_sha256": "4cf1e7f26636ebc3a6761288e4d2b40fb724662f88898872a672654b0c5d44eb",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/188/first-pass/collision_certificate/Main.lean:14:0: warning: automatically included section variable(s) unused in theorem `CollisionCertificate.upward_mem`:\n  [DecidableEq V]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq V] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/188/first-pass/collision_certificate/Main.lean:76:4: warning: `push_neg` has been deprecated. Prefer using `push Not` instead.\nIf you'd rather continue using `push_neg` in your project, you can implement it as follows:\n```\nopen Lean.Parser.Tactic in\nmacro \"push_neg\" cfg:optConfig loc:(location)? : tactic =>\n  `(tactic| push $cfg:optConfig Not $[$loc]?)\n```\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/collision_certificate/Main.lean",
+    "text": "import Mathlib\n\nopen Finset\n\nnamespace CollisionCertificate\n\nvariable {V : Type*} [DecidableEq V]\n\ninductive Upward (Z : Finset V) (parent : V → V) : V → V → Prop\n  | refl (v : V) : Upward Z parent v v\n  | step {m v : V} (h : Upward Z parent m v) (hp : parent v ∈ Z) :\n      Upward Z parent m (parent v)\n\ntheorem upward_mem {Z U : Finset V} {parent : V → V} {m v : V}\n    (h : Upward Z parent m v) (hm : m ∈ U)\n    (closed : ∀ w ∈ U, parent w ∈ Z → parent w ∈ U) : v ∈ U := by\n  induction h with\n  | refl => exact hm\n  | step h hp ih => exact closed _ ih hp\n\ntheorem marked_closure {Z U M : Finset V} {parent : V → V}\n    (sub : U ⊆ Z) (marks : M ⊆ U)\n    (cover : ∀ v ∈ Z, ∃ m ∈ M, Upward Z parent m v)\n    (closed : ∀ w ∈ U, parent w ∈ Z → parent w ∈ U) : U = Z := by\n  apply Finset.Subset.antisymm sub\n  intro v hv\n  obtain ⟨m, hm, path⟩ := cover v hv\n  exact upward_mem path (marks hm) closed\n\ndef backwardCount (Z U : Finset V) (left right : V → V) (v : V) : ℕ :=\n  (if left v ∉ Z ∨ left v ∈ U then 1 else 0) +\n  (if right v ∉ Z ∨ right v ∈ U then 1 else 0)\n\ntheorem backwardCount_le (Z U : Finset V) (left right : V → V) (v : V) :\n    backwardCount Z U left right v ≤ 2 := by\n  unfold backwardCount\n  split_ifs <;> omega\n\ntheorem saturated_backward {Z U : Finset V} {left right : V → V} {v : V}\n    (h : backwardCount Z U left right v = 2) :\n    (left v ∉ Z ∨ left v ∈ U) ∧ (right v ∉ Z ∨ right v ∈ U) := by\n  by_cases hl : left v ∉ Z ∨ left v ∈ U\n  · by_cases hr : right v ∉ Z ∨ right v ∈ U\n    · exact ⟨hl, hr⟩\n    · simp [backwardCount, hl, hr] at h\n  · by_cases hr : right v ∉ Z ∨ right v ∈ U\n    · simp [backwardCount, hl, hr] at h\n    · simp [backwardCount, hl, hr] at h\n\ntheorem terminal_suffix_bound {Z U M : Finset V} {parent left right : V → V}\n    (sub : U ⊆ Z) (proper : U ≠ Z)\n    (cover : ∀ v ∈ Z, ∃ m ∈ M, Upward Z parent m v)\n    (parent_slot : ∀ v ∈ Z, parent v = left v ∨ parent v = right v) :\n    (∑ v ∈ U, backwardCount Z U left right v) +\n      (if M ⊆ U then 1 else 0) ≤ 2 * U.card := by\n  classical\n  have total_le :\n      (∑ v ∈ U, backwardCount Z U left right v) ≤ ∑ _v ∈ U, (2 : ℕ) :=\n    Finset.sum_le_sum (fun v _ => backwardCount_le Z U left right v)\n  have constant_sum : (∑ _v ∈ U, (2 : ℕ)) = 2 * U.card := by\n    simp [Nat.mul_comm]\n  by_cases hm : M ⊆ U\n  · have not_saturated : ¬ ∀ v ∈ U, backwardCount Z U left right v = 2 := by\n      intro saturated\n      apply proper\n      apply marked_closure sub hm cover\n      intro v hv hp\n      obtain ⟨hl, hr⟩ := saturated_backward (saturated v hv)\n      rcases parent_slot v (sub hv) with heq | heq\n      · rcases hl with outside | inside\n        · exact False.elim (outside (heq ▸ hp))\n        · exact heq ▸ inside\n      · rcases hr with outside | inside\n        · exact False.elim (outside (heq ▸ hp))\n        · exact heq ▸ inside\n    push_neg at not_saturated\n    obtain ⟨v, hv, hne⟩ := not_saturated\n    have strict :\n        (∑ v ∈ U, backwardCount Z U left right v) < ∑ _v ∈ U, (2 : ℕ) := by\n      apply Finset.sum_lt_sum (fun w _ => backwardCount_le Z U left right w)\n      exact ⟨v, hv, by have := backwardCount_le Z U left right v; omega⟩\n    rw [constant_sum] at strict\n    simp only [if_pos hm]\n    omega\n  · simp only [if_neg hm, Nat.add_zero]\n    exact constant_sum ▸ total_le\n\ndef forkMultiplicity (n : ℕ) : ℕ :=\n  ∑ s ∈ Finset.range (n + 1), ∑ a ∈ Finset.range (s + 1), s.choose a\n\ntheorem forkMultiplicity_closed (n : ℕ) :\n    forkMultiplicity n + 1 = 2 ^ (n + 1) := by\n  have inner (s : ℕ) : (∑ a ∈ Finset.range (s + 1), s.choose a) = 2 ^ s := by\n    simpa using Nat.sum_range_choose s\n  induction n with\n  | zero => norm_num [forkMultiplicity]\n  | succ n ih =>\n      have recur : forkMultiplicity (n + 1) = forkMultiplicity n + 2 ^ (n + 1) := by\n        unfold forkMultiplicity\n        rw [Finset.sum_range_succ, inner]\n      rw [recur, pow_succ]\n      omega\n\nend CollisionCertificate\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/collision_certificate/statement_fidelity.md",
+    "text": "# Statement fidelity: terminal suffix and ordered two-path coefficients\n\n`Main.lean` formalizes two universal finite combinatorial statements, not the\nentire stochastic collision proposition. Its declarations are in namespace\n`CollisionCertificate`.\n\n## `terminal_suffix_bound`\n\nThe type `V` is an arbitrary type with decidable equality. `Z` is any finite\nset of free vertices, `U` is a proper subset of `Z`, and `M` is the set of free\nendpoints of the additional edge. The functions `left` and `right` give the\ntwo older endpoints of each birth's backward edges. An endpoint outside `Z`\nis a fixed boundary vertex, and thus is retained regardless of `U`.\n`backwardCount` counts the two backward-edge slots retained for a vertex\nof `U`. The final indicator counts the additional edge exactly when all\nits free endpoints lie in `U`.\n\n`parent_slot` says that the vertex born at the preceding non-root call is\none of the two attachment endpoints. `Upward Z parent m v` is a finite\nsequence of parent steps starting at `m` and ending at `v`, with each\nnewly reached parent in `Z`. `cover` says every free vertex is reached\nthis way from a free mark. It does NOT assume that `U` is closed, nor\ndoes it assume the edge-count conclusion.\n\nThe conclusion is that the number of retained backward-edge slots plus\nthe additional edge is at most twice the cardinality of `U`.\n`marked_closure` is the intermediate propagation theorem: a subset\ncontaining the marks and closed under parents contains all free vertices.\n\nFor the manuscript's terminal suffix, every suffix birth lies on a path\nending at a marked suffix birth; parent-first ordering keeps that path\ninside the suffix. A non-root call's two focus edges both contain its\nnew vertex, proving `parent_slot`. If a suffix birth's preceding call is\na root or lies before the suffix, choose either attachment endpoint for\n`parent` outside `Z`; the cover never needs a step past the first suffix\nbirth. Different backward slots correspond to different graph edges\nbecause each birth has two distinct older endpoints and a distinct new\nvertex. The extra edge is not a backward edge. These graph-to-slot facts\nare proved in the accompanying report, not by the Lean declaration.\nNo connectedness of `Z`, or assumption that both marks are in `Z`, is made.\n\n## `forkMultiplicity_closed`\n\nFor every natural number `n`, `forkMultiplicity n` is\n`sum_{s=0}^n sum_{a=0}^s binom(s,a)`, and the theorem says this number plus\none equals `2^(n+1)`. With `n` non-root calls, `s` calls on the two arms\nand `n-s` on the common trunk, `binom(s,a)` is the number of interleavings\nof arms of lengths `a` and `s-a`. Thus the universal coefficient identity\nis `2^(n+1)-1`; its exponential generating function is\n`2 exp(2x)-exp(x)`.\n\nThe coefficient-to-integral correspondence and the infinite-series\nidentity are ordinary mathematical arguments in the report. The compiler\nchecks the finite coefficient theorem for every `n`, not just tested `n`.\n\n## Limits\n\nThis source does not formalize probability spaces, conditional independence,\nthe good-prefix existence theorem, the analytic unfolding stability proof,\nor an infinite series. Those are not claimed as kernel-verified. There are\nno added axioms, `sorry`, `admit`, or non-kernel evaluators.\n"
+  },
+  "subject": {
+    "content_hash": "84eb5f757fa9f6603d42a29089e0244257891dd044c758d78b1c5d32d75a76d8",
+    "kind": "claim",
+    "subject_id": "C_SUFFIX_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

@@ -1,0 +1,47 @@
+{
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "discovery_query": "exact rank and determinant of a matrix over a finite field",
+  "candidate_operations": [
+    "finite_field.linear_map.rank.compute",
+    "matrix.symbolic.determinant.compute",
+    "matrix.symbolic.rank.compute",
+    "prime_field.matrix.rank.compute",
+    "matrix.determinant.compute"
+  ],
+  "operation_id": "prime_field.matrix.rank.compute",
+  "input_schema": {
+    "$defs": {
+      "PrimeFieldMatrix": {
+        "additionalProperties": false,
+        "description": "An immutable matrix with an exact prime and explicit empty shape.",
+        "properties": {
+          "columns": {"title": "Columns", "type": "integer"},
+          "entries": {"items": {"items": {"type": "integer"}, "type": "array"}, "title": "Entries", "type": "array"},
+          "prime": {"title": "Prime", "type": "integer"}
+        },
+        "required": ["prime", "entries", "columns"],
+        "title": "PrimeFieldMatrix",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "A bounded integer matrix over an explicit prime field GF(p), as the canonical `PrimeFieldMatrix` value: `prime` must be a prime integer in [2, 2147483647], `entries` must have at most 256 rows, each row 1..256 columns, all rows the same length matching the declared `columns`, and every entry a canonical residue in [0, prime). Zero rows are permitted and carry the explicit `columns` axis.",
+    "properties": {"matrix": {"$ref": "#/$defs/PrimeFieldMatrix"}},
+    "required": ["matrix"],
+    "title": "PrimeFieldMatrixRequest",
+    "type": "object"
+  },
+  "output_contract": {
+    "title": "PrimeFieldMatrixRankResult",
+    "required": ["prime", "source", "rank"],
+    "additionalProperties": false,
+    "prime": "integer in [2,2147483647]",
+    "source": "PrimeFieldMatrixRequest, retaining the exact input matrix",
+    "rank": "nonnegative integer"
+  },
+  "scope": "One bounded exact check of the actual L restriction. This operation does not construct Hankel bases, differentiate kernels, lift a tangent, or prove real existence. Those are reconstructed separately.",
+  "adapter_error": null,
+  "timeout": false
+}

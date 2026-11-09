@@ -1,0 +1,121 @@
+{
+  "goal": "C9000372",
+  "routes": {},
+  "nodes": {
+    "C9000372": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 372 (Global uniqueness in smooth isotropic elasticity.; papers: Global Uniqueness for the Smooth Isotropic Elasticity Inverse Problem; Lean status: Partially/Comparator formalized (lean/docs/372.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PF_PROPOSITION", "C_PF_INDEPENDENT_REVIEW"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PF_SCOPE": {
+      "statement": "Planar frames and matrix WKB expansions are prior art. No exterior normalization, auxiliary-to-physical boundary transfer, or downstream uniqueness claim is assumed.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/physical_frame/literature/eskin-ralston-v1.html", "research/physical_frame/verification.md"]
+    },
+    "C_PF_JET_IDENTITIES": {
+      "statement": "The augmented identity, scalar-Laplacian normalization, null conjugations, and transport-compatibility identity hold for unrestricted smooth jets.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["verify.py", "exact_certificate.json", "research/physical_frame/verification.md"]
+    },
+    "C_PF_ALGEBRA": {
+      "statement": "The augmented and degree-one compatibility identities imply each next normal-source compatibility; finite vector residuals and divergence constraints telescope for every truncation order.",
+      "status": "open",
+      "depends_on": ["C_PF_JET_IDENTITIES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/physical_frame/Main.lean", "research/physical_frame/statement_fidelity.md", "research/physical_frame/certificates/C_PF_ALGEBRA-e4a565076ac3722f.json", "research/physical_frame/verification.md"]
+    },
+    "C_PF_PLANAR": {
+      "statement": "Arbitrary smooth planar matrix systems admit local-parameter invertible disk frames and inhomogeneous solutions preserving compact transverse support.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/physical_frame/literature/forstneric-2009.pdf", "research/physical_frame/verification.md"]
+    },
+    "C_PF_SOLVABILITY": {
+      "statement": "A supported augmented Carleman estimate and its physical adjoint restriction yield an L2 right inverse for conjugated elasticity, uniformly for large tau.",
+      "status": "open",
+      "depends_on": ["C_PF_JET_IDENTITIES"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/physical_frame/literature/salo-tzou-v2.pdf", "research/physical_frame/verification.md"]
+    },
+    "C_PF_INTERIOR": {
+      "statement": "Scaled interior system estimates control two correction derivatives and all higher local derivatives with constants uniform as h tends to zero.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/physical_frame/literature/dyatlov-notes.pdf", "research/physical_frame/verification.md"]
+    },
+    "C_PF_RECURSION": {
+      "statement": "Every smooth constrained leading column has compatible amplitudes of every finite order on shrinking disks, preserving the same compact transverse support.",
+      "status": "open",
+      "depends_on": ["C_PF_ALGEBRA", "C_PF_PLANAR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/physical_frame/verification.md", "research/physical_frame/Main.lean"]
+    },
+    "C_PF_CORRECTION": {
+      "statement": "Compatible truncations have physical residual O(tau^(1-N)); physical correction has actual-divergence size O(tau^(2-N)) and the requisite weighted derivative bounds.",
+      "status": "open",
+      "depends_on": ["C_PF_RECURSION", "C_PF_JET_IDENTITIES", "C_PF_SOLVABILITY", "C_PF_INTERIOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/physical_frame/verification.md", "verify.py", "exact_certificate.json"]
+    },
+    "C_PF_PROPOSITION": {
+      "statement": "Proposition prop:physical-amplitudes: for every admissible smooth coefficient pair and every nonzero bilinear null direction, a transversely supported local rank-three frame is realized by exact physical pairs with strong actual-divergence convergence and O(tau) weighted first derivatives.",
+      "status": "open",
+      "depends_on": ["C_PF_PLANAR", "C_PF_CORRECTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/physical_frame/verification.md", "verify.py", "exact_certificate.json"]
+    },
+    "C_PF_PROFILE": {
+      "statement": "Stronger scoped theorem: all smooth actual physical leading profiles satisfy the constrained system; every smooth compact-transverse constrained column admits an exact realization with a complete compatible C-infinity expansion on a smaller ball.",
+      "status": "open",
+      "depends_on": ["C_PF_CORRECTION", "C_PF_JET_IDENTITIES", "C_PF_RECURSION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/physical_frame/verification.md"]
+    },
+    "C_PF_INDEPENDENT_REVIEW": {
+      "statement": "An independent Reviewer must replay the certificate, assess the complete analytic proof and statement fidelity, independently confirm external propositions, and decide publishable significance and verified novelty.",
+      "status": "open",
+      "depends_on": ["C_PF_PROPOSITION", "C_PF_PROFILE"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_BOUNDARY_TRANSFER": {
+      "statement": "The common-extension and physical-transfer statements in boundary-reduction.tex, under equality of the physical displacement-to-traction maps.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Global-Uniqueness-for-the-Smooth-Isotropic-Elasticity-Inverse-Problem-September-24-2026/build/sections/boundary-reduction.tex"]
+    },
+    "C_TRANSPORT_MATCHING": {
+      "statement": "Proposition prop:transport-matching constructs the supported smooth comparison, holomorphic in projective null direction; not certified in this mission.",
+      "status": "open",
+      "depends_on": ["C_BOUNDARY_TRANSFER", "C_PF_PROPOSITION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Global-Uniqueness-for-the-Smooth-Isotropic-Elasticity-Inverse-Problem-September-24-2026/build/sections/transport-matching.tex"]
+    },
+    "C_CONIC_RIGIDITY": {
+      "statement": "Lemma lem:conic-bundle and Proposition prop:comparison-rigidity force the comparison to be the identity; coefficient recovery then uses Lemma lem:finite-type. None is certified in this mission.",
+      "status": "open",
+      "depends_on": ["C_TRANSPORT_MATCHING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Global-Uniqueness-for-the-Smooth-Isotropic-Elasticity-Inverse-Problem-September-24-2026/build/sections/coefficient-recovery.tex"]
+    },
+    "C_MAIN_UNIQUENESS": {
+      "statement": "Theorem thm:main asserts equality of both smooth isotropic elastic moduli from equality of their physical boundary maps on every bounded connected smooth domain under mu>0 and 3lambda+2mu>0.",
+      "status": "open",
+      "depends_on": ["C_BOUNDARY_TRANSFER", "C_TRANSPORT_MATCHING", "C_CONIC_RIGIDITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Global-Uniqueness-for-the-Smooth-Isotropic-Elasticity-Inverse-Problem-September-24-2026/build/sections/introduction.tex"]
+    }
+  }
+}

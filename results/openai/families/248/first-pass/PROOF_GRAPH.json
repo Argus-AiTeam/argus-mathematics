@@ -1,0 +1,138 @@
+{
+  "goal": "C9000248",
+  "routes": [
+    {
+      "name": "R_REALIZED_BOUNDARY_KERNEL",
+      "status": "untried",
+      "evidence": "research/boundary_audit/exact_certificate.json"
+    }
+  ],
+  "nodes": {
+    "C9000248": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 248 (Thompson's group <i>F</i> is nonamenable.; papers: Thompson's group F is nonamenable; Lean status: Partially/Comparator formalized (lean/docs/248.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_REALIZED_BOUNDARY"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/boundary_audit/exact_certificate.json"
+      ]
+    },
+    "C_REALIZED_BOUNDARY": {
+      "statement": "For every Hilbert-ball Lipschitz map with uniform displacement and every D >= 2 with D > 4 L^2 / delta^2, the actual dyadic construction fixes a finite nonempty S before arbitrary nonempty finite A, and some h in S has boundary ratio at least (delta^2/L^2-4/D)/(4*(1-1/D)) > 0.",
+      "status": "open",
+      "depends_on": [
+        "C_DYAD_EVENTUAL",
+        "C_PAIR_TRANSPORT",
+        "C_RESTRICTION_COVARIANCE",
+        "C_RECURSIVE_REALIZATION",
+        "C_FIXED_S_COMMON_LEVEL",
+        "C_CORRELATION_VARIANCE",
+        "C_SCALAR_CONSTANT",
+        "C_UPSTREAM_REPLAY"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Thompsons-group-F-is-nonamenable-September-23-2026/build/sections/finite-proof.tex",
+        "research/boundary_audit/Main.lean",
+        "research/boundary_audit/statement_fidelity.md",
+        "research/boundary_audit/certificates/C_REALIZED_BOUNDARY-a89a94507e5d9e6f.json",
+        "research/boundary_audit/exact_certificate.json"
+      ]
+    },
+    "C_DYAD_EVENTUAL": {
+      "statement": "Every finite family of actual dyadic PL image partitions eventually is basic and respects every specified basic interval.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/DyadicImages.lean"
+      ]
+    },
+    "C_PAIR_TRANSPORT": {
+      "statement": "Any two ordered pairs of strictly separated internal basic intervals admit an affine-on-pairs transport in F.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/AffineTransport.lean"
+      ]
+    },
+    "C_RESTRICTION_COVARIANCE": {
+      "statement": "Normalized restrictions compose and are exactly covariant under an actual affine interval transport at admissible source and target partitions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/RestrictionCovariance.lean",
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/BasicPartition.lean"
+      ]
+    },
+    "C_RECURSIVE_REALIZATION": {
+      "statement": "The finite-cell recursive coloring is well founded and its actual parent colors equal f of the average of descendant colors at each admissible partition.",
+      "status": "open",
+      "depends_on": [
+        "C_RESTRICTION_COVARIANCE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/RecursiveColoring.lean",
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/GlobalColors.lean"
+      ]
+    },
+    "C_FIXED_S_COMMON_LEVEL": {
+      "statement": "The concrete finite transport set depends only on the chosen interval family, and every finite A union SA has a common admissibility level.",
+      "status": "open",
+      "depends_on": [
+        "C_DYAD_EVENTUAL",
+        "C_PAIR_TRANSPORT"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/TransportFamily.lean",
+        "research/boundary_audit/Main.lean"
+      ]
+    },
+    "C_CORRELATION_VARIANCE": {
+      "statement": "Finite-average cancellation and realized covariance compare all separated correlations and give E_A ||z_i-m||^2 <= 4/D + 4*(1-1/D)*eta, without a sign assumption on the reference correlation.",
+      "status": "open",
+      "depends_on": [
+        "C_RESTRICTION_COVARIANCE",
+        "C_FIXED_S_COMMON_LEVEL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/CorrelationVariance.lean",
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/TransportFamily.lean"
+      ]
+    },
+    "C_SCALAR_CONSTANT": {
+      "statement": "The realized recursion, Hilbert convexity, Lipschitz bound, and uniform displacement imply the displayed positive boundary constant.",
+      "status": "open",
+      "depends_on": [
+        "C_RECURSIVE_REALIZATION",
+        "C_CORRELATION_VARIANCE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/FiniteCorrelationBoundary.lean",
+        "research/boundary_audit/upstream/OAI/GroupTheory/Thompson/BoundaryAlgebra.lean",
+        "research/boundary_audit/Main.lean"
+      ]
+    },
+    "C_UPSTREAM_REPLAY": {
+      "statement": "The transitive concrete upstream finite-boundary implementation and a faithful wrapper compile without holes under Lean 4.31.0, rather than relying on upstream Lean 4.34.1 or a comparator placeholder.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/boundary_audit/replay_upstream.py",
+        "research/boundary_audit/upstream/.replay/last_run.json",
+        "research/boundary_audit/compiler_command.json"
+      ]
+    }
+  }
+}

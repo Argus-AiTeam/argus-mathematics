@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C318ACTALG-f9223a838012",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/318/first-pass/coheight-two-unit/action/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/318/first-pass/coheight-two-unit/action/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15628,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/318/first-pass/coheight-two-unit/action/Main.lean",
+    "source_sha256": "99174ed49c7268da060f608c483bff5d9ad1e68557268b59e26c6912daaa2b4d",
+    "statement_fidelity": "families/318/first-pass/coheight-two-unit/action/statement_fidelity.md",
+    "statement_fidelity_sha256": "cf2141ceba96c2665ef961382ec1845e995ee4b2f3f1d9dccd70b3b45efce35d",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/coheight-two-unit/action/Main.lean",
+    "text": "import Mathlib\n\nnamespace SpecifiedAction\n\nsection SplitInflation\n\nvariable {R A B C D E : Type*} [CommRing R]\n  [AddCommGroup A] [Module R A] [AddCommGroup B] [Module R B]\n  [AddCommGroup C] [Module R C] [AddCommGroup D] [Module R D]\n  [AddCommGroup E] [Module R E]\n\ntheorem split_surjective_right_inverse\n    (inf : A →ₗ[R] B) (res : B →ₗ[R] A)\n    (left : ∀ a, res (inf a) = a) (onto : Function.Surjective inf) :\n    ∀ b, inf (res b) = b := by\n  intro b\n  obtain ⟨a, rfl⟩ := onto b\n  rw [left]\n\ntheorem split_inflation_pullback\n    (inf : A →ₗ[R] B) (res : B →ₗ[R] A)\n    (left : ∀ a, res (inf a) = a) (onto : Function.Surjective inf)\n    (pullB : B →ₗ[R] C) (pullA : A →ₗ[R] C)\n    (compatible : ∀ a, pullB (inf a) = pullA a) (b : B) :\n    pullB b = pullA (res b) := by\n  calc\n    pullB b = pullB (inf (res b)) :=\n      congrArg pullB (split_surjective_right_inverse inf res left onto b).symm\n    _ = pullA (res b) := compatible _\n\ntheorem specified_pullback_transport\n    (fromP : D →ₗ[R] E) (fromJ : C →ₗ[R] E)\n    (pull : E →ₗ[R] B) (block : C →ₗ[R] A) (q : A →ₗ[R] B)\n    (factor : ∀ c, pull (fromJ c) = q (block c))\n    (cP : D) (cJ : C) (same : fromP cP = fromJ cJ) :\n    pull (fromP cP) = q (block cJ) := by\n  rw [same, factor]\n\nend SplitInflation\n\nsection PrimaryFactors\n\nvariable {R M : Type*} [CommRing R] [AddCommGroup M] [Module R M]\n\ntheorem bezout_projector (u v a b : R)\n    (bezout : u * a + v * b = 1) (annihilation : a * b = 0) :\n    (v * b) ^ 2 = v * b := by\n  linear_combination (v * b) * bezout - (u * v) * annihilation\n\ntheorem projector_annihilated (v a b : R)\n    (annihilation : a * b = 0) : a * (v * b) = 0 := by\n  calc\n    a * (v * b) = v * (a * b) := by ring\n    _ = 0 := by rw [annihilation, mul_zero]\n\ntheorem projector_on_a_primary (u v a b : R)\n    (bezout : u * a + v * b = 1) (m : M) (ha : a • m = 0) :\n    (v * b) • m = m := by\n  have h := congrArg (fun r : R => r • m) bezout\n  simpa only [add_smul, mul_smul, ha, smul_zero, zero_add, one_smul] using h\n\ntheorem projector_on_other_primary (v b : R)\n    (m : M) (hb : b • m = 0) : (v * b) • m = 0 := by\n  rw [mul_smul, hb, smul_zero]\n\ntheorem projector_idempotent (u v a b : R)\n    (bezout : u * a + v * b = 1) (annihilation : a * b = 0) (m : M) :\n    (v * b) • ((v * b) • m) = (v * b) • m := by\n  have h := congrArg (fun r : R => r • m)\n    (bezout_projector u v a b bezout annihilation)\n  simpa only [pow_two, mul_smul] using h\n\nend PrimaryFactors\n\ndef weightTwoParameter (x z : ℤ) : ℚ :=\n  (x : ℚ) - ((z : ℚ) - (x : ℚ) / 25) / (1 - 1 / 25)\n\ntheorem weight_two_parameter (x z : ℤ) :\n    weightTwoParameter x z = (25 / 24 : ℚ) * ((x : ℚ) - (z : ℚ)) := by\n  unfold weightTwoParameter\n  ring\n\ntheorem parameter_change_lift (x z b : ℤ) :\n    weightTwoParameter (x - b) (z - b) = weightTwoParameter x z := by\n  simp only [weight_two_parameter, Int.cast_sub]\n  ring\n\ntheorem parameter_image (q : ℚ) :\n    (∃ x z : ℤ, weightTwoParameter x z = q) ↔\n      ∃ n : ℤ, q = (25 / 24 : ℚ) * (n : ℚ) := by\n  constructor\n  · rintro ⟨x, z, h⟩\n    refine ⟨x - z, ?_⟩\n    rw [← h, weight_two_parameter, Int.cast_sub]\n  · rintro ⟨n, h⟩\n    refine ⟨n, 0, ?_⟩\n    rw [weight_two_parameter]\n    simpa using h.symm\n\ntheorem primitive_parameter :\n    weightTwoParameter 1 0 = (25 / 24 : ℚ) := by\n  norm_num [weight_two_parameter]\n\ntheorem filtered_extension_nonsplit :\n    ¬ ∃ b : ZMod 5, 1 - b = 0 ∧ -b = 0 := by\n  rintro ⟨b, h1, h0⟩\n  have hz : b = 0 := neg_eq_zero.mp h0\n  have h : (1 : ZMod 5) = 0 := by simpa [hz] using h1\n  exact (by decide : (1 : ZMod 5) ≠ 0) h\n\ntheorem rank_two_constants :\n    (24 : ZMod 5) ≠ 0 ∧\n    ((2 : ZMod 5) + 4 * 2 ^ 2 + 4 * 2 ^ 3 + 2 ^ 4) = 1 ∧\n    ((1 : ZMod 5) - 2) ≠ 0 ∧\n    ((2 : ZMod 5) * 3 = 1) ∧ ((2 : ZMod 5) ^ 2 * 4 = 1) := by\n  decide\n\nend SpecifiedAction\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/coheight-two-unit/action/statement_fidelity.md",
+    "text": "# C318ACTALG: split transport and normalization algebra\n\n`action/Main.lean`, namespace `SpecifiedAction`, formalizes algebraic\ncores of `specified-action.md`, not its geometric or regulator theorems.\n\n`split_surjective_right_inverse` quantifies over modules over an arbitrary\ncommutative ring, an inflation linear map `inf`, and its specified left\ninverse `res`. Surjectivity of `inf` is a hypothesis; the theorem proves\nthat the same `res` is its right inverse. `split_inflation_pullback`\ndeduces the actual pullback factorization for any two specified compatible\nlinear maps. In the application, inflation equivalence is proved by the\ncontinuous rational-additive-group calculation, not by Lean.\n\n`specified_pullback_transport` retains two named classes and the equality\nof their specified structural images. It propagates that equality through\na given pullback/block diagram. The common modification torsor, equality\nof its two structural images, and block factorization are mathematical\ninputs to this application, not formal constructions of this source.\n\n`bezout_projector` quantifies over every commutative ring. Given\n`u*a+v*b=1` and `a*b=0`, it proves that `v*b` is idempotent.\nThe three module theorems identify its action on the summands killed by\n`a` or `b` and its idempotence. `a` and `b` may be powers of primary\npolynomials, so no semisimplicity is hypothesized. In the application the\nring is the quotient of F5[T] by an annihilating product; existence of\nthe Bezout coefficients for the coprime factors is a separate elementary\npolynomial fact. No infinite eigenspace/limit exchange is encoded.\n\n`weightTwoParameter` is exactly the rational expression\n`x - (z-x/25)/(1-1/25)`, for integer x,z.\n`weight_two_parameter` proves that it is `(25/24)*(x-z)`.\n`parameter_change_lift` proves invariance under simultaneous subtraction\nof an arbitrary integer b. `parameter_image` characterizes the entire\nimage of that integer lattice, and `primitive_parameter` computes its\ndisplayed generator.\n\n`filtered_extension_nonsplit` proves that, over ZMod 5, no common change\nof lift can make both coordinates x=1 and z=0 split. Its interpretation\nas a Galois nonsplitting uses Fontaine--Laffaille exact realization,\nfinite full faithfulness, and the standard period lattice, all explicitly\nimported in the prose proof. The source does not encode Q5, a p-adic\nperiod ring, a filtered Frobenius category, or Galois cohomology.\n\n`rank_two_constants` checks the unit denominator 24, the actual value\nP2(2)=1, its nonzero denominator 1-2, and the two specified arithmetic\nweights in ZMod 5. It is not a proof of a dilogarithm identity or a\nlocal K-theory comparison.\n\nNo theorem here computes ordinary Morava-stabilizer cohomology,\nidentifies a geometric torsor, or constructs xi_i. The full specified\ncup-map conclusion applies the imported source theorems, this algebra,\nthe new prose argument, and the previously certified ordinary comparison\nand actual-unit criterion. Independent mathematical and fidelity review\nremain distinct from compiler acceptance.\n"
+  },
+  "subject": {
+    "content_hash": "ef7b9ce2688bde5903047532cbea94fb9c977c92a2c7c83f9926cf10d53ed97f",
+    "kind": "claim",
+    "subject_id": "C318ACTALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

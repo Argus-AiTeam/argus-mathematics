@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-DB_FINITE_CORE_REPLAY-595265683ec8",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-latest/argus_skill/tools/lean_axiom_audit.lean",
+      "families/078/argus-review/draft_reviews/finite-core/replay/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/078/argus-review/draft_reviews/finite-core/replay/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15189,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/078/argus-review/draft_reviews/finite-core/replay/Main.lean",
+    "source_sha256": "b1f3528bd130d4aa6d707a73e1d8a1c62bc9696c1645754a5484fe6a637714b0",
+    "statement_fidelity": "families/078/argus-review/draft_reviews/finite-core/replay/statement_fidelity.md",
+    "statement_fidelity_sha256": "e38799d7e98f47e951b21b674b877f3404ce03e6ed6b3887f5213cc0ae59b85f",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/draft_reviews/finite-core/replay/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace DirectionalBootstrap\n\ndef blockMass {A B : Type*} (p : A → B → ℝ)\n    (I : Finset A) (J : Finset B) : ℝ :=\n  ∑ a ∈ I, ∑ b ∈ J, p a b\n\ntheorem two_sided_core\n    {A B : Type*} [Fintype A] [Fintype B]\n    [DecidableEq A] [DecidableEq B]\n    (p : A → B → ℝ) (mu : A → ℝ) (nu : B → ℝ)\n    (hp : ∀ a b, 0 ≤ p a b)\n    (hmu : ∀ a, 0 ≤ mu a) (hnu : ∀ b, 0 ≤ nu b)\n    (hmu_sum : ∑ a, mu a = 1) (hnu_sum : ∑ b, nu b = 1)\n    (delta : ℝ) (hdelta : 0 ≤ delta) :\n    ∃ I : Finset A, ∃ J : Finset B,\n      0 ≤ blockMass p I J ∧\n      blockMass p Finset.univ Finset.univ - 2 * delta ≤ blockMass p I J ∧\n      (∀ a ∈ I, delta * mu a ≤ ∑ b ∈ J, p a b) ∧\n      (∀ b ∈ J, delta * nu b ≤ ∑ a ∈ I, p a b) := by\n  classical\n  let potential : Finset A × Finset B → ℝ := fun ij =>\n    blockMass p ij.1 ij.2 -\n      delta * (∑ a ∈ ij.1, mu a) - delta * (∑ b ∈ ij.2, nu b)\n  obtain ⟨ij, _, hmax⟩ :=\n    Finset.exists_max_image\n      (Finset.univ : Finset (Finset A × Finset B)) potential\n      (by exact ⟨(∅, ∅), Finset.mem_univ _⟩)\n  rcases ij with ⟨I, J⟩\n  refine ⟨I, J, ?_, ?_, ?_, ?_⟩\n  · exact Finset.sum_nonneg fun a _ =>\n      Finset.sum_nonneg fun b _ => hp a b\n  · have hfull := hmax (Finset.univ, Finset.univ) (Finset.mem_univ _)\n    dsimp [potential] at hfull\n    rw [hmu_sum, hnu_sum] at hfull\n    have hleft : 0 ≤ delta * (∑ a ∈ I, mu a) :=\n      mul_nonneg hdelta (Finset.sum_nonneg fun a _ => hmu a)\n    have hright : 0 ≤ delta * (∑ b ∈ J, nu b) :=\n      mul_nonneg hdelta (Finset.sum_nonneg fun b _ => hnu b)\n    linarith\n  · intro a ha\n    have hcompare := hmax (I.erase a, J) (Finset.mem_univ _)\n    dsimp [potential] at hcompare\n    have hmass :\n        blockMass p (I.erase a) J =\n          blockMass p I J - (∑ b ∈ J, p a b) := by\n      have h := Finset.sum_erase_add I (fun x => ∑ b ∈ J, p x b) ha\n      dsimp [blockMass]\n      linarith only [h]\n    have hweight :\n        (∑ x ∈ I.erase a, mu x) = (∑ x ∈ I, mu x) - mu a := by\n      have h := Finset.sum_erase_add I mu ha\n      linarith only [h]\n    rw [hmass, hweight] at hcompare\n    nlinarith only [hcompare]\n  · intro b hb\n    have hcompare := hmax (I, J.erase b) (Finset.mem_univ _)\n    dsimp [potential] at hcompare\n    have hsplit :\n        blockMass p I (J.erase b) + (∑ a ∈ I, p a b) =\n          blockMass p I J := by\n      dsimp [blockMass]\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro a _\n      exact Finset.sum_erase_add J (p a) hb\n    have hmass :\n        blockMass p I (J.erase b) =\n          blockMass p I J - (∑ a ∈ I, p a b) := by\n      linarith only [hsplit]\n    have hweight :\n        (∑ y ∈ J.erase b, nu y) = (∑ y ∈ J, nu y) - nu b := by\n      have h := Finset.sum_erase_add J nu hb\n      linarith only [h]\n    rw [hmass, hweight] at hcompare\n    nlinarith only [hcompare]\n\ntheorem reciprocal_retained_cap\n    {A B : Type*} [Fintype B]\n    (g : A → B → ℝ) (mu : A → ℝ) (I : Finset A)\n    (cap r v : ℝ)\n    (hparent : 0 < ∑ a ∈ I, mu a) (hr : 0 < r) (hv : 0 < v)\n    (hrows : ∀ a ∈ I, (∑ b, g a b) ≤ cap * mu a) :\n    blockMass g I Finset.univ / ((∑ a ∈ I, mu a) * r * v) ≤\n      cap / (r * v) := by\n  have hsum : blockMass g I Finset.univ ≤ cap * (∑ a ∈ I, mu a) := by\n    calc\n      blockMass g I Finset.univ ≤ ∑ a ∈ I, cap * mu a :=\n        Finset.sum_le_sum fun a ha => hrows a ha\n      _ = cap * (∑ a ∈ I, mu a) := (Finset.mul_sum I mu cap).symm\n  apply (div_le_div_iff₀ (mul_pos (mul_pos hparent hr) hv) (mul_pos hr hv)).2\n  calc\n    blockMass g I Finset.univ * (r * v) ≤\n        (cap * (∑ a ∈ I, mu a)) * (r * v) :=\n      mul_le_mul_of_nonneg_right hsum (le_of_lt (mul_pos hr hv))\n    _ = cap * ((∑ a ∈ I, mu a) * r * v) := by ring\n\ntheorem fiber_cap_from_core\n    (eventMass rowMass referenceMass cap delta : ℝ)\n    (hrow : 0 < rowMass) (hdelta : 0 < delta) (hcap : 0 ≤ cap)\n    (hfloor : delta * referenceMass ≤ rowMass)\n    (hevent : eventMass ≤ cap * referenceMass) :\n    eventMass / rowMass ≤ cap / delta := by\n  apply (div_le_div_iff₀ hrow hdelta).2\n  calc\n    eventMass * delta ≤ (cap * referenceMass) * delta :=\n      mul_le_mul_of_nonneg_right hevent (le_of_lt hdelta)\n    _ = cap * (delta * referenceMass) := by ring\n    _ ≤ cap * rowMass := mul_le_mul_of_nonneg_left hfloor hcap\n\ntheorem mesh_exponent_loss\n    (s a eLeft eRight eChild mesh : ℝ)\n    (hs : 0 ≤ s) (hsone : s ≤ 1)\n    (hleft : eLeft ≤ mesh) (hright : eRight ≤ mesh)\n    (hchild : eChild ≤ mesh) :\n    s * a - 4 * mesh ≤\n      s * (a + eLeft - eChild) - 2 * (eLeft + eRight) := by\n  have h1 := mul_nonneg (by linarith : 0 ≤ 2 - s) (sub_nonneg.mpr hleft)\n  have h2 := mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) (sub_nonneg.mpr hright)\n  have h3 := mul_nonneg hs (sub_nonneg.mpr hchild)\n  nlinarith only [h1, h2, h3]\n\nend DirectionalBootstrap\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/draft_reviews/finite-core/replay/statement_fidelity.md",
+    "text": "# Statement fidelity: DB_FINITE_CORE\n\nThe source is `research/directional_bootstrap/Main.lean`, namespace\n`DirectionalBootstrap`. It formalizes the finite normalization and\nsimultaneous trimming core, not the planar projection theorem or an\nanalytic limit.\n\n## Objects and quantifiers\n\n`blockMass p I J` is the sum of a real matrix over two finite index sets.\n`two_sided_core` quantifies over arbitrary finite row and column types,\nan entrywise nonnegative real matrix `p`, two nonnegative reference\nweight vectors `mu,nu` each summing to one, and any real `delta >= 0`.\nThe matrix need not itself have mass one and need not be a product.\nIt proves existence of one pair of row/column subsets `I,J` for which:\n\n- the retained matrix mass is nonnegative;\n- it is at least the original total mass minus `2*delta`;\n- every surviving row has raw mass at least `delta*mu a`;\n- every surviving column has raw mass at least `delta*nu b`.\n\nThe same subsets work for all events tested afterwards. If the original\nmass is `m>0`, taking `delta=m/4` guarantees mass at least `m/2`.\nEmpty subsets are allowed when the lower mass bound is nonpositive.\nNonempty probability index types follow automatically from the\nnormalization hypotheses, not from an unstated instance.\n\n`reciprocal_retained_cap` quantifies over an arbitrary row type, a finite\ncolumn type, a finite set `I` of rows, a real matrix `g`, real reference\nweights `mu`, a real cap, and strictly positive `r,v`. Its hypotheses are\na strictly positive parent weight and the per-row sum inequality\n`sum_b g(a,b) <= cap*mu(a)`. Its conclusion divides the sum over that\nparent by `parentWeight*r*v` and bounds it by `cap/(r*v)`. No inverse\nparent weight remains. The theorem does not impose probability\nnormalization on `g`: in the application it is the raw nonnegative\nmatrix of incidences satisfying the common event, separation, and one\ntarget direction interval. The geometrical implication giving its\nrow inequality must be proved separately.\n\n`fiber_cap_from_core` quantifies over five real scalars: an event mass,\nthe positive surviving row mass, a reference mass, a nonnegative cap,\nand a strictly positive threshold. A lower row floor and an upper\nevent cap imply the normalized conditional cap `cap/delta`.\nThe normalization by the total mass of the core cancels, so the lemma\nalso applies to its columns. Applying it to every tested bin supplies\nsimultaneous two-pin caps on the one core produced above.\n\n`mesh_exponent_loss` states the exact real inequality\n\n`s*a - 4*mesh <= s*(a+eLeft-eChild)-2*(eLeft+eRight)`,\n\nfor `0<=s<=1` and each error at most `mesh`. This includes the physical\ncase of nonnegative depth errors, but does not require their\nnonnegativity. The parameters encode\n`j_-=j-eLeft`, `j_+=j+eRight`, `b_-=j+a-eChild`.\nThe logarithmic losses from prefix mass estimates are additional\nterms, not silently included in this algebraic inequality.\n\n## Relation to the manuscript\n\nThe reciprocal cap is the normalization step in\n`07-rate-transfer.tex:951-967`; `r` is the original common-event\nretention on an `A_j` parent and `v` is its subsequent separation\nretention. The core theorem justifies, independently of any product\nassumption, a common uniform trim under both pins. It also provides the\ndegree floors used in the actual-marginal product replacement.\nThe mesh inequality applies to lines 1007-1021 using their unchanged\nglobal tree atoms.\n\nNo declaration asserts Ren--Wang, Taylor approximation, the no-strip\ncondition, entropy-profile extraction, differentiability, integration,\nor the Bochner--Riesz theorem. These remain analytical proof obligations\nin `report.md`. The formal claim is only `DB_FINITE_CORE`; compilation\ncannot certify `DB_MAIN` or `DB_APPLICATION`.\n"
+  },
+  "subject": {
+    "content_hash": "f64213c308ce7cb436a082073973bf4e2ff8eba34afa23207f5207006ddbff84",
+    "kind": "claim",
+    "subject_id": "DB_FINITE_CORE_REPLAY"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

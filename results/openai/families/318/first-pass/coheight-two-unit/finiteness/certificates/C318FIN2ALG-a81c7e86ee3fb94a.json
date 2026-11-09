@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C318FIN2ALG-6e86bcf651bb",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/318/first-pass/coheight-two-unit/finiteness/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/318/first-pass/coheight-two-unit/finiteness/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15675,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/318/first-pass/coheight-two-unit/finiteness/Main.lean",
+    "source_sha256": "059f54b5be471a14b31a935a6746d7f88d17160271d7da5408781d2120b737f2",
+    "statement_fidelity": "families/318/first-pass/coheight-two-unit/finiteness/statement_fidelity.md",
+    "statement_fidelity_sha256": "e13182c01b5c9883ce5895ef196ff3a8649b261ea242d193595122bd976b11db",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/318/first-pass/coheight-two-unit/finiteness/Main.lean:20:2: warning: try 'simp' instead of 'simpa'\n\nNote: This linter can be disabled with `set_option linter.unnecessarySimpa false`\nfamilies/318/first-pass/coheight-two-unit/finiteness/Main.lean:12:0: warning: automatically included section variable(s) unused in theorem `OrdinaryFiniteness.power_eq_of_equal_image`:\n  [CharP S 5]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [CharP S 5] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/318/first-pass/coheight-two-unit/finiteness/Main.lean:25:22: warning: Variable name `root_spec` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/coheight-two-unit/finiteness/Main.lean",
+    "text": "import Mathlib\n\nnamespace OrdinaryFiniteness\n\nlocal instance : Fact (Nat.Prime 5) := ⟨by decide⟩\n\nsection NilpotentSection\n\nvariable {E S : Type*} [CommRing E] [CommRing S]\n  [CharP E 5] [CharP S 5]\n\ntheorem power_eq_of_equal_image\n    (π : E →+* S) (r : ℕ)\n    (nilpotent : ∀ z, π z = 0 → z ^ (5 ^ r) = 0)\n    {a b : E} (h : π a = π b) :\n    a ^ (5 ^ r) = b ^ (5 ^ r) := by\n  apply sub_eq_zero.mp\n  rw [← sub_pow_char_pow]\n  apply nilpotent\n  simpa only [map_sub, h, sub_self]\n\nnoncomputable def liftedSection\n    (π : E →+* S) (r : ℕ)\n    (nilpotent : ∀ z, π z = 0 → z ^ (5 ^ r) = 0)\n    (root : S →+* S) (root_spec : ∀ z, (root z) ^ (5 ^ r) = z)\n    (lift : S → E) (lift_spec : ∀ z, π (lift z) = z) : S →+* E where\n  toFun z := lift (root z) ^ (5 ^ r)\n  map_one' := by\n    change lift (root 1) ^ (5 ^ r) = 1\n    calc\n      _ = (1 : E) ^ (5 ^ r) := power_eq_of_equal_image π r nilpotent (by\n        rw [lift_spec, map_one, map_one])\n      _ = 1 := one_pow _\n  map_mul' a b := by\n    change lift (root (a * b)) ^ (5 ^ r) =\n      lift (root a) ^ (5 ^ r) * lift (root b) ^ (5 ^ r)\n    calc\n      _ = (lift (root a) * lift (root b)) ^ (5 ^ r) :=\n        power_eq_of_equal_image π r nilpotent (by\n          rw [map_mul, lift_spec, map_mul, lift_spec, lift_spec])\n      _ = _ := mul_pow _ _ _\n  map_zero' := by\n    change lift (root 0) ^ (5 ^ r) = 0\n    calc\n      _ = (0 : E) ^ (5 ^ r) := power_eq_of_equal_image π r nilpotent (by\n        rw [lift_spec, map_zero, map_zero])\n      _ = 0 := zero_pow (pow_pos (by decide : 0 < (5 : ℕ)) r).ne'\n  map_add' a b := by\n    change lift (root (a + b)) ^ (5 ^ r) =\n      lift (root a) ^ (5 ^ r) + lift (root b) ^ (5 ^ r)\n    calc\n      _ = (lift (root a) + lift (root b)) ^ (5 ^ r) :=\n        power_eq_of_equal_image π r nilpotent (by\n          rw [map_add, lift_spec, map_add, lift_spec, lift_spec])\n      _ = _ := add_pow_char_pow _ _ 5 r\n\ntheorem liftedSection_splits\n    (π : E →+* S) (r : ℕ)\n    (nilpotent : ∀ z, π z = 0 → z ^ (5 ^ r) = 0)\n    (root : S →+* S) (root_spec : ∀ z, (root z) ^ (5 ^ r) = z)\n    (lift : S → E) (lift_spec : ∀ z, π (lift z) = z) (z : S) :\n    π (liftedSection π r nilpotent root root_spec lift lift_spec z) = z := by\n  change π (lift (root z) ^ (5 ^ r)) = z\n  rw [map_pow, lift_spec, root_spec]\n\ntheorem section_unique\n    (π : E →+* S) (r : ℕ)\n    (nilpotent : ∀ z, π z = 0 → z ^ (5 ^ r) = 0)\n    (root : S →+* S) (root_spec : ∀ z, (root z) ^ (5 ^ r) = z)\n    (σ τ : S →+* E)\n    (hσ : ∀ z, π (σ z) = z) (hτ : ∀ z, π (τ z) = z) :\n    σ = τ := by\n  ext z\n  calc\n    σ z = σ ((root z) ^ (5 ^ r)) := by rw [root_spec]\n    _ = σ (root z) ^ (5 ^ r) := map_pow σ _ _\n    _ = τ (root z) ^ (5 ^ r) :=\n      power_eq_of_equal_image π r nilpotent (by rw [hσ, hτ])\n    _ = τ ((root z) ^ (5 ^ r)) := (map_pow τ _ _).symm\n    _ = τ z := by rw [root_spec]\n\ntheorem exists_unique_section\n    (π : E →+* S) (r : ℕ)\n    (nilpotent : ∀ z, π z = 0 → z ^ (5 ^ r) = 0)\n    (root : S →+* S) (root_spec : ∀ z, (root z) ^ (5 ^ r) = z)\n    (surjective : Function.Surjective π) :\n    ∃! σ : S →+* E, ∀ z, π (σ z) = z := by\n  classical\n  let lift : S → E := fun z => Classical.choose (surjective z)\n  have hlift : ∀ z, π (lift z) = z :=\n    fun z => Classical.choose_spec (surjective z)\n  refine ⟨liftedSection π r nilpotent root root_spec lift hlift,\n    liftedSection_splits π r nilpotent root root_spec lift hlift, ?_⟩\n  intro τ hτ\n  exact section_unique π r nilpotent root root_spec τ _ hτ\n    (liftedSection_splits π r nilpotent root root_spec lift hlift)\n\nend NilpotentSection\n\nsection OneVariable\n\nvariable {R : Type*} [CommSemiring R]\n\ntheorem koszul_comparison (x : R) {s q : ℕ} (h : s ≤ q) :\n    x ^ s * x ^ (q - s) = x ^ q := by\n  rw [← pow_add, Nat.add_sub_of_le h]\n\ntheorem koszul_top_is_identity (x : R) {s q : ℕ} (h : s ≤ q) (v : R) :\n    x ^ s * (x ^ (q - s) * v) = x ^ q * v := by\n  rw [← mul_assoc, koszul_comparison x h]\n\ntheorem top_augmentation_unit {A : Type*} [CommSemiring A]\n    (ε : R →+* A) : ε (1 : R) = 1 := map_one ε\n\ntheorem wrong_top_augmentation_zero {A : Type*} [CommSemiring A]\n    (ε : R →+* A) (x : R) (hx : ε x = 0) : ε (x * 1) = 0 := by\n  simp [hx]\n\ntheorem root_corestriction_on_trivial_row\n    {A : Type*} [CommSemiring A] (ε : R →+* A)\n    (x : R) (hx : ε x = 0) {s q : ℕ} (h : s < q) :\n    ε (x ^ (q - s)) = 0 ∧ ε (1 : R) = 1 := by\n  constructor\n  · rw [map_pow, hx, zero_pow (Nat.sub_pos_of_lt h).ne']\n  · exact map_one ε\n\nend OneVariable\n\nend OrdinaryFiniteness\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/coheight-two-unit/finiteness/statement_fidelity.md",
+    "text": "# Statement fidelity: nilpotent sections and the height-two Koszul map\n\nThe new source is `finiteness/Main.lean`, namespace `OrdinaryFiniteness`.\nIt does not replace or recompile either previously reviewed formal source.\n\n`power_eq_of_equal_image` concerns arbitrary commutative characteristic-five\nrings E,S and a ring homomorphism pi:E->S. It assumes one common exponent\n5^r kills every element of ker(pi). Equal residue classes then have equal\n5^r-th powers. No finite-dimensionality or flatness is assumed.\n\n`liftedSection` constructs the manuscript's actual formula\nsigma(z)=lift(root(z))^(5^r), given any set-theoretic lift and a ring\nhomomorphism root:S->S whose 5^r-th power is the identity on elements.\nThe root hypothesis is the inverse Frobenius supplied by perfectness;\nit is not a freely chosen replacement geometric action.\nThe declaration proves all ring-homomorphism laws.\n`liftedSection_splits` proves pi sigma=id.\n`section_unique` proves equality of any two ring sections with these\nhypotheses. `exists_unique_section` replaces the chosen lifts by\nsurjectivity of pi and proves existence and uniqueness.\n\nThus the canonical perfect-fiber section, its independence of lifts\nand of a sufficiently large exponent, and its functorial uniqueness\nhave a universal algebraic proof. In the application the kernel is\nv E_N with v^N=0, and a power 5^r>=N supplies the uniform nilpotence\nhypothesis. Perfectness of the special fiber supplies root. An\nexponent fixing the finite ground field makes the section k-linear.\nThose identifications and the last k-linearity consequence are prose\narguments in `../finiteness.md`, not extra formal declarations.\n\n`koszul_comparison` and `koszul_top_is_identity` prove the one-variable\nresolution square with multipliers D^(q-s) in degree zero and 1 in\ndegree one, for every s<=q, in any commutative semiring.\n`top_augmentation_unit` and `wrong_top_augmentation_zero` distinguish\nits actual degree-one coefficient from the incorrect extra-D map.\n`root_corestriction_on_trivial_row` proves that after augmentation,\nan actual upward root comparison with s<q is zero in degree zero\nand identity in degree one.\n\nThese are identities for the actual Koszul comparison. Lean does not\nconstruct a Yoneda or derived category, and therefore does not itself\nidentify these identities with continuous translation Ext.\nThe finite free resolution and that identification are proved in prose.\n\nIn particular this source does not prove flatness of E_N over R_N,\nthe tensor-product Artin splitting, finiteness of ordinary coefficient\ncohomology, geometric support comparison, group duality, the Honda\ntame-character calculation, or the specified xi_i transport.\nClaim C318FIN2ALG is only the universal algebra described above.\n"
+  },
+  "subject": {
+    "content_hash": "011f3c224a2c16ae07b59164354aa17699dc09e1ed19a4758cf222dc91b43369",
+    "kind": "claim",
+    "subject_id": "C318FIN2ALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

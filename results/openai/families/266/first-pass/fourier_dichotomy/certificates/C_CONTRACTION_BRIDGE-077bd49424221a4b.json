@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CONTRACTION_BRIDGE-790b605c4cbe",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/266/first-pass/fourier_dichotomy/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/266/first-pass/fourier_dichotomy/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14588,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/266/first-pass/fourier_dichotomy/Main.lean",
+    "source_sha256": "66cf1535590c8854030d03e47bf1749b72ee5d81f563ae327fbf283b3781fe35",
+    "statement_fidelity": "families/266/first-pass/fourier_dichotomy/statement_fidelity.md",
+    "statement_fidelity_sha256": "4058f28230ee562c016b1d2059e5f83bd67e5f6c24b4801a6d8956e581f74f6f",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/fourier_dichotomy/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace FourierDichotomy\n\nnoncomputable def unusedAverage (used : Finset (Fin 6)) (f : Fin 6 → ℂ) : ℂ :=\n  (∑ t ∈ usedᶜ, f t) / ((6 - used.card : ℕ) : ℂ)\n\ntheorem occupied_unused_split\n    (used : Finset (Fin 6)) (f : Fin 6 → ℂ) (M : ℂ)\n    (orthogonal : ∑ t, f t = 0) :\n    (∑ t ∈ usedᶜ, M * f t) = -(∑ t ∈ used, M * f t) := by\n  have htotal :\n      (∑ t ∈ used, M * f t) + (∑ t ∈ usedᶜ, M * f t) = 0 := by\n    rw [Finset.sum_add_sum_compl, ← Finset.mul_sum, orthogonal, mul_zero]\n  linear_combination htotal\n\ntheorem normalized_order_one_contraction\n    (used : Finset (Fin 6)) (f : Fin 6 → ℂ) (M : ℂ)\n    (orthogonal : ∑ t, f t = 0) (has_unused : used.card < 6) :\n    ((6 - used.card : ℕ) : ℂ) *\n        unusedAverage used (fun t => M * f t) =\n      -(∑ t ∈ used, M * f t) := by\n  have hnat : 6 - used.card ≠ 0 := Nat.sub_ne_zero_of_lt has_unused\n  have hcomplex : ((6 - used.card : ℕ) : ℂ) ≠ 0 := by\n    exact_mod_cast hnat\n  unfold unusedAverage\n  calc\n    ((6 - used.card : ℕ) : ℂ) *\n        ((∑ t ∈ usedᶜ, M * f t) / ((6 - used.card : ℕ) : ℂ)) =\n        ∑ t ∈ usedᶜ, M * f t := by field_simp [hcomplex]\n    _ = -(∑ t ∈ used, M * f t) :=\n      occupied_unused_split used f M orthogonal\n\ntheorem normalized_real_contraction\n    (used : Finset (Fin 6)) (f : Fin 6 → ℂ) (M : ℂ)\n    (orthogonal : ∑ t, f t = 0) (has_unused : used.card < 6) :\n    ((6 - used.card : ℕ) : ℝ) *\n        (unusedAverage used (fun t => M * f t)).re =\n      -(∑ t ∈ used, (M * f t).re) := by\n  have h := congrArg Complex.re\n    (normalized_order_one_contraction used f M orthogonal has_unused)\n  simpa using h\n\ntheorem seven_row_boundary\n    (f : Fin 6 → ℂ) (M : ℂ) (orthogonal : ∑ t, f t = 0) :\n    (∑ t ∈ (Finset.univ : Finset (Fin 6)), M * f t) = 0 := by\n  rw [← Finset.mul_sum, orthogonal, mul_zero]\n\ntheorem nonnegative_sums_vanish\n    {ι : Type*} [Fintype ι] (u v : ι → ℝ)\n    (hu : ∀ i, 0 ≤ u i) (hv : ∀ i, 0 ≤ v i)\n    (identity : 3 * (∑ i, u i) + (∑ i, v i) = 0) :\n    (∀ i, u i = 0) ∧ (∀ i, v i = 0) := by\n  have hsu : 0 ≤ ∑ i, u i := Finset.sum_nonneg (fun i _ => hu i)\n  have hsv : 0 ≤ ∑ i, v i := Finset.sum_nonneg (fun i _ => hv i)\n  have hzu : (∑ i, u i) = 0 := by linarith\n  have hzv : (∑ i, v i) = 0 := by linarith\n  constructor\n  · intro i\n    have hle : u i ≤ ∑ j, u j :=\n      Finset.single_le_sum (fun j _ => hu j) (Finset.mem_univ i)\n    exact le_antisymm (by simpa [hzu] using hle) (hu i)\n  · intro i\n    have hle : v i ≤ ∑ j, v j :=\n      Finset.single_le_sum (fun j _ => hv j) (Finset.mem_univ i)\n    exact le_antisymm (by simpa [hzv] using hle) (hv i)\n\ntheorem pointwise_products_from_certificate\n    {ι : Type*} [Fintype ι] (L A B : ι → ℂ)\n    (identity :\n      3 * (∑ i, Complex.normSq (L i)) +\n          (∑ i, Complex.normSq (A i * B i)) = 0) :\n    ∀ i, L i = 0 ∧ (A i = 0 ∨ B i = 0) := by\n  have vanished := nonnegative_sums_vanish\n    (fun i => Complex.normSq (L i))\n    (fun i => Complex.normSq (A i * B i))\n    (fun i => Complex.normSq_nonneg (L i))\n    (fun i => Complex.normSq_nonneg (A i * B i))\n    identity\n  intro i\n  constructor\n  · exact Complex.normSq_eq_zero.mp (vanished.1 i)\n  · exact mul_eq_zero.mp (Complex.normSq_eq_zero.mp (vanished.2 i))\n\nend FourierDichotomy\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/fourier_dichotomy/statement_fidelity.md",
+    "text": "# Formal statement fidelity\n\nThis file describes `Main.lean`, namespace `FourierDichotomy`, for claim\n`C_CONTRACTION_BRIDGE`. It does not assert a Lean formalization of the entire\nHadamard dichotomy or of the rational identity certificate.\n\n`occupied_unused_split` quantifies over every subset `used` of the six labels,\nevery complex function `f` on these labels, and every complex multiplier `M`.\nIts hypothesis is the complex orthogonality identity `sum f = 0`. Its conclusion\nis that the unused-label sum of `M*f` is the negative of its occupied-label sum.\nThere is no probability assumption in this finite-sum theorem.\n\n`unusedAverage` divides the unused-label sum by the natural-number count\n`6 - used.card`. `normalized_order_one_contraction` requires `used.card < 6`,\nso this denominator is nonzero, and proves the corresponding normalized\ncontraction with coefficient `6 - used.card`. `normalized_real_contraction`\nproves its real-part version with the same coefficient.\n\nTo apply these statements to a manuscript order-one exponent row, take\n`f(t) = K(t,c_plus) * conjugate(K(t,c_minus))`, for distinct sampled columns,\nand take `M` to be the product from all other exponent rows. Column\northogonality supplies `sum f = 0`. With `p-1` other rows injectively assigned,\nthe coefficient is `6-(p-1) = 7-p`. The conversion from conditional finite sums\nto the manuscript's uniformly averaged injective moments, including the\nmarginal uniformity after merging rows, is proved in the mathematical report,\nnot encoded in Lean.\n\n`seven_row_boundary` states that the occupied sum is zero when all six labels\nare used. It neither defines a seven-row injective moment nor divides by zero.\nIts six summands correspond to the six merged exponent matrices in the report.\nThe identification of those summands with their exponent monomials is again\nthe mathematical-to-computational bridge outside Lean.\n\n`nonnegative_sums_vanish` quantifies over any finite type and any two\nnonnegative real functions `u,v`. From `3*sum u + sum v = 0` it proves that\nevery value of both functions is zero. `pointwise_products_from_certificate`\nspecializes this to complex squared norms and proves, at every index, that\n`L=0` and `A=0 or B=0`. For the manuscript take the index type to be the two\norientations times the row permutations, multiply the average identity by\n1440, and use `A=g(alpha)` and `B=g(q)`. No connection between the symbols\n`L,A,B` and an actual matrix is postulated or proved in Lean; that connection\nis explicit in `verify.py` and the report.\n\nThe source uses no axioms beyond Lean/Mathlib's standard foundations and no\nproof holes. The compiler result, rather than this document, determines\nwhether the file actually checks. Statement fidelity still requires\nindependent human mathematical review.\n"
+  },
+  "subject": {
+    "content_hash": "2763642caba78c5dd5c5ce69f713605ee730926bd958fa28b203129aa6912587",
+    "kind": "claim",
+    "subject_id": "C_CONTRACTION_BRIDGE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

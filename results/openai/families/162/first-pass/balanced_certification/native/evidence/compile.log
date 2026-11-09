@@ -1,0 +1,34 @@
+status: success
+source: families/162/first-pass/balanced_certification/native/evidence/Main.lean
+cwd: families/162/first-pass/balanced_certification/native/evidence
+lean: Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release) [$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean]
+lake: Lake version 5.0.0-src+5045d00 (Lean version 4.34.1) [$WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake]
+elan: elan 4.2.3 (b6cec7e10 2026-06-08) [$WORKSPACE/.elan/bin/elan]
+
+$ $WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean families/162/first-pass/balanced_certification/native/evidence/Main.lean
+exit_code: 0
+--- stdout ---
+'balanced_manuscript_statement' depends on axioms: [propext, Classical.choice, Quot.sound]
+def OAI.Balanced.MainResult : Prop :=
+∃ q₀, ∀ (q : ℕ), q₀ ≤ q → Nat.Prime q → OAI.Balanced.BalancedCounterexample q
+def OAI.Balanced.BalancedCounterexample : ℕ → Prop :=
+fun q => ∃ H, H.Intersecting ∧ H.Nonisolated ∧ H.HasCoverNumber (q + 1)
+def OAI.Balanced.PartiteHypergraph.Covers : {r n : ℕ} →
+  OAI.Balanced.PartiteHypergraph r n → Finset (OAI.Balanced.PartiteHypergraph.Vertex r n) → Prop :=
+fun {r n} H C => ∀ e ∈ H.edges, ∃ i, (i, e i) ∈ C
+def OAI.Balanced.PartiteHypergraph.Intersecting : {r n : ℕ} → OAI.Balanced.PartiteHypergraph r n → Prop :=
+fun {r n} H => H.edges.Nonempty ∧ ∀ e ∈ H.edges, ∀ f ∈ H.edges, ∃ i, e i = f i
+def OAI.Balanced.PartiteHypergraph.Nonisolated : {r n : ℕ} → OAI.Balanced.PartiteHypergraph r n → Prop :=
+fun {r n} H => ∀ (i : Fin r) (v : Fin n), ∃ e ∈ H.edges, e i = v
+def OAI.Balanced.PartiteHypergraph.HasCoverNumber : {r n : ℕ} → OAI.Balanced.PartiteHypergraph r n → ℕ → Prop :=
+fun {r n} H k =>
+  (∃ C, H.Covers C ∧ C.card = k) ∧ ∀ (C : Finset (OAI.Balanced.PartiteHypergraph.Vertex r n)), H.Covers C → k ≤ C.card
+
+--- stderr ---
+
+
+$ $WORKSPACE/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean --run $WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean families/162/first-pass/balanced_certification/native/evidence/Main.lean
+audit_exit_code: 0
+--- audit stdout ---
+
+--- audit stderr ---

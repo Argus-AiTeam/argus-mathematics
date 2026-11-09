@@ -1,0 +1,165 @@
+{
+  "status": "compiled_full_weighted_zero_count",
+  "result_class": "known_result",
+  "novelty_status": "not_claimed",
+  "campaign_completion_claimed": false,
+  "claim_binding_requested": "C_ZERO_WEIGHTED",
+  "principal_declaration": "ZeroWeightedCount.manuscript_zero_count",
+  "scope": "Complete finite determinant-zero row-lattice count for the explicit restricted-shift auxiliary weight, conditional on exactly the supplied cap and Smith data.",
+  "conclusion": "For h=B^k, N=(h*q)^10 and I=B^b*B^e, sum over all box/row-lattice/det=0/pairwise-distinct-projection matrices of actualWeight is at most absoluteConstant*log(2*N)*N^6/I^2.",
+  "hypotheses": [
+    "B and q are prime, h=B^k>=2, q>h^100.",
+    "C is any 3x3 matrix over ZMod h with supplied Smith factorization C=P*diag(1,B^b,B^e)*Q, P and Q invertible and 0<=b<=e<=k.",
+    "S is any cap in F_q^3 whose first coordinate lies in [0,floor(q/(1000*h^4))) and whose cardinality is at least q^2/(2000^3*h^12)."
+  ],
+  "weight_identity": "restrictedWeight_eq_uniform_product proves equality to (q^3/|S|)^3 times the fraction of pairs (G,a) in GL_3(F_q) x allowedShiftSet with all three columns in G(a+S), including repeated columns.",
+  "matrix_set_identity": "mem_zeroMatrices proves the finite enumeration is exactly the complete half-open box/row-lattice/det=0/distinct-projection set.",
+  "absolute_constant": "AuxiliaryZeroCount.countConstant * (2 / Real.log 2), proved strictly positive and independent of all input parameters.",
+  "stronger_intermediate_declaration": "ZeroWeightedCount.weighted_determinant_zero_bound permits every N>=1 and q>=h^26, with no assumed matrix-count bound.",
+  "assumes_target_count_or_shell_estimate": false,
+  "proof_holes": [],
+  "new_axioms": [],
+  "axioms": ["propext", "Classical.choice", "Quot.sound"],
+  "axiom_check": "All 12 printed declarations, including the principal theorem, explicit probability identity, and both reused global theorems, have exactly the three listed standard axioms.",
+  "compiler": {
+    "exit_code": 0,
+    "initial_elapsed_seconds": 7.392,
+    "source_sha256": "5843dfaac473cbb4645baa383b4a321ca328f2ab6380fc937dd5e7ab32305e0d",
+    "command": "python3 research/zero-weighted-count/compiler/compile_main.py",
+    "metadata": "research/zero-weighted-count/compiler/Main.compile.json",
+    "log": "research/zero-weighted-count/compiler/Main.compile.log",
+    "upstream_contract_log": "research/zero-weighted-count/compiler/Contracts.log",
+    "final_contract_exit_code": 0,
+    "final_contract_log": "research/zero-weighted-count/compiler/FinalContract.log"
+  },
+  "artifacts": {
+    "source": "research/zero-weighted-count/Main.lean",
+    "statement_fidelity": "research/zero-weighted-count/statement_fidelity.md",
+    "compiler_directory": "research/zero-weighted-count/compiler"
+  },
+  "upstream_dependency_build": {
+    "status": "completed",
+    "module_count": 85,
+    "metadata": "research/zero-weighted-count/compiler/upstream-build.json",
+    "oleans": "research/zero-weighted-count/compiler/upstream-olean",
+    "upstream_files_modified": false,
+    "adapters": [
+      "Finset.prod_le_prod₀ -> Finset.prod_le_prod",
+      "dite_eq_left -> dif_pos; ite_eq_left -> if_pos; ite_eq_right -> if_neg",
+      "LatticeResidues supplies the older product lemma's proved Nat.zero_le premise",
+      "Set.mem_ofPred_eq -> Set.mem_setOf_eq",
+      "OrbitEstimate inlines a complete proof of determinant surjectivity using diag(u,1,1); the generic commutative-ring proof separately compiled in compiler/DetSurjective431.lean"
+    ],
+    "historical_build_failures_resolved": true
+  },
+  "remaining_mathematical_blockers": [],
+  "remaining_statement_bridges": [],
+  "scope_exclusions": [
+    "The cap and Smith data are explicit hypotheses, not a formalization of all construction/existence results elsewhere in the manuscript.",
+    "This is not certification of the complete manuscript or a novelty claim."
+  ],
+  "host_next_step": "Host-invoked independent Reviewer should replay verify.py, inspect statement_fidelity.md and the archived compiler certificate, and judge C_ZERO_WEIGHTED. This is a known-result verification checkpoint, not a novelty or campaign-completion claim.",
+  "official_lean_evidence_invoked": true,
+  "official_claim_binding": {
+    "status": "success",
+    "exit_code": 0,
+    "proof_holes": [],
+    "claim_id": "C_ZERO_WEIGHTED",
+    "derived_ledger_status": "closed_kernel",
+    "undischarged_assumptions": [],
+    "result": "research/zero-weighted-count/lean_verify.json",
+    "certificate": "research/zero-weighted-count/certificates/C_ZERO_WEIGHTED-e090a6337f86ab2e.json",
+    "statement_fidelity_review": "Pending independent Host Reviewer"
+  },
+  "full_source_replay": {
+    "state": "done",
+    "task_id": "zero-count-full-replay",
+    "run_id": "zero-count-full-replay-1793909964056392975",
+    "mode": "direct",
+    "exit_code": 0,
+    "elapsed_seconds": 502.4,
+    "reclaimed": true,
+    "receipt": "research/zero-weighted-count/compiler/replay_receipt.json",
+    "check_with": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.subagent status --task-id zero-count-full-replay",
+    "scope": "Forced recompilation of all 85 upstream dependencies, exact arithmetic and structural fixtures, then the principal theorem and all 12 axiom reports"
+  },
+  "reviewer_approval_asserted": false,
+  "lean_version_required": "4.31.0",
+  "existing_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+  "upstream_root": "openai-math/lean",
+  "upstream_toolchain": "leanprover/lean4:v4.34.1",
+  "all_durable_tasks_reclaimed": true,
+  "durable_tasks": [
+    {
+      "task_id": "zero-count-formal-upstream-431",
+      "run_id": "zero-count-formal-upstream-431-1793908000237405219",
+      "state": "error",
+      "exit_code": 1,
+      "blocker": "LatticePacking.lean:218 uses the Mathlib 4.34 name Finset.prod_le_prod₀; Mathlib 4.31 calls the same product-monotonicity theorem Finset.prod_le_prod.",
+      "mode": "direct",
+      "run_dir": "research/zero-weighted-count/compiler/upstream-run",
+      "check_with": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.subagent status --task-id zero-count-formal-upstream-431"
+    },
+    {
+      "task_id": "zero-count-formal-api431",
+      "run_id": "zero-count-formal-api431-1793908334122436186",
+      "state": "error",
+      "exit_code": 1,
+      "blocker": "RowLatticeEqualShell.lean:49 uses the Lean 4.34 name dite_eq_left; Lean 4.31 calls the dependent-if positive-branch theorem dif_pos.",
+      "mode": "direct",
+      "run_dir": "research/zero-weighted-count/compiler/upstream-api431-run",
+      "check_with": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.subagent status --task-id zero-count-formal-api431"
+    },
+    {
+      "task_id": "zero-count-formal-core431",
+      "run_id": "zero-count-formal-core431-1793908517559226764",
+      "state": "error",
+      "exit_code": 1,
+      "blocker": "LatticeResidues.lean:54 uses the newer one-argument natural product comparison; Lean/Mathlib 4.31 requires the explicit proved premise fun _ _ => Nat.zero_le _.",
+      "mode": "direct",
+      "run_dir": "research/zero-weighted-count/compiler/upstream-core431-run",
+      "check_with": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.subagent status --task-id zero-count-formal-core431"
+    },
+    {
+      "task_id": "zero-count-formal-products431",
+      "run_id": "zero-count-formal-products431-1793908572626664881",
+      "state": "error",
+      "exit_code": 1,
+      "blocker": "WeightedZeroPartition.lean:55,61 uses the Lean 4.34 alias ite_eq_left; Lean 4.31 calls the positive conditional theorem if_pos.",
+      "mode": "direct",
+      "run_dir": "research/zero-weighted-count/compiler/upstream-products431-run",
+      "check_with": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.subagent status --task-id zero-count-formal-products431"
+    },
+    {
+      "task_id": "zero-count-formal-conditionals431",
+      "run_id": "zero-count-formal-conditionals431-1793908728770256639",
+      "state": "error",
+      "exit_code": 1,
+      "blocker": "DiagonalDetImage.lean:162 uses the new Set.mem_ofPred_eq name; the definitional predicate-set membership theorem in Mathlib 4.31 is Set.mem_setOf_eq.",
+      "mode": "direct",
+      "run_dir": "research/zero-weighted-count/compiler/upstream-conditionals431-run",
+      "check_with": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.subagent status --task-id zero-count-formal-conditionals431"
+    },
+    {
+      "task_id": "zero-count-formal-smith431",
+      "run_id": "zero-count-formal-smith431-1793909046131520639",
+      "state": "error",
+      "exit_code": 1,
+      "blocker": "OrbitEstimate.lean:51 invokes Matrix.GeneralLinearGroup.det_surjective, absent in Mathlib 4.31. An independent generic commutative-ring proof by diag(u,1,1) compiled successfully in compiler/DetSurjective431.lean; the builder now inlines that proof at the call site.",
+      "mode": "direct",
+      "run_dir": "research/zero-weighted-count/compiler/upstream-smith431-run",
+      "check_with": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.subagent status --task-id zero-count-formal-smith431"
+    },
+    {
+      "task_id": "zero-count-formal-determinant431",
+      "run_id": "zero-count-formal-determinant431-1793909234271738939",
+      "state": "done",
+      "exit_code": 0,
+      "elapsed_seconds": 76.9,
+      "reclaimed": true,
+      "mode": "direct",
+      "run_dir": "research/zero-weighted-count/compiler/upstream-determinant431-run",
+      "check_with": "$WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.tools.subagent status --task-id zero-count-formal-determinant431"
+    }
+  ]
+}

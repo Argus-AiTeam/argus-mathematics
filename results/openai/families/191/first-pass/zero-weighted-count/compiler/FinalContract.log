@@ -1,0 +1,48 @@
+@ZeroWeightedCount.manuscript_zero_count : ∀ {B k q : ℕ},
+  Nat.Prime B →
+    ∀ [inst : Fact (Nat.Prime q)],
+      2 ≤ B ^ k →
+        (B ^ k) ^ 100 < q →
+          ∀ (C : Matrix (Fin 3) (Fin 3) (ZMod (B ^ k))) (d : OAI.Problem355.PrimePowerData B k C)
+            (S : Finset (ZeroWeightedCount.Vector q)),
+            OAI.Problem355.AuxiliaryCap.IsCap ↑S →
+              (∀ v ∈ S, (v 0).val < q / (1000 * ((B ^ k) ^ 2) ^ 2)) →
+                ↑q ^ 2 / (2000 ^ 3 * ↑(B ^ k) ^ 12) ≤ ↑S.card →
+                  ∑ M ∈ ZeroWeightedCount.zeroMatrices C ((B ^ k * q) ^ 10),
+                      ZeroWeightedCount.actualWeight q (B ^ k) S M ≤
+                    ZeroWeightedCount.absoluteConstant * Real.log (2 * ↑((B ^ k * q) ^ 10)) * ↑((B ^ k * q) ^ 10) ^ 6 /
+                      (↑B ^ d.b * ↑B ^ d.e) ^ 2
+@ZeroWeightedCount.weighted_determinant_zero_bound : ∀ {B k q : ℕ},
+  Nat.Prime B →
+    ∀ [inst : Fact (Nat.Prime q)],
+      2 ≤ B ^ k →
+        (B ^ k) ^ 26 ≤ q →
+          ∀ (C : Matrix (Fin 3) (Fin 3) (ZMod (B ^ k))) (d : OAI.Problem355.PrimePowerData B k C)
+            (S : Finset (ZeroWeightedCount.Vector q)),
+            OAI.Problem355.AuxiliaryCap.IsCap ↑S →
+              (∀ v ∈ S, (v 0).val < q / (1000 * ((B ^ k) ^ 2) ^ 2)) →
+                q ^ 2 ≤ 2000 ^ 3 * (B ^ k) ^ 12 * S.card →
+                  ∀ (N : ℕ),
+                    1 ≤ N →
+                      ∀ (F : Finset ZeroWeightedCount.IntMatrix),
+                        (∀ M ∈ F, Matrix.det M = 0) →
+                          (∀ M ∈ F, ∀ (i : Fin 3), M i ∈ OAI.Problem355.PrimePowerRowData.rowModule C) →
+                            (∀ M ∈ F, ZeroWeightedCount.MatrixBox N M) →
+                              (∀ M ∈ F,
+                                  ∀ (i j : Fin 3),
+                                    i ≠ j →
+                                      (↑(M 0 i) / ↑(M 2 i), ↑(M 1 i) / ↑(M 2 i)) ≠
+                                        (↑(M 0 j) / ↑(M 2 j), ↑(M 1 j) / ↑(M 2 j))) →
+                                ∑ M ∈ F, ZeroWeightedCount.actualWeight q (B ^ k) S M ≤
+                                  ZeroWeightedCount.absoluteConstant * Real.log (2 * ↑N) * ↑N ^ 6 /
+                                    (↑B ^ d.b * ↑B ^ d.e) ^ 2
+@ZeroWeightedCount.restrictedWeight_eq_uniform_product : ∀ {q : ℕ} [inst : Fact (Nat.Prime q)]
+  (S A : Finset (ZeroWeightedCount.Vector q)) (p : Fin 3 → ZeroWeightedCount.Vector q),
+  ZeroWeightedCount.restrictedWeight q S A p =
+    (↑q ^ 3 / ↑S.card) ^ 3 *
+      (↑(Nat.card { u // ∀ (i : Fin 3), p i ∈ OAI.Problem355.AuxiliarySet.transformed S (↑u.2) u.1 }) /
+        ↑(Nat.card ((ZeroWeightedCount.Vector q ≃ₗ[ZMod q] ZeroWeightedCount.Vector q) × ↥A)))
+def ZeroWeightedCount.absoluteConstant : ℝ :=
+OAI.Problem355.AuxiliaryZeroCount.countConstant * (2 / Real.log 2)
+ZeroWeightedCount.absoluteConstant_pos : 0 < ZeroWeightedCount.absoluteConstant
+'ZeroWeightedCount.manuscript_zero_count' depends on axioms: [propext, Classical.choice, Quot.sound]

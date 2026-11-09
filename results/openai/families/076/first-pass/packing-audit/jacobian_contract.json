@@ -1,0 +1,31 @@
+{
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "schema_version": 1,
+  "protocol_version": "2025-11-25",
+  "transport": "mcp-stdio",
+  "discovery_query": "exact finite field linear equation fiber cardinality and conditional moment bounds for dependent linear forms",
+  "candidate_operations": [
+    "finite_field.linear_map.rank.compute",
+    "probability.finite_distribution.raw_moment.compute",
+    "prime_field.matrix.rank.compute"
+  ],
+  "inspected_operation": "prime_field.matrix.rank.compute",
+  "input_contract": {
+    "required": ["matrix"],
+    "additionalProperties": false,
+    "matrix_required": ["prime", "entries", "columns"],
+    "prime_range": [2, 2147483647],
+    "maximum_rows": 256,
+    "columns_range": [1, 256],
+    "entries": "canonical residues in [0,prime); rectangular with declared columns; prime must be prime"
+  },
+  "output_contract": {
+    "required": ["prime", "source", "rank"],
+    "additionalProperties": false,
+    "rank": "nonnegative integer, exact rank over the supplied prime field",
+    "source": "the complete typed PrimeFieldMatrixRequest"
+  },
+  "target_mismatch": "Rank is an applicable atomic check on dependent forms, but does not calculate the manuscript's random chunk construction or conditional moments. No discovered operation is used as a substitute for that target.",
+  "payload_file": "research/packing-audit/jacobian_request.json",
+  "output_file": "research/packing-audit/jacobian_result.json"
+}

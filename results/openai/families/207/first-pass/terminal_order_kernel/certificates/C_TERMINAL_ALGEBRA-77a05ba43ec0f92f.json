@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_TERMINAL_ALGEBRA-224072d497e1",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/207/first-pass/terminal_order_kernel/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/207/first-pass/terminal_order_kernel/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 8263,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/207/first-pass/terminal_order_kernel/Main.lean",
+    "source_sha256": "16d6584cd1f103a651b77a2c8ecfac56b7854fbe19050cd0ab506062ed6c1568",
+    "statement_fidelity": "families/207/first-pass/terminal_order_kernel/statement_fidelity.md",
+    "statement_fidelity_sha256": "dd9207fac199989bb606ef638a26178569af1b24e3f4ed4d8c4f7f101c20eff6",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/terminal_order_kernel/Main.lean",
+    "text": "import Mathlib.Data.Real.Basic\nimport Mathlib.LinearAlgebra.Matrix.Rank\nimport Mathlib.Tactic.Ring\n\n/-!\n# Bounded terminal-order kernel algebra\n\nFinite weighted bin kernels factor through the bin index set. The exact lag-one\ntwisted equality kernel is skew, vanishes for the identity permutation, and has\nan order-sign factorization for involutions.\n-/\n\nnoncomputable section\n\nnamespace TerminalOrderKernel\n\nuniverse uI uJ uB uL\n\nsection Bins\n\nvariable {I : Type uI} {J : Type uJ} {B : Type uB}\nvariable [Fintype I] [Fintype J] [Fintype B] [DecidableEq B]\n\n/-- An arbitrary real bin kernel with independent row and column weights. -/\ndef weightedBinMatrix (r : I → B) (c : J → B) (w : I → ℝ) (z : J → ℝ)\n    (K : Matrix B B ℝ) : Matrix I J ℝ :=\n  fun i j => w i * K (r i) (c j) * z j\n\n/-- Weighted incidence matrix from rows to bins. -/\ndef rowLift (r : I → B) (w : I → ℝ) : Matrix I B ℝ :=\n  fun i b => if r i = b then w i else 0\n\n/-- Weighted incidence matrix from bins to columns. -/\ndef columnLift (c : J → B) (z : J → ℝ) : Matrix B J ℝ :=\n  fun b j => if b = c j then z j else 0\n\nomit [Fintype I] [Fintype J] in\ntheorem weightedBinMatrix_factorization (r : I → B) (c : J → B)\n    (w : I → ℝ) (z : J → ℝ) (K : Matrix B B ℝ) :\n    weightedBinMatrix r c w z K = rowLift r w * K * columnLift c z := by\n  funext i j\n  simp [weightedBinMatrix, rowLift, columnLift, Matrix.mul_apply, ite_mul, mul_ite]\n\nomit [Fintype I] in\ntheorem weightedBinMatrix_rank_le_kernel (r : I → B) (c : J → B)\n    (w : I → ℝ) (z : J → ℝ) (K : Matrix B B ℝ) :\n    (weightedBinMatrix r c w z K).rank ≤ K.rank := by\n  rw [weightedBinMatrix_factorization]\n  exact (Matrix.rank_mul_le_left _ _).trans (Matrix.rank_mul_le_right _ _)\n\nomit [Fintype I] in\ntheorem weightedBinMatrix_rank_le_bins (r : I → B) (c : J → B)\n    (w : I → ℝ) (z : J → ℝ) (K : Matrix B B ℝ) :\n    (weightedBinMatrix r c w z K).rank ≤ Fintype.card B := by\n  exact (weightedBinMatrix_rank_le_kernel r c w z K).trans\n    (Matrix.rank_le_card_width K)\n\nend Bins\n\nsection TimeKernel\n\nvariable {L : Type uL} [DecidableEq L]\n\ndef ltIndicator (u v : ℝ) : ℝ :=\n  if u < v then 1 else 0\n\n/-- The sign of `v - u`, with zero at equal times. -/\ndef osign (u v : ℝ) : ℝ :=\n  if u < v then 1 else if v < u then -1 else 0\n\ndef eqIndicator (y z : L) : ℝ :=\n  if y = z then 1 else 0\n\ntheorem osign_eq_indicator_sub (u v : ℝ) :\n    osign u v = ltIndicator u v - ltIndicator v u := by\n  rcases lt_trichotomy u v with h | h | h\n  · simp [osign, ltIndicator, h, lt_asymm h]\n  · subst v\n    simp [osign, ltIndicator]\n  · simp [osign, ltIndicator, h, lt_asymm h]\n\ntheorem osign_swap (u v : ℝ) :\n    osign u v = -osign v u := by\n  rw [osign_eq_indicator_sub, osign_eq_indicator_sub]\n  ring\n\ntheorem eqIndicator_comm (y z : L) :\n    eqIndicator y z = eqIndicator z y := by\n  simp only [eqIndicator, eq_comm]\n\ntheorem eqIndicator_apply (σ : Equiv.Perm L) (y z : L) :\n    eqIndicator y (σ z) = eqIndicator z (σ.symm y) := by\n  have h : (y = σ z) ↔ (z = σ.symm y) :=\n    eq_comm.trans σ.apply_eq_iff_eq_symm_apply\n  simp only [eqIndicator, h]\n\ntheorem eqIndicator_apply_symm (σ : Equiv.Perm L) (y z : L) :\n    eqIndicator y (σ.symm z) = eqIndicator z (σ y) := by\n  simpa only [Equiv.symm_symm] using eqIndicator_apply σ.symm y z\n\n/-- The exact zero, plus-one, minus-one shift decomposition. -/\ndef twistedEqualityKernel (σ : Equiv.Perm L) (u : ℝ) (y : L)\n    (v : ℝ) (z : L) : ℝ :=\n  osign u v * eqIndicator y z\n    + ltIndicator v u * eqIndicator y (σ z)\n    - ltIndicator u v * eqIndicator y (σ.symm z)\n\ntheorem twistedEqualityKernel_skew (σ : Equiv.Perm L)\n    (u : ℝ) (y : L) (v : ℝ) (z : L) :\n    twistedEqualityKernel σ u y v z = -twistedEqualityKernel σ v z u y := by\n  unfold twistedEqualityKernel\n  rw [osign_swap v u, eqIndicator_comm z y,\n    eqIndicator_apply σ z y, eqIndicator_apply_symm σ z y]\n  ring\n\ntheorem twistedEqualityKernel_identity (u : ℝ) (y : L) (v : ℝ) (z : L) :\n    twistedEqualityKernel (Equiv.refl L) u y v z = 0 := by\n  simp only [twistedEqualityKernel, Equiv.refl_symm, Equiv.refl_apply,\n    osign_eq_indicator_sub]\n  ring\n\ntheorem twistedEqualityKernel_same_time (σ : Equiv.Perm L) (u : ℝ) (y z : L) :\n    twistedEqualityKernel σ u y u z = 0 := by\n  simp [twistedEqualityKernel, osign, ltIndicator]\n\ntheorem twistedEqualityKernel_of_symm_eq (σ : Equiv.Perm L)\n    (hσ : σ.symm = σ) (u : ℝ) (y : L) (v : ℝ) (z : L) :\n    twistedEqualityKernel σ u y v z =\n      osign u v * (eqIndicator y z - eqIndicator y (σ z)) := by\n  simp only [twistedEqualityKernel, hσ, osign_eq_indicator_sub]\n  ring\n\nomit [DecidableEq L] in\ntheorem perm_symm_eq_of_involutive (σ : Equiv.Perm L)\n    (hσ : Function.Involutive σ) : σ.symm = σ := by\n  apply Equiv.ext\n  intro y\n  calc\n    σ.symm y = σ.symm (σ (σ y)) := congrArg σ.symm (hσ y).symm\n    _ = σ y := σ.symm_apply_apply (σ y)\n\ntheorem twistedEqualityKernel_of_involutive (σ : Equiv.Perm L)\n    (hσ : Function.Involutive σ) (u : ℝ) (y : L) (v : ℝ) (z : L) :\n    twistedEqualityKernel σ u y v z =\n      osign u v * (eqIndicator y z - eqIndicator y (σ z)) := by\n  exact twistedEqualityKernel_of_symm_eq σ (perm_symm_eq_of_involutive σ hσ) u y v z\n\nend TimeKernel\n\nend TerminalOrderKernel\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/terminal_order_kernel/statement_fidelity.md",
+    "text": "# Statement fidelity: C_TERMINAL_ALGEBRA\n\n`Main.lean` formalizes the finite-dimensional bin factorization and the exact\nlag-one twisted equality kernel algebra, in namespace `TerminalOrderKernel`.\nIt uses Lean 4.31.0 and Mathlib.\n\n## Arbitrary finite matrix dimensions\n\n`I`, `J`, and `B` are independent arbitrary finite types, possibly empty.\nThe maps `r : I → B`, `c : J → B`, real weights `w`, `z`, and real matrix\n`K : Matrix B B ℝ` are arbitrary. No injectivity, surjectivity, positivity,\nnonzero-weight, nonempty-type, or invertibility hypotheses are imposed.\nDecidable equality on `B` permits writing the incidence matrices.\n\n* `weightedBinMatrix_factorization` proves exactly\n  `A = rowLift r w * K * columnLift c z`, with\n  `A i j = w i * K (r i) (c j) * z j`,\n  `rowLift r w i b = if r i = b then w i else 0`, and\n  `columnLift c z b j = if b = c j then z j else 0`.\n* `weightedBinMatrix_rank_le_kernel` proves `Matrix.rank A ≤ Matrix.rank K`.\n* `weightedBinMatrix_rank_le_bins` proves\n  `Matrix.rank A ≤ Fintype.card B` using Mathlib's rank-of-product bounds.\n  Rank is the real linear-map image dimension, not a sampled numerical rank.\n\nIn particular, these are dimension-uniform statements, not fixed-size examples.\nEmpty bins and rank-deficient or zero weights are included whenever the\ndisplayed bin maps exist.\n\n## Exact time/permutation kernel\n\nThe label type `L` is arbitrary with decidable equality; it need not be finite.\nFor arbitrary real `u`, `v`, `osign u v` is `+1` when `u < v`, `-1` when\n`v < u`, and zero otherwise, namely the sign of `v - u`.\n`ltIndicator u v` and `eqIndicator y z` are real-valued zero/one indicators.\nFor an arbitrary permutation `σ : Equiv.Perm L`, the definition is exactly\n\n`osign u v * [y = z] + [v < u] * [y = σ z] - [u < v] * [y = σ.symm z]`.\n\n* `twistedEqualityKernel_skew` proves antisymmetry under simultaneous\n  interchange of the two time/label arguments.\n* `twistedEqualityKernel_identity` proves the kernel is identically zero for\n  the identity permutation.\n* `twistedEqualityKernel_of_symm_eq` proves the stated involution formula\n  `osign u v * ([y = z] - [y = σ z])` under `σ.symm = σ`.\n* `perm_symm_eq_of_involutive` and `twistedEqualityKernel_of_involutive`\n  give the same result under `Function.Involutive σ`, i.e.\n  `∀ y, σ (σ y) = y`.\n* `twistedEqualityKernel_same_time` explicitly includes `u = v`.\n\nNo unequal-time, distinct-label, fixed-point-free, or open-interval assumptions\nare used. In particular equal labels and fixed labels are included. These\nare identities for the algebraic shift expression; no separate derivation of\nthat expression from an analytic operator is claimed.\n\n## Scope limits\n\nThe bin rank theorem does not prove an analytic error estimate or\ninfinite-dimensional singular-value decay. The kernel identities do not assert\nthe manuscript's separate finite-displacement condition for order-one `g`,\nand do not certify its other analytic hypotheses or conclusions.\n"
+  },
+  "subject": {
+    "content_hash": "de13c3c19792685853260a41f5080003f1e0f8613ece61d9d929ec83a1e6225b",
+    "kind": "claim",
+    "subject_id": "C_TERMINAL_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

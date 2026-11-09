@@ -1,0 +1,98 @@
+{
+  "goal": "C9000225",
+  "routes": [
+    {
+      "name": "R_FIDELITY_VERIFY",
+      "status": "current",
+      "evidence": "research/AUDIT_REPORT.md"
+    },
+    {
+      "name": "R_FINITE_ONLY",
+      "status": "ruled_out",
+      "reason": "Finite consistency checks do not prove an ordered thermodynamic limit.",
+      "evidence": "research/AUDIT_REPORT.md"
+    }
+  ],
+  "nodes": {
+    "C9000225": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 225 (Gaussian free field limits throughout the balanced six-vertex regime.; papers: The Gaussian free field limit of the balanced six-vertex model with variance multiplier 1/arcsin(c/2); Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_FIDELITY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_MAIN": {
+      "statement": "The staged thm:main asserts the balanced-plane GFF limit for every 0<c<=2, with squared multiplier 1/arcsin(c/2). Not certified by this mission.",
+      "status": "open",
+      "depends_on": ["C_FIDELITY", "C_GFF_REMAINDER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md"]
+    },
+    "C_GFF_REMAINDER": {
+      "statement": "All other load-bearing obligations of the full GFF theorem, including physical-plane identification, angular normalization comparisons, Gaussian currents, probabilistic endgame, and endpoint c=2, remain outside this mission and unverified.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md"]
+    },
+    "C_NEGATIVE_FIDELITY": {
+      "statement": "For every fixed pi/2<lambda<pi the same real-array half-filled twist fidelity has ordered density 1/(2lambda(pi-lambda)); this extension is proposed for independent review, with no novelty verdict yet.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md", "research/exact_certificate.json"]
+    },
+    "C_FIDELITY": {
+      "statement": "For every fixed 2pi/3<lambda<pi, lim_{d->0} limsup_{B->infinity} |I_L/B-1/(2lambda(pi-lambda))|=0 for the prescribed real array and half filling.",
+      "status": "open",
+      "depends_on": ["C_SCALAR", "C_ROOT_CONTROL", "C_OVERLAP_JETS", "C_TRACE_REMAINDER", "C_FOURIER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md", "research/exact_certificate.json", "research/certificate_sources/KMST2005-excerpt.md"]
+    },
+    "C_SCALAR": {
+      "statement": "The displayed monodromy, Hilbert adjoint, twisted scalar-product identity, and Cauchy factorization give eq:overlap-determinant-finite.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md", "research/verify.py", "research/certificate_sources/KMST2005-excerpt.md"]
+    },
+    "C_ROOT_CONTROL": {
+      "statement": "The prescribed half-filled array has regular real roots, controlled end cells, uniformly bounded exponentially weighted Gaudin inverses, and arbitrary fixed-order interior counting quadrature accuracy.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md"]
+    },
+    "C_OVERLAP_JETS": {
+      "statement": "Both overlap orientations admit the stated analytic diagonal coalescence and exact first and second jets; the shifted pair-product quadratic coefficient is sum_{i,j} v_i v_j (log sinh(x_i-x_j+i lambda))''.",
+      "status": "open",
+      "depends_on": ["C_SCALAR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md", "research/verify.py", "research/lean/certificates/C_ALG_KERNEL-5aa3c8fd29bf311b.json"]
+    },
+    "C_TRACE_REMAINDER": {
+      "statement": "After finite differentiation, normalized quadratic traces and pair sums differ from the uniform full-lattice calculation by a quantity tending to zero in the specified ordered limit, including all sparse-end and inverse-comparison errors.",
+      "status": "open",
+      "depends_on": ["C_ROOT_CONTROL", "C_OVERLAP_JETS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md"]
+    },
+    "C_FOURIER": {
+      "statement": "For both frequency signs, the sampled-pole correction gives relative symbol (1+exp(2pi i z) exp(-lambda p))/(1+exp(-lambda p)); the combined quadratic coefficient and shifted pair product give -1/(2lambda(pi-lambda)).",
+      "status": "open",
+      "depends_on": ["C_ALG_KERNEL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/AUDIT_REPORT.md", "research/exact_certificate.json"]
+    },
+    "C_ALG_KERNEL": {
+      "statement": "The pole-corrected Fourier-symbol factorization and the cancellation of accelerations in the shifted pair-product quadratic coefficient are exact algebraic identities.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/lean/Main.lean", "research/lean/statement_fidelity.md", "research/lean/certificates/C_ALG_KERNEL-5aa3c8fd29bf311b.json"]
+    }
+  }
+}

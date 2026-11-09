@@ -1,0 +1,154 @@
+oloured graph is a structure A with vocabulary τ = {E, C1 , . . . , Ct } where
+E(A) is a binary relation and Ci (A) are diagonal relations (which encode the i-th vertex
+colour). A class G is closed under vertex-colouring if for each {E, C1 , . . . , Ct }-structure
+A ∈ G also the {E, C1′ , . . . , Cs′ }-structure A′ belongs to G where E(A) = E(A′ ) and
+Ci′ (A′ ) are arbitrary diagonal relations.
+Theorem 14 ([16]). Let G be a class of coloured graphs that is closed under colouring.
+The following statements are equivalent.
+  1. Some complete invariant on C is computable in polynomial time.
+
+  2. Some canonical form on C is computable in polynomial time.
+This gives us the following corollary.
+Corollary 15. Let G be a class of coloured graphs closed under colouring such that
+there is a polynomial time DeepWL algorithm deciding isomorphism on G. Then there
+is a polynomial time canonisation algorithm for G.
+Remark 16. It can be shown that Corollary 15 also holds for arbitrary time-constructible
+time bounds of the form T O(1) where T is at least linear. This can be shown using
+padding arguments.
+
+
+
+                                              19
+6. Equivalence between CPT and DeepWL
+In this section, we prove that DeepWL has the same expressiveness as the logic CPT,
+choiceless polynomial time with counting. As opposed to the previous sections, in this
+section we use fairly standard techniques from finite model theory. For this reason, and
+to avoid lengthy definitions, we only describe the high level arguments and omit the
+technical details.
+   Let us start with a very brief introduction to CPT, which follows the presentation of
+[13]. We start by introducing a language that we call BGS (for Blass, Gurevich, Shelah,
+the authors of the original paper introducing choiceless polynomial time). The syntac-
+tical objects of BGS are formulas and terms; the latter play the role of algorithms of
+DeepWL. Like DeepWL-algorithms, BGS-terms operate on a τ -structure A, the input
+structure. The terms are interpreted over the hereditarily finite sets over V (A), that
+is, elements of V (A), sets of elements of V (A), sets of sets of elements, et cetera. We
+denote the set of all these hereditarily finite sets by HF(A). BGS-formulas are Boolean
+combinations of formulas t1 = t2 , t1 ∈ t2 , and R(t1 , t2 ), where t1 , t2 are terms and R
+is in the vocabulary of the input structure. The formulas t1 = t2 and R(t1 , t2 ) have
+the obvious meaning, t1 ∈ t2 means that a1 ∈ HF(A) interpreting t1 is an element of
+a2 ∈ HF(A) interpreting t2 . Ordinary BGS-terms are formed using the binary function
+symbols Pair, Union, the unary function symbols TheUnique, Card, and the constant
+symbols Empty and Atoms. The constants are interpreted by the empty set and the set
+V (A), respectively. (The elements of V (A) are the “atoms” or “urelements” in HF(A).)
+To define the meaning of the function symbols, let t1 , t2 be terms that are interpreted
+by a1 , a2 ∈ HF(A). Then Pair(t1 , t2 ) is interpreted by {a1 , a2 } and Union(t1 , t2 ) is in-
+terpreted by a1 ∪ a2 , where we treat the union with an atom like the union with the
+empty set. TheUnique(t1 ) is interpreted by b if a1 = {b} is a singleton set and by ∅
+otherwise. Card(t1 ) is interpreted by the cardinality of a1 viewed as a von-Neumann
+ordinal. Besides the ordinary terms, BGS-logic has comprehension terms of the form
+
+                                         {t : x ∈ u : ϕ}.                                     (⋆)
+
+Here t, u are terms, x is a variable that is not free in u, and ϕ is a formula. To emphasise
+the role of the variable x, we also write {t(x) : x ∈ u : ϕ(x)}. This term is interpreted
+by the set of all values t(a), where a ∈ HF(A) is an element of the set defined by the
+term u, and a satisfies the formula ϕ(x). Note that t, u, and ϕ may have other free
+variables besides x. The third type of BGS-terms are iteration terms. For every term
+t that has exactly one free variable x we form a new term t∗ . We also write t(x) and
+t(x)∗ to emphasise the role of the free variable x. The term t∗ is interpreted by the fixed
+point of the sequence t(∅), t(t(∅), t(t(t(∅))), . . ., if such a fixed point exists, or by ∅ if no
+fixed point exists. The free variables of terms and formulas are defined in the natural
+way, stipulating that the variable x in a comprehension term of the form (⋆) and in an
+iteration term t(x)∗ be bound. As usual, a sentence is a formula without free variables.
+   CPT is the “polynomial-time fragment” of BGS. To define CPT formally, we restrict
+the length of iterations to be polynomial in the size of the input structure, and we restrict
+
+
+
+
+                                               20
+the number of elements of all sets that appear during the “execution” of a term to be
+polynomial.
+  This completes our short description of the syntax and semantics of BGS and CPT.
+For details, we refer the reader to [13] (or [6, 8] for other, equivalent, presentations of
+the language).
+  We say that a property P of τ -structures is CPT-definable if there is a CPT-sentence
+ϕ satisfied precisely by the τ -structures in P.
+
+Lemma 17. Let P be a property of τ -structures that is decidable by a polynomial time
+DeepWL-algorithm. Then P is CPT-definable.
+
+Proof. We show that we can simulate a polynomial time DeepWL-algorithm in CPT.
+Formally, for this we have to define a CPT-term that simulates a single computation
+step and then iterate this term, but we never go to this syntactic level. We only describe
+the high-level structure of the simulation by explaining how we can simulate the different
+steps carried out during a DeepWL-computation.
+   A basic fact that we use in this proof is that CPT is at least as expressive as fixed-point
+logic with counting FPC [6]. Moreover, we use the Immerman-Vardi Theorem [17, 25]
+stating that on ordered structures, FPC (even fixed-point logic without counting) can
+simulate all polynomial time computations.
+   In our CPT-simulation, we first generate the set N of the first n von-Neumann ordinals,
+where n is the size of the input structure, together with the natural linear order ≤ of
+these ordinals. We use the ordered domain (N, ≤) to simulate the computation carried
+out by our DeepWL-algorithm. Since we are considering a polynomial time computation,
+we can do this in FPC and hence in CPT.
+   Moreover, during the computation we always maintain a copy of the structure A in
+the cloud. The elements as well as the relations of A are represented by hereditarily
+finite sets. To represent pairs of elements, we use the usual von-Neumann encoding of
+ordered pairs. We can represent the relations of A as sets of pairs, which are again
+hereditarily finite sets. To maintain the name of a relation, for every relation we create
+a pair (x, r) consisting of the relation, represented by a set x, and its name r, which is
+a von-Neumann ordinal whose binary representation is the name of the relation.
+   Now an addPair step can easily be simulated. For the contract-operation, we note
+that strongly connected components are definable in fixed-point logic. For create, we
+use the Union-operation, and forget is trivial.
+   It remains to explain how we deal with the coherent configurations that the DeepWL-
+algorithm maintains during its computation. For this, we use the fact that the coarsest
+coherent configuration of a structure, that is, the ordered partition of the pairs of ele-
+ments into the colour classes computed by the 2-dimensional Weisfeiler Leman algorithm,
+is definable in the logic FPC [10, 23]. Thus we can compute the coherent configuration
+during our simulation, and using the Card-operation we can extract the algebraic sketch.
+This enables us to simulate all parts of a DeepWL-computation in CPT.
+
+  To prove the converse direction that DeepWL can decide all CPT-definable properties,
+rather than working with CPT directly, we will use the equivalent interpretation logic
+
+
+
+                                             21
+introduced by Grädel, Pakusa, Schalthöfer and Kaiser [11].
+   Interpretation logic is based on the logic FO+H, first-order logic with a Härtig (or
+equal cardinality) quantifier: the meaning of the formula Hx.ϕ1 (x).ϕ2 (x) is that the
+number of elements satisfying ϕ1 equals the number of elements satisfying ϕ2 . Next,
+we need to define a specific form of syntactical interpretation. A (2-dimensional) [τ, τ ′ ]-
+interpretation (over FO+H) is a tuple
+                                                                                              
+              I= ϕV (x1 , x2 ),ϕ= ((x1 , x2 ),(x′1 , x′2 )),ϕE ((x1 , x2 ),(x′1 , x′2 ))E∈τ ′
+
+of FO+H-formulas. Such an interpretation maps each τ -structure A to a τ ′ -structure
+I(A) defined as follows. Let V := {(v1 , v2 ) ∈ V (A)2 | A |= ϕV (v1 , v2 )}, and let ∼ be the
+finest equivalence relation on V such that (v1 , v2 ) ∼ (v1′ , v2′ ) for all (v1 , v2 ), (v1′ , v2′ ) ∈ V
+with A |= ϕ= ((v1 , v2 ), (v1′ , v2′ )). Then the universe of I(A) is V /∼ , and for every relation
+symbol E ∈ τ ′ , the relation E(I(A)) contains all pairs (a, a′ ) ∈ (V /∼ )2 such that there
+are (v1 , v2 ) ∈ a, (v1′ , v2′ ) ∈ a′ with A |= ϕE (v1 , v2 , v1′ , v2′ ).
+   Now we are ready to define interpretation logic IL. An IL[τ ]-program is a tuple Π =
+(Iinit , Istep , ϕhalt , ϕout ) where for some vocabulary τwk , Iinit is a [τ, τwk ]-interpretation,
+Istep is a [τwk , τwk ]-interpretation, and ϕhalt and ϕout are τwk -sentences. Let A be a
+τ -structure. A run of Π on A is a sequence of τwk -structures A1 , . . . , Am where A1 :=
+Iinit (A) and Ai+1 := Istep (Ai ) and Ai 2 ϕhalt for all 1 ≤ i < m and Am  ϕhalt . The
+program accepts A if Am  ϕout , otherwise it rejects. We say that a program Π decides
+a property P of τ -structures if it accepts an input structure A if A ∈ P and rejects A
+otherwise.                                                                 P
+   We say that a program Π runs in polynomial time if m + 1≤i≤m |V (Ai )| is bounded
+by a polynomial.
+
+Theorem 18 ([11]). For every property P of τ -structures, the following statements are
+equivalent.
+
+   1. P is decidable by a polynomial-time IL-program.
+
+   2. P is CPT-definable.
+
+The next lemma states that we can simulate FO+H-formulas in DeepWL.
+
+Lemma 19. Let ϕ(x1 , x2 ) be an FO+H[τ ]-sentence. Then the function mapping ea

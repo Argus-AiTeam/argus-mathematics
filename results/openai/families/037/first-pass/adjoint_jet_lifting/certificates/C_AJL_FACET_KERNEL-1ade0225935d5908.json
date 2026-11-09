@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_AJL_FACET_KERNEL-5b4cd16907bc",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/037/first-pass/adjoint_jet_lifting/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/037/first-pass/adjoint_jet_lifting/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14716,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/037/first-pass/adjoint_jet_lifting/Main.lean",
+    "source_sha256": "69a2b845e8195bdc40feae8bd53f0eade466aa589a22d1b166d1c4fc64394be7",
+    "statement_fidelity": "families/037/first-pass/adjoint_jet_lifting/statement_fidelity.md",
+    "statement_fidelity_sha256": "0828813289361b98348fe6201ea8580c3ccd7c439b95ed7fcaff57ddd520b5e5",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/037/first-pass/adjoint_jet_lifting/Main.lean:19:0: warning: automatically included section variable(s) unused in theorem `AdjointJetLifting.exact_saturation`:\n  [Fintype I]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [Fintype I] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/adjoint_jet_lifting/Main.lean",
+    "text": "import Mathlib\n\nnamespace AdjointJetLifting\n\nvariable {A I : Type*} [AddCommGroup A] [Fintype I]\n\ndef ClosedHalfspaces (forms : I → A →+ ℤ) (q : A) : Prop :=\n  ∀ i, 0 ≤ forms i q\n\ndef StrictHalfspaces (forms : I → A →+ ℤ) (q : A) : Prop :=\n  ∀ i, 0 < forms i q\n\ntheorem height_one_surjective (form : A →+ ℤ) (c : A)\n    (height : form c = 1) : Function.Surjective form := by\n  intro z\n  refine ⟨z • c, ?_⟩\n  simp [map_zsmul, height]\n\ntheorem exact_saturation (forms : I → A →+ ℤ) (c : A)\n    (Gamma : A → Prop)\n    (height : ∀ i, forms i c = 1)\n    (contained : ∀ q, Gamma q → ClosedHalfspaces forms q)\n    (lift : ∀ q, StrictHalfspaces forms (q + c) → Gamma q) :\n    (∀ q, Gamma q ↔ ClosedHalfspaces forms q) ∧\n      (∀ q, StrictHalfspaces forms q ↔\n        ∃ g, Gamma g ∧ q = c + g) := by\n  have saturated : ∀ q, Gamma q ↔ ClosedHalfspaces forms q := by\n    intro q\n    constructor\n    · exact contained q\n    · intro hq\n      apply lift q\n      intro i\n      have hi := hq i\n      simp only [map_add, height i]\n      omega\n  refine ⟨saturated, ?_⟩\n  intro q\n  constructor\n  · intro hq\n    have hclosed : ClosedHalfspaces forms (q - c) := by\n      intro i\n      have hi := hq i\n      simp only [map_sub, height i]\n      omega\n    refine ⟨q - c, (saturated (q - c)).mpr hclosed, ?_⟩\n    abel\n  · rintro ⟨g, hg, rfl⟩\n    intro i\n    have hi := contained g hg i\n    simp only [map_add, height i]\n    omega\n\nend AdjointJetLifting\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/adjoint_jet_lifting/statement_fidelity.md",
+    "text": "# Statement fidelity: the exact finite-facet saturation kernel\n\n`AdjointJetLifting.exact_saturation` quantifies over an arbitrary additive\ncommutative group `A`, an arbitrary finite index type `I`, a family\n`forms : I -> A ->+ Int`, a vector `c : A`, and an arbitrary membership\npredicate `Gamma : A -> Prop`. In the application, `A` is the congruence\nlattice of original section degrees and Taylor exponents, expressed as\nan additive group, and `I` indexes all facets of the cone.\n\n`ClosedHalfspaces forms q` means every integral form is nonnegative at\n`q`; `StrictHalfspaces forms q` means every form is strictly positive.\nThe hypotheses are exactly:\n\n1. Every form has value one at `c`.\n2. `Gamma` is contained in the closed halfspaces.\n3. If `q+c` satisfies all strict inequalities, then `Gamma q`.\n\nThe conclusion is both exact equality of `Gamma` with the closed lattice\nhalfspaces, and equivalence of strict membership of `q` with existence\nof `g` in `Gamma` satisfying `q=c+g`. Subtraction in `A` is essential:\nthe proof considers `q-c`, not a rounded real point. Integrality of the\nform values is essential: a strictly positive integer is at least one.\nThere is no assumption of semigroup finite generation or saturation.\n\n`AdjointJetLifting.height_one_surjective` quantifies over any integral\nadditive form with value one at `c` and proves that it maps onto all\nintegers, by evaluating at integer multiples of `c`. This is precisely\nthe primitivity of that form on the lattice.\n\nThe formal source does not identify strict inequalities with topological\ninterior by itself. That identification is made in the report only\nafter proving that the full-dimensional cone is cut out by finitely many\nnonzero facet forms. The compiler does not verify cone rigidity,\norbifold geometry, local multiplier ideals, restriction surjectivity,\nglobal lifting, rational polyhedrality, or the cited geometric theorems.\nThose are separate mathematical arguments in the report. The theorem\ndoes not claim the full volume-gap theorem and makes no novelty claim.\n"
+  },
+  "subject": {
+    "content_hash": "7cdedc0713c9f33176a8688c4da60422128fab1883aea45d3aa816b37469fedb",
+    "kind": "claim",
+    "subject_id": "C_AJL_FACET_KERNEL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

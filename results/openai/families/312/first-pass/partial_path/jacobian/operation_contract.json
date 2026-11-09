@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "server": {"name": "jacobian", "version": "0.14.0"},
+  "protocol_version": "2025-11-25",
+  "operation_id": "topology.simplicial.edge_path.word.compute",
+  "description": "Compute the free group word representation of an edge path in a graph, where each edge corresponds to a generator and its inverse.",
+  "input_schema": {
+    "$defs": {
+      "OrientedEdge": {
+        "additionalProperties": false,
+        "properties": {
+          "edge_index": {"minimum": 0, "title": "Edge Index", "type": "integer"},
+          "orientation": {"enum": [-1, 1], "title": "Orientation", "type": "integer"}
+        },
+        "required": ["edge_index", "orientation"],
+        "title": "OrientedEdge",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Compute the free group word for an edge path.",
+    "properties": {
+      "edges": {
+        "items": {"maxItems": 2, "minItems": 2, "prefixItems": [{"type": "integer"}, {"type": "integer"}], "type": "array"},
+        "maxItems": 64,
+        "minItems": 1,
+        "title": "Edges",
+        "type": "array"
+      },
+      "path": {"items": {"$ref": "#/$defs/OrientedEdge"}, "maxItems": 128, "minItems": 1, "title": "Path", "type": "array"},
+      "start_vertex": {"minimum": 0, "title": "Start Vertex", "type": "integer"},
+      "vertex_count": {"minimum": 2, "title": "Vertex Count", "type": "integer"}
+    },
+    "required": ["vertex_count", "edges", "start_vertex", "path"],
+    "title": "EdgePathWordRequest",
+    "type": "object"
+  },
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "length": {"minimum": 0, "title": "Length", "type": "integer"},
+      "method": {"default": "EDGE_LABEL_REDUCTION", "title": "Method", "type": "string"},
+      "word": {"items": {"type": "string"}, "title": "Word", "type": "array"}
+    },
+    "required": ["word", "length"],
+    "title": "EdgePathWordResult",
+    "type": "object"
+  },
+  "read_only": true,
+  "discovery": {
+    "query": "free group word reduction tree paths exact",
+    "selected_relevance_score": 55,
+    "other_candidates": ["graph.spanning_tree.minimum.compute", "finite_abelian_group.exact_factorization.compute"],
+    "selection_reason": "This operation checks the signed edge-word cancellation used in tree linearization. It is not evidence for the universal higher-operation construction."
+  },
+  "inspection_status": "inspected_before_execution"
+}

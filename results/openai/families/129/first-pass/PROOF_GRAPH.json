@@ -1,0 +1,183 @@
+{
+  "goal": "C9000129",
+  "routes": [
+    {
+      "name": "R_NEST_CERTIFICATION",
+      "status": "current",
+      "evidence": "research/nested-loss-audit/verify.py"
+    }
+  ],
+  "nodes": {
+    "C9000129": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 129 (Exponential state costs for two-way automata.; papers: An exponential state lower bound for two-way nondeterministic complementation; An exponential two-way deterministic state lower bound for one-way liveness; Lean status: Partially/Comparator formalized (lean/docs/129.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_NEST_CHAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_NEST_CHAIN": {
+      "statement": "nest:chain: arbitrary nested chains spend at most twice one initial missing-class budget, including verification of absorption and containment.",
+      "status": "open",
+      "depends_on": ["C_NEST_ABSORPTION", "C_NEST_CONTAINMENT", "C_NEST_COUNTING"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/An-exponential-state-lower-bound-for-two-way-nondeterministic-complementation-September-25-2026/build/sections/nesting.tex",
+        "research/nested-loss-audit/Main.lean",
+        "research/nested-loss-audit/statement_fidelity.md",
+        "research/nested-loss-audit/certificates/C_NEST_CHAIN-a96607c6145c881d.json",
+        "research/nested-loss-audit/exact_certificate.json",
+        "research/nested-loss-audit/REPORT.md"
+      ]
+    },
+    "C_NEST_ABSORPTION": {
+      "statement": "nest:absorption: K and mixed P/through absorptions for nested idempotents of either sign.",
+      "status": "open",
+      "depends_on": ["C_DIAG_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/nested-loss-audit/Main.lean", "research/nested-loss-audit/certificates/C_NEST_CHAIN-a96607c6145c881d.json"]
+    },
+    "C_NEST_CONTAINMENT": {
+      "statement": "nest:containment: every new recurrent class contains one whole nonmissing old class or two distinct whole old classes of the same sign.",
+      "status": "open",
+      "depends_on": ["C_DIAG_RECTANGLES", "C_NEST_ABSORPTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/nested-loss-audit/Main.lean", "research/nested-loss-audit/certificates/C_NEST_CHAIN-a96607c6145c881d.json"]
+    },
+    "C_NEST_COUNTING": {
+      "statement": "The finite disjoint-class potential argument, with persistent protected labels, implies the chain budget.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/nested-loss-audit/Main.lean", "research/nested-loss-audit/certificates/C_NEST_CHAIN-a96607c6145c881d.json"]
+    },
+    "C_DIAG_CORE": {
+      "statement": "Finite first-exterior-exit path composition gives the diagram formulas, idempotent through identities and corner absorptions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-state-lower-bound-for-two-way-nondeterministic-complementation-September-25-2026/build/sections/diagrams.tex", "research/nested-loss-audit/Main.lean", "research/nested-loss-audit/REPORT.md"]
+    },
+    "C_DIAG_RECTANGLES": {
+      "statement": "diag:rectangles: finite idempotent through edges factor through recurrent-class rectangles.",
+      "status": "open",
+      "depends_on": ["C_DIAG_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/nested-loss-audit/Main.lean", "research/nested-loss-audit/REPORT.md"]
+    },
+    "C_COMP_TRANSPORT": {
+      "statement": "diag:transport: one common target missing set controls all replacements through a fixed context.",
+      "status": "open",
+      "depends_on": ["C_DIAG_RECTANGLES"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_COMP_AMPLIFICATION": {
+      "statement": "amp:single-edge: t=64 hub amplification forces missing loss at least 2^floor((h-2)/127).",
+      "status": "open",
+      "depends_on": ["C_COMP_TRANSPORT", "C_NEST_CHAIN", "C_COMP_CORNERS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-state-lower-bound-for-two-way-nondeterministic-complementation-September-25-2026/build/sections/amplification.tex"]
+    },
+    "C_COMP_IMAGE": {
+      "statement": "amp:image: a full h-point order-reversing relation image of T_m forces 2m >= 2^floor((h-2)/127).",
+      "status": "open",
+      "depends_on": ["C_COMP_AMPLIFICATION"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_COMP_AUTO": {
+      "statement": "auto:representation and auto:order-reversal: finite computations of a complementing s-state 2NFA induce the required order-reversing image in T_(s+1).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-state-lower-bound-for-two-way-nondeterministic-complementation-September-25-2026/build/sections/automata.tex"]
+    },
+    "C_COMP_MAIN": {
+      "statement": "The complementation manuscript's exponential state lower bound; a nesting-core result alone does not verify this theorem.",
+      "status": "open",
+      "depends_on": ["C_COMP_SOURCE", "C_COMP_IMAGE", "C_COMP_AUTO"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_DET_CORNERS": {
+      "statement": "lem:corners: matching-diagram corner/support calculus.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-two-way-deterministic-state-lower-bound-for-one-way-liveness-September-25-2026/build/sections/matching.tex"]
+    },
+    "C_DET_RANK_LOSS": {
+      "statement": "thm:rank-loss: t=16 amplification forces one-pair rank loss at least 2^floor((h-2)/31).",
+      "status": "open",
+      "depends_on": ["C_DET_CORNERS", "C_DET_LOCAL_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-two-way-deterministic-state-lower-bound-for-one-way-liveness-September-25-2026/build/sections/rank.tex"]
+    },
+    "C_DET_DEGREE": {
+      "statement": "cor:divisor-degree: the matching-diagram degree is at least 2^floor((h-2)/31).",
+      "status": "open",
+      "depends_on": ["C_DET_RANK_LOSS"],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C_DET_MACHINE": {
+      "statement": "thm:machine-diagrams and lem:syntactic-quotient: an s-state 2DFA yields the quotient in degree 4(s+2)^2, with the specified initial-configuration improvement.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-two-way-deterministic-state-lower-bound-for-one-way-liveness-September-25-2026/build/sections/machines.tex"]
+    },
+    "C_DET_MAIN": {
+      "statement": "The deterministic manuscript's exponential state lower bound; not certified by this nesting-core mission.",
+      "status": "open",
+      "depends_on": ["C_DET_SOURCE", "C_DET_DEGREE", "C_DET_MACHINE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-two-way-deterministic-state-lower-bound-for-one-way-liveness-September-25-2026/build/sections/separation.tex"]
+    },
+    "C_NEST_FINITE": {
+      "statement": "Bounded checkpoint only: 56 exhaustive T_1 nested pairs, 4000 sampled higher-degree pairs and 800 sampled chains passed exact tests.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/nested-loss-audit/finite_diagnostics.json", "research/nested-loss-audit/jacobian/output.json"]
+    },
+    "C_NEST_MERGER": {
+      "statement": "Exact degree-two merge-then-delete chain: two missing old positive singleton classes form one new recurrent class, and the losses are 2,1 against budget 2. This is not a refutation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/nested-loss-audit/verify.py", "research/nested-loss-audit/exact_certificate.json"]
+    },
+    "C_COMP_CORNERS": {
+      "statement": "amp:minimal-corner and amp:relation-corner supply minimal idempotent lifts, unit lifts and the supported relation-corner isomorphism.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-state-lower-bound-for-two-way-nondeterministic-complementation-September-25-2026/build/sections/amplification.tex"]
+    },
+    "C_COMP_SOURCE": {
+      "statement": "auto:source supplies the h+2-state source 2NFA.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-state-lower-bound-for-two-way-nondeterministic-complementation-September-25-2026/build/sections/automata.tex"]
+    },
+    "C_DET_LOCAL_ALGEBRA": {
+      "statement": "lem:rank-basic, lem:unit-lifts and lem:relation-corner are the remaining finite matching-diagram algebra used by the rank-loss induction.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-two-way-deterministic-state-lower-bound-for-one-way-liveness-September-25-2026/build/sections/matching.tex"]
+    },
+    "C_DET_SOURCE": {
+      "statement": "prop:small-nfa supplies the h+3-state one-way liveness NFA.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/An-exponential-two-way-deterministic-state-lower-bound-for-one-way-liveness-September-25-2026/build/sections/separation.tex"]
+    }
+  }
+}

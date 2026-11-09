@@ -1,0 +1,79 @@
+{
+  "goal": "C9000241",
+  "routes": [
+    {
+      "name": "R_RECOVERY_EXACT: certify the four-value recovery construction with explicit transcript translation",
+      "status": "current",
+      "evidence": "research/recovery_certificate/recovery.md"
+    }
+  ],
+  "nodes": {
+    "C9000241": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 241 (Rigidity of the Turing degrees.; papers: Rigidity of the Turing degrees; Lean status: Partially/Comparator formalized (lean/docs/241.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_RECOVERY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_RECOVERY": {
+      "statement": "Proposition prop:recovery with its original Borel, countable-fiber and all-input addition hypotheses, and with no hidden orbit oracle.",
+      "status": "open",
+      "depends_on": ["L_REC_CATEGORY", "L_REC_TRANSCRIPTS", "C_RECOVERY_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/recovery_certificate/recovery.md"]
+    },
+    "L_REC_CATEGORY": {
+      "statement": "Comeager auxiliary pairs admit two fixed local addition programs and a distinguishing coordinate with inward-pointing endpoint neighborhoods.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/recovery_certificate/recovery.md", "research/recovery_certificate/marker-dst-2002.pdf"]
+    },
+    "C_RECOVERY_CORE": {
+      "statement": "Finite programs and four streams compute every adaptive branch and the strict rational cut; confinement and computation termination hold for all natural stages.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/recovery_certificate/Main.lean",
+        "research/recovery_certificate/statement_fidelity.md",
+        "research/recovery_certificate/verify.py",
+        "research/recovery_certificate/recovery.md",
+        "research/recovery_certificate/exact_certificate.json",
+        "research/recovery_certificate/certificates/C_RECOVERY_CORE-9326e12f980f4212.json"
+      ],
+      "note": "The formal core is closed_kernel after a real Lean 4.31.0 run with exit_code=0 and proof_holes=[]. This audit node remains open pending independent statement-fidelity review."
+    },
+    "L_REC_TRANSCRIPTS": {
+      "statement": "A fixed oracle program has an effective ordinary partial-recursive verifier for finite matching halting transcripts; this translation introduces no additional real oracle.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/recovery_certificate/recovery.md"]
+    },
+    "M_ALL_INPUT_REPRESENTATION": {
+      "statement": "Every full Turing-degree automorphism admits the asserted single total arithmetic all-input lift.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rigidity-of-the-Turing-degrees-September-24-2026/build/sections/representation.tex"]
+    },
+    "M_CATEGORY_AVOIDANCE": {
+      "statement": "The relative upper cone of a nonreducible fixed set is meager in pairs of rational-cut oracles.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rigidity-of-the-Turing-degrees-September-24-2026/build/sections/preliminaries.tex"]
+    },
+    "M_UNRESTRICTED_RIGIDITY": {
+      "statement": "Every order automorphism of the full Turing degrees is the identity.",
+      "status": "open",
+      "depends_on": ["M_ALL_INPUT_REPRESENTATION", "C_RECOVERY", "M_CATEGORY_AVOIDANCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Rigidity-of-the-Turing-degrees-September-24-2026/build/sections/rigidity.tex"]
+    }
+  }
+}

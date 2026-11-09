@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_FOREST_FORMAL_CORE-becb104cca4e",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/007/first-pass/forest_coding/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/007/first-pass/forest_coding/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15811,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/007/first-pass/forest_coding/Main.lean",
+    "source_sha256": "291c6e7bfe5a8df592b9cbf12face75eaebe087a3576f1d6a821d0aa1cd0e100",
+    "statement_fidelity": "families/007/first-pass/forest_coding/statement_fidelity.md",
+    "statement_fidelity_sha256": "40e6904b55088b3728fcce2e6acbc41f05382fb623b95768c91377cac9b01828",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/forest_coding/Main.lean",
+    "text": "import Mathlib\n\nopen Function\n\nnamespace ForestCoding\n\nsection Linear\n\nvariable {K V : Type*} [Field K] [AddCommGroup V] [Module K V]\n\ntheorem dependent_pair_saturates (e w : V) (he : e ≠ 0)\n    (hmax : ¬ LinearIndependent K ![e, w]) :\n    ∃ c : K, w = c • e := by\n  by_contra h\n  apply hmax\n  apply (LinearIndependent.pair_iff' he).2\n  intro c hc\n  exact h ⟨c, hc.symm⟩\n\ntheorem maximal_pair_saturates {ι : Type*} (old : ι → V)\n    (hold : LinearIndependent K old) (e w : V)\n    (he : (Submodule.span K (Set.range old)).mkQ e ≠ 0)\n    (hmax : ¬ LinearIndependent K (Sum.elim old ![e, w])) :\n    ∃ c : K, (Submodule.span K (Set.range old)).mkQ w =\n      c • (Submodule.span K (Set.range old)).mkQ e := by\n  let D := Submodule.span K (Set.range old)\n  apply dependent_pair_saturates (D.mkQ e) (D.mkQ w) he\n  intro hpair\n  apply hmax\n  apply (linearIndependent_span hold).sumElim_of_quotient ![e, w]\n  have hfun : (D.mkQ ∘ ![e, w]) = ![D.mkQ e, D.mkQ w] := by\n    funext i\n    fin_cases i <;> rfl\n  change LinearIndependent K (D.mkQ ∘ ![e, w])\n  rw [hfun]\n  exact hpair\n\ntheorem regular_run_nonzero {ι : Type*} (u : ι → V)\n    (hu : LinearIndependent K u) (z : ι) (c : K) (hc : c ≠ 0) :\n    c • u z ≠ 0 := by\n  exact smul_ne_zero hc (hu.ne_zero z)\n\ntheorem independent_balance {ι : Type*} [Fintype ι]\n    (u : ι → V) (hu : LinearIndependent K u) (c : ι → K)\n    (hbalance : ∑ i, c i • u i = 0) :\n    ∀ i, c i = 0 := by\n  exact Fintype.linearIndependent_iff.mp hu c hbalance\n\ntheorem independent_polygon_impossible {ι : Type*} [Fintype ι] [Nonempty ι]\n    (u : ι → V) (hu : LinearIndependent K u)\n    (start finish : ι → V) (c : ι → K)\n    (hstep : ∀ i, finish i - start i = c i • u i)\n    (hclosed : ∑ i, (finish i - start i) = 0)\n    (hnonzero : ∀ i, c i ≠ 0) : False := by\n  have hbalance : ∑ i, c i • u i = 0 := by\n    simpa only [hstep] using hclosed\n  obtain ⟨i⟩ := ‹Nonempty ι›\n  exact hnonzero i (independent_balance u hu c hbalance i)\n\nend Linear\n\nsection Paths\n\nvariable {Vertex : Type*}\n\nnoncomputable def endpointDecoder (G : SimpleGraph Vertex) (a b : Vertex) :\n    Option (List Vertex) := by\n  classical\n  exact if h : G.Reachable a b then some h.some.toPath.val.support else none\n\ntheorem endpointDecoder_correct (G : SimpleGraph Vertex) (hG : G.IsAcyclic)\n    {a b : Vertex} (p : G.Walk a b)\n    (hp : List.IsChain (· ≠ ·) p.edges) :\n    endpointDecoder G a b = some p.support := by\n  classical\n  have hpath : p.IsPath := (hG.isPath_iff_isChain p).2 hp\n  have heq := hG.path_unique p.reachable.some.toPath ⟨p, hpath⟩\n  simp only [endpointDecoder, dif_pos p.reachable]\n  exact congrArg (fun q : G.Path a b => some q.val.support) heq\n\ntheorem nonbacktracking_walk_unique (G : SimpleGraph Vertex) (hG : G.IsAcyclic)\n    {a b : Vertex} (p q : G.Walk a b)\n    (hp : List.IsChain (· ≠ ·) p.edges)\n    (hq : List.IsChain (· ≠ ·) q.edges) : p = q := by\n  exact congrArg Subtype.val\n    (hG.path_unique ⟨p, (hG.isPath_iff_isChain p).2 hp⟩\n      ⟨q, (hG.isPath_iff_isChain q).2 hq⟩)\n\ntheorem endpointDecoder_labels (G : SimpleGraph Vertex) (hG : G.IsAcyclic)\n    {a b : Vertex} (p : G.Walk a b)\n    (hp : List.IsChain (· ≠ ·) p.edges) (isLine : Vertex → Bool) :\n    (endpointDecoder G a b).map (List.filter isLine) =\n      some (p.support.filter isLine) := by\n  rw [endpointDecoder_correct G hG p hp]\n  rfl\n\nend Paths\n\ndef recordBudget (r B I : ℕ) := (6 * r - 4) * B + I\n\nabbrev Code (n r B I : ℕ) :=\n  (Fin (4 * n) → Bool) × Fin (2 ^ (6 * n + 3)) ×\n    (Fin (recordBudget r B I) → Fin (2 * n))\n\nabbrev Pattern (n : ℕ) := Fin n → Fin n\n\ntheorem record_budget {r d B I actualI S O : ℕ} (hr : 1 ≤ r)\n    (hd : d ≤ 2 * r - 2) (hS : S ≤ (d + 1) * B)\n    (hO : O ≤ d * B) (hI : actualI ≤ I) :\n    2 * S + O + actualI ≤ recordBudget r B I := by\n  have hcoeff : 3 * d + 2 ≤ 6 * r - 4 := by omega\n  calc\n    2 * S + O + actualI ≤ (3 * d + 2) * B + I := by nlinarith\n    _ ≤ (6 * r - 4) * B + I :=\n      Nat.add_le_add_right (Nat.mul_le_mul_right B hcoeff) I\n\ntheorem code_card (n r B I : ℕ) :\n    Fintype.card (Code n r B I) =\n      2 ^ (10 * n + 3) * (2 * n) ^ recordBudget r B I := by\n  simp only [Code, Fintype.card_prod, Fintype.card_fun, Fintype.card_fin,\n    Fintype.card_bool]\n  rw [← mul_assoc, ← pow_add]\n  have he : 4 * n + (6 * n + 3) = 10 * n + 3 := by omega\n  rw [he]\n\ntheorem coefficient_uniform_injection {Witness : Type*}\n    (n r B I : ℕ) (valid : Witness → Pattern n → Prop)\n    (emit : ∀ w p, valid w p → Code n r B I)\n    (decode : Code n r B I → Option (Pattern n))\n    (hdecode : ∀ w p h, decode (emit w p h) = some p) :\n    ∃ encode : {p : Pattern n // ∃ w, valid w p} → Code n r B I,\n      Injective encode := by\n  classical\n  let encode : {p : Pattern n // ∃ w, valid w p} → Code n r B I :=\n    fun p => emit (Classical.choose p.property) p.val (Classical.choose_spec p.property)\n  refine ⟨encode, ?_⟩\n  intro p q heq\n  apply Subtype.ext\n  have hp : decode (encode p) = some p.val := hdecode _ _ _\n  have hq : decode (encode q) = some q.val := hdecode _ _ _\n  exact Option.some.inj (hp.symm.trans ((congrArg decode heq).trans hq))\n\ntheorem coefficient_uniform_card {Witness : Type*}\n    (n r B I : ℕ) (valid : Witness → Pattern n → Prop)\n    (emit : ∀ w p, valid w p → Code n r B I)\n    (decode : Code n r B I → Option (Pattern n))\n    (hdecode : ∀ w p h, decode (emit w p h) = some p) :\n    Nat.card {p : Pattern n // ∃ w, valid w p} ≤\n      2 ^ (10 * n + 3) * (2 * n) ^ recordBudget r B I := by\n  classical\n  obtain ⟨encode, hinj⟩ := coefficient_uniform_injection n r B I valid emit decode hdecode\n  calc\n    Nat.card {p : Pattern n // ∃ w, valid w p} ≤ Nat.card (Code n r B I) :=\n      Nat.card_le_card_of_injective encode hinj\n    _ = 2 ^ (10 * n + 3) * (2 * n) ^ recordBudget r B I := by\n      rw [Nat.card_eq_fintype_card, code_card]\n\nend ForestCoding\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/forest_coding/statement_fidelity.md",
+    "text": "# Statement fidelity: ForestCoding\n\n`Main.lean` uses Lean 4.31.0 and Mathlib. It proves universal core lemmas,\nnot numerical examples. The full structural theorem and its manuscript\nspecialization are proved in `report.md`; this file does not describe that\nentire proof as kernel-checked.\n\n## Linear algebra declarations\n\n`dependent_pair_saturates` quantifies over every field `K`, every `K`-module\n`V` with an additive commutative group, and vectors `e,w`. If `e` is nonzero\nand the two-vector family is dependent, `w` is a scalar multiple of `e`.\n\n`maximal_pair_saturates` quantifies over an arbitrary independent family\n`old`, and arbitrary `e,w`. Its quotient is exactly by the span of `old`.\nIt assumes that the quotient image of `e` is nonzero and that adjoining\nboth `e,w` as separately indexed vectors is not independent. It concludes\nthat the quotient image of `w` is a multiple of that of `e`. Thus it checks\nthe maximal-pair extension argument, not an independence assertion modulo\nnumerical primes. Application to all lit-occurrence pairs is in the report.\n\n`regular_run_nonzero` has arbitrary independent directions, label, and\nnonzero scalar increment; it proves that the vector increment is nonzero.\n`independent_balance` and `independent_polygon_impossible` rule out a closed\nfinite vector polygon with distinct independent directions and nonzero\ncoefficients. The latter explicitly assumes closure as a sum of\ndifferences. The translation from a graph cycle to this polygon is in the\nreport, not hidden in the Lean theorem.\n\n## Segment decoding declarations\n\n`endpointDecoder` is one decoder depending only on an abstract graph and\nits two endpoints. It returns `none` on disconnected endpoints and\notherwise the vertex support of a chosen simple path.\n\n`endpointDecoder_correct` proves, for every acyclic simple graph and every\nwalk whose consecutive undirected edges differ, that the decoder recovers\nthat walk's whole vertex sequence. `nonbacktracking_walk_unique` proves\nequality of any two such walks with the same endpoints.\n`endpointDecoder_labels` also recovers the sequence after filtering by an\narbitrary line-vertex type predicate. These are all-length statements;\nacyclicity is a hypothesis, established for the incidence graph in prose.\nThe nonzero-run and distinct-adjacent-label hypotheses are what give\nnonbacktracking in that application.\n\n## Code and coefficient-union declarations\n\n`Code n r B I` is the product of `4n` bits, a forest integer less than\n`2^(6n+3)`, and `E=(6r-4)B+I` entries of `Fin (2n)`. All public parameters\nare natural numbers. `record_budget` assumes `r>=1`, `d<=2r-2`,\n`S<=(d+1)B`, `O<=dB`, and `actualI<=I`, and proves the precise used-slot\nbound. `code_card` proves the exact cardinality of this fixed code type.\nThe typed-forest framing and mask/representative decoder construction\nare justified in the report and implemented over rational witnesses by\n`verify.py`; their full implementation is not formalized in Lean.\n\n`coefficient_uniform_injection` and `coefficient_uniform_card` quantify over\nan arbitrary, not necessarily finite, type `Witness`. The predicate\n`valid w p` can express arbitrary numerical coefficients, fields, padding,\nor other witness data. The theorem requires a witness encoder into the\n**same** `Code n r B I` and a **single** decoder satisfying the displayed\ndecode/encode identity for every witness. It constructs an injection of\nthe existential union `{p | exists w, valid w p}` into that code space,\nand proves its cardinal bound. It does not merely bound each fixed\nwitness fibre. It does not infer a shared decoder from separate fibre\ncardinality bounds. Constructing the encoder and proving its identity\nfor the forest witnesses is the substantive prose argument in the report.\n\n`Pattern n` is a function `Fin n -> Fin n`, sufficient to carry the\ncanonical restricted-growth word of every equality partition. The\nformal cardinal theorem is stronger in allowing any such functions.\nNo theorem in this file asserts either main correlation theorem or\nglobal novelty. No theorem assumes translated residues independent.\nThere are no project axioms or proof holes; standard Lean/Mathlib logical\naxioms are those of the imported library.\n"
+  },
+  "subject": {
+    "content_hash": "cc9e95878245762282967ac2db20a9ea93275bcf069d072aa0fa64bfa01764a9",
+    "kind": "claim",
+    "subject_id": "C_FOREST_FORMAL_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

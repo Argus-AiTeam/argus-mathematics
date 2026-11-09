@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_AUDIT_KERNEL-87677636465c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/317/first-pass/couniversality_audit/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/317/first-pass/couniversality_audit/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14845,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/317/first-pass/couniversality_audit/lean/Main.lean",
+    "source_sha256": "b92db80ca296babaac74e0520f86ef672e31b04e6ba68f786c5c1e2b639e51fc",
+    "statement_fidelity": "families/317/first-pass/couniversality_audit/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "99374637539617698c42e56955cec8fd5981f0c5b64c8e5b6105325b03a7d3fa",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'CouniversalityAudit.edge_identity_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CouniversalityAudit.append_control_iff_edge_identities' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CouniversalityAudit.terminal_correction' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CouniversalityAudit.sieve_constancy_implies_control' depends on axioms: [propext, Classical.choice, Quot.sound]\n'CouniversalityAudit.glue_along_adjunction' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/couniversality_audit/lean/Main.lean",
+    "text": "import Mathlib\n\nnoncomputable section\n\nopen CategoryTheory CategoryTheory.Limits\n\nnamespace CouniversalityAudit\n\nuniverse u v w z\n\ndef edge {α : Type u} (a b : α) : (α × α) →₀ ℤ := by\n  classical\n  exact if a = b then 0 else Finsupp.single (a, b) 1\n\ntheorem edge_identity_iff {E : Type u} [PartialOrder E]\n    (a b c : E) (hab : a ≤ b) (hbc : b ≤ c) :\n    edge a c - edge a b = edge b c ↔ a = b ∨ b = c := by\n  classical\n  constructor\n  · intro h\n    by_contra hn\n    have habn : a ≠ b := fun he => hn (Or.inl he)\n    have hbcn : b ≠ c := fun he => hn (Or.inr he)\n    have hacn : a ≠ c := by\n      intro he\n      apply habn\n      exact le_antisymm hab (by simpa [he] using hbc)\n    have hc := congrArg (fun q : (E × E) →₀ ℤ => q (a, c)) h\n    simp [edge, habn, hbcn, hacn, Ne.symm hbcn] at hc\n  · rintro (rfl | rfl) <;> simp [edge]\n\ndef normalized {α : Type u} (l : List α) : (List α) →₀ ℤ := by\n  classical\n  exact if l.Nodup then Finsupp.single l 1 else 0\n\ntheorem normalized_repeat {α : Type u} (pre post : List α) (a : α) :\n    normalized (pre ++ a :: a :: post) = 0 := by\n  classical\n  simp [normalized, List.nodup_append]\n\ntheorem normalized_last_duplicate {α : Type u} (l : List α) (a : α) :\n    normalized (l ++ [a, a]) = 0 := by\n  exact normalized_repeat l [] a\n\ndef AppendControl {E : Type u} [LE E] (f g : E → E) : Prop :=\n  ∀ x y, x ≤ y → f x = g x ∨ g x = g y\n\ntheorem append_control_iff_edge_identities {E : Type u} [PartialOrder E]\n    (f g : E → E) (hg : Monotone g) (hfg : ∀ x, f x ≤ g x) :\n    AppendControl f g ↔\n      ∀ x y, x ≤ y →\n        edge (f x) (g y) - edge (f x) (g x) = edge (g x) (g y) := by\n  constructor\n  · intro hc x y hxy\n    exact (edge_identity_iff _ _ _ (hfg x) (hg hxy)).mpr (hc x y hxy)\n  · intro he x y hxy\n    exact (edge_identity_iff _ _ _ (hfg x) (hg hxy)).mp (he x y hxy)\n\ntheorem terminal_correction {E : Type u} [PartialOrder E]\n    (f g : E → E) (hg : Monotone g) (hc : AppendControl f g)\n    (l : List E) (u v : E)\n    (hl : ∀ x ∈ l, x ≤ u) (huv : u ≤ v) :\n    normalized (((l ++ [u]).map f) ++ [g v]) -\n        normalized (((l ++ [u]).map f) ++ [g u]) =\n      normalized ((l ++ [u, v]).map g) := by\n  classical\n  by_cases hlast : g u = g v\n  · rw [hlast]\n    simp [List.map_append, ← hlast, normalized_last_duplicate]\n  · have hmap : (l ++ [u]).map f = (l ++ [u]).map g := by\n      apply List.map_congr_left\n      intro x hx\n      have hxu : x ≤ u := by\n        rcases List.mem_append.mp hx with hx | hx\n        · exact hl x hx\n        · have he : x = u := by simpa using hx\n          exact le_of_eq he\n      have hxv : x ≤ v := le_trans hxu huv\n      rcases hc x v hxv with he | he\n      · exact he\n      · exfalso\n        apply hlast\n        apply le_antisymm (hg huv)\n        simpa [← he] using hg hxu\n    rw [hmap]\n    simp [List.map_append, List.append_assoc, normalized_last_duplicate]\n\ntheorem sieve_constancy_implies_control {E : Type u} [PartialOrder E]\n    (A : Set E) (hA : IsLowerSet A) (f g : E → E)\n    (hold : ∀ x ∈ A, f x = g x)\n    (hnew : ∀ x ∉ A, ∀ y ∉ A, g x = g y) :\n    AppendControl f g := by\n  intro x y hxy\n  by_cases hx : x ∈ A\n  · exact Or.inl (hold x hx)\n  · have hy : y ∉ A := fun hy => hx (hA hxy hy)\n    exact Or.inr (hnew x hx y hy)\n\ntheorem glue_along_adjunction\n    {C : Type u} [Category.{v} C] {D : Type w} [Category.{z} D]\n    {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R)\n    {A X B Y : C} {a : A ⟶ X} {i : A ⟶ B}\n    {j : X ⟶ Y} {b : B ⟶ Y} (sq : IsPushout a i j b)\n    (Z : D) (s : L.obj X ⟶ Z) (p : L.obj B ⟶ Z)\n    (h : L.map a ≫ s = L.map i ≫ p) :\n    ∃! q : L.obj Y ⟶ Z, L.map j ≫ q = s ∧ L.map b ≫ q = p := by\n  let tx := (adj.homEquiv X Z) s\n  let tb := (adj.homEquiv B Z) p\n  have ht : a ≫ tx = i ≫ tb := by\n    dsimp [tx, tb]\n    rw [← adj.homEquiv_naturality_left, ← adj.homEquiv_naturality_left, h]\n  let d := sq.desc tx tb ht\n  refine ⟨(adj.homEquiv Y Z).symm d, ?_, ?_⟩\n  · constructor\n    · rw [← adj.homEquiv_naturality_left_symm]\n      change (adj.homEquiv X Z).symm (j ≫ sq.desc tx tb ht) = s\n      rw [sq.inl_desc]\n      exact (adj.homEquiv X Z).symm_apply_apply s\n    · rw [← adj.homEquiv_naturality_left_symm]\n      change (adj.homEquiv B Z).symm (b ≫ sq.desc tx tb ht) = p\n      rw [sq.inr_desc]\n      exact (adj.homEquiv B Z).symm_apply_apply p\n  · intro q hq\n    apply (adj.homEquiv Y Z).injective\n    rw [Equiv.apply_symm_apply]\n    apply sq.hom_ext\n    · rw [← adj.homEquiv_naturality_left, hq.1]\n      exact (sq.inl_desc tx tb ht).symm\n    · rw [← adj.homEquiv_naturality_left, hq.2]\n      exact (sq.inr_desc tx tb ht).symm\n\n#print axioms edge_identity_iff\n#print axioms append_control_iff_edge_identities\n#print axioms terminal_correction\n#print axioms sieve_constancy_implies_control\n#print axioms glue_along_adjunction\n\nend CouniversalityAudit\n\nend\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/couniversality_audit/lean/statement_fidelity.md",
+    "text": "# Statement fidelity\n\n`Main.lean` is an independent Lean 4.31 formalization of specified\nalgebraic and universal-property parts of the couniversality audit.\nIt is **not** a formalization of strict higher categories, the Gray\ntensor, the Street nerve, weak homotopy equivalences, or the complete\ncouniversality theorem. It does not import the incompatible public\nOpenAI development.\n\n## Declarations\n\n`CouniversalityAudit.edge` is the generator `(a,b)` of the free abelian\ngroup on ordered pairs, except that it is zero when `a=b`.\n`edge_identity_iff` quantifies over every partially ordered set and\nevery triple `a <= b <= c`. It proves\n`[a,c] - [a,b] = [b,c]` if and only if `a=b` or `b=c`.\nThere is no bound on the poset or on its cardinality. Only weakly\nincreasing pairs are used in this interpretation.\n\n`normalized` takes a list to its generator in the free abelian group\non all lists when it has no repeated entries, and to zero otherwise.\nOn the weakly increasing tuples in the mathematical proof, this is\nexactly the usual normalized-simplex bracket. It is not a definition\nof a differential, nor does the formalization assert that an arbitrary\nunordered list is an ordered simplex.\n`normalized_repeat` and `normalized_last_duplicate` prove the specified\nrepeated-tuple vanishings.\n\n`AppendControl f g` means that for every comparable pair `x <= y`,\neither `f(x)=g(x)` or `g(x)=g(y)`.\n`append_control_iff_edge_identities` proves that, for monotone `g`\nand pointwise `f <= g`, this is equivalent to all the corresponding\nnormalized edge identities. It constructs the necessity as well as\nthe sufficiency of this algebraic criterion.\n`terminal_correction` quantifies over every poset, monotone `g`,\nevery function `f` satisfying this control condition, every finite\nlist `l`, and every `u <= v`, assuming every entry of `l` is at most\n`u`. It proves\n\n```\n[f(l),f(u),g(v)] - [f(l),f(u),g(u)]\n  = [g(l),g(u),g(v)].\n```\n\nIn the prism proof this is `B-B'=G`. There is no bound on list\nlength, so this is not finite testing of dimensions. Monotonicity of\n`f` and `f <= g` are not needed for this isolated equality; those\nadditional hypotheses are needed in the mathematical proof to make\nthe displayed tuples positive ordered simplices.\n\n`sieve_constancy_implies_control` proves, for every lower subset `A`,\nthat `f=g` on `A` and constancy of `g` on its complement imply\n`AppendControl f g`. These are constructed consequences of the\nmanuscript's hypotheses, not new assumptions for the original prism.\n\n`glue_along_adjunction` quantifies over arbitrary categories, an actual\nadjunction `L : C -> D` left adjoint to `R`, an actual categorical\npushout `Y` of `X <- A -> B`, an arbitrary target `Z` in `D`, and\narbitrary compatible maps `s : L(X) -> Z`, `p : L(B) -> Z`.\nIt constructs the unique `q : L(Y) -> Z` restricting to `s,p`.\nThere is no monomorphism, freeness, cofibrancy, or dimension\nrestriction. It proves the universal-property mechanism used to glue\nwhole cylinders. It does **not** construct the particular\nstrict-category adjunction or its finite-dimensional restriction;\nthose are separate mathematical obligations in the report.\n\n## Trust and limits\n\nThe source imports Mathlib and uses no custom axioms, `sorry`,\n`admit`, or `native_decide`. The five main declarations print their\naxiom dependencies. Kernel checking establishes these statements,\nnot the identification of their abstract objects with the full\nmanuscript construction.\n\nThe associated ledger claim for a compiler run must therefore be an\nalgebraic or universal-property claim, not `C_COUNIVERSAL`.\nA compiling source cannot by itself close the categorical,\ntopological, literature, novelty, or independent-review obligations.\n"
+  },
+  "subject": {
+    "content_hash": "20d12ad2c2da8170cb985885534bb86f3ffb319fbfa9a2894d2bf8e1f42a54d4",
+    "kind": "claim",
+    "subject_id": "C_AUDIT_KERNEL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

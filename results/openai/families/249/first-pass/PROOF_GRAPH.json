@@ -1,0 +1,146 @@
+{
+  "goal": "C9000249",
+  "routes": [
+    {
+      "name": "R_WORD_ALIGNMENT",
+      "status": "current",
+      "goal": "RELATOR_ALIGNMENT",
+      "obligations": ["FINITE_WORD_SHEAR", "NORMAL_CLOSURE", "MATRIX_IDENTITY", "EXACT_COUNTS"],
+      "evidence": "research/relator_alignment/proof.md"
+    },
+    {
+      "name": "R_MATRIX_ONLY",
+      "status": "ruled_out",
+      "evidence": "research/relator_alignment/proof.md"
+    }
+  ],
+  "nodes": {
+    "C9000249": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 249 (A finitely generated Eilenberg–Ganea counterexample.; papers: A finitely generated counterexample to the Eilenberg–Ganea conjecture; Lean status: Partially/Comparator formalized (lean/docs/249.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["EG_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "EG_MAIN": {
+      "statement": "The specified Bestvina-Brady height kernel is finitely generated and residually finite, with integral cohomological dimension 2 and geometric dimension 3 (thm:main).",
+      "status": "open",
+      "depends_on": ["MODEL", "COMPARISON", "SMALL_LABELS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finitely-generated-counterexample-to-the-Eilenberg-Ganea-conjecture-September-23-2026/build/sections/conclusion.tex"]
+    },
+    "MODEL": {
+      "statement": "prop:model supplies the group, the finite triangular cycle basis, cd=2 and gd<=3.",
+      "status": "open",
+      "depends_on": ["SEED"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finitely-generated-counterexample-to-the-Eilenberg-Ganea-conjecture-September-23-2026/build/sections/geometry.tex"]
+    },
+    "SEED": {
+      "statement": "lem:geometric-seed constructs the finite acyclic flag complex and nontrivial SU(2) representation.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false
+    },
+    "SMALL_LABELS": {
+      "statement": "prop:small-labels supplies arbitrarily small triangle-flat labels with nontrivial closed-path holonomy.",
+      "status": "open",
+      "depends_on": ["MODEL", "SEED"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finitely-generated-counterexample-to-the-Eilenberg-Ganea-conjecture-September-23-2026/build/sections/transport.tex"]
+    },
+    "COMPARISON": {
+      "statement": "thm:presentation excludes nontrivial holonomy for sufficiently small triangle-flat labels if a two-dimensional classifying space exists.",
+      "status": "open",
+      "depends_on": ["ALIGNED_PRESENTATION", "EXACT_COUNTS", "QUADRATIC", "FINITE_QUOTIENT", "COMPACTNESS"],
+      "reviewer_confirmed": false
+    },
+    "INITIAL_PRESENTATION": {
+      "statement": "The hypothetical two-dimensional K(Gamma,1) yields an actual presentation with boundary isomorphism; adjoining S, replacing generators and adjoining U preserve the required structures.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finitely-generated-counterexample-to-the-Eilenberg-Ganea-conjecture-September-23-2026/build/sections/presentation.tex"]
+    },
+    "ALIGNED_PRESENTATION": {
+      "statement": "lem:aligned-presentation in full, including its topological reduction.",
+      "status": "open",
+      "depends_on": ["INITIAL_PRESENTATION", "RELATOR_ALIGNMENT"],
+      "reviewer_confirmed": false
+    },
+    "RELATOR_ALIGNMENT": {
+      "statement": "For arbitrary index sets, using the ambient path-chain module and an injective cycle embedding, the three P,Q,P precompositions of an actual stabilized presentation are realized by finite relator words, preserve the presentation kernel and give the distinguished boundaries, complete cycle basis, ordinary projection isomorphism, and exact counts.",
+      "status": "in_progress",
+      "depends_on": ["FINITE_WORD_SHEAR", "NORMAL_CLOSURE", "MATRIX_IDENTITY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/relator_alignment/Main.lean",
+        "research/relator_alignment/statement_fidelity.md",
+        "research/relator_alignment/verify.py",
+        "research/relator_alignment/exact_certificate.json",
+        "research/relator_alignment/certificates/RELATOR_ALIGNMENT-fdba76354af29dcf.json"
+      ],
+      "review_note": "The official Lean 4.31.0 claim-bound compiler run succeeded with no proof holes. Independent statement-fidelity and mathematical review remain required; this node is deliberately not marked proved."
+    },
+    "FINITE_WORD_SHEAR": {
+      "statement": "Every finitely supported left integral group-ring linear combination of boundaries of trivial relators is the boundary of a finite product of conjugates and inverse relators.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/relator_alignment/Main.lean"]
+    },
+    "NORMAL_CLOSURE": {
+      "statement": "Simultaneously right-multiplying each changing relator by a finite word in the normal closure of the unchanged block preserves the normal closure of both blocks, for arbitrary index sets.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/relator_alignment/Main.lean"]
+    },
+    "MATRIX_IDENTITY": {
+      "statement": "For any left-module linear isomorphism A, successive P,Q,P shears send (A,1) to the off-diagonal map (0,1;-A,0); the ordinary projection is diag(1,-A).",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/relator_alignment/Main.lean"]
+    },
+    "EXACT_COUNTS": {
+      "statement": "lem:exact-counts: every finite normal-closure expression for z has translated signed coefficient sum exactly e_rho_z, by injectivity of the complete boundary map.",
+      "status": "in_progress",
+      "depends_on": ["RELATOR_ALIGNMENT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/relator_alignment/Main.lean",
+        "research/relator_alignment/statement_fidelity.md",
+        "research/relator_alignment/exact_certificate.json"
+      ]
+    },
+    "QUADRATIC": {
+      "statement": "lem:quadratic-estimate gives a uniform quadratic discrepancy and short-word bound.",
+      "status": "open",
+      "depends_on": ["EXACT_COUNTS"],
+      "reviewer_confirmed": false
+    },
+    "LOCALIZED_DEGREE": {
+      "statement": "lem:localized-degree gives nonzero degree on every conjugation-invariant isolating open part of the word fiber containing the identity.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-finitely-generated-counterexample-to-the-Eilenberg-Ganea-conjecture-September-23-2026/build/sections/degree.tex"]
+    },
+    "FINITE_QUOTIENT": {
+      "statement": "lem:finite-quotient-solvability solves each finite ordinary system while keeping the distinguished products small.",
+      "status": "open",
+      "depends_on": ["RELATOR_ALIGNMENT", "QUADRATIC", "LOCALIZED_DEGREE"],
+      "reviewer_confirmed": false
+    },
+    "COMPACTNESS": {
+      "statement": "Finite-coordinate residual-finiteness and arbitrary-product compactness preserve the original S-labels and solve the full ordinary system.",
+      "status": "open",
+      "depends_on": ["FINITE_QUOTIENT"],
+      "reviewer_confirmed": false
+    }
+  }
+}

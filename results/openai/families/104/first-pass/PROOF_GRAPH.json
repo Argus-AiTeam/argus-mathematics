@@ -1,0 +1,157 @@
+{
+  "goal": "C9000104",
+  "routes": {
+    "R104_LABEL_CERTIFICATION": {
+      "description": "Certify the specified deterministic simultaneous-labeling recursion, conditional only on the stated finite-box interface.",
+      "goal": "C104_LABEL_CORE",
+      "obligations": ["C104_TRANSLATION", "C104_DOWN", "C104_UP", "C104_REWEIGHT", "C104_RANK", "C104_BASE"],
+      "status": "active"
+    }
+  },
+  "nodes": {
+    "C9000104": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 104 (Quasipolynomial algorithms for mean-payoff, stochastic and parity games.; papers: Turn-Based Stochastic Mean-Payoff Games in Deterministic Quasipolynomial Time; Mean-payoff parity games in quasipolynomial time; Deterministic quasipolynomial-time mean-payoff games; Randomized quasipolynomial-time mean-payoff games; Lean status: Partially/Comparator formalized (lean/docs/104.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C104_LABEL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C104_DETERMINISTIC": {
+      "statement": "A uniform deterministic algorithm computes the zero-threshold winning set of a finite binary-weighted mean-payoff game in 2^{O(log^2(L+2))} bit operations.",
+      "status": "open",
+      "depends_on": ["C104_LABEL_CORE", "C104_GAME_REDUCTION", "C104_BIT_BOUND"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    },
+    "C104_RANDOMIZED": {
+      "statement": "A uniform randomized algorithm returns the complete mean-payoff winning set with probability at least 7/8 and every tape uses 2^{O(log^2(L+2))} bit operations.",
+      "status": "open",
+      "depends_on": ["C104_BOX_INTERFACE", "C104_RANDOMIZED_RECOVERY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    },
+    "C104_STOCHASTIC": {
+      "statement": "A uniform deterministic algorithm computes the nonnegative expected mean-payoff value set for rational turn-based stochastic games in 2^{O(log^2(L+2))} bit operations.",
+      "status": "open",
+      "depends_on": ["C104_LABEL_CORE", "C104_DISCOUNTED_EXTENSION", "C104_STOCHASTIC_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    },
+    "C104_PARITY": {
+      "statement": "A uniform deterministic algorithm computes the vertices winning for parity and nonnegative mean payoff in 2^{O(log^2(L+2))} bit operations.",
+      "status": "open",
+      "depends_on": ["C104_DETERMINISTIC", "C104_PARITY_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    },
+    "C104_LABEL_CORE": {
+      "statement": "For every admissible finite nonempty dimension, integer lower endpoint, dyadic width and positive rational masses, the specified two-pass recursion terminates and simultaneously satisfies every Max and Min witness claim.",
+      "status": "open",
+      "depends_on": ["C104_BASE", "C104_TRANSLATION", "C104_DOWN", "C104_UP", "C104_REWEIGHT", "C104_RANK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md", "research/label_core/Main.lean", "research/label_core/STATEMENT_FIDELITY.md", "research/label_core/certificates/C104_LABEL_CORE-03320a67c0cc17a9.json"],
+      "formal_declaration": "LabelCore.label_good",
+      "engineer_status": "conditional_kernel_verified_pending_independent_review"
+    },
+    "C104_BOX_INTERFACE": {
+      "statement": "The staged companion's support-restricted comparison and finite synchronous Basic iteration hold on arbitrary finite integer boxes for the perturbed game operator.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Randomized-quasipolynomial-time-mean-payoff-games-September-25-2026/build/source/sections/02-boxes.tex"]
+    },
+    "C104_BASE": {
+      "statement": "The mass and small-width base cases satisfy all simultaneous witness obligations, using the finite-box interface only in the latter.",
+      "status": "open",
+      "depends_on": ["C104_BOX_INTERFACE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md", "research/label_core/Main.lean"],
+      "formal_declarations": ["mass_base_good", "basic_good"]
+    },
+    "C104_TRANSLATION": {
+      "statement": "Integer scalar translation and clipping preserve the required comparison inequality, have exact support at gaps < r contained in the original support, and claim all gaps <= r/32.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md", "research/label_core/Main.lean"],
+      "formal_declarations": ["translateMax_sub", "translateMin_super", "translateMax_support", "translateMin_support", "translateMax_witness", "translateMin_witness"]
+    },
+    "C104_DOWN": {
+      "statement": "Assuming correctness of smaller-rank children, the downward pass preserves Max peaks, makes negative overrides safe, and forces absolute Min gap-support mass > 3/4 at its stopped pivot.",
+      "status": "open",
+      "depends_on": ["C104_TRANSLATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md", "research/label_core/Main.lean"],
+      "formal_declarations": ["downRun_peak", "downRun_safe", "down_stopped_heavy"]
+    },
+    "C104_UP": {
+      "statement": "Assuming correctness of smaller-rank children, the upward pass preserves Min peaks, makes positive overrides safe, preserves the first heavy support, and forces absolute Max gap-support mass > 3/4.",
+      "status": "open",
+      "depends_on": ["C104_TRANSLATION", "C104_DOWN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md", "research/label_core/Main.lean"],
+      "formal_declarations": ["finalPivot_min_peak", "finalPivot_safe", "finalPivot_heavy_min", "finalPivot_heavy_max"]
+    },
+    "C104_REWEIGHT": {
+      "statement": "The provisional half-width call labels every heavy gap support favorably, so each unsettled original witness has reweighted support mass strictly below one.",
+      "status": "open",
+      "depends_on": ["C104_TRANSLATION", "C104_UP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md", "research/label_core/Main.lean"],
+      "formal_declarations": ["total_reweight", "reweight_support_bound", "survive_max", "survive_min", "stage_good"]
+    },
+    "C104_RANK": {
+      "statement": "Both finite pivot passes and every recursive child terminate by rank d+B(min_i a_i*b_i); only the provisional child preserves B.",
+      "status": "open",
+      "depends_on": ["C104_BOX_INTERFACE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md", "research/label_core/Main.lean"],
+      "formal_declarations": ["fall_spec", "rise_spec", "budget_decreases", "rank_decreases_mass", "downChild_rank", "upChild_rank", "continuation_rank", "wideChild_rank", "label"]
+    },
+    "C104_GAME_REDUCTION": {
+      "statement": "The initial wide-box solution has two separated bands whose positional strategies give the exact winning partition.",
+      "status": "open",
+      "depends_on": ["C104_BOX_INTERFACE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    },
+    "C104_BIT_BOUND": {
+      "statement": "The recursion's one budget-preserving child and O(n) budget-decreasing children give a quasipolynomial call count with polynomial local bit cost.",
+      "status": "open",
+      "depends_on": ["C104_RANK"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    },
+    "C104_RANDOMIZED_RECOVERY": {
+      "statement": "The randomized manuscript's potential-recovery and probability/bit analyses are correct; not audited in this mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    },
+    "C104_DISCOUNTED_EXTENSION": {
+      "statement": "Discounted translations, flooring and labeling recursion are valid; not certified by the deterministic core alone.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    },
+    "C104_STOCHASTIC_REDUCTION": {
+      "statement": "The stochastic value-separation and discounted-to-mean-payoff reduction and complexity bounds hold; not audited here.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    },
+    "C104_PARITY_REDUCTION": {
+      "statement": "The parity reduction and its complexity bound hold given the deterministic mean-payoff interface; not audited here.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/label_core/REPORT.md"]
+    }
+  }
+}

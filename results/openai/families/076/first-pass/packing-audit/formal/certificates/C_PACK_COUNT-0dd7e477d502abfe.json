@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_PACK_COUNT-d7fbd1ecc25f",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/076/first-pass/packing-audit/formal/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/076/first-pass/packing-audit/formal/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16372,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/076/first-pass/packing-audit/formal/Main.lean",
+    "source_sha256": "7a801205e6f379e35142502d868cecf0959eb3e2a4deedd2ad9022a5c8c223b7",
+    "statement_fidelity": "families/076/first-pass/packing-audit/formal/statement_fidelity.md",
+    "statement_fidelity_sha256": "2aa38e51c7e4ad8bc3ec562a3441722e73ffb8d9dda1dcbf6d9806248fe028b3",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/packing-audit/formal/Main.lean",
+    "text": "import Mathlib\n\nnamespace PackingAudit\n\nvariable {K V W : Type*}\nvariable [Field K] [AddCommGroup V] [Module K V]\nvariable [AddCommGroup W] [Module K W]\n\n/-- Splitting an affine fiber into the value of `g` and its `g = 0` subfiber. -/\ndef fiberEquiv (F : V →ₗ[K] W) (g : V →ₗ[K] K) (s : W)\n    (v : V) (hvF : F v = 0) (hvg : g v = 1) :\n    {x : V // F x = s} ≃ K × {x : V // F x = s ∧ g x = 0} where\n  toFun x := ⟨g x, ⟨x - g x • v, by\n    constructor\n    · simp [map_sub, map_smul, hvF, x.property]\n    · simp [map_sub, map_smul, hvg]⟩⟩\n  invFun z := ⟨z.2 + z.1 • v, by\n    simp [map_add, map_smul, hvF, z.2.property.1]⟩\n  left_inv x := by\n    apply Subtype.ext\n    exact sub_add_cancel _ _\n  right_inv z := by\n    apply Prod.ext\n    · simp [map_add, map_smul, hvg, z.2.property.2]\n    · apply Subtype.ext\n      simp [map_add, map_smul, hvg, z.2.property.2]\n\n/-- The same splitting with the `g` coordinate restricted to an arbitrary finset. -/\ndef selectedFiberEquiv (F : V →ₗ[K] W) (g : V →ₗ[K] K) (s : W)\n    (B : Finset K) (v : V) (hvF : F v = 0) (hvg : g v = 1) :\n    {x : V // F x = s ∧ g x ∈ B} ≃\n      ↥B × {x : V // F x = s ∧ g x = 0} where\n  toFun x := ⟨⟨g x, x.property.2⟩, ⟨x - g x • v, by\n    constructor\n    · simp [map_sub, map_smul, hvF, x.property.1]\n    · simp [map_sub, map_smul, hvg]⟩⟩\n  invFun z := ⟨z.2 + (z.1 : K) • v, by\n    constructor\n    · simp [map_add, map_smul, hvF, z.2.property.1]\n    · simp [map_add, map_smul, hvg, z.2.property.2]⟩\n  left_inv x := by\n    apply Subtype.ext\n    exact sub_add_cancel _ _\n  right_inv z := by\n    apply Prod.ext\n    · apply Subtype.ext\n      simp [map_add, map_smul, hvg, z.2.property.2]\n    · apply Subtype.ext\n      simp [map_add, map_smul, hvg, z.2.property.2]\n\ntheorem fiber_card_factorization (F : V →ₗ[K] W) (g : V →ₗ[K] K)\n    (s : W) (v : V) (hvF : F v = 0) (hvg : g v = 1) :\n    Nat.card {x : V // F x = s} =\n      Nat.card K * Nat.card {x : V // F x = s ∧ g x = 0} := by\n  calc\n    _ = Nat.card (K × {x : V // F x = s ∧ g x = 0}) :=\n      Nat.card_congr (fiberEquiv F g s v hvF hvg)\n    _ = _ := Nat.card_prod _ _\n\ntheorem selected_fiber_card_factorization (F : V →ₗ[K] W) (g : V →ₗ[K] K)\n    (s : W) (B : Finset K) (v : V) (hvF : F v = 0) (hvg : g v = 1) :\n    Nat.card {x : V // F x = s ∧ g x ∈ B} =\n      B.card * Nat.card {x : V // F x = s ∧ g x = 0} := by\n  calc\n    _ = Nat.card (↥B × {x : V // F x = s ∧ g x = 0}) :=\n      Nat.card_congr (selectedFiberEquiv F g s B v hvF hvg)\n    _ = _ := by rw [Nat.card_prod, Nat.card_eq_finsetCard]\n\n/-- Exact uniformity on every fiber, including an empty fiber. -/\ntheorem uniform_fiber_count [Finite K] [Finite V]\n    (F : V →ₗ[K] W) (g : V →ₗ[K] K)\n    (hw : ∃ v : V, F v = 0 ∧ g v = 1) (s : W) (B : Finset K) :\n    Nat.card K * Nat.card {x : V // F x = s ∧ g x ∈ B} =\n      B.card * Nat.card {x : V // F x = s} := by\n  obtain ⟨v, hvF, hvg⟩ := hw\n  rw [selected_fiber_card_factorization F g s B v hvF hvg,\n    fiber_card_factorization F g s v hvF hvg]\n  ac_rfl\n\n/-- Nonproportional forms admit a vector in `ker f` normalized to have `g` value one. -/\ntheorem exists_kernel_normalized_of_not_scalar_multiple\n    (f g : V →ₗ[K] K) (hf : f ≠ 0)\n    (hnon : ∀ c : K, g ≠ c • f) :\n    ∃ v : V, f v = 0 ∧ g v = 1 := by\n  classical\n  obtain ⟨u, hu⟩ : ∃ u : V, f u ≠ 0 := by\n    by_contra! h\n    apply hf\n    ext x\n    exact h x\n  let w : V := (f u)⁻¹ • u\n  have hw : f w = 1 := by simp [w, map_smul, hu]\n  obtain ⟨z, hfz, hgz⟩ : ∃ z : V, f z = 0 ∧ g z ≠ 0 := by\n    by_contra! hker\n    apply hnon (g w)\n    ext x\n    have hx : f (x - f x • w) = 0 := by simp [map_sub, map_smul, hw]\n    have hzero := hker (x - f x • w) hx\n    have heq : g x = f x * g w := by\n      apply sub_eq_zero.mp\n      simpa [map_sub, map_smul, smul_eq_mul] using hzero\n    simpa [LinearMap.smul_apply, smul_eq_mul, mul_comm] using heq\n  refine ⟨(g z)⁻¹ • z, ?_, ?_⟩\n  · simp [map_smul, hfz]\n  · simp [map_smul, hgz]\n\ntheorem nonparallel_forms_uniform_count [Finite K] [Finite V]\n    (f g : V →ₗ[K] K) (hf : f ≠ 0)\n    (hnon : ∀ c : K, g ≠ c • f) (s : K) (B : Finset K) :\n    Nat.card K * Nat.card {x : V // f x = s ∧ g x ∈ B} =\n      B.card * Nat.card {x : V // f x = s} := by\n  exact uniform_fiber_count f g\n    (exists_kernel_normalized_of_not_scalar_multiple f g hf hnon) s B\n\ntheorem constant_on_fiber (f g : V →ₗ[K] K) (c s : K)\n    (hg : g = c • f) {x : V} (hx : f x = s) :\n    g x = c * s := by\n  simp [hg, LinearMap.smul_apply, hx, smul_eq_mul]\n\nend PackingAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/packing-audit/formal/statement_fidelity.md",
+    "text": "# C_PACK_COUNT: exact counting on an affine fiber\n\nSource: `research/packing-audit/formal/Main.lean`. All declarations below are in\nnamespace `PackingAudit` and import the supplied Mathlib for Lean 4.31.0.\nThis document describes only the formal counting core, not a manuscript review.\n\n## Objects and hypotheses\n\n`K`, `V`, and `W` range over arbitrary types, with instances\n`[Field K] [AddCommGroup V] [Module K V] [AddCommGroup W] [Module K W]`.\nThus `V` and `W` are vector spaces over the commutative field `K`.\nThe counting conclusions additionally assume `[Finite K] [Finite V]`.\nThere is no fixed field order, characteristic, dimension, or enumeration.\nNo finiteness assumption on `W` is needed.\n\n`F : V →ₗ[K] W` and `g : V →ₗ[K] K` are arbitrary linear maps,\n`s : W` is any target, and `B : Finset K` is any finite subset, including\nthe empty subset and the whole field. A `Finset` has no repeated elements.\n`Nat.card {x : V // P x}` is the cardinality of the subtype satisfying `P`;\nsince `V` is finite, it is the ordinary finite count, equivalently\n`(Finset.univ.filter P).card` under a classical `Fintype` enumeration.\n`Nat.card K` is the field cardinality and `B.card` is the subset cardinality.\nAll displayed equalities of counts are in `ℕ`, not in `K`.\n\n## Main declarations and exact signatures\n\nImplicit type and instance parameters are as above. All remaining arguments\ndisplayed here are universally quantified.\n\n```lean\nPackingAudit.uniform_fiber_count [Finite K] [Finite V]\n    (F : V →ₗ[K] W) (g : V →ₗ[K] K)\n    (hw : ∃ v : V, F v = 0 ∧ g v = 1) (s : W) (B : Finset K) :\n    Nat.card K * Nat.card {x : V // F x = s ∧ g x ∈ B} =\n      B.card * Nat.card {x : V // F x = s}\n```\n\nThe only additional algebraic hypothesis is the normalized kernel witness\n`hw`. Neither `F` nor the joint map `(F,g)` is assumed surjective. No\nnonemptiness of the fiber is assumed: an empty fiber has both counts zero.\nThis is the requested exact uniform-fiber counting identity, with subtype\ncardinalities instead of finset-filter notation.\n\n```lean\nPackingAudit.exists_kernel_normalized_of_not_scalar_multiple\n    (f g : V →ₗ[K] K) (hf : f ≠ 0)\n    (hnon : ∀ c : K, g ≠ c • f) :\n    ∃ v : V, f v = 0 ∧ g v = 1\n```\n\nThis theorem needs neither `[Finite K]` nor `[Finite V]`.\nHere `hnon` means exactly that `g` is not a scalar multiple of `f`, including\nthe scalar zero. The proof first normalizes a vector `w` with `f w = 1`.\nIf `g` vanished on `ker f`, applying it to `x - f x • w` would give\n`g = (g w) • f`, contradicting `hnon`. A vector with nonzero `g` value in\n`ker f` is then normalized by that value's inverse.\n\n```lean\nPackingAudit.nonparallel_forms_uniform_count [Finite K] [Finite V]\n    (f g : V →ₗ[K] K) (hf : f ≠ 0)\n    (hnon : ∀ c : K, g ≠ c • f) (s : K) (B : Finset K) :\n    Nat.card K * Nat.card {x : V // f x = s ∧ g x ∈ B} =\n      B.card * Nat.card {x : V // f x = s}\n```\n\nThis is the two-nonparallel-forms consequence, obtained by supplying the\npreceding theorem's witness to `uniform_fiber_count`.\n\n```lean\nPackingAudit.constant_on_fiber\n    (f g : V →ₗ[K] K) (c s : K)\n    (hg : g = c • f) {x : V} (hx : f x = s) :\n    g x = c * s\n```\n\nThe constant branch requires no finiteness or nonzero-form assumption.\nScalar multiplication of linear maps is pointwise, so `(c • f) x = c * f x`.\n\n## Constructive splitting and auxiliary declarations\n\n`fiberEquiv F g s v hvF hvg` is an explicit equivalence\n\n```lean\n{x : V // F x = s} ≃ K × {x : V // F x = s ∧ g x = 0}\n```\n\nunder `hvF : F v = 0` and `hvg : g v = 1`. It sends\n`x` to `(g x, x - g x • v)` and has inverse `(a,y) ↦ y + a • v`.\n\n`selectedFiberEquiv F g s B v hvF hvg` gives the restricted equivalence\n\n```lean\n{x : V // F x = s ∧ g x ∈ B} ≃\n  ↥B × {x : V // F x = s ∧ g x = 0}\n```\n\nwith the same formulas. Neither equivalence requires finiteness.\n\n`fiber_card_factorization F g s v hvF hvg` proves\n\n```lean\nNat.card {x : V // F x = s} =\n  Nat.card K * Nat.card {x : V // F x = s ∧ g x = 0}\n```\n\n`selected_fiber_card_factorization F g s B v hvF hvg` proves\n\n```lean\nNat.card {x : V // F x = s ∧ g x ∈ B} =\n  B.card * Nat.card {x : V // F x = s ∧ g x = 0}\n```\n\nThese auxiliary `Nat.card` identities follow directly from the equivalences\nand also do not require finiteness. Only their finite-carrier specialization\nis used to interpret the main theorem as exact counting. Multiplication and\ncommutativity yield the main identity without division or cancellation.\n\n## Scope and exclusions\n\nThe general theorem can be instantiated with any finite product vector space\nand any linear constraint map `F`, provided its stated normalized kernel\nwitness is supplied. No product decomposition or independence is an\nunstated hypothesis. The formalization makes no claim of joint independence\nof multiple forms solely from pairwise nonproportionality.\n\nRandom sampling, chunks, probabilistic union bounds, packings, matching,\nintervals, boundary/interior geometry, and any parameters `r` and `m` are\nnot encoded. In particular there is no assumption `r ≤ m` and no\ninterior-center assumption. This file does not register claims, modify the\nledger, or produce an official Lean evidence certificate.\n\n## Local validation\n\nThe source is checked with the supplied built Mathlib workspace using\n`timeout 110s lake env lean` on its absolute path. Compiler transcripts\nare kept beside the source as `compiler-*.log`. The final check recorded in\n`compiler-final.log` exited with code `0`, with no errors or warnings.\nThe source contains no `sorry`, `admit`, or added axioms. There is no remaining\nlocal compilation issue; the parent is responsible for the official\n`lean_evidence` verification bound to `C_PACK_COUNT`.\n"
+  },
+  "subject": {
+    "content_hash": "2dd0c6f6895c8261e3b822e3803b98445e4a5d8a14c7070769e6fac18062766b",
+    "kind": "claim",
+    "subject_id": "C_PACK_COUNT"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

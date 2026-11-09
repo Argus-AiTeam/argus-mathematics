@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_MATCH289-3af4e292281d",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/289/first-pass/free_word_audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/289/first-pass/free_word_audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15960,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/289/first-pass/free_word_audit/Main.lean",
+    "source_sha256": "70a762559997c2585cbdfcc2fe3192b6c04870347399c4d37b89c7819279c17c",
+    "statement_fidelity": "families/289/first-pass/free_word_audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "84b9e943d3375f8788a060f7a7b8efd07e7dda2cb08f3739fe9a7b00e6029ef7",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/free_word_audit/Main.lean",
+    "text": "import Mathlib\n\nnoncomputable section\n\nopen scoped BigOperators\n\nnamespace FreeWordAudit\n\nvariable {α : Type*}\n\ntheorem missing_left_unique {A A' B W : Multiset α} {a : α}\n    (h : A + B + {a} = W) (h' : A' + B + {a} = W) : A = A' := by\n  exact add_right_cancel (add_right_cancel (h.trans h'.symm))\n\ntheorem missing_right_unique {A B B' W : Multiset α} {a : α}\n    (h : A + B + {a} = W) (h' : A + B' + {a} = W) : B = B' := by\n  exact add_left_cancel (add_right_cancel (h.trans h'.symm))\n\ntheorem missing_label_unique {A B W : Multiset α} {a b : α}\n    (h : A + B + {a} = W) (h' : A + B + {b} = W) : a = b := by\n  have hs : ({a} : Multiset α) = {b} := add_left_cancel (h.trans h'.symm)\n  simpa using hs\n\ntheorem missing_energy_le [DecidableEq α]\n    (W : Multiset α)\n    (s : Finset (Multiset α × (Multiset α × α)))\n    (I : Finset (Multiset α × α))\n    (hs : ∀ e ∈ s, e.1 + e.2.1 + {e.2.2} = W)\n    (hI : ∀ e ∈ s, e.2 ∈ I)\n    (w : (Multiset α × α) → ℝ)\n    (hw : ∀ i ∈ I, 0 ≤ w i) :\n    (∑ e ∈ s, w e.2) ≤ ∑ i ∈ I, w i := by\n  classical\n  have hinj : Set.InjOn\n      (fun e : Multiset α × (Multiset α × α) => e.2) s := by\n    intro e he f hf h\n    have hB : e.2.1 = f.2.1 := congrArg Prod.fst h\n    have ha : e.2.2 = f.2.2 := congrArg Prod.snd h\n    have hfe : f.1 + e.2.1 + {e.2.2} = W := by\n      simpa only [hB, ha] using hs f hf\n    exact Prod.ext (missing_left_unique (hs e he) hfe) h\n  calc\n    (∑ e ∈ s, w e.2) =\n        ∑ i ∈ s.image (fun e => e.2), w i := by\n      symm\n      exact Finset.sum_image hinj\n    _ ≤ ∑ i ∈ I, w i := by\n      apply Finset.sum_le_sum_of_subset_of_nonneg\n      · intro i hi\n        obtain ⟨e, he, rfl⟩ := Finset.mem_image.mp hi\n        exact hI e he\n      · intro i hi _\n        exact hw i hi\n\ntheorem all_ones_energy_bound (m n : ℕ) (x : Fin n → ℝ) :\n    (m : ℝ) * (∑ j, x j) ^ 2 ≤\n      (m : ℝ) * (n : ℝ) * (∑ j, (x j) ^ 2) := by\n  have h := Finset.sum_mul_sq_le_sq_mul_sq\n    (Finset.univ : Finset (Fin n)) x (fun _ => (1 : ℝ))\n  have hc : (∑ j, x j) ^ 2 ≤ (n : ℝ) * (∑ j, (x j) ^ 2) := by\n    simpa [mul_comm] using h\n  calc\n    (m : ℝ) * (∑ j, x j) ^ 2 ≤\n        (m : ℝ) * ((n : ℝ) * (∑ j, (x j) ^ 2)) :=\n      mul_le_mul_of_nonneg_left hc (Nat.cast_nonneg m)\n    _ = _ := by ring\n\ntheorem all_ones_constant_attains (m n : ℕ) (c : ℝ) :\n    (m : ℝ) * (∑ _j : Fin n, c) ^ 2 =\n      (m : ℝ) * (n : ℝ) * (∑ _j : Fin n, c ^ 2) := by\n  simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]\n  ring\n\ntheorem middle_tail_algebra (m : ℝ) (hm : 5 ≤ m) :\n    (m - 3) ^ 2 ≤ (m - 1) * (m - 4) := by\n  nlinarith\n\ntheorem weighted_cauchy_identity (u v : ℝ) :\n    3 * (u ^ 2 + v ^ 2 / 2) - (u + v) ^ 2 =\n      (2 * u - v) ^ 2 / 2 := by\n  ring\n\ntheorem scalar_tail_lt_two (u v : ℝ)\n    (h : u ^ 2 + v ^ 2 / 2 ≤ 1) : u + v < 2 := by\n  have hs := sq_nonneg (2 * u - v)\n  have ht := sq_nonneg (u + v - 2)\n  nlinarith\n\ntheorem product_step (s x : ℝ) (hs : 0 ≤ s) (hx : 0 ≤ x) :\n    (1 + x) * (1 - s - x) ≤ 1 - s := by\n  nlinarith [mul_nonneg hs hx, sq_nonneg x]\n\ntheorem product_defect_bound {ι : Type*} (s : Finset ι) (x : ι → ℝ) :\n    (∀ i ∈ s, 0 ≤ x i) →\n      (∏ i ∈ s, (1 + x i)) * (1 - ∑ i ∈ s, x i) ≤ 1 := by\n  classical\n  induction s using Finset.induction_on with\n  | empty => simp\n  | @insert a s ha ih =>\n      intro hx\n      have hxa : 0 ≤ x a := hx a (by simp)\n      have hxs : ∀ i ∈ s, 0 ≤ x i := by\n        intro i hi\n        exact hx i (by simp [hi])\n      have hsum : 0 ≤ ∑ i ∈ s, x i := Finset.sum_nonneg hxs\n      have hprod : 0 ≤ ∏ i ∈ s, (1 + x i) :=\n        Finset.prod_nonneg (by\n          intro i hi\n          linarith [hxs i hi])\n      have hstep := product_step (∑ i ∈ s, x i) (x a) hsum hxa\n      rw [Finset.prod_insert ha, Finset.sum_insert ha]\n      calc\n        (1 + x a) * (∏ i ∈ s, (1 + x i)) *\n            (1 - (x a + ∑ i ∈ s, x i)) =\n            (∏ i ∈ s, (1 + x i)) *\n              ((1 + x a) * (1 - (∑ i ∈ s, x i) - x a)) := by ring\n        _ ≤ (∏ i ∈ s, (1 + x i)) * (1 - ∑ i ∈ s, x i) :=\n          mul_le_mul_of_nonneg_left hstep hprod\n        _ ≤ 1 := ih hxs\n\ntheorem through_twenty_six (P s : ℝ) (hP : 0 ≤ P)\n    (hs : s ≤ 1 / 26) (h : P * (1 - s) ≤ 1) : 25 * P ≤ 26 := by\n  have hm : 0 ≤ P * (1 / 26 - s) := mul_nonneg hP (by linarith)\n  nlinarith\n\nend FreeWordAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/free_word_audit/statement_fidelity.md",
+    "text": "# Statement fidelity: C_MATCH289\n\nThe source is `research/free_word_audit/Main.lean`, namespace `FreeWordAudit`,\nusing Lean 4.31.0 and the host's built Mathlib. There are no additional\nproject axioms or mathematical hypotheses imported as unchecked assumptions.\nOrdinary Mathlib foundations are the trusted library boundary.\n\n## Missing-label matching\n\n`missing_left_unique`, `missing_right_unique`, and `missing_label_unique`\nquantify over any type of labels, any finite multisets `A`, `B`, `W`, and\nany labels `a`, `b`. A singleton is a multiset of multiplicity one, and\n`+` adds multiplicities. The hypothesis is exactly `A + B + {a} = W`.\nThe declarations show that fixing two of the three entries determines\nthe third. Repeated labels are allowed; no disjointness or distinct-label\nhypothesis is present.\n\n`missing_energy_le` quantifies over any decidable label type, a multiset\n`W`, a finite set `s` of triples `(A,(B,a))` satisfying that same equation,\na finite set `I` of pairs `(B,a)` containing the pair from each edge,\nand an arbitrary nonnegative real weight `w` on `I`. Its conclusion is\nthat summing `w(B,a)` over edges does not exceed its sum over `I`.\nThere is no bound on the alphabet size, multiset size, or edge-set size.\nThe proof uses the injectivity of the edge-to-`(B,a)` map, not a row-degree\nbound. `missing_right_unique` provides the symmetric uniqueness needed\nfor orthogonality within a row in the analytic application.\n\nIn report.md (10)--(11), `A` is the output submultiset, `B` the input\nsubmultiset, `a` the missing label, and `w(B,a)` represents\n`||L_(e_a) xi_B||^2`. The Lean statement establishes the combinatorial\nnon-overcounting of these energies. It does not construct those\nprojections or prove their Hilbert-space orthogonality.\n\n## Order replication\n\n`all_ones_energy_bound` quantifies over every pair of natural numbers\n`m,n` and every real vector `x : Fin n -> Real`. It bounds the squared\noutput energy of the real `m`-by-`n` all-ones matrix by `m*n` times the\ninput energy. Zero sizes are included.\n\n`all_ones_constant_attains` proves equality in that energy bound on every\nconstant vector. For `n>0` and a nonzero constant this vector is nonzero.\nTogether the two declarations are the real squared-norm calculation\nbehind the factor `sqrt(m*n)`. The definitions of tuple-order fibers,\ntheir factorial cardinalities, their normalized isometric embeddings,\nand the complex/Hilbert-space norm interpretation are provided in\nreport.md Section 2, not encoded as Lean definitions here.\n\n## Scalar inequalities\n\n`middle_tail_algebra` states `(m-3)^2 <= (m-1)*(m-4)` for every real\n`m>=5`. `weighted_cauchy_identity` is the exact identity\n`3*(u^2+v^2/2)-(u+v)^2=(2*u-v)^2/2` for arbitrary real `u,v`.\n`scalar_tail_lt_two` shows `u+v<2` whenever `u^2+v^2/2<=1`;\nit does not require either variable to be nonnegative.\nThese are the scalar steps used after the binomial coefficient\ncomparison in report.md (14). The binomial comparison and the\nsmall-length cases themselves are not formalized.\n\n`product_step` states `(1+x)*(1-s-x)<=1-s` for nonnegative reals\n`s,x`. `product_defect_bound` quantifies over an arbitrary finite\nindex set and any nonnegative real sequence on it, and proves\n`product(1+x_i)*(1-sum x_i)<=1`. There is no assumption that the sum\nis below one; that extra hypothesis is needed only for division in\nthe analytic application. `through_twenty_six` proves `25*P<=26`\nfor nonnegative real `P` satisfying `P*(1-s)<=1` and `s<=1/26`.\nThese statements are the universal finite-product step, not a\nnumerical check up to a chosen word length.\n\n## Boundary of the formal result\n\nThe declaration suite supports C_MATCH289, not a full kernel proof\nof C_FW289, C_TL289 or C_MULTI289. In particular it does not define\nfree von Neumann algebras, the GNS representation, arbitrary Fock-space\ntails, the domain-restricted operator cuts, operator-valued tuple matrices,\nthe scalar restoration expansion, or stars-and-bars counting. The\nall-parameter analytic argument is report.md Sections 1--4 and needs\nindependent human mathematical review. A successful compiler run must\nnot be described as having formally verified those additional statements\nor the universal Kadison--Kastler theorem.\n"
+  },
+  "subject": {
+    "content_hash": "d35d2308f275fba47ea4c3c65bf915c06977886cc10c8855752a820f00538fb0",
+    "kind": "claim",
+    "subject_id": "C_MATCH289"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

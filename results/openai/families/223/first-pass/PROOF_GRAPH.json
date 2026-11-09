@@ -1,0 +1,120 @@
+{
+  "goal": "C9000223",
+  "routes": {},
+  "nodes": {
+    "C9000223": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 223 (Random-cluster interfaces: critical, disordered, thermal, and natural-time scaling.; papers: Square-lattice FK interfaces and nested loops for 1 <= q < 4; Self-dual random-cluster interfaces below one; Quenched SLE Universality for Weakly Disordered FK–Ising Interfaces; Thermal FK–Ising interfaces and massive SLE; Natural Occupation Measures for Critical Square-Lattice FK Interfaces; Conformal Limits of Critical Square-Lattice Random-Cluster Interfaces; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "PC_CORE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "PC_CORE": {
+      "statement": "Universal positive site pressure, connected support, convergence beyond the unit polydisk and the incident/cofacial Rayleigh consequence, with the finite hypotheses of 01-pressure.tex unchanged.",
+      "status": "open",
+      "depends_on": ["PC_PRESSURE", "PC_RAYLEIGH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md", "research/pressure-core/exact_certificate.json"]
+    },
+    "PC_PRESSURE": {
+      "statement": "All nonzero site multiindices, including repeated labels, have nonnegative pressure coefficients; positive coefficients have connected support and the series converges beyond the unit polydisk.",
+      "status": "open",
+      "depends_on": ["PC_POLYMER_REDUCTION", "PC_POLYMER", "PC_CONNECTED_SUPPORT", "PC_CONVERGENCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md"]
+    },
+    "PC_SQUAREFREE": {
+      "statement": "The site polynomial has exactly the squarefree moments W(T) in pressure:squarefree after the incident gamma rescaling.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md", "research/pressure-core/verify.py"]
+    },
+    "PC_FIXED_UNION": {
+      "statement": "The complete fixed-ordinary-union sum, with repeated labels allowed, is v_D times the product of Z(D0;-u,1+v) over ordinary components.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md", "research/pressure-core/verify.py"]
+    },
+    "PC_NEGATIVE_PARTITION": {
+      "statement": "Z(G;-u,w)<0 for every nonempty connected finite multigraph, 0<u<1 and all w_e>=1.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md", "research/pressure-core/verify.py"]
+    },
+    "PC_POLYMER": {
+      "statement": "The actual formal negative logarithm of every finite hard-core polymer partition series with nonnegative zero-constant polynomial-coefficient activities is coefficientwise nonnegative, for all grading degrees and all repeated site multiindices. Lean certifies this generic theorem; independent statement-fidelity review remains.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/pressure-core/Main.lean",
+        "research/pressure-core/statement_fidelity.md",
+        "research/pressure-core/certificates/PC_POLYMER-a4583f8f28fb87e7.json"
+      ]
+    },
+    "PC_POLYMER_REDUCTION": {
+      "statement": "The finite FK site polynomial is exactly the hard-core partition polynomial on disjoint vertex subsets with connected-ordinary-union amplitudes lambda(S)>=0. Grading each activity by support size transfers every site coefficient from the generic formal theorem.",
+      "status": "open",
+      "depends_on": ["PC_SQUAREFREE", "PC_FIXED_UNION", "PC_NEGATIVE_PARTITION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md", "research/pressure-core/verify.py"]
+    },
+    "PC_CONNECTED_SUPPORT": {
+      "statement": "A pressure coefficient with disconnected site support is zero: setting all other variables to zero makes the squarefree polynomial factor over the induced support components.",
+      "status": "open",
+      "depends_on": ["PC_SQUAREFREE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md"]
+    },
+    "PC_HARD_SIGN": {
+      "statement": "The connected hard-edge alternating sum is zero or has sign (-1)^(b-1), with cancellation for an internal hard edge.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md", "research/pressure-core/verify.py"]
+    },
+    "PC_CUMULANT": {
+      "statement": "The labeled moment-cumulant identity equals the connected A-union-B-union-L structure sum, including all repeated types.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md", "research/pressure-core/verify.py"]
+    },
+    "PC_CONVERGENCE": {
+      "statement": "Nonnegative formal coefficients and positivity of F_H on the real unit cube give absolute convergence in a polydisk of radius strictly greater than one.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md"]
+    },
+    "PC_HUB": {
+      "statement": "The hub partition identity holds for all finite nonnegative hub odds, including parallel links at a site.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md", "research/pressure-core/verify.py"]
+    },
+    "PC_RAYLEIGH": {
+      "statement": "Distinct incident FK edges have nonpositive opening covariance; plane duality gives the cofacial statement, and deletion/contraction minors preserve it.",
+      "status": "open",
+      "depends_on": ["PC_PRESSURE", "PC_HUB"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/report.md", "research/pressure-core/verify.py"]
+    },
+    "PC_FINITE_DIAGNOSTIC": {
+      "statement": "Exact diagnostics pass 80 graph/parameter cases, 2700 degree-at-most-four coefficients, 11612 ordinary unions and 920 incident covariance checks. This is diagnostic evidence only.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/pressure-core/exact_certificate.json"]
+    }
+  }
+}

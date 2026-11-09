@@ -1,0 +1,330 @@
+{
+  "schema_version": 2,
+  "contexts": [
+    {
+      "context_id": "CTX9000112",
+      "version": 1,
+      "statement": "OpenAI Math Audit #112: Beyond the square-root exponent for depth-three circuits.",
+      "definitions": {
+        "openai_family": "112"
+      },
+      "content_hash": "9e184f10a58ad5f67b422a10d7520a4b2cd31bba7c9ffcbecc6fc70dd1f7cd68"
+    },
+    {
+      "context_id": "CTX_RESTRICTION",
+      "version": 1,
+      "statement": "Finite CNFs on an arbitrary finite coordinate type; clauses have a finite scope and one falsifying Boolean pattern; false clauses have empty scope and true or tautological clauses are discarded. Restrictions independently leave each variable live with probability p and otherwise freeze it to a fair bit. The goal concerns simultaneous correlation control against all real-valued tests, not the whole circuit lower-bound theorem.",
+      "definitions": {
+        "mass": "Sum of absolute coefficients of an explicitly constructed finite signed width-b CNF expansion before cancellation",
+        "theta": "Sum over subsets D of a clause scope with card D greater than b of (2p/(1-p))^(card D)"
+      },
+      "content_hash": "dd22ae114cc88eaa30088c39ef639a67d3b4f2c1fcefe74c8802abdf1a135a35"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C9000112",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000112",
+        "content_hash": "9e184f10a58ad5f67b422a10d7520a4b2cd31bba7c9ffcbecc6fc70dd1f7cd68"
+      },
+      "natural_statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 112 (Beyond the square-root exponent for depth-three circuits.; papers: Beyond the Square-Root Exponent for Depth-Three Boolean Circuits; Lean status: Partially/Comparator formalized (lean/docs/112.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "cbbe5a81de0ea2751b61c3dacea61013750a3c94ed37cdcccb4a5b5ac8a57321"
+    },
+    {
+      "claim_id": "C_RESTRICTION_INDEPENDENT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RESTRICTION",
+        "content_hash": "dd22ae114cc88eaa30088c39ef639a67d3b4f2c1fcefe74c8802abdf1a135a35"
+      },
+      "natural_statement": "For every finite coordinate type, every finite width-at-most-k CNF H, every integer b>=1, and every 0<p<1 such that sum_{ell=b+1}^k binom(k,ell)(2p/(1-p))^ell<=1, clause insertion constructs for each restriction a finite signed expansion into width-at-most-b CNFs equal pointwise to H restricted, with expected absolute coefficient mass at most 1. Its cost is restriction-dependent but independent of the test; simultaneously every real-valued test obeys the corresponding correlation inequality. The construction includes empty formulas, false and repeated clauses, overlapping scopes, empty live sets, and k<=b.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "c32fadadc0dfb3ea4932badbd1aa970150d6bbf1241831ec0beb47ce0ccb2c6a"
+    },
+    {
+      "claim_id": "L_RESTRICTION_EXPANSION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RESTRICTION",
+        "content_hash": "dd22ae114cc88eaa30088c39ef639a67d3b4f2c1fcefe74c8802abdf1a135a35"
+      },
+      "natural_statement": "For every finite CNF and restriction, the recursive clause-insertion expansion is a finite pointwise-equal signed combination of width-at-most-b CNFs for every b>=1.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "a33bbc5c44bb1fcd43db998afcb34382c9f48ea0c6874423a85c36f1050867d9"
+    },
+    {
+      "claim_id": "L_RESTRICTION_EXPECTATION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RESTRICTION",
+        "content_hash": "dd22ae114cc88eaa30088c39ef639a67d3b4f2c1fcefe74c8802abdf1a135a35"
+      },
+      "natural_statement": "Under the independent product restriction law, insertion of a clause of scope S changes the expected constructed mass by exactly q^|S| (sum_{D subset S, |D|>b}(p/q)^|D|-1) times the expectation of the prefix mass with S fixed to its falsifying pattern, where q=(1-p)/2. Hence expected mass is at most one for arbitrary finite clause lists if every clause subset tail is at most one.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "78dd4e2370b213a5ea14aac2cdb56529709cd2cc08ab1d219ba07074cf59de41"
+    },
+    {
+      "claim_id": "C_RESTRICTION_MANUSCRIPT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RESTRICTION",
+        "content_hash": "dd22ae114cc88eaa30088c39ef639a67d3b4f2c1fcefe74c8802abdf1a135a35"
+      },
+      "natural_statement": "The existential restriction bound in staged Lemma lem:restriction holds with its original quantifiers: theta<1 implies there is a restriction-only W>=0 with E W<=1/(1-theta), simultaneously controlling the correlation of the restricted CNF with every real-valued test by W corr_b. The independently constructed W has the stronger bound E W<=1 and is not the manuscript path-defined W.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "6854224ec39274e676d57a5c4e5ad15ea7c1b937c27cabed83bf2c286986fcf2"
+    },
+    {
+      "claim_id": "C_LZ_COMPARATOR",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RESTRICTION",
+        "content_hash": "dd22ae114cc88eaa30088c39ef639a67d3b4f2c1fcefe74c8802abdf1a135a35"
+      },
+      "natural_statement": "The expected width-b CNF expansion mass bound at most one for theta<=1, obtained by clause insertion, is already stated and proved in Li-Zhong arXiv:2610.27127v1, Lemma 3.1, with attribution to Chukhin. This is prior mathematical provenance, not an imported proof of the local formalization.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "1733cfcaf68753bb8a1e67407777069d0f88c59b1663ae9fa553610e4cb99ee6"
+    },
+    {
+      "claim_id": "C_LZ_COMPARATOR",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RESTRICTION",
+        "content_hash": "dd22ae114cc88eaa30088c39ef639a67d3b4f2c1fcefe74c8802abdf1a135a35"
+      },
+      "natural_statement": "The expected width-b CNF expansion mass bound at most one for theta<=1, obtained by clause insertion, is already stated and proved in Li-Zhong arXiv:2610.27127v1, Lemma 3.1, with attribution to Chukhin. This is prior mathematical provenance, not an imported proof of the local formalization.",
+      "formal_statement": "",
+      "external_assumptions": [
+        {
+          "assumption_id": "A_LZ_3_1",
+          "statement": "For k>=b>=1 and theta=sum_{j>b} binom(k,j)(2p/(1-p))^j<=1, a p-random restriction of a width-k CNF has expected width-b CNF signed expansion mass at most one; clause insertion pays extra wide-case mass from the falsified-clause cases.",
+          "source": "Li and Zhong, Short Point Lists for CNFs and Stronger Constant-Depth Circuit Hardness, October 18, 2026; Lemma 3.1 credits Chukhin.",
+          "source_id": "arxiv:2610.27127v1",
+          "locator": "Lemma 3.1 (Expected CNF mass), including proof",
+          "filed_by": "engineer:copilot",
+          "content_hash": "5555c4cd3828f23bdcdc67fb9b6be09f3296b93ea42d26a295d397e4773c6f78"
+        }
+      ],
+      "retired_assumptions": [],
+      "content_hash": "1733cfcaf68753bb8a1e67407777069d0f88c59b1663ae9fa553610e4cb99ee6"
+    },
+    {
+      "claim_id": "C_MAIN_CIRCUIT",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000112",
+        "content_hash": "9e184f10a58ad5f67b422a10d7520a4b2cd31bba7c9ffcbecc6fc70dd1f7cd68"
+      },
+      "natural_statement": "The staged Theorem thm:main asserts a fixed polynomial-time language L such that log_2 S_3(f_n)/sqrt(n) tends to infinity, where S_3 counts all AND and OR gates of arbitrary-fan-in depth-three OR-AND-OR circuits. This claim remains unaudited by the restriction-core mission.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "f76939ec3fe3a0c5a53e7faa73d9f38c377982aae3aea96d2dd1ed56b5ee4df0"
+    },
+    {
+      "claim_id": "C_SPARSE_PARTITION",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000112",
+        "content_hash": "9e184f10a58ad5f67b422a10d7520a4b2cd31bba7c9ffcbecc6fc70dd1f7cd68"
+      },
+      "natural_statement": "Staged Lemma lem:sparse-partition: for every b>=1 and eta>0 there is M(b,eta) such that every width-b CNF on m>=1 variables is a disjoint sum of at most 2^(eta m) width-b CNFs, each with at most M m clauses. This mission does not independently certify the claim.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "2b1ddf5a476cea8586067b1a4e118704e854cc9533fad01cf89703ac4794e82c"
+    },
+    {
+      "claim_id": "C_GOOD_SLICES",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000112",
+        "content_hash": "9e184f10a58ad5f67b422a10d7520a4b2cd31bba7c9ffcbecc6fc70dd1f7cd68"
+      },
+      "natural_statement": "Staged Proposition prop:good-slices: for each fixed b>=1 and B>0, all sufficiently large n admit one fixed setting of non-data bits whose sign has simultaneously small correlation against all width-b CNFs on all but at most 4*2^(-B sqrt(d)/16) random restrictions, where p=B/sqrt(d). This mission does not independently certify the claim.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "334226865df306540989e6a34dd72de93c8d32d9c9a1d53bbaf13639dad9b067"
+    },
+    {
+      "claim_id": "C_POLYTIME_EVALUATOR",
+      "version": 1,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX9000112",
+        "content_hash": "9e184f10a58ad5f67b422a10d7520a4b2cd31bba7c9ffcbecc6fc70dd1f7cd68"
+      },
+      "natural_statement": "Staged Proposition prop:polytime: the quotient-ring evaluator decides the defined language on every input in time C(n+1)^a for fixed positive integers C,a. This mission does not independently certify the claim.",
+      "formal_statement": "",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "24455ff092d5ea3c83bbf9cd5d1acb0cf1f90599286f98475f919741d5a55af4"
+    },
+    {
+      "claim_id": "C_RESTRICTION_INDEPENDENT",
+      "version": 2,
+      "context": {
+        "kind": "context",
+        "subject_id": "CTX_RESTRICTION",
+        "content_hash": "dd22ae114cc88eaa30088c39ef639a67d3b4f2c1fcefe74c8802abdf1a135a35"
+      },
+      "natural_statement": "For every finite coordinate type, every finite width-at-most-k CNF H, every integer b>=1, and every 0<p<1 such that sum_{ell=b+1}^k binom(k,ell)(2p/(1-p))^ell<=1, clause insertion constructs for each restriction a finite signed expansion into width-at-most-b CNFs equal pointwise to H restricted, with expected absolute coefficient mass at most 1. Its cost is restriction-dependent but independent of the test; simultaneously every real-valued test obeys the corresponding correlation inequality. The construction includes empty formulas, false and repeated clauses, overlapping scopes, empty live sets, and k<=b.",
+      "formal_statement": "import Mathlib\n\nopen scoped BigOperators\nopen Finset\n\nnamespace RestrictionCertificate\n\nset_option linter.unusedSectionVars false\nattribute [local instance] Classical.propDecidable\n\nvariable {V : Type*} [Fintype V] [DecidableEq V]\n\nabbrev Assignment (V : Type*) := V → Bool\nabbrev Restriction (V : Type*) := V → Option Bool\n\nstructure Clause (V : Type*) where\n  scope : Finset V\n  pattern : Assignment V\n\nabbrev CNF (V : Type*) := List (Clause V)\nabbrev Expansion (V : Type*) := List (ℝ × CNF V)\n\nnoncomputable def clauseValue (c : Clause V) (x : Assignment V) : ℝ :=\n  if ∀ i ∈ c.scope, x i = c.pattern i then 0 else 1\n\nnoncomputable def cnfValue (H : CNF V) (x : Assignment V) : ℝ :=\n  (H.map (fun c => clauseValue c x)).prod\n\ndef fill (r : Restriction V) (x : Assignment V) : Assignment V :=\n  fun i => (r i).getD (x i)\n\ndef live (c : Clause V) (r : Restriction V) : Finset V :=\n  c.scope.filter (fun i => r i = none)\n\ndef compatible (c : Clause V) (r : Restriction V) : Prop :=\n  ∀ i ∈ c.scope, r i = none ∨ r i = some (c.pattern i)\n\ndef close (c : Clause V) (r : Restriction V) : Restriction V :=\n  fun i => if i ∈ c.scope then some (c.pattern i) else r i\n\ndef reduced (c : Clause V) (r : Restriction V) : Clause V :=\n  ⟨live c r, c.pattern⟩\n\ndef unit (i : V) (a : Bool) : Clause V :=\n  ⟨{i}, fun _ => !a⟩\n\nnoncomputable def guard (c : Clause V) (r : Restriction V) : CNF V :=\n  (live c r).toList.map (fun i => unit i (c.pattern i))\n\nnoncomputable def denote (E : Expansion V) (x : Assignment V) : ℝ :=\n  (E.map (fun t => t.1 * cnfValue t.2 x)).sum\n\nnoncomputable def mass (E : Expansion V) : ℝ :=\n  (E.map (fun t => |t.1|)).sum\n\ndef width (b : ℕ) (H : CNF V) : Prop :=\n  ∀ c ∈ H, c.scope.card ≤ b\n\ndef expansionWidth (b : ℕ) (E : Expansion V) : Prop :=\n  ∀ t ∈ E, width b t.2\n\ndef supported (r : Restriction V) (H : CNF V) : Prop :=\n  ∀ c ∈ H, ∀ i ∈ c.scope, r i = none\n\nnoncomputable def restrictCNF (r : Restriction V) : CNF V → CNF V\n  | [] => []\n  | c :: H =>\n    if compatible c r then reduced c r :: restrictCNF r H else restrictCNF r H\n\nnoncomputable def attach (A : CNF V) (E : Expansion V) : Expansion V :=\n  E.map (fun t => (t.1, A ++ t.2))\n\nnoncomputable def negative (E : Expansion V) : Expansion V :=\n  E.map (fun t => (-t.1, t.2))\n\nnoncomputable def expand (b : ℕ) : CNF V → Restriction V → Expansion V\n  | [], _ => [(1, [])]\n  | c :: H, r => by\n    classical\n    exact if ¬compatible c r then expand b H r\n      else if live c r = ∅ then []\n      else if (live c r).card ≤ b then attach [reduced c r] (expand b H r)\n      else expand b H r ++ negative (attach (guard c r) (expand b H (close c r)))\n\n@[simp] theorem cnfValue_nil (x : Assignment V) : cnfValue [] x = 1 := by\n  simp [cnfValue]\n\n@[simp] theorem cnfValue_cons (c : Clause V) (H : CNF V) (x : Assignment V) :\n    cnfValue (c :: H) x = clauseValue c x * cnfValue H x := by\n  simp [cnfValue]\n\n@[simp] theorem cnfValue_append (H K : CNF V) (x : Assignment V) :\n    cnfValue (H ++ K) x = cnfValue H x * cnfValue K x := by\n  simp [cnfValue]\n\n@[simp] theorem fill_fill (r : Restriction V) (x : Assignment V) :\n    fill r (fill r x) = fill r x := by\n  funext i\n  cases h : r i <;> simp [fill, h]\n\ntheorem compatible_of_violation (c : Clause V) (r : Restriction V)\n    (x : Assignment V) (h : ∀ i ∈ c.scope, fill r x i = c.pattern i) :\n    compatible c r := by\n  intro i hi\n  cases hr : r i with\n  | none => exact Or.inl rfl\n  | some a =>\n      right\n      have ha := h i hi\n      simp [fill, hr] at ha\n      simp [ha]\n\ntheorem violation_reduced (c : Clause V) (r : Restriction V)\n    (hc : compatible c r) (x : Assignment V) :\n    (∀ i ∈ c.scope, fill r x i = c.pattern i) ↔\n      ∀ i ∈ live c r, x i = c.pattern i := by\n  constructor\n  · intro h i hi\n    obtain ⟨his, hir⟩ := Finset.mem_filter.mp hi\n    simpa [fill, hir] using h i his\n  · intro h i hi\n    rcases hc i hi with hr | hr\n    · have hx := h i (Finset.mem_filter.mpr ⟨hi, hr⟩)\n      simpa [fill, hr] using hx\n    · simp [fill, hr]\n\ntheorem clauseValue_incompatible (c : Clause V) (r : Restriction V)\n    (h : ¬compatible c r) (x : Assignment V) :\n    clauseValue c (fill r x) = 1 := by\n  unfold clauseValue\n  rw [if_neg]\n  exact fun hv => h (compatible_of_violation c r x hv)\n\ntheorem clauseValue_reduced (c : Clause V) (r : Restriction V)\n    (hc : compatible c r) (x : Assignment V) :\n    clauseValue c (fill r x) = clauseValue (reduced c r) x := by\n  simp only [clauseValue, reduced]\n  simp only [violation_reduced c r hc x]\n  rfl\n\ntheorem clauseValue_dead (c : Clause V) (r : Restriction V)\n    (hc : compatible c r) (he : live c r = ∅) (x : Assignment V) :\n    clauseValue c (fill r x) = 0 := by\n  rw [clauseValue_reduced c r hc x]\n  simp [clauseValue, reduced, he]\n\n@[simp] theorem denote_nil (x : Assignment V) : denote [] x = 0 := by\n  simp [denote]\n\n@[simp] theorem denote_append (E F : Expansion V) (x : Assignment V) :\n    denote (E ++ F) x = denote E x + denote F x := by\n  simp [denote]\n\n@[simp] theorem mass_nil : mass ([] : Expansion V) = 0 := by\n  simp [mass]\n\n@[simp] theorem mass_append (E F : Expansion V) :\n    mass (E ++ F) = mass E + mass F := by\n  simp [mass]\n\n@[simp] theorem mass_attach (A : CNF V) (E : Expansion V) :\n    mass (attach A E) = mass E := by\n  simp [mass, attach, List.map_map, Function.comp_def]\n\n@[simp] theorem mass_negative (E : Expansion V) : mass (negative E) = mass E := by\n  simp [mass, negative, List.map_map, Function.comp_def]\n\ntheorem mass_nonneg (E : Expansion V) : 0 ≤ mass E := by\n  unfold mass\n  exact List.sum_nonneg (fun a ha => by\n    obtain ⟨t, _, rfl⟩ := List.mem_map.mp ha\n    exact abs_nonneg t.1)\n\n@[simp] theorem denote_cons (t : ℝ × CNF V) (E : Expansion V) (x : Assignment V) :\n    denote (t :: E) x = t.1 * cnfValue t.2 x + denote E x := by\n  simp [denote]\n\n@[simp] theorem mass_cons (t : ℝ × CNF V) (E : Expansion V) :\n    mass (t :: E) = |t.1| + mass E := by\n  simp [mass]\n\n@[simp] theorem denote_attach (A : CNF V) (E : Expansion V) (x : Assignment V) :\n    denote (attach A E) x = cnfValue A x * denote E x := by\n  induction E with\n  | nil => simp [attach]\n  | cons t E ih =>\n      simp only [attach, List.map_cons, denote_cons, cnfValue_append] at *\n      rw [ih]\n      ring\n\n@[simp] theorem denote_negative (E : Expansion V) (x : Assignment V) :\n    denote (negative E) x = -denote E x := by\n  induction E with\n  | nil => simp [negative]\n  | cons t E ih =>\n      simp only [negative, List.map_cons, denote_cons] at *\n      rw [ih]\n      ring\n\n@[simp] theorem unit_value (i : V) (a : Bool) (x : Assignment V) :\n    clauseValue (unit i a) x = if x i = a then 1 else 0 := by\n  simp only [clauseValue, unit, Finset.mem_singleton, forall_eq]\n  cases a <;> cases x i <;> simp\n\ntheorem guard_value (c : Clause V) (r : Restriction V) (x : Assignment V) :\n    cnfValue (guard c r) x =\n      if ∀ i ∈ live c r, x i = c.pattern i then 1 else 0 := by\n  classical\n  simp only [cnfValue, guard, List.map_map, Function.comp_def, unit_value]\n  by_cases h : ∀ i ∈ live c r, x i = c.pattern i\n  · rw [if_pos h]\n    apply List.prod_eq_one\n    intro a ha\n    obtain ⟨i, hi, rfl⟩ := List.mem_map.mp ha\n    rw [if_pos (h i (Finset.mem_toList.mp hi))]\n  · rw [if_neg h]\n    push Not at h\n    obtain ⟨i, hi, hx⟩ := h\n    apply List.prod_eq_zero\n    exact List.mem_map.mpr ⟨i, Finset.mem_toList.mpr hi, if_neg hx⟩\n\ntheorem fill_close_of_violation (c : Clause V) (r : Restriction V)\n    (x : Assignment V) (h : ∀ i ∈ c.scope, fill r x i = c.pattern i) :\n    fill (close c r) x = fill r x := by\n  funext i\n  by_cases hi : i ∈ c.scope\n  · simpa [fill, close, hi] using (h i hi).symm\n  · simp [fill, close, hi]\n\ntheorem insertion_identity (c : Clause V) (H : CNF V) (r : Restriction V)\n    (hc : compatible c r) (x : Assignment V) :\n    cnfValue (c :: H) (fill r x) =\n      cnfValue H (fill r x) -\n        cnfValue (guard c r) x * cnfValue H (fill (close c r) x) := by\n  classical\n  rw [cnfValue_cons, guard_value]\n  by_cases hv : ∀ i ∈ live c r, x i = c.pattern i\n  · have hs := (violation_reduced c r hc x).mpr hv\n    rw [if_pos hv, fill_close_of_violation c r x hs]\n    have hcv : clauseValue c (fill r x) = 0 := if_pos hs\n    rw [hcv]\n    ring\n  · have hs := mt (violation_reduced c r hc x).mp hv\n    have hcv : clauseValue c (fill r x) = 1 := if_neg hs\n    rw [hcv, if_neg hv]\n    ring\n\ntheorem attach_width (b : ℕ) (A : CNF V) (E : Expansion V)\n    (ha : width b A) (he : expansionWidth b E) :\n    expansionWidth b (attach A E) := by\n  intro t ht\n  obtain ⟨u, hu, rfl⟩ := List.mem_map.mp ht\n  intro c hc\n  rcases List.mem_append.mp hc with hc | hc\n  · exact ha c hc\n  · exact he u hu c hc\n\ntheorem guard_width (b : ℕ) (hb : 1 ≤ b) (c : Clause V) (r : Restriction V) :\n    width b (guard c r) := by\n  intro e he\n  obtain ⟨i, _, rfl⟩ := List.mem_map.mp he\n  simpa [unit] using hb\n\ntheorem expand_width (b : ℕ) (hb : 1 ≤ b) (H : CNF V) (r : Restriction V) :\n    expansionWidth b (expand b H r) := by\n  classical\n  induction H generalizing r with\n  | nil => simp [expand, expansionWidth, width]\n  | cons c H ih =>\n      unfold expand\n      split\n      · exact ih r\n      · split\n        · simp [expansionWidth]\n        · split\n          · next h =>\n              apply attach_width _ _ _ _ (ih r)\n              intro e he\n              have heq : e = reduced c r := by simpa using he\n              simpa [heq, reduced] using h\n          · intro t ht\n            rcases List.mem_append.mp ht with ht | ht\n            · exact ih r t ht\n            · obtain ⟨u, hu, rfl⟩ := List.mem_map.mp ht\n              exact attach_width b _ _ (guard_width b hb c r) (ih (close c r)) u hu\n\ntheorem expand_correct (b : ℕ) (H : CNF V) (r : Restriction V)\n    (x : Assignment V) :\n    denote (expand b H r) x = cnfValue H (fill r x) := by\n  classical\n  induction H generalizing r with\n  | nil => simp [expand, denote]\n  | cons c H ih =>\n      by_cases hc : compatible c r\n      · by_cases he : live c r = ∅\n        · simp [expand, hc, he, clauseValue_dead c r hc he x]\n        · by_cases hb : (live c r).card ≤ b\n          · simp only [expand, hc, not_true_eq_false, ↓reduceIte,\n              he, hb, denote_attach, cnfValue_cons, cnfValue_nil, mul_one]\n            rw [ih, ← clauseValue_reduced c r hc x]\n          · simp only [expand, hc, not_true_eq_false, ↓reduceIte, he, hb,\n              denote_append, denote_negative, denote_attach, ih]\n            exact (insertion_identity c H r hc x).symm\n      · simp [expand, hc, ih, clauseValue_incompatible c r hc x]\n\ntheorem restrictCNF_value (r : Restriction V) (H : CNF V) (x : Assignment V) :\n    cnfValue (restrictCNF r H) x = cnfValue H (fill r x) := by\n  induction H with\n  | nil => simp [restrictCNF]\n  | cons c H ih =>\n      by_cases hc : compatible c r\n      · simp [restrictCNF, hc, ih, clauseValue_reduced c r hc x]\n      · simp [restrictCNF, hc, ih, clauseValue_incompatible c r hc x]\n\ntheorem restrictCNF_width (r : Restriction V) (b : ℕ) (H : CNF V)\n    (hw : width b H) : width b (restrictCNF r H) := by\n  induction H with\n  | nil => simp [restrictCNF, width]\n  | cons c H ih =>\n      have hh : width b H := fun e he => hw e (List.mem_cons_of_mem _ he)\n      by_cases hc : compatible c r\n      · simp only [restrictCNF, hc, ↓reduceIte]\n        intro e he\n        rcases List.mem_cons.mp he with he | he\n        · subst e\n          have hscope : (reduced c r).scope ⊆ c.scope := Finset.filter_subset _ _\n          exact (Finset.card_le_card hscope).trans (hw c List.mem_cons_self)\n        · exact ih hh e he\n      · simpa only [restrictCNF, hc, ↓reduceIte] using ih hh\n\ntheorem restrictCNF_supported (r : Restriction V) (H : CNF V) :\n    supported r (restrictCNF r H) := by\n  induction H with\n  | nil => simp [restrictCNF, supported]\n  | cons c H ih =>\n      by_cases hc : compatible c r\n      · simp only [restrictCNF, hc, ↓reduceIte]\n        intro e he i hi\n        rcases List.mem_cons.mp he with he | he\n        · subst e\n          exact (Finset.mem_filter.mp hi).2\n        · exact ih e he i hi\n      · simpa only [restrictCNF, hc, ↓reduceIte] using ih\n\ntheorem supported_value (r : Restriction V) (H : CNF V)\n    (hs : supported r H) (x : Assignment V) :\n    cnfValue H (fill r x) = cnfValue H x := by\n  induction H with\n  | nil => simp\n  | cons c H ih =>\n      have he :\n          (∀ i ∈ c.scope, fill r x i = c.pattern i) ↔\n            ∀ i ∈ c.scope, x i = c.pattern i := by\n        constructor <;> intro h i hi <;> simpa [fill, hs c List.mem_cons_self i hi] using h i hi\n      have hcv : clauseValue c (fill r x) = clauseValue c x := by\n        simp only [clauseValue, he]\n      have hh : supported r H := fun e he i hi => hs e (List.mem_cons_of_mem _ he) i hi\n      simp [hcv, ih hh]\n\ndef falseOn (c : Clause V) (r : Restriction V) : Prop :=\n  ∀ i ∈ c.scope, r i = some (c.pattern i)\n\ntheorem live_subset (c : Clause V) (r : Restriction V) : live c r ⊆ c.scope :=\n  Finset.filter_subset _ _\n\ntheorem falseOn_iff (c : Clause V) (r : Restriction V) :\n    falseOn c r ↔ compatible c r ∧ live c r = ∅ := by\n  constructor\n  · intro h\n    constructor\n    · exact fun i hi => Or.inr (h i hi)\n    · apply Finset.eq_empty_iff_forall_notMem.mpr\n      intro i hi\n      obtain ⟨his, hin⟩ := Finset.mem_filter.mp hi\n      rw [h i his] at hin\n      contradiction\n  · rintro ⟨hc, he⟩ i hi\n    rcases hc i hi with hr | hr\n    · have hmem : i ∈ live c r := Finset.mem_filter.mpr ⟨hi, hr⟩\n      simp [he] at hmem\n    · exact hr\n\ntheorem close_eq_self (c : Clause V) (r : Restriction V) (h : falseOn c r) :\n    close c r = r := by\n  funext i\n  by_cases hi : i ∈ c.scope\n  · simp [close, hi, h i hi]\n  · simp [close, hi]\n\nnoncomputable def switch (c : Clause V) (D : Finset V) :\n    Restriction V ≃ Restriction V :=\n  Equiv.piCongrRight (fun i =>\n    if i ∈ D then Equiv.swap none (some (c.pattern i)) else Equiv.refl _)\n\ntheorem switch_mem (c : Clause V) (D : Finset V) (r : Restriction V)\n    (i : V) (hi : i ∈ D) :\n    switch c D r i = Equiv.swap none (some (c.pattern i)) (r i) := by\n  simp [switch, hi, Equiv.piCongrRight]\n\ntheorem switch_not_mem (c : Clause V) (D : Finset V) (r : Restriction V)\n    (i : V) (hi : i ∉ D) : switch c D r i = r i := by\n  simp [switch, hi, Equiv.piCongrRight]\n\ntheorem event_switch (c : Clause V) (D : Finset V) (hd : D ⊆ c.scope)\n    (r : Restriction V) :\n    (compatible c (switch c D r) ∧ live c (switch c D r) = D) ↔ falseOn c r := by\n  constructor\n  · rintro ⟨hc, hl⟩ i hi\n    by_cases hid : i ∈ D\n    · have hm : i ∈ live c (switch c D r) := by\n        rw [hl]\n        exact hid\n      have hpair : i ∈ c.scope ∧ switch c D r i = none := by\n        simpa only [live, Finset.mem_filter] using hm\n      have he := hpair.2\n      rw [switch_mem c D r i hid] at he\n      apply (Equiv.swap none (some (c.pattern i))).injective\n      simpa using he\n    · rcases hc i hi with hr | hr\n      · have hm : i ∈ live c (switch c D r) := Finset.mem_filter.mpr ⟨hi, hr⟩\n        exact False.elim (hid (hl ▸ hm))\n      · simpa [switch_not_mem c D r i hid] using hr\n  · intro hf\n    constructor\n    · intro i hi\n      by_cases hid : i ∈ D\n      · left\n        rw [switch_mem c D r i hid, hf i hi, Equiv.swap_apply_right]\n      · right\n        rw [switch_not_mem c D r i hid, hf i hi]\n    · apply Finset.ext\n      intro i\n      constructor\n      · intro hi\n        obtain ⟨his, hin⟩ := Finset.mem_filter.mp hi\n        by_contra hid\n        rw [switch_not_mem c D r i hid, hf i his] at hin\n        contradiction\n      · intro hid\n        apply Finset.mem_filter.mpr\n        refine ⟨hd hid, ?_⟩\n        rw [switch_mem c D r i hid, hf i (hd hid), Equiv.swap_apply_right]\n\ntheorem close_switch (c : Clause V) (D : Finset V) (hd : D ⊆ c.scope)\n    (r : Restriction V) (hf : falseOn c r) : close c (switch c D r) = r := by\n  funext i\n  by_cases hi : i ∈ c.scope\n  · simp [close, hi, hf i hi]\n  · have hid : i ∉ D := fun h => hi (hd h)\n    simp [close, hi, switch_not_mem c D r i hid]\n\nnoncomputable def stateWeight (p q : ℝ) (s : Option Bool) : ℝ :=\n  if s = none then p else q\n\nnoncomputable def weight (p q : ℝ) (r : Restriction V) : ℝ :=\n  ∏ i, stateWeight p q (r i)\n\ntheorem weight_nonneg (p q : ℝ) (hp : 0 ≤ p) (hq : 0 ≤ q) (r : Restriction V) :\n    0 ≤ weight p q r := by\n  apply Finset.prod_nonneg\n  intro i _\n  unfold stateWeight\n  split <;> assumption\n\ntheorem weight_switch (p q α : ℝ) (hp : p = α * q)\n    (c : Clause V) (D : Finset V) (hd : D ⊆ c.scope)\n    (r : Restriction V) (hf : falseOn c r) :\n    weight p q (switch c D r) = α ^ D.card * weight p q r := by\n  calc\n    weight p q (switch c D r) =\n        ∏ i, (if i ∈ D then α else 1) * stateWeight p q (r i) := by\n      apply Finset.prod_congr rfl\n      intro i _\n      by_cases hi : i ∈ D\n      · rw [switch_mem c D r i hi, hf i (hd hi), Equiv.swap_apply_right]\n        simp [stateWeight, hi, hp]\n      · rw [switch_not_mem c D r i hi]\n        simp [hi]\n    _ = (∏ i : V, if i ∈ D then α else 1) * weight p q r := by\n      rw [Finset.prod_mul_distrib]\n      rfl\n    _ = α ^ D.card * weight p q r := by\n      simp [Finset.prod_ite_mem]\n\nnoncomputable def falsePart (c : Clause V) (f : Restriction V → ℝ)\n    (r : Restriction V) : ℝ :=\n  if falseOn c r then f r else 0\n\nnoncomputable def fiberPart (c : Clause V) (D : Finset V)\n    (f : Restriction V → ℝ) (r : Restriction V) : ℝ :=\n  if compatible c r ∧ live c r = D then f (close c r) else 0\n\nnoncomputable def hardPart (c : Clause V) (b : ℕ)\n    (f : Restriction V → ℝ) (r : Restriction V) : ℝ :=\n  if compatible c r ∧ b < (live c r).card then f (close c r) else 0\n\nnoncomputable def subsetTail (S : Finset V) (b : ℕ) (α : ℝ) : ℝ :=\n  ∑ D ∈ S.powerset, if b < D.card then α ^ D.card else 0\n\ntheorem fiber_reweight (p q α : ℝ) (hp : p = α * q)\n    (c : Clause V) (D : Finset V) (hd : D ⊆ c.scope)\n    (f : Restriction V → ℝ) :\n    (∑ r, weight p q r * fiberPart c D f r) =\n      α ^ D.card * ∑ r, weight p q r * falsePart c f r := by\n  rw [← (switch c D).sum_comp (fun r => weight p q r * fiberPart c D f r)]\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro r _\n  by_cases hf : falseOn c r\n  · rw [weight_switch p q α hp c D hd r hf]\n    simp only [fiberPart, falsePart, event_switch c D hd r, hf, ↓reduceIte,\n      close_switch c D hd r hf]\n    ring\n  · simp [fiberPart, falsePart, event_switch c D hd r, hf]\n\ntheorem hard_fibers (c : Clause V) (b : ℕ) (f : Restriction V → ℝ)\n    (r : Restriction V) :\n    hardPart c b f r =\n      ∑ D ∈ c.scope.powerset, if b < D.card then fiberPart c D f r else 0 := by\n  unfold hardPart fiberPart\n  by_cases hc : compatible c r\n  · simp only [hc, true_and]\n    symm\n    calc\n      (∑ D ∈ c.scope.powerset,\n          if b < D.card then (if live c r = D then f (close c r) else 0) else 0) =\n          ∑ D ∈ c.scope.powerset,\n            if live c r = D then (if b < D.card then f (close c r) else 0) else 0 := by\n        apply Finset.sum_congr rfl\n        intro D _\n        split_ifs <;> rfl\n      _ = if b < (live c r).card then f (close c r) else 0 := by\n        rw [Finset.sum_ite_eq]\n        simp [Finset.mem_powerset.mpr (live_subset c r)]\n  · simp [hc]\n\ntheorem hard_reweight (p q α : ℝ) (hp : p = α * q)\n    (c : Clause V) (b : ℕ) (f : Restriction V → ℝ) :\n    (∑ r, weight p q r * hardPart c b f r) =\n      subsetTail c.scope b α * ∑ r, weight p q r * falsePart c f r := by\n  conv_lhs => simp only [hard_fibers, Finset.mul_sum]\n  rw [Finset.sum_comm]\n  calc\n    (∑ D ∈ c.scope.powerset,\n        ∑ r, weight p q r * (if b < D.card then fiberPart c D f r else 0)) =\n        ∑ D ∈ c.scope.powerset,\n          (if b < D.card then\n            α ^ D.card * ∑ r, weight p q r * falsePart c f r else 0) := by\n      apply Finset.sum_congr rfl\n      intro D hd\n      by_cases hb : b < D.card\n      · simp only [hb, ↓reduceIte]\n        exact fiber_reweight p q α hp c D (Finset.mem_powerset.mp hd) f\n      · simp [hb]\n    _ = subsetTail c.scope b α * ∑ r, weight p q r * falsePart c f r := by\n      rw [subsetTail, Finset.sum_mul]\n      apply Finset.sum_congr rfl\n      intro D _\n      split_ifs <;> simp\n\ntheorem mass_step (b : ℕ) (c : Clause V) (H : CNF V) (r : Restriction V) :\n    mass (expand b (c :: H) r) =\n      mass (expand b H r) - falsePart c (fun s => mass (expand b H s)) r +\n        hardPart c b (fun s => mass (expand b H s)) r := by\n  unfold falsePart hardPart\n  rw [falseOn_iff]\n  by_cases hc : compatible c r\n  · by_cases he : live c r = ∅\n    · simp [expand, hc, he]\n    · by_cases hb : (live c r).card ≤ b\n      · simp [expand, hc, he, hb, not_lt_of_ge hb]\n      · simp [expand, hc, he, hb, Nat.lt_of_not_ge hb]\n  · simp [expand, hc]\n\ntheorem expected_mass_step (p q α : ℝ) (hp : p = α * q)\n    (c : Clause V) (H : CNF V) (b : ℕ) :\n    (∑ r, weight p q r * mass (expand b (c :: H) r)) =\n      (∑ r, weight p q r * mass (expand b H r)) +\n        (subsetTail c.scope b α - 1) *\n          ∑ r, weight p q r * falsePart c (fun s => mass (expand b H s)) r := by\n  simp_rw [mass_step, mul_add, mul_sub]\n  rw [Finset.sum_add_distrib, Finset.sum_sub_distrib,\n    hard_reweight p q α hp c b]\n  ring\n\ntheorem sum_weight (p q : ℝ) (hn : p + 2 * q = 1) :\n    ∑ r : Restriction V, weight p q r = 1 := by\n  unfold weight\n  rw [← Fintype.prod_sum]\n  have hs : (∑ s : Option Bool, stateWeight p q s) = 1 := by\n    simp [Fintype.sum_option, stateWeight]\n    linarith\n  simp [hs]\n\ntheorem expected_mass_le_one (H : CNF V) (b : ℕ) (p q α : ℝ)\n    (hp : 0 ≤ p) (hq : 0 ≤ q) (hn : p + 2 * q = 1) (hr : p = α * q)\n    (ht : ∀ c ∈ H, subsetTail c.scope b α ≤ 1) :\n    (∑ r, weight p q r * mass (expand b H r)) ≤ 1 := by\n  induction H with\n  | nil => simpa [expand, mass] using le_of_eq (sum_weight (V := V) p q hn)\n  | cons c H ih =>\n      rw [expected_mass_step p q α hr c H b]\n      have htail := ht c List.mem_cons_self\n      have hprefix := ih (fun e he => ht e (List.mem_cons_of_mem _ he))\n      have hfalse :\n          0 ≤ ∑ r, weight p q r * falsePart c (fun s => mass (expand b H s)) r := by\n        apply Finset.sum_nonneg\n        intro r _\n        apply mul_nonneg (weight_nonneg p q hp hq r)\n        unfold falsePart\n        split\n        · exact mass_nonneg _\n        · rfl\n      have hdecrease := mul_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr htail) hfalse\n      linarith\n\nnoncomputable def theta (k b : ℕ) (α : ℝ) : ℝ :=\n  ∑ j ∈ Finset.range (k + 1), if b < j then (k.choose j : ℝ) * α ^ j else 0\n\ntheorem theta_eq_Icc (k b : ℕ) (α : ℝ) :\n    theta k b α = ∑ j ∈ Finset.Icc (b + 1) k, (k.choose j : ℝ) * α ^ j := by\n  unfold theta\n  rw [← Finset.sum_filter]\n  apply Finset.sum_congr\n  · ext j\n    simp only [Finset.mem_filter, Finset.mem_range, Finset.mem_Icc]\n    omega\n  · intro j _\n    rfl\n\ntheorem subsetTail_eq_binomial (S : Finset V) (b : ℕ) (α : ℝ) :\n    subsetTail S b α = theta S.card b α := by\n  unfold subsetTail theta\n  rw [Finset.sum_powerset]\n  apply Finset.sum_congr rfl\n  intro j _\n  calc\n    (∑ D ∈ Finset.powersetCard j S, if b < D.card then α ^ D.card else 0) =\n        ∑ _D ∈ Finset.powersetCard j S, if b < j then α ^ j else 0 := by\n      apply Finset.sum_congr rfl\n      intro D hd\n      rw [(Finset.mem_powersetCard.mp hd).2]\n    _ = if b < j then (S.card.choose j : ℝ) * α ^ j else 0 := by\n      by_cases hj : b < j <;> simp [hj, Finset.card_powersetCard, nsmul_eq_mul]\n\ntheorem theta_nonneg (k b : ℕ) (α : ℝ) (ha : 0 ≤ α) : 0 ≤ theta k b α := by\n  apply Finset.sum_nonneg\n  intro j _\n  split\n  · positivity\n  · rfl\n\ntheorem subsetTail_le_theta (S : Finset V) (b k : ℕ) (α : ℝ)\n    (ha : 0 ≤ α) (hk : S.card ≤ k) :\n    subsetTail S b α ≤ theta k b α := by\n  rw [subsetTail_eq_binomial]\n  unfold theta\n  calc\n    (∑ j ∈ Finset.range (S.card + 1),\n        if b < j then (S.card.choose j : ℝ) * α ^ j else 0) ≤\n        ∑ j ∈ Finset.range (S.card + 1),\n          if b < j then (k.choose j : ℝ) * α ^ j else 0 := by\n      apply Finset.sum_le_sum\n      intro j _\n      split\n      · apply mul_le_mul_of_nonneg_right _ (pow_nonneg ha _)\n        exact_mod_cast Nat.choose_le_choose j hk\n      · rfl\n    _ ≤ ∑ j ∈ Finset.range (k + 1),\n        if b < j then (k.choose j : ℝ) * α ^ j else 0 := by\n      apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono (Nat.add_le_add_right hk 1))\n      intro j _ _\n      split\n      · positivity\n      · rfl\n\ntheorem theta_zero_of_le (k b : ℕ) (α : ℝ) (hk : k ≤ b) : theta k b α = 0 := by\n  apply Finset.sum_eq_zero\n  intro j hj\n  have hn : ¬b < j := by\n    have := Finset.mem_range.mp hj\n    omega\n  simp [hn]\n\ntheorem expected_mass_uniform (H : CNF V) (b k : ℕ) (p : ℝ)\n    (hw : width k H) (hp : 0 < p) (hp1 : p < 1)\n    (ht : theta k b (2 * p / (1 - p)) ≤ 1) :\n    (∑ r, weight p ((1 - p) / 2) r * mass (expand b H r)) ≤ 1 := by\n  have hq : 0 < (1 - p) / 2 := by linarith\n  have ha : 0 ≤ 2 * p / (1 - p) := by positivity\n  have hr : p = (2 * p / (1 - p)) * ((1 - p) / 2) := by\n    field_simp [ne_of_gt (sub_pos.mpr hp1)]\n  apply expected_mass_le_one H b p ((1 - p) / 2) (2 * p / (1 - p))\n    (le_of_lt hp) (le_of_lt hq) (by ring) hr\n  intro c hc\n  exact (subsetTail_le_theta c.scope b k _ ha (hw c hc)).trans ht\n\ntheorem clauseValue_zero_or_one (c : Clause V) (x : Assignment V) :\n    clauseValue c x = 0 ∨ clauseValue c x = 1 := by\n  unfold clauseValue\n  split <;> simp\n\ntheorem cnfValue_zero_or_one (H : CNF V) (x : Assignment V) :\n    cnfValue H x = 0 ∨ cnfValue H x = 1 := by\n  induction H with\n  | nil => simp\n  | cons c H ih =>\n      rw [cnfValue_cons]\n      rcases clauseValue_zero_or_one c x with hc | hc <;>\n        rcases ih with hh | hh <;> simp [hc, hh]\n\nnoncomputable def average (f : Assignment V → ℝ) : ℝ :=\n  (Fintype.card (Assignment V) : ℝ)⁻¹ * ∑ x, f x\n\ntheorem average_live (r : Restriction V)\n    (g : ({i : V // r i = none} → Bool) → ℝ) :\n    average (fun x => g (fun i => x i.val)) =\n      (Fintype.card ({i : V // r i = none} → Bool) : ℝ)⁻¹ * ∑ z, g z := by\n  let e := Equiv.piEquivPiSubtypeProd (fun i => r i = none) (fun _ : V => Bool)\n  have hs :\n      (∑ x : Assignment V, g (fun i => x i.val)) =\n        (Fintype.card ({i : V // ¬r i = none} → Bool) : ℝ) * ∑ z, g z := by\n    calc\n      (∑ x : Assignment V, g (fun i => x i.val)) =\n          ∑ z : ({i : V // r i = none} → Bool) ×\n            ({i : V // ¬r i = none} → Bool), g z.1 :=\n          e.sum_comp (fun z => g z.1)\n      _ = _ := by\n        simp [Fintype.sum_prod_type, nsmul_eq_mul, Finset.mul_sum]\n  have hc :\n      (Fintype.card (Assignment V) : ℝ) =\n        (Fintype.card ({i : V // r i = none} → Bool) : ℝ) *\n          (Fintype.card ({i : V // ¬r i = none} → Bool) : ℝ) := by\n    exact_mod_cast (Fintype.card_congr e).trans (Fintype.card_prod _ _)\n  have hl : (Fintype.card ({i : V // r i = none} → Bool) : ℝ) ≠ 0 := by\n    exact_mod_cast Fintype.card_ne_zero\n  have hf : (Fintype.card ({i : V // ¬r i = none} → Bool) : ℝ) ≠ 0 := by\n    exact_mod_cast Fintype.card_ne_zero\n  unfold average\n  rw [hs, hc]\n  field_simp\n\n@[simp] theorem average_zero : average (fun _ : Assignment V => (0 : ℝ)) = 0 := by\n  simp [average]\n\ntheorem average_add (f g : Assignment V → ℝ) :\n    average (fun x => f x + g x) = average f + average g := by\n  simp [average, Finset.sum_add_distrib, mul_add]\n\ntheorem average_scale (a : ℝ) (f : Assignment V → ℝ) :\n    average (fun x => a * f x) = a * average f := by\n  simp [average, Finset.mul_sum, mul_assoc, mul_comm]\n\nnoncomputable def testCorrelation (r : Restriction V) (G : Assignment V → ℝ)\n    (H : CNF V) : ℝ :=\n  average (fun x => G (fill r x) * cnfValue H (fill r x))\n\nnoncomputable def truth (H : CNF V) : Assignment V → Bool :=\n  fun x => decide (cnfValue H x = 1)\n\ntheorem truth_value (H : CNF V) (x : Assignment V) :\n    (if truth H x then (1 : ℝ) else 0) = cnfValue H x := by\n  rcases cnfValue_zero_or_one H x with h | h <;> simp [truth, h]\n\nnoncomputable def tests (b : ℕ) (r : Restriction V) : Finset (Assignment V → Bool) :=\n  Finset.univ.filter (fun f => ∃ H : CNF V, width b H ∧ supported r H ∧ truth H = f)\n\ntheorem truth_mem_tests (b : ℕ) (r : Restriction V) (H : CNF V)\n    (hw : width b H) (hs : supported r H) : truth H ∈ tests b r := by\n  simp only [tests, Finset.mem_filter, Finset.mem_univ, true_and]\n  exact ⟨H, hw, hs, rfl⟩\n\ntheorem tests_nonempty (b : ℕ) (r : Restriction V) : (tests b r).Nonempty :=\n  ⟨truth [], truth_mem_tests b r [] (by simp [width]) (by simp [supported])⟩\n\nnoncomputable def corr (b : ℕ) (r : Restriction V) (G : Assignment V → ℝ) : ℝ :=\n  (tests b r).sup' (tests_nonempty b r)\n    (fun f => |average (fun x => G (fill r x) * (if f (fill r x) then 1 else 0))|)\n\ntheorem testCorrelation_le_corr (b : ℕ) (r : Restriction V)\n    (G : Assignment V → ℝ) (H : CNF V) (hw : width b H) :\n    |testCorrelation r G H| ≤ corr b r G := by\n  unfold corr\n  have h := Finset.le_sup'\n    (fun f : Assignment V → Bool =>\n      |average (fun x => G (fill r x) * (if f (fill r x) then 1 else 0))|)\n    (truth_mem_tests b r (restrictCNF r H) (restrictCNF_width r b H hw)\n      (restrictCNF_supported r H))\n  simpa only [truth_value, restrictCNF_value, fill_fill, testCorrelation] using h\n\ntheorem corr_nonneg (b : ℕ) (r : Restriction V) (G : Assignment V → ℝ) :\n    0 ≤ corr b r G :=\n  (abs_nonneg (testCorrelation r G [])).trans\n    (testCorrelation_le_corr b r G [] (by simp [width]))\n\ntheorem expansion_correlation (b : ℕ) (r : Restriction V)\n    (G : Assignment V → ℝ) (E : Expansion V) (B : ℝ)\n    (hw : expansionWidth b E)\n    (hb : ∀ H : CNF V, width b H → |testCorrelation r G H| ≤ B) :\n    |average (fun x => G (fill r x) * denote E (fill r x))| ≤ mass E * B := by\n  induction E with\n  | nil => simp [denote, mass]\n  | cons t E ih =>\n      have he : expansionWidth b E := fun u hu => hw u (List.mem_cons_of_mem _ hu)\n      have ht : width b t.2 := hw t List.mem_cons_self\n      have hind := ih he\n      have hf :\n          (fun x => G (fill r x) * denote (t :: E) (fill r x)) =\n            (fun x => t.1 * (G (fill r x) * cnfValue t.2 (fill r x)) +\n              G (fill r x) * denote E (fill r x)) := by\n        funext x\n        rw [denote_cons]\n        ring\n      rw [hf, average_add, average_scale, mass_cons]\n      change |t.1 * testCorrelation r G t.2 +\n          average (fun x => G (fill r x) * denote E (fill r x))| ≤\n        (|t.1| + mass E) * B\n      calc\n        _ ≤ |t.1 * testCorrelation r G t.2| +\n            |average (fun x => G (fill r x) * denote E (fill r x))| := abs_add_le _ _\n        _ ≤ |t.1| * B + mass E * B := by\n          apply add_le_add _ hind\n          rw [abs_mul]\n          exact mul_le_mul_of_nonneg_left (hb t.2 ht) (abs_nonneg t.1)\n        _ = _ := by ring\n\ntheorem restriction_correlation (b : ℕ) (hb : 1 ≤ b) (H : CNF V)\n    (r : Restriction V) (G : Assignment V → ℝ) :\n    |testCorrelation r G H| ≤ mass (expand b H r) * corr b r G := by\n  have h := expansion_correlation b r G (expand b H r) (corr b r G)\n    (expand_width b hb H r) (fun J hj => testCorrelation_le_corr b r G J hj)\n  simpa only [expand_correct, fill_fill, testCorrelation] using h\n\ntheorem independent_restriction (H : CNF V) (b k : ℕ) (p : ℝ)\n    (hb : 1 ≤ b) (hw : width k H) (hp : 0 < p) (hp1 : p < 1)\n    (ht : theta k b (2 * p / (1 - p)) ≤ 1) :\n    (∀ r, expansionWidth b (expand b H r) ∧\n      (∀ x, denote (expand b H r) x = cnfValue H (fill r x)) ∧\n      0 ≤ mass (expand b H r)) ∧\n    (∑ r, weight p ((1 - p) / 2) r * mass (expand b H r)) ≤ 1 ∧\n    (∀ r G, |testCorrelation r G H| ≤ mass (expand b H r) * corr b r G) := by\n  refine ⟨?_, expected_mass_uniform H b k p hw hp hp1 ht, ?_⟩\n  · intro r\n    exact ⟨expand_width b hb H r, expand_correct b H r, mass_nonneg _⟩\n  · exact fun r G => restriction_correlation b hb H r G\n\ntheorem manuscript_corollary (H : CNF V) (b k : ℕ) (p : ℝ)\n    (hb : 1 ≤ b) (hw : width k H) (hp : 0 < p) (hp1 : p < 1)\n    (ht : theta k b (2 * p / (1 - p)) < 1) :\n    ∃ W : Restriction V → ℝ,\n      (∀ r, 0 ≤ W r) ∧\n      (∑ r, weight p ((1 - p) / 2) r * W r) ≤\n        1 / (1 - theta k b (2 * p / (1 - p))) ∧\n      ∀ r G, |testCorrelation r G H| ≤ W r * corr b r G := by\n  refine ⟨fun r => mass (expand b H r), fun r => mass_nonneg _, ?_, ?_⟩\n  · apply (expected_mass_uniform H b k p hw hp hp1 (le_of_lt ht)).trans\n    have hn := theta_nonneg k b (2 * p / (1 - p)) (by positivity)\n    apply (le_div_iff₀ (sub_pos.mpr ht)).mpr\n    linarith\n  · exact fun r G => restriction_correlation b hb H r G\n\n#print axioms independent_restriction\n#print axioms manuscript_corollary\n\nend RestrictionCertificate\n",
+      "external_assumptions": [],
+      "retired_assumptions": [],
+      "content_hash": "32c616b5178b616ebc54619727a7c79e07bc1f63ade551494e68de5ee9830fbf"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "lean-C_RESTRICTION_INDEPENDENT-0137f72f5468",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RESTRICTION_INDEPENDENT",
+        "content_hash": "32c616b5178b616ebc54619727a7c79e07bc1f63ade551494e68de5ee9830fbf"
+      },
+      "tier": "mechanical",
+      "verdict": "supports",
+      "produced_by": "lean_evidence/lean 4.31.0",
+      "artifact": "research/restriction_certificate/certificates/C_RESTRICTION_INDEPENDENT-0bb9da8c1d84b528.json"
+    },
+    {
+      "evidence_id": "judgement-C_RESTRICTION_INDEPENDENT-1b3bdac09abb",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RESTRICTION_INDEPENDENT",
+        "content_hash": "32c616b5178b616ebc54619727a7c79e07bc1f63ade551494e68de5ee9830fbf"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot:c7ba2af93017",
+      "artifact": "research/restriction_certificate/certificates/C_RESTRICTION_INDEPENDENT-0bb9da8c1d84b528.json"
+    },
+    {
+      "evidence_id": "judgement-C_RESTRICTION_MANUSCRIPT-e593535aec79",
+      "subject": {
+        "kind": "claim",
+        "subject_id": "C_RESTRICTION_MANUSCRIPT",
+        "content_hash": "6854224ec39274e676d57a5c4e5ad15ea7c1b937c27cabed83bf2c286986fcf2"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot:c7ba2af93017",
+      "artifact": "research/restriction_certificate/certificates/C_RESTRICTION_INDEPENDENT-0bb9da8c1d84b528.json"
+    },
+    {
+      "evidence_id": "judgement-A_LZ_3_1-0e595c3aa4ed",
+      "subject": {
+        "kind": "assumption",
+        "subject_id": "A_LZ_3_1",
+        "content_hash": "5555c4cd3828f23bdcdc67fb9b6be09f3296b93ea42d26a295d397e4773c6f78"
+      },
+      "tier": "judgement",
+      "verdict": "supports",
+      "produced_by": "reviewer:copilot:c7ba2af93017",
+      "artifact": "research/restriction_certificate/li_zhong_lemma_3_1.txt"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "R_INSERTION_GENERAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_RESTRICTION_INDEPENDENT",
+        "content_hash": "32c616b5178b616ebc54619727a7c79e07bc1f63ade551494e68de5ee9830fbf"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "L_RESTRICTION_EXPANSION",
+          "content_hash": "a33bbc5c44bb1fcd43db998afcb34382c9f48ea0c6874423a85c36f1050867d9"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "L_RESTRICTION_EXPECTATION",
+          "content_hash": "78dd4e2370b213a5ea14aac2cdb56529709cd2cc08ab1d219ba07074cf59de41"
+        }
+      ],
+      "retired_because": "Superseded only by formal-source binding: the goal now carries the complete compiler-certified CNF theorem. The same mathematical obligations are re-recorded against that current statement as R_INSERTION_GENERAL_FORMAL."
+    },
+    {
+      "route_id": "R_INSERTION_COROLLARY",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_RESTRICTION_MANUSCRIPT",
+        "content_hash": "6854224ec39274e676d57a5c4e5ad15ea7c1b937c27cabed83bf2c286986fcf2"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_RESTRICTION_INDEPENDENT",
+          "content_hash": "32c616b5178b616ebc54619727a7c79e07bc1f63ade551494e68de5ee9830fbf"
+        }
+      ],
+      "retired_because": "The independent-theorem obligation was rebound to its complete formal source. R_INSERTION_COROLLARY_FORMAL references that current certified statement; the mathematical corollary was not abandoned."
+    },
+    {
+      "route_id": "R_INSERTION_GENERAL_FORMAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_RESTRICTION_INDEPENDENT",
+        "content_hash": "32c616b5178b616ebc54619727a7c79e07bc1f63ade551494e68de5ee9830fbf"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "L_RESTRICTION_EXPANSION",
+          "content_hash": "a33bbc5c44bb1fcd43db998afcb34382c9f48ea0c6874423a85c36f1050867d9"
+        },
+        {
+          "kind": "claim",
+          "subject_id": "L_RESTRICTION_EXPECTATION",
+          "content_hash": "78dd4e2370b213a5ea14aac2cdb56529709cd2cc08ab1d219ba07074cf59de41"
+        }
+      ],
+      "retired_because": ""
+    },
+    {
+      "route_id": "R_INSERTION_COROLLARY_FORMAL",
+      "goal": {
+        "kind": "claim",
+        "subject_id": "C_RESTRICTION_MANUSCRIPT",
+        "content_hash": "6854224ec39274e676d57a5c4e5ad15ea7c1b937c27cabed83bf2c286986fcf2"
+      },
+      "obligations": [
+        {
+          "kind": "claim",
+          "subject_id": "C_RESTRICTION_INDEPENDENT",
+          "content_hash": "32c616b5178b616ebc54619727a7c79e07bc1f63ade551494e68de5ee9830fbf"
+        }
+      ],
+      "retired_because": ""
+    }
+  ]
+}

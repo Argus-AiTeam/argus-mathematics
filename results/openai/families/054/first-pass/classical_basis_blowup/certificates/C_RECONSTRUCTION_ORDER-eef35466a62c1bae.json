@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_RECONSTRUCTION_ORDER-5c46ffbd7a5c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/054/first-pass/classical_basis_blowup/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/054/first-pass/classical_basis_blowup/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15858,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/054/first-pass/classical_basis_blowup/Main.lean",
+    "source_sha256": "c99c0b4cf9bdf4e6024c023a75b05a8508a8af7bcb992756df1bc073cc12bb61",
+    "statement_fidelity": "families/054/first-pass/classical_basis_blowup/statement_fidelity.md",
+    "statement_fidelity_sha256": "c7126f997329ca3e1facfe98614018f0c95cdeff155675cb3c1bac426f15897a",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/classical_basis_blowup/Main.lean",
+    "text": "import Mathlib\n\nnamespace BlowupReconstruction\n\ndef positiveCount : List Nat → Nat\n  | [] => 0\n  | a :: xs => (if a = 0 then 0 else 1) + positiveCount xs\n\ntheorem positiveCount_le_sum (xs : List Nat) :\n    positiveCount xs ≤ xs.sum := by\n  induction xs with\n  | nil => simp [positiveCount]\n  | cons a xs ih =>\n      simp only [positiveCount, List.sum_cons]\n      split_ifs <;> omega\n\ntheorem positiveCount_lt_of_merge (xs : List Nat)\n    (h : ∃ a ∈ xs, 1 < a) : positiveCount xs < xs.sum := by\n  induction xs with\n  | nil => simp at h\n  | cons a xs ih =>\n      rcases h with ⟨b, hb, hbig⟩\n      simp only [List.mem_cons] at hb\n      rcases hb with hba | hb\n      · subst b\n        have hrest := positiveCount_le_sum xs\n        have ha : a ≠ 0 := by omega\n        simp only [positiveCount, if_neg ha, List.sum_cons]\n        omega\n      · have hrest := ih ⟨b, hb, hbig⟩\n        simp only [positiveCount, List.sum_cons]\n        split_ifs <;> omega\n\ntheorem positiveCount_rigidity (xs : List Nat)\n    (h : positiveCount xs = xs.sum) : ∀ a ∈ xs, a ≤ 1 := by\n  intro a ha\n  by_contra hbig\n  have hlt := positiveCount_lt_of_merge xs ⟨a, ha, by omega⟩\n  omega\n\ntheorem length_le_sum_of_positive (xs : List Nat)\n    (h : ∀ a ∈ xs, 0 < a) : xs.length ≤ xs.sum := by\n  induction xs with\n  | nil => simp\n  | cons a xs ih =>\n      have ha := h a (by simp)\n      have ht : ∀ b ∈ xs, 0 < b := by\n        intro b hb\n        exact h b (by simp [hb])\n      have hl := ih ht\n      simp only [List.length_cons, List.sum_cons]\n      omega\n\ntheorem restricted_contact (r k kp b : Nat)\n    (hr : 0 < r) (hb : b < r)\n    (hc : 0 ≤ (r : Int) * k - (r : Int) * kp + b) : kp ≤ k := by\n  by_contra h\n  have hkp : (k : Int) + 1 ≤ kp := by omega\n  have hr' : (0 : Int) < r := by omega\n  have hb' : (b : Int) < r := by omega\n  nlinarith\n\ntheorem restricted_empty_tail (r kp : Nat) (hr : 2 ≤ r) (hk : 0 < kp) :\n    1 - (r : Int) * kp < 0 := by\n  have hr' : (2 : Int) ≤ r := by omega\n  have hk' : (1 : Int) ≤ kp := by omega\n  nlinarith\n\ndef divisorCodim (tail : List Nat × Nat) : Int :=\n  (tail.1.sum : Int) - tail.1.length - tail.2 + 1\n\ndef inputContact (tails : List (List Nat × Nat)) : Nat :=\n  (tails.map fun tail => tail.1.sum).sum\n\ndef inputLength (tails : List (List Nat × Nat)) : Nat :=\n  (tails.map fun tail => tail.1.length).sum\n\ndef outputContact (tails : List (List Nat × Nat)) : Nat :=\n  (tails.map fun tail => tail.2).sum\n\ntheorem divisor_balance (tails : List (List Nat × Nat)) :\n    (tails.map divisorCodim).sum =\n      (inputContact tails : Int) - inputLength tails -\n        outputContact tails + tails.length := by\n  induction tails with\n  | nil => simp [inputContact, inputLength, outputContact]\n  | cons tail tails ih =>\n      simp only [List.map_cons, List.sum_cons, List.length_cons]\n      simp only [inputContact, inputLength, outputContact, List.map_cons,\n        List.sum_cons] at *\n      simp only [Nat.cast_add, Nat.cast_one]\n      unfold divisorCodim at *\n      omega\n\ntheorem divisor_length_order (tails : List (List Nat × Nat))\n    (hcontact : inputContact tails = outputContact tails)\n    (hnonneg : 0 ≤ (tails.map divisorCodim).sum) :\n    inputLength tails ≤ tails.length := by\n  have hbalance := divisor_balance tails\n  omega\n\ntheorem empty_divisor_tail (kp : Nat) (hk : 0 < kp)\n    (hc : 0 ≤ divisorCodim ([], kp)) : kp = 1 := by\n  simp [divisorCodim] at hc\n  omega\n\ndef divisorMeasure (K L p : Nat) : Nat := (K - L) * (K + 1) + p\n\ntheorem divisor_measure_lt (K L t p pp : Nat)\n    (hL : L ≤ K) (ht : t ≤ K) (hpp : pp ≤ t)\n    (h : L < t ∨ (L = t ∧ pp < p)) :\n    divisorMeasure K t pp < divisorMeasure K L p := by\n  rcases h with hlength | ⟨rfl, hcount⟩\n  · have hstep : K - t + 1 ≤ K - L := by omega\n    have hmul := Nat.mul_le_mul_right (K + 1) hstep\n    unfold divisorMeasure\n    nlinarith\n  · exact Nat.add_lt_add_left hcount _\n\ndef fibreCoefficient (r k j : Nat) : Rat :=\n  1 / ((k : Rat) ^ (r - j) * (Nat.factorial (k - 1) : Rat) ^ r)\n\ntheorem fibreCoefficient_pos (r k j : Nat) (hk : 0 < k) :\n    0 < fibreCoefficient r k j := by\n  have hk' : (0 : Rat) < k := by exact_mod_cast hk\n  have hf : (0 : Rat) < Nat.factorial (k - 1) := by\n    exact_mod_cast Nat.factorial_pos (k - 1)\n  unfold fibreCoefficient\n  positivity\n\ntheorem labelled_tail_coefficient_pos (r k j m : Nat) (hk : 0 < k) :\n    0 < (k : Rat) ^ (m + 1) * fibreCoefficient r k j := by\n  have hk' : (0 : Rat) < k := by exact_mod_cast hk\n  exact mul_pos (pow_pos hk' _) (fibreCoefficient_pos r k j hk)\n\ntheorem tensor_recover {V : Type*} [AddCommGroup V] [Module Rat V]\n    (S : Submodule Rat V) (A B R : V) (c : Rat) (hc : c ≠ 0)\n    (h : A = c • B + R) (hA : A ∈ S) (hR : R ∈ S) : B ∈ S := by\n  have hscaled : c • B ∈ S := by\n    simpa [h] using S.sub_mem hA hR\n  have hdivided := S.smul_mem c⁻¹ hscaled\n  simpa [smul_smul, hc] using hdivided\n\nend BlowupReconstruction\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/classical_basis_blowup/statement_fidelity.md",
+    "text": "# Statement fidelity: reconstruction order and tensor division\n\nClaim: `C_RECONSTRUCTION_ORDER`.\nSource: `research/classical_basis_blowup/Main.lean`.\n\nAll declarations are in `BlowupReconstruction`. Natural-number variables\nare unbounded; this is not a finite parameter search.\n\n`restricted_contact` proves that a nonnegative singleton-tail codimension\n`r*(k-kp)+b`, with positive `r` and `b<r`, forces `kp<=k`.\nThe geometric restricted correspondence uses `r>=2`, a stronger hypothesis.\n`restricted_empty_tail` excludes every positive-contact empty tail when\n`r>=2`.\n\n`divisorCodim` is the integer\n`sum(input contacts)-number(input contacts)-output contact+1`.\nFor an arbitrary finite list of tails, `divisor_balance` proves its summed\nidentity, including empty tails. `divisor_length_order` deduces that the\nnew length is at least the original length when total contacts agree and\nthe sum of codimensions is nonnegative. It does not assert that geometric\ntail pushforwards have nonnegative codimension; that is a geometric input\nproved in REPORT.md. `empty_divisor_tail` forces contact one for a\nnonnegative-codimension empty divisor tail.\n\n`length_le_sum_of_positive` bounds the length of any positive-contact list\nby its total contact K. `divisor_measure_lt` proves strict decrease of\n`(K-length)*(K+1)+positive_count` if the new length increases, or if length\nis unchanged and the positive count decreases. The new positive count is\nassumed at most the new length. This proves termination at fixed K;\nneither a nef divisor nor a global bound on descendants is assumed.\n\nFor a list whose entries count the positive-weight input labels on each\ntail, `positiveCount_le_sum` proves that coalescence does not increase\ntheir number. `positiveCount_lt_of_merge` makes the decrease strict if a\ntail contains at least two such labels. `positiveCount_rigidity` says that\nequality forces at most one positive-weight input label on every tail.\nThe interpretation of these counts as geometric labels, and preservation\nof each label in the equality case, are not encoded in Lean.\n\n`fibreCoefficient_pos` proves strict positivity of the rational expression\n`1/(k^(r-j)*((k-1)!)^r)` for every positive k. This expression is the\npublished fibre invariant only in the geometric range `0<=j<=r-1`.\n`labelled_tail_coefficient_pos` includes the contact gluing factor and m\nordinary point-divisor insertions. Lean does not compute a virtual class\nor prove the Hu--Li--Ruan formula.\n\n`tensor_recover` quantifies over every rational module V and rational\nsubmodule S. A single rational scalar c must be nonzero and must satisfy\nthe equality `A=c*B+R` in V, not just pointwise after variable\nspecialization. Membership of A and R in S then implies membership of B.\nThis models bilinear tensors with two distinguished formal slots.\n\nThese declarations formalize only the arithmetic and linear reconstruction\ncore. They do not formalize Gromov--Witten moduli, Hodge theory,\ndegeneration, descendant compatibility, the blowup theorem, or its proposed\nextension. Those mathematical dependencies and their application are\nseparately stated in REPORT.md. A compiler success for this file must not\nbe reported as a kernel proof of `C_GW_SPLIT` or `C_EVEN_HODGE_SPLIT`.\n"
+  },
+  "subject": {
+    "content_hash": "c19950b3018f33e45067be733036c9274122625a1f5dbff3f9a6c5ad8d637764",
+    "kind": "claim",
+    "subject_id": "C_RECONSTRUCTION_ORDER"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

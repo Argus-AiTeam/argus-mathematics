@@ -1,0 +1,179 @@
+{
+  "goal": "C9000028",
+  "routes": {},
+  "nodes": {
+    "C9000028": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 028 (Uniformly bounded components of Gaussian-prime graphs.; papers: Bounded-Step Walks on Gaussian Primes; Lean status: Partially/Comparator formalized (lean/docs/028.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_RECTANGLE_SHARP"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/signed_rectangle/PROOF.md",
+        "research/signed_rectangle/exact_certificate.json",
+        "research/signed_rectangle/STATEMENT_FIDELITY.md"
+      ]
+    },
+    "C_MAIN": {
+      "statement": "For every finite D, all components of the Gaussian-prime graph G_D have a finite common size bound B_D, including axis primes (main.tex, thm:main).",
+      "status": "open",
+      "depends_on": ["C_SIEVE", "C_PERIODIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/main.tex"]
+    },
+    "C_SIEVE": {
+      "statement": "For each D >= 1, some finite set of split rational primes gives an avoiding set with no infinite self-avoiding D-step walk (main.tex, thm:sieve).",
+      "status": "open",
+      "depends_on": ["C_INFORMATION", "C_TELESCOPE", "C_SCHEDULE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/information.tex"]
+    },
+    "C_PERIODIC": {
+      "statement": "A finite periodic obstruction gives the explicit uniform component bound stated in periodicity.tex, prop:periodic.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/periodicity.tex"]
+    },
+    "C_DIFFERENCES": {
+      "statement": "For a self-avoiding D-step segment of n steps, its diameter-width product A satisfies c n <= A <= D^2 n^2 and |E-E| >= c_D A (geometry.tex, lem:differences).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/geometry.tex"]
+    },
+    "C_RECTANGLE": {
+      "statement": "For each fixed origin-centered rotated rectangle with R >= W >= 1 and RW <= P^(1-d), 0 < d < 1/4, independent fair conjugate choices over distinct split primes in [T,2T], T >= 5, have a nonzero rectangle witness with probability <= C exp(-c d^3 r) when d^3 r >= C0, for absolute positive constants (geometry.tex, lem:rectangle).",
+      "status": "open",
+      "depends_on": ["C_RECTANGLE_SHARP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/geometry.tex"]
+    },
+    "C_RECTANGLE_SHARP": {
+      "statement": "Under exactly the rectangle lemma's hypotheses, for every r >= 1 the bad-sign probability is at most min(1, 3 exp(-d^2 r/32)); no lower threshold on d^3 r is needed.",
+      "status": "open",
+      "depends_on": ["C_LINE_SEPARATION", "C_FIXED_LINE", "C_SEPARATED_CLASSES"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/signed_rectangle/PROOF.md",
+        "research/signed_rectangle/verify.py",
+        "research/signed_rectangle/exact_certificate.json",
+        "research/signed_rectangle/STATEMENT_FIDELITY.md",
+        "research/signed_rectangle/verification_output.json"
+      ]
+    },
+    "C_SPLIT_ARITH": {
+      "statement": "Distinct split-prime factors are pairwise coprime; for primitive v at most one conjugate factor over each p divides v, the product of eligible norms is at most N(v), and a missing chosen factor in a nonzero witness a v forces p | a.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/signed_rectangle/PROOF.md"]
+    },
+    "C_LINE_SEPARATION": {
+      "statement": "If d^2 r >= 1, bad sign vectors at Hamming distance <= dr/4 have collinear witnesses; each bad vector has a unique witness line.",
+      "status": "open",
+      "depends_on": ["C_SPLIT_ARITH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/signed_rectangle/PROOF.md"]
+    },
+    "C_FIXED_LINE": {
+      "statement": "If d^2 r >= 1, any one fixed primitive integer line has witness probability at most exp(-d^2 r/8), uniformly in its direction.",
+      "status": "open",
+      "depends_on": ["C_SPLIT_ARITH", "C_BERNOULLI_MGF"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/signed_rectangle/PROOF.md"]
+    },
+    "C_BERNOULLI_MGF": {
+      "statement": "For independent fair bits B_i and real weights a_i, E exp(lambda sum_i a_i(B_i-1/2)) <= exp(lambda^2 sum_i a_i^2/8), for every real lambda.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/signed_rectangle/PROOF.md"]
+    },
+    "C_CUBE_MGF": {
+      "statement": "For every real-valued 1-Lipschitz function on the uniform r-cube, E exp(lambda(f-Ef)) <= exp(r lambda^2/8) for all real lambda.",
+      "status": "open",
+      "depends_on": ["C_BERNOULLI_MGF"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/signed_rectangle/PROOF.md"]
+    },
+    "C_SEPARATED_CLASSES": {
+      "statement": "For disjoint classes S_j in the uniform r-cube at pairwise Hamming distance >= s > 0, each of mass <= m, their total mass is <= 3 max(m, exp(-s^2/(2r))). The number of classes is unrestricted.",
+      "status": "open",
+      "depends_on": ["C_CUBE_MGF"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/signed_rectangle/PROOF.md"]
+    },
+    "C_ENRICHMENT": {
+      "statement": "In the asymptotic regime of geometry.tex, lem:enrichment, f_V(b)/(b L_*) >= (1 + f_Z(q)/(q L_*))/2 - O_D(g), uniformly in walks, batches, and starting laws.",
+      "status": "open",
+      "depends_on": ["C_DIFFERENCES", "C_RECTANGLE", "C_DISPLACEMENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/geometry.tex"]
+    },
+    "C_DISPLACEMENT": {
+      "statement": "Bounded time displacement gives entropy <= 2 log(n+1)+O_D(1) and the corresponding loss bound for residue entropy (preliminaries.tex, lem:displacement).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/preliminaries.tex"]
+    },
+    "C_LIST": {
+      "statement": "If finite X has at most a values, Y-dependent lists have size at most b with 1 <= b <= a, and rho is their success probability, then log a - H(X|Y) >= rho log(a/b) - h(rho) (preliminaries.tex, lem:list).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/preliminaries.tex"]
+    },
+    "C_CONTINUITY": {
+      "statement": "For two joint laws on a product alphabet of size at most a and total variation epsilon <= 1/2, the conditional entropies differ by at most 2h(epsilon)+2epsilon log a (preliminaries.tex, lem:continuity).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/preliminaries.tex"]
+    },
+    "C_CONDITIONING": {
+      "statement": "For finite (Y,H), independently chosen signed s-coordinate subset S, mean joint residue entropy >= (1-epsilon)s Lbar and H(H) <= kappa s Lbar imply mean coordinate conditional entropy deficit <= (epsilon+kappa)Lbar, with no independence of Y and H (coverage-transfer.tex, lem:conditioning).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/coverage-transfer.tex"]
+    },
+    "C_TRANSFER": {
+      "statement": "Under all conditional entropy, repetition, coverage, and parameter inequalities in coverage-transfer.tex, thm:transfer, all but fraction eta of terminal coordinates have (tau,beta)-coverage.",
+      "status": "open",
+      "depends_on": ["C_CONDITIONING", "C_LIST"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/coverage-transfer.tex"]
+    },
+    "C_SCHEDULE": {
+      "statement": "The schedule in schedule.tex supplies the required checkpoint entropy, future displacement bounds, and common terminal law with the stated smoothing and uniformity properties.",
+      "status": "open",
+      "depends_on": ["C_ENRICHMENT", "C_DISPLACEMENT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/schedule.tex"]
+    },
+    "C_COVERAGE": {
+      "statement": "Under the full schedule hypotheses, all but eta_i of the signed prime coordinates have the checkpoint coverage in schedule.tex, prop:coverage.",
+      "status": "open",
+      "depends_on": ["C_TRANSFER", "C_SCHEDULE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/schedule.tex"]
+    },
+    "C_INFORMATION": {
+      "statement": "Under zero avoidance, each batch has conditional information rate at least c_1/log T as stated in information.tex, prop:information-rate.",
+      "status": "open",
+      "depends_on": ["C_COVERAGE", "C_SCHEDULE", "C_DISPLACEMENT", "C_LIST"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/information.tex"]
+    },
+    "C_TELESCOPE": {
+      "statement": "The nested common-time information costs obey the block entropy upper bound in information.tex, lem:telescope.",
+      "status": "open",
+      "depends_on": ["C_SCHEDULE", "C_CONTINUITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Bounded-Step-Walks-on-Gaussian-Primes-September-26-2026/build/information.tex"]
+    }
+  }
+}

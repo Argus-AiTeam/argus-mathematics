@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "unit_id": "symbolic-frobenius",
+  "assessment": {
+    "status": "supported_in_exact_stated_scope",
+    "summary": "The existing symbolic frame family, determinant and p=2 wrong-convention diagnostic reproduce exactly; old and current typed solutions agree.",
+    "mathematical_defect_found": false,
+    "manuscript_counterexample": false
+  },
+  "result_class": "exact_local_algebra_with_convention_diagnostic",
+  "source": {
+    "input_root": "campaigns/9000001",
+    "attribution": "Historical Argus calculation supporting PF-CORE; cohomological convention attributed to Mark Kisin and Rong Zhou, arxiv:2505.02165v1 section 2.1.14.",
+    "source_sha256": "28d352ec78c988c0fe315bc809b531e1f10e66fc4ae22c1f496150bb60b9ba28",
+    "exact_certificate_sha256": "1bffa67f2097d014cdb2fec54f524dcf03479f21a7e6db8061d4e32a137a881f",
+    "manuscript_context": "OpenAI, October 7 2026, revision 4eaee87548250b2682affda7d05d947c05554bae; not refuted by this diagnostic."
+  },
+  "claims": [
+    {
+      "id": "PF-CORE-supporting-symbolic-family",
+      "hypotheses": [
+        "Initial calculation over QQ(p,u,v) with algebraically independent ordered parameters p,u,v.",
+        "Original b and invertible-frame interpretation require p != 0.",
+        "For Frobenius interpretation sigma fixes rational scalars, u=sigma(t), v=sigma^2(t).",
+        "dual(a)=(a^-1)^t, b=[[0,1],[-1/p,0]], g=[[1,t],[0,1]], S=dual(sigma(g)), B=dual(b)."
+      ],
+      "conclusion": "S*A=B*sigma(S) has A=[[-v,1],[-p-u*v,u]], det(A)=p.",
+      "reason": "Direct multiplication and exact residual verification; row-major coefficient determinant is 1."
+    },
+    {
+      "id": "quadratic-Frobenius-diagnostic",
+      "hypotheses": ["p=2", "t^2+t+1=0", "sigma(t)=-1-t", "Correct frame is dual(sigma(g))"],
+      "conclusion": "Correct [[-t,1],[-3,-1-t]] differs from the omitted-sigma-basis matrix [[1+t,1],[-3,t]] by -(1+2*t)*I.",
+      "reason": "Exact reduction in the quadratic algebra; irreducible separable mod-2 reduction supports the unramified quadratic 2-adic interpretation.",
+      "classification": "Diagnostic of a wrong convention, not a manuscript refutation."
+    }
+  ],
+  "supported_scope": [
+    "Exact symbolic two-dimensional frame identity and determinant for the stated family.",
+    "Exact quadratic p=2 convention comparison, with the correct and incorrect bases distinguished.",
+    "Historical typed input is exactly the independently derived existing linear system.",
+    "One fresh bounded typed solve agrees with the historical mathematical output and passes exact residual checks.",
+    "No separate new ledger theorem or novelty claim."
+  ],
+  "limitations": [
+    "Jacobian semantics are generic over QQ(p,u,v), not a parameter-specialization case split.",
+    "The p=0 specialization is outside the original b/invertible-frame interpretation.",
+    "A matrix family is not a construction of geometric objects, integral tensor structures or admissible filtrations.",
+    "The p=2 diagnostic does not contradict the manuscript's indicated cohomological convention.",
+    "The checker and server use SymPy-based arithmetic rather than independent foundational kernels.",
+    "Server-backend Python/SymPy versions are not exposed by the typed contract and are not inferred.",
+    "No global certification of PF-REALIZATION, the rationality theorem, balanced-Weil dichotomy or CM Hodge theorem."
+  ],
+  "evidence": [
+    {
+      "path": "research/prescribed-filtration-audit/verify.py",
+      "role": "Exact reconstruction and residual verifier; copied without edits into this unit."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/exact_certificate.json",
+      "role": "Historical bundle distinguishes local computations from non-kernel-checked geometry."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/jacobian-linear-contract.json",
+      "role": "Historical typed contract, semantically identical to the inspected current contract."
+    },
+    {
+      "path": "research/prescribed-filtration-audit/jacobian-payload.json",
+      "role": "Historical exact input; byte-identical to current payload.",
+      "sha256": "3421839b30fcf3f4930b6b64141cbd0c247eef7aa1c206723d37ebdb2755c926"
+    },
+    {
+      "path": "research/prescribed-filtration-audit/jacobian-output.json",
+      "role": "Historical result of matrix.symbolic.linear_system.solve, server 0.14.0, protocol 2025-11-25.",
+      "sha256": "e221565f1b5dd852c2c98802b2730965fa923b41716fbcc3dbe4ba785d62a2b6"
+    },
+    {
+      "path": "research/prescribed-filtration-audit/sources/KZ-2505.02165v1.txt",
+      "role": "Read section 2.1.14, lines 492-502, for the indicated Frobenius-descent convention only."
+    }
+  ],
+  "replay": {
+    "status": "PASS",
+    "receipt": "research/draft_reviews/symbolic-frobenius/exact-replay.json",
+    "command": "PYTHONDONTWRITEBYTECODE=1 $WORKSPACE/miniconda3/bin/python -B research/draft_reviews/symbolic-frobenius/replay.py check",
+    "historical_checker_command": [
+      "$WORKSPACE/miniconda3/bin/python",
+      "-B",
+      "research/draft_reviews/symbolic-frobenius/historical-replay/verify.py"
+    ],
+    "historical_checker_exit_code": 0,
+    "historical_checker_stderr": "",
+    "historical_checker_duration_seconds": 0.302,
+    "versions": {
+      "python": "3.13.5, Anaconda build, GCC 11.2.0",
+      "python_executable": "$WORKSPACE/miniconda3/bin/python",
+      "sympy": "1.14.0",
+      "jacobian_server": "0.14.0",
+      "jacobian_protocol": "2025-11-25"
+    },
+    "jacobian": {
+      "adapter_executable": "$WORKSPACE/argus-live-update/.venv/bin/python",
+      "module": "argus_skill.tools.jacobian",
+      "operation_id": "matrix.symbolic.linear_system.solve",
+      "operation_attempts": 1,
+      "discovery_limit": 3,
+      "contract_inspected_before_run": true,
+      "discovery": "research/draft_reviews/symbolic-frobenius/jacobian-discovery.json",
+      "contract": "research/draft_reviews/symbolic-frobenius/jacobian-contract.json",
+      "payload": "research/draft_reviews/symbolic-frobenius/jacobian-payload.json",
+      "typed_output": "research/draft_reviews/symbolic-frobenius/jacobian-output.json",
+      "adapter_status": "research/draft_reviews/symbolic-frobenius/jacobian-adapter-status.json",
+      "exit_code": 0,
+      "timeout_seconds": 60,
+      "process_timeout_seconds": 90,
+      "timed_out": false,
+      "adapter_error": null,
+      "classification": "UNIQUE",
+      "consistency": "EXACT_RATIONAL_FUNCTION",
+      "field_semantics": "GENERIC_OVER_QQ_FIELD",
+      "cli_duration_seconds": 3.265,
+      "server_runtime_ms": 25,
+      "historical_mathematical_output_matches": true,
+      "independent_exact_residual_check": "PASS",
+      "timeout_unknown_incomplete_policy": "non-conclusion",
+      "direct_jacobian_imports": false
+    },
+    "historical_inputs_unchanged": true,
+    "old_pycache_created": false,
+    "dependencies_installed": false,
+    "geometry_checked": false
+  },
+  "contribution_type": {
+    "historical": "Exact algebraic calculation and diagnostic rejecting an omitted-sigma convention.",
+    "current": "Reproduction of existing algebra and scoped assessment; no new error search."
+  },
+  "novelty_status": "not assessed/not claimed",
+  "independent_review": "pending_native_reviewer"
+}

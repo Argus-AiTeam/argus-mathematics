@@ -1,0 +1,34 @@
+{
+  "state": "done",
+  "task_id": "c118-structural-bound-kernel",
+  "run_id": "c118-structural-bound-kernel-1793911601954658798",
+  "description": "Record the complete structural theorem on its current formal claim",
+  "command": "ARGUS_SKILL_MATHLIB_WORKSPACE=$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0 $WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.lean_evidence verify --project-root . --claim C118_STRUCTURAL_GAP research/structural_gap_certification/Main.lean --statement-fidelity research/structural_gap_certification/STATEMENT_FIDELITY.md > research/structural_gap_certification/official_bound_verify.json 2> research/structural_gap_certification/official_bound_verify.stderr.log; verify_code=$?; $WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.math_state check --project-root campaigns/9000118 > research/structural_gap_certification/bound_math_state_check.json; math_code=$?; $WORKSPACE/argus-live-update/.venv/bin/python -m argus_skill.verticals.math.proof_graph_check check --project-root campaigns/9000118 > research/structural_gap_certification/bound_proof_graph_check.log; graph_code=$?; printf \"{\\\"project_root\\\":\\\"campaigns/9000118\\\",\\\"verify_exit_code\\\":%s,\\\"math_state_exit_code\\\":%s,\\\"proof_graph_check_exit_code\\\":%s}\\n\" \"$verify_code\" \"$math_code\" \"$graph_code\" > research/structural_gap_certification/bound_validation_exit_codes.json; test \"$verify_code\" -eq 0 && test \"$math_code\" -eq 0 && test \"$graph_code\" -eq 0",
+  "exit_code": 0,
+  "elapsed_seconds": 665.7,
+  "completed_at": 1793912267.6652691,
+  "pid": 791203,
+  "worker_pid": 791201,
+  "mode": "direct",
+  "process_identity": {
+    "pid": 791203,
+    "start_time_ticks": "244723552"
+  },
+  "worker_process_identity": {
+    "pid": 791201,
+    "start_time_ticks": "244723551"
+  },
+  "run_dir": "families/118/first-pass/structural_gap_certification/runner_bound",
+  "stdout_tail": "",
+  "stderr_tail": "",
+  "stdout_log": ".argus_subagents/c118-structural-bound-kernel_logs/stdout.log",
+  "stderr_log": ".argus_subagents/c118-structural-bound-kernel_logs/stderr.log",
+  "timeout_seconds": 1800,
+  "timeout_defaulted": false,
+  "supervisor_usage_model": "",
+  "supervisor_input_tokens": 0,
+  "supervisor_cached_input_tokens": 0,
+  "supervisor_output_tokens": 0,
+  "supervisor_reasoning_output_tokens": 0,
+  "cwd": "campaigns/9000118"
+}

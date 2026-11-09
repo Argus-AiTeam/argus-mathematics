@@ -1,0 +1,251 @@
+{
+  "goal": "C9000222",
+  "routes": [
+    {
+      "name": "R222_SPECTRAL and R222_SPECTRAL_SHARP: exact stationary residuals, whole-line Riccati tails, inward shooting, and positive ground-state matching, with a twentyfold sharper enclosure",
+      "status": "current",
+      "evidence": "research/jamming_spectral/report.md"
+    },
+    {
+      "name": "R222_SCALING_IDENTITY: algebraic exponent relation without microscopic or spectral selection",
+      "status": "ruled_out",
+      "retired_because": "The identity holds for every 0<a<1/2, so it cannot select a root or establish either endpoint sign.",
+      "evidence": "research/jamming_spectral/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000222": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 222 (Perceptron free energies and microscopic jamming exponents.; papers: The free energy of the Ising random perceptron; Microscopic jamming in the negative spherical perceptron; The spherical perceptron with bi-orthogonally invariant disorder; The free energy of the spherical random perceptron; Lean status: Partially/Comparator formalized (lean/docs/222.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C222_SPECTRAL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C222_ISING": {
+      "statement": "The bounded-Borel iid Gaussian Ising perceptron has the source variational pressure formula and convergence in probability (thm:main, build/sections/model.tex:88-102).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C222_SPHERICAL": {
+      "statement": "The bounded-continuous iid Gaussian spherical perceptron has the source variational pressure formula and convergence in probability (thm:main, build/paper.tex:72-82).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C222_BIORTH": {
+      "statement": "Under the source compact spectral-law and no-outlier hypotheses, the bi-orthogonally invariant spherical pressure has the stated spectral-mesh variational limit (thm:main, build/paper.tex:92-111).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C222_JAMMING": {
+      "statement": "The source thm:main asserts a sharp SAT threshold, existence and mixture universality of ordered microscopic laws, and the stated exact exponent intervals.",
+      "status": "open",
+      "depends_on": [
+        "L222_PRESSURE",
+        "L222_REPAIR",
+        "L222_CRITICAL",
+        "C222_SPECTRAL",
+        "L222_SELECTION",
+        "L222_MIXTURE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "C222_SPECTRAL": {
+      "statement": "For the stated whole-line Friedrichs operator, 2936535023/10^10 < lambda(2936533/10^7) < 2936535043/10^10 and 2936533037/10^10 < lambda(2936535/10^7) < 2936533057/10^10; hence the two parameter differences have opposite signs.",
+      "status": "open",
+      "depends_on": [
+        "L222_REFERENCE",
+        "L222_RESIDUAL",
+        "L222_PROFILE_ERROR",
+        "L222_TAIL",
+        "L222_SHOOT",
+        "L222_GROUND"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/report.md",
+        "research/jamming_spectral/exact_certificate.json",
+        "research/jamming_spectral/verify.py",
+        "research/jamming_spectral/verification.json"
+      ]
+    },
+    "L222_REFERENCE": {
+      "statement": "The admissible stationary whole-line reference profile exists uniquely, is monotone and strictly convex, and satisfies the identities and Gaussian tail bounds of eq:src40.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/report.md"
+      ]
+    },
+    "L222_RESIDUAL": {
+      "statement": "The two endpoint stationary integer trials have exact C1 joins, spatial residual <10^-23, hinge boundary errors <10^-23 at +/-24, and derivatives between -1.01 and .01.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/verify.py",
+        "research/jamming_spectral/exact_certificate.json",
+        "research/jamming_spectral/verification.json"
+      ]
+    },
+    "L222_PROFILE_ERROR": {
+      "statement": "The actual stationary profile and derivative lie within 10^-22 and 4*10^-20 of the exact trials on [-24,24].",
+      "status": "open",
+      "depends_on": [
+        "L222_REFERENCE",
+        "L222_RESIDUAL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/report.md"
+      ]
+    },
+    "L222_TAIL": {
+      "statement": "At every trial in the two endpoint windows the exact half-line Riccati solution is trapped by T+/-K*x^-7 for x>=12 and is the unique square-integrable branch after conjugation; it is continuous in lambda.",
+      "status": "open",
+      "depends_on": [
+        "L222_REFERENCE"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/report.md",
+        "research/jamming_spectral/jacobian_output.json"
+      ]
+    },
+    "L222_SHOOT": {
+      "statement": "Exact inward Riccati residual and drift inequalities turn the two endpoint shooting mismatches into strict signs for the actual half-line solutions at zero.",
+      "status": "open",
+      "depends_on": [
+        "L222_RESIDUAL",
+        "L222_PROFILE_ERROR",
+        "L222_TAIL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/report.md",
+        "research/jamming_spectral/verification.json"
+      ]
+    },
+    "L222_GROUND": {
+      "statement": "A matched positive whole-line eigenfunction, together with the ground-state quadratic-form identity, identifies the certified matching value with the bottom eigenvalue of the stated Friedrichs operator.",
+      "status": "open",
+      "depends_on": [
+        "L222_REFERENCE",
+        "L222_TAIL",
+        "L222_SHOOT"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/report.md"
+      ]
+    },
+    "L222_CENTER_SHARP": {
+      "statement": "For a certified trial at its own eigenvalue, each true half-line Riccati center error is below 3*10^-14, by the profile error, infinite-tail enclosure, residual source bound, and inward drift integrals.",
+      "status": "open",
+      "depends_on": [
+        "L222_PROFILE_ERROR",
+        "L222_TAIL",
+        "L222_SHOOT"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/report.md",
+        "research/jamming_spectral/verification.json"
+      ]
+    },
+    "L222_SHOOT_SHARP": {
+      "statement": "At both endpoint parameters, the middle and additional lambda_seed+1 integer shoots have exact mismatch signs below -6*10^-14 and above 6*10^-14 and satisfy all residual, magnitude, continuity, and drift predicates.",
+      "status": "open",
+      "depends_on": [
+        "L222_RESIDUAL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/exact_certificate.json",
+        "research/jamming_spectral/verify.py",
+        "research/jamming_spectral/verification.json"
+      ]
+    },
+    "C222_SPECTRAL_SHARP": {
+      "statement": "2936535033/10^10 < lambda(2936533/10^7) < 2936535034/10^10 and 2936533047/10^10 < lambda(2936535/10^7) < 2936533048/10^10 for the manuscript's whole-line Friedrichs operator; these windows are twenty times narrower than its certified windows.",
+      "status": "open",
+      "depends_on": [
+        "L222_REFERENCE",
+        "L222_PROFILE_ERROR",
+        "L222_TAIL",
+        "L222_CENTER_SHARP",
+        "L222_SHOOT_SHARP",
+        "L222_GROUND"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/report.md",
+        "research/jamming_spectral/exact_certificate.json",
+        "research/jamming_spectral/verify.py",
+        "research/jamming_spectral/verification.json"
+      ]
+    },
+    "L222_SCALING": {
+      "statement": "The exponent relation is an identity for every 0<a<1/2 and cannot by itself prove a spectral bracket or microscopic selection.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/jamming_spectral/report.md"
+      ]
+    },
+    "L222_PRESSURE": {
+      "statement": "The singular quadratic-penalty Gaussian pressure formula and row-law identification needed for microscopic criticality are valid.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "L222_REPAIR": {
+      "statement": "The feasibility-repair argument upgrades zero limiting energy to a sharp SAT threshold.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "L222_CRITICAL": {
+      "statement": "The critical Brownian martingale construction and endpoint estimates provide the stated entire critical limits with tightness and normalization.",
+      "status": "open",
+      "depends_on": [
+        "L222_PRESSURE",
+        "L222_REPAIR"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "L222_SELECTION": {
+      "statement": "Every entire microscopic critical-layer limit is selected by the source contraction as the stationary root; spectral endpoint certification is not enough.",
+      "status": "open",
+      "depends_on": [
+        "L222_CRITICAL",
+        "C222_SPECTRAL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": []
+    },
+    "L222_MIXTURE": {
+      "statement": "Coordinate comparison transfers the limiting microscopic laws and endpoint normalization to each fixed sufficiently small Gaussian scale mixture.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": []
+    }
+  }
+}

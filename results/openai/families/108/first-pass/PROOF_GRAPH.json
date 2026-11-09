@@ -1,0 +1,152 @@
+{
+  "goal": "C9000108",
+  "routes": [
+    {
+      "name": "R_COEFFICIENT_STRONG",
+      "status": "parked",
+      "evidence": "research/openai_manuscript/A-cubic-lower-bound-for-border-determinantal-complexity-of-the-permanent-September-24-2026/build/source/sections/dimension.tex"
+    },
+    {
+      "name": "R_RECTANGULAR_BOUNDARY",
+      "status": "current",
+      "evidence": "research/spectral_bridge/proof.md"
+    },
+    {
+      "name": "R_FINITE_ONLY",
+      "status": "ruled_out",
+      "evidence": "research/MATH_STATE.json",
+      "reason": "Finite-field agreement cannot prove the universal dimension inequality."
+    }
+  ],
+  "nodes": {
+    "C9000108": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 108 (A cubic permanent–determinant lower bound.; papers: A cubic lower bound for border determinantal complexity of the permanent; Lean status: Partially/Comparator formalized (lean/docs/108.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_GRADIENT_CODIM"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_GRADIENT_CODIM": {
+      "statement": "For every permitted characteristic-two pencil, dim V(gradient G_D) <= k^2+k-binomial(q+2,2).",
+      "status": "open",
+      "depends_on": ["C_COEFFICIENT_STRONG"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/proof.md"]
+    },
+    "C_COEFFICIENT_STRONG": {
+      "statement": "Over any algebraically closed field, coefficient exponents a,b,c with sum k-1 give dim V(gradient G) <= k^2+k-(a+1)(b+1), with no ordering condition on exponents.",
+      "status": "open",
+      "depends_on": [
+        "L_SPECTRAL_BOUNDARY",
+        "L_ADJUGATE_EXACT",
+        "L_RECTANGULAR_AFFINE",
+        "L_CONDUCTOR",
+        "L_SEVERI",
+        "L_ROW_HILBERT",
+        "L_HILBERT_DIM"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/proof.md", "research/spectral_bridge/exact_certificate.json"]
+    },
+    "L_SPECTRAL_BOUNDARY": {
+      "statement": "The fixed distinct-root boundary gives a reduced curve, a finite flat generically etale projection and the stated splitting.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/proof.md"]
+    },
+    "L_ADJUGATE_EXACT": {
+      "statement": "Adjugates span the full degree-(k-1) vanishing space, with no H^1 defect; length Z equals binomial(k+1,2) minus the adjugate coefficient rank.",
+      "status": "open",
+      "depends_on": ["L_SPECTRAL_BOUNDARY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/proof.md", "research/spectral_bridge/exact_certificate.json"]
+    },
+    "L_APOLAR_EXACT": {
+      "statement": "A finite scheme annihilated in top degree by a monomial coefficient functional has length at least the product of the two smaller exponents plus one; this bound is sharp.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/literature/RS2011.html"]
+    },
+    "L_RECTANGULAR_AFFINE": {
+      "statement": "For finite Z disjoint u=0, annihilation by [s^a t^b u^c] makes the entire (a+1) by (b+1) affine monomial rectangle independent on Z.",
+      "status": "open",
+      "depends_on": ["L_RECTANGULAR_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/proof.md"]
+    },
+    "L_RECTANGULAR_CORE": {
+      "statement": "Top-degree homogenization and complementary monomial multiplication recover a nonzero rectangle coefficient, in every characteristic; rectangle cardinality dominates the manuscript triangle.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/spectral_bridge/formal/Main.lean",
+        "research/spectral_bridge/formal/statement_fidelity.md",
+        "research/spectral_bridge/formal/certificates/L_RECTANGULAR_CORE-2c249cc00f592776.json"
+      ]
+    },
+    "L_ROW_HILBERT": {
+      "statement": "The entire fixed-D matrix fiber is an open subscheme of Hilb^N(C), with an explicit inverse from the boundary frame and multiplication by s, including nonreduced parameter bases.",
+      "status": "open",
+      "depends_on": ["L_SPECTRAL_BOUNDARY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/proof.md", "research/spectral_bridge/exact_certificate.json"]
+    },
+    "L_CONDUCTOR": {
+      "statement": "The adjugate evaluation ideal contains the conductor, giving length Z <= delta(C) without tame-ramification assumptions.",
+      "status": "open",
+      "depends_on": ["L_SPECTRAL_BOUNDARY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/proof.md"]
+    },
+    "L_SEVERI": {
+      "statement": "The reduced degree-k locus with normalization defect >= L has dimension <= k(k+3)/2-L.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/literature/CHT2023.pdf", "research/spectral_bridge/literature/CHT_excerpt.txt", "research/spectral_bridge/proof.md"]
+    },
+    "L_HILBERT_DIM": {
+      "statement": "For any reduced plane curve, dim Hilb^N(C) <= N; with the row correspondence this bounds every matrix fiber.",
+      "status": "open",
+      "depends_on": ["L_ROW_HILBERT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/spectral_bridge/proof.md"]
+    },
+    "C_MANUSCRIPT_MAIN": {
+      "statement": "The manuscript's cubic complex border bound depends on the characteristic-two bridge and additional selector, transfer and polar arguments outside this mission.",
+      "status": "open",
+      "depends_on": ["C_GRADIENT_CODIM", "C_SELECTOR", "C_TRANSFER", "C_POLAR"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md"]
+    },
+    "C_SELECTOR": {
+      "statement": "The selector realizes the coefficient polynomial as an affine permanent restriction; outside this bounded mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-cubic-lower-bound-for-border-determinantal-complexity-of-the-permanent-September-24-2026/build/source/sections/selector.tex"]
+    },
+    "C_TRANSFER": {
+      "statement": "Characteristic transfer and linear sections produce the required smooth complex form; outside this bounded mission.",
+      "status": "open",
+      "depends_on": ["C_GRADIENT_CODIM"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-cubic-lower-bound-for-border-determinantal-complexity-of-the-permanent-September-24-2026/build/source/sections/transfer.tex"]
+    },
+    "C_POLAR": {
+      "statement": "The smooth-form border lower bound follows from polar counting and persistence; outside this bounded mission.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-cubic-lower-bound-for-border-determinantal-complexity-of-the-permanent-September-24-2026/build/source/sections/polar.tex"]
+    }
+  }
+}

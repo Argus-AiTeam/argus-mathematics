@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_LPP_ALGEBRA-c28ed25dc233",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/267/first-pass/long_palm_product/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/267/first-pass/long_palm_product/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15949,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/267/first-pass/long_palm_product/lean/Main.lean",
+    "source_sha256": "26d120b6212b3dac5977c384bed9294d87cbde0a1b285df0d137cd4c7ff55d78",
+    "statement_fidelity": "families/267/first-pass/long_palm_product/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "a5c306f8521d8a2204e7228746dc3c8c8d3d6305835e891086903efb63a73ac2",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/long_palm_product/lean/Main.lean",
+    "text": "import Mathlib\n\nnamespace LongPalmProduct\n\nopen Finset\n\ntheorem marginal_product_identity\n    {A B C : Type*} [Fintype A] [Fintype B] [Fintype C]\n    (wa : A → ℝ) (wb : B → ℝ) (wc : C → ℝ)\n    (f : A → B → ℝ) (g : A → C → ℝ) :\n    (∑ a, ∑ b, ∑ c, wa a * wb b * wc c * f a b * g a c) =\n      ∑ a, wa a * (∑ b, wb b * f a b) * (∑ c, wc c * g a c) := by\n  calc\n    _ = ∑ a, ∑ b, (wa a * (wb b * f a b)) * (∑ c, wc c * g a c) := by\n      apply sum_congr rfl\n      intro a _\n      apply sum_congr rfl\n      intro b _\n      rw [mul_sum]\n      apply sum_congr rfl\n      intro c _\n      ring\n    _ = ∑ a, (∑ b, wa a * (wb b * f a b)) * (∑ c, wc c * g a c) := by\n      simp only [sum_mul]\n    _ = _ := by simp only [mul_sum]\n\ntheorem shared_output_bound\n    {A B C : Type*} [Fintype A] [Fintype B] [Fintype C]\n    (wa : A → ℝ) (wb : B → ℝ) (wc : C → ℝ)\n    (f : A → B → ℝ) (g : A → C → ℝ) (G : ℝ)\n    (hwa : ∀ a, 0 ≤ wa a) (hwc : ∀ c, 0 ≤ wc c)\n    (hg : ∀ a c, 0 ≤ g a c) (hG : 0 ≤ G)\n    (hf : ∀ a, (∑ b, wb b * f a b) ≤ G)\n    (hmass : (∑ a, wa a * (∑ c, wc c * g a c)) ≤ 1) :\n    (∑ a, ∑ b, ∑ c, wa a * wb b * wc c * f a b * g a c) ≤ G := by\n  have hgmargin (a : A) : 0 ≤ ∑ c, wc c * g a c :=\n    sum_nonneg fun c _ => mul_nonneg (hwc c) (hg a c)\n  rw [marginal_product_identity]\n  calc\n    _ ≤ ∑ a, wa a * G * (∑ c, wc c * g a c) := by\n      apply sum_le_sum\n      intro a _\n      exact mul_le_mul_of_nonneg_right\n        (mul_le_mul_of_nonneg_left (hf a) (hwa a)) (hgmargin a)\n    _ = G * (∑ a, wa a * (∑ c, wc c * g a c)) := by\n      rw [mul_sum]\n      apply sum_congr rfl\n      intro a _\n      ring\n    _ ≤ G := by\n      simpa using mul_le_mul_of_nonneg_left hmass hG\n\ntheorem source_mixture_bound\n    {X Z : Type*} [Fintype X]\n    (mu rho : X → ℝ) (k : X → Z → ℝ) (b : Z → ℝ) (C R : ℝ)\n    (hC : 0 ≤ C) (hmu : ∀ x, mu x ≤ C * rho x)\n    (hk : ∀ x z, 0 ≤ k x z)\n    (hmix : ∀ z, (∑ x, rho x * k x z) ≤ R * b z) :\n    ∀ z, (∑ x, mu x * k x z) ≤ C * R * b z := by\n  intro z\n  calc\n    _ ≤ ∑ x, (C * rho x) * k x z := by\n      exact sum_le_sum fun x _ =>\n        mul_le_mul_of_nonneg_right (hmu x) (hk x z)\n    _ = C * (∑ x, rho x * k x z) := by\n      rw [mul_sum]\n      apply sum_congr rfl\n      intro x _\n      ring\n    _ ≤ C * R * b z := by\n      simpa [mul_assoc] using mul_le_mul_of_nonneg_left (hmix z) hC\n\ntheorem cross_source_bound\n    {X Z W : Type*} [Fintype X] [Fintype Z] [Fintype W]\n    (mu : X → ℝ) (k : X → Z → ℝ) (g : W → ℝ)\n    (cost : X → W → ℝ) (H : ℝ)\n    (hmu : ∀ x, 0 ≤ mu x) (hg : ∀ w, 0 ≤ g w)\n    (hcost : ∀ x w, 0 ≤ cost x w)\n    (hrow : ∀ x, (∑ z, k x z) ≤ 1)\n    (hsource : ∀ w, (∑ x, mu x * cost x w) ≤ H)\n    (hmass : (∑ w, g w) ≤ 1) (hH : 0 ≤ H) :\n    (∑ w, g w * (∑ x, mu x * cost x w * (∑ z, k x z))) ≤ H := by\n  have hinner (w : W) :\n      (∑ x, mu x * cost x w * (∑ z, k x z)) ≤ H := by\n    calc\n      _ ≤ ∑ x, mu x * cost x w := by\n        apply sum_le_sum\n        intro x _\n        simpa using mul_le_mul_of_nonneg_left\n          (hrow x) (mul_nonneg (hmu x) (hcost x w))\n      _ ≤ H := hsource w\n  calc\n    _ ≤ ∑ w, g w * H := by\n      exact sum_le_sum fun w _ =>\n        mul_le_mul_of_nonneg_left (hinner w) (hg w)\n    _ = (∑ w, g w) * H := by rw [sum_mul]\n    _ ≤ H := by\n      simpa using mul_le_mul_of_nonneg_right hmass hH\n\ntheorem deleted_check_tag_error\n    {X : Type*} [Fintype X]\n    (w a aMinus h : X → ℝ)\n    (hw : ∀ x, 0 ≤ w x) (ha : ∀ x, a x ≤ aMinus x)\n    (hh : ∀ x, 0 ≤ h x ∧ h x ≤ 1)\n    (hZ : 0 < ∑ x, w x * a x) :\n    0 ≤ (∑ x, w x * h x * (aMinus x - a x)) / (∑ x, w x * a x) ∧\n      (∑ x, w x * h x * (aMinus x - a x)) / (∑ x, w x * a x) ≤\n        (∑ x, w x * aMinus x) / (∑ x, w x * a x) - 1 := by\n  have hnum : 0 ≤ ∑ x, w x * h x * (aMinus x - a x) :=\n    sum_nonneg fun x _ =>\n      mul_nonneg (mul_nonneg (hw x) (hh x).1) (sub_nonneg.mpr (ha x))\n  have hsum :\n      (∑ x, w x * h x * (aMinus x - a x)) ≤\n        (∑ x, w x * aMinus x) - (∑ x, w x * a x) := by\n    calc\n      _ ≤ ∑ x, w x * (aMinus x - a x) := by\n        apply sum_le_sum\n        intro x _\n        calc\n          _ = (w x * (aMinus x - a x)) * h x := by ring\n          _ ≤ (w x * (aMinus x - a x)) * 1 :=\n            mul_le_mul_of_nonneg_left (hh x).2\n              (mul_nonneg (hw x) (sub_nonneg.mpr (ha x)))\n          _ = _ := mul_one _\n      _ = _ := by simp only [mul_sub, sum_sub_distrib]\n  refine ⟨div_nonneg hnum (le_of_lt hZ), ?_⟩\n  calc\n    _ ≤ ((∑ x, w x * aMinus x) - (∑ x, w x * a x)) /\n        (∑ x, w x * a x) :=\n      div_le_div_of_nonneg_right hsum (le_of_lt hZ)\n    _ = _ := by rw [sub_div, div_self (ne_of_gt hZ)]\n\ndef routeMass {H : Type*} [Fintype H] :\n    List ((H → H → ℝ) × ℝ) → H → ℝ\n  | [], _ => 1\n  | step :: rest, h => ∑ h', step.1 h h' * routeMass rest h'\n\ntheorem selected_route_bound\n    {H : Type*} [Fintype H] :\n    ∀ steps : List ((H → H → ℝ) × ℝ),\n      (∀ step ∈ steps, 0 ≤ step.2) →\n      (∀ step ∈ steps, ∀ h h', 0 ≤ step.1 h h') →\n      (∀ step ∈ steps, ∀ h, (∑ h', step.1 h h') ≤ step.2) →\n      0 ≤ (steps.map Prod.snd).prod ∧\n        ∀ h, 0 ≤ routeMass steps h ∧\n          routeMass steps h ≤ (steps.map Prod.snd).prod := by\n  intro steps\n  induction steps with\n  | nil =>\n      intro _ _ _\n      simp [routeMass]\n  | cons step rest ih =>\n      intro hcap hk hrow\n      have hcapRest : ∀ s ∈ rest, 0 ≤ s.2 :=\n        fun s hs => hcap s (List.mem_cons_of_mem _ hs)\n      have hkRest : ∀ s ∈ rest, ∀ h h', 0 ≤ s.1 h h' :=\n        fun s hs => hk s (List.mem_cons_of_mem _ hs)\n      have hrowRest : ∀ s ∈ rest, ∀ h, (∑ h', s.1 h h') ≤ s.2 :=\n        fun s hs => hrow s (List.mem_cons_of_mem _ hs)\n      obtain ⟨hprod, htail⟩ := ih hcapRest hkRest hrowRest\n      have hmem : step ∈ step :: rest := List.mem_cons_self\n      constructor\n      · simpa using mul_nonneg (hcap step hmem) hprod\n      · intro h\n        constructor\n        · exact sum_nonneg fun h' _ =>\n            mul_nonneg (hk step hmem h h') (htail h').1\n        · change (∑ h', step.1 h h' * routeMass rest h') ≤\n            step.2 * (rest.map Prod.snd).prod\n          calc\n            _ ≤ ∑ h', step.1 h h' * (rest.map Prod.snd).prod := by\n              exact sum_le_sum fun h' _ =>\n                mul_le_mul_of_nonneg_left (htail h').2 (hk step hmem h h')\n            _ = (∑ h', step.1 h h') * (rest.map Prod.snd).prod := by\n              rw [sum_mul]\n            _ ≤ _ := mul_le_mul_of_nonneg_right (hrow step hmem h) hprod\n\nend LongPalmProduct\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/long_palm_product/lean/statement_fidelity.md",
+    "text": "# Reading of `Main.lean`\n\nThe claim is `C_LPP_ALGEBRA`. The file proves a universal finite algebraic\ncore, not a discretization theorem for Brownian motion or a theorem about a\nBose gas. All sums range over arbitrary finite types, not over a tested list\nof examples. Scalars are real. Empty finite types are permitted when the\ndisplayed hypotheses permit them.\n\nThe declarations in namespace `LongPalmProduct` are:\n\n- `marginal_product_identity`: for arbitrary real weights and functions on\n  shared coordinates `A`, private coordinates `B`, and private coordinates\n  `C`, the full product integral equals the integral of the product of the\n  two shared-coordinate marginals. No independence of coordinates *within*\n  either function is assumed. The product reference weights are explicit.\n- `shared_output_bound`: if the first shared-coordinate marginal is at most\n  `G`, the second function has weighted total mass at most one, and its\n  weights and values are nonnegative, the full integral is at most `G`.\n  The shared weight and `G` are nonnegative. The first function and its\n  private weights need not be nonnegative for this stronger algebraic\n  statement, although they are nonnegative in the application. Substitute\n  `G = G_D^q`. `A` is the product space of shared outputs, not the set of\n  shared labels. A singleton `A` represents disjoint changed sets.\n- `source_mixture_bound`: a pointwise latent-source domination\n  `mu <= C * rho` transfers through any nonnegative kernel whose `rho`\n  mixture is at most `R * b`, giving the bound `C * R * b`.\n  Only `C` is required to be nonnegative by the encoded implication.\n  The kernel can be deterministic. In particular no independence of a pin\n  and its own latent source is postulated.\n- `cross_source_bound`: `mu` is a nonnegative latent-source weight, `k` is\n  an own-output kernel with row sums at most one, `g` is a nonnegative\n  *opposing* output weight with total mass at most one, and `cost(x,w)` is\n  nonnegative. If its `mu` integral is uniformly at most `H >= 0` for\n  every opposing output `w`, the complete integral, including the\n  own-output kernel, is at most `H`. The expression multiplies `mu` and\n  `g`; this encodes separation between protocols as a hypothesis. It\n  does not prove that the manuscript's separate protocols are independent.\n  Kernel nonnegativity is not needed for this upper inequality; in the\n  application the kernels are subprobability kernels and are nonnegative.\n- `deleted_check_tag_error`: for nonnegative base weights, reference\n  weights `a <= aMinus`, a tag `0 <= h <= 1`, and positive original\n  normalizer, the normalized nonnegative tag error after check deletion is\n  at most the deleted/original normalizer ratio minus one.\n- `routeMass` and `selected_route_bound`: an arbitrary finite list of\n  nonnegative transition matrices, with nonnegative history-uniform row\n  caps, has total path mass at most the product of those caps. The type\n  `H` can retain the complete preceding history and auxiliary variables.\n  After fixing the latent input and selected outputs, their primary\n  constraints can be incorporated in the transition matrices. An\n  unselected subprobability stage has cap one; a selected stage has the\n  cap furnished by its primary marginal. Thus no factor is charged for\n  the number of unselected stages. The finite theorem does not prove the\n  corresponding analytic kernel hypotheses.\n\nThe prose proof in `report.md` supplies the measurable-kernel extension\nusing nonnegative integration, the normalizer insertion argument, the\nGaussian source-cost estimate, and the source-faithful application. Those\narguments, the actual Brownian input estimates, source-map correctness,\nnovelty, and publishable significance are not checked by the Lean compiler.\nThe formalization contains no axioms specific to this project, no `sorry`,\nand no claimed equivalence between a finite fixture and the Brownian gas.\n"
+  },
+  "subject": {
+    "content_hash": "02273a695e92b4f8f3a5e0b4b06204dc6e5f453411c1c0f36d1f69f98a29f7bf",
+    "kind": "claim",
+    "subject_id": "C_LPP_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

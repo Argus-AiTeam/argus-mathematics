@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C238_FINITE_KERNEL-91e7fdd4e4d6",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/238/first-pass/thorp_energy/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/238/first-pass/thorp_energy/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14743,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/238/first-pass/thorp_energy/Main.lean",
+    "source_sha256": "e935cede90728d0cd15537c3e001d8a557c84b414728344afc6ef00c92a88ec6",
+    "statement_fidelity": "families/238/first-pass/thorp_energy/statement_fidelity.md",
+    "statement_fidelity_sha256": "026430480ebe0362b4e39c3a9736c0524194f5d7c369b54a8ff0df1357b0b787",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/thorp_energy/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace ThorpEnergy\n\ntheorem deterministic_matrix_preserves_centering\n    {B I J : Type*} [Fintype B] [Fintype I] [Fintype J]\n    (M : J → I → ℝ) (z : B → I → ℝ)\n    (hz : ∀ i, ∑ b, z b i = 0) :\n    ∀ j, ∑ b, (∑ i, M j i * z b i) = 0 := by\n  intro j\n  rw [Finset.sum_comm]\n  simp_rw [← Finset.mul_sum, hz]\n  simp\n\ntheorem centered_inner\n    {A B I : Type*} [Fintype A] [Fintype B] [Fintype I]\n    (p : A → I → ℝ) (z : A → B → I → ℝ)\n    (hz : ∀ a i, ∑ b, z a b i = 0) :\n    ∑ a, ∑ b, ∑ i, p a i * z a b i = 0 := by\n  have hrow : ∀ a, ∑ b, ∑ i, p a i * z a b i = 0 := by\n    intro a\n    rw [Finset.sum_comm]\n    simp_rw [← Finset.mul_sum, hz]\n    simp\n  simp_rw [hrow]\n  simp\n\ntheorem centered_energy_row\n    {B I : Type*} [Fintype B] [Fintype I]\n    (p : I → ℝ) (z : B → I → ℝ)\n    (hz : ∀ i, ∑ b, z b i = 0) :\n    (∑ b, ∑ i, (p i + z b i) ^ 2) =\n      (Fintype.card B : ℝ) * (∑ i, (p i) ^ 2) +\n        ∑ b, ∑ i, (z b i) ^ 2 := by\n  have hcoord : ∀ i,\n      (∑ b, (p i + z b i) ^ 2) =\n        (Fintype.card B : ℝ) * (p i) ^ 2 + ∑ b, (z b i) ^ 2 := by\n    intro i\n    calc\n      _ = ∑ b, ((p i) ^ 2 + (2 * p i) * z b i + (z b i) ^ 2) := by\n        apply Finset.sum_congr rfl\n        intro b _\n        ring\n      _ = _ := by\n        simp only [Finset.sum_add_distrib, ← Finset.mul_sum, hz,\n          mul_zero, add_zero, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]\n  rw [Finset.sum_comm]\n  simp_rw [hcoord]\n  rw [Finset.sum_add_distrib, ← Finset.mul_sum]\n  congr 1\n  exact Finset.sum_comm\n\ntheorem finite_centered_energy\n    {A B I : Type*} [Fintype A] [Fintype B] [Fintype I]\n    (p : A → I → ℝ) (z : A → B → I → ℝ)\n    (hz : ∀ a i, ∑ b, z a b i = 0) :\n    (∑ a, ∑ b, ∑ i, (p a i + z a b i) ^ 2) =\n      (Fintype.card B : ℝ) * (∑ a, ∑ i, (p a i) ^ 2) +\n        ∑ a, ∑ b, ∑ i, (z a b i) ^ 2 := by\n  calc\n    _ = ∑ a, ((Fintype.card B : ℝ) * (∑ i, (p a i) ^ 2) +\n        ∑ b, ∑ i, (z a b i) ^ 2) := by\n      apply Finset.sum_congr rfl\n      intro a _\n      exact centered_energy_row (p a) (z a) (hz a)\n    _ = _ := by rw [Finset.sum_add_distrib, ← Finset.mul_sum]\n\ntheorem finite_product_factorization\n    {A B : Type*} [Fintype A] [Fintype B]\n    (f : A → ℝ) (g : B → ℝ) :\n    (∑ a, ∑ b, f a * g b) = (∑ a, f a) * (∑ b, g b) := by\n  simp_rw [← Finset.mul_sum]\n  exact (Finset.sum_mul ..).symm\n\ntheorem spread_dipole_energy (q : ℕ) (a : ℝ) :\n    (∑ b : Bool, ∑ _u : Fin (2 ^ q),\n      ((if b then a else -a) / (2 * (2 : ℝ) ^ q)) ^ 2) =\n        a ^ 2 / (2 : ℝ) ^ (q + 1) := by\n  have hpow : (2 : ℝ) ^ q ≠ 0 := pow_ne_zero _ (by norm_num)\n  simp only [Fintype.sum_bool, Finset.sum_const, Finset.card_univ,\n    Fintype.card_fin, nsmul_eq_mul, Nat.cast_pow, Nat.cast_ofNat]\n  simp only [Bool.false_eq_true, reduceIte]\n  rw [pow_succ]\n  field_simp\n  ring\n\nend ThorpEnergy\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/thorp_energy/statement_fidelity.md",
+    "text": "# Statement fidelity: `ThorpEnergy`\n\n`Main.lean` formalizes finite real-vector identities used in the\nconditional-energy proof. It does **not** encode the entire shuffle,\nsigma-fields, the path-cylinder theorem, the geometric identification of\nsubcube supports, or the full mixing theorem. Those connections are proved\nin `report.md`; the compiler cannot check that interpretation.\n\nAll index types in the first five declarations are arbitrary finite types.\nThey may be empty: the identities are unnormalized sums, so division by\ntheir cardinalities is not part of those statements.\n\n* `deterministic_matrix_preserves_centering`: for any finite outcome set\n  `B`, input/output coordinate sets `I,J`, real matrix `M`, and array `z`,\n  if each input coordinate has sum zero over `B`, every coordinate of\n  `Mz` also has sum zero. The matrix is fixed, not allowed to depend on\n  the outcome being averaged.\n* `centered_inner`: for any finite histories `A`, finite future outcomes\n  `B`, finite spatial coordinates `I`, vectors `p a`, and noises\n  `z a b`, assume `sum_b z a b i = 0` separately for **every** `a,i`.\n  Then `sum_a sum_b sum_i p a i * z a b i = 0`.\n  Thus past-dependent amplitudes are permitted; assuming merely a\n  globally centered noise would not suffice.\n* `centered_energy_row` and `finite_centered_energy`: under the same\n  row-centering premise, the sum of squared coordinates of `p+z`\n  is exactly `card(B)` times the past energy plus the summed noise\n  energy, first for one history and then over arbitrary finite histories.\n  This is the martingale cancellation core, not a premise that the\n  manuscript's energy identity already holds. In the application,\n  row-centering is established from the fresh independent switch coins.\n  Finite fair-coin fibers have equal weights; division by their positive\n  size converts these sum identities to conditional expectations.\n* `finite_product_factorization`: arbitrary real functions on two finite\n  index sets have a factorizable double sum of their product. In the\n  application the two factors are the independent future switch arrays\n  in different components, not the free set and the flow in one component.\n* `spread_dipole_energy`: for every natural `q` and real amplitude `a`,\n  there are two disjoint copies indexed by `Bool`, each with `2^q`\n  coordinates indexed by `Fin (2^q)`. Each copy has constant value\n  `+a/(2*2^q)` or `-a/(2*2^q)`. Their total squared norm is\n  `a^2/2^(q+1)`. This includes `q=0` and `a=0`; it formalizes the\n  exact coefficient after the two disjoint subcubes have been identified.\n  It does not assert disjointness for arbitrary overlapping subsets.\n\nThe probabilistic proof supplies row-centering and component-local\nmeasurability directly from cylinders in the switch product space.\nThe formal file does not turn finite enumeration into a universal proof\nor certify novelty, publishability, independence of review, or mixing.\n"
+  },
+  "subject": {
+    "content_hash": "597946e26a7d347ac4862a6a72c9922a52435ae1cae969fc7c3c2f5b4c8d72c6",
+    "kind": "claim",
+    "subject_id": "C238_FINITE_KERNEL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

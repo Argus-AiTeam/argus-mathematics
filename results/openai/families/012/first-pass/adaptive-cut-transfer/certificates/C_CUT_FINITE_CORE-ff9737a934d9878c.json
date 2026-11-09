@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_CUT_FINITE_CORE-46567f81624c",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/012/first-pass/adaptive-cut-transfer/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/012/first-pass/adaptive-cut-transfer/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15818,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/012/first-pass/adaptive-cut-transfer/Main.lean",
+    "source_sha256": "d1800dc6bc630202612b9382beec27c89d3c39b63f7e66b854e2774e23eb0c47",
+    "statement_fidelity": "families/012/first-pass/adaptive-cut-transfer/statement_fidelity.md",
+    "statement_fidelity_sha256": "bd64a680b96f41ef996d0a0e8c79c5f4e94c2cea5caa8b661862c93a375e8039",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/012/first-pass/adaptive-cut-transfer/Main.lean:43:0: warning: automatically included section variable(s) unused in theorem `AdaptiveCutTransfer.adaptive_response_bound`:\n  [DecidableEq ι]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq ι] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\nfamilies/012/first-pass/adaptive-cut-transfer/Main.lean:74:0: warning: automatically included section variable(s) unused in theorem `AdaptiveCutTransfer.response_difference`:\n  [DecidableEq ι]\nconsider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:\n  omit [DecidableEq ι] in theorem ...\n\nNote: This linter can be disabled with `set_option linter.unusedSectionVars false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/adaptive-cut-transfer/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnoncomputable section\n\nnamespace AdaptiveCutTransfer\n\nvariable {ι : Type*} [Fintype ι] [DecidableEq ι]\n\ndef signPlus (x : ℝ) : ℝ := if 0 ≤ x then 1 else -1\n\ntheorem abs_signPlus (x : ℝ) : |signPlus x| = 1 := by\n  unfold signPlus\n  split_ifs <;> norm_num\n\ntheorem response_loss (r h : ℝ) :\n    |r| - r * signPlus h ≤ 2 * |r - h| := by\n  by_cases hh : 0 ≤ h\n  · rw [signPlus, if_pos hh, mul_one]\n    by_cases hr : 0 ≤ r\n    · rw [abs_of_nonneg hr]\n      linarith [abs_nonneg (r - h)]\n    · rw [abs_of_neg (lt_of_not_ge hr)]\n      linarith [neg_le_abs (r - h)]\n  · rw [signPlus, if_neg hh, mul_neg_one]\n    by_cases hr : 0 ≤ r\n    · rw [abs_of_nonneg hr]\n      have hh' : h < 0 := lt_of_not_ge hh\n      linarith [le_abs_self (r - h)]\n    · rw [abs_of_neg (lt_of_not_ge hr)]\n      linarith [abs_nonneg (r - h)]\n\ntheorem test_le_abs (x z : ℝ) (hz : |z| ≤ 1) : x * z ≤ |x| := by\n  calc\n    x * z ≤ |x * z| := le_abs_self _\n    _ = |x| * |z| := abs_mul _ _\n    _ ≤ |x| * 1 := mul_le_mul_of_nonneg_left hz (abs_nonneg x)\n    _ = |x| := mul_one _\n\ndef response (X : ι → ι → ℝ) : ℝ := ∑ k, |∑ i, X i k|\n\ntheorem adaptive_response_bound (A : ι → ι → ℝ) (δ h : ι → ℝ)\n    (hδ : ∀ k, |δ k| ≤ 1) :\n    (∑ i, |∑ k, A i k * δ k|) ≤\n      (∑ k, |∑ i, A i k * signPlus (h i)|) +\n        2 * ∑ i, |(∑ k, A i k * δ k) - h i| := by\n  have loss :\n      (∑ i, (|∑ k, A i k * δ k| -\n        (∑ k, A i k * δ k) * signPlus (h i))) ≤\n          2 * ∑ i, |(∑ k, A i k * δ k) - h i| := by\n    calc\n      _ ≤ ∑ i, 2 * |(∑ k, A i k * δ k) - h i| :=\n        Finset.sum_le_sum fun i _ => response_loss _ _\n      _ = _ := by rw [Finset.mul_sum]\n  have swap :\n      (∑ i, (∑ k, A i k * δ k) * signPlus (h i)) =\n        ∑ k, (∑ i, A i k * signPlus (h i)) * δ k := by\n    simp_rw [Finset.sum_mul]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro k _\n    apply Finset.sum_congr rfl\n    intro i _\n    ring\n  have bound :\n      (∑ i, (∑ k, A i k * δ k) * signPlus (h i)) ≤\n        ∑ k, |∑ i, A i k * signPlus (h i)| := by\n    rw [swap]\n    exact Finset.sum_le_sum fun k _ => test_le_abs _ _ (hδ k)\n  rw [Finset.sum_sub_distrib] at loss\n  linarith\n\ntheorem response_difference (X Y : ι → ι → ℝ) :\n    |response X - response Y| ≤ ∑ i, ∑ k, |X i k - Y i k| := by\n  unfold response\n  calc\n    |(∑ k, |∑ i, X i k|) - (∑ k, |∑ i, Y i k|)| =\n        |∑ k, (|∑ i, X i k| - |∑ i, Y i k|)| := by\n      rw [Finset.sum_sub_distrib]\n    _ ≤ ∑ k, abs (|∑ i, X i k| - |∑ i, Y i k|) :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ ≤ ∑ k, ∑ i, |X i k - Y i k| := by\n      apply Finset.sum_le_sum\n      intro k _\n      calc\n        abs (|∑ i, X i k| - |∑ i, Y i k|) ≤\n            |(∑ i, X i k) - ∑ i, Y i k| :=\n          abs_abs_sub_abs_le_abs_sub _ _\n        _ = |∑ i, (X i k - Y i k)| := by rw [Finset.sum_sub_distrib]\n        _ ≤ ∑ i, |X i k - Y i k| := Finset.abs_sum_le_sum_abs _ _\n    _ = ∑ i, ∑ k, |X i k - Y i k| := Finset.sum_comm\n\ntheorem incident_mass_bound (W : ι → ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hW : ∀ i k, 0 ≤ W i k)\n    (hoff : ∀ i k, i ∉ J → k ∉ J → W i k = 0)\n    (hrow : ∀ i, ∑ k, W i k ≤ d)\n    (hcol : ∀ k, ∑ i, W i k ≤ d) :\n    (∑ i, ∑ k, W i k) ≤ 2 * (J.card : ℝ) * d := by\n  have point (i k : ι) :\n      W i k ≤ (if i ∈ J then W i k else 0) +\n        (if k ∈ J then W i k else 0) := by\n    by_cases hi : i ∈ J\n    · by_cases hk : k ∈ J\n      · simp only [if_pos hi, if_pos hk]\n        linarith [hW i k]\n      · simp [hi, hk]\n    · by_cases hk : k ∈ J\n      · simp [hi, hk]\n      · simp [hi, hk, hoff i k hi hk]\n  have first :\n      (∑ i, ∑ k, if i ∈ J then W i k else 0) ≤ (J.card : ℝ) * d := by\n    calc\n      _ ≤ ∑ i, if i ∈ J then d else 0 := by\n        apply Finset.sum_le_sum\n        intro i _\n        by_cases hi : i ∈ J\n        · simpa [hi] using hrow i\n        · simp [hi]\n      _ = _ := by simp\n  have second :\n      (∑ i, ∑ k, if k ∈ J then W i k else 0) ≤ (J.card : ℝ) * d := by\n    rw [Finset.sum_comm]\n    calc\n      _ ≤ ∑ k, if k ∈ J then d else 0 := by\n        apply Finset.sum_le_sum\n        intro k _\n        by_cases hk : k ∈ J\n        · simpa [hk] using hcol k\n        · simp [hk]\n      _ = _ := by simp\n  calc\n    _ ≤ ∑ i, ∑ k,\n        ((if i ∈ J then W i k else 0) + (if k ∈ J then W i k else 0)) :=\n      Finset.sum_le_sum fun i _ => Finset.sum_le_sum fun k _ => point i k\n    _ = (∑ i, ∑ k, if i ∈ J then W i k else 0) +\n        (∑ i, ∑ k, if k ∈ J then W i k else 0) := by\n      simp_rw [Finset.sum_add_distrib]\n    _ ≤ (J.card : ℝ) * d + (J.card : ℝ) * d := add_le_add first second\n    _ = _ := by ring\n\ntheorem good_configuration_lipschitz (X Y : ι → ι → ℝ)\n    (J : Finset ι) (d : ℝ)\n    (hoff : ∀ i k, i ∉ J → k ∉ J → X i k = Y i k)\n    (hrowX : ∀ i, ∑ k, |X i k| ≤ d)\n    (hcolX : ∀ k, ∑ i, |X i k| ≤ d)\n    (hrowY : ∀ i, ∑ k, |Y i k| ≤ d)\n    (hcolY : ∀ k, ∑ i, |Y i k| ≤ d) :\n    |response X - response Y| ≤ 4 * d * (J.card : ℝ) := by\n  have point (i k : ι) : |X i k - Y i k| ≤ |X i k| + |Y i k| := by\n    simpa using abs_sub_le (X i k) 0 (Y i k)\n  have row : ∀ i, ∑ k, |X i k - Y i k| ≤ 2 * d := by\n    intro i\n    calc\n      _ ≤ ∑ k, (|X i k| + |Y i k|) := Finset.sum_le_sum fun k _ => point i k\n      _ = (∑ k, |X i k|) + ∑ k, |Y i k| := Finset.sum_add_distrib\n      _ ≤ d + d := add_le_add (hrowX i) (hrowY i)\n      _ = _ := by ring\n  have col : ∀ k, ∑ i, |X i k - Y i k| ≤ 2 * d := by\n    intro k\n    calc\n      _ ≤ ∑ i, (|X i k| + |Y i k|) := Finset.sum_le_sum fun i _ => point i k\n      _ = (∑ i, |X i k|) + ∑ i, |Y i k| := Finset.sum_add_distrib\n      _ ≤ d + d := add_le_add (hcolX k) (hcolY k)\n      _ = _ := by ring\n  calc\n    _ ≤ ∑ i, ∑ k, |X i k - Y i k| := response_difference X Y\n    _ ≤ 2 * (J.card : ℝ) * (2 * d) :=\n      incident_mass_bound _ J (2 * d) (fun i k => abs_nonneg _)\n        (by intro i k hi hk; rw [hoff i k hi hk, sub_self, abs_zero]) row col\n    _ = _ := by ring\n\ndef deleteVertices (X : ι → ι → ℝ) (J : Finset ι) (i k : ι) : ℝ :=\n  if i ∈ J ∨ k ∈ J then 0 else X i k\n\ntheorem deletion_bound (X : ι → ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hrow : ∀ i, ∑ k, |X i k| ≤ d)\n    (hcol : ∀ k, ∑ i, |X i k| ≤ d) :\n    response X ≤ response (deleteVertices X J) + 2 * (J.card : ℝ) * d := by\n  have point (i k : ι) :\n      |X i k - deleteVertices X J i k| ≤ |X i k| := by\n    unfold deleteVertices\n    split_ifs <;> simp\n  have row : ∀ i, ∑ k, |X i k - deleteVertices X J i k| ≤ d := by\n    intro i\n    exact (Finset.sum_le_sum fun k _ => point i k).trans (hrow i)\n  have col : ∀ k, ∑ i, |X i k - deleteVertices X J i k| ≤ d := by\n    intro k\n    exact (Finset.sum_le_sum fun i _ => point i k).trans (hcol k)\n  have mass :\n      (∑ i, ∑ k, |X i k - deleteVertices X J i k|) ≤\n        2 * (J.card : ℝ) * d := by\n    apply incident_mass_bound _ J d (fun i k => abs_nonneg _) _ row col\n    intro i k hi hk\n    simp [deleteVertices, hi, hk]\n  have hd := (response_difference X (deleteVertices X J)).trans mass\n  have hs := le_abs_self (response X - response (deleteVertices X J))\n  linarith\n\ntheorem adaptive_deleted_response_bound (A : ι → ι → ℝ)\n    (δ h : ι → ℝ) (J : Finset ι) (d : ℝ)\n    (hδ : ∀ k, |δ k| ≤ 1)\n    (hrow : ∀ i, ∑ k, |A i k| ≤ d)\n    (hcol : ∀ k, ∑ i, |A i k| ≤ d) :\n    (∑ i, |∑ k, A i k * δ k|) ≤\n      response (deleteVertices (fun i k => A i k * signPlus (h i)) J) +\n        2 * ∑ i, |(∑ k, A i k * δ k) - h i| +\n        2 * (J.card : ℝ) * d := by\n  have row : ∀ i, ∑ k, |A i k * signPlus (h i)| ≤ d := by\n    intro i\n    simpa only [abs_mul, abs_signPlus, mul_one] using hrow i\n  have col : ∀ k, ∑ i, |A i k * signPlus (h i)| ≤ d := by\n    intro k\n    simpa only [abs_mul, abs_signPlus, mul_one] using hcol k\n  have ha := adaptive_response_bound A δ h hδ\n  have hd := deletion_bound (fun i k => A i k * signPlus (h i)) J d row col\n  dsimp only [response] at hd ⊢\n  linarith\n\nend AdaptiveCutTransfer\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/adaptive-cut-transfer/statement_fidelity.md",
+    "text": "# Statement fidelity: deterministic adaptive cut core\n\n`Main.lean` uses Lean real numbers and an arbitrary finite index type, not a\nbounded list of sample matrices. `signPlus` is +1 at zero and -1 on negative\ninputs. `response X` is the unnormalized column best-response energy\n`sum_k |sum_i X(i,k)|`.\n\nThe declarations describing claim `C_CUT_FINITE_CORE` are:\n\n- `adaptive_response_bound`: for every real matrix, every column test with\n  absolute value at most one, and every real row-estimate vector, the optimal\n  row-response energy is at most the column-response energy of the estimated\n  row signs plus twice their total estimation error. The column vector can be\n  a realized optimizer; the assertion is uniform over all such vectors.\n- `good_configuration_lipschitz`: two arbitrary arrays that agree outside\n  ordered pairs incident to a specified set J, and whose separate row and\n  column absolute masses are at most d, have response energies differing by\n  at most `4*d*card(J)`. There is no assumption about a path of good\n  configurations, connectedness, probability, or intermediate arrays.\n- `adaptive_deleted_response_bound`: combines the adaptive response inequality\n  with deletion of every ordered pair incident to J, costing\n  `2*d*card(J)`, not a change to the cut-norm normalization.\n\nThe auxiliary declarations prove the scalar sign loss, absolute response\ndifference, incident mass bound and deletion estimate. Symmetry is not needed\ninside these declarations because both row and column mass hypotheses are\nexplicit. In the probabilistic application they follow from the same\nsymmetric envelope, including when its entries are multiplied by row signs.\nDividing the response estimates by the positive integer M gives precisely the\nmanuscript normalization 1/M.\n\nThis formalization does NOT encode independence, conditional expectations,\nthe sampling-without-replacement variance formula, the capped infimum\nextension, its probability tail, the finite-size transfer theorem, or any\narithmetic property of the manuscript's kernels. Those parts are proved in\n`report.md`; `verify.py` additionally replays exact finite adaptive\noptimizations, conditioning and disconnected-good-set extension tests.\nAccordingly a successful compiler run certifies `C_CUT_FINITE_CORE`, not the\nwhole proposition, its arithmetic hypotheses, or the joint Dickman law.\n"
+  },
+  "subject": {
+    "content_hash": "d96839e9ff29d2166479788f47de9806dcbb052b9279fc1d462273a4430471e7",
+    "kind": "claim",
+    "subject_id": "C_CUT_FINITE_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

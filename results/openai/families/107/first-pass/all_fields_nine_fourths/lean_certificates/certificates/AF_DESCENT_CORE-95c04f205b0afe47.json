@@ -1,0 +1,64 @@
+{
+  "evidence_id": "lean-AF_DESCENT_CORE-adb63c093107",
+  "lean_check": {
+    "audit_command": [],
+    "audit_exit_code": null,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/107/first-pass/all_fields_nine_fourths/lean_certificates/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 3389,
+    "environment_failure": "",
+    "exit_code": 1,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/107/first-pass/all_fields_nine_fourths/lean_certificates/Main.lean",
+    "source_sha256": "a1b95af37bf8b8e87d76d64829c44671129bbae33af67670354a6756e2c543b3",
+    "statement_fidelity": "families/107/first-pass/all_fields_nine_fourths/lean_certificates/statement_fidelity.md",
+    "statement_fidelity_sha256": "687575a0bef47bb96042c2af0715bf5eac6bd969b5463225c45b8c7ee40366b0",
+    "status": "type_error",
+    "stderr": "",
+    "stdout": "families/107/first-pass/all_fields_nine_fourths/lean_certificates/Main.lean:21:67: error: unsolved goals\nF : Type u_1\nE : Type u_2\ninst✝³ : Field F\ninst✝² : Field E\ninst✝¹ : Algebra F E\nD : Type u_3\ninst✝ : Fintype D\nb : Basis D F E\nell : E →ₗ[F] F\nx y z : E\n⊢ ∑ x_1, ∑ i, (b.repr y) x_1 * ((b.repr x) i * ell (b i * (b x_1 * z))) =\n    ∑ x_1, ∑ x_2, (b.repr x) x_1 * ((b.repr y) x_2 * ell (b x_1 * (b x_2 * z)))\n'AllFieldsNineFourths.finite_extension_restriction_descent' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]\n'AllFieldsNineFourths.mismatch_weight_identity' depends on axioms: [propext, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/all_fields_nine_fourths/lean_certificates/Main.lean",
+    "text": "import Mathlib.LinearAlgebra.Basis.VectorSpace\nimport Mathlib.LinearAlgebra.Dual.Lemmas\nimport Mathlib.Tactic.Ring\n\nopen scoped BigOperators\nopen Module\n\nnamespace AllFieldsNineFourths\n\nvariable {F E : Type*} [Field F] [Field E] [Algebra F E]\nvariable {D I J K X Y Z : Type*}\nvariable [Fintype D] [Fintype I] [Fintype J] [Fintype K]\n\ntheorem normalized_functional :\n    ∃ ell : E →ₗ[F] F, ell (1 : E) = 1 :=\n  Module.Projective.exists_dual_eq_one F one_ne_zero\n\ntheorem functional_product_expansion\n    (b : Basis D F E) (ell : E →ₗ[F] F) (x y z : E) :\n    ell (x * y * z) =\n      ∑ s, ∑ t, (b.repr x s * b.repr y t) * ell (b s * b t * z) := by\n  conv_lhs => rw [← b.sum_repr x, ← b.sum_repr y]\n  simp only [Finset.sum_mul, Finset.mul_sum, smul_mul_assoc, mul_smul_comm,\n    map_sum, map_smul, smul_eq_mul, mul_assoc]\n\ndef restrictionCoefficient\n    (a : I × J × K → F) (u : I → X → F)\n    (v : J → Y → F) (w : K → Z → F) (x : X) (y : Y) (z : Z) : F :=\n  ∑ q, a q * u q.1 x * v q.2.1 y * w q.2.2 z\n\ndef extensionRestrictionCoefficient\n    (a : I × J × K → F) (u : I → X → E)\n    (v : J → Y → E) (w : K → Z → E) (x : X) (y : Y) (z : Z) : E :=\n  ∑ q, a q • (u q.1 x * v q.2.1 y * w q.2.2 z)\n\ntheorem sum_three_swap {T : Type*} [Fintype T] (f : T → D → D → F) :\n    (∑ q, ∑ s, ∑ t, f q s t) = ∑ s, ∑ t, ∑ q, f q s t := by\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro s hs\n  rw [Finset.sum_comm]\n\ntheorem restriction_descent_formula\n    (b : Basis D F E) (ell : E →ₗ[F] F) (h_one : ell (1 : E) = 1)\n    (a : I × J × K → F) (target : X → Y → Z → F)\n    (u : I → X → E) (v : J → Y → E) (w : K → Z → E)\n    (h : ∀ x y z, extensionRestrictionCoefficient a u v w x y z =\n      target x y z • (1 : E)) (x : X) (y : Y) (z : Z) :\n    target x y z =\n      ∑ s, ∑ t, restrictionCoefficient a\n        (fun i x => b.repr (u i x) s)\n        (fun j y => b.repr (v j y) t)\n        (fun k z => ell (b s * b t * w k z)) x y z := by\n  have term (q : I × J × K) :\n      ell (a q • (u q.1 x * v q.2.1 y * w q.2.2 z)) =\n        ∑ s, ∑ t, a q * b.repr (u q.1 x) s * b.repr (v q.2.1 y) t *\n          ell (b s * b t * w q.2.2 z) := by\n    rw [map_smul, functional_product_expansion b ell]\n    simp only [smul_eq_mul, Finset.mul_sum, mul_assoc]\n  calc\n    target x y z = ell (extensionRestrictionCoefficient a u v w x y z) := by\n      rw [h, map_smul, h_one, smul_eq_mul, mul_one]\n    _ = ∑ q, ∑ s, ∑ t,\n        a q * b.repr (u q.1 x) s * b.repr (v q.2.1 y) t *\n          ell (b s * b t * w q.2.2 z) := by\n      rw [extensionRestrictionCoefficient, map_sum]\n      exact Finset.sum_congr rfl (fun q _ => term q)\n    _ = ∑ s, ∑ t, ∑ q,\n        a q * b.repr (u q.1 x) s * b.repr (v q.2.1 y) t *\n          ell (b s * b t * w q.2.2 z) := sum_three_swap _\n    _ = _ := rfl\n\ntheorem finite_extension_restriction_descent\n    (b : Basis D F E) (a : I × J × K → F) (target : X → Y → Z → F)\n    (u : I → X → E) (v : J → Y → E) (w : K → Z → E)\n    (h : ∀ x y z, extensionRestrictionCoefficient a u v w x y z =\n      target x y z • (1 : E)) :\n    ∃ ell : E →ₗ[F] F, ell (1 : E) = 1 ∧\n      ∀ x y z, target x y z =\n        ∑ s, ∑ t, restrictionCoefficient a\n          (fun i x => b.repr (u i x) s)\n          (fun j y => b.repr (v j y) t)\n          (fun k z => ell (b s * b t * w k z)) x y z := by\n  obtain ⟨ell, h_one⟩ := normalized_functional (F := F) (E := E)\n  exact ⟨ell, h_one, restriction_descent_formula b ell h_one a target u v w h⟩\n\ntheorem number_of_source_copies :\n    Fintype.card (D × D) = Fintype.card D ^ 2 := by\n  simp [pow_two]\n\ntheorem mismatch_weight_identity {R : Type*} [CommRing R] (g h u v : R) :\n    (g ^ 2 + h * u - h ^ 2 - h * v) - (g - h) ^ 2 =\n      h * (u - v + 2 * (g - h)) := by\n  ring\n\n#print axioms finite_extension_restriction_descent\n#print axioms mismatch_weight_identity\n\nend AllFieldsNineFourths\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/all_fields_nine_fourths/lean_certificates/statement_fidelity.md",
+    "text": "# Statement fidelity: finite-extension restriction descent\n\nClaim: `AF_DESCENT_CORE`. Source: `Main.lean`. Lean version: 4.31.0.\n\nThe principal declaration is\n`AllFieldsNineFourths.finite_extension_restriction_descent`.\n`F` and `E` are arbitrary fields with an `F`-algebra structure on `E`.\n`D` is a finite index type and `b : Basis D F E` is an actual basis.\nThus the extension degree is `card D`; separability, characteristic zero,\nand nonvanishing trace are NOT hypotheses.\n\n`I,J,K` are arbitrary finite source-leg index types. `X,Y,Z` are arbitrary\ntarget-leg index types. The source coefficient array is\n`a : I x J x K -> F`. The target coefficient array is\n`target : X -> Y -> Z -> F`. The three substitution arrays `u,v,w`\nhave values in `E` and depend only on their own source and target leg.\nThe hypothesis `h` states, at EVERY target coordinate, that these\nsubstitutions take the source to the target after embedding `F` in `E`.\nEmbedding is written as scalar multiplication of `1 : E`.\n\nThe conclusion constructs an `F`-linear functional `ell : E -> F` with\n`ell(1)=1`. For every target coordinate it gives the explicit sum over\n`(s,t) : D x D` of restrictions of the SAME source array. The first map\nis the `s` basis coordinate of `u`, the second the `t` basis coordinate\nof `v`, and the third is `ell(b(s)b(t)w)`. In particular the third map\ndoes not depend on either of the first two source indices. This is the\nindependence needed to interpret each summand as one tensor restriction,\nnot merely an unrestricted sum of coordinate identities.\n\n`AllFieldsNineFourths.number_of_source_copies` proves that this index\nset has exactly `(card D)^2` elements. The usual direct-sum substitution\nidentifies each pair's target legs; this interpretation is explained in\nthe mathematical report. The source does NOT introduce an abstract tensor\nrestriction relation or a rank function: it proves the full coefficient\nformula from which the direct-sum restriction follows.\n\nThe formal quantifiers allow arbitrary source and target dimensions, so\nthe same theorem applies to each tensor power with the SAME `E` and\nthe SAME `D`. Consequently the number of copies remains `e^2`, not\n`e^(2j)`. There is no separate formal tensor-power construction.\n\nSupporting declarations are `normalized_functional`,\n`functional_product_expansion`, `restriction_descent_formula`, and\n`sum_three_swap`. The normalization existence theorem works for any\nfield extension; its finite basis is needed only for the finite sum.\n\n`AllFieldsNineFourths.mismatch_weight_identity` is additionally proved\nover every commutative ring. It identifies the separation weight minus\nthe square mismatch with the Fourier-relation multiple. Positivity of\ninteger weights is a separate argument in the report, not a notion of\norder on a finite field.\n\nThe full tensor restriction interpretation is claim `AF_DESCENT`.\nThe complete all-field matrix-multiplication theorem, interpolation\nlimits, character existence, entropy counting, profile inequalities,\nand arithmetic recursion are proved in prose in `report.md`; they are\nNOT claimed to be formalized by this file. Compiler acceptance verifies\nthe stated coefficient identities, not the prose interpretation,\noriginality, significance, or the entire exponent theorem.\n"
+  },
+  "subject": {
+    "content_hash": "a87b7a85cd3d7dc2d37c7cd42dc7e224944e420071dfc24be9a84357d974487b",
+    "kind": "claim",
+    "subject_id": "AF_DESCENT_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "inconclusive"
+}

@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-L_DIMENSION_WINDOW_CORE-6e9d210e90c0",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/148/first-pass/dimension-audit/certificates/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/148/first-pass/dimension-audit/certificates/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14924,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/148/first-pass/dimension-audit/certificates/Main.lean",
+    "source_sha256": "921ed4b5dcf7298d9c9b17ea8f5b1b2310122feda34d9f0cbfe62e41626955d1",
+    "statement_fidelity": "families/148/first-pass/dimension-audit/certificates/statement_fidelity.md",
+    "statement_fidelity_sha256": "167b00b595a4ec5f0e7c0c7f4327174ed5446aab481a64509afae6b3b0f51309",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'DimensionWindowCertificate.ceiling_increment' depends on axioms: [propext, Classical.choice, Quot.sound]\n'DimensionWindowCertificate.adjusted_depth_antitone' depends on axioms: [propext, Classical.choice, Quot.sound]\n'DimensionWindowCertificate.finer_window_before_coarser' depends on axioms: [propext, Classical.choice, Quot.sound]\n'DimensionWindowCertificate.ordered_window_gain_bound' depends on axioms: [propext, Classical.choice, Quot.sound]\n'DimensionWindowCertificate.target_recovery' depends on axioms: [propext, Classical.choice, Quot.sound]\n'DimensionWindowCertificate.candidate_mass_bound' depends on axioms: [propext, Classical.choice, Quot.sound]\n'DimensionWindowCertificate.eventually_separated' depends on axioms: [propext, Classical.choice, Quot.sound]\n'DimensionWindowCertificate.no_uniform_positive_band_count' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/dimension-audit/certificates/Main.lean",
+    "text": "import Mathlib\n\nnamespace DimensionWindowCertificate\n\ntheorem ceiling_increment (s t : ℝ) :\n    (⌈t⌉ : ℝ) - (⌈s⌉ : ℝ) ≤ t - s + 1 := by\n  have hs := Int.le_ceil s\n  have ht := Int.ceil_lt_add_one t\n  linarith\n\ntheorem adjusted_depth_antitone (σ : ℕ → ℝ) (hσ : Monotone σ) (L : ℝ) :\n    Antitone (fun j => L - (⌈σ j⌉ : ℝ)) := by\n  intro j k hjk\n  have hc : ⌈σ j⌉ ≤ ⌈σ k⌉ := Int.ceil_mono (hσ hjk)\n  have hc' : (⌈σ j⌉ : ℝ) ≤ (⌈σ k⌉ : ℝ) := by exact_mod_cast hc\n  linarith\n\ntheorem finer_window_before_coarser (σ : ℕ → ℝ) (hσ : Monotone σ)\n    (j n k : ℕ) (a B C L : ℝ)\n    (hstart : a ≤ L - (⌈σ j⌉ : ℝ))\n    (hincrement : σ (j + n) - σ j ≤ C)\n    (hseparation : B < a - C - 1)\n    (hcoarse : L - (⌈σ k⌉ : ℝ) ≤ B) :\n    j + n < k := by\n  have hceil := ceiling_increment (σ j) (σ (j + n))\n  have hend : a - C - 1 ≤ L - (⌈σ (j + n)⌉ : ℝ) := by linarith\n  by_contra hn\n  have hk : k ≤ j + n := by omega\n  have horder := adjusted_depth_antitone σ hσ L hk\n  linarith\n\ntheorem ordered_window_gain_bound (g : ℕ → ℝ) (hg : Antitone g)\n    (hzero : ∀ j, 0 ≤ g j) (ws : List (ℕ × ℕ)) (s : ℕ)\n    (hstarts : ∀ w ∈ ws, s ≤ w.1)\n    (horder : ws.Pairwise (fun a b => a.2 ≤ b.1)) :\n    (ws.map (fun w => g w.1 - g w.2)).sum ≤ g s := by\n  induction ws generalizing s with\n  | nil => simpa using hzero s\n  | cons w ws ih =>\n      have hp := List.pairwise_cons.mp horder\n      have htail := ih w.2 (fun v hv => hp.1 v hv) hp.2\n      have hfirst := hg (hstarts w (by simp))\n      simp only [List.map_cons, List.sum_cons]\n      linarith\n\ntheorem target_recovery (U z a b ell : ℤ)\n    (ha : 1 ≤ a) (hz : 0 ≤ z) (hzu : z ≤ U) (hb : b < U)\n    (hell : a ≤ ell ∧ ell ≤ b) :\n    ∃! L : ℤ, 1 ≤ L ∧ L ≤ 2 * U ∧ L - z = ell := by\n  refine ⟨ell + z, ?_, ?_⟩\n  · omega\n  · intro L hL\n    omega\n\ntheorem candidate_mass_bound (D n T : ℝ) (hD : 0 < D) (hn : 0 < n) :\n    T / (2 * D) ≤ ((⌊T / (2 * D * n)⌋ : ℝ) + 1) * n := by\n  have hf := (Int.lt_floor_add_one (T / (2 * D * n))).le\n  have hd : 0 < 2 * D * n := by positivity\n  have hm := (div_le_iff₀ hd).mp hf\n  apply (div_le_iff₀ (by positivity : 0 < 2 * D)).mpr\n  nlinarith\n\ntheorem eventually_separated (A A' B : ℝ) (hgap : A' < A) :\n    ∃ N : ℕ, ∀ n : ℕ, N ≤ n →\n      B < (⌈A * (n : ℝ)⌉ : ℝ) - 1 - A' * (n : ℝ) - 1 := by\n  have hpos : 0 < A - A' := sub_pos.mpr hgap\n  obtain ⟨N, hN⟩ := exists_nat_gt ((B + 2) / (A - A'))\n  refine ⟨N, ?_⟩\n  intro n hn\n  have hn' : (N : ℝ) ≤ (n : ℝ) := by exact_mod_cast hn\n  have hm := (div_lt_iff₀ hpos).mp hN\n  have hceil := Int.le_ceil (A * (n : ℝ))\n  have hmon := mul_le_mul_of_nonneg_left hn' hpos.le\n  nlinarith\n\ntheorem no_uniform_positive_band_count (δ c B : ℝ)\n    (hδ : 0 < δ) (hc : 0 < c) :\n    ¬ (∀ q : ℕ, δ * c * (q : ℝ) ≤ B) := by\n  intro h\n  obtain ⟨q, hq⟩ := exists_nat_gt (B / (δ * c))\n  have hm := (div_lt_iff₀ (mul_pos hδ hc)).mp hq\n  have hb := h q\n  nlinarith\n\n#print axioms ceiling_increment\n#print axioms adjusted_depth_antitone\n#print axioms finer_window_before_coarser\n#print axioms ordered_window_gain_bound\n#print axioms target_recovery\n#print axioms candidate_mass_bound\n#print axioms eventually_separated\n#print axioms no_uniform_positive_band_count\n\nend DimensionWindowCertificate\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/dimension-audit/certificates/statement_fidelity.md",
+    "text": "# Statement fidelity: dimension-formula verification\n\n## The manuscript claim\n\n`C_DIMENSION_FORMULA` quantifies over every finite nonempty **indexed** family\n`x -> r_i*x+t_i` on the real line, with `0 < |r_i| < 1`, arbitrary real\ntranslations, and every strictly positive probability vector. Its measure is\nthe Bernoulli coding pushforward. The random walk merges equal complete\naffine maps, including the signed slope, before taking Shannon entropy.\nWriting `h = lim H(G_n)/n` and `chi = -sum p_i log_2 |r_i|`, the conclusion is\n\n    dim_H(mu) = min(1, h/chi).\n\nHere measure dimension is the infimum of Hausdorff dimensions of Borel sets\nof positive mass. Exact dimensionality makes the full-mass convention\nequivalent. Negative and unequal contractions, duplicate indexed generators,\nexact word collisions, zero entropy, and both `h = chi` and `h > chi` are\nincluded. There is no arithmetic or effective separation hypothesis.\n\nThe complete argument is in `proof.md`. It uses the unchanged, independently\nreviewed `research/pair-bound/` theorem and Feng-Hu Theorem 2.8 for exact\ndimensionality. It does **not** assume an entropy-rate dimension formula,\nprojection-entropy identification, conditional-tail nonsaturation, independence\nafter observing a sum, or a bound on the finest positive separation.\n\n## Precisely what the new Lean source proves\n\n`Main.lean` imports only Mathlib. Its namespace is\n`DimensionWindowCertificate`. It proves `L_DIMENSION_WINDOW_CORE`, not the\nanalytic self-similar dimension theorem.\n\n`ceiling_increment` quantifies over arbitrary real `s,t`, with no positivity\nor order assumption, and proves `ceil(t)-ceil(s) <= t-s+1` in the reals.\n`adjusted_depth_antitone` takes an arbitrary nondecreasing real depth sequence\non the natural numbers and any real target `L`; the adjusted depths\n`L-ceil(sigma_j)` are nonincreasing.\n\n`finer_window_before_coarser` takes such a sequence, arbitrary natural starts\n`j,k` and length `n`, and real `a,B,C,L`. Its hypotheses are exactly a fine\nstart depth at least `a`, a depth increment at most `C`, the strict\nseparation `B < a-C-1`, and a coarse start depth at most `B`. Its conclusion\nis the strict index inequality `j+n < k`. In the manuscript instantiate\n`C = A'*n`. No randomness or independence is assumed.\n\n`ordered_window_gain_bound` quantifies over every real nonnegative antitone\nsequence `g`, every finite list of natural endpoint pairs, and every natural\nstarting index `s`. Every listed left endpoint is at least `s`; every earlier\nright endpoint is at most every later left endpoint. It proves that the sum\nof the listed decrements is at most `g(s)`. Actual half-open retained windows\nsatisfy these hypotheses. No independence or probabilistic average is encoded.\n\n`target_recovery` uses integers `U,z,a,b,ell`, with `1<=a`, `0<=z<=U`,\n`b<U`, and `a<=ell<=b`. It proves the existence and uniqueness of the target\n`1<=L<=2*U` satisfying `L-z=ell`. This is the manuscript's even `T=2*U`\ntarget correspondence, including both band endpoints.\n\n`candidate_mass_bound` takes arbitrary real `D,n,T`, with `D,n` positive,\nand proves\n\n    T/(2*D) <= (floor(T/(2*D*n))+1)*n.\n\nFor positive manuscript `T` and integral `n`, the factor in parentheses is\nthe number of candidate starts. The theorem itself does not identify a\ncardinality; that elementary identification is supplied in `proof.md`.\n\n`eventually_separated` takes arbitrary real `A,A',B`, with `A'<A`. It\nproduces a natural `N` such that every natural `n>=N` satisfies\n`B < ceil(A*n)-A'*n-2`. Consequently any finite collection of previously\nchosen upper endpoints can be passed; it assumes no growth control on them.\n\n`no_uniform_positive_band_count` takes arbitrary positive reals `delta,c`\nand any real bound `B`. It disproves `forall q : Nat, delta*c*q <= B`.\nAfter the analytic inequalities in the proof, choose `B=8*D*log_2(M)`.\n\nThe source contains no user axioms, `sorry`, upstream dimension theorem, or\nanalytic hypothesis disguised as a formalized final conclusion. The compiler\nand axiom audit decide its formal validity. The preceding pair-bound compiler\ncertificate remains a separate certificate with its original statement\nfidelity and independent approval.\n\n## Evidence boundary\n\nThe Python replay checks exact rational coding laws, merged collisions, type\nconditioning, entropy identities and inequalities via rational log products,\nband endpoints, the strict-Jensen example, and finite retained-window\nconfigurations. These are diagnostics, not proofs of universal analytic claims.\nThe new Lean theorem is universal for its explicitly stated combinatorial\nobjects. The remaining analysis is proved in prose and requires independent\nReviewer reading; compiling this source does not certify Feng-Hu or the whole\ndimension formula.\n"
+  },
+  "subject": {
+    "content_hash": "9d830accc756e8964420f5709f63ea8839912a7ff1dcc3b229a5a6d6af78a174",
+    "kind": "claim",
+    "subject_id": "L_DIMENSION_WINDOW_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

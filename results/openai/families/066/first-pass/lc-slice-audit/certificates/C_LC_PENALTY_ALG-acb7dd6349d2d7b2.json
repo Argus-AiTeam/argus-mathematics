@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_LC_PENALTY_ALG-bed26cf2cf5f",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/066/first-pass/lc-slice-audit/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/066/first-pass/lc-slice-audit/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15299,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/066/first-pass/lc-slice-audit/Main.lean",
+    "source_sha256": "b620d6f367634a49efa6817079668791a90c4e072d80c4fc8adb7525585d06b0",
+    "statement_fidelity": "families/066/first-pass/lc-slice-audit/statement_fidelity.md",
+    "statement_fidelity_sha256": "0ccfea1275942b12c87d013aa307c9eceb8cc50b199909bc8e3e18f36f122c66",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/066/first-pass/lc-slice-audit/Main.lean:8:5: warning: Variable name `hD` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\nfamilies/066/first-pass/lc-slice-audit/Main.lean:8:18: warning: Variable name `hB` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/lc-slice-audit/Main.lean",
+    "text": "import Mathlib\n\nnamespace LCSliceAudit\n\ntheorem exact_penalty\n    (e lam C D B b h R V : ℝ)\n    (he : 0 < e) (hlam : 0 < lam) (hC : 0 ≤ C)\n    (hD : 0 ≤ D) (hB : 0 ≤ B)\n    (hb : 0 < b) (hbB : b ≤ B) (hR : 0 < R)\n    (hh : b - D * e ≤ h)\n    (hV : R / (1 + C * e) ≤ V)\n    (hbudget : lam * (D + C * B) < 1) :\n    lam * b * R < (e + lam * h) * V := by\n  have hK : 0 < 1 + C * e := by positivity\n  have hVpos : 0 < V := lt_of_lt_of_le (div_pos hR hK) hV\n  have hVR : R ≤ (1 + C * e) * V := by\n    have ht := (div_le_iff₀ hK).mp hV\n    nlinarith only [ht]\n  have hbudget' : lam * (D + C * b) < 1 := by\n    have hcb : C * b ≤ C * B := mul_le_mul_of_nonneg_left hbB hC\n    have hsum : D + C * b ≤ D + C * B := by linarith only [hcb]\n    calc\n      lam * (D + C * b) ≤ lam * (D + C * B) :=\n        mul_le_mul_of_nonneg_left hsum hlam.le\n      _ < 1 := hbudget\n  have hmargin : 0 < e * (1 - lam * (D + C * b)) :=\n    mul_pos he (by linarith)\n  have hslack : 0 ≤ lam * (h - b + D * e) :=\n    mul_nonneg hlam.le (by linarith)\n  have hnum : lam * b * (1 + C * e) < e + lam * h := by\n    nlinarith only [hmargin, hslack]\n  calc\n    lam * b * R ≤ lam * b * ((1 + C * e) * V) :=\n      mul_le_mul_of_nonneg_left hVR (mul_nonneg hlam.le hb.le)\n    _ = (lam * b * (1 + C * e)) * V := by ring\n    _ < (e + lam * h) * V := mul_lt_mul_of_pos_right hnum hVpos\n\ntheorem common_budget\n    (lam S : ℝ) (hlam : 0 < lam) (hS : 0 ≤ S)\n    (hsmall : lam ≤ 1 / (2 * (1 + S))) :\n    lam * S < 1 / 2 := by\n  have hden : 0 < 2 * (1 + S) := by positivity\n  have hmul := (le_div_iff₀ hden).mp hsmall\n  nlinarith only [hmul, hlam]\n\ntheorem minimizer_defect_zero\n    {T : Type*} (e h root : T → ℝ) (r : T → T)\n    (u : T) (lam C D B : ℝ)\n    (hlam : 0 < lam) (hC : 0 ≤ C)\n    (hD : 0 ≤ D) (hB : 0 ≤ B)\n    (hbudget : lam * (D + C * B) < 1)\n    (he : 0 ≤ e u) (her : e (r u) = 0)\n    (hb : 0 < h (r u)) (hbB : h (r u) ≤ B)\n    (hR : 0 < root (r u))\n    (hh : h (r u) - D * e u ≤ h u)\n    (hV : root (r u) / (1 + C * e u) ≤ root u)\n    (hmin : ∀ w : T,\n      (e u + lam * h u) * root u ≤\n        (e w + lam * h w) * root w) :\n    e u = 0 := by\n  by_contra hne\n  have hepos : 0 < e u := lt_of_le_of_ne he (Ne.symm hne)\n  have hstrict := exact_penalty (e u) lam C D B (h (r u)) (h u)\n    (root (r u)) (root u) hepos hlam hC hD hB hb hbB hR hh hV hbudget\n  have hcompare := hmin (r u)\n  rw [her, zero_add] at hcompare\n  exact (not_lt_of_ge hcompare) hstrict\n\nend LCSliceAudit\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/lc-slice-audit/statement_fidelity.md",
+    "text": "# Statement fidelity: the exact-penalty reduction\n\nThe source `Main.lean` formalizes the universal scalar core of claim\n`C_LC_PENALTY_ALG`, not the complete geometric claims\n`C_LC_EXACT_BRIDGE`, `C_COMP_EXACT`, or `C_CART_EXACT`.\n\nThe declarations are `exact_penalty`, `common_budget`, and\n`minimizer_defect_zero`, all in namespace `LCSliceAudit`.\n\n`LCSliceAudit.exact_penalty` quantifies over nine independent real\nnumbers `e, lam, C, D, B, b, h, R, V`. Its hypotheses are positive\ndefect `e`, positive parameter `lam`, nonnegative constants `C,D,B`,\npositive retracted height `b`, the uniform upper bound `b <= B`,\npositive retracted volume root `R`, the error bound `h >= b-D*e`,\nthe volume-root comparison `V >= R/(1+C*e)`, and the one fixed\nbudget `lam*(D+C*B)<1`. The conclusion is the strict comparison\n`lam*b*R < (e+lam*h)*V`. This is exactly the strict inequality\nrequired to exclude an off-constraint global minimizer.\n\nThe ledger's extra hypothesis `e+lam*h>0` is redundant: the formal\ntheorem proves the conclusion without it. It is valid in the\ngeometric application because the perturbed pair is klt.\n\n`LCSliceAudit.common_budget` says that for all real `S>=0` and\n`0<lam<=1/(2*(1+S))`, one has `lam*S<1/2`. Substituting\n`S=D+C*B` makes the threshold independent of individual competitors\nand yields a margin strictly larger than one half.\n\n`LCSliceAudit.minimizer_defect_zero` quantifies over an arbitrary\ntype `T`, arbitrary functions `e,h,root : T -> Real`, an arbitrary\nmap `r : T -> T`, a point `u`, and real uniform constants. It\nassumes a nonnegative defect at `u`, zero defect at `r u`, the\nheight and root-volume comparisons for this pair, and that `u`\nis a global minimizer against every `w : T`. It concludes `e u=0`.\nThus there is no finite enumeration of competitors in the formal\nargument.\n\nIn the geometric interpretation `T` is the set of centred competing\nvaluations, `e` is lc discrepancy, `h` the chosen height, `root`\nthe ordinary valuation-volume root, and `r` monomial retraction.\nThe proof note establishes the comparisons uniformly for every\nrelevant sublevel competitor and proves that an actual global\nminimizer belongs to that sublevel set. The compiler does not\nestablish that valuations, log discrepancies, volume limits,\nresolution charts, or the two manuscript encodings have been\ncorrectly constructed. It does not check the external cited\ntheorems, the proof note, statement fidelity itself, originality,\nor publishable significance. Those are independent review\nobligations, not consequences of the Lean exit status.\n"
+  },
+  "subject": {
+    "content_hash": "8990d052ad20584226b2fd3970ce9843405331f2e10d04eb6a5a401b33c0af61",
+    "kind": "claim",
+    "subject_id": "C_LC_PENALTY_ALG"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

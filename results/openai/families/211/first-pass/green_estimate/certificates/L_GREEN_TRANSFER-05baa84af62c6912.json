@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-L_GREEN_TRANSFER-10094b4a27c0",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/211/first-pass/green_estimate/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/211/first-pass/green_estimate/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 14312,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/211/first-pass/green_estimate/Main.lean",
+    "source_sha256": "f9bb61c3e0fa8892aaf85192d2ae9919833b15dd6498a97f139c330473f59bb3",
+    "statement_fidelity": "families/211/first-pass/green_estimate/statement_fidelity.md",
+    "statement_fidelity_sha256": "56dcb33c5e2aea449a4bde4e8b2addedd0aef808b99e92deb98c8fe1e925e4a4",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/green_estimate/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace FiniteGreen\n\ntheorem weighted_cut_transport\n    {T E X : Type*} [Fintype T] [Fintype E]\n    (prob : T → ℝ) (term : T → E → X → ℝ) (weight : T → E → ℝ)\n    (modulus : ℝ)\n    (hprob : ∀ t, 0 ≤ prob t)\n    (hbound : ∀ t e x, |term t e x| ≤ weight t e * modulus) :\n    ∀ x, |∑ t, prob t * ∑ e, term t e x| ≤\n      (∑ t, prob t * ∑ e, weight t e) * modulus := by\n  intro x\n  calc\n    |∑ t, prob t * ∑ e, term t e x| ≤\n        ∑ t, |prob t * ∑ e, term t e x| :=\n      Finset.abs_sum_le_sum_abs _ _\n    _ = ∑ t, prob t * |∑ e, term t e x| := by\n      apply Finset.sum_congr rfl\n      intro t ht\n      rw [abs_mul, abs_of_nonneg (hprob t)]\n    _ ≤ ∑ t, prob t * ∑ e, weight t e * modulus := by\n      apply Finset.sum_le_sum\n      intro t ht\n      apply mul_le_mul_of_nonneg_left _ (hprob t)\n      exact (Finset.abs_sum_le_sum_abs _ _).trans\n        (Finset.sum_le_sum (fun e he => hbound t e x))\n    _ = (∑ t, prob t * ∑ e, weight t e) * modulus := by\n      simp only [Finset.sum_mul, mul_assoc]\n\ntheorem simultaneous_cut_transport\n    {F T E X : Type*} [Fintype T] [Fintype E]\n    (admissible : F → Prop) (prob : T → ℝ)\n    (term : F → T → E → X → ℝ) (weight : T → E → ℝ)\n    (modulus : F → ℝ)\n    (hprob : ∀ t, 0 ≤ prob t)\n    (hbound : ∀ f, admissible f → ∀ t e x,\n      |term f t e x| ≤ weight t e * modulus f) :\n    ∀ f, admissible f → ∀ x,\n      |∑ t, prob t * ∑ e, term f t e x| ≤\n        (∑ t, prob t * ∑ e, weight t e) * modulus f := by\n  intro f hf\n  exact weighted_cut_transport prob (term f) weight (modulus f)\n    hprob (hbound f hf)\n\ntheorem overlapping_small_sides_do_not_cover\n    {V : Type*} [Fintype V] [DecidableEq V]\n    (mu : V → ℝ) (hpos : ∀ v, 0 < mu v)\n    (hnorm : ∑ v, mu v = 1)\n    (S R : Finset V)\n    (hS : ∑ v ∈ S, mu v ≤ (1 : ℝ) / 2)\n    (hR : ∑ v ∈ R, mu v ≤ (1 : ℝ) / 2)\n    (x : V) (hxS : x ∈ S) (hxR : x ∈ R) :\n    S ∪ R ≠ Finset.univ := by\n  intro hcover\n  have hlower : mu x ≤ ∑ v ∈ S ∩ R, mu v :=\n    Finset.single_le_sum (fun v hv => (hpos v).le)\n      (Finset.mem_inter.mpr ⟨hxS, hxR⟩)\n  have hid :\n      (∑ v ∈ S ∪ R, mu v) + (∑ v ∈ S ∩ R, mu v) =\n        (∑ v ∈ S, mu v) + (∑ v ∈ R, mu v) :=\n    Finset.sum_union_inter\n  rw [hcover, hnorm] at hid\n  linarith [hpos x]\n\nend FiniteGreen\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/green_estimate/statement_fidelity.md",
+    "text": "# Statement fidelity: deterministic parts of the finite Green argument\n\nClaim: `L_GREEN_TRANSFER`. Source: `research/green_estimate/Main.lean`.\nThe Lean statements are universal finite deterministic lemmas, not the\nprobabilistic Green theorem.\n\n`weighted_cut_transport` (namespace `FiniteGreen`) quantifies over arbitrary types `T`, `E`,\nand `X`, with finite `T` and `E`; arbitrary real functions `prob`, `term`,\nand `weight`; and an arbitrary real `modulus`. It assumes `prob t >= 0`\nand the pointwise absolute bound\n`abs(term t e x) <= weight t e * modulus` for every `t,e,x`.\nIt proves the absolute value of the weighted finite sum at every `x` is\nat most the corresponding weighted sum of weights times the common modulus.\nNo normalization, positivity of the weights, or positivity of the modulus is\nneeded once this pointwise bound is assumed.\n\n`simultaneous_cut_transport` (namespace `FiniteGreen`) adds an arbitrary source type `F`,\nan admissibility predicate, source-dependent terms and moduli, and a single\nsource-independent weight array. Its conclusion quantifies over every\nadmissible source and every `x`, using the same weighted coefficient.\nIn the paper argument `T` indexes spanning trees of one fixed map, `E`\ncan index all possible cut edges with zero terms for absent edges, and\n`X` indexes vertices. `prob` is the conditional uniform tree law. The\nforest representation and source interpolation supply its pointwise\nhypothesis; those facts are NOT encoded here.\n\n`overlapping_small_sides_do_not_cover` (namespace `FiniteGreen`) separately quantifies over\na finite vertex type, a strictly positive real mass on every vertex with\ntotal mass one, two finite subsets each of mass at most one half, and\na vertex belonging to both. It proves their union is not all vertices.\nThis certifies the strict inequality needed when choosing smaller tree-cut\nsides, including ties. It does NOT prove that tree-cut sides containing one\nvertex are nested unless their union is the full vertex set; that elementary\ntree fact is proved in prose.\n\nThe source does not encode random planar maps, the encoding bijection,\nthe inverse-Laplacian forest identity, Dyck probabilities, concentration,\nnorm estimates, or a novelty claim. A successful compiler run certifies only\nthe declarations above. No probabilistic theorem should be assigned kernel\nclosure on the strength of this file.\n"
+  },
+  "subject": {
+    "content_hash": "6d2692a81bd6a6adc95bd5686eba53aa511898b2581102cd2698ccd1e2c8cdd1",
+    "kind": "claim",
+    "subject_id": "L_GREEN_TRANSFER"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

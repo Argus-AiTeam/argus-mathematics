@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_ST_ALGEBRA-6dff30125a73",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/273/first-pass/stieltjes_certificate/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/273/first-pass/stieltjes_certificate/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 16012,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/273/first-pass/stieltjes_certificate/Main.lean",
+    "source_sha256": "9a09a548cf01fd2f23863d62ea210758b4d1c5feeeaa8ede7c84f1b33869a071",
+    "statement_fidelity": "families/273/first-pass/stieltjes_certificate/statement_fidelity.md",
+    "statement_fidelity_sha256": "71c4835015688ee3a417b8f738c2539743337c3e476b1a273e791baaf0412fcc",
+    "status": "success",
+    "stderr": "",
+    "stdout": "'StieltjesBoundary.boundary_density' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/stieltjes_certificate/Main.lean",
+    "text": "import Mathlib\n\nnamespace StieltjesBoundary\n\nnoncomputable section\n\ndef jacobian (p q h : ℝ) : ℝ := p ^ 2 + q ^ 2 * h ^ 2 - q * h\n\ndef pDot (p q h : ℝ) : ℝ :=\n  -p * (h + q * (1 - h ^ 2)) / jacobian p q h\n\ndef radius (p q h : ℝ) : ℝ := (1 - h ^ 2) * (p ^ 2 / h ^ 2 + q ^ 2)\n\ndef height (p h : ℝ) : ℝ := p / h\n\ndef densityDenom (p q h : ℝ) : ℝ := (q * h - 1) ^ 2 + (height p h) ^ 2\n\ndef heightDot (p q h : ℝ) : ℝ :=\n  pDot p q h / h - p * (1 - h ^ 2) / h ^ 2\n\ndef radiusDot (p q h : ℝ) : ℝ :=\n  2 * p * pDot p q h * (1 - h ^ 2) / h ^ 2 -\n    2 * p ^ 2 * (1 - h ^ 2) / h ^ 3 +\n    2 * q * (1 - h ^ 2) - 2 * q ^ 2 * h * (1 - h ^ 2)\n\ntheorem jacobian_pos {p q h : ℝ} (hp : 1 < p) :\n    0 < jacobian p q h := by\n  have hp2 : 1 < p ^ 2 := by nlinarith [sq_nonneg (p - 1)]\n  unfold jacobian\n  nlinarith [sq_nonneg (q * h - 1 / 2)]\n\ntheorem radius_pos {p q h : ℝ} (hp : 1 < p) (hh0 : 0 < h) (hh1 : h < 1) :\n    0 < radius p q h := by\n  have hp0 : 0 < p := by linarith\n  have hc : 0 < 1 - h ^ 2 := by\n    have ht : 0 < (1 - h) * (1 + h) := mul_pos (by linarith) (by linarith)\n    nlinarith\n  unfold radius\n  exact mul_pos hc\n    (add_pos_of_pos_of_nonneg (div_pos (sq_pos_of_pos hp0) (sq_pos_of_pos hh0))\n      (sq_nonneg q))\n\ntheorem height_pos {p h : ℝ} (hp : 1 < p) (hh0 : 0 < h) :\n    0 < height p h := by\n  exact div_pos (by linarith) hh0\n\ntheorem densityDenom_pos {p q h : ℝ} (hp : 1 < p) (hh0 : 0 < h) :\n    0 < densityDenom p q h := by\n  exact add_pos_of_nonneg_of_pos (sq_nonneg _) (sq_pos_of_pos (height_pos hp hh0))\n\ntheorem heightDot_eq {p q h : ℝ} (hp : 1 < p) (hh0 : 0 < h) :\n    heightDot p q h = -p * (1 + radius p q h) / jacobian p q h := by\n  have hj : jacobian p q h ≠ 0 := ne_of_gt (jacobian_pos hp)\n  have hh : h ≠ 0 := ne_of_gt hh0\n  dsimp [heightDot, pDot, radius]\n  field_simp [hj, hh]\n  dsimp [jacobian]\n  ring\n\ntheorem radiusDot_eq {p q h : ℝ} (hp : 1 < p) (hh0 : 0 < h) :\n    radiusDot p q h =\n      -2 * h * radius p q h * densityDenom p q h / jacobian p q h := by\n  have hj : jacobian p q h ≠ 0 := ne_of_gt (jacobian_pos hp)\n  have hh : h ≠ 0 := ne_of_gt hh0\n  dsimp [radiusDot, pDot, radius, densityDenom, height]\n  field_simp [hj, hh]\n  dsimp [jacobian]\n  ring\n\ntheorem boundary_density {p q h : ℝ}\n    (hp : 1 < p) (hh0 : 0 < h) (hh1 : h < 1) :\n    0 < jacobian p q h ∧\n    0 < radius p q h ∧\n    0 < height p h ∧\n    0 < densityDenom p q h ∧\n    heightDot p q h < 0 ∧\n    radiusDot p q h < 0 ∧\n    heightDot p q h / radiusDot p q h =\n      (1 + radius p q h) * height p h /\n        (2 * radius p q h * densityDenom p q h) := by\n  have hj := jacobian_pos (q := q) (h := h) hp\n  have hr := radius_pos (q := q) hp hh0 hh1\n  have hd := height_pos hp hh0\n  have hk := densityDenom_pos (q := q) hp hh0\n  have hp0 : 0 < p := by linarith\n  have hD : heightDot p q h < 0 := by\n    rw [heightDot_eq hp hh0]\n    exact div_neg_of_neg_of_pos\n      (mul_neg_of_neg_of_pos (neg_neg_of_pos hp0) (by linarith)) hj\n  have hR : radiusDot p q h < 0 := by\n    rw [radiusDot_eq hp hh0]\n    have ht : 0 < 2 * h * radius p q h * densityDenom p q h := by positivity\n    exact div_neg_of_neg_of_pos (by nlinarith) hj\n  have hratio :\n      heightDot p q h / radiusDot p q h =\n        (1 + radius p q h) * height p h /\n          (2 * radius p q h * densityDenom p q h) := by\n    rw [heightDot_eq hp hh0, radiusDot_eq hp hh0]\n    dsimp [height]\n    field_simp [ne_of_gt hj, ne_of_gt hr, ne_of_gt hk, ne_of_gt hh0]\n  exact ⟨hj, hr, hd, hk, hD, hR, hratio⟩\n\n#print axioms boundary_density\n\nend\n\nend StieltjesBoundary\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/stieltjes_certificate/statement_fidelity.md",
+    "text": "# Reading of the formal boundary-derivative certificate\n\nThe source `Main.lean` describes real scalar algebra, not the whole\nanalytic Stieltjes representation. Its principal declaration is\n`StieltjesBoundary.boundary_density`.\n\nIts variables `p`, `q`, and `h` range over all real numbers. Its only\nhypotheses are `1 < p`, `0 < h`, and `h < 1`. There is deliberately no\nhypothesis on `q`: the algebraic sign theorem holds even without `q>0`.\nThe manuscript application has the stronger conditions `q>0`,\n`pi/2<p<pi`, and `h=tanh(q)`. Consequently its actual boundary parameters\nsatisfy every formal hypothesis.\n\nThe definitions denote the following exact rational expressions:\n\n- `jacobian p q h` is `J=p^2+q^2*h^2-q*h`.\n- `pDot p q h` is `P=-p*(h+q*(1-h^2))/J`.\n- `radius p q h` is `r=(1-h^2)*(p^2/h^2+q^2)`.\n- `height p h` is `d=p/h`.\n- `densityDenom p q h` is `K=(q*h-1)^2+d^2`.\n- `heightDot p q h` is `P/h-p*(1-h^2)/h^2`.\n- `radiusDot p q h` is the formal chain-rule expression\n  `2*p*P*(1-h^2)/h^2-2*p^2*(1-h^2)/h^3\n   +2*q*(1-h^2)-2*q^2*h*(1-h^2)`.\n\n`jacobian_pos`, `radius_pos`, `height_pos`, and `densityDenom_pos`\nprove strict positivity of those four denominators/weights under their\ndisplayed relevant hypotheses. `heightDot_eq` and `radiusDot_eq` prove\nthe identities `heightDot=-p*(1+r)/J` and `radiusDot=-2*h*r*K/J`.\n\n`boundary_density` proves all four strict positivities, strict negativity\nof both derivative expressions, and the exact density ratio\n\n```\nheightDot / radiusDot = (1+r)*d/(2*r*K).\n```\n\nMultiplication by the positive factor `1/pi` gives the density in the\nanalytic theorem. The factor `pi` itself is not a formal variable or a\nconclusion of this source.\n\nThe definitions with the suffix `Dot` are algebraic expressions, not Lean\nderivative predicates. Their equality to the actual derivatives of the\nimplicit function is proved in section 2 of `proof.md` by differentiation\nof `p*tan(p)=-q*tanh(q)` and `h'=1-h^2`. The compiler does not verify that\ntranslation. The formal theorem does verify that these expressions give\nstrictly decreasing radius and height, and the positive claimed density,\non every allowed scalar specialization.\n\nThe compiler also does not verify existence or uniqueness of `p(q)`,\nthe inverse-sinc branch, the complex contour proof, endpoint limits,\nconvergence of integrals, reconstruction of the entire measure, the\nabsence of singular contributions, originality, or EPnI. Those are not\nsilently inherited from this algebraic certificate. No additional axioms\nare declared, and the final `#print axioms` exposes the kernel dependencies.\n"
+  },
+  "subject": {
+    "content_hash": "3fa868a6f1810e6f3a89938a463d7c10fed5704f66b16366c1ffb3b6f3a599c1",
+    "kind": "claim",
+    "subject_id": "C_ST_ALGEBRA"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

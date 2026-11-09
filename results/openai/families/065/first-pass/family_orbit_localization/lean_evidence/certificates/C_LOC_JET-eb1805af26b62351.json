@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_LOC_JET-0b1c5f043cb9",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/065/first-pass/family_orbit_localization/lean_evidence/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/065/first-pass/family_orbit_localization/lean_evidence/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15798,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/065/first-pass/family_orbit_localization/lean_evidence/Main.lean",
+    "source_sha256": "b4cb6a378265f41042862a298836d0e5639b7a8e8bc5d192b0d4b6f57a3bdd1f",
+    "statement_fidelity": "families/065/first-pass/family_orbit_localization/lean_evidence/statement_fidelity.md",
+    "statement_fidelity_sha256": "1c5dd38b2fce621ff14a5f8b0ac5f9a834eec1c57076b78e6b3224fba622819a",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/065/first-pass/family_orbit_localization/lean_evidence/Main.lean:23:58: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/family_orbit_localization/lean_evidence/Main.lean",
+    "text": "import Mathlib\n\nopen scoped BigOperators\n\nnamespace FamilyOrbitLocalization\n\ntheorem finite_geometric_remainder {A : Type*} [CommRing A] (x : A) (N : ℕ) :\n    (1 - x) * (∑ j ∈ Finset.range N, x ^ j) = 1 - x ^ N := by\n  induction N with\n  | zero => simp\n  | succ N ih =>\n      rw [Finset.sum_range_succ, mul_add, ih, pow_succ]\n      ring\n\ndef nilpotentResolvent {A : Type*} [CommRing A] (u ν : A) (N : ℕ) : A :=\n  u * ∑ j ∈ Finset.range N, (-ν * u) ^ j\n\ntheorem nilpotent_resolvent_inverse {A : Type*} [CommRing A]\n    (t u ν : A) (N : ℕ) (hu : t * u = 1) (hν : ν ^ N = 0) :\n    (t + ν) * nilpotentResolvent u ν N = 1 := by\n  have hx : (-ν * u) ^ N = 0 := by\n    calc\n      (-ν * u) ^ N = ((-1 : A) * ν * u) ^ N := by congr 1 <;> ring\n      _ = 0 := by simp only [mul_pow, hν, mul_zero, zero_mul]\n  have ht : (t + ν) * u = 1 - (-ν * u) := by\n    rw [add_mul, hu]\n    ring\n  rw [nilpotentResolvent, ← mul_assoc, ht, finite_geometric_remainder, hx]\n  simp\n\ntheorem nilpotent_resolvent_unique {A : Type*} [CommRing A]\n    (t u ν v : A) (N : ℕ) (hu : t * u = 1) (hν : ν ^ N = 0)\n    (hv : (t + ν) * v = 1) :\n    v = nilpotentResolvent u ν N := by\n  have hr := nilpotent_resolvent_inverse t u ν N hu hν\n  calc\n    v = v * 1 := (mul_one v).symm\n    _ = v * ((t + ν) * nilpotentResolvent u ν N) := by rw [hr]\n    _ = ((t + ν) * v) * nilpotentResolvent u ν N := by ring\n    _ = nilpotentResolvent u ν N := by rw [hv, one_mul]\n\nsection LinearMoments\n\nvariable {K V W U J : Type*} [CommRing K]\nvariable [AddCommGroup V] [Module K V]\nvariable [AddCommGroup W] [Module K W]\nvariable [AddCommGroup U] [Module K U] [Fintype J]\n\ntheorem joint_moment_naturality\n    (P : V →ₗ[K] W) (L : W →ₗ[K] U) (c : J → K) (h : J → V) :\n    L (∑ j, c j • P (h j)) = ∑ j, c j • (L.comp P) (h j) := by\n  simp only [map_sum, map_smul, LinearMap.comp_apply]\n\ntheorem joint_dressing_naturality\n    (L : W →ₗ[K] U) (D : J → V →ₗ[K] W) (h : J → V) :\n    L (∑ j, D j (h j)) = ∑ j, (L.comp (D j)) (h j) := by\n  simp only [map_sum, LinearMap.comp_apply]\n\nend LinearMoments\n\nsection MultilinearContractions\n\nvariable {K I : Type*} [CommRing K] [Fintype I] [DecidableEq I]\nvariable {V : I → Type*} [∀ i, AddCommGroup (V i)] [∀ i, Module K (V i)]\nvariable {W : Type*} [AddCommGroup W] [Module K W]\nvariable {J : I → Type*} [∀ i, Fintype (J i)]\n\ntheorem all_flag_contraction\n    (F : MultilinearMap K V W) (c : ∀ i, J i → K)\n    (h : ∀ i, J i → V i) :\n    F (fun i => ∑ j, c i j • h i j) =\n      ∑ choice : ∀ i, J i,\n        (∏ i, c i (choice i)) • F (fun i => h i (choice i)) := by\n  rw [F.map_sum]\n  apply Finset.sum_congr rfl\n  intro choice _\n  exact F.map_smul_univ (fun i => c i (choice i)) (fun i => h i (choice i))\n\nend MultilinearContractions\n\nend FamilyOrbitLocalization\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/family_orbit_localization/lean_evidence/statement_fidelity.md",
+    "text": "# Statement fidelity: finite joint moments\n\nClaim: `C_LOC_JET`. Namespace: `FamilyOrbitLocalization`.\n\n`finite_geometric_remainder` quantifies over every commutative ring `A`,\nevery element `x`, and every natural number `N`, including zero. It proves\nthe exact finite geometric-series remainder, without a convergence claim.\n\n`nilpotent_resolvent_inverse` and `nilpotent_resolvent_unique` quantify over\nevery commutative ring, all elements `t,u,nu`, and every natural number `N`.\nTheir hypotheses are `t*u=1` and `nu^N=0`. The inverse is the explicitly\ndefined finite series `u * sum_{0 <= j < N} (-nu*u)^j`. The uniqueness\ntheorem additionally assumes `(t+nu)*v=1` and identifies `v` with that\nseries. For a localization flag, `t=a0-s`, `u=1/(a0-s)`, and `nu` is the\nordinary even tangent class. The theorem does not assert that a particular\ngeometric class is nilpotent; that is supplied by the finite dimension of\nthe proper leg stack in the mathematical report.\n\n`joint_moment_naturality` quantifies over a commutative scalar ring `K`,\nthree arbitrary `K`-modules, a finite joint-index type `J`, two linear\nmaps `P,L`, scalars `c_j`, and vectors `h_j`. It proves\n`L(sum_j c_j P(h_j)) = sum_j c_j (L compose P)(h_j)`.\nThe index `J` may be a whole tuple of flag orders. No factorization or\nindependence of these joint data is assumed.\n\n`joint_dressing_naturality` allows a different linear dressing `D_j` at\neach joint index and proves commutation with any subsequent linear map.\nIts `h_j` may already be the pushforward of an entire connected\ncorrespondence into a tensor-product state space. It does not replace\njoint moments by products of marginal moments.\n\n`all_flag_contraction` quantifies over every finite flag type `I`, a finite\nindex type `J_i` at every flag, arbitrary modules `V_i,W`, and an arbitrary\nmultilinear map `F`. It expands contraction of weighted sums into the sum\nover all choices of indices, with the product of their scalar weights.\nThere is no bound on the number of flags or truncation orders. Thus it\napplies to any finite graph after its contractions are written as linear\nor multilinear maps.\n\nThe commutative-ring assertions model the *even* tangent classes. They do\nnot formalize super permutation signs; those are carried by the fixed\ncategorical contraction maps in the report. Nor does this source define\nGromov--Witten moduli, perfect obstruction theories, virtual pullbacks,\nancestor classes, `S`, `R`, or quantization. It is an all-orders\ncertification of the finite-moment algebra used in that geometric proof,\nnot a kernel proof of Proposition `loc:factorization`.\n"
+  },
+  "subject": {
+    "content_hash": "5f2031c7e3cbecbcb58a483d3d0920d92de2da6128f971963293805357d0765d",
+    "kind": "claim",
+    "subject_id": "C_LOC_JET"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

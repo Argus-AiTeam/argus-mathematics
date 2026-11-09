@@ -1,0 +1,67 @@
+[
+  {
+    "command": [
+      "$WORKSPACE/argus-latest/.venv/bin/python",
+      "-B",
+      "-m",
+      "argus_skill.verticals.math.lean_evidence",
+      "verify",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: lean_evidence.py verify [-h] --statement-fidelity STATEMENT_FIDELITY\n                               [--artifact-dir ARTIFACT_DIR] [--claim CLAIM]\n                               [--project-root PROJECT_ROOT]\n                               [--timeout TIMEOUT] [--lean-bin LEAN_BIN]\n                               [--lake-bin LAKE_BIN] [--lake | --no-lake]\n                               source\n\npositional arguments:\n  source\n\noptions:\n  -h, --help            show this help message and exit\n  --statement-fidelity STATEMENT_FIDELITY\n  --artifact-dir ARTIFACT_DIR\n  --claim CLAIM         record the outcome as mechanical evidence about this\n                        claim in research/MATH_STATE.json. This is the only\n                        way mechanical evidence is ever written: the tier is\n                        chosen by the code that read the compiler's answer,\n                        never passed in\n  --project-root PROJECT_ROOT\n                        the project whose state --claim writes to, and the\n                        root artifact paths are recorded against\n  --timeout TIMEOUT     explicit compile timeout; omitted waits for Lean to\n                        finish\n  --lean-bin LEAN_BIN\n  --lake-bin LAKE_BIN\n  --lake, --no-lake     compile through `lake env lean`. Omit to decide from\n                        the host: lake when a Lake workspace applies to the\n                        source, bare lean otherwise. Pass --no-lake to force\n                        bare lean even where a workspace exists\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "$WORKSPACE/argus-latest/.venv/bin/python",
+      "-B",
+      "-m",
+      "argus_skill.verticals.math.math_state",
+      "revise-claim",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: math_state.py revise-claim [-h] [--project-root PROJECT_ROOT] --id ID\n                                  [--statement STATEMENT]\n                                  [--formal-file FORMAL_FILE]\n                                  [--formal FORMAL] [--use-current-context]\n                                  [--retire ID=WHY]\n\noptions:\n  -h, --help            show this help message and exit\n  --project-root PROJECT_ROOT\n  --id ID\n  --statement STATEMENT\n  --formal-file FORMAL_FILE\n  --formal FORMAL\n  --use-current-context\n                        restate this claim against the newest version of its\n                        context\n  --retire ID=WHY       stop standing on an assumption, with the reason the\n                        proof does not need it\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "$WORKSPACE/argus-latest/.venv/bin/python",
+      "-B",
+      "-m",
+      "argus_skill.verticals.math.math_state",
+      "judge",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: math_state.py judge [-h] [--project-root PROJECT_ROOT] --claim CLAIM\n                           [--assumption ASSUMPTION]\n                           --verdict {supports,refutes,inconclusive} --by BY\n                           [--artifact ARTIFACT]\n\noptions:\n  -h, --help            show this help message and exit\n  --project-root PROJECT_ROOT\n  --claim CLAIM\n  --assumption ASSUMPTION\n                        judge this assumption of the claim instead\n  --verdict {supports,refutes,inconclusive}\n  --by BY               who answered; the independence key\n  --artifact ARTIFACT   what the opinion was reached from: the certificate\n                        that was read, or a file holding the reasoning. Citing\n                        the certificate is what makes the verdict stop\n                        counting if the reading it approved is later replaced\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "$WORKSPACE/argus-latest/.venv/bin/python",
+      "-B",
+      "-m",
+      "argus_skill.tools.subagent",
+      "submit",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: subagent submit [-h] --task-id TASK_ID [--description DESCRIPTION]\n                       --command COMMAND [--mode {direct,supervised}]\n                       [--timeout TIMEOUT]\n                       [--monitor-interval MONITOR_INTERVAL] [--model MODEL]\n                       [--run-dir RUN_DIR] [--cwd CWD]\n                       [--override-discussion REASON] [--clear-stop]\n                       [--no-preflight] [--cpu-count CPU_COUNT |\n                       --cpu-ids CPU_IDS]\n\noptions:\n  -h, --help            show this help message and exit\n  --task-id TASK_ID     Unique task identifier\n  --description DESCRIPTION\n  --command COMMAND     Shell command to run\n  --mode {direct,supervised}\n                        direct: just run (no LLM). supervised: run + periodic\n                        LLM monitoring\n  --timeout TIMEOUT     Max seconds (default: 2h)\n  --monitor-interval MONITOR_INTERVAL\n                        Base seconds between supervisor checks; backs off\n                        while healthy, tightens when degrading (supervised\n                        mode)\n  --model MODEL         Supervisor model (defaults to configured\n                        supervisor/shared model)\n  --run-dir RUN_DIR     Run directory whose progress.jsonl/status.json the\n                        supervisor reads and where it writes STOP on early-\n                        stop\n  --cwd CWD\n  --override-discussion REASON\n                        Break-glass: launch even though a supervisor is parked\n                        on an open discussion. Records REASON to the\n                        experiment ledger.\n  --clear-stop          Remove a leftover run_dir/STOP before launching\n                        (otherwise submit refuses a poisoned run dir).\n  --no-preflight        Skip the supervised-mode pre-launch RL config\n                        preflight (escape hatch for a known-good config).\n  --cpu-count CPU_COUNT\n                        Lease this many distinct CPUs before creating task/run\n                        artifacts; the launched process inherits the selected\n                        affinity.\n  --cpu-ids CPU_IDS     Lease exact comma-separated CPU ids before launch;\n                        conflicts with other participating live subagents are\n                        rejected.\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "$WORKSPACE/argus-latest/.venv/bin/python",
+      "-B",
+      "-m",
+      "argus_skill.tools.subagent",
+      "wait",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "usage: subagent wait [-h] --task-id TASK_ID [--timeout TIMEOUT]\n\noptions:\n  -h, --help         show this help message and exit\n  --task-id TASK_ID\n  --timeout TIMEOUT\n",
+    "stderr": ""
+  }
+]

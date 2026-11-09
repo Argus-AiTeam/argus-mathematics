@@ -1,0 +1,128 @@
+{
+  "goal": "C9000008",
+  "routes": [
+    {
+      "name": "R_UPSTREAM_UB",
+      "status": "current",
+      "evidence": "research/upper_bound_certificate/report.md"
+    },
+    {
+      "name": "R_KERNEL_UB",
+      "status": "current",
+      "evidence": "research/upper_bound_certificate/exact_certificate.json"
+    }
+  ],
+  "nodes": {
+    "C9000008": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 008 (The Deligne–Drinfeld conjecture.; papers: The Deligne-Drinfeld conjecture; Lean status: Partially/Comparator formalized (lean/docs/008.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_UB_ALL"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_UB_ALL": {
+      "statement": "For every n >= 0, dim_Q W_n <= dim_Q FreeLie_Q(e_3,e_5,...)_n with generator weights 3,5,7,..., for the full staged rational equation space.",
+      "status": "open",
+      "depends_on": ["L_LOW_WEIGHTS", "C_UB_GT2", "L_UPSTREAM_FIDELITY"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/upper_bound_certificate/report.md",
+        "research/upper_bound_certificate/exact_certificate.json"
+      ]
+    },
+    "L_LOW_WEIGHTS": {
+      "statement": "W_n=0 for n=0,1,2, with no free-Lie constants in weight zero.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/upper_bound_certificate/verify.py",
+        "research/upper_bound_certificate/report.md",
+        "research/upper_bound_certificate/exact_certificate.json"
+      ]
+    },
+    "L_LIE_LATTICE": {
+      "statement": "Integral ordinary free-Lie lattices and braid targets are torsion free; ordinary free-Lie dimensions agree after rationalization and reduction.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/upper_bound_certificate/report.md"]
+    },
+    "L_SPECIAL": {
+      "statement": "The staged special identity and its linearization hold over Q for every W_n with n>2 before reduction.",
+      "status": "open",
+      "depends_on": ["L_LIE_LATTICE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/upper_bound_certificate/report.md"]
+    },
+    "L_SATURATED_TRANSFER": {
+      "statement": "The saturated integral solution lattice reduces injectively, preserving rational dimension and the defining and special equations; arbitrary modular lifting is unnecessary.",
+      "status": "open",
+      "depends_on": ["L_LIE_LATTICE", "L_SPECIAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/upper_bound_certificate/report.md"]
+    },
+    "L_ABC": {
+      "statement": "A=x^2,C=[x,y],B=y give an injective associative presentation containing all ordinary x,y Lie elements of weight greater than one.",
+      "status": "open",
+      "depends_on": ["L_LIE_LATTICE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/upper_bound_certificate/report.md"]
+    },
+    "L_LEADING_PENTAGON": {
+      "statement": "Opposite count-monotone ordering transfers the leading rational-reduction pentagon to the arrangement target at symbolic length m+r, n=2m+r, without target independence.",
+      "status": "open",
+      "depends_on": ["L_ABC", "L_SATURATED_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/upper_bound_certificate/report.md"]
+    },
+    "L_PROJECTION": {
+      "statement": "Integral deletion tests and the reduced special identity make chi -> chi(0,C,B) injective on each associated graded piece for n>2.",
+      "status": "open",
+      "depends_on": ["L_LEADING_PENTAGON", "L_SPECIAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/upper_bound_certificate/report.md"]
+    },
+    "L_IMAGE": {
+      "statement": "Even-index restrictions, polynomial shifts, Vandermonde divisibility and an ordinary Lie retraction place the projected image in FreeLie_F2(ad_C^k B:k>=1), with weight 2k+1 and length one.",
+      "status": "open",
+      "depends_on": ["L_ABC", "L_SATURATED_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/upper_bound_certificate/report.md"]
+    },
+    "L_FILTERED_BOUND": {
+      "statement": "For every n>2, the finite B-count filtration and the injective ordinary-Lie leading image imply the rational dimension upper bound.",
+      "status": "open",
+      "depends_on": ["L_PROJECTION", "L_IMAGE", "L_LIE_LATTICE", "C_UB_GT2"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/upper_bound_certificate/report.md"]
+    },
+    "L_UPSTREAM_FIDELITY": {
+      "statement": "The exact upstream rational theorem has the staged solution-space and grading definitions, no extra solution hypotheses, and a freshly checked axiom closure without proof holes.",
+      "status": "open",
+      "depends_on": ["C_UB_GT2"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/upper_bound_certificate/statement_fidelity.md",
+        "research/upper_bound_certificate/argus_result.json",
+        "research/upper_bound_certificate/upstream_source_pin.json"
+      ]
+    },
+    "C_UB_GT2": {
+      "statement": "For every natural number n with 2<n, dim_Q W_n <= dim_Q FreeLie_Q(e_3,e_5,...)_n, with exactly the staged rational solution-space and weight definitions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/upper_bound_certificate/Main.lean",
+        "research/upper_bound_certificate/statement_fidelity.md",
+        "research/upper_bound_certificate/certificates/C_UB_GT2-2c372ff5ea7abe86.json"
+      ]
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "claim_id": "C_UNIFORM_RATE",
+  "result_class": "quantitative_verification_theorem",
+  "quantifiers": {
+    "k": "every integer k >= 2",
+    "point": "every v+it in D",
+    "moving_tips": "no separation hypothesis on t, r_0, R, or R-r_0"
+  },
+  "majorant": {
+    "cutoff": "r_k = 1 - log(k)/k",
+    "compact_coefficient": "pi^2/2",
+    "tip_coefficient": "3*sqrt(2)*pi^2/8",
+    "endpoint_bound": "1 + pi/e",
+    "lower_T_prime": "(8/pi^2)*atanh(r_k)",
+    "formula": "(pi^2/2)*k*r_k^(2*k-2) + (3*sqrt(2)*pi^2/8)*(1+pi/e)/sqrt((8/pi^2)*atanh(r_k))",
+    "coarse_vanishing_bound": "pi^2*e/(2*k) + 3*pi^3*(1+pi/e)/(8*sqrt(log(k)))",
+    "global_derivative_bound": "Re(F_prime(w)) >= 2/pi",
+    "diameter_bound": 2
+  },
+  "sharpness": {
+    "claim_id": "C_SLICE_SHARPNESS",
+    "height": 0,
+    "radius": "1 - 1/k^2",
+    "conclusion": "No coefficient smaller than pi/4 permits an all-point error tending to zero."
+  },
+  "analytic_proof": {
+    "file": "REPORT.md",
+    "obligations": [
+      "C_GLOBAL_DERIVATIVE",
+      "C_SLICE_GEOMETRY",
+      "C_TIP_LOSS",
+      "C_ENDPOINT_INTEGRAL",
+      "C_RATE_CONVERGENCE",
+      "C_UNIFORM_RATE",
+      "C_UNIFORM_SLICE",
+      "C_SLICE_SHARPNESS"
+    ],
+    "verification": "Analytic proof; independent Reviewer replay required. Not a fully formalized integral theorem."
+  },
+  "formal_core": {
+    "claim_id": "C_SCALAR_CORE",
+    "source": "Main.lean",
+    "statement_fidelity": "statement_fidelity.md",
+    "compiler_result": "lean_verification.json",
+    "ledger_archive": "certificates/C_SCALAR_CORE-f8307363eb1810c1.json",
+    "required_version": "4.31.0",
+    "declarations": [
+      "resolvent_slack",
+      "disk_resolvent",
+      "exponential_peak",
+      "endpoint_peak",
+      "left_half_kernel",
+      "tip_constant_square"
+    ],
+    "does_not_formalize": [
+      "holomorphic series and univalence",
+      "arctangent inequality",
+      "slice and improper integration",
+      "error-sequence convergence",
+      "any full Mahler or symplectic-width theorem"
+    ]
+  },
+  "jacobian": {
+    "operation_id": "polynomial.box.enclosure.compute",
+    "server_version": "0.14.0",
+    "protocol_version": "2025-11-25",
+    "payload": "jacobian_payload.json",
+    "typed_output": "jacobian_output.json",
+    "adapter_status": "jacobian_adapter_status.json",
+    "substitution": "d=q^2-x^2-y^2, u=q-x, v=1-q",
+    "polynomial": "d+u*v",
+    "box": [[0, 1], [0, 2], [0, 1]],
+    "exact_enclosure": [0, 3]
+  },
+  "finite_experiments": {
+    "classification": "Finite exact rational stress tests, not proofs of universal bounds.",
+    "disk_grid_denominator": 16,
+    "endpoint_k": [2, 3, 4, 8, 16, 32, 64],
+    "endpoint_radius_families": ["0", "1/2", "1-1/k", "1-1/k^2", "1-1/k^4", "1-1/k^8"],
+    "endpoint_moments": "Cat_j/(2*4^j), with c_0=1/2 and c_j/c_(j-1)=(2*j-1)/(2*j+2)",
+    "exact_endpoint_benchmarks": [
+      {"k": 2, "a": [0, 1], "I_over_pi": [5, 64]},
+      {"k": 2, "a": [1, 2], "I_over_pi": [141, 1024]}
+    ]
+  },
+  "independent_review": "pending_host_invoked_reviewer",
+  "significance_status": "not_assessed",
+  "novelty_status": "not_assessed",
+  "campaign_complete": false
+}

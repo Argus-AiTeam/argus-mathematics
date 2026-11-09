@@ -1,0 +1,187 @@
+{
+  "goal": "C9000202",
+  "routes": [
+    {
+      "name": "R_GENUS_EXACT",
+      "status": "current",
+      "evidence": "research/genus-bound-audit/report.md"
+    },
+    {
+      "name": "R_SMOOTH_FROBENIUS",
+      "status": "ruled_out",
+      "evidence": "research/genus-bound-audit/report.md",
+      "reason": "Smooth-source genus invariance requires smoothness and H^0 equal to the ground field; the allowed inseparable constant covers satisfy neither."
+    }
+  ],
+  "nodes": {
+    "C9000202": {
+      "statement": "Independently certify a substantive exact verification or refutation of a load-bearing assertion in manuscript family 202.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_GENUS", "C_RANK_PROFILE", "C_OPTIMAL_PROFILE", "C_THRESHOLD_STRICTNESS"],
+      "reviewer_confirmed": false,
+      "evidence": ["OBJECTIVE.md"]
+    },
+    "C_GENUS": {
+      "statement": "Under the exact hypotheses of thm:inseparable-genus, nu_F(Z)/d >= sum_i(1-1/r_i), retaining all inseparable constant and residue degrees.",
+      "status": "open",
+      "depends_on": ["C_TWIST_INDEX", "C_LABEL_RANK", "C_ABSOLUTE_GENUS", "C_HEIGHT_ONE", "C_FULL_DIVISOR", "C_TOWER", "C_DESCENT_ROUNDING"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/report.md", "research/genus-bound-audit/verify.py", "research/genus-bound-audit/exact_certificate.json"]
+    },
+    "C_TWIST_INDEX": {
+      "statement": "The translated cyclic twist has index p^s, and after [F:F0]_p <= p^h every divisor degree on E_F or a regular finite cover is divisible by p^(s-h).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/twist.tex"]
+    },
+    "C_LABEL_RANK": {
+      "statement": "For every subset I, the covectors (1,-t_i^*eta) over FF' have rank at least |I|-h.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/twist.tex"]
+    },
+    "C_ABSOLUTE_GENUS": {
+      "statement": "For a regular integral projective curve C over S finitely generated over perfect kappa, Omega_(C/kappa) is locally free of rank trdeg(S/kappa)+1 and deg_S det Omega_(C/kappa) = -2 chi_S(C).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/report.md"]
+    },
+    "C_HEIGHT_ONE": {
+      "statement": "An exponent-one finite map of such curves, of degree q=p^a, has locally free absolute tangent kernel F and cokernel Q of rank a, det Q=(det F)^p, and nu(C)=q nu(C')+(p-1)deg F.",
+      "status": "open",
+      "depends_on": ["C_ABSOLUTE_GENUS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/report.md"]
+    },
+    "C_FULL_DIVISOR": {
+      "statement": "At each label with nontrivial purely inseparable ramification, the constant conormal covector annihilates the tangent-map image modulo the full pullback divisor; exterior powers give the image-degree bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/report.md"]
+    },
+    "C_TOWER": {
+      "statement": "The Frobenius tower M_j=M_e M_z^(p^j) gives the 1/p genus recurrence and the weighted contribution at least sum_i(1-1/r_i), with error at most h+log_p d.",
+      "status": "open",
+      "depends_on": ["C_HEIGHT_ONE", "C_LABEL_RANK", "C_FULL_DIVISOR"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/report.md"]
+    },
+    "C_DESCENT_ROUNDING": {
+      "statement": "Both nu_F(Z) and d sum_i(1-1/r_i) are degrees of divisors over F; their difference is a multiple of p^(s-h) strictly larger than its negative.",
+      "status": "open",
+      "depends_on": ["C_ABSOLUTE_GENUS", "C_TWIST_INDEX"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/report.md"]
+    },
+    "C_RANK_PROFILE": {
+      "statement": "For a purely inseparable cover of a genus-one curve split as a constant elliptic curve over a finite separable extension of a finitely generated field over perfect characteristic-p constants, nu_F(Z)/d is at least the weighted sum of max(0,c_j-m_j), with c_j the rank of the ramified-label absolute conormal covectors. For an integer h>=0 bounding every subset's rank loss, the full marked-ramification bound follows under the exact degree-lattice threshold N>d sum_j (1-1/p)p^(-j)(h+m_j).",
+      "status": "open",
+      "depends_on": ["C_ABSOLUTE_GENUS", "C_HEIGHT_ONE", "C_FULL_DIVISOR", "C_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/report.md"]
+    },
+    "C_OPTIMAL_PROFILE": {
+      "statement": "For prime p, integer h>=0 and positive height-one stage ranks summing to a>=1, the weighted error is at most U_p(a,h)=max_(1<=b<=a) ((h+1)(1-p^(-b))+(1-1/p)(a-b)). The maximum is attained at b=min(a,min{b>=1:p^b>=h+1}); with U_p(0,h)=0, N>p^A U_p(A,h), A=floor(log_p m), suffices uniformly for d<=m.",
+      "status": "open",
+      "depends_on": ["C_RANK_PROFILE", "C_FORMAL_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/report.md"]
+    },
+    "C_FORMAL_CORE": {
+      "statement": "The finite-matrix Frobenius determinant identity has exponent +p; the rational height-one recurrence numerator, finite geometric sum, universal positive-list discounted-error bound, and strict integer degree-lattice deduction hold exactly as encoded in GenusAudit's Lean declarations. This claim does not formalize the geometric theorem.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/lean/Main.lean", "research/genus-bound-audit/lean/statement_fidelity.md", "research/genus-bound-audit/lean/certificates/C_FORMAL_CORE-c2bc29b612ec14dd.json"]
+    },
+    "C_THRESHOLD_STRICTNESS": {
+      "statement": "The strict threshold N>dE in the generalized rank-profile theorem cannot uniformly be weakened to N>=dE: in characteristic two, the index-two translated torsor with constant orbit divisor O+P and its descended Frobenius endomorphism has h=1, d=2, N=dE=2, both local indices two, and nu=0. This is outside the manuscript's generic-label and strict-threshold hypotheses.",
+      "status": "open",
+      "depends_on": ["C_TWIST_INDEX"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/genus-bound-audit/report.md", "research/genus-bound-audit/verify.py"]
+    },
+    "C_WEIGHT": {
+      "statement": "For every finite group G, prime p and p-block B, l(B)=|W_p(B)| (intro.tex, thm:main).",
+      "status": "open",
+      "depends_on": ["C_GROUP_REDUCTION", "C_TUPLE_DIVISIBILITY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/intro.tex"]
+    },
+    "C_GROUP_REDUCTION": {
+      "statement": "Uniform tuple divisibility for all J with O_p(J)=1 implies the blockwise chain identity and hence the blockwise Alperin weight equality (group.tex, prop:group-reduction).",
+      "status": "open",
+      "depends_on": ["C_GROUP_TRACE_CHAIN"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/group.tex"]
+    },
+    "C_GROUP_TRACE_CHAIN": {
+      "statement": "The tuple trace, p-core cancellation, alternating subsections, trace limit, chain transform and normalizer projection yield the group reduction.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/group.tex"]
+    },
+    "C_TUPLE_DIVISIBILITY": {
+      "statement": "For O_p(J)=1 and every h, p^h divides the generating-tuple count for n=p^s sufficiently large, uniformly in the multiset of p-singular classes.",
+      "status": "open",
+      "depends_on": ["C_NO_SMALL_COVER", "C_SMALL_ORBIT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/specialization.tex"]
+    },
+    "C_NO_SMALL_COVER": {
+      "statement": "Under the genus threshold and O_p(J)=1, no extension of p-part degree below p^h supports the required J-cover (prop:no-small-cover).",
+      "status": "open",
+      "depends_on": ["C_SPECIALIZATION_MODEL", "C_CONNECTEDNESS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/specialization.tex"]
+    },
+    "C_SPECIALIZATION_MODEL": {
+      "statement": "Sharp Euler-characteristic and residue-degree comparisons produce the claimed flat projective model (prop:specialization-model).",
+      "status": "open",
+      "depends_on": ["C_GENUS", "C_SEPARABLE_DIFFERENT", "C_VALUATION_COMPARISONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/specialization.tex"]
+    },
+    "C_SEPARABLE_DIFFERENT": {
+      "statement": "The absolute determinant gives the separable different bound including e-1+1_(p divides e), with inseparable residue degrees retained.",
+      "status": "open",
+      "depends_on": ["C_ABSOLUTE_GENUS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/differentials.tex"]
+    },
+    "C_VALUATION_COMPARISONS": {
+      "statement": "The valued-field construction and section comparisons give the residue-degree and sharp-specialization interfaces needed by the model.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/valuations.tex", "research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/specialization.tex"]
+    },
+    "C_CONNECTEDNESS": {
+      "statement": "A flat projective finite-presentation model with geometrically integral generic fiber has geometrically connected special fiber (lem:valuation-model-connectedness).",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/specialization.tex"]
+    },
+    "C_SMALL_ORBIT": {
+      "statement": "A Sylow-p orbit of size below p^h gives the corresponding cover over a field extension of p-part degree below p^h.",
+      "status": "open",
+      "depends_on": ["C_MARKED_CLASSIFICATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/valuations.tex"]
+    },
+    "C_MARKED_CLASSIFICATION": {
+      "statement": "Marked J-covers correspond to simultaneous-conjugacy classes of generating tuples [x,y]u_1...u_n=1 with the specified inertia classes.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-Blockwise-Alperin-Weight-Conjecture-September-23-2026/build/sections/valuations.tex"]
+    }
+  }
+}

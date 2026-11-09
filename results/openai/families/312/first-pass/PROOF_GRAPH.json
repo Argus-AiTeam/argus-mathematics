@@ -1,0 +1,166 @@
+{
+  "goal": "C9000312",
+  "routes": [
+    {
+      "name": "partial_path_fixed_cutoff",
+      "status": "current",
+      "evidence": "research/partial_path/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000312": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 312 (The Grothendieck homotopy hypothesis.; papers: The Grothendieck homotopy hypothesis via elementary expansions; Lean status: Partially/Comparator formalized (lean/docs/312.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PP_ALL"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PP_FOUNDATIONS": {
+      "statement": "For contractible globular theories, weak equivalence has the exact-boundary test; it has two-out-of-three, retract and filtered-colimit closure, and a weak equivalence lifting J_j lifts I_j.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_CUTOFF": {
+      "statement": "Original-stage-order interpretation constructs R_k preserving all cells through k, for every k at most the fixed cutoff q.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_HIGH": {
+      "statement": "Attachments I_j and J_j of index j>k preserve all cells through k, for k<q.",
+      "status": "open",
+      "depends_on": ["C_PP_CUTOFF"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_SPINE": {
+      "statement": "The finite spine T_m(S) has height at most m+1, retains all cells through m, and S is obtained from it by source attachments of index greater than m.",
+      "status": "open",
+      "depends_on": ["C_PP_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md", "research/partial_path/exact_certificate.json"]
+    },
+    "C_PP_SHAPES": {
+      "statement": "Every reflected free nonempty globular sum F_q(S) is contractible.",
+      "status": "open",
+      "depends_on": ["C_PP_HIGH", "C_PP_SPINE", "C_PP_FOUNDATIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_TOP": {
+      "statement": "E(q,q) holds, including q=0.",
+      "status": "open",
+      "depends_on": ["C_PP_HIGH", "C_PP_FOUNDATIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_UPPER": {
+      "statement": "Under E(q,j) for n<j<=q, upper I-cellular weak equivalences with cellular source split and remain weak equivalences after cellular pushouts.",
+      "status": "open",
+      "depends_on": ["C_PP_CUTOFF", "C_PP_FOUNDATIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_TREES": {
+      "statement": "Under the higher-index hypotheses, all free depth-n tree diagrams are contractible; generator homotopies are promoted using only J_(n+1).",
+      "status": "open",
+      "depends_on": ["C_PP_SHAPES", "C_PP_FOUNDATIONS", "C_PP_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_WHISKERS": {
+      "statement": "Under the higher-index hypotheses, freely adjoining one independently oriented whisker at every actual n-cell of a globular sum gives a contractible model.",
+      "status": "open",
+      "depends_on": ["C_PP_TREES", "C_PP_SPINE", "C_PP_FOUNDATIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_GLUE": {
+      "statement": "Cylinder realization has the exact one-sided skeletal pushout formula, with each shared face used once.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_CYLINDERS": {
+      "statement": "Under the higher-index hypotheses, the constructed P_j, A_j^epsilon for j>n, and P(S) for globular sums of height <=q are cellular and contractible; the one-sided maps above n are upper cellular weak equivalences.",
+      "status": "open",
+      "depends_on": ["C_PP_WHISKERS", "C_PP_GLUE", "C_PP_UPPER", "C_PP_HIGH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_OPERATIONS": {
+      "statement": "All generators extend in the original free order on the partial path globular set, naturally in full models, preserving both endpoints even for composite faces of arity height j and output j-1.",
+      "status": "open",
+      "depends_on": ["C_PP_CYLINDERS", "C_PP_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_SINGLE": {
+      "statement": "Each endpoint lifts every boundary inclusion in A_q for every target model, not just cellular targets.",
+      "status": "open",
+      "depends_on": ["C_PP_CYLINDERS", "C_PP_UPPER", "C_PP_OPERATIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_JOINT": {
+      "statement": "The joint endpoint lifts J_n, via a retraction of the upper-cellular inclusion of the four-vertex three-edge tree into P_(n+1).",
+      "status": "open",
+      "depends_on": ["C_PP_TREES", "C_PP_CYLINDERS", "C_PP_UPPER", "C_PP_OPERATIONS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_PATH": {
+      "statement": "For every q and 0<=n<q, higher-index expansions imply all of Proposition prop:partial-path, including its algebraic interpretations and both lifting properties.",
+      "status": "open",
+      "depends_on": ["C_PP_OPERATIONS", "C_PP_SINGLE", "C_PP_JOINT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_STEP": {
+      "statement": "The partial path construction implies E(q,n) for arbitrary cellular sources and arbitrary attaching cells.",
+      "status": "open",
+      "depends_on": ["C_PP_PATH", "C_PP_FOUNDATIONS", "C_PP_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_FIXED": {
+      "statement": "For each fixed q, descending induction proves E(q,n) for every 0<=n<=q.",
+      "status": "open",
+      "depends_on": ["C_PP_TOP", "C_PP_STEP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_ALL": {
+      "statement": "For every coherator in the manuscript convention, elementary expansions of all cellular models at every attaching cell are weak equivalences before reflection.",
+      "status": "open",
+      "depends_on": ["C_PP_FIXED", "C_PP_CUTOFF"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_LOCAL": {
+      "statement": "At a fixed q, the fixed-cutoff theorem and partial-path construction hold for a contractible globular theory with a given free filler presentation that bounds arity only for generator outputs <=q; higher-output generators may have arbitrary finite globular-sum arities and only their prescribed-face equations.",
+      "status": "open",
+      "depends_on": ["C_PP_FIXED"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/partial_path/report.md"]
+    },
+    "C_PP_CORE": {
+      "statement": "Universally: a spine at m retains generating cells and both globular face maps through m and has no cells above m+1; the recursive face maps satisfy the globular identities; bijective boundary maps give unique operations on arbitrary tuple types; naturality is closed under typed composition and jointly injective tuple legs; the duplicate-generator promotion and final domain-retract equations imply the stated W-membership consequences for every category and morphism property satisfying the specified axioms.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/partial_path/lean/Main.lean",
+        "research/partial_path/lean/statement_fidelity.md",
+        "research/partial_path/lean/certificates/C_PP_CORE-a444dbe733826824.json"
+      ]
+    }
+  }
+}

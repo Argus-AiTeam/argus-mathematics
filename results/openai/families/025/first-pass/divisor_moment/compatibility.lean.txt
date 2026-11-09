@@ -1,0 +1,11 @@
+/- Lean 4.31.0 lacks the later real-valued list lower-bound lemma. -/
+theorem List.length_nsmul_le_sum (l : List ℝ) (a : ℝ)
+    (h : ∀ b ∈ l, a ≤ b) : l.length • a ≤ l.sum := by
+  induction l with
+  | nil => simp
+  | cons b l ih =>
+    have hb : a ≤ b := h b (by simp)
+    have ht : l.length • a ≤ l.sum := ih (fun x hx => h x (by simp [hx]))
+    change (l.length + 1) • a ≤ b + l.sum
+    rw [add_nsmul, one_nsmul]
+    linarith

@@ -1,0 +1,179 @@
+structure OAI.Problem355.ZeroDeterminantCount.RowData : Type
+number of parameters: 0
+fields:
+  OAI.Problem355.ZeroDeterminantCount.RowData.B : ℕ
+  OAI.Problem355.ZeroDeterminantCount.RowData.b : ℕ
+  OAI.Problem355.ZeroDeterminantCount.RowData.e : ℕ
+  OAI.Problem355.ZeroDeterminantCount.RowData.k : ℕ
+  OAI.Problem355.ZeroDeterminantCount.RowData.prime : Nat.Prime self.B
+  OAI.Problem355.ZeroDeterminantCount.RowData.e_le_k : self.e ≤ self.k
+  OAI.Problem355.ZeroDeterminantCount.RowData.L : Submodule ℤ OAI.Problem355.ZeroDeterminantCount.IntVector
+  OAI.Problem355.ZeroDeterminantCount.RowData.C : OAI.Problem355.ZeroDeterminantCount.IntMatrix
+  OAI.Problem355.ZeroDeterminantCount.RowData.P : (Matrix (Fin 3) (Fin 3) (ZMod (self.B ^ self.k)))ˣ
+  OAI.Problem355.ZeroDeterminantCount.RowData.Q : (Matrix (Fin 3) (Fin 3) (ZMod (self.B ^ self.k)))ˣ
+  OAI.Problem355.ZeroDeterminantCount.RowData.diagonal : Matrix.map self.C ⇑(Int.castRingHom (ZMod (self.B ^ self.k))) =
+      ↑self.P * Matrix.diagonal ![1, ↑self.B ^ self.b, ↑self.B ^ self.e] * ↑self.Q
+  OAI.Problem355.ZeroDeterminantCount.RowData.contains : ∀ (v : OAI.Problem355.ZeroDeterminantCount.IntVector),
+      self.B ^ self.e • v ∈ self.L
+  OAI.Problem355.ZeroDeterminantCount.RowData.rows : ∀ (i : Fin 3), self.C i ∈ self.L
+  OAI.Problem355.ZeroDeterminantCount.RowData.index_eq : self.L.toAddSubgroup.index = self.B ^ (self.b + self.e)
+constructor:
+  OAI.Problem355.ZeroDeterminantCount.RowData.mk (B b e k : ℕ) (prime : Nat.Prime B) (e_le_k : e ≤ k)
+    (L : Submodule ℤ OAI.Problem355.ZeroDeterminantCount.IntVector) (C : OAI.Problem355.ZeroDeterminantCount.IntMatrix)
+    (P Q : (Matrix (Fin 3) (Fin 3) (ZMod (B ^ k)))ˣ)
+    (diagonal : Matrix.map C ⇑(Int.castRingHom (ZMod (B ^ k))) = ↑P * Matrix.diagonal ![1, ↑B ^ b, ↑B ^ e] * ↑Q)
+    (contains : ∀ (v : OAI.Problem355.ZeroDeterminantCount.IntVector), B ^ e • v ∈ L) (rows : ∀ (i : Fin 3), C i ∈ L)
+    (index_eq : L.toAddSubgroup.index = B ^ (b + e)) : OAI.Problem355.ZeroDeterminantCount.RowData
+structure OAI.Problem355.PrimePowerData (p k : ℕ) (C : Matrix (Fin 3) (Fin 3) (ZMod (p ^ k))) : Type
+number of parameters: 3
+fields:
+  OAI.Problem355.PrimePowerData.b : ℕ
+  OAI.Problem355.PrimePowerData.e : ℕ
+  OAI.Problem355.PrimePowerData.b_le_e : self.b ≤ self.e
+  OAI.Problem355.PrimePowerData.e_le_k : self.e ≤ k
+  OAI.Problem355.PrimePowerData.left : GL (Fin 3) (ZMod (p ^ k))
+  OAI.Problem355.PrimePowerData.right : GL (Fin 3) (ZMod (p ^ k))
+  OAI.Problem355.PrimePowerData.diagonalization : C =
+      ↑self.left * Matrix.diagonal ![1, ↑(p ^ self.b), ↑(p ^ self.e)] * ↑self.right
+constructor:
+  OAI.Problem355.PrimePowerData.mk {p k : ℕ} {C : Matrix (Fin 3) (Fin 3) (ZMod (p ^ k))} (b e : ℕ) (b_le_e : b ≤ e)
+    (e_le_k : e ≤ k) (left right : GL (Fin 3) (ZMod (p ^ k)))
+    (diagonalization : C = ↑left * Matrix.diagonal ![1, ↑(p ^ b), ↑(p ^ e)] * ↑right) :
+    OAI.Problem355.PrimePowerData p k C
+structure OAI.Problem355.AuxiliarySampling.Law (q H : ℕ) [Fact (Nat.Prime q)] : Type 1
+number of parameters: 3
+fields:
+  OAI.Problem355.AuxiliarySampling.Law.Outcome : Type
+  OAI.Problem355.AuxiliarySampling.Law.outcomeFintype : Fintype self.Outcome
+  OAI.Problem355.AuxiliarySampling.Law.weight : self.Outcome → ℝ
+  OAI.Problem355.AuxiliarySampling.Law.sets : self.Outcome → Finset (Fin 3 → ZMod q)
+  OAI.Problem355.AuxiliarySampling.Law.size : ℕ
+  OAI.Problem355.AuxiliarySampling.Law.size_pos : 0 < self.size
+  OAI.Problem355.AuxiliarySampling.Law.weight_nonneg : ∀ (ω : self.Outcome), 0 ≤ self.weight ω
+  OAI.Problem355.AuxiliarySampling.Law.weight_sum : Finset.univ.sum self.weight = 1
+  OAI.Problem355.AuxiliarySampling.Law.sets_card : ∀ (ω : self.Outcome), (self.sets ω).card = self.size
+  OAI.Problem355.AuxiliarySampling.Law.size_lower : q ^ 2 ≤ 2000 ^ 3 * H ^ 6 * self.size
+  OAI.Problem355.AuxiliarySampling.Law.zero_not_mem : ∀ (ω : self.Outcome), 0 ∉ self.sets ω
+  OAI.Problem355.AuxiliarySampling.Law.isCap : ∀ (ω : self.Outcome), OAI.Problem355.AuxiliaryCap.IsCap ↑(self.sets ω)
+  OAI.Problem355.AuxiliarySampling.Law.short_relation : ∀ (ω : self.Outcome) (p : Fin 3 → Fin 3 → ZMod q),
+      (∀ (i : Fin 3), p i ∈ self.sets ω) →
+        Function.Injective p → ∀ (x : Fin 3 → ℤ), (∀ (i : Fin 3), |x i| ≤ ↑H) → x ≠ 0 → ∑ i, ↑(x i) • p i ≠ 0
+  OAI.Problem355.AuxiliarySampling.Law.weight_le_eight : ∀ (p : Fin 3 → Fin 3 → ZMod q),
+      AffineIndependent (ZMod q) p →
+        OAI.Problem355.LiftingProbability.auxiliaryWeight q self.size self.weight self.sets p ≤ 8
+  OAI.Problem355.AuxiliarySampling.Law.weight_le_four : ∀ (p : Fin 3 → Fin 3 → ZMod q) (i j : Fin 3),
+      p i ≠ p j →
+        OAI.Problem355.LiftingProbability.auxiliaryWeight q self.size self.weight self.sets p ≤
+          4 * (↑q ^ 3 / ↑self.size)
+  OAI.Problem355.AuxiliarySampling.Law.weight_le_two : ∀ (p : Fin 3 → Fin 3 → ZMod q),
+      OAI.Problem355.LiftingProbability.auxiliaryWeight q self.size self.weight self.sets p ≤
+        2 * (↑q ^ 3 / ↑self.size) ^ 2
+constructor:
+  OAI.Problem355.AuxiliarySampling.Law.mk {q H : ℕ} [Fact (Nat.Prime q)] (Outcome : Type)
+    (outcomeFintype : Fintype Outcome) (weight : Outcome → ℝ) (sets : Outcome → Finset (Fin 3 → ZMod q)) (size : ℕ)
+    (size_pos : 0 < size) (weight_nonneg : ∀ (ω : Outcome), 0 ≤ weight ω) (weight_sum : Finset.univ.sum weight = 1)
+    (sets_card : ∀ (ω : Outcome), (sets ω).card = size) (size_lower : q ^ 2 ≤ 2000 ^ 3 * H ^ 6 * size)
+    (zero_not_mem : ∀ (ω : Outcome), 0 ∉ sets ω) (isCap : ∀ (ω : Outcome), OAI.Problem355.AuxiliaryCap.IsCap ↑(sets ω))
+    (short_relation :
+      ∀ (ω : Outcome) (p : Fin 3 → Fin 3 → ZMod q),
+        (∀ (i : Fin 3), p i ∈ sets ω) →
+          Function.Injective p → ∀ (x : Fin 3 → ℤ), (∀ (i : Fin 3), |x i| ≤ ↑H) → x ≠ 0 → ∑ i, ↑(x i) • p i ≠ 0)
+    (weight_le_eight :
+      ∀ (p : Fin 3 → Fin 3 → ZMod q),
+        AffineIndependent (ZMod q) p → OAI.Problem355.LiftingProbability.auxiliaryWeight q size weight sets p ≤ 8)
+    (weight_le_four :
+      ∀ (p : Fin 3 → Fin 3 → ZMod q) (i j : Fin 3),
+        p i ≠ p j → OAI.Problem355.LiftingProbability.auxiliaryWeight q size weight sets p ≤ 4 * (↑q ^ 3 / ↑size))
+    (weight_le_two :
+      ∀ (p : Fin 3 → Fin 3 → ZMod q),
+        OAI.Problem355.LiftingProbability.auxiliaryWeight q size weight sets p ≤ 2 * (↑q ^ 3 / ↑size) ^ 2) :
+    OAI.Problem355.AuxiliarySampling.Law q H
+OAI.Problem355.ZeroGlobalCount.weighted_count_le_log : ∀ (D : OAI.Problem355.ZeroDeterminantCount.RowData) (q N : ℕ)
+  [inst : Fact (Nat.Prime q)],
+  1 ≤ N →
+    IsUnit ↑D.E →
+      D.h ^ 26 ≤ ↑q →
+        ∀ (S : Finset (Matrix (Fin 3) (Fin 3) ℤ)) (W : Matrix (Fin 3) (Fin 3) ℤ → ℝ) (Ca Cg Cd : ℝ),
+          0 ≤ Ca →
+            0 ≤ Cg →
+              0 ≤ Cd →
+                (∀ A ∈ S, 0 ≤ W A) →
+                  (∀ A ∈ S, A.det = 0) →
+                    (∀ A ∈ S, ∀ (i : Fin 3), A i ∈ D.L) →
+                      (∀ A ∈ S, ∀ (i : Fin 3), A 2 i ≠ 0) →
+                        (∀ A ∈ S,
+                            ∀ (i j : Fin 3),
+                              i ≠ j →
+                                (↑(A 0 i) / ↑(A 2 i), ↑(A 1 i) / ↑(A 2 i)) ≠
+                                  (↑(A 0 j) / ↑(A 2 j), ↑(A 1 j) / ↑(A 2 j))) →
+                          (∀ A ∈ S, ∀ (i j : Fin 3), |A i j| ≤ ↑(2 * N)) →
+                            (∀ A ∈ S,
+                                0 < W A →
+                                  ∃ T,
+                                    OAI.Problem355.AuxiliaryCap.IsCap T ∧
+                                      ∀ (i : Fin 3), (A.map ⇑(Int.castRingHom (ZMod q))).col i ∈ T) →
+                              (∀ A ∈ S, AffineIndependent (ZMod q) (A.map ⇑(Int.castRingHom (ZMod q))).col → W A ≤ Ca) →
+                                (∀ A ∈ S, W A ≤ Cg * ↑q ^ 2 * D.h ^ 24) →
+                                  (∀ A ∈ S,
+                                      (∃ i j,
+                                          (A.map ⇑(Int.castRingHom (ZMod q))).col i ≠
+                                            (A.map ⇑(Int.castRingHom (ZMod q))).col j) →
+                                        W A ≤ Cd * ↑q * D.h ^ 12) →
+                                    (∀ A ∈ S,
+                                        ∀ (x : Fin 3 → ℤ),
+                                          OAI.Problem355.PrimitiveNormal.IsPrimitive x →
+                                            A.mulVec x = 0 →
+                                              AffineIndependent (ZMod q) (A.map ⇑(Int.castRingHom (ZMod q))).col →
+                                                0 < W A → D.h ^ 2 < ‖OAI.Problem355.PrimitiveNormal.toEuclidean x‖) →
+                                      ∑ A ∈ S, W A ≤
+                                        OAI.Problem355.ZeroGlobalCount.countConstant Ca Cg Cd * ↑N ^ 6 / ↑D.I ^ 2 *
+                                          (Real.log (4 * ↑N) / Real.log 2)
+OAI.Problem355.AuxiliaryZeroCount.weighted_count_le_log : ∀ (D : OAI.Problem355.ZeroDeterminantCount.RowData) (q N : ℕ)
+  [inst : Fact (Nat.Prime q)],
+  1 ≤ N →
+    IsUnit ↑D.E →
+      D.h ^ 26 ≤ ↑q →
+        ∀ (L : OAI.Problem355.AuxiliarySampling.Law q ((D.B ^ D.k) ^ 2)) (S : Finset (Matrix (Fin 3) (Fin 3) ℤ)),
+          (∀ A ∈ S, A.det = 0) →
+            (∀ A ∈ S, ∀ (i : Fin 3), A i ∈ D.L) →
+              (∀ A ∈ S, ∀ (i : Fin 3), A 2 i ≠ 0) →
+                (∀ A ∈ S,
+                    ∀ (i j : Fin 3),
+                      i ≠ j → (↑(A 0 i) / ↑(A 2 i), ↑(A 1 i) / ↑(A 2 i)) ≠ (↑(A 0 j) / ↑(A 2 j), ↑(A 1 j) / ↑(A 2 j))) →
+                  (∀ A ∈ S, ∀ (i j : Fin 3), |A i j| ≤ ↑(2 * N)) →
+                    ∑ A ∈ S,
+                        OAI.Problem355.LiftingProbability.auxiliaryWeight q L.size L.weight L.sets
+                          (A.map ⇑(Int.castRingHom (ZMod q))).col ≤
+                      OAI.Problem355.AuxiliaryZeroCount.countConstant * ↑N ^ 6 / ↑D.I ^ 2 *
+                        (Real.log (4 * ↑N) / Real.log 2)
+@OAI.Problem355.PrimePowerData.toZeroRowData : {B k : ℕ} →
+  {C : Matrix (Fin 3) (Fin 3) (ZMod (B ^ k))} →
+    OAI.Problem355.PrimePowerData B k C → Nat.Prime B → OAI.Problem355.ZeroDeterminantCount.RowData
+@OAI.Problem355.AuxiliaryThreeCase.three_case_cover : ∀ {F : Type u_1} [inst : Field F] (x : Fin 3 → F),
+  x ≠ 0 →
+    ∀ (v : Fin 3 → Fin 3 → F),
+      (AffineIndependent F v ∨ ∃ p, OAI.Problem355.WeightedZeroPartition.EqualPair v p) →
+        AffineIndependent F v ∨
+          (∃ p,
+              OAI.Problem355.WeightedZeroPartition.EqualPair v p ∧
+                ¬OAI.Problem355.AuxiliaryThreeCase.ExceptionalVector x p) ∨
+            ∃ p,
+              OAI.Problem355.WeightedZeroPartition.EqualPair v p ∧
+                OAI.Problem355.AuxiliaryThreeCase.ExceptionalVector x p ∧ ∃ i j, v i ≠ v j
+@OAI.Problem355.AuxiliaryThreeCase.special_weight_le_four : ∀ {F : Type u_1} [inst : Field F] [inst_1 : Fintype F]
+  [inst_2 : Fintype ((Fin 3 → F) ≃ᵃ[F] Fin 3 → F)] (S : Finset (Fin 3 → F)),
+  S.Nonempty →
+    ∀ (T : Finset ((Fin 3 → F) ≃ᵃ[F] Fin 3 → F)),
+      T.Nonempty →
+        Fintype.card ((Fin 3 → F) ≃ᵃ[F] Fin 3 → F) ≤ 2 * T.card →
+          ∀ (v : Fin 3 → Fin 3 → F),
+            (∃ i j, v i ≠ v j) →
+              OAI.Problem355.AuxiliaryWeights.affineInclusionWeight S T v ≤ 4 * (↑(Fintype.card F) ^ 3 / ↑S.card)
+@OAI.Problem355.AffineTripleOrbit.restrictedInputShiftEquiv : {F : Type u_1} →
+  {V : Type u_2} →
+    [inst : Field F] →
+      [inst_1 : AddCommGroup V] →
+        [inst_2 : Module F V] →
+          (A : Set V) → { e // (OAI.Problem355.AffineTripleOrbit.inputShiftEquiv e).2 ∈ A } ≃ (V ≃ₗ[F] V) × ↑A
+'OAI.Problem355.ZeroGlobalCount.weighted_count_le_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OAI.Problem355.AuxiliaryZeroCount.weighted_count_le_log' depends on axioms: [propext, Classical.choice, Quot.sound]

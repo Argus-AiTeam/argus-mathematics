@@ -1,0 +1,175 @@
+{
+  "goal": "C9000288",
+  "routes": {},
+  "nodes": {
+    "C9000288": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 288 (Kadison's similarity conjecture.; papers: Kadison's similarity theorem through uniform derivation estimates; Lean status: Partially/Comparator formalized (lean/docs/288.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_INV",
+        "C_WORD"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/invariant-intertwiners/proof.md"
+      ],
+      "scope": "The active bounded verification route is C_INV and C_WORD. This does not discharge the downstream similarity chain or the publishable-novelty gate."
+    },
+    "C_INV": {
+      "statement": "All-degree bounded left-D-linear, matrix-stage conjugation-equivariant intertwiners are degree-preserving and are exactly identity-endpoint tensor permutation combinations.",
+      "status": "open",
+      "depends_on": ["L_ENDPOINT", "L_FINITE_SW", "L_STABILITY", "L_CYCLE_SUPPORT", "L_PAIRING_SUPPORT"],
+      "reviewer_confirmed": false,
+      "source_label": "lem:invariant-intertwiners",
+      "evidence": [
+        "research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/tensors.tex",
+        "research/invariant-intertwiners/proof.md",
+        "research/invariant-intertwiners/source_fidelity.md",
+        "research/invariant-intertwiners/exact_certificate.json"
+      ],
+      "remaining_obligation": "Independent review of the complete analytic proof and its connection to the certified core."
+    },
+    "L_ENDPOINT": {
+      "statement": "Left-module slices give the endpoint L1 bound and the c*d endpoint substitution.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/invariant-intertwiners/proof.md"]
+    },
+    "L_FINITE_SW": {
+      "statement": "For m at least p, invariant multilinear matrix forms have an independent normalized cycle-trace basis.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/invariant-intertwiners/literature/grinko_ozols_v2.txt",
+        "research/invariant-intertwiners/proof.md"
+      ]
+    },
+    "L_STABILITY": {
+      "statement": "Normalized traces agree under unital inclusions; unique cycle coefficients stabilize, and unbounded stage sizes eliminate coefficients below the cycle-count threshold.",
+      "status": "open",
+      "depends_on": ["L_ENDPOINT", "L_FINITE_SW"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/invariant-intertwiners/proof.md",
+        "research/invariant-intertwiners/exact_certificate.json"
+      ]
+    },
+    "L_CYCLE_SUPPORT": {
+      "statement": "After centering, the cycle-count threshold forces a singleton endpoint and pair cycles on every tail slot, in every degree.",
+      "status": "open",
+      "depends_on": ["C_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/invariant-intertwiners/proof.md",
+        "research/invariant-intertwiners/Main.lean",
+        "research/invariant-intertwiners/exact_certificate.json"
+      ]
+    },
+    "L_PAIRING_SUPPORT": {
+      "statement": "Disjoint two-slot label pools isolate every pairing. Arbitrarily large orthonormal sums exclude same-side pairs; all-cross pairings equate source and target degrees.",
+      "status": "open",
+      "depends_on": ["C_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/invariant-intertwiners/proof.md",
+        "research/invariant-intertwiners/Main.lean",
+        "research/invariant-intertwiners/exact_certificate.json"
+      ]
+    },
+    "C_CORE": {
+      "statement": "For arbitrary finite slot sets and unbounded size sequences: matrix-unit successor support is unique; the cycle threshold forces pairs; disjoint two-slot tags isolate a pairing; positive-exponent bounded coefficients vanish; cross pairings have equal side cardinalities.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/invariant-intertwiners/Main.lean",
+        "research/invariant-intertwiners/statement_fidelity.md",
+        "research/invariant-intertwiners/lean_check.json",
+        "research/invariant-intertwiners/certificates/C_CORE-09c7e9d9a0151129.json"
+      ],
+      "remaining_obligation": "Independent statement-fidelity reading and fresh compiler replay; the formal result is not the analytic classification."
+    },
+    "C_WORD": {
+      "statement": "The symmetrized operator reduces every word level and acts only on J_k on every repeated complex centered letter, for both G and G* and all L2 endpoints.",
+      "status": "open",
+      "depends_on": ["C_INV"],
+      "reviewer_confirmed": false,
+      "source_label": "lem:word-structure",
+      "evidence": [
+        "research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/tensors.tex",
+        "research/invariant-intertwiners/proof.md",
+        "research/invariant-intertwiners/source_fidelity.md",
+        "research/invariant-intertwiners/exact_certificate.json"
+      ],
+      "remaining_obligation": "Independent review of the full-output slice argument for both G and G*."
+    },
+    "C_SYMM": {
+      "statement": "Matrix-stage averaging preserves the corner hypotheses, their adjoint versions, and the compressed commutator exactly.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "lem:free-symmetrization",
+      "evidence": ["research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/tensors.tex"]
+    },
+    "C_PROPAGATION": {
+      "statement": "The repeated-s propagation estimate holds uniformly over every word degree, also for adjoints.",
+      "status": "open",
+      "depends_on": ["C_WORD"],
+      "reviewer_confirmed": false,
+      "source_label": "lem:propagation",
+      "evidence": ["research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/propagation.tex"]
+    },
+    "C_FREE_CORNER": {
+      "statement": "The free-product corner estimate has the source constant 6 pi^2(1+4c_0), independent of N and the corner trace.",
+      "status": "open",
+      "depends_on": ["C_SYMM", "C_PROPAGATION"],
+      "reviewer_confirmed": false,
+      "source_label": "thm:free-corner",
+      "evidence": ["research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/hankel.tex"]
+    },
+    "C_FREE_POSITION": {
+      "statement": "Every source irreducible separable II_1 inclusion admits the asserted matrix-generated free-position subfactor in Q^omega.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "source_label": "lem:free-position",
+      "evidence": ["research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/finite-factors.tex"]
+    },
+    "C_FACTOR": {
+      "statement": "The matrix commutator estimate holds in every factor representation with a universal constant.",
+      "status": "open",
+      "depends_on": ["C_FREE_POSITION", "C_FREE_CORNER"],
+      "reviewer_confirmed": false,
+      "source_label": "prop:factor-representations",
+      "evidence": ["research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/global.tex"]
+    },
+    "C_UNIVERSAL": {
+      "statement": "The universal matrix commutator estimate holds for every concrete von Neumann algebra on every Hilbert space.",
+      "status": "open",
+      "depends_on": ["C_FACTOR"],
+      "reviewer_confirmed": false,
+      "source_label": "thm:universal",
+      "evidence": ["research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/global.tex"]
+    },
+    "C_DERIVATIONS": {
+      "statement": "Every bounded representation derivation is completely bounded with the source universal bound and is implemented.",
+      "status": "open",
+      "depends_on": ["C_UNIVERSAL"],
+      "reviewer_confirmed": false,
+      "source_label": "prop:all-derivations",
+      "evidence": ["research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/global.tex"]
+    },
+    "C_SIMILARITY": {
+      "statement": "Every bounded unital homomorphism of an arbitrary unital C*-algebra into B(H) is similar to a *-homomorphism.",
+      "status": "open",
+      "depends_on": ["C_DERIVATIONS"],
+      "reviewer_confirmed": false,
+      "source_label": "thm:similarity",
+      "evidence": ["research/openai_manuscript/Kadisons-similarity-theorem-through-uniform-derivation-estimates-September-23-2026/build/sections/global.tex"]
+    }
+  }
+}

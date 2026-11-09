@@ -1,0 +1,159 @@
+{
+  "goal": "C9000331",
+  "routes": [
+    {
+      "name": "R_LENS_TWO",
+      "status": "current",
+      "evidence": "research/lens_sharpness/report.md"
+    },
+    {
+      "name": "R_LENS_EXTENSION",
+      "status": "current",
+      "evidence": "research/lens_sharpness/report.md"
+    },
+    {
+      "name": "R_SCALAR_ONLY",
+      "status": "ruled_out",
+      "evidence": "research/lens_sharpness/exact_certificate.json",
+      "retired_because": "eta=1, theta=0 makes the existing squared scalar bound 4, not 2. Endpoint dependence is essential."
+    },
+    {
+      "name": "R_LATTICE_ENERGY",
+      "status": "ruled_out",
+      "evidence": "research/lens_sharpness/exact_certificate.json",
+      "retired_because": "The exact seven-vertex cumulative-potential example gives 134 > 132, refuting the proposed submodularity shortcut, not the manuscript."
+    }
+  ],
+  "nodes": {
+    "C9000331": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 331 (Reflexive midpoint convexity and diamond distortion.; papers: Asymptotic midpoint uniform convexity and unbounded diamond distortion in a reflexive tree space; Midpoint lenses in segment spaces; Distortion of countably branching diamonds from midpoint and tree energies; Exact asymptotic moduli in a Daugavet subspace of L1; Midpoint convexity from bounded tree potentials and path costs; Independent products in real L1: asymptotic midpoint convexity without AUC renormings; Midpoint convexity from two recursive potentials; Lean status: Partially/Comparator formalized (lean/docs/331.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": [
+        "C_LENS_OPT"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_LENS_OPT": {
+      "statement": "Open conjecture: the optimal universal squared lens constant is 2. No publishable completion or independent acceptance is claimed.",
+      "status": "open",
+      "depends_on": ["C_LENS_UPPER2", "C_LENS_LOWER2"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/lens_sharpness/report.md"]
+    },
+    "C_LENS_UPPER2": {
+      "statement": "Universal upper constant 2 for arbitrary ancestral heads and arbitrary displacement heads.",
+      "status": "open",
+      "depends_on": ["C_EXTENSION_TWO", "C_EXTENSION_REDUCTION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/lens_sharpness/report.md"]
+    },
+    "C_EXTENSION_TWO": {
+      "statement": "For head p and tail v, a common tail correction makes the average of rho(p+v+w) and rho(p-v+w) at most sqrt(rho(p)^2+2rho(v)^2). This universal extension estimate is unresolved.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/lens_sharpness/report.md"]
+    },
+    "C_EXTENSION_REDUCTION": {
+      "statement": "The coupled extension estimate implies upper constant 2 by endpoint testing and optimizing the two normer weights.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/lens_sharpness/report.md"]
+    },
+    "C_LENS_LOWER2": {
+      "statement": "The exact root-and-two-children lens has squared norms 16,18,25,25 and attains ratio 2 in each actual ambient model.",
+      "status": "open",
+      "depends_on": ["C_STAR_CORE", "C_LENS_AMBIENT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/lens_sharpness/exact_certificate.json",
+        "research/lens_sharpness/report.md"
+      ]
+    },
+    "C_STAR_CORE": {
+      "statement": "The finite rooted-star polar certificate is kernel-checked by Lean 4.31.0; statement fidelity still requires independent review.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/lens_sharpness/Main.lean",
+        "research/lens_sharpness/statement_fidelity.md",
+        "research/lens_sharpness/certificates/C_STAR_CORE-a4cf3ea2195fb82f.json"
+      ]
+    },
+    "C_LENS_AMBIENT": {
+      "statement": "Ancestral restriction identifies the finite polar norm with the inherited ambient dual norm in both completions.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/lens_sharpness/report.md"]
+    },
+    "C_LENS_BRACKET": {
+      "statement": "The established bounds are 2 <= K_star <= 4, not an optimality theorem.",
+      "status": "open",
+      "depends_on": ["C_LENS_LOWER2", "C_LENS_UPPER4"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/lens_sharpness/report.md"]
+    },
+    "C_LENS_UPPER4": {
+      "statement": "The manuscript's universal upper constant 4 is supported by its finite atomic, cone, cancellation, and joint-budget arguments.",
+      "status": "open",
+      "depends_on": [
+        "C_LENS_ATOMS",
+        "C_LENS_CONES",
+        "C_LENS_CANCELLATION",
+        "C_LENS_BUDGET"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": ["research/lens_sharpness/report.md"]
+    },
+    "C_LENS_ATOMS": {
+      "statement": "Finite ancestral dual balls are convex hulls of represented disjoint-segment atoms in each model.",
+      "status": "open",
+      "depends_on": ["C_LENS_AMBIENT"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Midpoint-lenses-in-segment-spaces-September-27-2026/build/sections/atomic.tex",
+        "research/openai_manuscript/Midpoint-lenses-in-segment-spaces-September-27-2026/build/sections/infinite-foundations.tex"
+      ]
+    },
+    "C_LENS_CONES": {
+      "statement": "The actual exterior dual norm is the square sum of the gate-cone restriction norms.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Midpoint-lenses-in-segment-spaces-September-27-2026/build/sections/forest-foundations.tex",
+        "research/openai_manuscript/Midpoint-lenses-in-segment-spaces-September-27-2026/build/sections/infinite-foundations.tex"
+      ]
+    },
+    "C_LENS_CANCELLATION": {
+      "statement": "Simultaneous nested-head splitting bounds opposite crossing products by the two squared-test deficits.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Midpoint-lenses-in-segment-spaces-September-27-2026/build/sections/atomic.tex"
+      ]
+    },
+    "C_LENS_BUDGET": {
+      "statement": "Equal endpoint mixing gives eta+theta <= R^2-r^2 and the tail bound sqrt(eta)+sqrt(eta+2theta), without requiring a zero displacement head.",
+      "status": "open",
+      "depends_on": [
+        "C_LENS_ATOMS",
+        "C_LENS_CONES",
+        "C_LENS_CANCELLATION"
+      ],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/openai_manuscript/Midpoint-lenses-in-segment-spaces-September-27-2026/build/sections/joint-budget.tex",
+        "research/lens_sharpness/report.md"
+      ]
+    }
+  }
+}

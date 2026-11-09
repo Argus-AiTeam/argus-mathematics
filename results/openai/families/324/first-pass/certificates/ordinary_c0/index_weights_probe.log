@@ -1,0 +1,24 @@
+def OAI.C0Absorption.TailOperation.factor : TailOperation → ↑C0Ball → ℝ :=
+fun t s =>
+  if t.isBasic = true then tailFactor (dyadic t.scaleIndex) (t.tailIndex + 1) ↑s
+  else tailFactor (dyadic t.scaleIndex) (t.tailIndex + 1) ↑s - 1
+def OAI.C0Absorption.coordinateTail : ℕ → C0 → C0 :=
+fun N s => s - truncate (N + 1) s
+def OAI.C0Absorption.prefixRestrict : (j : ℕ) → ↑C0Ball → PrefixCube j :=
+fun j s k => ⟨↑s ↑k, ⋯⟩
+@[reducible] def OAI.C0Absorption.OperationGrid : Finset ℕ → ℕ → Type :=
+fun I a => ↥I → ↑(GridIndex (2 ^ (a + 3)))
+def OAI.C0Absorption.tailFactor : ℝ → ℕ → C0 → ℝ :=
+fun c N s => min 1 (max (2 - tau N s / c) 0)
+def OAI.C0Absorption.ell : ℕ → ℝ :=
+fun j => Real.exp (-scheduleH) * rho (j + 1)
+def OAI.C0Absorption.rho : ℕ → ℝ :=
+fun x => Nat.brecOn x rho._f
+def OAI.C0Absorption.blockVector : (lev : Level) → ↑C0Ball → Block lev → ℝ :=
+fun lev s b => theta (levelJ lev) (localRadius lev ↑s) ↑b.fst * bandVector (↑b.fst) b.snd (prefixRestrict (↑b.fst) s)
+def OAI.C0Absorption.blockRow : (lev : Level) → ↑C0Ball → Block lev → ℝ :=
+fun lev s b => theta (levelJ lev) (localRadius lev ↑s) ↑b.fst * bandRow (↑b.fst) b.snd (prefixRestrict (↑b.fst) s)
+def OAI.C0Absorption.correction : Label → ↑C0Ball → ℝ :=
+fun γ s => (frozenCorrection (stateWeights s) γ) ↑s
+def OAI.C0Absorption.levelJ : Level → ℕ :=
+fun lev => lev.1 + lev.2 + 2

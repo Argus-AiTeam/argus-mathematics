@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-C_Q_SERIES_CORE-ddd61d15cdac",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/080/first-pass/quartic-core/lean/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/080/first-pass/quartic-core/lean/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 15054,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/080/first-pass/quartic-core/lean/Main.lean",
+    "source_sha256": "f8b3ea3c98c21849a1bd6cbd88fa7639e2e90b3d11998069538c61430f56f785",
+    "statement_fidelity": "families/080/first-pass/quartic-core/lean/statement_fidelity.md",
+    "statement_fidelity_sha256": "1a390629b9b3459e4e1481783c55dbe195951f2c97a41a519e275d5ca4dc3e08",
+    "status": "success",
+    "stderr": "",
+    "stdout": "families/080/first-pass/quartic-core/lean/Main.lean:49:6: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\nfamilies/080/first-pass/quartic-core/lean/Main.lean:66:6: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice\n\nNote: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`\n",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/quartic-core/lean/Main.lean",
+    "text": "import Mathlib\n\nopen Finset\n\nnamespace QuarticCore\n\ntheorem quartet_factor (a b d : ℝ) :\n    a ^ 2 - b ^ 2 + (b + d - a) ^ 2 - d ^ 2 =\n      2 * (a - b) * (a - d) := by\n  ring\n\ntheorem gaussian_completion (x u v a : ℝ) :\n    (x - a) ^ 2 + (x - u - a) ^ 2 +\n      (x - u - v - a) ^ 2 + (x - v - a) ^ 2 =\n      4 * (a - (x - (u + v) / 2)) ^ 2 + u ^ 2 + v ^ 2 := by\n  ring\n\ntheorem potential_expansion (ju jv pu pv : ℝ) :\n    ju * jv - pu * pv =\n      (ju - pu) + (jv - pv) +\n        ((1 - ju) * (1 - jv) - (1 - pu) * (1 - pv)) := by\n  ring\n\ntheorem geometric_identity (r : ℝ) (N : ℕ) :\n    (1 - r) * (∑ k ∈ range N, r ^ k) = 1 - r ^ N := by\n  induction N with\n  | zero => simp\n  | succ N ih =>\n      rw [sum_range_succ, mul_add, ih, pow_succ]\n      ring\n\ntheorem geometric_bound (r : ℝ) (N : ℕ) (hr0 : 0 ≤ r) (hr1 : r < 1) :\n    (∑ k ∈ range N, r ^ k) ≤ 1 / (1 - r) := by\n  have hd : 0 < 1 - r := sub_pos.mpr hr1\n  have hp : 0 ≤ r ^ N := pow_nonneg hr0 N\n  have hi := geometric_identity r N\n  apply (le_div_iff₀ hd).2\n  nlinarith\n\ntheorem dyadic_exact (N : ℕ) :\n    (∑ k ∈ range N, (2 * (k : ℝ) + 1) / (2 : ℝ) ^ k) =\n      6 - (4 * (N : ℝ) + 6) / (2 : ℝ) ^ N := by\n  induction N with\n  | zero => norm_num\n  | succ N ih =>\n      rw [sum_range_succ, ih, pow_succ]\n      push_cast\n      field_simp\n      <;> ring\n\ntheorem dyadic_bound (N : ℕ) :\n    (∑ k ∈ range N, (2 * (k : ℝ) + 1) / (2 : ℝ) ^ k) ≤ 6 := by\n  rw [dyadic_exact]\n  have ht : 0 ≤ (4 * (N : ℝ) + 6) / (2 : ℝ) ^ N := by positivity\n  linarith\n\ntheorem rectangle_exact (N : ℕ) :\n    (∑ k ∈ range N, ((k : ℝ) + 3) / (2 : ℝ) ^ k) =\n      8 - (2 * (N : ℝ) + 8) / (2 : ℝ) ^ N := by\n  induction N with\n  | zero => norm_num\n  | succ N ih =>\n      rw [sum_range_succ, ih, pow_succ]\n      push_cast\n      field_simp\n      <;> ring\n\ntheorem rectangle_bound (N : ℕ) :\n    (∑ k ∈ range N, ((k : ℝ) + 3) / (2 : ℝ) ^ k) ≤ 8 := by\n  rw [rectangle_exact]\n  have ht : 0 ≤ (2 * (N : ℝ) + 8) / (2 : ℝ) ^ N := by positivity\n  linarith\n\ntheorem weighted_geometric_budget\n    (r D : ℝ) (loss : ℕ → ℝ) (height : ℕ → ℕ) (N M : ℕ)\n    (hr0 : 0 ≤ r) (hr1 : r < 1) (hD : 0 ≤ D)\n    (hloss : ∀ m, 0 ≤ loss m) :\n    D * (∑ k ∈ range N, r ^ k) +\n        (∑ m ∈ range M, loss m * (∑ k ∈ range (height m), r ^ k)) ≤\n      (D + ∑ m ∈ range M, loss m) / (1 - r) := by\n  calc\n    _ ≤ D * (1 / (1 - r)) +\n          ∑ m ∈ range M, loss m * (1 / (1 - r)) := by\n      apply add_le_add\n      · exact mul_le_mul_of_nonneg_left (geometric_bound r N hr0 hr1) hD\n      · exact sum_le_sum fun m _ =>\n          mul_le_mul_of_nonneg_left\n            (geometric_bound r (height m) hr0 hr1) (hloss m)\n    _ = _ := by\n      rw [← sum_mul]\n      ring\n\nend QuarticCore\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/quartic-core/lean/statement_fidelity.md",
+    "text": "# Statement fidelity: exact quartic and all-depth summation core\n\nThis file describes only claim `C_Q_SERIES_CORE` and the elementary\nquartic identities used alongside it. It does not encode or certify\nthe analytic claims `C_Q_KERNEL`, `C_Q_MASK`, `C_Q_ERROR_2`,\n`C_Q_TELESCOPE`, or `C_Q_GROWTH`.\n\nAll real variables range over the ordinary real field. All depths,\nrow lengths, and indices range over arbitrary natural numbers,\nincluding zero; they are not bounded test parameters.\n\nAll declarations below are in namespace `QuarticCore`.\n\n`quartet_factor` states the spatial resonance identity after\nthe alternating spatial sum has eliminated the third frequency:\nxi1=a, xi2=b, xi3=b+d-a, xi4=d. Thus u=a-b, v=a-d and the alternating\nsum of squares is 2uv. It does not assert a free evolution equation.\n\n`gaussian_completion` states the completion of squares for\nfrequencies x, x-u, x-u-v, x-v and integration center a. The midpoint\nis x-(u+v)/2. This is the polynomial prerequisite for integrating the\nGaussian center, not a formalization of Gaussian integration.\n\n`potential_expansion` is the scalar product expansion for\narbitrary real values of the two new and two old Gaussian multipliers.\nIt supplies the signs of the error term, but does not formalize a\nquartic Fourier integral or its symmetry.\n\n`geometric_identity` and `geometric_bound`\nstate the exact finite geometric identity and its uniform upper\nbound for every real r with 0<=r<1. The application uses r=K^-2.\n\n`dyadic_exact` and `dyadic_bound` state, for\nevery natural N, that the sum over k<N of (2k+1)/2^k equals\n6-(4N+6)/2^N and is at most 6.\n\n`rectangle_exact` and `rectangle_bound` state,\nfor every natural N, that the sum over k<N of (k+3)/2^k equals\n8-(2N+8)/2^N and is at most 8. This majorizes the normalized\noff-diagonal cap-offset costs after the analytic bounds in the report.\nThe theorem does not prove those kernel or offset-count bounds.\n\n`weighted_geometric_budget` has arbitrary nonnegative real\nD and nonnegative loss sequence, an arbitrary natural-valued row-height\nfunction, arbitrary finite row count M, and arbitrary base depth N.\nFor 0<=r<1 it bounds D times the base geometric sum plus each loss times\nits own row's geometric sum by (D+sum losses)/(1-r).\nThe triangular scale sum in the report is one choice of row heights.\nIt does not assert the energy contraction or identify the loss\nsequence with the actual smooth masks.\n\nThe source contains no added axioms, proof holes, or declarations of\nanalytic inequalities. A successful compiler run verifies precisely\nthese algebraic and finite-sum statements. The mathematical report\nand its application to the manuscript still require independent review.\n"
+  },
+  "subject": {
+    "content_hash": "c2fc3290133d211451bd7308c91e5711462b043a486ef5634e7a5105931a3501",
+    "kind": "claim",
+    "subject_id": "C_Q_SERIES_CORE"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

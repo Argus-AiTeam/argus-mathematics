@@ -1,0 +1,71 @@
+{
+  "evidence_id": "lean-AF_KERNEL-82c4b4fde581",
+  "lean_check": {
+    "audit_command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "--run",
+      "$WORKSPACE/argus-live-update/argus_skill/tools/lean_axiom_audit.lean",
+      "families/298/first-pass/analytic_fisher/Main.lean"
+    ],
+    "audit_exit_code": 0,
+    "audit_stderr": "",
+    "audit_stdout": "",
+    "command": [
+      "$WORKSPACE/.elan/bin/lake",
+      "env",
+      "lean",
+      "families/298/first-pass/analytic_fisher/Main.lean"
+    ],
+    "cwd": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "duration_ms": 10124,
+    "environment_failure": "",
+    "exit_code": 0,
+    "lake_workspace": "$WORKSPACE/.local/share/argus-skill/mathlib-v4.31.0",
+    "proof_holes": [],
+    "schema_version": 1,
+    "source": "families/298/first-pass/analytic_fisher/Main.lean",
+    "source_sha256": "fa35d0b76a3067193b00473ba47600ab7aafb8772236e175f1761b592ce7cbdb",
+    "statement_fidelity": "families/298/first-pass/analytic_fisher/statement_fidelity.md",
+    "statement_fidelity_sha256": "8dfc91e1a95595474ef2f02ca4c047982aa41a1e05f6cec134cf4cf11945e624",
+    "status": "success",
+    "stderr": "",
+    "stdout": "",
+    "tool": "lake",
+    "tools": {
+      "elan": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/elan",
+        "version": "elan 4.2.3 (b6cec7e10 2026-06-08)"
+      },
+      "lake": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake",
+        "version": "Lake version 5.0.0-src+68218e8 (Lean version 4.31.0)"
+      },
+      "lean": {
+        "available": true,
+        "path": "$WORKSPACE/.elan/bin/lake env lean",
+        "version": "Lean (version 4.31.0, x86_64-unknown-linux-gnu, commit 68218e876d2a38b1985b8590fff244a83c321783, Release)"
+      }
+    }
+  },
+  "lean_source": {
+    "path": "research/analytic_fisher/Main.lean",
+    "text": "import Mathlib.Data.Fintype.Card\nimport Mathlib.Tactic\n\nnamespace AnalyticFisher\n\ndef NoncrossingPartition {m : ℕ} (R : Fin m → Fin m → Prop) : Prop :=\n  ∀ a b c d, a < b → b < c → c < d → R a c → R b d → R a b\n\ndef NoCrossing {m : ℕ} (Q : Fin m → Fin m → Prop) : Prop :=\n  ∀ a b c d, a < b → b < c → c < d → Q a c → Q b d → False\n\ntheorem noncrossing_union {m : ℕ} {R Q : Fin m → Fin m → Prop}\n    (hR : NoncrossingPartition R)\n    (refines : ∀ a b, Q a b → R a b)\n    (within : ∀ a b c d, a < b → b < c → c < d →\n      R a b → Q a c → Q b d → False) :\n    NoCrossing Q := by\n  intro a b c d hab hbc hcd hac hbd\n  exact within a b c d hab hbc hcd\n    (hR a b c d hab hbc hcd (refines a c hac) (refines b d hbd)) hac hbd\n\nabbrev PairConstant {m k p : ℕ} (a b : Fin k → Fin m) (f : Fin m → Fin p) : Prop :=\n  ∀ j, f (a j) = f (b j)\n\ntheorem pairing_label_bound {m k p : ℕ} (a b : Fin k → Fin m)\n    (covers : ∀ i, ∃ j, i = a j ∨ i = b j) :\n    Fintype.card {f : Fin m → Fin p // PairConstant a b f} ≤ p ^ k := by\n  classical\n  let encode : {f : Fin m → Fin p // PairConstant a b f} → (Fin k → Fin p) :=\n    fun f j => f.val (a j)\n  have injective : Function.Injective encode := by\n    intro f g h\n    apply Subtype.ext\n    funext i\n    obtain ⟨j, hj | hj⟩ := covers i\n    · subst i\n      exact congrFun h j\n    · subst i\n      exact (f.property j).symm.trans ((congrFun h j).trans (g.property j))\n  simpa using Fintype.card_le_of_injective encode injective\n\ntheorem family_pairing_label_bound {m k p t : ℕ}\n    (a b : Fin t → Fin k → Fin m)\n    (covers : ∀ s i, ∃ j, i = a s j ∨ i = b s j) :\n    Fintype.card {f : Fin m → Fin p // ∃ s, PairConstant (a s) (b s) f} ≤\n      t * p ^ k := by\n  classical\n  let decode :\n      (Σ s : Fin t, {f : Fin m → Fin p // PairConstant (a s) (b s) f}) →\n      {f : Fin m → Fin p // ∃ s, PairConstant (a s) (b s) f} :=\n    fun sf => ⟨sf.2.val, ⟨sf.1, sf.2.property⟩⟩\n  have surjective : Function.Surjective decode := by\n    intro f\n    obtain ⟨s, hs⟩ := f.property\n    exact ⟨⟨s, ⟨f.val, hs⟩⟩, rfl⟩\n  calc\n    Fintype.card {f : Fin m → Fin p // ∃ s, PairConstant (a s) (b s) f} ≤\n        Fintype.card (Σ s : Fin t,\n          {f : Fin m → Fin p // PairConstant (a s) (b s) f}) :=\n      Fintype.card_le_of_surjective decode surjective\n    _ = ∑ s : Fin t,\n        Fintype.card {f : Fin m → Fin p // PairConstant (a s) (b s) f} := by\n      simp only [Fintype.card_sigma]\n    _ ≤ ∑ _s : Fin t, p ^ k := by\n      apply Finset.sum_le_sum\n      intro s _\n      exact pairing_label_bound (a s) (b s) (covers s)\n    _ = t * p ^ k := by simp\n\nend AnalyticFisher\n"
+  },
+  "produced_by": "lean_evidence/lean 4.31.0",
+  "schema_version": 1,
+  "statement_fidelity": {
+    "path": "research/analytic_fisher/statement_fidelity.md",
+    "text": "# Statement fidelity: finite noncrossing support kernel\n\nThis document describes precisely the declarations in `Main.lean` attached to\nclaim `AF_KERNEL`. Natural numbers `m`, `k`, `p`, and `t` are universally\nquantified, including zero. Positions are `Fin m`; labels are `Fin p`.\n\n`AnalyticFisher.NoncrossingPartition R` is the following relational property:\nfor ordered positions `a < b < c < d`, `R a c` and `R b d` imply `R a b`.\nThe intended application takes `R` to mean membership in the same block of a\nnoncrossing partition. The definition does not additionally demand that `R`\nbe an equivalence relation; the proved implication needs no such assumption.\n`NoCrossing Q` forbids `Q a c` and `Q b d` at four such positions.\n\n`AnalyticFisher.noncrossing_union` assumes that `Q` refines `R`, that `R`\nhas the displayed noncrossing-partition property, and that crossing `Q`\npairs cannot have their first endpoints in the same `R` block. It concludes\nthat `Q` has no crossing. In the application, `Q` is the union of pairings\nchosen inside the blocks of a noncrossing partition; the last hypothesis is\nexactly the noncrossingness of each chosen within-block pairing. No algebraic\nmoment or cumulant identity is assumed or proved in this declaration.\n\n`AnalyticFisher.PairConstant a b f` says that a labeling `f` has equal values\nat the two endpoints `a j`, `b j` of every listed pair.\n`AnalyticFisher.pairing_label_bound` assumes that the `k` listed pairs cover\nall `m` positions and proves that the finite type of pair-constant labelings\nhas cardinality at most `p^k`. It proves this by the injective map recording\none endpoint label per pair. Disjointness and distinct endpoints are not\nrequired, so the theorem applies in particular to perfect pairings.\n\n`AnalyticFisher.family_pairing_label_bound` takes `t` such covering lists\nand proves that at most `t*p^k` labelings are constant on at least one of\nthem. Its proof uses a surjection from the disjoint union of the individual\ntypes, followed by the preceding cardinality bound. This is the all-order\nlabel-counting step used with `m=b`, `k=b/2`, and a family of noncrossing\npairings of the `B` positions.\n\nThese are load-bearing combinatorial statements, not numerical comparisons\nof entropy bounds. They do **not** formalize the construction of\nnoncrossing lattices, Catalan enumeration, the moment-cumulant formula,\nthe tensor-product moment law, Wick testing, conditional expectations,\ninfinite-series convergence, Fisher information, or entropy. Those parts\nare proved in `report.md` using the stated background results and remain\nsubject to independent mathematical review. A successful compiler run on\n`AF_KERNEL` must not be reported as a kernel proof of the whole analytic\ntheorem or of the manuscript's main entropy separation.\n"
+  },
+  "subject": {
+    "content_hash": "7e1338e3bf2299e56d210fac404a76c91e5c5de353b64fc9e245003f8dae1e5f",
+    "kind": "claim",
+    "subject_id": "AF_KERNEL"
+  },
+  "tier": "mechanical",
+  "verdict": "supports"
+}

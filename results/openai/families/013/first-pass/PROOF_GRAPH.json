@@ -1,0 +1,165 @@
+{
+  "goal": "C9000013",
+  "routes": [
+    {
+      "name": "R_TREE_VERIFY",
+      "status": "current",
+      "evidence": "research/tree_comparison/report.md"
+    },
+    {
+      "name": "R_TREE_REFUTE",
+      "status": "parked",
+      "evidence": "research/tree_comparison/report.md"
+    },
+    {
+      "name": "R_COUNTS_ONLY",
+      "status": "ruled_out",
+      "retired_because": "The formal growth values A(x)=B(x)=sqrt(x/log x) satisfy the necessary counting bounds and prime-coverage product bound simultaneously.",
+      "evidence": "research/tree_comparison/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000013": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 013 (Ostmann’s inverse Goldbach conjecture.; papers: The additive indecomposability of the primes; Lean status: Partially/Comparator formalized (lean/docs/013.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_TREE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_OSTMANN": {
+      "statement": "For every A,B subset N_0 with at least two elements each, (A+B) symmetric-difference P is infinite.",
+      "status": "open",
+      "depends_on": ["C_FINITE", "C_TWO_INFINITE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_FINITE": {
+      "statement": "An eventual decomposition of the positive primes into two nontrivial subsets of N_0 has both summands infinite.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_TWO_INFINITE": {
+      "statement": "No two infinite subsets of N_0 have sumset of finite symmetric difference from the positive primes.",
+      "status": "open",
+      "depends_on": ["C_FINAL"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_COLLISION": {
+      "statement": "Under the hypothetical eventual decomposition, the weighted collision-stability inequality of lem:collision holds for the stated tail measures and point-mass bound.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_QUADRATIC": {
+      "statement": "The independently translated quadratic-character correlations in prop:quadratic have weighted prime-band average o(T).",
+      "status": "open",
+      "depends_on": ["C_COLLISION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_CHARACTERS": {
+      "statement": "For every fixed 0<alpha<beta, prop:characters bounds the harmonic-band maximum translated correlation over all character orders greater than two by o(L).",
+      "status": "open",
+      "depends_on": ["C_COLLISION", "C_QUADRATIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_FLAT": {
+      "statement": "The centered normalized additive transforms g_p in cor:mixed-flatness have uniformly vanishing mixed-character correlation outside harmonic prime mass o(L).",
+      "status": "open",
+      "depends_on": ["C_COLLISION", "C_QUADRATIC", "C_CHARACTERS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_SUPPLY": {
+      "statement": "There is an absolute delta_0>0 for which the balanced primes with gamma_p>=delta_0 in the stated harmonic band have mass at least 0.15L for all sufficiently large L.",
+      "status": "open",
+      "depends_on": ["C_COLLISION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_ARITH": {
+      "statement": "The diagonal and signed history bounds of prop:comparisons hold uniformly over their allowed arithmetic environments and assignments.",
+      "status": "open",
+      "depends_on": ["C_TREE", "C_FLAT"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_TRANSFER": {
+      "statement": "The constructed transfer amplitudes satisfy the lower recurrence and final lower bound in Section 09.",
+      "status": "open",
+      "depends_on": ["C_COLLISION", "C_FLAT", "C_SUPPLY", "C_ARITH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_FINAL": {
+      "statement": "The final permutation-symmetrized upper bound contradicts the transfer lower bound after choosing depth and then scale.",
+      "status": "open",
+      "depends_on": ["C_TRANSFER", "C_ARITH"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_TREE": {
+      "statement": "For every odd prime and every literal permitted diagram, the single second moment is at most 3^r and the paired correlation is at most C_l(epsilon+q^(-1/4)) whenever l>=2 and b<=3r/4.",
+      "status": "in_progress",
+      "depends_on": ["C_TREE_DENSITY", "C_TREE_MAJORANTS", "C_TREE_CYCLE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md", "research/tree_comparison/exact_certificate.json"],
+      "remaining_obligation": "Independent review of the complete all-field proof; Engineer support is not Reviewer certification."
+    },
+    "C_TREE_DENSITY": {
+      "statement": "At every horizontal level, the valid argument law is dominated by 2^(k-1) times independent uniform unit measure, for k nodes at that level.",
+      "status": "in_progress",
+      "depends_on": ["C_TREE_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_TREE_MAJORANTS": {
+      "statement": "Quartet Mellin coefficients admit nonnegative majorants depending only on the parent argument, g, q, and the character, with small supremum of means O(epsilon^2+q^(-1/2)) and bounded sum of means, uniformly over ancestor data and parameters.",
+      "status": "in_progress",
+      "depends_on": ["C_TREE_AFFINE", "C_TREE_FOURTH", "C_TREE_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_TREE_AFFINE": {
+      "statement": "The uniform Mellin estimate eq:src42 holds for every character eta and additive frequency a, with bound q/(q-1)*(epsilon^4+sqrt(3)*q^(-1/2)).",
+      "status": "in_progress",
+      "depends_on": ["C_TREE_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_TREE_FOURTH": {
+      "statement": "The nonprincipal Gauss-convolution fourth moment and principal correction give the two-bad twisted-convolution bound O(epsilon^2+q^(-1)).",
+      "status": "in_progress",
+      "depends_on": ["C_TREE_ALGEBRA"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_TREE_CYCLE": {
+      "statement": "A cycle preserving component and quartet products yields the required projected norm estimate, including a two-parallel-edge cycle.",
+      "status": "in_progress",
+      "depends_on": ["C_TREE_DENSITY", "C_TREE_MAJORANTS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/tree_comparison/report.md"]
+    },
+    "C_TREE_ALGEBRA": {
+      "statement": "The reconstruction identities, square-root fiber dichotomy, nonidentity affine fiber injectivity, and off-diagonal quadratic-collision uniqueness hold over every field with their stated nonzero hypotheses.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/tree_comparison/Main.lean",
+        "research/tree_comparison/statement_fidelity.md",
+        "research/tree_comparison/certificates/C_TREE_ALGEBRA-aecfcac1b0b37198.json"
+      ],
+      "remaining_obligation": "The formal algebra has a real zero-hole compiler certificate; independent statement-fidelity review remains."
+    }
+  }
+}

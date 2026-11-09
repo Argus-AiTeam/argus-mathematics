@@ -1,0 +1,210 @@
+{
+  "goal": "C9000230",
+  "routes": [
+    {
+      "name": "R_MESH_ANALYTIC",
+      "status": "current",
+      "evidence": "research/mesh-tail-audit/report.md"
+    },
+    {
+      "name": "R_FIXED_ORDER_SHORTCUT",
+      "status": "ruled_out",
+      "evidence": "research/mesh-tail-audit/literature.md",
+      "retired_because": "Fixed-order moment finiteness supplies neither order growth nor the required uniform stopped-density estimates."
+    }
+  ],
+  "nodes": {
+    "C9000230": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 230 (Exact Hausdorff gauges for SLE.; papers: An exact Hausdorff gauge for SLE; An explicit exact Hausdorff gauge for SLE; Lean status: Partially/Comparator formalized (lean/docs/230.md)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C26_MESH_TAIL", "C_MESH_SIMULTANEOUS"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md",
+        "research/mesh-tail-audit/report.md"
+      ]
+    },
+    "C25_MAIN": {
+      "statement": "For fixed 0<kappa<8 the September 25 deterministic moment-defined gauge gives positive finite Hausdorff measure simultaneously on every positive-time compact SLE segment and finite expected whole-trace measure in each B_m.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["C25_LOWER", "C25_UPPER"],
+      "anchor": "S25/introduction.tex thm:main, hd:upper",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C25_GREEN": {
+      "statement": "In September 25 conventions a=2/kappa, alpha=1-kappa/8 and p_old=4a-1, the Green density has consistent finite stopped tilts, a centered angle diffusion with invariant density proportional to sin(theta)^(4a), uniform positive-time mixing, and conditional restart.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": [],
+      "anchor": "S25/onepoint.tex op:finite-tilt, op:mixing, op:potential",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C25_MULTI": {
+      "statement": "The September 25 multipoint radius estimate holds uniformly over marked surviving domains, initial angles, visiting orders, and stopping times, with the stated product of min(1,(e_i/b_i)^alpha) and an order-dependent constant.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C25_GREEN"],
+      "anchor": "S25/multipoint.tex mp:estimate, mp:kernel-integral",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C25_MASS": {
+      "statement": "There exists the September 25 locally finite nonatomic adapted trace measure with conditional remaining Green potential, locally continuous increments, conformal covariance, positive interval mass, and pathwise stopping restart.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C25_GREEN", "C25_MULTI"],
+      "anchor": "S25/mass.tex mass:construction, mass:restart, mass:positive",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C25_MOMENTS": {
+      "statement": "Every positive integer disk-model mass moment m_n is finite and positive, its finite-radius approximants recover it, and centered moments have the claimed inverse-angle bound.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C25_MASS", "C25_MULTI"],
+      "anchor": "S25/coefficients.tex coef:positive-moments, coef:recovery",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C25_BATCH": {
+      "statement": "The moment-defined finite batches produce the September 25 continuous positive nondecreasing quadratic-envelope gauge and both the summable tail and divergent testing multiplicity inequalities.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C25_MOMENTS"],
+      "anchor": "S25/gauge.tex gauge:admissible, gauge:multiplicity",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C25_LOWER": {
+      "statement": "Palm comparison and summable deletion retain positive trace mass with a ball bound by the September 25 gauge, giving its positive Hausdorff lower bound.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C25_MASS", "C25_BATCH"],
+      "anchor": "S25/hausdorff.tex hd:palm, hd:bad-cells, hd:lower",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C25_UPPER": {
+      "statement": "The September 25 adaptively separated centered tests and cleanup yield a finite expected whole-trace covering cost in each B_m.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C25_GREEN", "C25_MASS", "C25_BATCH"],
+      "anchor": "S25/upper-cover.tex hd:visit, hd:test-failure, hd:upper",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_MAIN": {
+      "statement": "For each fixed 0<kappa<8, h(r)=r^(1+kappa/8)(log log(1/r))^((1-kappa/8)/2) gives positive finite Hausdorff measure on every positive-time compact chordal SLE segment and finite expected whole-trace measure in each fixed bounded disk.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_RETAIN", "C26_COVER"],
+      "anchor": "S26/introduction.tex thm:main",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_GREEN": {
+      "statement": "For full conformal radius and p=1-kappa/8, a0=8/kappa-1, M=R^(-p)sin(theta)^a0 has exact finite live-clearance stopped first moments, zero terminal value on a missed cutoff, uniform approach probabilities, and conditional restart.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": [],
+      "anchor": "S26/local-laws.tex ll:finite-tilt, ll:inverse-angle, ll:approach",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_LIFETIME": {
+      "statement": "The consistent centered finite-radius stops have a finite limiting Loewner lifetime almost surely.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_GREEN"],
+      "anchor": "S26/local-laws.tex ll:finite-clock",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_ACCESS": {
+      "statement": "A finite stopped surviving-domain inverse map extends continuously spherically; a fresh first live hit of an initially free disk has a radial access in the current tip prime end.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": [],
+      "anchor": "S26/geometry.tex geom:extension, geom:fresh-tip, geom:first-hit-access",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_LOCALIZATION": {
+      "statement": "If a univalent half-plane map with continuous spherical extension maps an access from 0 to modulus 1 into B(q,r), the ordinary SLE image up to modulus L^b leaves B(q,Lr) with probability at most C L^(-c), uniformly over the map and access.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_GREEN"],
+      "anchor": "S26/local-laws.tex ll:near-real, ll:rectangle, ll:localization",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_SWALLOW": {
+      "statement": "For 4<kappa<8 a unit-modulus interior point remains live until a half-plane trace excursion of modulus A with probability at most C A^(-c), uniformly over its angle.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": [],
+      "anchor": "S26/local-laws.tex ll:swallowing",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_DISK": {
+      "statement": "For 4<kappa<8, after a first live circle hit of an initially free disk B(z,r), a subsequent exit from B(z,Lr) while z is live has conditional probability at most C L^(-c), uniformly over the permitted past.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["C26_ACCESS", "C26_LOCALIZATION", "C26_SWALLOW"],
+      "anchor": "S26/local-laws.tex ll:disk-rule",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_LAYER": {
+      "statement": "For every simply connected plane domain with connected unbounded complement, its Dirichlet Green function in logarithmic normalization has boundary-layer integral at most C r^2 at every starting point.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": [],
+      "anchor": "S26/mesh-tails.tex mesh:layer",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_BRACKET": {
+      "statement": "For kappa<=4, the spatial integral of the martingale slab from each point's own first distance r to its own first distance qr has pathwise bracket at most C r^(2-2p), including killing and infinite terminal intervals.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_GREEN", "C26_LAYER"],
+      "anchor": "S26/mesh-tails.tex mesh:active-coefficient through mesh:slab-tail",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_WINDOW": {
+      "statement": "Bounded outputs of geometrically disjoint adaptive curve windows, minus their start-measurable conditional upper means, have the spatial concentration bound exp(-c b^2/(K^2 R^2)) without conditioning on a permutation of starts.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": [],
+      "anchor": "S26/mesh-tails.tex win:concentration",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_RECURRENCE": {
+      "statement": "For 4<kappa<8, the live-approach and density window outputs imply the two simultaneous integral recurrences with summable alpha_j and e_j; their bound and summed exceptional probability are independent of the number of final-mesh slabs.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_GREEN", "C26_DISK", "C26_WINDOW", "C_MESH_ALGEBRA"],
+      "anchor": "S26/mesh-tails.tex win:means through win:recurrences and the final iteration",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_MESH_TAIL": {
+      "statement": "For fixed 0<kappa<8 and a fixed free collar around A=B(0,1), there exist C,c,delta0>0 depending only on kappa and the collar such that P(integral_A W_e > C delta^(-p)) <= C exp(-c delta^(-2)) for every prescribed 0<e<=delta<=delta0, uniformly over all permitted marked finite stopped-past domains, without a tip-distance bound and with fixed or stopping time cutoffs.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["C26_BRACKET", "C26_RECURRENCE"],
+      "anchor": "S26/mesh-tails.tex mesh:tail, mesh:normalized-tail",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_RETAIN": {
+      "statement": "Finite-time stopped densities and mesh-tail deletion give positive retained mass, supported weak limits with the h-ball bound, and positivity of h-Hausdorff measure simultaneously on every positive-time SLE interval.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_MESH_TAIL", "C26_LIFETIME"],
+      "anchor": "S26/retained-mass.tex retain:first-second through retain:positivity",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_SAUSAGE": {
+      "statement": "On each prescribed deterministic positive-length time interval, the normalized fine sausage area has a small-value probability tending to zero as its positive threshold tends to zero, uniformly for sufficiently fine meshes.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_MESH_TAIL", "C26_LIFETIME"],
+      "anchor": "S26/retained-mass.tex retain:sausage",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_RIBBON": {
+      "statement": "One admissible ribbon step has a uniformly positive conditional probability of controlled passage and positive normalized sausage mass at every prescribed mesh below a deterministic cutoff uniform over the rough stopped past.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_ACCESS", "C26_LOCALIZATION", "C26_SAUSAGE"],
+      "anchor": "S26/ribbon.tex rc:step, es:guide-compactness, es:good-semicircle",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_DENSE": {
+      "statement": "At radius r and angle bounded away from zero, the finite centered law has probability at least c exp(-C m^2) to generate normalized sausage area at least c r^d m^p before a fixed radius reduction, at every prescribed mesh below a state-uniform deterministic r delta_m.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_GREEN", "C26_RIBBON"],
+      "anchor": "S26/ribbon.tex rc:dense",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_CHARGE": {
+      "statement": "The expected normalized area of the whole-trace v-sausage in each bounded disk is bounded uniformly for 0<v<=1, including the real boundary layer.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_GREEN"],
+      "anchor": "S26/dense-cover.tex lem:cover-charge",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C26_COVER": {
+      "statement": "The dense tests with a common physical mesh, disjoint charged disks, and missed-cell cleanup give finite expected whole-trace h-Hausdorff measure in every bounded disk.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": ["C26_DENSE", "C26_CHARGE"],
+      "anchor": "S26/dense-cover.tex prop:dense-cover-upper",
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C_MESH_MOMENT_SCOPE": {
+      "statement": "The fixed-order statements in Rezaei-Zhan Theorems 1.1-1.2 do not, without an additional order-growth and uniformity argument, imply the specified stretched-exponential stopped-density tail.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/mesh-tail-audit/literature.md"]
+    },
+    "C_MESH_ALGEBRA": {
+      "statement": "Over the real numbers the two nonnegative mesh recurrences with 0<=alpha<=1/2, Lambda>=max(1,2C) imply the stated max-envelope recurrence; every scalar perturbed recurrence is bounded by its partial-error sum times its coefficient product, uniformly at all natural indices when these sums and products have common bounds; and B^n/(n+1)^4>=n+1 for all B>=32 and natural n.",
+      "status": "open", "reviewer_confirmed": false, "depends_on": [],
+      "evidence": ["research/mesh-tail-audit/Main.lean", "research/mesh-tail-audit/statement_fidelity.md", "research/mesh-tail-audit/certificates/C_MESH_ALGEBRA-355b0158c89e4ec6.json"]
+    },
+    "C_MESH_DOMAIN_EXTENSION": {
+      "statement": "For every fixed 0<kappa<8 the integrated stopped-density tail of C26_MESH_TAIL holds, with the same collar-only domain dependence, in every bounded simply connected locally connected-boundary initial domain with arbitrary distinct marked prime ends, and after its finite stopped pasts whenever the collar remains free.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["C26_GREEN", "C26_ACCESS", "C26_BRACKET", "C26_RECURRENCE"],
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    },
+    "C_MESH_SIMULTANEOUS": {
+      "statement": "For 4<kappa<8 in either the original or extended domain class, for each 0<delta<=delta0 there is a measurable random envelope E_delta dominating integral_A W_e simultaneously for every 0<e<=delta, with P(E_delta>C delta^(-p))<=C exp(-c delta^(-2)); therefore the bound also holds for any measurably chosen, possibly future-dependent final mesh in that interval.",
+      "status": "open", "reviewer_confirmed": false,
+      "depends_on": ["C26_RECURRENCE", "C_MESH_DOMAIN_EXTENSION"],
+      "evidence": ["research/mesh-tail-audit/report.md"]
+    }
+  }
+}

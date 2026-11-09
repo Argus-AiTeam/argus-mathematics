@@ -1,0 +1,148 @@
+{
+  "goal": "C9000355",
+  "routes": [
+    {
+      "name": "weighted-positive-Gevrey-Stokes-transfer",
+      "status": "current",
+      "evidence": "research/stokes_audit/proof.md"
+    },
+    {
+      "name": "unrestricted-radial-weight-positivity",
+      "status": "ruled_out",
+      "evidence": "research/stokes_audit/proof.md, Section 2: at m=3 the unique recurrence has b_2=0 and b_3=-1, so the positive-coefficient proof cannot cover every radial weight. No vanishing claim is inferred."
+    }
+  ],
+  "nodes": {
+    "C9000355": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 355 (Unique tangent flows at the first surface singularity.; papers: Uniqueness of tangent flows at the first singular time of embedded surface mean-curvature flow; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C355_STOKES_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C355_STOKES_CORE": {
+      "statement": "Independently verify the exact scalar Stokes and conditional boundary-transfer core and extend it uniformly to radial weights 1 <= m <= 2; no full tangent-flow uniqueness claim.",
+      "status": "in_progress",
+      "depends_on": ["C355_RECURRENCE", "C355_SECTORS", "C355_GEVREY", "C355_NONZERO", "C355_TRANSFER", "C355_ORIENTATION"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/stokes_audit/proof.md",
+        "research/stokes_audit/verify.py",
+        "research/stokes_audit/exact_certificate.json"
+      ]
+    },
+    "C355_RECURRENCE": {
+      "statement": "The exact weighted positive-composition recurrence has nonnegative coefficients and n*b_n >= 2^(n-1)*(n-1)! for 1 <= m <= 2, n >= 1; the ODE and momentum polynomial identities hold.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "research/stokes_audit/proof.md",
+        "research/stokes_audit/lean/Main.lean",
+        "research/stokes_audit/lean/statement_fidelity.md",
+        "research/stokes_audit/lean/certificates/C355_RECURRENCE-7db95e20a6abdc29.json"
+      ]
+    },
+    "C355_SECTORS": {
+      "statement": "Uniform convergent Volterra iteration selects the unique small upper and lower exterior solutions, including sectors with arg(y^2) = +/-2pi/3.",
+      "status": "in_progress",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/stokes_audit/proof.md"]
+    },
+    "C355_GEVREY": {
+      "statement": "The selected solutions have a common formal expansion with factorial coefficient bounds and all-order analytic remainders, uniformly for 1 <= m <= 2.",
+      "status": "in_progress",
+      "depends_on": ["C355_RECURRENCE", "C355_SECTORS"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/stokes_audit/proof.md"]
+    },
+    "C355_NONZERO": {
+      "statement": "The lateral difference is c_m*y^(4-m)*exp(-y^2/(2m))*(1+O(y^-2)); c_m is continuous, purely imaginary, nonzero, and bounded away from zero on [1,2].",
+      "status": "in_progress",
+      "depends_on": ["C355_GEVREY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/stokes_audit/proof.md"]
+    },
+    "C355_TRANSFER": {
+      "statement": "For fixed-section stationary first variation and normalized linear slope interpolation, exact momentum cancellation transfers the lateral difference to m^3*c_m. Matching finite bypasses have exponentially smaller errors.",
+      "status": "in_progress",
+      "depends_on": ["C355_NONZERO", "C355_RECURRENCE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/stokes_audit/proof.md"]
+    },
+    "C355_ORIENTATION": {
+      "statement": "The outward radial orientation and axial-to-radial bypass reversal are common on every end, yielding one global sign epsilon_lab, not an end-dependent sign.",
+      "status": "in_progress",
+      "depends_on": ["C355_TRANSFER"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/stokes_audit/proof.md"]
+    },
+    "M355_MAIN": {
+      "statement": "Manuscript thm:main: fixed-center tangent-flow uniqueness at the first singular time for every smooth closed embedded surface in R^3.",
+      "status": "open",
+      "depends_on": ["M355_GEOMETRY", "M355_FAMILY", "M355_NO_ARC", "M355_FINITE_JET", "M355_FLOW"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Tangent-flow-uniqueness-2026-09-24/build/sections/introduction.tex"]
+    },
+    "M355_GEOMETRY": {
+      "statement": "Manuscript geo:tangent: multiplicity one, smooth tangent support, and finitely many separated conical and cylindrical ends.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Tangent-flow-uniqueness-2026-09-24/build/sections/geometry.tex"]
+    },
+    "M355_FAMILY": {
+      "statement": "Manuscript lin:family: normalized stationary family, polynomial opening jets, and their uniform analytic and weighted estimates.",
+      "status": "open",
+      "depends_on": ["M355_GEOMETRY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Tangent-flow-uniqueness-2026-09-24/build/sections/linear.tex"]
+    },
+    "M355_ARRAY_UPPER": {
+      "statement": "Manuscript arr:action-upper: a formal critical opening arc gives common actual parameters and an exponentially small action difference with the asserted strict margin.",
+      "status": "open",
+      "depends_on": ["M355_FAMILY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Tangent-flow-uniqueness-2026-09-24/build/sections/arrays.tex"]
+    },
+    "H355_SURFACE_INTERFACES": {
+      "statement": "The manuscript's compatible normalized surface homotopies, common phase normalization, fixed-Y radial and homotopy-derivative limits, exact first variation, and exponentially small endpoint errors satisfy Section 8 of proof.md.",
+      "status": "open",
+      "depends_on": ["M355_FAMILY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/stokes_audit/proof.md"]
+    },
+    "M355_ACTION_JUMP": {
+      "statement": "Manuscript jump:jump: the actual normalized array action difference has the universal nonzero signed sum of physical end scales.",
+      "status": "open",
+      "depends_on": ["H355_SURFACE_INTERFACES", "C355_STOKES_CORE"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Tangent-flow-uniqueness-2026-09-24/build/sections/jump.tex"]
+    },
+    "M355_NO_ARC": {
+      "statement": "Manuscript phase:no-arc: every real formal critical arc has identically zero opening variables, using phase expansion and positive relative end weights.",
+      "status": "open",
+      "depends_on": ["M355_ARRAY_UPPER", "M355_ACTION_JUMP"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Tangent-flow-uniqueness-2026-09-24/build/sections/phase.tex"]
+    },
+    "M355_FINITE_JET": {
+      "statement": "The manuscript converts opening-arc exclusion into finite-jet real-radical and gradient inequalities using the stated algebraic and analytic inputs.",
+      "status": "open",
+      "depends_on": ["M355_NO_ARC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Tangent-flow-uniqueness-2026-09-24/build/sections/finite-jet.tex"]
+    },
+    "M355_FLOW": {
+      "statement": "The manuscript's localization, graphical bootstrap, and finite rescaled length yield fixed-frame convergence at every negative time.",
+      "status": "open",
+      "depends_on": ["M355_FINITE_JET"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/Tangent-flow-uniqueness-2026-09-24/build/sections/flow.tex"]
+    }
+  }
+}

@@ -1,0 +1,1543 @@
+import Mathlib
+
+set_option maxHeartbeats 1600000
+
+/- The following Apache-2.0 sources are from openai/math, revision
+   4eaee87548250b2682affda7d05d947c05554bae. Modified here by flattening imports for Lean 4.31.0.
+   See LICENSE.upstream and the original files in upstream/. -/
+
+/- Lean 4.31.0 lacks the later real-valued list lower-bound lemma. -/
+theorem List.length_nsmul_le_sum (l : List ℝ) (a : ℝ)
+    (h : ∀ b ∈ l, a ≤ b) : l.length • a ≤ l.sum := by
+  induction l with
+  | nil => simp
+  | cons b l ih =>
+    have hb : a ≤ b := h b (by simp)
+    have ht : l.length • a ≤ l.sum := ih (fun x hx => h x (by simp [hx]))
+    change (l.length + 1) • a ≤ b + l.sum
+    rw [add_nsmul, one_nsmul]
+    linarith
+
+
+/- Upstream module: OAI.NumberTheory.ShortEgyptian.PrimeReciprocals -/
+
+
+
+namespace OAI
+
+namespace ShortEgyptian
+
+open scoped BigOperators
+open Finset
+
+theorem prime_reciprocals_band (s : Finset ℕ) (R : ℝ) (hR : 1 < R)
+    (hs : ∀ p ∈ s, p.Prime ∧ R ≤ p ∧ (p : ℝ) ≤ 2 * R) :
+    ∑ p ∈ s, (1 : ℝ) / p ≤ 2 * Real.log 4 / Real.log R := by
+  have hRp : 0 < R := lt_trans zero_lt_one hR
+  have hl : 0 < Real.log R := Real.log_pos hR
+  have hsub : s ⊆ Nat.primesLE ⌊2 * R⌋₊ := by
+    intro p hp
+    exact Nat.mem_primesLE.mpr ⟨Nat.le_floor (hs p hp).2.2, (hs p hp).1⟩
+  have hsum : ∑ p ∈ s, Real.log p ≤ Real.log 4 * (2 * R) := by
+    calc
+      _ ≤ ∑ p ∈ Nat.primesLE ⌊2 * R⌋₊, Real.log p :=
+        sum_le_sum_of_subset_of_nonneg hsub (fun p _ _ => Real.log_natCast_nonneg p)
+      _ = Chebyshev.theta (2 * R) := (Chebyshev.theta_eq_sum_primesLE _).symm
+      _ ≤ _ := Chebyshev.theta_le_log4_mul_x (by positivity)
+  calc
+    _ ≤ ∑ p ∈ s, Real.log p / (R * Real.log R) := by
+      apply sum_le_sum
+      intro p hp
+      have hpp : 0 < (p : ℝ) := lt_of_lt_of_le hRp (hs p hp).2.1
+      apply (div_le_div_iff₀ hpp (mul_pos hRp hl)).mpr
+      have hlog := Real.log_le_log hRp (hs p hp).2.1
+      nlinarith [mul_le_mul_of_nonneg_left hlog hpp.le,
+        mul_le_mul_of_nonneg_right (hs p hp).2.1 hl.le]
+    _ = (∑ p ∈ s, Real.log p) / (R * Real.log R) := (sum_div _ _ _).symm
+    _ ≤ (Real.log 4 * (2 * R)) / (R * Real.log R) := by gcongr
+    _ = _ := by field_simp
+
+theorem prime_reciprocals_dyadic (K : ℕ) :
+    ∑ p ∈ Nat.primesLE (2 ^ (K + 1)), (1 : ℝ) / p ≤ 4 * (1 + (harmonic K : ℝ)) := by
+  induction K with
+  | zero =>
+    have h : Nat.primesLE 2 = {2} := by decide
+    norm_num [h]
+  | succ K ih =>
+    let s := (Nat.primesLE (2 ^ (K + 1 + 1))).filter fun p => 2 ^ (K + 1) < p
+    have hsplit :
+        ∑ p ∈ Nat.primesLE (2 ^ (K + 1 + 1)), (1 : ℝ) / p =
+        (∑ p ∈ Nat.primesLE (2 ^ (K + 1)), (1 : ℝ) / p) + ∑ p ∈ s, (1 : ℝ) / p := by
+      rw [← sum_filter_add_sum_filter_not _ (fun p => p ≤ 2 ^ (K + 1))]
+      congr 1
+      · congr 1
+        ext p
+        simp only [mem_filter, Nat.mem_primesLE]
+        have hp : 2 ^ (K + 1) ≤ 2 ^ (K + 1 + 1) := Nat.pow_le_pow_right (by omega) (by omega)
+        constructor
+        · rintro ⟨⟨h1, h2⟩, h3⟩
+          exact ⟨h3, h2⟩
+        · rintro ⟨h1, h2⟩
+          exact ⟨⟨h1.trans hp, h2⟩, h1⟩
+      · simp [s]
+    have hb := prime_reciprocals_band s ((2 : ℝ) ^ (K + 1))
+      (by exact one_lt_pow₀ (by norm_num) (by omega)) (by
+        intro p hp
+        obtain ⟨hp, hp'⟩ := mem_filter.mp hp
+        obtain ⟨hle, hprime⟩ := Nat.mem_primesLE.mp hp
+        refine ⟨hprime, ?_, ?_⟩
+        · exact_mod_cast hp'.le
+        · have hle' : (p : ℝ) ≤ (2 : ℝ) ^ (K + 1 + 1) := by exact_mod_cast hle
+          simpa [pow_succ, mul_comm] using hle')
+    have hlog2 : 0 < Real.log 2 := Real.log_pos (by norm_num)
+    have hlog4 : Real.log 4 = 2 * Real.log 2 := by
+      convert Real.log_pow 2 2 using 1 <;> norm_num
+    rw [Real.log_pow, hlog4] at hb
+    have hb' : ∑ p ∈ s, (1 : ℝ) / p ≤ 4 / (K + 1 : ℕ) := by
+      convert hb using 1
+      field_simp
+      norm_num
+    rw [hsplit, harmonic_succ]
+    push_cast
+    push_cast at hb'
+    rw [div_eq_mul_inv] at hb'
+    linarith
+
+theorem prime_reciprocals_bound (T : ℕ) (hT : 2 ≤ T) :
+    ∑ p ∈ Nat.primesLE T, (1 : ℝ) / p ≤
+      8 + 4 * Real.log (1 + Real.log T / Real.log 2) := by
+  let K := Nat.log 2 T
+  have hK : 0 < K := Nat.log_pos (by norm_num) hT
+  have hl2 : 0 < Real.log 2 := Real.log_pos (by norm_num)
+  have hTpos : 0 < (T : ℝ) := by exact_mod_cast (by omega : 0 < T)
+  have hpower : (2 : ℝ) ^ K ≤ T := by exact_mod_cast Nat.pow_log_le_self 2 (by omega : T ≠ 0)
+  have hlog : (K : ℝ) ≤ Real.log T / Real.log 2 := by
+    apply (le_div_iff₀ hl2).mpr
+    simpa [Real.log_pow] using Real.log_le_log (by positivity : 0 < (2 : ℝ) ^ K) hpower
+  have hharm := harmonic_le_one_add_log K
+  have hlog' : Real.log K ≤ Real.log (1 + Real.log T / Real.log 2) := by
+    apply Real.log_le_log (by exact_mod_cast hK)
+    linarith
+  calc
+    _ ≤ ∑ p ∈ Nat.primesLE (2 ^ (K + 1)), (1 : ℝ) / p :=
+      sum_le_sum_of_subset_of_nonneg
+        (Nat.primesLE_mono (Nat.lt_pow_succ_log_self (by norm_num : 1 < 2) T).le)
+        (fun _ _ _ => by positivity)
+    _ ≤ 4 * (1 + (harmonic K : ℝ)) := prime_reciprocals_dyadic K
+    _ ≤ _ := by linarith
+
+end ShortEgyptian
+
+end OAI
+
+
+/- Upstream module: OAI.NumberTheory.ShortEgyptian.DivisorWeights -/
+
+
+
+namespace OAI
+
+namespace ShortEgyptian
+
+open scoped BigOperators
+open Finset
+
+noncomputable def momentSeriesConst (r : ℕ) : ℝ :=
+  ∑' j : ℕ, ((j + 2 : ℕ) : ℝ) ^ r * (3 / 4 : ℝ) ^ j
+
+theorem summable_shifted_geom (r k : ℕ) (x : ℝ) (hx0 : 0 < x) (hx1 : x < 1) :
+    Summable (fun j : ℕ => ((j + k : ℕ) : ℝ)^r * x^j) := by
+  have hb : Summable (fun j : ℕ => (j : ℝ)^r * x^j) :=
+    summable_pow_mul_geometric_of_norm_lt_one r (by simpa [Real.norm_eq_abs, abs_of_pos hx0] using hx1)
+  have hs := (summable_nat_add_iff k).mpr hb
+  have hs' := hs.mul_right (x ^ k)⁻¹
+  apply hs'.congr
+  intro j
+  rw [pow_add]
+  field_simp
+
+theorem polynomial_geom_local (r : ℕ) (x : ℝ) (hx0 : 0 ≤ x) (hx1 : x ≤ 3/4) :
+    Summable (fun j : ℕ => ((j + 1 : ℕ) : ℝ)^r * x^j) ∧
+    (∑' j : ℕ, ((j + 1 : ℕ) : ℝ)^r * x^j) ≤ Real.exp (momentSeriesConst r * x) := by
+  have hs (k : ℕ) := summable_shifted_geom r k (3/4) (by norm_num) (by norm_num)
+  have hsum (k : ℕ) : Summable (fun j : ℕ => ((j+k:ℕ):ℝ)^r * x^j) := by
+    apply Summable.of_nonneg_of_le (fun j => by positivity) _ (hs k)
+    intro j
+    gcongr
+  refine ⟨hsum 1, ?_⟩
+  have htail : (∑' j : ℕ, ((j+2:ℕ):ℝ)^r * x^j) ≤ momentSeriesConst r := by
+    exact (hsum 2).tsum_le_tsum (fun j => by gcongr) (hs 2)
+  rw [(hsum 1).tsum_eq_zero_add]
+  simp only [Nat.zero_add, Nat.cast_one, one_pow, pow_zero, mul_one]
+  have heq : (∑' b : ℕ, ((b + 1 + 1 : ℕ) : ℝ)^r * x^(b+1)) =
+      x * ∑' b : ℕ, ((b+2:ℕ):ℝ)^r * x^b := by
+    rw [← tsum_mul_left]
+    congr 1
+    ext b
+    simp only [pow_succ]
+    ring
+  rw [heq]
+  calc
+    _ ≤ 1 + momentSeriesConst r * x := by nlinarith
+    _ ≤ _ := by simpa [add_comm] using Real.add_one_le_exp (momentSeriesConst r * x)
+
+noncomputable def divisorWeight (r : ℕ) (σ : ℝ) (n : ℕ) : ℝ :=
+  (n.divisors.card : ℝ)^r * (n : ℝ)^(-σ)
+
+theorem divisorWeight_one (r : ℕ) (σ : ℝ) : divisorWeight r σ 1 = 1 := by
+  simp [divisorWeight]
+
+theorem divisorWeight_mul (r : ℕ) (σ : ℝ) {m n : ℕ} (h : m.Coprime n) :
+    divisorWeight r σ (m*n) = divisorWeight r σ m * divisorWeight r σ n := by
+  simp only [divisorWeight, h.card_divisors_mul, Nat.cast_mul, mul_pow,
+    Real.mul_rpow (Nat.cast_nonneg _) (Nat.cast_nonneg _)]
+  ring
+
+theorem divisorWeight_prime_pow (r : ℕ) (σ : ℝ) {p : ℕ} (hp : p.Prime) (j : ℕ) :
+    divisorWeight r σ (p^j) = ((j+1:ℕ):ℝ)^r * ((p:ℝ)^(-σ))^j := by
+  have hcard : (p^j).divisors.card = j+1 := by
+    rw [← ArithmeticFunction.sigma_zero_apply]
+    exact ArithmeticFunction.sigma_zero_apply_prime_pow hp
+  simp only [divisorWeight, hcard, Nat.cast_pow]
+  congr 1
+  rw [← Real.rpow_natCast_mul (Nat.cast_nonneg _), mul_comm,
+    Real.rpow_mul_natCast (Nat.cast_nonneg _)]
+
+theorem prime_rpow_small {p : ℕ} (hp : p.Prime) {σ : ℝ} (hσ : 1/2 ≤ σ) :
+    0 < (p:ℝ)^(-σ) ∧ (p:ℝ)^(-σ) ≤ 3/4 := by
+  have hpp : 0 < (p:ℝ) := by exact_mod_cast hp.pos
+  have hp2 : 2 ≤ (p:ℝ) := by exact_mod_cast hp.two_le
+  have hs : 4/3 ≤ Real.sqrt (p:ℝ) := by
+    apply (Real.le_sqrt (by norm_num) hpp.le).mpr
+    norm_num
+    linarith
+  refine ⟨Real.rpow_pos_of_pos hpp _, ?_⟩
+  calc
+    _ ≤ (p:ℝ)^(-(1/2:ℝ)) := Real.rpow_le_rpow_of_exponent_le (by linarith) (by linarith)
+    _ = (Real.sqrt (p:ℝ))⁻¹ := by rw [Real.rpow_neg hpp.le, Real.sqrt_eq_rpow]
+    _ ≤ 3/4 := by
+      rw [← one_div]
+      apply (div_le_iff₀ (Real.sqrt_pos.mpr hpp)).mpr
+      linarith
+
+theorem divisorWeight_prime_summable (r : ℕ) {σ : ℝ} (hσ : 1/2 ≤ σ)
+    {p : ℕ} (hp : p.Prime) : Summable (fun j : ℕ => ‖divisorWeight r σ (p^j)‖) := by
+  simp_rw [divisorWeight_prime_pow r σ hp]
+  have hx := prime_rpow_small hp hσ
+  have hnonneg (j : ℕ) : 0 ≤ ((j+1:ℕ):ℝ)^r * ((p:ℝ)^(-σ))^j := by positivity
+  simp_rw [Real.norm_eq_abs, abs_of_nonneg (hnonneg _)]
+  exact (polynomial_geom_local r _ hx.1.le hx.2).1
+
+theorem smooth_divisor_weight (r : ℕ) {σ : ℝ} (hσ : 1/2 ≤ σ)
+    (s P : Finset ℕ) (hs : ∀ d ∈ s, d ∈ Nat.factoredNumbers P) :
+    ∑ d ∈ s, divisorWeight r σ d ≤
+      Real.exp (momentSeriesConst r * ∑ p ∈ P with p.Prime, (p:ℝ)^(-σ)) := by
+  classical
+  have he := EulerProduct.summable_and_hasSum_factoredNumbers_prod_filter_prime_tsum
+    (divisorWeight_one r σ) (fun h => divisorWeight_mul r σ h)
+    (fun hp => divisorWeight_prime_summable r hσ hp) P
+  have hnn (d : ℕ) : 0 ≤ divisorWeight r σ d := by
+    unfold divisorWeight
+    positivity
+  calc
+    _ = ∑ d ∈ s.subtype (· ∈ Nat.factoredNumbers P), divisorWeight r σ d :=
+      (sum_subtype_of_mem _ hs).symm
+    _ ≤ ∏ p ∈ P with p.Prime, ∑' j : ℕ, divisorWeight r σ (p^j) :=
+      sum_le_hasSum _ (fun d _ => hnn d) he.2
+    _ ≤ ∏ p ∈ P with p.Prime, Real.exp (momentSeriesConst r * (p:ℝ)^(-σ)) := by
+      apply prod_le_prod
+      · intro p _
+        exact tsum_nonneg (fun j => hnn (p^j))
+      · intro p hp
+        have hp' := (mem_filter.mp hp).2
+        simp_rw [divisorWeight_prime_pow r σ hp']
+        exact (polynomial_geom_local r _ (prime_rpow_small hp' hσ).1.le
+          (prime_rpow_small hp' hσ).2).2
+    _ = _ := by rw [← Real.exp_sum, ← mul_sum]
+
+theorem momentSeriesConst_nonneg (r : ℕ) : 0 ≤ momentSeriesConst r := by
+  exact tsum_nonneg (fun _ => by positivity)
+
+theorem rankin_divisor_weight (r : ℕ) (A lam : ℝ) (hA : 0 < A)
+    (hlam : 0 ≤ lam) (hlamsmall : lam ≤ 1/2) (s P : Finset ℕ)
+    (hs : ∀ d ∈ s, d ∈ Nat.factoredNumbers P ∧ A ≤ d) :
+    ∑ d ∈ s, (d.divisors.card : ℝ)^r / d ≤
+      Real.exp (-lam * Real.log A + momentSeriesConst r *
+        ∑ p ∈ P with p.Prime, (p:ℝ)^(-(1-lam))) := by
+  have hnonneg : 0 ≤ A ^ (-lam) := Real.rpow_nonneg hA.le _
+  have hsum := smooth_divisor_weight r (by linarith : 1/2 ≤ 1-lam) s P (fun d hd => (hs d hd).1)
+  calc
+    _ ≤ ∑ d ∈ s, A^(-lam) * divisorWeight r (1-lam) d := by
+      apply sum_le_sum
+      intro d hd
+      have hdpos : 0 < (d:ℝ) := lt_of_lt_of_le hA (hs d hd).2
+      have hp : (d:ℝ)^(-lam) ≤ A^(-lam) :=
+        Real.rpow_le_rpow_of_nonpos hA (hs d hd).2 (by linarith)
+      have heq : (d.divisors.card : ℝ)^r / d =
+          (d:ℝ)^(-lam) * divisorWeight r (1-lam) d := by
+        unfold divisorWeight
+        rw [mul_left_comm, ← Real.rpow_add hdpos]
+        have hh : -lam + -(1-lam) = (-1:ℝ) := by ring
+        rw [hh, Real.rpow_neg_one]
+        ring
+      rw [heq]
+      exact mul_le_mul_of_nonneg_right hp (by unfold divisorWeight; positivity)
+    _ = A^(-lam) * ∑ d ∈ s, divisorWeight r (1-lam) d := (mul_sum _ _ _).symm
+    _ ≤ A^(-lam) * Real.exp (momentSeriesConst r *
+        ∑ p ∈ P with p.Prime, (p:ℝ)^(-(1-lam))) := mul_le_mul_of_nonneg_left hsum hnonneg
+    _ = _ := by rw [Real.rpow_def_of_pos hA, ← Real.exp_add]; congr 1; ring
+
+end ShortEgyptian
+
+end OAI
+
+
+/- Upstream module: OAI.NumberTheory.ShortEgyptian.TruncatedDivisors -/
+
+
+
+namespace OAI
+
+namespace ShortEgyptian
+
+open scoped BigOperators
+open Finset
+
+noncomputable def truncatedDivisors (X : ℝ) (n : ℕ) : Finset ℕ :=
+  n.divisors.filter fun a => (a:ℝ) ≤ X
+
+noncomputable def truncatedDivisorCount (X : ℝ) (n : ℕ) : ℕ :=
+  (truncatedDivisors X n).card
+
+theorem truncatedDivisors_mul (X : ℝ) {d e : ℕ} (hd : d ≠ 0) (he : e ≠ 0) :
+    truncatedDivisorCount X (d*e) ≤ d.divisors.card * truncatedDivisorCount X e := by
+  classical
+  have hsub : truncatedDivisors X (d*e) ⊆
+      (d.divisors ×ˢ truncatedDivisors X e).image (fun bc => bc.1 * bc.2) := by
+    intro a ha
+    obtain ⟨ha, hX⟩ := mem_filter.mp ha
+    obtain ⟨had, han⟩ := Nat.mem_divisors.mp ha
+    obtain ⟨b, c, hb, hc, hbc⟩ := exists_dvd_and_dvd_of_dvd_mul had
+    have hbpos : 0 < b := Nat.pos_of_dvd_of_pos hb (Nat.pos_of_ne_zero hd)
+    have hcle : c ≤ a := by rw [hbc]; exact Nat.le_mul_of_pos_left c hbpos
+    exact mem_image.mpr ⟨(b,c), mem_product.mpr ⟨Nat.mem_divisors.mpr ⟨hb,hd⟩,
+      mem_filter.mpr ⟨Nat.mem_divisors.mpr ⟨hc,he⟩, le_trans (by exact_mod_cast hcle) hX⟩⟩, hbc.symm⟩
+  calc
+    _ ≤ ((d.divisors ×ˢ truncatedDivisors X e).image (fun bc => bc.1 * bc.2)).card := card_le_card hsub
+    _ ≤ (d.divisors ×ˢ truncatedDivisors X e).card := card_image_le
+    _ = _ := by simp [truncatedDivisorCount]
+
+theorem rough_cardFactors_log {n : ℕ} (hn : n ≠ 0) (z : ℝ) (hz : 0 < z)
+    (hrough : ∀ p ∈ n.primeFactorsList, z ≤ p) :
+    (ArithmeticFunction.cardFactors n : ℝ) * Real.log z ≤ Real.log n := by
+  have hprod : (n.primeFactorsList.map (fun p : ℕ => (p:ℝ))).prod = n := by
+    rw [← Nat.cast_list_prod, Nat.prod_primeFactorsList hn]
+  have hlog := Real.log_list_prod (l := n.primeFactorsList.map (fun p : ℕ => (p:ℝ))) (by
+    intro x hx
+    obtain ⟨p, hp, rfl⟩ := List.mem_map.mp hx
+    exact_mod_cast (Nat.pos_of_mem_primeFactorsList hp).ne')
+  rw [hprod, List.map_map] at hlog
+  have hh := List.length_nsmul_le_sum (n.primeFactorsList.map (fun p : ℕ => Real.log (p:ℝ))) (Real.log z) (by
+    intro x hx
+    obtain ⟨p, hp, rfl⟩ := List.mem_map.mp hx
+    exact Real.log_le_log hz (hrough p hp))
+  rw [hlog]
+  simpa [ArithmeticFunction.cardFactors_apply, List.length_map, nsmul_eq_mul, Function.comp_def] using hh
+
+theorem divisor_generating_prime_mul (q : ℝ) (hq : 0 ≤ q) {p m : ℕ}
+    (hp : p.Prime) (hm : m ≠ 0) :
+    ∑ d ∈ (p*m).divisors, q^(ArithmeticFunction.cardFactors d) ≤
+      (1+q) * ∑ d ∈ m.divisors, q^(ArithmeticFunction.cardFactors d) := by
+  classical
+  let w (d : ℕ) : ℝ := q^(ArithmeticFunction.cardFactors d)
+  have hw (d : ℕ) : 0 ≤ w d := pow_nonneg hq _
+  have hsub : (p*m).divisors ⊆ m.divisors ∪ m.divisors.image (p*·) := by
+    intro d hd
+    have hdvd := (Nat.mem_divisors.mp hd).1
+    apply mem_union.mpr
+    by_cases hpd : p ∣ d
+    · right
+      refine mem_image.mpr ⟨d/p, Nat.mem_divisors.mpr ⟨?_, hm⟩, Nat.mul_div_cancel' hpd⟩
+      have hh := Nat.div_dvd_div hpd hdvd
+      simpa [Nat.mul_div_cancel_left m hp.pos] using hh
+    · left
+      exact Nat.mem_divisors.mpr ⟨((hp.coprime_iff_not_dvd.mpr hpd).symm).dvd_of_dvd_mul_left hdvd, hm⟩
+  have hsum : (∑ d ∈ m.divisors ∪ m.divisors.image (p*·), w d) ≤
+      (∑ d ∈ m.divisors, w d) + ∑ d ∈ m.divisors.image (p*·), w d := by
+    have hh := sum_union_inter (s₁ := m.divisors) (s₂ := m.divisors.image (p*·)) (f := w)
+    have hnn := sum_nonneg (s := m.divisors ∩ m.divisors.image (p*·)) (fun d _ => hw d)
+    linarith
+  calc
+    _ ≤ ∑ d ∈ m.divisors ∪ m.divisors.image (p*·), w d :=
+      sum_le_sum_of_subset_of_nonneg hsub (fun d _ _ => hw d)
+    _ ≤ _ := hsum
+    _ = (∑ d ∈ m.divisors, w d) + ∑ d ∈ m.divisors, w (p*d) := by
+      rw [sum_image (by intro a _ b _ h; exact Nat.eq_of_mul_eq_mul_left hp.pos h)]
+    _ = _ := by
+      have hmul : ∀ d ∈ m.divisors, w (p*d) = q * w d := by
+        intro d hd
+        unfold w
+        rw [ArithmeticFunction.cardFactors_mul hp.ne_zero (Nat.pos_of_mem_divisors hd).ne',
+          ArithmeticFunction.cardFactors_apply_prime hp, pow_add, pow_one]
+      rw [sum_congr rfl hmul, ← mul_sum]
+      ring
+
+theorem divisor_generating_bound (q : ℝ) (hq : 0 ≤ q) (n : ℕ) (hn : n ≠ 0) :
+    ∑ d ∈ n.divisors, q^(ArithmeticFunction.cardFactors d) ≤
+      (1+q)^(ArithmeticFunction.cardFactors n) := by
+  induction n using Nat.strong_induction_on with
+  | h n ih =>
+    by_cases hn1 : n = 1
+    · simp [hn1]
+    have hp := Nat.minFac_prime hn1
+    have hm : n / n.minFac ≠ 0 := by
+      have hmul := Nat.mul_div_cancel' (Nat.minFac_dvd n)
+      intro hz
+      simp [hz] at hmul
+      exact hn hmul.symm
+    have hlt := Nat.div_lt_self (Nat.pos_of_ne_zero hn) hp.one_lt
+    have hmul : n = n.minFac * (n / n.minFac) := (Nat.mul_div_cancel' (Nat.minFac_dvd n)).symm
+    calc
+      _ = ∑ d ∈ (n.minFac * (n / n.minFac)).divisors, q^(ArithmeticFunction.cardFactors d) := by
+        rw [← hmul]
+      _ ≤ (1+q) * ∑ d ∈ (n / n.minFac).divisors, q^(ArithmeticFunction.cardFactors d) :=
+        divisor_generating_prime_mul q hq hp hm
+      _ ≤ (1+q) * (1+q)^(ArithmeticFunction.cardFactors (n / n.minFac)) :=
+        mul_le_mul_of_nonneg_left (ih _ hlt hm) (by linarith)
+      _ = _ := by
+        conv_rhs => rw [hmul]
+        rw [ArithmeticFunction.cardFactors_mul hp.ne_zero hm,
+          ArithmeticFunction.cardFactors_apply_prime hp, pow_add, pow_one]
+
+theorem rough_truncated_bound {n : ℕ} (hn : n ≠ 0) (X W z q : ℝ)
+    (hz : 1 < z) (hq0 : 0 < q) (hq1 : q < 1)
+    (hW : Real.log n ≤ W) (hrough : ∀ p ∈ n.primeFactorsList, z ≤ p) :
+    (truncatedDivisorCount X n : ℝ) ≤
+      Real.exp ((q * W - Real.log X * Real.log q) / Real.log z) := by
+  classical
+  have hlz : 0 < Real.log z := Real.log_pos hz
+  have hlq : Real.log q < 0 := Real.log_neg hq0 hq1
+  have hΩ : (ArithmeticFunction.cardFactors n : ℝ) ≤ W / Real.log z := by
+    apply (le_div_iff₀ hlz).mpr
+    exact (rough_cardFactors_log hn z (by linarith) hrough).trans hW
+  let L := Real.log q * (Real.log X / Real.log z)
+  let U := q * W / Real.log z
+  have hlower : (truncatedDivisorCount X n : ℝ) * Real.exp L ≤
+      ∑ a ∈ truncatedDivisors X n, q^(ArithmeticFunction.cardFactors a) := by
+    calc
+      _ = ∑ _a ∈ truncatedDivisors X n, Real.exp L := by simp [truncatedDivisorCount]
+      _ ≤ _ := by
+        apply sum_le_sum
+        intro a ha
+        have ha' := mem_filter.mp ha
+        have had := Nat.mem_divisors.mp ha'.1
+        have ha0 : 0 < (a:ℝ) := by exact_mod_cast Nat.pos_of_mem_divisors ha'.1
+        have hΩa := rough_cardFactors_log (Nat.pos_of_mem_divisors ha'.1).ne' z (by linarith)
+          (fun p hp => hrough p (Nat.primeFactorsList_subset_of_dvd had.1 hn hp))
+        have hlog := Real.log_le_log ha0 ha'.2
+        have hΩa' : (ArithmeticFunction.cardFactors a : ℝ) ≤ Real.log X / Real.log z :=
+          (le_div_iff₀ hlz).mpr (hΩa.trans hlog)
+        have hmul := mul_le_mul_of_nonpos_left hΩa' hlq.le
+        calc
+          _ ≤ Real.exp (Real.log q * (ArithmeticFunction.cardFactors a : ℝ)) := Real.exp_le_exp.mpr hmul
+          _ = _ := by rw [mul_comm, Real.exp_nat_mul, Real.exp_log hq0]
+  have hupper : (∑ a ∈ n.divisors, q^(ArithmeticFunction.cardFactors a)) ≤ Real.exp U := by
+    calc
+      _ ≤ (1+q)^(ArithmeticFunction.cardFactors n) := divisor_generating_bound q hq0.le n hn
+      _ = Real.exp ((ArithmeticFunction.cardFactors n : ℝ) * Real.log (1+q)) := by
+        rw [Real.exp_nat_mul, Real.exp_log (by linarith : 0 < 1+q)]
+      _ ≤ Real.exp ((ArithmeticFunction.cardFactors n : ℝ) * q) := by
+        apply Real.exp_le_exp.mpr
+        have hh := Real.log_le_sub_one_of_pos (by linarith : 0 < 1+q)
+        gcongr
+        linarith
+      _ ≤ Real.exp U := by
+        apply Real.exp_le_exp.mpr
+        dsimp [U]
+        calc
+          _ = q * (ArithmeticFunction.cardFactors n : ℝ) := mul_comm _ _
+          _ ≤ q * (W / Real.log z) := mul_le_mul_of_nonneg_left hΩ hq0.le
+          _ = _ := by ring
+  have hbound := hlower.trans ((sum_le_sum_of_subset_of_nonneg
+    (filter_subset _ _) (fun a _ _ => pow_nonneg hq0.le (ArithmeticFunction.cardFactors a))).trans hupper)
+  have heq : Real.exp ((q * W - Real.log X * Real.log q) / Real.log z) * Real.exp L = Real.exp U := by
+    rw [← Real.exp_add]
+    congr 1
+    dsimp [L,U]
+    ring
+  nlinarith [Real.exp_pos L]
+
+end ShortEgyptian
+
+end OAI
+
+
+/- Upstream module: OAI.NumberTheory.ShortEgyptian.PrimeSplitting -/
+
+
+
+namespace OAI
+
+namespace ShortEgyptian
+
+open scoped BigOperators
+open Finset
+
+theorem small_prime_divisor_bound {n : ℕ} (hn : n ≠ 0) (z W : ℝ)
+    (hz : 0 ≤ z) (hW : Real.log n ≤ W)
+    (hsmooth : ∀ p ∈ n.primeFactorsList, (p:ℝ) ≤ z) :
+    (n.divisors.card : ℝ) ≤ Real.exp (z * Real.log (1+W/Real.log 2)) := by
+  classical
+  have hl2 : 0 < Real.log 2 := Real.log_pos (by norm_num)
+  have hΩ : (ArithmeticFunction.cardFactors n : ℝ) ≤ W / Real.log 2 := by
+    apply (le_div_iff₀ hl2).mpr
+    exact (rough_cardFactors_log hn 2 (by norm_num) (fun p hp => by
+      exact_mod_cast (Nat.prime_of_mem_primeFactorsList hp).two_le)).trans hW
+  have hΩ0 : 0 ≤ W/Real.log 2 := le_trans (Nat.cast_nonneg _) hΩ
+  have hfac (p : ℕ) : n.factorization p ≤ ArithmeticFunction.cardFactors n := by
+    rw [ArithmeticFunction.cardFactors_eq_sum_factorization]
+    simpa using (Finsupp.single_le_sum n.factorization (g := fun _ k => k) (fun _ k => Nat.zero_le k) p)
+  have hcard : (n.primeFactors.card:ℝ) ≤ z := by
+    have hsub : n.primeFactors ⊆ Icc 1 ⌊z⌋₊ := by
+      intro p hp
+      have hh := Nat.mem_primeFactors.mp hp
+      exact mem_Icc.mpr ⟨hh.1.one_lt.le, Nat.le_floor (hsmooth p ((Nat.mem_primeFactorsList hn).mpr ⟨hh.1,hh.2.1⟩))⟩
+    have hhh := card_le_card hsub
+    have hc : n.primeFactors.card ≤ ⌊z⌋₊ := by simpa using hhh
+    exact le_trans (by exact_mod_cast hc) (Nat.floor_le hz)
+  calc
+    _ = ∏ p ∈ n.primeFactors, ((n.factorization p:ℝ)+1) := by rw [Nat.card_divisors hn, Nat.cast_prod]; simp
+    _ ≤ (1+W/Real.log 2)^n.primeFactors.card := by
+      calc
+        _ ≤ ∏ _p ∈ n.primeFactors, (1+W/Real.log 2) := by
+          apply prod_le_prod (fun p _ => by positivity)
+          intro p _
+          have hh : (n.factorization p:ℝ) ≤ ArithmeticFunction.cardFactors n := by exact_mod_cast hfac p
+          linarith
+        _ = _ := by simp
+    _ = Real.exp ((n.primeFactors.card:ℝ)*Real.log (1+W/Real.log 2)) := by
+      rw [Real.exp_nat_mul,Real.exp_log (by linarith)]
+    _ ≤ _ := by
+      apply Real.exp_le_exp.mpr
+      exact mul_le_mul_of_nonneg_right hcard (Real.log_nonneg (by linarith))
+
+theorem prime_threshold_split {n : ℕ} (hn : n ≠ 0) (z : ℝ) :
+    ∃ d e : ℕ, n = d*e ∧ d ≠ 0 ∧ e ≠ 0 ∧
+      (∀ p ∈ d.primeFactorsList, (p:ℝ) ≤ z) ∧
+      (∀ p ∈ e.primeFactorsList, z ≤ p) := by
+  classical
+  let l := n.primeFactorsList
+  let f (p : ℕ) : Bool := decide ((p:ℝ) < z)
+  let d := (l.filter f).prod
+  let e := (l.filter (fun p => !f p)).prod
+  have hde : n = d*e := by
+    have hh := (List.filter_append_perm f l).prod_eq
+    rw [List.prod_append, Nat.prod_primeFactorsList hn] at hh
+    exact hh.symm
+  have hd : d ≠ 0 := by intro hh; simp [hh] at hde; exact hn hde
+  have he : e ≠ 0 := by intro hh; simp [hh] at hde; exact hn hde
+  refine ⟨d,e,hde,hd,he,?_,?_⟩
+  · intro p hp
+    have hh := mem_list_primes_of_dvd_prod (Nat.prime_of_mem_primeFactorsList hp).prime
+      (L := l.filter f) (fun q hq => (Nat.prime_of_mem_primeFactorsList (List.mem_of_mem_filter hq)).prime)
+      (Nat.dvd_of_mem_primeFactorsList hp)
+    have hlt : (p:ℝ) < z := by simpa [f] using (List.mem_filter.mp hh).2
+    exact hlt.le
+  · intro p hp
+    have hh := mem_list_primes_of_dvd_prod (Nat.prime_of_mem_primeFactorsList hp).prime
+      (L := l.filter (fun q => !f q)) (fun q hq => (Nat.prime_of_mem_primeFactorsList (List.mem_of_mem_filter hq)).prime)
+      (Nat.dvd_of_mem_primeFactorsList hp)
+    have hlt : ¬ (p:ℝ) < z := by simpa [f] using (List.mem_filter.mp hh).2
+    exact le_of_not_gt hlt
+
+theorem truncated_pointwise_bound {n : ℕ} (hn : n ≠ 0) (X W z q : ℝ)
+    (hz : 1 < z) (hq0 : 0 < q) (hq1 : q < 1) (hW : Real.log n ≤ W) :
+    (truncatedDivisorCount X n:ℝ) ≤ Real.exp
+      (z * Real.log (1+W/Real.log 2) + (q*W-Real.log X*Real.log q)/Real.log z) := by
+  obtain ⟨d,e,hde,hd,he,hs,hr⟩ := prime_threshold_split hn z
+  have hdle : (d:ℝ) ≤ n := by exact_mod_cast Nat.le_of_dvd (Nat.pos_of_ne_zero hn) (hde ▸ dvd_mul_right d e)
+  have hele : (e:ℝ) ≤ n := by exact_mod_cast Nat.le_of_dvd (Nat.pos_of_ne_zero hn) (hde ▸ dvd_mul_left e d)
+  have hdW := (Real.log_le_log (by exact_mod_cast Nat.pos_of_ne_zero hd) hdle).trans hW
+  have heW := (Real.log_le_log (by exact_mod_cast Nat.pos_of_ne_zero he) hele).trans hW
+  have hm : (truncatedDivisorCount X n:ℝ) ≤ (d.divisors.card:ℝ)*truncatedDivisorCount X e := by
+    exact_mod_cast (hde ▸ truncatedDivisors_mul X hd he)
+  calc
+    _ ≤ _ := hm
+    _ ≤ Real.exp (z * Real.log (1+W/Real.log 2)) *
+          Real.exp ((q*W-Real.log X*Real.log q)/Real.log z) :=
+      mul_le_mul (small_prime_divisor_bound hd z W (by linarith) hdW hs)
+        (rough_truncated_bound he X W z q hz hq0 hq1 heW hr) (Nat.cast_nonneg _) (Real.exp_pos _).le
+    _ = _ := (Real.exp_add _ _).symm
+
+theorem prime_prefix_split {n : ℕ} (hn : n ≠ 0) (R : ℝ) (hR : 1 ≤ R) (hnR : R < n) :
+    ∃ d e p : ℕ, n = d*e ∧ d ≠ 0 ∧ e ≠ 0 ∧ p.Prime ∧ p ∣ e ∧
+      (d:ℝ) ≤ R ∧ R < (d:ℝ)*p ∧
+      (∀ q ∈ d.primeFactorsList, q ≤ p) ∧ (∀ q ∈ e.primeFactorsList, p ≤ q) := by
+  induction n using Nat.strong_induction_on generalizing R with
+  | h n ih =>
+    have hn1 : n ≠ 1 := by intro h; simp [h] at hnR; linarith
+    let p := n.minFac
+    have hp : p.Prime := Nat.minFac_prime hn1
+    have hp0 : 0 < (p:ℝ) := by exact_mod_cast hp.pos
+    by_cases hpR : R < p
+    · refine ⟨1,n,p, by simp, by norm_num, hn, hp, Nat.minFac_dvd n, ?_, ?_, ?_, ?_⟩
+      · simpa using hR
+      · simpa using hpR
+      · simp
+      · intro q hq
+        exact Nat.minFac_le_of_dvd (Nat.prime_of_mem_primeFactorsList hq).two_le
+          (Nat.dvd_of_mem_primeFactorsList hq)
+    · have hpR' : (p:ℝ) ≤ R := le_of_not_gt hpR
+      let m := n/p
+      have hmul : n = p*m := (Nat.mul_div_cancel' (Nat.minFac_dvd n)).symm
+      have hm : m ≠ 0 := by intro h; simp [h] at hmul; exact hn hmul
+      have hlt : m < n := Nat.div_lt_self (Nat.pos_of_ne_zero hn) hp.one_lt
+      have hmR : R / p < (m:ℝ) := by
+        apply (div_lt_iff₀ hp0).mpr
+        have hh : (n:ℝ) = (p:ℝ)*m := by exact_mod_cast hmul
+        nlinarith
+      obtain ⟨d,e,q, hde, hd, he, hq, hqe, hdR, hRdp, hdq, heq⟩ :=
+        ih m hlt hm (R/p) ((le_div_iff₀ hp0).mpr (by nlinarith)) hmR
+      have hpq : p ≤ q := by
+        apply Nat.minFac_le_of_dvd hq.two_le
+        exact hqe.trans (by rw [hmul,hde]; exact dvd_mul_of_dvd_right (dvd_mul_left e d) p)
+      refine ⟨p*d,e,q, ?_, mul_ne_zero hp.ne_zero hd, he, hq, hqe, ?_, ?_, ?_, heq⟩
+      · rw [hmul,hde,mul_assoc]
+      · have hh := (le_div_iff₀ hp0).mp hdR
+        push_cast
+        nlinarith
+      · have hh := (div_lt_iff₀ hp0).mp hRdp
+        push_cast
+        nlinarith
+      · intro a ha
+        have hap := Nat.prime_of_mem_primeFactorsList ha
+        have had := Nat.dvd_of_mem_primeFactorsList ha
+        rcases hap.dvd_mul.mp had with hah | hah
+        · rcases (Nat.dvd_prime hp).mp hah with h1 | h1
+          · exact False.elim (hap.ne_one h1)
+          · simpa [h1] using hpq
+        · exact hdq a ((Nat.mem_primeFactorsList hd).mpr ⟨hap,hah⟩)
+
+end ShortEgyptian
+
+end OAI
+
+
+/- Upstream module: OAI.NumberTheory.ShortEgyptian.DivisorCover -/
+
+
+
+namespace OAI
+
+universe uι
+
+namespace ShortEgyptian
+
+open scoped BigOperators
+open Finset
+
+theorem multiples_interval_bound (N : ℕ) (Y : ℝ) (hY : 0 ≤ Y) {d : ℕ}
+    (hd : 0 < d) (hdY : (d:ℝ) ≤ Y) :
+    (((Ioc N (N+⌊Y⌋₊)).filter (d ∣ ·)).card:ℝ) ≤ 2*Y/d := by
+  have hdR : 0 < (d:ℝ) := by exact_mod_cast hd
+  have hcard : ((Ioc N (N+⌊Y⌋₊)).filter (d ∣ ·)).card ≤
+      (N+⌊Y⌋₊)/d-N/d := by
+    calc
+      _ ≤ (Ioc (N/d) ((N+⌊Y⌋₊)/d)).card := by
+        apply card_le_card_of_injOn (fun n => n/d)
+        · intro n hn
+          obtain ⟨hn, hdn⟩ := mem_filter.mp hn
+          have hh := mem_Ioc.mp hn
+          apply mem_Ioc.mpr
+          constructor
+          · apply (Nat.div_lt_iff_lt_mul hd).mpr
+            simpa [Nat.div_mul_cancel hdn] using hh.1
+          · exact Nat.div_le_div_right hh.2
+        · intro a ha b hb hab
+          have ha' := (mem_filter.mp ha).2
+          have hb' := (mem_filter.mp hb).2
+          calc
+            a = a/d*d := (Nat.div_mul_cancel ha').symm
+            _ = b/d*d := congrArg (·*d) hab
+            _ = b := Nat.div_mul_cancel hb'
+      _ = _ := by simp
+  have hdiv : (N+⌊Y⌋₊)/d-N/d ≤ ⌊Y⌋₊/d+1 := by
+    rw [Nat.add_div hd, Nat.add_assoc, Nat.add_sub_cancel_left]
+    apply Nat.add_le_add_left
+    split_ifs <;> decide
+  have hf : (⌊Y⌋₊:ℝ)/d ≤ Y/d := div_le_div_of_nonneg_right (Nat.floor_le hY) hdR.le
+  have h1 : (1:ℝ) ≤ Y/d := (le_div_iff₀ hdR).mpr (by simpa using hdY)
+  calc
+    _ ≤ ((⌊Y⌋₊/d+1:ℕ):ℝ) := by exact_mod_cast hcard.trans hdiv
+    _ ≤ Y/d+1 := by
+      push_cast
+      have hh : (⌊Y⌋₊/d:ℕ) ≤ (⌊Y⌋₊:ℝ)/d := Nat.cast_div_le
+      linarith
+    _ ≤ _ := by calc
+      _ ≤ Y/d+Y/d := by linarith
+      _ = 2*Y/d := by ring
+
+theorem sum_le_divisor_cover {ι : Type uι} (I : Finset ι) (D : ι → Finset ℕ)
+    (F : ι → ℕ → ℝ) (N : ℕ) (Y : ℝ) (hY : 0 ≤ Y) (w : ℕ → ℝ)
+    (hF : ∀ i ∈ I, ∀ d ∈ D i, 0 ≤ F i d)
+    (hD : ∀ i ∈ I, ∀ d ∈ D i, 0 < d ∧ (d:ℝ) ≤ Y)
+    (hc : ∀ n ∈ Ioc N (N+⌊Y⌋₊), ∃ i ∈ I, ∃ d ∈ D i, d ∣ n ∧ w n ≤ F i d) :
+    ∑ n ∈ Ioc N (N+⌊Y⌋₊), w n ≤ 2*Y * ∑ i ∈ I, ∑ d ∈ D i, F i d/d := by
+  classical
+  calc
+    _ ≤ ∑ n ∈ Ioc N (N+⌊Y⌋₊), ∑ i ∈ I, ∑ d ∈ (D i).filter (· ∣ n), F i d := by
+      apply sum_le_sum
+      intro n hn
+      obtain ⟨i,hi,d,hd,hdn,hw⟩ := hc n hn
+      apply hw.trans
+      apply (single_le_sum (s := (D i).filter (· ∣ n))
+        (fun d hd' => hF i hi d (mem_filter.mp hd').1)
+        (mem_filter.mpr ⟨hd,hdn⟩)).trans
+      exact single_le_sum (fun j hj => sum_nonneg (fun d hd' => hF j hj d (mem_filter.mp hd').1)) hi
+    _ = ∑ i ∈ I, ∑ d ∈ D i, (((Ioc N (N+⌊Y⌋₊)).filter (d ∣ ·)).card:ℝ) * F i d := by
+      rw [sum_comm]
+      apply sum_congr rfl
+      intro i hi
+      simp_rw [sum_filter]
+      rw [sum_comm]
+      apply sum_congr rfl
+      intro d hd
+      rw [← sum_filter]
+      simp
+    _ ≤ ∑ i ∈ I, ∑ d ∈ D i, 2*Y/d * F i d := by
+      apply sum_le_sum
+      intro i hi
+      apply sum_le_sum
+      intro d hd
+      exact mul_le_mul_of_nonneg_right (multiples_interval_bound N Y hY (hD i hi d hd).1 (hD i hi d hd).2) (hF i hi d hd)
+    _ = _ := by
+      rw [mul_sum]
+      apply sum_congr rfl
+      intro i hi
+      rw [mul_sum]
+      apply sum_congr rfl
+      intro d hd
+      ring
+
+end ShortEgyptian
+
+end OAI
+
+
+/- Upstream module: OAI.NumberTheory.ShortEgyptian.SmoothBounds -/
+
+
+
+namespace OAI
+
+namespace ShortEgyptian
+
+open scoped BigOperators
+open Finset
+
+noncomputable def primeRecipBound (T : ℝ) : ℝ :=
+  8+4*Real.log (1+Real.log T/Real.log 2)
+
+theorem prime_reciprocals_real (T : ℝ) (hT : 2 ≤ T) :
+    ∑ p ∈ Nat.primesLE ⌊T⌋₊, (1:ℝ)/p ≤ primeRecipBound T := by
+  have h2 : 2 ≤ ⌊T⌋₊ := Nat.le_floor hT
+  have hl2 : 0 < Real.log 2 := Real.log_pos (by norm_num)
+  apply (prime_reciprocals_bound ⌊T⌋₊ h2).trans
+  have hlog := Real.log_le_log (by exact_mod_cast (by omega : 0 < ⌊T⌋₊))
+    (Nat.floor_le (by linarith : 0 ≤ T))
+  have hh : 0 ≤ Real.log (⌊T⌋₊:ℝ) := Real.log_natCast_nonneg _
+  have harg : 0 < 1+Real.log (⌊T⌋₊:ℝ)/Real.log 2 := by positivity
+  have hlog' := Real.log_le_log harg (show 1+Real.log (⌊T⌋₊:ℝ)/Real.log 2 ≤ 1+Real.log T/Real.log 2 by gcongr)
+  unfold primeRecipBound
+  linarith
+
+theorem shifted_prime_sum (T lam : ℝ) (hT : 2 ≤ T) (hlam : 0 ≤ lam) :
+    ∑ p ∈ Nat.primesLE ⌊T⌋₊, (p:ℝ)^(-(1-lam)) ≤
+      T^lam * primeRecipBound T := by
+  calc
+    _ ≤ ∑ p ∈ Nat.primesLE ⌊T⌋₊, T^lam * ((1:ℝ)/p) := by
+      apply sum_le_sum
+      intro p hp
+      have hh := Nat.mem_primesLE.mp hp
+      have hp0 : 0 < (p:ℝ) := by exact_mod_cast hh.2.pos
+      have hpT : (p:ℝ) ≤ T := le_trans (by exact_mod_cast hh.1) (Nat.floor_le (by linarith))
+      calc
+        _ = (p:ℝ)^lam * ((1:ℝ)/p) := by
+          rw [one_div, ← Real.rpow_neg_one,← Real.rpow_add hp0]
+          congr 1
+          ring
+        _ ≤ _ := mul_le_mul_of_nonneg_right (Real.rpow_le_rpow hp0.le hpT hlam) (by positivity)
+    _ = T^lam * ∑ p ∈ Nat.primesLE ⌊T⌋₊, (1:ℝ)/p := (mul_sum _ _ _).symm
+    _ ≤ _ := mul_le_mul_of_nonneg_left (prime_reciprocals_real T hT) (Real.rpow_nonneg (by linarith) _)
+
+noncomputable def smallSmoothConst : ℝ := ∑' n : ℕ, (n:ℝ)^(-41/40:ℝ)
+
+theorem smallSmoothConst_nonneg : 0 ≤ smallSmoothConst := by
+  exact tsum_nonneg (fun n => Real.rpow_nonneg (Nat.cast_nonneg n) _)
+
+theorem small_prime_sum (T : ℝ) (hT : 0 ≤ T) :
+    ∑ p ∈ Nat.primesLE ⌊T⌋₊, (p:ℝ)^(-(1-(1/10:ℝ))) ≤ T^(1/8:ℝ)*smallSmoothConst := by
+  have hs : Summable (fun n : ℕ => (n:ℝ)^(-41/40:ℝ)) := Real.summable_nat_rpow.mpr (by norm_num)
+  calc
+    _ ≤ ∑ p ∈ Nat.primesLE ⌊T⌋₊, T^(1/8:ℝ)*(p:ℝ)^(-41/40:ℝ) := by
+      apply sum_le_sum
+      intro p hp
+      have hh := Nat.mem_primesLE.mp hp
+      have hp0 : 0 < (p:ℝ) := by exact_mod_cast hh.2.pos
+      have hpT : (p:ℝ) ≤ T := le_trans (by exact_mod_cast hh.1) (Nat.floor_le hT)
+      calc
+        _ = (p:ℝ)^(1/8:ℝ)*(p:ℝ)^(-41/40:ℝ) := by rw [← Real.rpow_add hp0]; norm_num
+        _ ≤ _ := mul_le_mul_of_nonneg_right (Real.rpow_le_rpow hp0.le hpT (by norm_num)) (Real.rpow_nonneg hp0.le _)
+    _ = T^(1/8:ℝ) * ∑ p ∈ Nat.primesLE ⌊T⌋₊, (p:ℝ)^(-41/40:ℝ) := (mul_sum _ _ _).symm
+    _ ≤ _ := mul_le_mul_of_nonneg_left (hs.sum_le_tsum _ (fun n _ => Real.rpow_nonneg (Nat.cast_nonneg n) _))
+      (Real.rpow_nonneg hT _)
+
+theorem factored_primesLE {n : ℕ} (hn : n ≠ 0) {T : ℝ}
+    (hs : ∀ p ∈ n.primeFactorsList, (p:ℝ) ≤ T) :
+    n ∈ Nat.factoredNumbers (Nat.primesLE ⌊T⌋₊) := by
+  refine ⟨hn, ?_⟩
+  intro p hp
+  exact Nat.mem_primesLE.mpr ⟨Nat.le_floor (hs p hp), Nat.prime_of_mem_primeFactorsList hp⟩
+
+theorem divisor_harmonic_bound (r : ℕ) (T : ℝ) (hT : 2 ≤ T) :
+    ∑ d ∈ Icc 1 ⌊T⌋₊, (d.divisors.card:ℝ)^r/d ≤
+      Real.exp (momentSeriesConst r * primeRecipBound T) := by
+  have hf : ∀ d ∈ Icc 1 ⌊T⌋₊, d ∈ Nat.factoredNumbers (Nat.primesLE ⌊T⌋₊) := by
+    intro d hd
+    have hd' := mem_Icc.mp hd
+    apply factored_primesLE (by omega)
+    intro p hp
+    apply le_trans _ (Nat.floor_le (by linarith : 0 ≤ T))
+    exact_mod_cast (Nat.le_of_dvd (by omega : 0 < d) (Nat.dvd_of_mem_primeFactorsList hp)).trans hd'.2
+  have hh := smooth_divisor_weight r (by norm_num : 1/2 ≤ (1:ℝ)) (Icc 1 ⌊T⌋₊) (Nat.primesLE ⌊T⌋₊) hf
+  have hfilter : (Nat.primesLE ⌊T⌋₊).filter Nat.Prime = Nat.primesLE ⌊T⌋₊ := filter_true_of_mem (fun p hp => (Nat.mem_primesLE.mp hp).2)
+  simp only [divisorWeight, Real.rpow_neg_one, ← div_eq_mul_inv, hfilter] at hh
+  apply hh.trans
+  apply Real.exp_le_exp.mpr
+  simpa only [one_div] using mul_le_mul_of_nonneg_left (prime_reciprocals_real T hT) (momentSeriesConst_nonneg r)
+
+theorem rough_exponential_bound {n : ℕ} (hn : n ≠ 0) (v W z : ℝ)
+    (hv : 0 < v) (hvW : v < W) (hz : 1 < z) (hW : Real.log n ≤ W)
+    (hrough : ∀ p ∈ n.primeFactorsList, z ≤ p) :
+    (truncatedDivisorCount (Real.exp v) n:ℝ) ≤
+      Real.exp ((1+Real.log (W/v))*v/Real.log z) := by
+  have hW0 : 0 < W := hv.trans hvW
+  have hq : 0 < v/W := div_pos hv hW0
+  have hq1 : v/W < 1 := (div_lt_one hW0).mpr hvW
+  have hb := rough_truncated_bound hn (Real.exp v) W z (v/W) hz hq hq1 hW hrough
+  rw [Real.log_exp, Real.log_div hv.ne' hW0.ne'] at hb
+  rw [Real.log_div hW0.ne' hv.ne']
+  convert hb using 1
+  congr 1
+  field_simp
+  ring
+
+theorem prefix_weight_bound {n d e p : ℕ} (hde : n = d*e)
+    (hd : d ≠ 0) (he : e ≠ 0) (hp : p.Prime) (r : ℕ) (v W : ℝ)
+    (hv : 0 < v) (hvW : v < W) (hnW : Real.log n ≤ W)
+    (hr : ∀ q ∈ e.primeFactorsList, p ≤ q) :
+    (truncatedDivisorCount (Real.exp v) n:ℝ)^r ≤ (d.divisors.card:ℝ)^r *
+      Real.exp ((r:ℝ)*(1+Real.log (W/v))*v/Real.log p) := by
+  have hele : (e:ℝ) ≤ n := by
+    exact_mod_cast (Nat.le_of_dvd (by rw [hde]; exact Nat.mul_pos (Nat.pos_of_ne_zero hd) (Nat.pos_of_ne_zero he))
+      (hde ▸ dvd_mul_left e d))
+  have hrough := rough_exponential_bound he v W p hv hvW (by exact_mod_cast hp.one_lt)
+    ((Real.log_le_log (by exact_mod_cast Nat.pos_of_ne_zero he) hele).trans hnW)
+    (fun q hq => by exact_mod_cast hr q hq)
+  have hmul : (truncatedDivisorCount (Real.exp v) n:ℝ) ≤
+      (d.divisors.card:ℝ)*truncatedDivisorCount (Real.exp v) e := by
+    rw [hde]
+    exact_mod_cast truncatedDivisors_mul (Real.exp v) hd he
+  calc
+    _ ≤ ((d.divisors.card:ℝ)*truncatedDivisorCount (Real.exp v) e)^r := pow_le_pow_left₀ (Nat.cast_nonneg _) hmul r
+    _ ≤ ((d.divisors.card:ℝ)*Real.exp ((1+Real.log (W/v))*v/Real.log p))^r := by gcongr
+    _ = _ := by rw [mul_pow, ← Real.exp_nat_mul]; congr 2; ring
+
+theorem smooth_prefix_sum (r : ℕ) (v T lam : ℝ) (hT : 2 ≤ T)
+    (hlam : 0 ≤ lam) (hlam' : lam ≤ 1/2) (s : Finset ℕ)
+    (hs : ∀ d ∈ s, d ∈ Nat.factoredNumbers (Nat.primesLE ⌊T⌋₊) ∧ Real.exp (v/5) ≤ d) :
+    ∑ d ∈ s, (d.divisors.card:ℝ)^r/d ≤
+      Real.exp (-lam*v/5 + momentSeriesConst r * (T^lam * primeRecipBound T)) := by
+  have hh := rankin_divisor_weight r (Real.exp (v/5)) lam (Real.exp_pos _) hlam hlam' s (Nat.primesLE ⌊T⌋₊) hs
+  have hfilter : (Nat.primesLE ⌊T⌋₊).filter Nat.Prime = Nat.primesLE ⌊T⌋₊ := filter_true_of_mem (fun p hp => (Nat.mem_primesLE.mp hp).2)
+  rw [Real.log_exp, hfilter] at hh
+  apply hh.trans
+  apply Real.exp_le_exp.mpr
+  have hsum := mul_le_mul_of_nonneg_left (shifted_prime_sum T lam hT hlam) (momentSeriesConst_nonneg r)
+  linarith
+
+theorem small_smooth_prefix_sum (v T : ℝ) (hT : 0 ≤ T) (s : Finset ℕ)
+    (hs : ∀ d ∈ s, d ∈ Nat.factoredNumbers (Nat.primesLE ⌊T⌋₊) ∧ Real.exp (v/5) ≤ d) :
+    ∑ d ∈ s, (1:ℝ)/d ≤
+      Real.exp (-v/50 + momentSeriesConst 0 * (T^(1/8:ℝ) * smallSmoothConst)) := by
+  have hh := rankin_divisor_weight 0 (Real.exp (v/5)) (1/10) (Real.exp_pos _) (by norm_num) (by norm_num)
+    s (Nat.primesLE ⌊T⌋₊) hs
+  have hfilter : (Nat.primesLE ⌊T⌋₊).filter Nat.Prime = Nat.primesLE ⌊T⌋₊ := filter_true_of_mem (fun p hp => (Nat.mem_primesLE.mp hp).2)
+  simp only [pow_zero, Real.log_exp, hfilter] at hh
+  apply hh.trans
+  apply Real.exp_le_exp.mpr
+  have hsum := mul_le_mul_of_nonneg_left (small_prime_sum T hT) (momentSeriesConst_nonneg 0)
+  linarith
+
+end ShortEgyptian
+
+end OAI
+
+
+/- Upstream module: OAI.NumberTheory.ShortEgyptian.DivisorMoments -/
+
+
+
+namespace OAI
+
+namespace ShortEgyptian
+
+open scoped BigOperators
+open Finset
+
+noncomputable def smoothPrefixes (R v T : ℝ) : Finset ℕ :=
+  (Icc 1 ⌊R⌋₊).filter fun d =>
+    d ∈ Nat.factoredNumbers (Nat.primesLE ⌊T⌋₊) ∧ Real.exp (v/5) ≤ d
+
+noncomputable def momentB (v W : ℝ) : ℝ := (1+Real.log (W/v))*v
+
+noncomputable def momentPoint (r : ℕ) (v W z : ℝ) : ℝ :=
+  (r:ℝ)*(z*Real.log (1+W/Real.log 2)+momentB v W/Real.log z)
+
+noncomputable def momentBandExp (r : ℕ) (v W t : ℝ) : ℝ :=
+  (r:ℝ)*momentB v W/t - (Real.log (v/t)/(10*t))*v/5 +
+    momentSeriesConst r * (Real.exp (2*t)^(Real.log (v/t)/(10*t)) * primeRecipBound (Real.exp (2*t)))
+
+theorem pointwise_moment_bound {n : ℕ} (hn : n ≠ 0) (r : ℕ) (v W z : ℝ)
+    (hv : 0 < v) (hvW : v < W) (hz : 1 < z) (hW : Real.log n ≤ W) :
+    (truncatedDivisorCount (Real.exp v) n:ℝ)^r ≤ Real.exp (momentPoint r v W z) := by
+  have hW0 : 0 < W := hv.trans hvW
+  have hq0 : 0 < v/W := div_pos hv hW0
+  have hq1 : v/W < 1 := (div_lt_one hW0).mpr hvW
+  have hh := truncated_pointwise_bound hn (Real.exp v) W z (v/W) hz hq0 hq1 hW
+  have halg : v/W*W-Real.log (Real.exp v)*Real.log (v/W) = momentB v W := by
+    rw [Real.log_exp, Real.log_div hv.ne' hW0.ne']
+    unfold momentB
+    rw [Real.log_div hW0.ne' hv.ne']
+    field_simp
+    ring
+  rw [halg] at hh
+  have hp := pow_le_pow_left₀ (Nat.cast_nonneg _) hh r
+  simpa [momentPoint,Real.exp_nat_mul] using hp
+
+theorem momentB_nonneg (v W : ℝ) (hv : 0 < v) (hvW : v < W) : 0 ≤ momentB v W := by
+  have hq : 1 ≤ W/v := (le_div_iff₀ hv).mpr (by linarith)
+  have hh := Real.log_nonneg hq
+  unfold momentB
+  positivity
+
+theorem divisor_moment_finite (r : ℕ) (N : ℕ) (Y v W z T L : ℝ)
+    (hY : 4 ≤ Y) (hv : 0 < v) (hvW : v < W) (hz : 1 < z)
+    (hYv : v/2 ≤ Real.log Y) (hL : 0 < L) (hLv : L ≤ v/20)
+    (hT : 2 ≤ Real.log T) (hTpos : 0 < T)
+    (hnW : ∀ n ∈ Ioc N (N+⌊Y⌋₊), Real.log n ≤ W)
+    (hsmall : momentPoint r v W z -v/50 + momentSeriesConst 0*(T^(1/8:ℝ)*smallSmoothConst) ≤ 0)
+    (hband : ∀ t : ℝ, 1 ≤ t → Real.log T/2 ≤ t → t ≤ L →
+      0 ≤ Real.log (v/t)/(10*t) ∧ Real.log (v/t)/(10*t) ≤ 1/2 ∧ momentBandExp r v W t ≤ 0) :
+    ∑ n ∈ Ioc N (N+⌊Y⌋₊), (truncatedDivisorCount (Real.exp v) n:ℝ)^r ≤
+      2*Y*(Real.exp ((r:ℝ)*momentB v W/L + momentSeriesConst r*primeRecipBound (Real.sqrt Y)) +
+        (⌊L⌋₊:ℝ)+1) := by
+  classical
+  let R := Real.sqrt Y
+  let K := ⌊L⌋₊
+  let D (i : ℕ) : Finset ℕ := if i=0 then Icc 1 ⌊R⌋₊ else
+    if i=1 then smoothPrefixes R v T else
+    if Real.log T/2 ≤ (i-1:ℕ) then smoothPrefixes R v (Real.exp (2*(i-1:ℕ))) else ∅
+  let F (i d : ℕ) : ℝ := if i=0 then
+    Real.exp ((r:ℝ)*momentB v W/L)*(d.divisors.card:ℝ)^r else
+    if i=1 then Real.exp (momentPoint r v W z) else
+    Real.exp ((r:ℝ)*momentB v W/(i-1:ℕ))*(d.divisors.card:ℝ)^r
+  have hR2 : 2 ≤ R := (Real.le_sqrt (by norm_num) (by linarith)).mpr (by norm_num; exact hY)
+  have hRpos : 0 < R := by linarith
+  have hRY : R ≤ Y := by
+    have hh : R*R = Y := Real.mul_self_sqrt (by linarith)
+    nlinarith
+  have hRlog : v/4 ≤ Real.log R := by
+    have hh : Real.log R = Real.log Y/2 := Real.log_sqrt (by linarith)
+    linarith
+  have hB : 0 ≤ (r:ℝ)*momentB v W := mul_nonneg (Nat.cast_nonneg r) (momentB_nonneg v W hv hvW)
+  have hF (i d : ℕ) : 0 ≤ F i d := by unfold F; split_ifs <;> positivity
+  have hD (i d : ℕ) (hd : d ∈ D i) : 0 < d ∧ (d:ℝ) ≤ Y := by
+    have hh : d ∈ Icc 1 ⌊R⌋₊ := by
+      unfold D at hd
+      split_ifs at hd with h0 h1 ht
+      · exact hd
+      · exact (mem_filter.mp hd).1
+      · exact (mem_filter.mp hd).1
+      · simp at hd
+    have hh' := mem_Icc.mp hh
+    exact ⟨by omega, (le_trans (by exact_mod_cast hh'.2) (Nat.floor_le hRpos.le)).trans hRY⟩
+  have hcover : ∀ n ∈ Ioc N (N+⌊Y⌋₊), ∃ i ∈ range (K+2), ∃ d ∈ D i,
+      d ∣ n ∧ (truncatedDivisorCount (Real.exp v) n:ℝ)^r ≤ F i d := by
+    intro n hn
+    have hnpos : 0 < n := by have hh := (mem_Ioc.mp hn).1; omega
+    have hn0 : n ≠ 0 := hnpos.ne'
+    by_cases hnR : (n:ℝ) ≤ R
+    · refine ⟨0, mem_range.mpr (by omega), n, ?_, dvd_rfl, ?_⟩
+      · simp only [D, if_pos rfl]
+        exact mem_Icc.mpr ⟨hnpos, Nat.le_floor hnR⟩
+      · have hcard : truncatedDivisorCount (Real.exp v) n ≤ n.divisors.card := card_le_card (filter_subset _ _)
+        have hc : (truncatedDivisorCount (Real.exp v) n:ℝ)^r ≤ (n.divisors.card:ℝ)^r := by
+          exact_mod_cast Nat.pow_le_pow_left hcard r
+        have hexp : 1 ≤ Real.exp ((r:ℝ)*momentB v W/L) := Real.one_le_exp (div_nonneg hB hL.le)
+        simpa [F] using hc.trans (le_mul_of_one_le_left (by positivity) hexp)
+    · obtain ⟨d,e,p,hde,hd,he,hp,hpe,hdR,hRdp,hds,her⟩ :=
+        prime_prefix_split hn0 R (by linarith) (lt_of_not_ge hnR)
+      have hdpos : 0 < (d:ℝ) := by exact_mod_cast Nat.pos_of_ne_zero hd
+      have hppos : 0 < (p:ℝ) := by exact_mod_cast hp.pos
+      have hlp : 0 < Real.log (p:ℝ) := Real.log_pos (by exact_mod_cast hp.one_lt)
+      have hdbase : d ∈ Icc 1 ⌊R⌋₊ := mem_Icc.mpr ⟨Nat.pos_of_ne_zero hd, Nat.le_floor hdR⟩
+      have hdn : d ∣ n := hde ▸ dvd_mul_right d e
+      have hpref := prefix_weight_bound hde hd he hp r v W hv hvW (hnW n hn) her
+      have hpref' : (truncatedDivisorCount (Real.exp v) n:ℝ)^r ≤
+        (d.divisors.card:ℝ)^r * Real.exp ((r:ℝ)*momentB v W/Real.log p) := by
+        simpa [momentB, mul_assoc] using hpref
+      by_cases hpL : L ≤ Real.log p
+      · refine ⟨0, mem_range.mpr (by omega), d, by simpa [D] using hdbase, hdn, ?_⟩
+        have hecomp := Real.exp_le_exp.mpr (div_le_div_of_nonneg_left hB hL hpL)
+        simpa [F,mul_comm] using hpref'.trans (mul_le_mul_of_nonneg_left hecomp (by positivity))
+      · have hpL' : Real.log (p:ℝ) < L := lt_of_not_ge hpL
+        have hlogd : v/5 ≤ Real.log d := by
+          have hh := Real.log_lt_log hRpos hRdp
+          rw [Real.log_mul hdpos.ne' hppos.ne'] at hh
+          linarith
+        have hdA : Real.exp (v/5) ≤ (d:ℝ) := by
+          simpa [Real.exp_log hdpos] using Real.exp_le_exp.mpr hlogd
+        by_cases hpT : (p:ℝ) ≤ T
+        · have hdsmooth := factored_primesLE hd (T := T) (fun q hq => le_trans (by exact_mod_cast hds q hq) hpT)
+          refine ⟨1, mem_range.mpr (by omega), d, ?_, hdn, ?_⟩
+          · change d ∈ smoothPrefixes R v T
+            exact mem_filter.mpr ⟨hdbase,hdsmooth,hdA⟩
+          · simpa [F] using pointwise_moment_bound hn0 r v W z hv hvW hz (hnW n hn)
+        · let t := ⌊Real.log (p:ℝ)⌋₊
+          have hlogpT : Real.log T < Real.log (p:ℝ) := Real.log_lt_log hTpos (lt_of_not_ge hpT)
+          have ht2 : 2 ≤ t := Nat.le_floor (by norm_num; linarith)
+          have ht1 : 1 ≤ (t:ℝ) := by exact_mod_cast (by omega : 1 ≤ t)
+          have htlog : (t:ℝ) ≤ Real.log (p:ℝ) := Nat.floor_le hlp.le
+          have hlogt : Real.log (p:ℝ) < (t:ℝ)+1 := Nat.lt_floor_add_one _
+          have htT : Real.log T/2 ≤ (t:ℝ) := by linarith
+          have htK : t ≤ K := Nat.le_floor (htlog.trans hpL'.le)
+          have hpt : (p:ℝ) ≤ Real.exp (2*(t:ℝ)) := by
+            rw [← Real.exp_log hppos]
+            exact Real.exp_le_exp.mpr (by linarith)
+          have hdsmooth := factored_primesLE hd (T := Real.exp (2*(t:ℝ)))
+            (fun q hq => le_trans (by exact_mod_cast hds q hq) hpt)
+          refine ⟨t+1, mem_range.mpr (by omega), d, ?_, hdn, ?_⟩
+          · have ht0 : t+1 ≠ 0 := by omega
+            have htne1 : t+1 ≠ 1 := by omega
+            dsimp only [D]
+            rw [if_neg ht0,if_neg htne1,Nat.add_sub_cancel,if_pos htT]
+            exact mem_filter.mpr ⟨hdbase,hdsmooth,hdA⟩
+          · have hecomp := Real.exp_le_exp.mpr (div_le_div_of_nonneg_left hB (by linarith : 0 < (t:ℝ)) htlog)
+            have ht0 : t+1 ≠ 0 := by omega
+            have htne1 : t+1 ≠ 1 := by omega
+            dsimp only [F]
+            rw [if_neg ht0,if_neg htne1,Nat.add_sub_cancel]
+            simpa [mul_comm] using hpref'.trans (mul_le_mul_of_nonneg_left hecomp (by positivity))
+  have hsum := sum_le_divisor_cover (range (K+2)) D F N Y (by linarith)
+    (fun n => (truncatedDivisorCount (Real.exp v) n:ℝ)^r)
+    (fun i _ d _ => hF i d) (fun i _ d hd => hD i d hd) hcover
+  let E := (r:ℝ)*momentB v W/L + momentSeriesConst r*primeRecipBound R
+  have hmass : ∀ i ∈ range (K+2), (∑ d ∈ D i, F i d/d) ≤ if i=0 then Real.exp E else 1 := by
+    intro i hi
+    by_cases hi0 : i=0
+    · subst i
+      simp only [D,F,if_pos rfl]
+      have hh := divisor_harmonic_bound r R hR2
+      calc
+        _ = Real.exp ((r:ℝ)*momentB v W/L) * ∑ d ∈ Icc 1 ⌊R⌋₊, (d.divisors.card:ℝ)^r/d := by rw [mul_sum]; apply sum_congr rfl; intro d hd; ring
+        _ ≤ Real.exp ((r:ℝ)*momentB v W/L) * Real.exp (momentSeriesConst r*primeRecipBound R) :=
+          mul_le_mul_of_nonneg_left hh (Real.exp_pos _).le
+        _ = _ := (Real.exp_add _ _).symm
+    · simp only [if_neg hi0]
+      by_cases hi1 : i=1
+      · subst i
+        simp only [D,F,ite_false,one_ne_zero]
+        have hh := small_smooth_prefix_sum v T hTpos.le (smoothPrefixes R v T) (fun d hd => (mem_filter.mp hd).2)
+        calc
+          _ = Real.exp (momentPoint r v W z) * ∑ d ∈ smoothPrefixes R v T, (1:ℝ)/d := by rw [mul_sum]; simp [div_eq_mul_inv]
+          _ ≤ Real.exp (momentPoint r v W z) * Real.exp (-v/50 + momentSeriesConst 0*(T^(1/8:ℝ)*smallSmoothConst)) :=
+            mul_le_mul_of_nonneg_left hh (Real.exp_pos _).le
+          _ ≤ 1 := by rw [← Real.exp_add, Real.exp_le_one_iff]; linarith
+      · by_cases htT : Real.log T/2 ≤ (i-1:ℕ)
+        · have ht1 : 1 ≤ (i-1:ℕ) := by omega
+          have ht1R : 1 ≤ ((i-1:ℕ):ℝ) := by exact_mod_cast ht1
+          have htle : ((i-1:ℕ):ℝ) ≤ L := by
+            have hh : i-1 ≤ K := by have hh := mem_range.mp hi; omega
+            exact le_trans (by exact_mod_cast hh) (Nat.floor_le hL.le)
+          have ht := hband (i-1:ℕ) ht1R htT htle
+          have hTe : 2 ≤ Real.exp (2*((i-1:ℕ):ℝ)) := by
+            have hh := Real.add_one_le_exp (2*((i-1:ℕ):ℝ))
+            linarith
+          have hh := smooth_prefix_sum r v (Real.exp (2*((i-1:ℕ):ℝ)))
+            (Real.log (v/(i-1:ℕ))/(10*(i-1:ℕ))) hTe ht.1 ht.2.1
+            (smoothPrefixes R v (Real.exp (2*((i-1:ℕ):ℝ)))) (fun d hd => (mem_filter.mp hd).2)
+          simp only [D,F,if_neg hi0,if_neg hi1,if_pos htT]
+          calc
+            _ = Real.exp ((r:ℝ)*momentB v W/(i-1:ℕ)) *
+              ∑ d ∈ smoothPrefixes R v (Real.exp (2*((i-1:ℕ):ℝ))), (d.divisors.card:ℝ)^r/d := by rw [mul_sum]; apply sum_congr rfl; intro d hd; ring
+            _ ≤ _ := mul_le_mul_of_nonneg_left hh (Real.exp_pos _).le
+            _ ≤ 1 := by rw [← Real.exp_add, Real.exp_le_one_iff]; have ht' := ht.2.2; unfold momentBandExp at ht'; linarith
+        · simp [D,hi0,hi1,htT]
+  apply hsum.trans
+  apply mul_le_mul_of_nonneg_left _ (by positivity)
+  calc
+    _ ≤ ∑ i ∈ range (K+2), if i=0 then Real.exp E else 1 := sum_le_sum hmass
+    _ = Real.exp E + (K:ℝ)+1 := by rw [sum_range_succ']; simp; ring
+    _ = _ := rfl
+
+end ShortEgyptian
+
+end OAI
+
+
+/- Upstream module: OAI.NumberTheory.ShortEgyptian.MomentDecay -/
+
+
+
+namespace OAI
+
+namespace ShortEgyptian
+
+open scoped BigOperators
+open Finset
+
+theorem primeRecipBound_mono {T U : ℝ} (hT : 1 ≤ T) (hTU : T ≤ U) :
+    primeRecipBound T ≤ primeRecipBound U := by
+  have h2 : 0 < Real.log 2 := Real.log_pos (by norm_num)
+  have hlT : 0 ≤ Real.log T := Real.log_nonneg hT
+  have hl := Real.log_le_log (by linarith : 0 < T) hTU
+  have harg : 0 < 1+Real.log T/Real.log 2 := by positivity
+  have hl' := Real.log_le_log harg (show 1+Real.log T/Real.log 2 ≤ 1+Real.log U/Real.log 2 by gcongr)
+  unfold primeRecipBound
+  linarith
+
+theorem moment_band_nonpos (r : ℕ) (S v W t : ℝ)
+    (hS : 1 < S) (ht : 0 < t) (hv : 0 < v) (htlo : 2*Real.log S ≤ t)
+    (htup : t ≤ S) (hB : (r:ℝ)*(1+Real.log (W/v)) ≤ Real.log S/3200)
+    (hQlo : S^(1/16:ℝ) ≤ v/t) (hQup : v/t ≤ S^2)
+    (hC : momentSeriesConst r*primeRecipBound (Real.exp (2*S)) ≤ S^(1/20:ℝ)*Real.log S/3200) :
+    0 ≤ Real.log (v/t)/(10*t) ∧ Real.log (v/t)/(10*t) ≤ 1/2 ∧ momentBandExp r v W t ≤ 0 := by
+  have hS0 : 0 < S := by linarith
+  have hlS : 0 < Real.log S := Real.log_pos hS
+  let Q := v/t
+  have hQ : 0 < Q := div_pos hv ht
+  have hlQlo : Real.log S/16 ≤ Real.log Q := by
+    have hh := Real.log_le_log (Real.rpow_pos_of_pos hS0 _) hQlo
+    rw [Real.log_rpow hS0] at hh
+    dsimp [Q]
+    linarith
+  have hlQup : Real.log Q ≤ 2*Real.log S := by
+    have hh := Real.log_le_log hQ hQup
+    rw [Real.log_pow] at hh
+    exact hh
+  have hlQ : 0 < Real.log Q := by linarith
+  have hlam0 : 0 ≤ Real.log Q/(10*t) := div_nonneg hlQ.le (by positivity)
+  have hlam1 : Real.log Q/(10*t) ≤ 1/2 := by
+    apply (div_le_iff₀ (by positivity : 0 < 10*t)).mpr
+    linarith
+  refine ⟨hlam0,hlam1,?_⟩
+  have hE : Real.exp (2*t)^(Real.log Q/(10*t)) = Q^(1/5:ℝ) := by
+    rw [Real.rpow_def_of_pos (Real.exp_pos _),Real.log_exp,Real.rpow_def_of_pos hQ]
+    congr 1
+    field_simp
+    ring
+  have hpow : S^(1/20:ℝ) ≤ Q^(4/5:ℝ) := by
+    calc
+      _ = (S^(1/16:ℝ))^(4/5:ℝ) := by rw [← Real.rpow_mul hS0.le]; norm_num
+      _ ≤ _ := Real.rpow_le_rpow (Real.rpow_nonneg hS0.le _) hQlo (by norm_num)
+  have hlog : Real.log S/3200 ≤ Real.log Q/200 := by linarith
+  have hH := primeRecipBound_mono (Real.one_le_exp (by positivity : 0 ≤ 2*t))
+    (Real.exp_le_exp.mpr (show 2*t ≤ 2*S by linarith))
+  have hcoeff : momentSeriesConst r*primeRecipBound (Real.exp (2*t)) ≤ Q^(4/5:ℝ)*Real.log Q/200 := by
+    calc
+      _ ≤ momentSeriesConst r*primeRecipBound (Real.exp (2*S)) :=
+        mul_le_mul_of_nonneg_left hH (momentSeriesConst_nonneg r)
+      _ ≤ _ := hC
+      _ = S^(1/20:ℝ)*(Real.log S/3200) := by ring
+      _ ≤ Q^(4/5:ℝ)*(Real.log Q/200) := mul_le_mul hpow hlog (by positivity) (Real.rpow_nonneg hQ.le _)
+      _ = _ := by ring
+  have hpowmul : Q^(1/5:ℝ)*Q^(4/5:ℝ) = Q := by rw [← Real.rpow_add hQ]; norm_num
+  have hpos : momentSeriesConst r*(Q^(1/5:ℝ)*primeRecipBound (Real.exp (2*t))) ≤ Q*Real.log Q/200 := by
+    have hh := mul_le_mul_of_nonneg_left hcoeff (Real.rpow_nonneg hQ.le (1/5))
+    calc
+      _ = Q^(1/5:ℝ)*(momentSeriesConst r*primeRecipBound (Real.exp (2*t))) := by ring
+      _ ≤ _ := hh
+      _ = Q^(1/5:ℝ)*Q^(4/5:ℝ)*Real.log Q/200 := by ring
+      _ = _ := by rw [hpowmul]
+  have hfirst : (r:ℝ)*momentB v W/t ≤ Q*Real.log Q/200 := by
+    calc
+      _ = Q*((r:ℝ)*(1+Real.log (W/v))) := by unfold momentB Q; ring
+      _ ≤ Q*(Real.log S/3200) := mul_le_mul_of_nonneg_left hB hQ.le
+      _ ≤ Q*(Real.log Q/200) := mul_le_mul_of_nonneg_left hlog hQ.le
+      _ = _ := by ring
+  have hneg : (Real.log Q/(10*t))*v/5 = Q*Real.log Q/50 := by dsimp [Q]; ring
+  unfold momentBandExp
+  change (r:ℝ)*momentB v W/t - (Real.log Q/(10*t))*v/5 +
+    momentSeriesConst r*(Real.exp (2*t)^(Real.log Q/(10*t))*primeRecipBound (Real.exp (2*t))) ≤ 0
+  rw [hE,hneg]
+  nlinarith
+
+end ShortEgyptian
+
+end OAI
+
+
+/- Upstream module: OAI.NumberTheory.ShortEgyptian.MomentAsymptotics -/
+
+
+
+namespace OAI
+
+namespace ShortEgyptian
+
+open scoped BigOperators
+open Finset
+
+open Filter Topology Asymptotics
+
+theorem eventually_log_pow_le (C : ℝ) (k : ℕ) {eps : ℝ} (heps : 0 < eps) :
+    ∀ᶠ S : ℝ in atTop, C * (1+Real.log S)^k ≤ S^eps := by
+  have hh := ((isLittleO_log_rpow_rpow_atTop (k:ℝ) heps).tendsto_div_nhds_zero).const_mul (max C 0 * 2^k)
+  have hh' : Tendsto (fun S : ℝ => (max C 0*2^k) * ((Real.log S)^k / S^eps)) atTop (𝓝 0) := by
+    simpa only [Real.rpow_natCast, mul_zero] using hh
+  filter_upwards [hh'.eventually_le_const (by norm_num : (0:ℝ)<1),
+    Real.tendsto_log_atTop.eventually_ge_atTop 1, eventually_gt_atTop (0:ℝ)] with S h hh hS
+  have hp : 0 < S^eps := Real.rpow_pos_of_pos hS _
+  have hbound : max C 0 * 2^k * (Real.log S)^k ≤ S^eps := by
+    have h' : (max C 0*2^k*(Real.log S)^k)/S^eps ≤ 1 := by simpa [mul_div_assoc] using h
+    exact (div_le_one hp).mp h'
+  calc
+    C * (1+Real.log S)^k ≤ max C 0 * (1+Real.log S)^k := mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)
+    _ ≤ max C 0 * (2*Real.log S)^k := by gcongr; linarith
+    _ = max C 0 * 2^k * (Real.log S)^k := by rw [mul_pow]; ring
+    _ ≤ _ := hbound
+
+theorem eventually_nested_log_le (C E : ℝ) (hE : 0 < E) :
+    ∀ᶠ S : ℝ in atTop, C*(1+Real.log (E*Real.log S)) ≤ Real.log S := by
+  have hh := Real.isLittleO_log_id_atTop.tendsto_div_nhds_zero
+  have hC := (tendsto_id : Tendsto (fun x : ℝ => x) atTop atTop).const_div_atTop (1+Real.log E)
+  have hlim : Tendsto (fun x : ℝ => C*((1+Real.log E)/x+Real.log x/x)) atTop (𝓝 0) := by
+    simpa using (hC.add hh).const_mul C
+  have hh' := (hlim.comp Real.tendsto_log_atTop).eventually_le_const (by norm_num : (0:ℝ)<1)
+  filter_upwards [hh',Real.tendsto_log_atTop.eventually_gt_atTop 0] with S h hl
+  rw [Real.log_mul hE.ne' hl.ne']
+  have heq : C * (1+Real.log E+Real.log (Real.log S))/Real.log S =
+      C*((1+Real.log E)/Real.log S+Real.log (Real.log S)/Real.log S) := by ring
+  change C*((1+Real.log E)/Real.log S+Real.log (Real.log S)/Real.log S) ≤ 1 at h
+  have h' := (div_le_one hl).mp (heq.symm ▸ h)
+  linarith
+
+theorem log_linear_bound (S E : ℝ) (hS : 1 ≤ S) (hE : 0 ≤ E) :
+    Real.log (1+E*S/Real.log 2) ≤ Real.log S+Real.log (1+E/Real.log 2) := by
+  have hl2 : 0 < Real.log 2 := Real.log_pos (by norm_num)
+  have harg : 0 < 1+E*S/Real.log 2 := by positivity
+  calc
+    _ ≤ Real.log (S*(1+E/Real.log 2)) := Real.log_le_log harg (by
+      have heq : S*(1+E/Real.log 2) = S+E*S/Real.log 2 := by ring
+      rw [heq]
+      linarith only [hS])
+    _ = _ := Real.log_mul (by linarith) (by positivity)
+
+theorem prime_exp_bound (S E : ℝ) (hS : 1 ≤ S) (hE : 0 ≤ E)
+    (hl : 1 ≤ Real.log S) (hElog : Real.log (1+E/Real.log 2) ≤ Real.log S) :
+    primeRecipBound (Real.exp (E*S)) ≤ 16*Real.log S := by
+  unfold primeRecipBound
+  rw [Real.log_exp]
+  have hh := log_linear_bound S E hS hE
+  linarith
+
+theorem divisor_moment_numeric (r : ℕ) (D S v Y : ℝ) (N : ℕ)
+    (hD : 1 ≤ D) (hS : 1 < S) (hl : 1 ≤ Real.log S) (hDS : D ≤ S)
+    (hElog : Real.log (1+(D+1)/Real.log 2) ≤ Real.log S)
+    (h2log : Real.log (1+2/Real.log 2) ≤ Real.log S)
+    (h40 : 40*(1+Real.log S) ≤ S^(1/16:ℝ))
+    (hpoint : 1600*(r:ℝ)*(1+Real.log S)^2 ≤ S^(1/2:ℝ))
+    (hsmall : 400*(momentSeriesConst 0*smallSmoothConst)*(1+Real.log S) ≤ S^(1/2:ℝ))
+    (hband : 51200*momentSeriesConst r ≤ S^(1/20:ℝ))
+    (hB : 3200*(r:ℝ)*(1+Real.log (2*(D+1)*Real.log S)) ≤ Real.log S)
+    (hB1 : 1+Real.log (2*(D+1)*Real.log S) ≤ Real.log S)
+    (hbig : 8*(r:ℝ)*D*(1+Real.log S) ≤ S^(1/8:ℝ))
+    (hpr : 128*momentSeriesConst r*(1+Real.log S) ≤ S^(1/4:ℝ))
+    (hout : 4*(1+Real.log S) ≤ S^(1/4:ℝ))
+    (hvlo : S/(2*Real.log S) ≤ v) (hvup : v ≤ D*S)
+    (hYlo : Real.exp (v/2) ≤ Y) (hYup : Y ≤ Real.exp v) (hN : (N:ℝ) ≤ Real.exp (D*S)) :
+    ∑ n ∈ Ioc N (N+⌊Y⌋₊), (truncatedDivisorCount (Real.exp v) n:ℝ)^r ≤ Y*Real.exp (S^(1/4:ℝ)) := by
+  have hS0 : 0 < S := by linarith
+  have hl0 : 0 < Real.log S := by linarith
+  have hv : 0 < v := lt_of_lt_of_le (div_pos hS0 (by positivity)) hvlo
+  have hvcoef : S ≤ 2*Real.log S*v := by simpa [mul_comm] using (div_le_iff₀ (show 0 < 2*Real.log S by positivity)).mp hvlo
+  let W := (D+1)*S
+  let B := 1+Real.log (W/v)
+  let L := S^(7/8:ℝ)
+  let z := Real.exp (Real.log S/2)
+  let T := Real.exp (4*Real.log S)
+  have hW0 : 0 < W := by dsimp [W]; positivity
+  have hvW : v < W := by dsimp [W]; nlinarith only [hvup,hS0]
+  have hBlog : B ≤ 1+Real.log (2*(D+1)*Real.log S) := by
+    have hfrac : W/v ≤ 2*(D+1)*Real.log S := by
+      apply (div_le_iff₀ hv).mpr
+      dsimp [W]
+      nlinarith only [hvcoef,hD]
+    have hh := Real.log_le_log (div_pos hW0 hv) hfrac
+    dsimp [B]
+    linarith
+  have hBbound : (r:ℝ)*B ≤ Real.log S/3200 := by
+    have hh := mul_le_mul_of_nonneg_left hBlog (Nat.cast_nonneg r)
+    nlinarith only [hh,hB]
+  have hBle : B ≤ Real.log S := hBlog.trans hB1
+  have hBpos : 0 ≤ B := by
+    have hh := Real.log_nonneg ((le_div_iff₀ hv).mpr (by simpa using hvW.le))
+    dsimp [B]; linarith
+  have hL0 : 0 < L := Real.rpow_pos_of_pos hS0 _
+  have hLle : L ≤ S := by simpa [L] using Real.rpow_le_rpow_of_exponent_le hS.le (by norm_num : (7/8:ℝ) ≤ 1)
+  have hpowhalf : S^(1/2:ℝ)*S^(1/2:ℝ) = S := by rw [← Real.rpow_add hS0]; norm_num
+  have hpowL : L*S^(1/8:ℝ) = S := by dsimp [L]; rw [← Real.rpow_add hS0]; norm_num
+  have hpower8 : S^(1/16:ℝ) ≤ S^(1/8:ℝ) := Real.rpow_le_rpow_of_exponent_le hS.le (by norm_num)
+  have h408 : 40*(Real.log S) ≤ S^(1/8:ℝ) := by linarith
+  have hLv : L ≤ v/20 := by
+    have hh := mul_le_mul_of_nonneg_left h408 hL0.le
+    rw [hpowL] at hh
+    nlinarith only [hh,hvcoef,hl0]
+  have hS16 : S^(1/16:ℝ) ≤ S := by simpa using Real.rpow_le_rpow_of_exponent_le hS.le (by norm_num : (1/16:ℝ) ≤ 1)
+  have hv8 : 8 ≤ v := by nlinarith only [h40,hS16,hvcoef,hl0]
+  have hY4 : 4 ≤ Y := by
+    have hh := Real.add_one_le_exp (v/2)
+    linarith
+  have hY0 : 0 < Y := by linarith
+  have hYv : v/2 ≤ Real.log Y := by
+    have hh := Real.log_le_log (Real.exp_pos _) hYlo
+    simpa only [Real.log_exp] using hh
+  have hz : 1 < z := Real.one_lt_exp_iff.mpr (by positivity)
+  have hzlog : Real.log z = Real.log S/2 := Real.log_exp _
+  have hzeq : z = S^(1/2:ℝ) := by rw [Real.rpow_def_of_pos hS0]; dsimp[z]; congr 1; ring
+  have hTeq : T^(1/8:ℝ) = S^(1/2:ℝ) := by
+    rw [Real.rpow_def_of_pos (Real.exp_pos _),Real.log_exp,Real.rpow_def_of_pos hS0]; congr 1; ring
+  have hpLog : Real.log (1+W/Real.log 2) ≤ 2*Real.log S := by
+    have hh := log_linear_bound S (D+1) hS.le (by linarith)
+    dsimp [W]; linarith
+  have hPfirst : (r:ℝ)*z*Real.log (1+W/Real.log 2) ≤ v/400 := by
+    have hh : 1600*(r:ℝ)*(Real.log S)^2 ≤ S^(1/2:ℝ) := by nlinarith only [hpoint,(show (0:ℝ) ≤ r from Nat.cast_nonneg r),hl]
+    have hmul := mul_le_mul_of_nonneg_right hh (Real.rpow_nonneg hS0.le (1/2))
+    rw [hpowhalf] at hmul
+    have hm : (r:ℝ)*z*Real.log (1+W/Real.log 2) ≤ 2*(r:ℝ)*z*Real.log S := by
+      have hh := mul_le_mul_of_nonneg_left hpLog (by positivity : 0 ≤ (r:ℝ)*z)
+      linarith
+    rw [hzeq] at hm ⊢
+    nlinarith only [hm,hmul,hvcoef,hl0]
+  have hPsecond : (r:ℝ)*momentB v W/Real.log z ≤ v/1600 := by
+    rw [hzlog]
+    apply (div_le_iff₀ (by positivity : 0 < Real.log S/2)).mpr
+    have hh := mul_le_mul_of_nonneg_right hBbound hv.le
+    change (r:ℝ)*(B*v) ≤ _
+    nlinarith only [hh]
+  have hP : momentPoint r v W z ≤ v/200 := by
+    unfold momentPoint
+    have heq : (r:ℝ)*(z*Real.log (1+W/Real.log 2)+momentB v W/Real.log z) =
+      (r:ℝ)*z*Real.log (1+W/Real.log 2)+(r:ℝ)*momentB v W/Real.log z := by ring
+    rw [heq]; linarith
+  have hSmall : momentSeriesConst 0*(T^(1/8:ℝ)*smallSmoothConst) ≤ v/200 := by
+    rw [hTeq]
+    have hc0 := mul_nonneg (momentSeriesConst_nonneg 0) smallSmoothConst_nonneg
+    have hh : 400*(momentSeriesConst 0*smallSmoothConst)*Real.log S ≤ S^(1/2:ℝ) := by nlinarith only [hsmall,hc0]
+    have hm := mul_le_mul_of_nonneg_right hh (Real.rpow_nonneg hS0.le (1/2))
+    rw [hpowhalf] at hm
+    nlinarith only [hm,hvcoef,hl0]
+  have hnW : ∀ n ∈ Ioc N (N+⌊Y⌋₊), Real.log n ≤ W := by
+    intro n hn
+    have hn0 : 0 < n := by have hh := (mem_Ioc.mp hn).1; omega
+    have hnl : (n:ℝ) ≤ (N:ℝ)+Y := by
+      have hh : (n:ℝ) ≤ (N:ℝ)+(⌊Y⌋₊:ℝ) := by exact_mod_cast (mem_Ioc.mp hn).2
+      linarith [Nat.floor_le hY0.le]
+    have hne : (n:ℝ) ≤ 2*Real.exp (D*S) := by
+      have hh := Real.exp_le_exp.mpr hvup
+      linarith
+    have hh := Real.log_le_log (by exact_mod_cast hn0 : (0:ℝ)<n) hne
+    rw [Real.log_mul (by norm_num) (Real.exp_ne_zero _),Real.log_exp] at hh
+    have hlog2 : Real.log 2 ≤ S := (Real.log_le_sub_one_of_pos (by norm_num : (0:ℝ)<2)).trans (by linarith)
+    dsimp [W]; linarith
+  have hbands : ∀ t : ℝ, 1 ≤ t → Real.log T/2 ≤ t → t ≤ L →
+      0 ≤ Real.log (v/t)/(10*t) ∧ Real.log (v/t)/(10*t) ≤ 1/2 ∧ momentBandExp r v W t ≤ 0 := by
+    intro t ht htlo htup
+    have ht0 : 0 < t := by linarith
+    have htlo' : 2*Real.log S ≤ t := by dsimp [T] at htlo; rw [Real.log_exp] at htlo; linarith
+    have hQlo : S^(1/16:ℝ) ≤ v/t := by
+      apply (le_div_iff₀ ht0).mpr
+      have hh1 : 2*Real.log S ≤ S^(1/16:ℝ) := by linarith
+      have hh2 := mul_le_mul_of_nonneg_left hh1 (Real.rpow_nonneg hS0.le (1/16))
+      have heq : S^(1/16:ℝ)*S^(1/16:ℝ) = S^(1/8:ℝ) := by rw [← Real.rpow_add hS0]; norm_num
+      rw [heq] at hh2
+      have hh3 := mul_le_mul_of_nonneg_left hh2 hL0.le
+      rw [hpowL] at hh3
+      have hh4 := mul_le_mul_of_nonneg_left htup (Real.rpow_nonneg hS0.le (1/16))
+      nlinarith only [hh3,hh4,hvcoef,hl0]
+    have hQup : v/t ≤ S^2 := by
+      apply (div_le_iff₀ ht0).mpr
+      nlinarith only [hvup,hDS,hS0,ht]
+    have hC : momentSeriesConst r*primeRecipBound (Real.exp (2*S)) ≤ S^(1/20:ℝ)*Real.log S/3200 := by
+      have hh := mul_le_mul_of_nonneg_left (prime_exp_bound S 2 hS.le (by norm_num) hl h2log) (momentSeriesConst_nonneg r)
+      have hh' := mul_le_mul_of_nonneg_right hband hl0.le
+      linarith
+    exact moment_band_nonpos r S v W t hS ht0 hv htlo' (htup.trans hLle) hBbound hQlo hQup hC
+  have hfin := divisor_moment_finite r N Y v W z T L hY4 hv hvW hz hYv hL0 hLv
+    (by dsimp [T]; rw [Real.log_exp]; linarith) (Real.exp_pos _) hnW (by linarith) hbands
+  have hR : 1 ≤ Real.sqrt Y := Real.one_le_sqrt.mpr (by linarith)
+  have hRle : Real.sqrt Y ≤ Real.exp (D*S) := by
+    have hh : Real.sqrt Y ≤ Y := by nlinarith only [Real.sq_sqrt hY0.le,Real.sqrt_nonneg Y,hY4]
+    exact hh.trans (hYup.trans (Real.exp_le_exp.mpr hvup))
+  have hED : Real.log (1+D/Real.log 2) ≤ Real.log S := by
+    apply le_trans _ hElog
+    apply Real.log_le_log (by positivity : 0 < 1+D/Real.log 2)
+    gcongr; norm_num
+  have hPrime : primeRecipBound (Real.sqrt Y) ≤ 16*Real.log S :=
+    (primeRecipBound_mono hR hRle).trans (prime_exp_bound S D hS.le (by linarith) hl hED)
+  have hFirst : (r:ℝ)*momentB v W/L ≤ S^(1/4:ℝ)/8 := by
+    have h8 : 0 < S^(1/8:ℝ) := Real.rpow_pos_of_pos hS0 _
+    have hd : (r:ℝ)*B*v ≤ (r:ℝ)*Real.log S*(D*S) := by gcongr
+    have heq : (r:ℝ)*Real.log S*(D*S)/L = (r:ℝ)*D*Real.log S*S^(1/8:ℝ) := by
+      apply (div_eq_iff hL0.ne').mpr
+      calc _ = (r:ℝ)*D*Real.log S*(L*S^(1/8:ℝ)) := by rw [hpowL]; ring
+           _ = _ := by ring
+    have hm := mul_le_mul_of_nonneg_right hbig h8.le
+    have heq2 : S^(1/8:ℝ)*S^(1/8:ℝ) = S^(1/4:ℝ) := by rw [← Real.rpow_add hS0]; norm_num
+    rw [heq2] at hm
+    have hx : (r:ℝ)*momentB v W/L ≤ (r:ℝ)*D*Real.log S*S^(1/8:ℝ) := by
+      simpa only [momentB,B,mul_assoc] using (div_le_div_of_nonneg_right hd hL0.le).trans_eq heq
+    have hdrop : 8*(r:ℝ)*D*Real.log S*S^(1/8:ℝ) ≤ 8*(r:ℝ)*D*(1+Real.log S)*S^(1/8:ℝ) := by gcongr; linarith
+    linarith only [hx,hm,hdrop]
+  have hSecond : momentSeriesConst r*primeRecipBound (Real.sqrt Y) ≤ S^(1/4:ℝ)/8 := by
+    have hh := mul_le_mul_of_nonneg_left hPrime (momentSeriesConst_nonneg r)
+    nlinarith only [hh,hpr,momentSeriesConst_nonneg r]
+  have hExp : Real.exp ((r:ℝ)*momentB v W/L+momentSeriesConst r*primeRecipBound (Real.sqrt Y)) ≤ Real.exp (S^(1/4:ℝ)/2) := by
+    apply Real.exp_le_exp.mpr
+    have hh := Real.rpow_nonneg hS0.le (1/4)
+    linarith
+  have hSL : (⌊L⌋₊:ℝ)+1 ≤ Real.exp (S^(1/4:ℝ)/2) := by
+    apply le_trans (show (⌊L⌋₊:ℝ)+1 ≤ S+1 by linarith [Nat.floor_le hL0.le])
+    rw [← Real.exp_log (by linarith : 0 < S+1)]
+    apply Real.exp_le_exp.mpr
+    have hh := Real.log_le_log (by linarith : 0 < S+1) (show S+1 ≤ 2*S by linarith)
+    rw [Real.log_mul (by norm_num) hS0.ne'] at hh
+    have hlog2 := Real.log_le_sub_one_of_pos (by norm_num : (0:ℝ)<2)
+    linarith
+  have h4 : (4:ℝ) ≤ Real.exp (S^(1/4:ℝ)/2) := by
+    have hh := Real.add_one_le_exp (S^(1/4:ℝ)/2)
+    linarith
+  calc
+    _ ≤ _ := hfin
+    _ ≤ 4*Y*Real.exp (S^(1/4:ℝ)/2) := by nlinarith only [hExp,hSL,hY0]
+    _ ≤ Y*(Real.exp (S^(1/4:ℝ)/2)*Real.exp (S^(1/4:ℝ)/2)) := by
+      have hh := mul_le_mul_of_nonneg_right h4 (show 0 ≤ Y*Real.exp (S^(1/4:ℝ)/2) by positivity)
+      nlinarith only [hh]
+    _ = _ := by rw [← Real.exp_add]; congr 2; ring
+
+theorem uniform_divisor_moment (D : ℝ) (hD : 1 ≤ D) (r : ℕ) :
+    ∀ᶠ S : ℝ in atTop, ∀ (v Y : ℝ) (N : ℕ),
+      S/(2*Real.log S) ≤ v → v ≤ D*S → Real.exp (v/2) ≤ Y → Y ≤ Real.exp v →
+      (N:ℝ) ≤ Real.exp (D*S) →
+      ∑ n ∈ Ioc N (N+⌊Y⌋₊), (truncatedDivisorCount (Real.exp v) n:ℝ)^r ≤ Y*Real.exp (S^(1/4:ℝ)) := by
+  filter_upwards [eventually_gt_atTop (1:ℝ),Real.tendsto_log_atTop.eventually_ge_atTop 1,
+    eventually_ge_atTop D,
+    Real.tendsto_log_atTop.eventually_ge_atTop (Real.log (1+(D+1)/Real.log 2)),
+    Real.tendsto_log_atTop.eventually_ge_atTop (Real.log (1+2/Real.log 2)),
+    eventually_log_pow_le 40 1 (by norm_num : (0:ℝ)<1/16),
+    eventually_log_pow_le (1600*(r:ℝ)) 2 (by norm_num : (0:ℝ)<1/2),
+    eventually_log_pow_le (400*(momentSeriesConst 0*smallSmoothConst)) 1 (by norm_num : (0:ℝ)<1/2),
+    eventually_log_pow_le (51200*momentSeriesConst r) 0 (by norm_num : (0:ℝ)<1/20),
+    eventually_nested_log_le (3200*(r:ℝ)) (2*(D+1)) (by linarith),
+    eventually_nested_log_le 1 (2*(D+1)) (by linarith),
+    eventually_log_pow_le (8*(r:ℝ)*D) 1 (by norm_num : (0:ℝ)<1/8),
+    eventually_log_pow_le (128*momentSeriesConst r) 1 (by norm_num : (0:ℝ)<1/4),
+    eventually_log_pow_le 4 1 (by norm_num : (0:ℝ)<1/4)]
+    with S hS hl hDS hElog h2log h40 hp hs hb hB hB1 hbig hpr hout
+  simp only [pow_zero,pow_one,mul_one,one_mul] at h40 hs hb hB1 hbig hpr hout
+  intro v Y N hvlo hvup hYlo hYup hN
+  exact divisor_moment_numeric r D S v Y N hD hS hl hDS hElog h2log h40 hp hs hb hB hB1 hbig hpr hout hvlo hvup hYlo hYup hN
+
+end ShortEgyptian
+
+end OAI
+
+namespace DivisorMomentAudit
+
+open scoped BigOperators
+open Finset Filter OAI.ShortEgyptian
+
+theorem shifted_sum (f : ℕ → ℝ) (N H : ℕ) :
+    ∑ h ∈ Icc 1 H, f (N + h) = ∑ n ∈ Ioc N (N + H), f n := by
+  refine Finset.sum_bij (fun h _ => N + h) ?_ ?_ ?_ ?_
+  · intro h hh
+    obtain ⟨hlo, hup⟩ := mem_Icc.mp hh
+    exact mem_Ioc.mpr ⟨by omega, by omega⟩
+  · intro h hh h' hh' heq
+    omega
+  · intro n hn
+    obtain ⟨hlo, hup⟩ := mem_Ioc.mp hn
+    refine ⟨n - N, mem_Icc.mpr ⟨by omega, by omega⟩, ?_⟩
+    omega
+  · intro h hh
+    rfl
+
+theorem one_le_count (X : ℝ) (n : ℕ) (hX : 1 ≤ X) (hn : 0 < n) :
+    1 ≤ truncatedDivisorCount X n := by
+  change 0 < (truncatedDivisors X n).card
+  apply Finset.card_pos.mpr
+  refine ⟨1, ?_⟩
+  simp [truncatedDivisors, Nat.mem_divisors, hn.ne', hX]
+
+theorem uniform_divisor_moment_real (D r : ℝ) (hD : 1 ≤ D) (hr : 1 ≤ r) :
+    ∀ᶠ S : ℝ in atTop, ∀ (X Y : ℝ) (N : ℕ),
+      0 < X →
+      S / (2 * Real.log S) ≤ Real.log X → Real.log X ≤ D * S →
+      X ^ (1 / 2 : ℝ) ≤ Y → Y ≤ X → (N : ℝ) ≤ Real.exp (D * S) →
+      ∑ h ∈ Icc 1 ⌊Y⌋₊, (truncatedDivisorCount X (N + h) : ℝ) ^ r ≤
+        Y * Real.exp (S ^ (1 / 4 : ℝ)) := by
+  filter_upwards [uniform_divisor_moment D hD ⌈r⌉₊, eventually_gt_atTop (1 : ℝ)]
+    with S hnat hS
+  intro X Y N hX hvlo hvup hYlo hYup hN
+  have hlogS : 0 < Real.log S := Real.log_pos hS
+  have hlog : 0 < Real.log X :=
+    lt_of_lt_of_le
+      (div_pos (by linarith : 0 < S) (by positivity : 0 < 2 * Real.log S)) hvlo
+  have hX1 : 1 ≤ X := by
+    calc
+      1 ≤ Real.exp (Real.log X) := Real.one_le_exp hlog.le
+      _ = X := Real.exp_log hX
+  have hYlo' : Real.exp (Real.log X / 2) ≤ Y := by
+    simpa only [Real.rpow_def_of_pos hX, div_eq_mul_inv, one_mul] using hYlo
+  have hbound := hnat (Real.log X) Y N hvlo hvup hYlo'
+    (by simpa only [Real.exp_log hX] using hYup) hN
+  rw [Real.exp_log hX] at hbound
+  calc
+    _ ≤ ∑ h ∈ Icc 1 ⌊Y⌋₊, (truncatedDivisorCount X (N + h) : ℝ) ^ ⌈r⌉₊ := by
+      apply sum_le_sum
+      intro h hh
+      have hn : 0 < N + h := by
+        have := (mem_Icc.mp hh).1
+        omega
+      have hd : (1 : ℝ) ≤ truncatedDivisorCount X (N + h) := by
+        exact_mod_cast one_le_count X (N + h) hX1 hn
+      simpa only [Real.rpow_natCast] using
+        Real.rpow_le_rpow_of_exponent_le hd (Nat.le_ceil r)
+    _ = ∑ n ∈ Ioc N (N + ⌊Y⌋₊), (truncatedDivisorCount X n : ℝ) ^ ⌈r⌉₊ :=
+      shifted_sum (fun n => (truncatedDivisorCount X n : ℝ) ^ ⌈r⌉₊) N ⌊Y⌋₊
+    _ ≤ _ := hbound
+
+theorem manuscript_divisor_moment (D r : ℝ) (hD : 1 ≤ D) (hr : 1 ≤ r) :
+    ∃ S0 : ℝ, ∀ S ≥ S0, ∀ (X Y : ℝ) (N : ℕ),
+      0 < X →
+      S / (2 * Real.log S) ≤ Real.log X → Real.log X ≤ D * S →
+      X ^ (1 / 2 : ℝ) ≤ Y → Y ≤ X → (N : ℝ) ≤ Real.exp (D * S) →
+      ∑ h ∈ Icc 1 ⌊Y⌋₊, (truncatedDivisorCount X (N + h) : ℝ) ^ r ≤
+        Y * Real.exp (S ^ (1 / 4 : ℝ)) := by
+  exact Filter.eventually_atTop.mp (uniform_divisor_moment_real D r hD hr)
+
+end DivisorMomentAudit
+
+#print axioms OAI.ShortEgyptian.uniform_divisor_moment
+#print axioms DivisorMomentAudit.manuscript_divisor_moment

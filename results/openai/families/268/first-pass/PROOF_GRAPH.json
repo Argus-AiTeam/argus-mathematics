@@ -1,0 +1,111 @@
+{
+  "goal": "C9000268",
+  "routes": [
+    {
+      "name": "R_FAMILY_VERIFICATION",
+      "status": "untried",
+      "evidence": "OBJECTIVE.md"
+    },
+    {
+      "name": "R_TRANSFER_ALL_ORDERS",
+      "status": "current",
+      "evidence": "research/transfer_audit/report.md"
+    }
+  ],
+  "nodes": {
+    "C9000268": {
+      "statement": "Adversarially audit, verify, or refute OpenAI Manuscript Family 268 (The spin-one Haldane gap.; papers: The periodic spin-one Haldane gap; A boundary-field gap for the spin-one Heisenberg chain; Lean status: UNFORMALIZED (No Lean proof in openai/math)): either (a) discover and certify an explicit mathematical flaw, sign/orientation error, counterexample to an intermediate lemma, or statement-fidelity/citation gap with a deterministic symbolic/computational certificate (`verify.py` + `exact_certificate.json`), or (b) independently verify, repair, or generalize the manuscript's core mathematical theorem with a standalone machine-checkable certificate certified by the independent Reviewer.",
+      "status": "open",
+      "is_goal": true,
+      "depends_on": ["C_PERIODIC_MAIN", "C_BOUNDARY_MAIN"],
+      "reviewer_confirmed": false,
+      "evidence": [
+        "OBJECTIVE.md"
+      ]
+    },
+    "C_PERIODIC_MAIN": {
+      "statement": "Periodic thm:main: uniqueness for even L >= 60, gap > (4/105) log(80/79) there, and gap > log(20)/784 for even L >= 2304.",
+      "status": "open",
+      "depends_on": ["C_TRANSFER_PERIODIC", "C_PERIODIC_FINITE", "C_PERIODIC_PROPAGATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-periodic-spin-one-Haldane-gap-September-24-2026/build/introduction.tex"]
+    },
+    "C_BOUNDARY_MAIN": {
+      "statement": "Boundary thm:main: the same-field open chain has gap > log(10)/392 for every L >= 960, with n = 2L+1 and h = 3/5.",
+      "status": "open",
+      "depends_on": ["C_TRANSFER_BOUNDARY", "C_PERIODIC_FINITE", "C_PERIODIC_PROPAGATION", "C_BOUNDARY_FINITE", "C_BOUNDARY_PROPAGATION"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-boundary-field-gap-for-the-spin-one-Heisenberg-chain-September-24-2026/build/main.tex"]
+    },
+    "C_TRANSFER": {
+      "statement": "The specified chronological kernel gives both literal periodic and open-chain transfer identities at every stated parameter, not only at finitely tested orders.",
+      "status": "open",
+      "depends_on": ["C_TRANSFER_PERIODIC", "C_TRANSFER_BOUNDARY"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/transfer_audit/report.md", "research/transfer_audit/exact_certificate.json", "research/openai_manuscript/The-periodic-spin-one-Haldane-gap-September-24-2026/build/transfer.tex", "research/openai_manuscript/A-boundary-field-gap-for-the-spin-one-Heisenberg-chain-September-24-2026/build/sections/transfer.tex"]
+    },
+    "C_TRANSFER_CORE": {
+      "statement": "For an arbitrary finite ordered event word, the trace of the product of sitewise tensor matrices is the product of the chronological local word traces; identity insertions may be filtered without reversing order.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/transfer_audit/Main.lean", "research/transfer_audit/statement_fidelity.md", "research/transfer_audit/certificates/C_TRANSFER_CORE-a7e3c1372950d78e.json"]
+    },
+    "C_HISTORY_INTERLEAVING": {
+      "statement": "For every finite tuple of history lengths, the product of ordered time simplexes decomposes, up to collision null sets, into the global ordered simplexes indexed by order-preserving interleavings, with Jacobian one.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/transfer_audit/report.md", "research/transfer_audit/exact_certificate.json"]
+    },
+    "C_TRANSFER_ANALYTIC": {
+      "statement": "The history kernel is measurable, real, symmetric, bounded by 3 on a space of mass exp(3b); the stated Hilbert--Schmidt, trace-class, absolute-convergence, and cycle-trace assertions follow.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/transfer_audit/report.md"]
+    },
+    "C_TRANSFER_PERIODIC": {
+      "statement": "Periodic prop:transfer: Z_n(b,g) = Tr(X_b^n U_g) for all b > 0, n >= 4, and all 24 proper signed permutations, with the seam conjugated on site 0 and shift a = 700741/500000 per site.",
+      "status": "open",
+      "depends_on": ["C_TRANSFER_CORE", "C_HISTORY_INTERLEAVING", "C_TRANSFER_ANALYTIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/transfer_audit/report.md", "research/transfer_audit/exact_certificate.json", "research/openai_manuscript/The-periodic-spin-one-Haldane-gap-September-24-2026/build/model.tex", "research/openai_manuscript/The-periodic-spin-one-Haldane-gap-September-24-2026/build/transfer.tex"]
+    },
+    "C_TRANSFER_BOUNDARY": {
+      "statement": "Boundary tr:boundary: for all b > 0, n >= 2, and g in the stated twelve-element group, <v_b, X_b^n U_g v_b> is the open-chain partition function with left field -h S_0^z and right field +h S_{n-1}^{g e_z}; h = 3/5 and the shift is per site.",
+      "status": "open",
+      "depends_on": ["C_TRANSFER_CORE", "C_HISTORY_INTERLEAVING", "C_TRANSFER_ANALYTIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/transfer_audit/report.md", "research/transfer_audit/exact_certificate.json", "research/openai_manuscript/A-boundary-field-gap-for-the-spin-one-Heisenberg-chain-September-24-2026/build/sections/transfer.tex"]
+    },
+    "C_PERIODIC_FINITE": {
+      "statement": "The periodic finite thermal, variational, and scalar initialization certificates establish the exact seeds required in build/initialization.tex.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-periodic-spin-one-Haldane-gap-September-24-2026/build/initialization.tex"]
+    },
+    "C_PERIODIC_PROPAGATION": {
+      "statement": "The periodic rotation-sector, purity bootstrap, length coverage, and gap-extraction arguments propagate the stated seeds to the periodic main theorem.",
+      "status": "open",
+      "depends_on": ["C_TRANSFER_PERIODIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/The-periodic-spin-one-Haldane-gap-September-24-2026/build/bootstrap.tex", "research/openai_manuscript/The-periodic-spin-one-Haldane-gap-September-24-2026/build/assembly.tex"]
+    },
+    "C_BOUNDARY_FINITE": {
+      "statement": "The boundary finite thermal, trial, and scalar initialization certificates establish the seeds for the stated endpoint Hamiltonians.",
+      "status": "open",
+      "depends_on": [],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-boundary-field-gap-for-the-spin-one-Heisenberg-chain-September-24-2026/build/sections/initialization.tex"]
+    },
+    "C_BOUNDARY_PROPAGATION": {
+      "statement": "The boundary recurrence, leading-line invariance, signed odd-length comparison, and gap extraction propagate the exact seeds to the boundary main theorem.",
+      "status": "open",
+      "depends_on": ["C_TRANSFER_BOUNDARY", "C_TRANSFER_PERIODIC"],
+      "reviewer_confirmed": false,
+      "evidence": ["research/openai_manuscript/A-boundary-field-gap-for-the-spin-one-Heisenberg-chain-September-24-2026/build/sections/boundary.tex", "research/openai_manuscript/A-boundary-field-gap-for-the-spin-one-Heisenberg-chain-September-24-2026/build/sections/conclusion.tex"]
+    }
+  }
+}

@@ -1,0 +1,796 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,array,longtable}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\kk}{{\overline{\mathbb Q}}}
+\DeclareMathOperator{\CH}{CH}
+\DeclareMathOperator{\Nm}{Nm}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hdg}{Hdg}
+\DeclareMathOperator{\Sp}{Sp}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Tr}{Tr}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\title{All-degree CM supply for quadratic actions:\\
+a constructive verification of the determinant reduction}
+\author{Campaign 9000032: Engineer submission}
+\date{November 5, 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We verify the algebraic reduction in the two all-powers theorems of
+\emph{Weil classes and Hodge classes on abelian powers}
+(October 6, 2026). Reusing the independently reviewed actual derived-group
+theorem, we prove that every rational Hodge class on every self-power in
+either family is supplied by the full cohomology of CM abelian varieties
+through rational algebraic correspondences. The proof covers arbitrary
+tensor degrees and repeated determinant factors. It includes a fixed-list
+simultaneous-balance argument, primitive integer exponent cancellation,
+nonzero determinant extraction, actual positive polarization padding, and
+rational Hodge lifts. Markman's all-period Weil-plane theorem, not the
+manuscript's later geometric proof, is an external input.
+An executable exact certificate checks the finite case reduction and
+symbolic identities; it does not replace the universal proof.
+The final Hodge-conjecture implication remains conditional on the separate
+CM Hodge theorem, which is not audited here.
+\end{abstract}
+
+\noindent\textbf{Status and comparison.}
+This is a universal prose verification with an exact algebraic certificate,
+submitted for independent Reviewer certification. It is not a Lean/kernel
+proof, a counterexample, or a novelty certification.
+The prior reviewed result \texttt{AG-UNIVERSAL} established condition (c)
+of the manuscript's tensor criterion, namely the actual independent
+derived images. The present result establishes the additional
+determinant-supply condition (d) and the all-degree passage to rational
+classes. It does not assume independence of central characters, nor does
+it replace an actual special-period Hodge group by a generic PEL group.
+
+\medskip
+\noindent\textbf{Source scope.}
+The relevant staged labels are \texttt{p3:cm-operations},
+\texttt{p3:admissible-operations}, \texttt{p3:tensor-criterion},
+\texttt{p3ab:hyperbolic}, and \texttt{p3ab:determinant-supply},
+together with the balance arguments at source lines 1609--1834.
+For admissible operations we prove the abelian-variety instance used
+in these two families. Algebraicity assertions in the CM-operations
+lemma and tensor criterion retain their explicitly separate CM input.
+
+\section{Statement, scope, and inputs}
+
+Fix $\kk=\overline{\Q}\subset\C$. Scalar conjugation acts on coefficients
+of the cohomology of a \emph{fixed} complex variety. It does not conjugate
+that variety. For a smooth projective $X$ define
+\[
+ {\cal C}^{d}(X)=
+ \sum_{\substack{B\ {\rm CM}\\ j\in\Z,\ \Gamma}}
+ \im\left(\Gamma_*:H^{d-2j}(B,\Q)(-j)
+                 \longrightarrow H^d(X,\Q)\right),\qquad
+ \Gamma\in\CH^{\dim B+j}(B\times X)_\Q.
+ \tag{1}\label{eq:supply}
+\]
+Only existing degrees and cycle groups are used; a point is allowed.
+CM means that the degree-one Hodge group is a torus.
+The twist convention is $V(r)^{p,q}=V^{p+r,q+r}$.
+A $\kk$-subspace is supplied if it lies in ${\cal C}^d(X)_\kk$.
+In particular, the source in (1) is \emph{full cohomology}, not just
+its Hodge classes.
+
+\begin{theorem}\label{thm:main}
+Let $A/\C$ admit a unital action of an imaginary quadratic field $E$.
+Suppose either
+\begin{enumerate}
+\item $\dim A\leq5$; or
+\item $\dim A=6$ and a compatible polarization has hyperbolic rational
+homological $E$-Hermitian form of signature $(3,3)$.
+\end{enumerate}
+For every $m\geq1$ and $p\geq0$,
+\[
+ H^{2p}(A^m,\Q)\cap H^{p,p}(A^m)
+             \ \subset\ {\cal C}^{2p}(A^m).
+ \tag{2}\label{eq:main}
+\]
+Every such class has a rational Hodge lift through a finite sum of
+the defining maps in (1).
+Consequently, \emph{if} the rational Hodge conjecture holds for every
+CM abelian variety, it holds for every $A^m$ in the two families.
+\end{theorem}
+
+We reuse the reviewed theorem in
+\path{research/actual_group_audit/report.tex}, without reclassifying groups.
+After isogeny and admissible matrix-copy identifications, it supplies the
+following covering list. Here $B$ is a simple non-CM factor, $g=\dim B$,
+$r$ its multiplicity, and a Type IV center has degree $2f$.
+\begin{center}\small
+\begin{tabular}{p{.17\textwidth}p{.73\textwidth}}
+Types I, II & Symplectic columns of ranks $2,4,6$.\\
+Type III & $g=4$ or $6$, $r=1$, one $\SO_g$ column;
+each $E$-eigenspace is an admissible copy, of signature
+$(g/2,g/2)$.\\
+Type IV, $E\not\hookrightarrow K$ &
+$K$ quadratic, $g=3,r=2$, one $\SL_3$ column and its opposite.\\
+Type IV, $E\hookrightarrow K$ &
+$K$ is the full endomorphism field. Either $f=1$, $3\leq g\leq6$,
+or $(f,a,g)=(2,2,4),(2,3,6),(3,2,6)$, where $a=g/f$.
+Each column has image $\SL_a$; opposite columns are dual.
+Rank-two cases have both pure and mixed embedding pairs.
+\end{tabular}
+\end{center}
+The corresponding classical factors act independently on their own
+columns and trivially on the CM summand. All copy maps and pair tensors
+are admissible. A pure column in a non-CM factor is \emph{not} moved into
+the rational CM summand. The list is necessary, not a realizability claim.
+
+The following external propositions are recorded as assumptions in
+\path{research/MATH_STATE.json}; their primary passages are archived in
+\texttt{literature/}.
+\begin{center}\small
+\begin{tabular}{p{.18\textwidth}p{.72\textwidth}}
+\texttt{MARKMAN-WEIL} &
+\cite[Theorem 1.5.1]{Markman}: the whole rational Weil plane of
+\emph{every} polarized Weil sixfold of discriminant $-1$ is algebraic.\\
+\texttt{MEYER} &
+\cite[Corollary 3.3.4]{PS}: a nondegenerate indefinite rational
+quadratic form of rank at least five is isotropic.\\
+\texttt{HERMITIAN-}\newline\texttt{CONVENTION} &
+\cite[Lemma 5.2(2)--(5), author version]{vG}: the homological
+polarization formula and determinant convention specified below.\\
+\texttt{FFT-SP} &
+\cite[Theorem 4.1 and Corollary 4.2]{LZ15}: all-degree
+symplectic and ordinary orthogonal invariant spanning by pairs.\\
+\texttt{FFT-SO} &
+\cite[Theorem 2.1, Remark 2.2, Example 4.1, Corollary 4.2]{LZ17}:
+the determinant-isotypic orthogonal component is generated by volume
+and pairs, giving the special-orthogonal statement.\\
+\texttt{FFT-SL} &
+\cite[Section 5, author PDF p. 10]{Sch}: all mixed-degree
+special-linear invariant spanning by coevaluation and the two volumes.
+\end{tabular}
+\end{center}
+No CM Hodge-conjecture theorem is an input to (2). The cited
+invariant-theory assertions are spanning theorems without a stable-range
+restriction; independence of generators is not required.
+Markman uses ``complex multiplication by $K$'' for the quadratic action
+in his definition of Weil type, not for a toric full Hodge group.
+His Theorem 1.5.1 imposes no simplicity or general-period hypothesis.
+We import that theorem, not a new verification of his geometric proof.
+The Grenoble endpoint of \cite{PS} timed out; the author's Eindhoven
+endpoint supplied the stated June 2024 version, dated September 16, 2024,
+including the exact corollary. No mathematical conclusion was drawn from
+the retrieval failure.
+
+\section{Algebraic operations and rational lifts}
+
+\begin{lemma}\label{lem:descent}
+Let $T$ be a rational vector space, $P\subset T_\C$ a complex-linear
+subspace, and $t\in T_\kk$. If $\gamma t\in P$ for every
+$\gamma\in\Gal(\kk/\Q)$, then
+$t\in(T\cap P)\otimes_\Q\kk$.
+\end{lemma}
+\begin{proof}
+Choose a finite Galois field $F$ containing the coefficients of $t$.
+For a basis $b_i$ of $F/\Q$ let $b_i^*$ be its trace-dual basis.
+The rational coefficient of $b_i$ in $t$ is
+$\Tr_{F/\Q}(b_i^*t)$, a sum of scalar multiples of conjugates of $t$.
+It lies in $P$. This recovers every coefficient over $\Q$.
+The argument does not assert that a scalar automorphism commutes with
+complex conjugation.
+\end{proof}
+
+Recall that an admissible summand is the image of a $\kk$-projector all
+of whose scalar conjugates are Hodge endomorphisms. Admissible maps
+preserve the Hodge grading in every scalar conjugate. These are linear
+conditions, so Lemma~\ref{lem:descent} expresses the ambient extensions
+of such maps as $\kk$-linear combinations of rational Hodge maps.
+The degree-one realization used in the reviewed actual-group argument
+then realizes them by rational homomorphisms of abelian varieties in the
+contravariant direction. Explicitly, dualize to homology, clear lattice
+denominators, and use the resulting complex-linear homomorphism of
+abelian varieties. Graphs, followed by degree-one projectors, are
+algebraic correspondences on the required slots. Isogenies have
+cohomological inverses given by degree-normalized pushforward.
+All these assertions are cohomological; no Chow-idempotence assertion
+is needed.
+
+Pair tensors and contractions also have explicit algebraic realizations.
+A rational polarization and the Poincare divisor give a nondegenerate
+coevaluation tensor on the ambient degree-one spaces. Any other
+all-conjugate $(1,1)$ pair is obtained from it by an admissible map on
+one slot. This map is algebraic by the preceding paragraph, so the pair
+is algebraic over $\kk$. To contract its inverse pairing, express that
+pairing as the polarization pairing composed with an admissible map.
+The polarization pairing is cup product with a suitable ample
+$(g-1)$st power, followed by integration; hence contraction is algebraic.
+This proves the needed abelian-variety instance without an additional
+Hodge-conjecture input.
+
+For completeness, a polarization pairs an admissible $W$ perfectly with
+its coefficient-conjugate $\bar W$. After complexification, the positive
+Hermitian form obtained with the Weil operator detects every nonzero
+vector of the Hodge-stable space $W_\C$. Its conjugate arguments lie in
+$\bar W_\C$. Conjugating the nonzero determinant preserves perfectness
+for every $\gamma$. The rational polarization still pairs complementary
+Hodge types on $\gamma W,\gamma\bar W$. Thus
+\[
+ \epsilon_\gamma(\bar W)=-\epsilon_\gamma(W),\qquad
+ \epsilon_\gamma(W)=
+ \dim(\gamma W)^{1,0}-\dim(\gamma W)^{0,1}.
+ \tag{3}\label{eq:opposite}
+\]
+This reasoning does not replace $\gamma\bar W$ by $\overline{\gamma W}$.
+
+Write $\delta_r(v_1,\ldots,v_r)=
+\sum_{\sigma\in S_r}\operatorname{sgn}(\sigma)
+v_{\sigma(1)}\otimes\cdots\otimes v_{\sigma(r)}$ and
+$D(W)=\bigwedge^{\dim W}W$ on separate degree-one slots.
+For $W=\bigoplus_i W_i$, projecting $\delta_{\dim W}$ onto successive
+blocks of lengths $\dim W_i$ gives exactly
+$\bigotimes_i\delta_{\dim W_i}$ in concatenated bases.
+Conversely, full alternation of this tensor gives
+$\left(\prod_i(\dim W_i)!\right)\delta_{\dim W}$.
+Both coefficients are nonzero. These are algebraic operations because
+the projectors and ordinary permutations are algebraic on these slots;
+ordinary and geometric permutations differ by the rational Koszul sign.
+
+If $b:W\otimes W'\to\kk(-1)$ is a perfect pairing of rank $r$,
+slotwise contraction gives the exact identity
+\[
+ b^{\otimes r}\bigl(\delta_r(v)\otimes\delta_r(w)\bigr)
+       =r!\det\bigl(b(v_i,w_j)\bigr)\ne0.
+ \tag{4}\label{eq:det-contract}
+\]
+Here the ordinary permutation putting matching slots together is part of
+the operation. Alternating the $r$th power of the inverse pair tensor
+also supplies $D(W)\otimes D(W')$ nontrivially. In particular every
+opposite determinant pair is algebraic. For an alternating self-pair,
+the top wedge has a nonzero Pfaffian, so the symplectic volume is already
+algebraic. These statements require perfectness, not a particular
+choice of determinant vectors or a square root of a scalar.
+
+\begin{lemma}\label{lem:operations}
+Supply in (1) is stable under external products, permutations, cup
+products, algebraic correspondences, their $\kk$-linear combinations,
+and scalar conjugation. Rational membership descends from $\kk$.
+Every rational Hodge class in ${\cal C}^{2p}(X)$ has a rational Hodge
+lift through finitely many of the defining CM-source maps.
+\end{lemma}
+\begin{proof}
+Products of CM varieties are CM: their joint Hodge group is a subgroup
+of a product of tori. External products and composition of cycle
+correspondences give the stated operations. Diagonal pullback is cup
+product. Expanding a $\kk$-linear combination of maps places its whole
+image in the scalar extension of the sum of their rational full images.
+The space ${\cal C}^d(X)$ is rational, so its scalar extension is stable
+under conjugation and rational membership descends by taking the
+quotient by that subspace.
+
+For a target class choose finitely many image maps containing it and
+write
+\[
+ f:\bigoplus_\nu H^{2p-2j_\nu}(B_\nu,\Q)(-j_\nu)
+           \longrightarrow H^{2p}(X,\Q).
+ \tag{5}\label{eq:lift}
+\]
+These are polarizable pure rational Hodge structures of the same weight.
+Let $K=\ker f$. For a rational polarization on the source, its
+restriction to $K$ is nondegenerate: $K$ is stable under the Weil
+operator, and the associated positive Hermitian form detects each
+nonzero element of $K_\C$. Therefore $K^\perp$ is a rational Hodge
+complement, and $f|_{K^\perp}$ is a Hodge isomorphism onto its image.
+Its inverse gives a rational Hodge lift. No algebraicity of this
+splitting is asserted or needed.
+Before twisting, the $\nu$th component has type
+$(p-j_\nu,p-j_\nu)$ on $B_\nu$.
+\end{proof}
+
+\section{All-degree invariant spanning and one fixed CM list}
+
+Use the reviewed decomposition of $H=H^1(A,\Q)$ into classical blocks.
+Fix a finite list ${\cal E}_0$ of embedding lines for the rational
+CM isotypic summand $H_0$. This choice precedes every determinant list.
+Repetitions retain their chosen lines under scalar conjugation.
+Rational toric summands are realized by actual CM isogeny factors
+through their degree-one projectors.
+
+The symplectic FFT spans each invariant tensor power by inverse-form
+pairs. For the special orthogonal case one must combine the ordinary
+orthogonal FFT with the determinant-isotypic assertion of
+\cite[Theorem 2.1]{LZ17}. Its harmonic tensor can be chosen to be the
+top exterior volume: Example 4.1 verifies harmonicity and nonzero norm.
+The result spans by pairs and volume in every degree. For $\SL$ the
+mixed-degree FFT spans by identity coevaluations, the volume, and the
+dual volume. On Hodge spaces the opposite column is
+$\bar W\simeq W^*(-1)$, so the coevaluation is the type-$(1,1)$ pair,
+and the opposite volume has positive tensor degree, not the weight of
+an untwisted dual. No Tate shift is discarded.
+
+The complex statements descend to $\kk$: in a fixed tensor degree,
+invariants of each connected classical group are the common kernel of
+the finitely many matrices of its Lie algebra action. Kernels commute
+with extension from $\kk$ to $\C$, and the displayed generators are
+defined over $\kk$. For a product of groups, decompose the finitely many
+slots into their summands and apply the assertions to each factor.
+Thus, for any fixed tensor degree, the invariant subspace is spanned by
+a \emph{finite} list of generator lines made from pairs, CM embedding
+lines, orthogonal volumes, and linear volumes of either orientation.
+Each line is pure of some Hodge bidegree after every scalar conjugation.
+
+\begin{lemma}[Simultaneous balance]\label{lem:simultaneous}
+Suppose a subspace $U\subset T_\kk$ of a rational pure Hodge structure
+of weight $2p$ is spanned by finitely many lines $L_i$, each pure after
+every scalar conjugation. Every rational $(p,p)$ vector in $U$ is spanned
+by the $L_i$ whose every conjugate has type $(p,p)$.
+\end{lemma}
+\begin{proof}
+For a fixed $\gamma$, group the original lines by the Hodge bidegree
+of $\gamma L_i$. Their grouped spans form a direct sum: apply $\gamma$
+and use the direct Hodge decomposition. Let $q_\gamma$ retain the
+$(p,p)$ group. A rational $(p,p)$ vector $\alpha$ is fixed by
+$q_\gamma$, since $\gamma\alpha=\alpha$.
+Each $L_i$ is an eigenline of every $q_\gamma$, with eigenvalue zero
+or one. It follows on a spanning set that these projections commute,
+even when the lines are dependent. Only finitely many distinct
+projections occur, since their retained subsets determine them on the
+spanning lines. Their product fixes $\alpha$ and has image spanned
+by exactly the lines retained by all of them.
+\end{proof}
+
+A rational balanced tensor is fixed by its actual rational Hodge group:
+its stabilizer is rational and contains the Hodge circle. It is therefore
+fixed by the independently acting classical product. Apply the preceding
+FFT and Lemma~\ref{lem:simultaneous}. Removing pair factors from the
+bidegree count gives precisely
+\[
+ \sum_j\epsilon_\gamma(W_j)+
+ \sum_{\ell\ {\rm in\ the\ chosen\ CM\ list}}\epsilon_\gamma(\ell)=0
+       \quad\hbox{for every }\gamma.
+ \tag{6}\label{eq:balance}
+\]
+The list here is the \emph{actual list in that generator}; its entries
+are not chosen anew for different $\gamma$.
+If every determinant product selected by (6) is supplied, all generator
+lines and hence the rational tensor are supplied by
+Lemma~\ref{lem:operations}. This proves the unconditional
+\emph{supply} version of the manuscript's tensor criterion.
+The argument is repeated for each finite degree, with no bound on that
+degree or on the number of copies of a block.
+
+\section{Polarization-compatible quadratic determinant supply}
+
+Write $E=\Q(u)$, $u^2=-d$, $d>0$. A rational Riemann form $e$ is
+compatible when $e(ux,y)=-e(x,uy)$. Set, on homology,
+\[
+ h(x,y)=e(x,uy)+u e(x,y).
+ \tag{7}\label{eq:hermitian}
+\]
+It is conjugate-linear first, linear second, Hermitian, and
+\[
+ e(x,y)=\Tr_{E/\Q}\bigl((2u)^{-1}h(x,y)\bigr).
+ \tag{8}\label{eq:trace}
+\]
+For example $h(x,uy)=-de(x,y)+u e(x,uy)=u h(x,y)$;
+the first-variable and conjugate-symmetry identities follow in the
+same way from compatibility and alternation. Nondegeneracy follows
+from (8). This is exactly \cite[Lemma 5.2]{vG}, the homological
+convention used with the discriminant in \cite[Section 1.1]{Markman}.
+Compatibility also gives $a^*e=\Nm(a)e$, the polarization condition
+in Markman's definition.
+
+For $\sigma(u)=i\sqrt d$, if the $\sigma$-eigenspace of cohomology has
+Hodge dimensions $(p,q)$, the signature of (7) is $(p,q)$.
+Indeed on the two complex-structure eigenspaces of homology,
+$u=\sqrt d I$ and $u=-\sqrt d I$; the signs of $h(x,x)=e(x,ux)$
+are therefore the signs claimed by $e(x,Ix)>0$. The summands are
+orthogonal because $h$ is $I$-invariant.
+
+There is always a compatible polarization. Starting with $e_0$, take
+\[
+ e(x,y)=e_0(x,y)+d^{-1}e_0(ux,uy).
+ \tag{9}\label{eq:average}
+\]
+Both summands are positive Riemann forms and direct substitution gives
+compatibility. Multiplication by a positive integer clears lattice
+denominators. In rank six such multiplication by $N$ changes the
+Hermitian determinant by $N^6=\Nm(N^3)$; it does not change its
+discriminant class. The same is true of a basis change, which multiplies
+the determinant by the norm of the change-of-basis determinant.
+
+\begin{lemma}\label{lem:hyperbolic}
+A nondegenerate $E$-Hermitian form of rank $2b$ and signature $(b,b)$
+is hyperbolic if and only if $[\det h]=[(-1)^b]$ in
+$\Q^\times/\Nm(E^\times)$.
+\end{lemma}
+\begin{proof}
+Given an isotropic $v\ne0$, choose $w$ with $h(v,w)=1$ and replace
+$w$ by $w-h(w,w)v/2$. This gives the plane
+$\left(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\right)$.
+If a half-dimensional isotropic space exists, projecting it into
+the orthogonal complement and iterating gives $b$ such planes.
+Their determinant class is $[(-1)^b]$.
+
+Conversely diagonalize $h$ over $E$, with nonzero rational coefficients
+$a_i$. The underlying rational quadratic form is
+$\sum_i a_i(x_i^2+d y_i^2)$, of dimension $4b$ and signature
+$(2b,2b)$. For $b\geq2$, Meyer applies and gives a nonzero isotropic
+vector. Split the preceding plane; the complement has the same
+signature/determinant condition with $b$ decreased by one.
+At rank two write $h=\langle a,b'\rangle$. The determinant condition
+gives $\Nm(t)=-ab'$ for some $t\ne0$ in $E$. Then
+$(t/a,1)$ is isotropic, since $a\Nm(t/a)+b'=0$.
+This finishes the induction. In the applications Meyer is used only
+in dimensions twelve and eight; the dimension-four step uses the
+explicit norm identity.
+\end{proof}
+
+Consequently Markman's discriminant $-1$ at rank six is precisely
+the hyperbolic condition for the \emph{actual} compatible form here.
+We do not replace that form by an arbitrary form of the same real
+signature.
+
+\begin{proposition}[Padding and extraction]\label{prop:padding}
+Let $B$ have an $E$-action with compatible signature $(p,q)$,
+$n=p+q$. If $1\leq n<6$ and $p,q\leq3$, both $E$-embedding
+determinants of $H^1(B,\kk)$ are CM-supplied on separate slots.
+No discriminant restriction is needed in this smaller dimension.
+If $n=6$ and the actual form is hyperbolic of signature $(3,3)$,
+both determinants are algebraic over $\kk$ on separate slots.
+\end{proposition}
+\begin{proof}
+In rank six Markman's theorem supplies the entire rational Weil plane
+in $H^6(B,\Q)$. Its two embedding lines are therefore algebraic
+over $\kk$. The spectral projectors of $u$ are algebraic on degree one.
+To put a determinant on separate slots use addition
+$\mu:B^6\to B$ and the algebraic projector
+\[
+ \pi_1=\prod_{\substack{0\leq r\leq2\dim B\\r\ne1}}
+                \frac{[2]^*-2^r}{2-2^r}.
+ \tag{10}\label{eq:projector}
+\]
+Multiplication by $2$ acts by $2^r$ on $H^r(B)$, so
+$(\pi_1)^{\boxtimes6}\mu^*(v_1\wedge\cdots\wedge v_6)=\delta_6(v)$.
+This is nonzero and algebraic.
+
+Now add $3-p$ $E$-CM elliptic curves with signature $(1,0)$ and
+$3-q$ with signature $(0,1)$. Their Hermitian coefficients in
+$E$-bases have the prescribed signs and any chosen positive rational
+magnitudes: scale their rational polarizations positively.
+The actual product $X=B\times\prod_{\nu=1}^{6-n}C_\nu$ has
+signature $(3,3)$ and a rational determinant $D_0<0$.
+There is at least one added line. Multiply its coefficient by
+$-1/D_0>0$. This preserves Riemann positivity, leaves the restricted
+form of $B$ unchanged, and makes the total determinant exactly $-1$.
+Lemma~\ref{lem:hyperbolic} makes the form hyperbolic. Clearing integral
+denominators preserves its discriminant, so Markman applies to this
+actual polarized product, at the original period of $B$.
+
+Let $L_\nu=H^1(C_\nu,\kk)_\sigma$. Algebraic block projection of
+the supplied total determinant, as calculated before (4), supplies
+\[
+ D(H^1(B,\kk)_\sigma)\otimes\bigotimes_\nu L_\nu.
+ \tag{11}\label{eq:padded-det}
+\]
+The opposite lines $\bar L_\nu$ are supplied from the \emph{full}
+cohomology of the CM product $C=\prod_\nu C_\nu$ by its identity
+correspondence. Tensor with these lines and contract the perfect
+elliptic pairings. Each contraction is algebraic and nonzero by (4).
+Thus (11) gives the desired line, not merely a possibly zero image.
+Scalar conjugation supplies the opposite determinant.
+
+One can check the shifts explicitly. The source subspace is
+$\bigotimes_\nu\bar L_\nu\subset H^{6-n}(C)$ of Hodge type
+$(3-q,3-p)$. The resulting correspondence has shift $j=n-3$:
+\[
+ H^{6-n}(C)(3-n)\longrightarrow H^n(B^n).
+ \tag{12}\label{eq:padding-shift}
+\]
+After twisting its indicated type is exactly $(p,q)$.
+The correspondence cycles on $C\times B^n$ have codimension
+$(6-n)+(n-3)=3$ in every smaller rank.
+Negative shifts for small $n$ are legitimate in (1).
+For $n=6$ the source is a point; $D(0)$ is also supplied by a point.
+\end{proof}
+
+\section{Exhaustive special-period balance}
+
+Work up to isogeny as $A=\prod B^{r_B}$, transporting the given action.
+Pullback preserves the rational Hermitian isometry class, and the
+degree-normalized inverse correspondence preserves supply.
+The isotypic summands are orthogonal for any compatible polarization:
+the polarization has no cross homomorphisms between distinct simple
+isogeny types and their duals. Their projectors commute with $E$.
+In the sixfold case their signatures therefore add to $(3,3)$.
+A proper summand need \emph{not} itself be hyperbolic.
+
+Fix the CM line decomposition as specified below before testing any
+list in (6). For each linear representative $W_i$, let
+$P_i,Q_i\geq0$ be the counts of $D(W_i),D(\bar W_i)$ and set
+$n_i=P_i-Q_i\in\Z$. Orthogonal columns have zero imbalance.
+Write $c_\gamma$ for the sum from the fixed CM list. Balance implies
+\[
+ \sum_i n_i\epsilon_\gamma(W_i)+c_\gamma=0
+                    \quad\hbox{for every }\gamma.
+ \tag{13}\label{eq:net}
+\]
+The $\min(P_i,Q_i)$ opposite pairs are already algebraic.
+If several $n_i$ are equal to one integer $t$, their remaining line is
+the $t$th power of the product of those determinants for $t\geq0$,
+or the $(-t)$th power of its opposite for $t<0$.
+There is no division by an integer exponent or extraction of a root.
+
+\subsection{Blocks with direct supply or forced cancellation}
+
+Types I and II require only pair tensors. A Type III factor has rank
+four or six; its $E$-eigenspace is an admissible copy of its orthogonal
+column. Rank four has signature $(2,2)$ and is supplied by
+Proposition~\ref{prop:padding} for its \emph{arbitrary} restricted form.
+Rank six exhausts $A$ and uses the stipulated hyperbolic form.
+Admissible copy maps transfer these supplies to the representative.
+
+For Type IV with quadratic center equal to $E$, a rank-three or
+rank-four column is mixed and both signature entries are at most three,
+so its determinant is individually supplied.
+In dimension at most five a rank-five factor exhausts $A$ and has
+imbalance $2p-5\ne0$. There is no CM remainder or other block.
+Equation (13) therefore gives $n=0$, including signatures $(1,4)$
+and $(4,1)$ which the padding proposition does \emph{not} cover.
+
+In the split sixfold, a multiplicity-one factor of rank at most five
+has both signature entries at most three by orthogonal addition, so
+padding supplies it. A rank-six factor exhausts $A$ and uses the
+given hyperbolic form. The only possible repeated non-CM factor in
+this case is a threefold $B^2$. For the central $K=E$ action on $B$
+the signature is $(1,2)$ or $(2,1)$, hence padding applies on $B$.
+The given, possibly noncentral, action on $B^2$ merely reassigns its
+two opposite column types among matrix copies. Their admissible
+identifications preserve the supply; a product polarization on $B^2$
+is not substituted for the given sixfold polarization.
+
+If $E$ does not embed in the Type IV center $K$, the reviewed list
+forces a quadratic-center threefold repeated twice, exhausting $A$.
+Its single $K$-column has rank three and nonzero imbalance.
+There is no CM remainder, so (13) again gives zero net exponent.
+This case does not occur below dimension six.
+
+These arguments are unaffected by other symplectic blocks, by arbitrary
+CM remainders in the individually supplied cases, or by two distinct
+quadratic-center threefolds in dimension six.
+
+\subsection{Quartic-center fourfold and its fixed CM remainder}
+
+The remaining proper higher-center factor has $(f,a,g)=(2,2,4)$.
+Take representatives $W_1,W_2$ above one embedding of $E$.
+Exactly one is mixed and the other pure, so the imbalance vector is,
+up to order, $(0,2)$ or $(0,-2)$.
+
+Below dimension six the remainder has dimension zero or one.
+In dimension one its inherited unital $E$-action realizes an $E$-CM
+elliptic curve. In a split sixfold the restricted signature of $B$ is
+$(1,3)$ or $(3,1)$; the remainder has respectively signature $(2,0)$
+or $(0,2)$. On its two-dimensional $E$-homology the complex structure
+is the same $E$-scalar everywhere. Choose an $E$-basis: each basis
+line is a rational Hodge substructure of elliptic CM type.
+Degree-one realization makes the remainder isogenous to a square of
+an $E$-CM elliptic curve. This is a geometric consequence of the
+signature, not an assumption that all CM factors are elliptic.
+
+In both families choose the embedding lines of these $E$-CM factors
+as the fixed CM decomposition. Every $\gamma\in\Gal(\kk/E)$ fixes
+each of these lines and hence their contribution $c_\gamma=c$,
+regardless of the number of repeated entries in the list.
+An element of this Galois group exchanges the two embeddings of $K/E$.
+Writing $d_i=\epsilon_1(W_i)$, (13) includes
+\[
+ d_1n_1+d_2n_2+c=0,\qquad
+ d_2n_1+d_1n_2+c=0.
+ \tag{14}\label{eq:quartic}
+\]
+As $d_1-d_2=\pm2$, subtraction gives $n_1=n_2=t\in\Z$.
+The integer kernel in variables $(n_1,n_2,c)$ is exactly
+$\Z(1,1,-d_1-d_2)$; its first coordinate is one, so no saturation
+or divisibility issue is hidden.
+
+Algebraic direct-sum determinant maps identify the basic product
+$D(W_1)D(W_2)$ with the full $E$-determinant of $B$.
+Its signature is $(1,3)$ or $(3,1)$, so padding supplies it.
+Integer cancellation then supplies every determinant list in (13).
+If the remainder is zero, extra balance may force $t=0$; supplying
+the larger set just obtained is harmless.
+
+\subsection{Higher-center sixfolds}
+
+Here $B=A$ and there is no CM remainder. The given action is central,
+since the multiplicity is one. Representatives are taken above one
+$E$-embedding. Scalar automorphisms fixing $E$ permute these embeddings;
+their action is transitive. Primitive matrix-copy changes, when present
+in the general construction, are admissible and do not change the
+Hodge multiplicities.
+
+If $(f,a)=(2,3)$, the two holomorphic multiplicities sum to three.
+The possibilities $(0,3),(3,0)$ have every embedding pure and are
+CM, contrary to this case. Thus the vector is $(1,2)$ or $(2,1)$,
+with imbalances $(-1,1)$ or $(1,-1)$. Balance gives $n_1=n_2$.
+The integer kernel is $\Z(1,1)$.
+
+If $(f,a)=(3,2)$, the multiplicities lie in $\{0,1,2\}$ and sum
+to three. The all-mixed vector $(1,1,1)$ is excluded by the reviewed
+rank-two actual-commutant argument. The remaining possibilities are
+the permutations of $(0,1,2)$. The transitive action on three
+embeddings contains a three-cycle. In cyclic order the necessary
+balance equations have rows which are cyclic permutations of
+$(-2,0,2)$, up to a common relabeling and reversal. For example
+\[
+ M=\begin{pmatrix}-2&0&2\\2&-2&0\\0&2&-2\end{pmatrix},
+       \qquad
+ \ker_\Q M=\Q(1,1,1),\quad
+ \ker_\Z M=\Z(1,1,1).
+ \tag{15}\label{eq:cyclic}
+\]
+Thus $n_1=n_2=n_3=t\in\Z$.
+
+In either case $\bigotimes_{i=1}^fD(W_i)$ is identified nontrivially
+and algebraically with the full $E$-determinant of $A$.
+The actual hyperbolic form supplies this determinant; it is not
+necessary to supply each column determinant separately.
+Opposite cancellation and the integer $t$ finish the argument.
+Further scalar-conjugate equations can only restrict these necessary
+kernels, never invalidate the supply constructed for them.
+
+\begin{proposition}\label{prop:balance}
+For each family in Theorem~\ref{thm:main}, the geometry permits one
+fixed CM-line decomposition for which every determinant list satisfying
+(6), with arbitrary repetitions, is CM-supplied. Thus condition (d)
+of the manuscript's tensor criterion holds.
+\end{proposition}
+\begin{proof}
+The preceding cases exhaust the reviewed covering list. A determinant
+block has cost at least three in abelian dimension, an orthogonal
+block at least four, and each higher-center exceptional case at least
+four. A quartic-center fourfold is consequently the only nonsaturated
+proper case that can interact with a CM remainder, which was treated
+with a fixed decomposition above. Non-embedded quadratic actions and
+higher-center sixfolds exhaust the dimension budget; the odd rank-five
+case below six likewise exhausts it. Other blocks are individually
+supplied. All exponent arguments were over $\Z$, without bounds.
+\end{proof}
+
+\section{Completion on powers and the conditional implication}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Apply the reviewed group theorem at the actual period.
+The FFT reduces invariant tensors to generator lines.
+Lemma~\ref{lem:simultaneous} retains only those balanced in all conjugates.
+Proposition~\ref{prop:balance} supplies their determinant factors.
+The CM embedding lines come from actual CM factors, and pair tensors
+are algebraic. Lemma~\ref{lem:operations} descends this supply rationally.
+
+On $A^m$ first cohomology is $H^{\oplus m}$. Label all slots by their
+copies. This just repeats the original blocks and CM lines; the
+unbounded repetitions already allowed in (6) and
+Proposition~\ref{prop:balance} apply. For a class in
+$H^{2p}(A^m,\Q)=\bigwedge^{2p}H^1(A^m,\Q)$, normalized
+antisymmetrization is a rational Hodge lift to the ordinary tensor power.
+The proved tensor result supplies that lift on separate slots.
+Diagonal pullback, equivalently cup product of those slots, returns
+the original exterior class. Supply is preserved by this algebraic map.
+The case $p=0$ is supplied by a point, and nonexistent degrees are zero.
+This proves (2) for every $m,p$.
+
+The rational Hodge lift is furnished by (5).
+Only for the final conditional implication do we assume the CM Hodge
+theorem: it algebraizes each untwisted rational Hodge component of that
+lift on its CM source. Applying the given rational algebraic
+correspondences and adding then algebraizes the target.
+\end{proof}
+
+This conclusion is not a claim that the full cohomology of $A$ is
+CM-supplied, or that its derived group is trivial. Nor does it assert
+saturation under arbitrary additional CM companions. For example the
+rank-five cancellation argument used the absence of a CM remainder.
+The general saturated extension in the manuscript is a separate
+conditional statement and is not needed here.
+
+\section{Exact certificate and what it proves}
+
+The read-only command
+\[
+ \texttt{python3 -B research/determinant\_supply\_audit/verify.py}
+\]
+recomputes \texttt{exact\_certificate.json}. Its only mathematical
+dependency beyond the Python standard library is SymPy, used in exact
+rational and symbolic arithmetic.
+It does not call a network service or trust precomputed matrix ranks.
+The certificate checks:
+\begin{enumerate}
+\item The generic averaging, Hermitian, trace and hyperbolic-plane
+identities, the determinant-normalizing positive scaling formula,
+and the degrees and Hodge shifts in (12).
+\item Nonzero separate-slot extraction for every composition of ranks
+one through six, the generic polynomial contraction identity (4),
+and the Pfaffian sign identities in symplectic ranks two, four and six.
+\item The degree-one projector at every cohomological degree for
+abelian dimensions one through six.
+\item Primitive integer kernels for every orientation/permutation of
+the exceptional balance vectors, including the fixed CM contribution
+in (14); universal symbolic nonnegative monoid reconstruction for
+both signs of the common integer exponent.
+\item All determinant-bearing configurations within the dimension
+budget and permitted signatures of the reviewed covering list.
+Unspecified residual dimensions overapproximate the possible
+pair-only or CM factors. Every exceptional residual signature used
+in the proof is checked explicitly.
+\end{enumerate}
+This finite coverage is exhaustive because dimensions and column ranks
+are bounded, \emph{not} because tensor degree or determinant exponents
+are bounded. The proof above supplies the all-degree invariant theorem,
+fixed-list quantifier, geometric realization of the residual CM factors,
+and arbitrary-integer cancellation. The program does not decide which
+numerical configurations are realized by an abelian variety, prove
+Markman's theorem or Meyer anew, or verify algebraicity of arbitrary
+CM Hodge classes.
+
+The saved Jacobian request concerns only the $3$-by-$3$ rational matrix
+(15). Its current typed contract was inspected after discovery, and the
+approved Argus adapter was then run once. The operation id, payload,
+server/protocol metadata, typed output and adapter exit status are
+preserved beside the certificate. The standalone checker recomputes
+the nullspace independently and verifies the returned basis. A timeout,
+transport error or incomplete result would fail this replay rather than
+count as mathematical evidence.
+
+Negative controls show why weaker tests do not suffice. The identity
+equation alone for $(-2,0,2)$ admits $(0,1,0)$, whereas the cyclic
+system excludes it. Allowing an independent CM contribution for each
+conjugate of a quartic-center factor also permits unequal exponents.
+These are counterexamples to weakened \emph{linear systems}, not
+hypothesis-valid abelian-variety counterexamples. The geometry above
+is exactly what rules them out. We do not promote them to a refutation.
+
+This extends the reviewed group result by proving the requested supply
+reduction. It does not establish publication priority. Independent review
+of the proof and citations is still required, as is any assessment of
+novelty and significance. The Kuga--Satake, geometric Weil-plane proof
+and Milne branches, and the companion CM theorem, are untouched.
+
+\begin{thebibliography}{9}
+\bibitem{Markman}
+E. Markman, \emph{Cycles on abelian $2n$-folds of Weil type from secant
+sheaves on abelian $n$-folds}, arXiv:2502.03415v2, August 24, 2026.
+\url{https://arxiv.org/html/2502.03415v2}.
+\bibitem{PS}
+C. Peters and H. Sterk, \emph{Symmetric and Quadratic Forms, with
+Applications to Coding Theory, Algebraic Geometry and Topology},
+author monograph, Version June 2024, dated September 16, 2024,
+Corollary 3.3.4, p. 77.
+\url{https://cpeters1.win.tue.nl/Books/QuadraticForms/QuadForms.pdf}.
+\bibitem{vG}
+B. van Geemen, \emph{An introduction to the Hodge conjecture for abelian
+varieties}, LNM 1594 (1994), 233--252,
+doi:10.1007/978-3-540-49046-3\_5.
+Lemma locators refer to \url{https://sites.unimi.it/vangeemen/cime.pdf}.
+\bibitem{LZ15}
+G. I. Lehrer and R. B. Zhang, \emph{The Brauer category and invariant
+theory}, JEMS 17 (2015), 2311--2351, doi:10.4171/JEMS/558.
+\bibitem{LZ17}
+G. I. Lehrer and R. B. Zhang, \emph{Invariants of the special orthogonal
+group and an enhanced Brauer category}, Enseign. Math. 63 (2017),
+181--200, doi:10.4171/LEM/63-1/2-6.
+\bibitem{Sch}
+A. Schrijver, \emph{Tensor subalgebras and first fundamental theorems
+in invariant theory}, J. Algebra 319 (2008), 1305--1319,
+doi:10.1016/j.jalgebra.2007.10.039.
+Section/page locators refer to the 19-page author PDF:
+\url{https://homepages.cwi.nl/~lex/files/tensfft_ja.pdf}.
+\end{thebibliography}
+\end{document}

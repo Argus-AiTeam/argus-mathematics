@@ -1,0 +1,589 @@
+{
+  "adapter_context": {
+    "operation_id": "polynomial.box.enclosure.compute",
+    "protocol_version": "2025-11-25",
+    "provenance": "Parent's prior authorized live discovery; no find repeated here.",
+    "server": {
+      "name": "jacobian",
+      "version": "0.14.0"
+    },
+    "transport": "mcp-stdio"
+  },
+  "command": [
+    "$WORKSPACE/argus-live-update/.venv/bin/python",
+    "-B",
+    "-m",
+    "argus_skill.tools.jacobian",
+    "inspect",
+    "--operation",
+    "polynomial.box.enclosure.compute"
+  ],
+  "cwd": "families/066/argus-review/draft_reviews/scalar-penalty/replay",
+  "duration_seconds": 3.189438,
+  "exit_code": 0,
+  "finished_at": "2026-11-07T21:09:51.334656+00:00",
+  "geometric_result": null,
+  "operation_id": "polynomial.box.enclosure.compute",
+  "reported_protocol_version": "2025-11-25",
+  "reported_server": {
+    "description": "Search and run atomic, composable Jacobian tools for higher mathematics.",
+    "icons": null,
+    "name": "jacobian",
+    "title": "Jacobian Mathematical Workbench",
+    "version": "0.14.0",
+    "websiteUrl": null
+  },
+  "reported_transport": "mcp-stdio",
+  "started_at": "2026-11-07T21:09:48.145206+00:00",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"protocol_version\": \"2025-11-25\", \"request\": {\"request\": {\"op\": \"inspect\", \"operation_id\": \"polynomial.box.enclosure.compute\"}}, \"result\": {\"kind\": \"operation\", \"operation\": {\"description\": \"Deterministic exact rational enclosure of one sparse scalar QQ polynomial on a complete axis-aligned box. It contains the full image, need not be the exact range, and containing zero does not prove a root. Bounds: 4,096 terms; degree 32768 per variable and 262144 total; 32768-digit coefficient and 32768-digit input-endpoint components; 32,768 term-axis pairs; 65,536-digit intermediate components; 32,768-digit result components; 10,485,760-byte canonical retained-source result.\", \"examples\": [{\"description\": \"Enclose x^2 + y + 1 on [1,2] x [0,1]; the box must use the polynomial's complete ordered (x, y) axis.\", \"input\": {\"box\": {\"domain\": \"QQ\", \"intervals\": [{\"lower\": {\"den\": \"1\", \"num\": \"1\"}, \"upper\": {\"den\": \"1\", \"num\": \"2\"}}, {\"lower\": {\"den\": \"1\", \"num\": \"0\"}, \"upper\": {\"den\": \"1\", \"num\": \"1\"}}], \"variables\": [\"x\", \"y\"]}, \"polynomial\": {\"domain\": \"QQ\", \"polynomial\": {\"terms\": [{\"coefficient\": {\"den\": \"1\", \"num\": \"1\"}, \"exponents\": [2, 0]}, {\"coefficient\": {\"den\": \"1\", \"num\": \"1\"}, \"exponents\": [0, 1]}, {\"coefficient\": {\"den\": \"1\", \"num\": \"1\"}, \"exponents\": [0, 0]}]}, \"variables\": [\"x\", \"y\"]}}, \"name\": \"positive_bivariate_box\"}], \"input_schema\": {\"$defs\": {\"CanonicalRational\": {\"additionalProperties\": false, \"description\": \"A reduced rational whose denominator is positive and whose zero is 0/1.\", \"examples\": [{\"den\": \"2\", \"num\": \"1\"}], \"properties\": {\"den\": {\"description\": \"Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.\", \"examples\": [\"2\"], \"pattern\": \"^(?:0|-?[1-9][0-9]*)$\", \"title\": \"Den\", \"type\": \"string\"}, \"num\": {\"description\": \"Canonical decimal numerator of the reduced rational.\", \"examples\": [\"1\"], \"pattern\": \"^(?:0|-?[1-9][0-9]*)$\", \"title\": \"Num\", \"type\": \"string\"}}, \"required\": [\"num\", \"den\"], \"title\": \"CanonicalRational\", \"type\": \"object\"}, \"ClosedRationalInterval\": {\"additionalProperties\": false, \"description\": \"One closed exact rational interval whose lower endpoint is at most its upper.\", \"properties\": {\"lower\": {\"$ref\": \"#/$defs/CanonicalRational\"}, \"upper\": {\"$ref\": \"#/$defs/CanonicalRational\"}}, \"required\": [\"lower\", \"upper\"], \"title\": \"ClosedRationalInterval\", \"type\": \"object\"}, \"RationalBox\": {\"additionalProperties\": false, \"description\": \"A closed rational box with one interval on each distinct ordered axis.\", \"properties\": {\"domain\": {\"const\": \"QQ\", \"default\": \"QQ\", \"title\": \"Domain\", \"type\": \"string\"}, \"intervals\": {\"description\": \"Closed coordinate intervals in the same order as variables; zero-width intervals are preserved.\", \"items\": {\"$ref\": \"#/$defs/ClosedRationalInterval\"}, \"maxItems\": 8, \"title\": \"Intervals\", \"type\": \"array\"}, \"variables\": {\"description\": \"Complete ordered coordinate axis. Its order is part of the box's identity; the empty axis denotes the unique zero-dimensional box.\", \"items\": {\"pattern\": \"^[A-Za-z][A-Za-z0-9_]{0,31}$\", \"type\": \"string\"}, \"maxItems\": 8, \"title\": \"Variables\", \"type\": \"array\"}}, \"required\": [\"variables\", \"intervals\"], \"title\": \"RationalBox\", \"type\": \"object\"}, \"RationalPolynomial\": {\"additionalProperties\": false, \"description\": \"One sparse polynomial together with its exact coefficient ring.\", \"properties\": {\"domain\": {\"const\": \"QQ\", \"default\": \"QQ\", \"title\": \"Domain\", \"type\": \"string\"}, \"polynomial\": {\"$ref\": \"#/$defs/SparseRationalPolynomial\"}, \"variables\": {\"items\": {\"pattern\": \"^[A-Za-z][A-Za-z0-9_]{0,31}$\", \"type\": \"string\"}, \"maxItems\": 8, \"minItems\": 1, \"title\": \"Variables\", \"type\": \"array\"}}, \"required\": [\"variables\", \"polynomial\"], \"title\": \"RationalPolynomial\", \"type\": \"object\"}, \"RationalPolynomialTerm\": {\"additionalProperties\": false, \"properties\": {\"coefficient\": {\"$ref\": \"#/$defs/CanonicalRational\"}, \"exponents\": {\"items\": {\"type\": \"integer\"}, \"maxItems\": 8, \"minItems\": 0, \"title\": \"Exponents\", \"type\": \"array\"}}, \"required\": [\"coefficient\", \"exponents\"], \"title\": \"RationalPolynomialTerm\", \"type\": \"object\"}, \"SparseRationalPolynomial\": {\"additionalProperties\": false, \"properties\": {\"terms\": {\"default\": [], \"description\": \"Nonzero monomials in descending lexicographic order of their exponent tuples (highest first). For one variable, list [2] before [0].\", \"examples\": [[{\"coefficient\": {\"den\": \"1\", \"num\": \"1\"}, \"exponents\": [2]}, {\"coefficient\": {\"den\": \"1\", \"num\": \"-1\"}, \"exponents\": [0]}]], \"items\": {\"$ref\": \"#/$defs/RationalPolynomialTerm\"}, \"maxItems\": 4096, \"title\": \"Terms\", \"type\": \"array\"}}, \"title\": \"SparseRationalPolynomial\", \"type\": \"object\"}}, \"additionalProperties\": false, \"description\": \"Enclose one canonical scalar QQ polynomial on a complete closed rational box. The box must use exactly the polynomial's ordered variables. The returned exact rational interval is deterministic and sound but need not be the exact range. Bounds: 4,096 terms; degree 32768 per variable and 262144 total; 32768-digit coefficient and 32768-digit input-endpoint components; 32,768 term-axis pairs; 65,536-digit intermediate components; 32,768-digit result components; 10,485,760-byte canonical retained-source result.\", \"properties\": {\"box\": {\"$ref\": \"#/$defs/RationalBox\"}, \"polynomial\": {\"$ref\": \"#/$defs/RationalPolynomial\"}}, \"required\": [\"polynomial\", \"box\"], \"title\": \"PolynomialBoxEnclosureRequest\", \"type\": \"object\"}, \"operation_id\": \"polynomial.box.enclosure.compute\", \"output_schema\": {\"$defs\": {\"CanonicalRational\": {\"additionalProperties\": false, \"description\": \"A reduced rational whose denominator is positive and whose zero is 0/1.\", \"examples\": [{\"den\": \"2\", \"num\": \"1\"}], \"properties\": {\"den\": {\"description\": \"Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.\", \"examples\": [\"2\"], \"pattern\": \"^(?:0|-?[1-9][0-9]*)$\", \"title\": \"Den\", \"type\": \"string\"}, \"num\": {\"description\": \"Canonical decimal numerator of the reduced rational.\", \"examples\": [\"1\"], \"pattern\": \"^(?:0|-?[1-9][0-9]*)$\", \"title\": \"Num\", \"type\": \"string\"}}, \"required\": [\"num\", \"den\"], \"title\": \"CanonicalRational\", \"type\": \"object\"}, \"ClosedRationalInterval\": {\"additionalProperties\": false, \"description\": \"One closed exact rational interval whose lower endpoint is at most its upper.\", \"properties\": {\"lower\": {\"$ref\": \"#/$defs/CanonicalRational\"}, \"upper\": {\"$ref\": \"#/$defs/CanonicalRational\"}}, \"required\": [\"lower\", \"upper\"], \"title\": \"ClosedRationalInterval\", \"type\": \"object\"}, \"RationalBox\": {\"additionalProperties\": false, \"description\": \"A closed rational box with one interval on each distinct ordered axis.\", \"properties\": {\"domain\": {\"const\": \"QQ\", \"default\": \"QQ\", \"title\": \"Domain\", \"type\": \"string\"}, \"intervals\": {\"description\": \"Closed coordinate intervals in the same order as variables; zero-width intervals are preserved.\", \"items\": {\"$ref\": \"#/$defs/ClosedRationalInterval\"}, \"maxItems\": 8, \"title\": \"Intervals\", \"type\": \"array\"}, \"variables\": {\"description\": \"Complete ordered coordinate axis. Its order is part of the box's identity; the empty axis denotes the unique zero-dimensional box.\", \"items\": {\"pattern\": \"^[A-Za-z][A-Za-z0-9_]{0,31}$\", \"type\": \"string\"}, \"maxItems\": 8, \"title\": \"Variables\", \"type\": \"array\"}}, \"required\": [\"variables\", \"intervals\"], \"title\": \"RationalBox\", \"type\": \"object\"}, \"RationalPolynomial\": {\"additionalProperties\": false, \"description\": \"One sparse polynomial together with its exact coefficient ring.\", \"properties\": {\"domain\": {\"const\": \"QQ\", \"default\": \"QQ\", \"title\": \"Domain\", \"type\": \"string\"}, \"polynomial\": {\"$ref\": \"#/$defs/SparseRationalPolynomial\"}, \"variables\": {\"items\": {\"pattern\": \"^[A-Za-z][A-Za-z0-9_]{0,31}$\", \"type\": \"string\"}, \"maxItems\": 8, \"minItems\": 1, \"title\": \"Variables\", \"type\": \"array\"}}, \"required\": [\"variables\", \"polynomial\"], \"title\": \"RationalPolynomial\", \"type\": \"object\"}, \"RationalPolynomialTerm\": {\"additionalProperties\": false, \"properties\": {\"coefficient\": {\"$ref\": \"#/$defs/CanonicalRational\"}, \"exponents\": {\"items\": {\"type\": \"integer\"}, \"maxItems\": 8, \"minItems\": 0, \"title\": \"Exponents\", \"type\": \"array\"}}, \"required\": [\"coefficient\", \"exponents\"], \"title\": \"RationalPolynomialTerm\", \"type\": \"object\"}, \"SparseRationalPolynomial\": {\"additionalProperties\": false, \"properties\": {\"terms\": {\"default\": [], \"description\": \"Nonzero monomials in descending lexicographic order of their exponent tuples (highest first). For one variable, list [2] before [0].\", \"examples\": [[{\"coefficient\": {\"den\": \"1\", \"num\": \"1\"}, \"exponents\": [2]}, {\"coefficient\": {\"den\": \"1\", \"num\": \"-1\"}, \"exponents\": [0]}]], \"items\": {\"$ref\": \"#/$defs/RationalPolynomialTerm\"}, \"maxItems\": 4096, \"title\": \"Terms\", \"type\": \"array\"}}, \"title\": \"SparseRationalPolynomial\", \"type\": \"object\"}}, \"additionalProperties\": false, \"description\": \"An exact enclosure bound to its source polynomial and box.\", \"properties\": {\"box\": {\"$ref\": \"#/$defs/RationalBox\"}, \"enclosure\": {\"$ref\": \"#/$defs/ClosedRationalInterval\"}, \"polynomial\": {\"$ref\": \"#/$defs/RationalPolynomial\"}, \"source_digest\": {\"pattern\": \"^sha256:[0-9a-f]{64}$\", \"title\": \"Source Digest\", \"type\": \"string\"}}, \"required\": [\"polynomial\", \"box\", \"source_digest\", \"enclosure\"], \"title\": \"PolynomialBoxEnclosureResult\", \"type\": \"object\"}, \"read_only\": true, \"tags\": [\"polynomial\", \"multivariate\", \"sparse\", \"evaluation\", \"interval\", \"box\", \"axis-aligned\", \"enclosure\", \"exact\", \"rational\", \"uniform\", \"nonzero\", \"jacobian\", \"bounded\"], \"title\": \"Enclose a rational polynomial on a rational box\"}}, \"schema_version\": 1, \"server\": {\"description\": \"Search and run atomic, composable Jacobian tools for higher mathematics.\", \"icons\": null, \"name\": \"jacobian\", \"title\": \"Jacobian Mathematical Workbench\", \"version\": \"0.14.0\", \"websiteUrl\": null}, \"tool\": \"math.find\", \"tools\": [\"math.find\", \"math.run\"], \"transport\": \"mcp-stdio\"}\n",
+  "structured_error": null,
+  "timeout": false,
+  "timeout_seconds": 45,
+  "typed_output": {
+    "protocol_version": "2025-11-25",
+    "request": {
+      "request": {
+        "op": "inspect",
+        "operation_id": "polynomial.box.enclosure.compute"
+      }
+    },
+    "result": {
+      "kind": "operation",
+      "operation": {
+        "description": "Deterministic exact rational enclosure of one sparse scalar QQ polynomial on a complete axis-aligned box. It contains the full image, need not be the exact range, and containing zero does not prove a root. Bounds: 4,096 terms; degree 32768 per variable and 262144 total; 32768-digit coefficient and 32768-digit input-endpoint components; 32,768 term-axis pairs; 65,536-digit intermediate components; 32,768-digit result components; 10,485,760-byte canonical retained-source result.",
+        "examples": [
+          {
+            "description": "Enclose x^2 + y + 1 on [1,2] x [0,1]; the box must use the polynomial's complete ordered (x, y) axis.",
+            "input": {
+              "box": {
+                "domain": "QQ",
+                "intervals": [
+                  {
+                    "lower": {
+                      "den": "1",
+                      "num": "1"
+                    },
+                    "upper": {
+                      "den": "1",
+                      "num": "2"
+                    }
+                  },
+                  {
+                    "lower": {
+                      "den": "1",
+                      "num": "0"
+                    },
+                    "upper": {
+                      "den": "1",
+                      "num": "1"
+                    }
+                  }
+                ],
+                "variables": [
+                  "x",
+                  "y"
+                ]
+              },
+              "polynomial": {
+                "domain": "QQ",
+                "polynomial": {
+                  "terms": [
+                    {
+                      "coefficient": {
+                        "den": "1",
+                        "num": "1"
+                      },
+                      "exponents": [
+                        2,
+                        0
+                      ]
+                    },
+                    {
+                      "coefficient": {
+                        "den": "1",
+                        "num": "1"
+                      },
+                      "exponents": [
+                        0,
+                        1
+                      ]
+                    },
+                    {
+                      "coefficient": {
+                        "den": "1",
+                        "num": "1"
+                      },
+                      "exponents": [
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "variables": [
+                  "x",
+                  "y"
+                ]
+              }
+            },
+            "name": "positive_bivariate_box"
+          }
+        ],
+        "input_schema": {
+          "$defs": {
+            "CanonicalRational": {
+              "additionalProperties": false,
+              "description": "A reduced rational whose denominator is positive and whose zero is 0/1.",
+              "examples": [
+                {
+                  "den": "2",
+                  "num": "1"
+                }
+              ],
+              "properties": {
+                "den": {
+                  "description": "Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.",
+                  "examples": [
+                    "2"
+                  ],
+                  "pattern": "^(?:0|-?[1-9][0-9]*)$",
+                  "title": "Den",
+                  "type": "string"
+                },
+                "num": {
+                  "description": "Canonical decimal numerator of the reduced rational.",
+                  "examples": [
+                    "1"
+                  ],
+                  "pattern": "^(?:0|-?[1-9][0-9]*)$",
+                  "title": "Num",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "num",
+                "den"
+              ],
+              "title": "CanonicalRational",
+              "type": "object"
+            },
+            "ClosedRationalInterval": {
+              "additionalProperties": false,
+              "description": "One closed exact rational interval whose lower endpoint is at most its upper.",
+              "properties": {
+                "lower": {
+                  "$ref": "#/$defs/CanonicalRational"
+                },
+                "upper": {
+                  "$ref": "#/$defs/CanonicalRational"
+                }
+              },
+              "required": [
+                "lower",
+                "upper"
+              ],
+              "title": "ClosedRationalInterval",
+              "type": "object"
+            },
+            "RationalBox": {
+              "additionalProperties": false,
+              "description": "A closed rational box with one interval on each distinct ordered axis.",
+              "properties": {
+                "domain": {
+                  "const": "QQ",
+                  "default": "QQ",
+                  "title": "Domain",
+                  "type": "string"
+                },
+                "intervals": {
+                  "description": "Closed coordinate intervals in the same order as variables; zero-width intervals are preserved.",
+                  "items": {
+                    "$ref": "#/$defs/ClosedRationalInterval"
+                  },
+                  "maxItems": 8,
+                  "title": "Intervals",
+                  "type": "array"
+                },
+                "variables": {
+                  "description": "Complete ordered coordinate axis. Its order is part of the box's identity; the empty axis denotes the unique zero-dimensional box.",
+                  "items": {
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$",
+                    "type": "string"
+                  },
+                  "maxItems": 8,
+                  "title": "Variables",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "variables",
+                "intervals"
+              ],
+              "title": "RationalBox",
+              "type": "object"
+            },
+            "RationalPolynomial": {
+              "additionalProperties": false,
+              "description": "One sparse polynomial together with its exact coefficient ring.",
+              "properties": {
+                "domain": {
+                  "const": "QQ",
+                  "default": "QQ",
+                  "title": "Domain",
+                  "type": "string"
+                },
+                "polynomial": {
+                  "$ref": "#/$defs/SparseRationalPolynomial"
+                },
+                "variables": {
+                  "items": {
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$",
+                    "type": "string"
+                  },
+                  "maxItems": 8,
+                  "minItems": 1,
+                  "title": "Variables",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "variables",
+                "polynomial"
+              ],
+              "title": "RationalPolynomial",
+              "type": "object"
+            },
+            "RationalPolynomialTerm": {
+              "additionalProperties": false,
+              "properties": {
+                "coefficient": {
+                  "$ref": "#/$defs/CanonicalRational"
+                },
+                "exponents": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 0,
+                  "title": "Exponents",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "coefficient",
+                "exponents"
+              ],
+              "title": "RationalPolynomialTerm",
+              "type": "object"
+            },
+            "SparseRationalPolynomial": {
+              "additionalProperties": false,
+              "properties": {
+                "terms": {
+                  "default": [],
+                  "description": "Nonzero monomials in descending lexicographic order of their exponent tuples (highest first). For one variable, list [2] before [0].",
+                  "examples": [
+                    [
+                      {
+                        "coefficient": {
+                          "den": "1",
+                          "num": "1"
+                        },
+                        "exponents": [
+                          2
+                        ]
+                      },
+                      {
+                        "coefficient": {
+                          "den": "1",
+                          "num": "-1"
+                        },
+                        "exponents": [
+                          0
+                        ]
+                      }
+                    ]
+                  ],
+                  "items": {
+                    "$ref": "#/$defs/RationalPolynomialTerm"
+                  },
+                  "maxItems": 4096,
+                  "title": "Terms",
+                  "type": "array"
+                }
+              },
+              "title": "SparseRationalPolynomial",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Enclose one canonical scalar QQ polynomial on a complete closed rational box. The box must use exactly the polynomial's ordered variables. The returned exact rational interval is deterministic and sound but need not be the exact range. Bounds: 4,096 terms; degree 32768 per variable and 262144 total; 32768-digit coefficient and 32768-digit input-endpoint components; 32,768 term-axis pairs; 65,536-digit intermediate components; 32,768-digit result components; 10,485,760-byte canonical retained-source result.",
+          "properties": {
+            "box": {
+              "$ref": "#/$defs/RationalBox"
+            },
+            "polynomial": {
+              "$ref": "#/$defs/RationalPolynomial"
+            }
+          },
+          "required": [
+            "polynomial",
+            "box"
+          ],
+          "title": "PolynomialBoxEnclosureRequest",
+          "type": "object"
+        },
+        "operation_id": "polynomial.box.enclosure.compute",
+        "output_schema": {
+          "$defs": {
+            "CanonicalRational": {
+              "additionalProperties": false,
+              "description": "A reduced rational whose denominator is positive and whose zero is 0/1.",
+              "examples": [
+                {
+                  "den": "2",
+                  "num": "1"
+                }
+              ],
+              "properties": {
+                "den": {
+                  "description": "Positive canonical decimal denominator; together with num it must be reduced, and integers use den='1'.",
+                  "examples": [
+                    "2"
+                  ],
+                  "pattern": "^(?:0|-?[1-9][0-9]*)$",
+                  "title": "Den",
+                  "type": "string"
+                },
+                "num": {
+                  "description": "Canonical decimal numerator of the reduced rational.",
+                  "examples": [
+                    "1"
+                  ],
+                  "pattern": "^(?:0|-?[1-9][0-9]*)$",
+                  "title": "Num",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "num",
+                "den"
+              ],
+              "title": "CanonicalRational",
+              "type": "object"
+            },
+            "ClosedRationalInterval": {
+              "additionalProperties": false,
+              "description": "One closed exact rational interval whose lower endpoint is at most its upper.",
+              "properties": {
+                "lower": {
+                  "$ref": "#/$defs/CanonicalRational"
+                },
+                "upper": {
+                  "$ref": "#/$defs/CanonicalRational"
+                }
+              },
+              "required": [
+                "lower",
+                "upper"
+              ],
+              "title": "ClosedRationalInterval",
+              "type": "object"
+            },
+            "RationalBox": {
+              "additionalProperties": false,
+              "description": "A closed rational box with one interval on each distinct ordered axis.",
+              "properties": {
+                "domain": {
+                  "const": "QQ",
+                  "default": "QQ",
+                  "title": "Domain",
+                  "type": "string"
+                },
+                "intervals": {
+                  "description": "Closed coordinate intervals in the same order as variables; zero-width intervals are preserved.",
+                  "items": {
+                    "$ref": "#/$defs/ClosedRationalInterval"
+                  },
+                  "maxItems": 8,
+                  "title": "Intervals",
+                  "type": "array"
+                },
+                "variables": {
+                  "description": "Complete ordered coordinate axis. Its order is part of the box's identity; the empty axis denotes the unique zero-dimensional box.",
+                  "items": {
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$",
+                    "type": "string"
+                  },
+                  "maxItems": 8,
+                  "title": "Variables",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "variables",
+                "intervals"
+              ],
+              "title": "RationalBox",
+              "type": "object"
+            },
+            "RationalPolynomial": {
+              "additionalProperties": false,
+              "description": "One sparse polynomial together with its exact coefficient ring.",
+              "properties": {
+                "domain": {
+                  "const": "QQ",
+                  "default": "QQ",
+                  "title": "Domain",
+                  "type": "string"
+                },
+                "polynomial": {
+                  "$ref": "#/$defs/SparseRationalPolynomial"
+                },
+                "variables": {
+                  "items": {
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]{0,31}$",
+                    "type": "string"
+                  },
+                  "maxItems": 8,
+                  "minItems": 1,
+                  "title": "Variables",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "variables",
+                "polynomial"
+              ],
+              "title": "RationalPolynomial",
+              "type": "object"
+            },
+            "RationalPolynomialTerm": {
+              "additionalProperties": false,
+              "properties": {
+                "coefficient": {
+                  "$ref": "#/$defs/CanonicalRational"
+                },
+                "exponents": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 0,
+                  "title": "Exponents",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "coefficient",
+                "exponents"
+              ],
+              "title": "RationalPolynomialTerm",
+              "type": "object"
+            },
+            "SparseRationalPolynomial": {
+              "additionalProperties": false,
+              "properties": {
+                "terms": {
+                  "default": [],
+                  "description": "Nonzero monomials in descending lexicographic order of their exponent tuples (highest first). For one variable, list [2] before [0].",
+                  "examples": [
+                    [
+                      {
+                        "coefficient": {
+                          "den": "1",
+                          "num": "1"
+                        },
+                        "exponents": [
+                          2
+                        ]
+                      },
+                      {
+                        "coefficient": {
+                          "den": "1",
+                          "num": "-1"
+                        },
+                        "exponents": [
+                          0
+                        ]
+                      }
+                    ]
+                  ],
+                  "items": {
+                    "$ref": "#/$defs/RationalPolynomialTerm"
+                  },
+                  "maxItems": 4096,
+                  "title": "Terms",
+                  "type": "array"
+                }
+              },
+              "title": "SparseRationalPolynomial",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "description": "An exact enclosure bound to its source polynomial and box.",
+          "properties": {
+            "box": {
+              "$ref": "#/$defs/RationalBox"
+            },
+            "enclosure": {
+              "$ref": "#/$defs/ClosedRationalInterval"
+            },
+            "polynomial": {
+              "$ref": "#/$defs/RationalPolynomial"
+            },
+            "source_digest": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "title": "Source Digest",
+              "type": "string"
+            }
+          },
+          "required": [
+            "polynomial",
+            "box",
+            "source_digest",
+            "enclosure"
+          ],
+          "title": "PolynomialBoxEnclosureResult",
+          "type": "object"
+        },
+        "read_only": true,
+        "tags": [
+          "polynomial",
+          "multivariate",
+          "sparse",
+          "evaluation",
+          "interval",
+          "box",
+          "axis-aligned",
+          "enclosure",
+          "exact",
+          "rational",
+          "uniform",
+          "nonzero",
+          "jacobian",
+          "bounded"
+        ],
+        "title": "Enclose a rational polynomial on a rational box"
+      }
+    },
+    "schema_version": 1,
+    "server": {
+      "description": "Search and run atomic, composable Jacobian tools for higher mathematics.",
+      "icons": null,
+      "name": "jacobian",
+      "title": "Jacobian Mathematical Workbench",
+      "version": "0.14.0",
+      "websiteUrl": null
+    },
+    "tool": "math.find",
+    "tools": [
+      "math.find",
+      "math.run"
+    ],
+    "transport": "mcp-stdio"
+  }
+}
