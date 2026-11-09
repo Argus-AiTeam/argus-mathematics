@@ -1,6 +1,6 @@
 # Verifying the OpenAI Mathematics Collection with Argus
 
-*Status as of 2026-11-09. Every candidate issue examined is recorded item by item in [openai-claims-checked.md](openai-claims-checked.md). The machine-readable ledger is [`data/openai-math-373-audit.json`](../data/openai-math-373-audit.json).*
+*Status as of 2026-11-09. The machine-readable ledger is [`data/openai-math-373-audit.json`](../data/openai-math-373-audit.json).*
 
 Upstream: [`openai/math`](https://github.com/openai/math) at commit `4eaee87548250b2682affda7d05d947c05554bae` — **721 active manuscripts in 373 result families**, plus 3 manuscripts OpenAI withdrew on 2026-10-06.
 
@@ -39,15 +39,6 @@ Costs are provider token-meter dollar equivalents and a known lower bound; 14 er
 The reason given is a sign error (`I_new = I(f_1) − m = −2m ≠ 0`) in the first manuscript, which invalidates a stabilization-trace cancellation argument used by the other two. OpenAI states that the withdrawal concerns the proofs, not the truth of the statements. Argus did not find this error.
 
 **External literature (`342`).** Argus checked OpenAI's explicit almost-complex structure on `T^4` and found no error in it. Evaluated on that example, it appears to conflict with cone-duality equalities printed in Li–Zhang, arXiv:0708.2520v4 (Thm 1.3, Cor 1.4, Prop 3.9). OpenAI's own 2026-10-07 revision of *Taming implies compatibility* already "corrected the cone-equality claim … [and] added a strict-inclusion example". Treat this as a candidate conflict in a third-party paper: the published version of Li–Zhang, the geometry, and priority still need specialist review.
-
-**Candidates that did not hold.** Argus's first-pass drafts raised further candidate issues. Checked against the source, each turned out to be one of the following:
-- a shortcut or extension Argus proposed itself;
-- a statement OpenAI explicitly avoids or warns against;
-- a misreading of Argus's own conclusion. For example, the draft for `003` says OpenAI's sign `u−n` is *correct*; and in `318` Argus confirmed OpenAI's main theorem that a map is *nonzero*.
-- a negative-control mutation in Argus's own verifier (`130`);
-- not traceable to any source.
-
-Details for all 33 items are in [openai-claims-checked.md](openai-claims-checked.md).
 
 ## 3. What the review supports: improvements over stated OpenAI results
 
@@ -104,16 +95,9 @@ Substantial examples (Argus-authored lines):
 - `176` Kahn–Kalai pathwise reduction: 1,814 lines
 - `242` Pell and power completeness: 1,674 lines
 
-## 5. About OpenAI's Lean repository
+## 5. Limitations
 
-OpenAI's Lean proofs contain **no** `sorry` and **no** custom axioms.
-- A text search for `axiom` matches only English words in comments.
-- The `sorry` occurrences are in `lean/ComparatorChallenges/`, which are challenge statements that end in `sorry` by design; the solutions live in `lean/OAI/`.
-- `review: status: unchecked` in `formalization.yaml` is a schema field, not an admission of error.
-
-## 6. Limitations
-
-- **Reviewer.** Acceptance is by Argus's AI Reviewer, which can be wrong. It once misread an OpenAI comparator challenge file as an unproved theorem (`075`); that finding does not hold.
+- **Reviewer.** Acceptance is by Argus's AI Reviewer, which can be wrong; human expert review is still needed.
 - **Novelty.** No improvement has been checked for novelty against the literature.
 - **Coverage.** 319 families are not yet reviewed. Their first-pass self-assessments are not findings.
 - **Availability.** Review reports and most Lean sources are not yet published in this repository.

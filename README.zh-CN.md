@@ -53,7 +53,7 @@
 - **Lean。** 在 314 个家族中共有 384 份 Lean 4.31.0 核心引理证书，都有编译通过的记录，没有 `sorry`。其中 Argus 原创的去重代码约 12 万行；另有约 5.2 万行移植自 OpenAI 的 Lean，`156` 还有一份 346,954 行的机器生成 SAT 证明重放。
 - **前提。** 目前的验收都由 Argus 自己的 AI Reviewer 完成，没有经过人类专家审核；也没有任何一项改进查过文献、核实是否为新结果。
 
-报告：[中文](docs/openai-math-audit-findings.zh-CN.md) · [English](docs/openai-math-audit-findings.md) · 台账：[`data/openai-math-373-audit.json`](data/openai-math-373-audit.json) · 候选问题核查：[中文](docs/openai-claims-checked.zh-CN.md) / [EN](docs/openai-claims-checked.md)
+报告：[中文](docs/openai-math-audit-findings.zh-CN.md) · [English](docs/openai-math-audit-findings.md) · 台账：[`data/openai-math-373-audit.json`](data/openai-math-373-audit.json)
 
 ---
 

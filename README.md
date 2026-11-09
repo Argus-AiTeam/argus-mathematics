@@ -53,7 +53,7 @@ Upstream: `openai/math` @ `4eaee875`, with 373 active result families and 721 ma
 - **Lean.** There are 384 Lean 4.31.0 core-lemma certificates in 314 families, each recorded as compiling with no `sorry`. They contain about 120,000 distinct Argus-authored lines. In addition, about 52,000 lines are ported from OpenAI's Lean, and family `156` has a 346,954-line machine-generated SAT replay.
 - **Caveats.** Acceptance so far is by Argus's own AI Reviewer, not by human experts, and no improvement has been checked for novelty against the literature.
 
-Report: [English](docs/openai-math-audit-findings.md) · [中文](docs/openai-math-audit-findings.zh-CN.md) · Ledger: [`data/openai-math-373-audit.json`](data/openai-math-373-audit.json) · Candidate issues checked: [EN](docs/openai-claims-checked.md) / [中文](docs/openai-claims-checked.zh-CN.md)
+Report: [English](docs/openai-math-audit-findings.md) · [中文](docs/openai-math-audit-findings.zh-CN.md) · Ledger: [`data/openai-math-373-audit.json`](data/openai-math-373-audit.json)
 
 ---
 

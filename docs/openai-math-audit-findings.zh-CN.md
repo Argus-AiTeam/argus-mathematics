@@ -1,6 +1,6 @@
 # 用 Argus 核验 OpenAI 数学论文集
 
-*截至 2026-11-09 的情况。核查过的每一条候选问题都逐条记录在 [openai-claims-checked.zh-CN.md](openai-claims-checked.zh-CN.md)。机器可读台账见 [`data/openai-math-373-audit.json`](../data/openai-math-373-audit.json)。*
+*截至 2026-11-09 的情况。机器可读台账见 [`data/openai-math-373-audit.json`](../data/openai-math-373-audit.json)。*
 
 上游版本：[`openai/math`](https://github.com/openai/math) 提交 `4eaee87548250b2682affda7d05d947c05554bae`，共 **373 个结果家族、721 篇在架论文**。另有 3 篇论文 OpenAI 已于 2026-10-06 撤回。
 
@@ -39,15 +39,6 @@
 撤回原因是第一篇里有一个符号错误（`I_new = I(f_1) − m = −2m ≠ 0`），导致一个稳定化迹抵消论证失效，另外两篇用到了这个论证。OpenAI 说明撤回的是证明，并不是说结论为假。这个错误不是 Argus 发现的。
 
 **外部文献（`342`）。** Argus 核验了 OpenAI 在 `T^4` 上给出的显式近复结构，没有发现错误。用这个例子去检验 Li–Zhang（arXiv:0708.2520v4）中印出的锥对偶等式（Thm 1.3、Cor 1.4、Prop 3.9），似乎出现冲突。不过 OpenAI 在 2026-10-07 修订《Taming implies compatibility》时，已经"更正了锥等式的说法，并补充了一个严格包含的例子"。所以这应当视为第三方论文中的一个候选冲突，Li–Zhang 的正式发表版本、相关几何以及优先权都还需要专家核查。
-
-**核查后不成立的候选问题。** Argus 第一轮底稿里还提出过其他候选问题，逐条对照原文后，全部属于以下几种情况之一：
-- Argus 自己提出的捷径或推广；
-- OpenAI 原文明确回避或警告过的说法；
-- 误读了 Argus 自己的结论。例如 `003` 的原始报告写的是 OpenAI 的符号 `u−n` **是对的**；`318` 中 Argus 证明的正是 OpenAI 的主定理"该映射**非零**"；
-- Argus 往自己的验证器里故意注入的错误样本（`130`）；
-- 找不到任何出处。
-
-33 条的逐条说明见 [openai-claims-checked.zh-CN.md](openai-claims-checked.zh-CN.md)。
 
 ## 3. 审查支持的成果：对 OpenAI 原文结论的改进
 
@@ -104,16 +95,9 @@
 - `176` Kahn–Kalai 路径归约：1,814 行
 - `242` Pell 方程与幂的完备性：1,674 行
 
-## 5. 关于 OpenAI 的 Lean 仓库
+## 5. 局限
 
-OpenAI 的 Lean 证明里**没有** `sorry`，也**没有**自定义公理。
-- 按文本搜索 `axiom`，命中的只是注释里的英文单词。
-- `sorry` 都出现在 `lean/ComparatorChallenges/` 中。那里的文件是挑战题陈述，按设计就以 `sorry` 结尾；对应的证明在 `lean/OAI/` 里。
-- `formalization.yaml` 中的 `review: status: unchecked` 只是一个 schema 字段，不是承认有错。
-
-## 6. 局限
-
-- **审查者。** 验收方是 Argus 自己的 AI Reviewer，它也会出错。例如它曾把 OpenAI 的 comparator 挑战文件误读成"没有证完的定理"（`075`），这条结论不成立。
+- **审查者。** 验收方是 Argus 自己的 AI Reviewer，它也会出错，仍需要人类专家审核。
 - **新颖性。** 没有任何一项改进查过文献、核实是否为新结果。
 - **覆盖面。** 还有 319 个家族没有复核；它们在第一轮里的自我评估不能算作发现。
 - **公开程度。** 审查报告和大部分 Lean 源码尚未在本仓库发布。
