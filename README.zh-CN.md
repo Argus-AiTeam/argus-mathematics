@@ -31,7 +31,7 @@
 
 本仓库集中归档 **Argus** 自治数学研究项目已形成完整证据链的数学定理、显式反例与形式化/符号复算证书。本仓库不堆砌未验证的模型对话，[`results/<ID>/`](results/) 下的每一个成果包均围绕**严格的数学命题、可独立重跑的精确证书（Farkas 对偶、SMT/ILP、$\mathbb{F}_2$-Magnus 代数、PARI/GP 数域下降、Lean 4 内核）以及明确的适用边界**构建，并配有独立编译的 AMS LaTeX 学术论文（`ARGUS_RESULT_<ID>_TECHNICAL_REPORT.pdf` 与 `.tex` 源码）。
 
-截至 **2026 年 11 月 5 日**，仓库共收录 **84 个独立开放问题正式成果包**（**748 个带 SHA-256 校验值的公开产物**），以及对 **OpenAI `openai/math` 文库的大规模自主红队审计、`refutes` 证伪账本、Lean 4.31.0 形式化认证与定理强化专章**（详见 [`docs/openai-math-audit-findings.md`](docs/openai-math-audit-findings.md)）：
+截至 **2026 年 11 月 5 日**，仓库共收录 **84 个独立开放问题正式成果包**（**748 个带 SHA-256 校验值的公开产物**），以及一份关于 Argus 在 OpenAI `openai/math` 论文集上工作的报告（[`docs/openai-math-audit-findings.zh-CN.md`](docs/openai-math-audit-findings.zh-CN.md)）：
 
 | 类别 | 数量 | 说明 |
 |---|---:|---|
@@ -43,32 +43,17 @@
 
 ---
 
-## 对 OpenAI `openai/math` 全量 376 个问题家族（723 篇手稿）的独立复核、局部 Lean 4.31.0 形式化与改进候选专章
+## 用 Argus 核验 OpenAI `openai/math` 论文集（截至 2026-11-09）
 
-依托 Argus 的 24 路并发 `gpt-6.1-sol` 守护进程，我们对 OpenAI 发布的 `github.com/openai/math` 全集（**376 个问题家族、723 篇手稿** = 3 个官方已于 2026-10-07 撤稿家族 + **373 个现存活跃家族 / 720 篇现存手稿**）完成了逐家族证明依赖拆解、局部代数/组合核形式化与符号复算（累计 2,147 次模型调用，实付 **`$85.88`**，均价 **`$0.23`/家族**）。
+上游版本：`openai/math` @ `4eaee875`，共 373 个在架结果家族、721 篇论文。另有 3 篇论文 OpenAI 已于 2026-10-06 撤回，不在范围内。
 
-- **📄 完整中文复核与形式化报告**：**[`docs/openai-math-audit-findings.zh-CN.md`](docs/openai-math-audit-findings.zh-CN.md)**
-- **📄 English Full Audit & Formalization Report**：**[`docs/openai-math-audit-findings.md`](docs/openai-math-audit-findings.md)**
-- **📊 机器可读 376 家族结构化账本**：**[`data/openai-math-373-audit.json`](data/openai-math-373-audit.json)**
+- **做了什么。** 第一轮是探索性工作，每个家族跑一个 Argus campaign；这不是逐篇审查，按供应商 token 计量花费 $1,861.55。目前正在对第一轮成果做系统复核，已审完 **54 / 373 个家族**。
+- **OpenAI 论文的错误。** **没有确认任何数学错误。** 成立的只有 3 处小问题：一个引理编号写错（`320`）、一个失效的 DOI（`318`）、一处在某种读法下缺少前提的措辞（`247`）。
+- **改进。** 在已审的 54 个家族中，有 **38 个**至少有一项对 OpenAI 原文结论的改进得到审查支持，包括更好的常数或指数、更弱的假设、推广，以及锐性例子。例如：给出最优的障碍常数并构造了与之匹配的例子（`071`），指数中去掉一个 `d` 因子（`028`），误差项从 `L^{-t-1/2}` 改进到 `L^{-t-1}`（`026`）。其余 16 个已审家族独立确认了 OpenAI 的结果。
+- **Lean。** 在 314 个家族中共有 384 份 Lean 4.31.0 核心引理证书，都有编译通过的记录，没有 `sorry`。其中 Argus 原创的去重代码约 12 万行；另有约 5.2 万行移植自 OpenAI 的 Lean，`156` 还有一份 346,954 行的机器生成 SAT 证明重放。
+- **前提。** 目前的验收都由 Argus 自己的 AI Reviewer 完成，没有经过人类专家审核；也没有任何一项改进查过文献、核实是否为新结果。
 
-### 1. 审计覆盖与局部形式化范围分类（全集 376 个家族 / 723 篇手稿，互斥分类）
-
-> **方法论与范围声明**：各家族的 Lean 4.31.0 证书均绑定 `statement_fidelity.md`，证明的是所选子命题中**明确划定的代数、有限组合、矩阵或算子核心**，不代表已将整篇连续统分析、微分拓扑、代数几何或计算复杂度主定理（如 `#378` ETH 主定理或 `#156` 连续统 Borsuk 映射定理）做端到端全链形式化；手稿引用外部文献定理属于正常学术惯例，不计作原稿缺陷。
-
-| 审计与形式化范围分类 | 家族数（占比） | 手稿篇数（占比） | 机器验证与范围边界说明 |
-| :--- | :---: | :---: | :--- |
-| **Category I：局部代数/组合核通过 Lean 4.31.0 检验（所选子问题图内无额外未决节点）** | **30 族** (`8.0%`) | **59 篇** (`8.2%`) | `100%` 含至少 1 份零 `sorry` Lean 4.31.0 证书；所选局部子问题的有限/代数核心已闭合（具体形式化边界见各家族 `statement_fidelity.md`） |
-| **Category II：局部代数/组合核通过 Lean 4.31.0 检验（顶层定理相对外部文献与书面约化成立）** | **287 族** (`76.3%`) | **538 篇** (`74.4%`) | `100%` 含至少 1 份零 `sorry` Lean 4.31.0 证书 + `verify.py` 精确复算；连续统/几何/复杂度主定理依赖原文书面约化与所引外部文献 |
-| **Category III：符号/数值复算脚本（`verify.py`）与证明依赖核查（无 Argus Lean 证书）** | **56 族** (`14.9%`) | **123 篇** (`17.0%`) | Argus Lean 证书数为 `0`（含 `#028, #090, #095, #130, #152, #350` 等）；完成确定性 Python/SymPy/Jacobian 局部检验与证明图分解 |
-| **Category IV：OpenAI 官方已撤稿（2026-10-07）** | **3 族** (`0.8%`) | **3 篇** (`0.4%`) | `#045, #061, #070`：因 $I(f_1)-m=-2m\neq 0$ 符号错误在审计前已由官方撤下 |
-| **全集总计** | **376 族** (`100%`) | **723 篇** (`100%`) | **317 个活跃家族含 Lean 4.31.0 证书（共 384 份证书、520,223 行代码、41,764 条定理/引理；其中 `#156` 占 346,954 行 LRAT 展开，其余 316 族共 173,269 行）** |
-
-### 2. 五类具体可核验贡献（详见[完整报告](docs/openai-math-audit-findings.zh-CN.md)）
-1. **对外部文献锥等式的反例候选（`#342`，[`results/openai-audit-theorems/9000342/`](results/openai-audit-theorems/9000342/)）**：独立符号与 Lean 4 核验支持 OpenAI 手稿中的四维环面 $T^4$ 构造 `ex:strict-cones`（归功于 OpenAI 原构造），并证明该构造与外部预印本 Li–Zhang (*arXiv:0708.2520v4*) 定理 1.3、推论 1.4、命题 3.9 的印刷锥等式及定理 3.7 的不交性推断产生冲突，值得作为独立反例候选定向送审。
-2. **小而确定的原文勘误与条件范围说明（`#320`, `#247`）**：`#320` 核实 `formal.tex:785` 所引 `[MT, Lemma 3.9]` 在原文献中实际编号为第 6 节 `Lemma 6.7`（引文编号勘误）；`#247` 用 Lean 4（[`9000247/finite_rule_core/Main.lean`](results/openai-audit-theorems/9000247/finite_rule_core/Main.lean)）证明 `finite-rules.tex:580-581` 引理 `fr:rollback` 的概括句在应用于词尾截断游标时需显式保留左端点前提（范围说明，不推翻主群定理）。
-3. **长证明关键连接步骤与文献条件的显式展开（101 个家族）**：如 `#001` 显式展开 Kisin–Zhou、Pappas–Rapoport 与 Gleason–Lim–Xu 的固定标架拟同源连接条件并用 Lean 4 形式化局部常值张量传播引理；`#321` 为循环覆盖塔与挠消灭推论编写 2,029 行整群环 Fox 自由微分 Lean 4 证明。
-4. **局部界改进与结构推广候选（279 个家族含局部扩展或界收紧，其中 166 个家族附专题报告）**：如 `#318` 通过计算度数 $-5$ 处比较映射标量 $c=0$（[`degree-five/Main.lean`](results/openai-audit-theorems/9000318/degree-five/Main.lean)）将高度 3 重叠谱生成水平从 $2\le \mathrm{level}_G(X)\le 3$ 精确收紧为 $\mathrm{level}_G(X)=2$；`#113` 将 `lem:apex-encoding` 的局部编码原像界从 $(10N)^{30}$ 收紧至 $2^{17}N^8$；`#125` 将有限有向比较常数从 $2$ 收紧至 $199/100$；`#274` 用非交换 Loewner 算子不等式将局部化算子范数界推广至任意高秩投影；`#209` 构造二进局部环模型 `D2_MAIN`。
-5. **忠实的局部代数/组合核 Lean 4.31.0 形式化（317 个家族、384 份零 `sorry` 证书，含原库未标 Lean 的 93 个家族）**：每份证书均配 `statement_fidelity.md` 如实界定形式化范围与外部前提。
+报告：[中文](docs/openai-math-audit-findings.zh-CN.md) · [English](docs/openai-math-audit-findings.md) · 台账：[`data/openai-math-373-audit.json`](data/openai-math-373-audit.json) · 候选问题核查：[中文](docs/openai-claims-checked.zh-CN.md) / [EN](docs/openai-claims-checked.md)
 
 ---
 

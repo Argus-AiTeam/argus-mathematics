@@ -31,7 +31,7 @@
 
 This repository archives the completed, independently verified mathematical outputs of the **Argus** autonomous research program. Rather than publishing unverified model transcripts, every package in [`results/<ID>/`](results/) is organized around **explicit mathematical statements, exact rerunnable certificates, and explicit scope boundaries**, accompanied by a standalone compiled AMS LaTeX paper (`ARGUS_RESULT_<ID>_TECHNICAL_REPORT.pdf` and `.tex`).
 
-As of **November 5, 2026**, the archive contains **84 standalone open-problem result packages** (**748 SHA-256 checksummed artifacts**) plus the **Autonomous Audit, Refutation, and Lean 4.31.0 Formal Certification of OpenAI's `openai/math` Corpus** ([`docs/openai-math-audit-findings.md`](docs/openai-math-audit-findings.md)):
+As of **November 5, 2026**, the archive contains **84 standalone open-problem result packages** (**748 SHA-256 checksummed artifacts**) plus a report on Argus's work on OpenAI's `openai/math` collection ([`docs/openai-math-audit-findings.md`](docs/openai-math-audit-findings.md)):
 
 | Category | Count | Description |
 |---|---:|---|
@@ -43,32 +43,17 @@ As of **November 5, 2026**, the archive contains **84 standalone open-problem re
 
 ---
 
-## Independent Verification, Scoped Lean 4.31.0 Formalizations, and Local Improvement Candidates on OpenAI's `openai/math` Collection (723 Manuscripts Across 376 Families)
+## Verifying OpenAI's `openai/math` Collection with Argus (status 2026-11-09)
 
-Using 24-way parallel `gpt-6.1-sol` daemons, we completed a corpus-wide dependency decomposition, scoped algebraic/combinatorial Lean 4.31.0 formalization, and symbolic replay across all **376 problem families (723 manuscripts)** of OpenAI's `github.com/openai/math` release (`3` families withdrawn upstream by OpenAI on October 7, 2026 + **373 active families / 720 active manuscripts**) at a total billed cost of **`$85.88` (`2,147` calls, `$0.23` per family)**.
+Upstream: `openai/math` @ `4eaee875`, with 373 active result families and 721 manuscripts. OpenAI withdrew 3 further manuscripts on 2026-10-06; they are out of scope.
 
-- **📄 Full Audit & Formalization Report (English):** **[`docs/openai-math-audit-findings.md`](docs/openai-math-audit-findings.md)**
-- **📄 完整中文复核与形式化报告：** **[`docs/openai-math-audit-findings.zh-CN.md`](docs/openai-math-audit-findings.zh-CN.md)**
-- **📊 Machine-Readable 376-Family Audit Ledger:** **[`data/openai-math-373-audit.json`](data/openai-math-373-audit.json)**
+- **Work done.** An exploratory first pass ran one Argus campaign per family. It was not a per-manuscript review, and it cost $1,861.55 at provider token-meter rates. A systematic review of that work is in progress: **54 / 373 families** reviewed so far.
+- **Errors in OpenAI's manuscripts.** **No mathematical error has been established.** Three minor issues stand: a wrong lemma number (`320`), a dead DOI (`318`), and a reading-dependent wording gap (`247`).
+- **Improvements.** In **38 of the 54 reviewed families**, the review supports at least one improvement over the stated OpenAI result: sharper constants or exponents, weaker hypotheses, generalizations, or sharpness examples. Examples include an optimal barrier constant with a matching construction (`071`), one factor of `d` removed from an exponent (`028`), and an error term improved from `L^{-t-1/2}` to `L^{-t-1}` (`026`). The other 16 reviewed families independently confirm OpenAI's results.
+- **Lean.** There are 384 Lean 4.31.0 core-lemma certificates in 314 families, each recorded as compiling with no `sorry`. They contain about 120,000 distinct Argus-authored lines. In addition, about 52,000 lines are ported from OpenAI's Lean, and family `156` has a 346,954-line machine-generated SAT replay.
+- **Caveats.** Acceptance so far is by Argus's own AI Reviewer, not by human experts, and no improvement has been checked for novelty against the literature.
 
-### 1. Audit Coverage & Scoped Formalization Categories (All 376 Families / 723 Manuscripts, Mutually Exclusive)
-
-> **Methodological & Scope Note:** Every Lean 4.31.0 certificate is paired with an explicit `statement_fidelity.md` file and certifies the **delimited algebraic, finite-combinatorial, matrix, or operator core** of the selected sub-problem (not end-to-end formalization of full continuum, topological, algebro-geometric, or complexity-theoretic main theorems such as ETH in `#378` or full 9D Borsuk in `#156`). Citing external literature is standard mathematical practice and is not counted as a manuscript defect.
-
-| Audit & Formalization Scope Category | Families (%) | Manuscripts (%) | Verification & Scope Description |
-| :--- | :---: | :---: | :--- |
-| **Category I: Scoped Algebraic/Combinatorial Core Certified in Lean 4.31.0 (Self-Contained Audited Subgraph)** | **30** (`8.0%`) | **59** (`8.2%`) | `100%` have $\ge 1$ zero-`sorry` Lean 4.31.0 certificate (`exit_code=0`); no unresolved obligations remain inside the audited sub-problem (exact scope in `statement_fidelity.md`) |
-| **Category II: Scoped Algebraic/Combinatorial Core Certified in Lean 4.31.0 (Relative to Cited Literature & Prose Reductions)** | **287** (`76.3%`) | **538** (`74.4%`) | `100%` have $\ge 1$ zero-`sorry` Lean 4.31.0 certificate + `verify.py` replay; top-level continuum/geometric/complexity theorem relies on prose reductions and cited literature |
-| **Category III: Symbolic/Computational Replay (`verify.py`) & Dependency Audit (No Argus Lean Certificate)** | **56** (`14.9%`) | **123** (`17.0%`) | `0` Argus Lean certificates (includes `#028, #090, #095, #130, #152, #350`); verified via deterministic Python/SymPy/Jacobian scripts (`verify.py`) and proof-graph decomposition |
-| **Category IV: Withdrawn Upstream by OpenAI (October 7, 2026)** | **3** (`0.8%`) | **3** (`0.4%`) | `#045, #061, #070`: withdrawn by OpenAI prior to our audit due to the sign error $I(f_1)-m=-2m\neq 0$ |
-| **Total** | **376** (`100%`) | **723** (`100%`) | **317 active families with Lean 4.31.0 certificates (384 certificates, 520,223 lines, 41,764 theorems/lemmas: 346,954 LRAT-unrolled lines in `#156` + 173,269 structural lines across 316 families)** |
-
-### 2. Five Verifiable Contribution Pillars (See [Full Report](docs/openai-math-audit-findings.md))
-1. **Candidate Counterexample to External Printed Cone Equalities (`#342`, [`results/openai-audit-theorems/9000342/`](results/openai-audit-theorems/9000342/)):** Independent symbolic and Lean 4.31.0 checks verify OpenAI's staged $T^4$ example `ex:strict-cones` (with full credit to OpenAI's construction) and show that it conflicts with the printed cone-duality equalities in Theorem 1.3, Corollary 1.4, and Proposition 3.9 (and the projected-current disjointness step in Theorem 3.7) of Li–Zhang (*arXiv:0708.2520v4*).
-2. **Concrete Manuscript & Citation Errata (`#320`, `#247`):** In `#320`, `formal.tex:785` cites `[MT, Lemma 3.9]`, whereas the actual nilpotent correction in `[MT]` is `Lemma 6.7` in Section 6; in `#247`, [`9000247/finite_rule_core/Main.lean`](results/openai-audit-theorems/9000247/finite_rule_core/Main.lean) shows that the unqualified summary sentence in Lemma `fr:rollback` (`finite-rules.tex:580-581`) requires the left-endpoint hypothesis when applied to word-end truncated cursor configurations (a scope clarification that does not affect `fr:faithful` or the main group theorems).
-3. **Explicit Unpacking of Long-Proof Dependencies & Connecting Steps (101 Families):** E.g., `#001` (explicit fixed-marking realization argument connecting Kisin–Zhou, Pappas–Rapoport, and Gleason–Lim–Xu, with connected-component tensor propagation formalized in [`Main.lean`](results/openai-audit-theorems/9000001/Main.lean)) and `#321` (2,029-line Lean 4.31.0 word-integral Fox boundary realization for `cor:torsion`).
-4. **Scoped Local Bound Refinements & Structural Extensions (279 Families, Including 166 Dedicated Extension Reports):** E.g., `#318` (computing $c=0$ in degree $-5$ via [`degree-five/Main.lean`](results/openai-audit-theorems/9000318/degree-five/Main.lean) to sharpen $2\le \mathrm{level}_G(X)\le 3$ to $\mathrm{level}_G(X)=2$), `#113` (tightening the local encoding preimage bound in `lem:apex-encoding` from $(10N)^{30}$ to $2^{17}N^8$), `#125` (tightening the finite comparison constant in `thm:finite-inequality` from $2$ to $199/100$), `#274` (generalizing localization to arbitrary projection ranks via Loewner operator inequalities), and `#209` (dyadic regular local domain `D2_MAIN`).
-5. **Faithful Scoped Lean 4.31.0 Core Formalizations (384 Zero-`sorry` Certificates Across 317 Families, Including 93 Families Unformalized in `openai/math`):** Every certificate is paired with an explicit `statement_fidelity.md` documenting its exact formal scope.
+Report: [English](docs/openai-math-audit-findings.md) · [中文](docs/openai-math-audit-findings.zh-CN.md) · Ledger: [`data/openai-math-373-audit.json`](data/openai-math-373-audit.json) · Candidate issues checked: [EN](docs/openai-claims-checked.md) / [中文](docs/openai-claims-checked.zh-CN.md)
 
 ---
 
