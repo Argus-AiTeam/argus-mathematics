@@ -1,6 +1,6 @@
 # Argus drafts on the OpenAI mathematics collection
 
-One directory per active family of [`openai/math`](https://github.com/openai/math) @ `4eaee875`. Each holds the Argus first-pass drafts (`first-pass/`) and, for 54 families, the Argus second-pass review (`argus-review/`). The family `README.md` lists every improvement claim with its OpenAI baseline and verification verdict. The overall report is [`docs/openai-math-audit-findings.md`](../../docs/openai-math-audit-findings.md).
+One directory per active family of [`openai/math`](https://github.com/openai/math) @ `4eaee875`. Each holds the Argus first-pass drafts (`first-pass/`) and, for 54 families, the Argus second-pass review (`argus-review/`). The family `README.md` lists every improvement claim with its OpenAI baseline and verification verdict. The overall report is [`README.md`](README.md).
 
 Excluded from these copies:
 - third-party papers and text extracts;

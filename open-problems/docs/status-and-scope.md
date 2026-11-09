@@ -46,7 +46,7 @@ by that program; it does not replace review of the mathematical reduction.
 Lean has checked the declaration and assumptions in the supplied source file.
 For Result 2884, the published topology theorems and geometric inputs are
 explicit hypotheses rather than formalized from first principles. The exact
-boundary is documented in `results/2884/statement_fidelity.md`.
+boundary is documented in `open-problems/2884/statement_fidelity.md`.
 
 ### Novelty not certified
 
@@ -62,6 +62,6 @@ Every result summary should answer four questions:
 3. Which nearby statements remain undecided?
 4. What level of external review has occurred?
 
-If any of these changes, both the result README and `data/results.json` should
+If any of these changes, both the result README and `open-problems/results.json` should
 be updated together.
 
