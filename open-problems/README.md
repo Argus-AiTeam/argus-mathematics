@@ -13,7 +13,6 @@
   <a href="README.zh-CN.md">中文说明</a> ·
   <a href="./">All 84 Result Packages (<code>open-problems/</code>)</a> ·
   <a href="results.json">Structured Index (<code>results.json</code>)</a> ·
-  <a href="../runtime/">Frozen Runtime &amp; <code>math</code> Vertical</a> ·
   <a href="https://github.com/Argus-AiTeam/argus-counterexample-runtime">Standalone Runtime Repo</a>
 </p>
 

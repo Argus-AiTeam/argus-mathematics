@@ -13,7 +13,6 @@
   <a href="README.md">English</a> ·
   <a href="./">全部 84 个成果包目录 (<code>open-problems/</code>)</a> ·
   <a href="results.json">结构化索引 (<code>results.json</code>)</a> ·
-  <a href="../runtime/">Argus 运行时与 <code>math</code> Vertical</a> ·
   <a href="https://github.com/Argus-AiTeam/argus-counterexample-runtime">独立引擎源码仓库</a>
 </p>
 

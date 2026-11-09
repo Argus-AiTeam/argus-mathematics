@@ -48,7 +48,6 @@ open-problems/
   README.md, README.zh-CN.md   catalog of the 84 packages
   <ID>/                        one package per result (report PDF/TeX, certificates, verifiers)
   results.json, usage-audit.json, docs/
-runtime/                       frozen Argus runtime and math vertical
 scripts/verify_artifacts.py    checks every file against SHA256SUMS
 ```
 

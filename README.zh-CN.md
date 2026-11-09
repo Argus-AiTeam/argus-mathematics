@@ -48,7 +48,6 @@ open-problems/
   README.md, README.zh-CN.md   84 个成果包的目录
   <ID>/                        每个结果一个包（报告 PDF/TeX、证书、验证脚本）
   results.json, usage-audit.json, docs/
-runtime/                       冻结的 Argus 运行时和数学垂直模块
 scripts/verify_artifacts.py    按 SHA256SUMS 校验每个文件
 ```
 
