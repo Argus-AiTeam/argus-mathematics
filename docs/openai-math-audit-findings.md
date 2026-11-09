@@ -34,7 +34,16 @@ Costs are provider token-meter dollar equivalents and a known lower bound; 14 er
 
 The reason given is a sign error (`I_new = I(f_1) − m = −2m ≠ 0`) in the first manuscript, which invalidates a stabilization-trace cancellation argument used by the other two. OpenAI states that the withdrawal concerns the proofs, not the truth of the statements. Argus did not find this error.
 
-**External literature (`342`).** Argus checked OpenAI's explicit almost-complex structure on `T^4` and found no error in it. Evaluated on that example, it appears to conflict with cone-duality equalities printed in Li–Zhang, arXiv:0708.2520v4 (Thm 1.3, Cor 1.4, Prop 3.9). OpenAI's own 2026-10-07 revision of *Taming implies compatibility* already "corrected the cone-equality claim … [and] added a strict-inclusion example". Treat this as a candidate conflict in a third-party paper: the published version of Li–Zhang, the geometry, and priority still need specialist review.
+**Li–Zhang cone equality (`342`).** Li–Zhang, *Comparing tamed and compatible symplectic cones…*, Comm. Anal. Geom. 17 (2009), state in Corollary 1.1 (arXiv:0708.2520v4, Corollary 1.4) that on an almost complex 4-manifold with a compatible symplectic form, `K^t = K^c + H^-`. The same claim appears in Theorem 1.1 and Proposition 3.1 (v4: Theorem 1.3, Proposition 3.9).
+- **OpenAI's September 23 version** of *Taming implies compatibility on four-manifolds* used this corollary to state `K^t = K^c + H^-`.
+- **The October 6 revision** proves its own cone description instead. It states the equality only when `h^- = b_2^+ − 1`, notes that the inclusion can be strict even when `H^- = 0`, and gives an explicit `T^4` example (`ex:strict-cones`). OpenAI's `history.md` records this as "corrected the cone-equality claim … added a strict-inclusion example". OpenAI does not say explicitly that the Li–Zhang statements are false.
+- **What Argus added:**
+  - It verified OpenAI's example (exact symbolic checks plus a Lean core).
+  - It checked directly that the example satisfies Li–Zhang's hypotheses (`C^∞`-full, compatible cone nonempty). The example is therefore a counterexample to the three printed Li–Zhang statements.
+  - It matched the arXiv and journal numbering.
+  - It located the failing step: the disjointness claim in the proof of Theorem 3.4 (v4: Theorem 3.7). It refuted that claim with an explicit positive projection of a closed current.
+- **Not refuted:** the `b^+ = 1` special case.
+- **Credit and status:** the counterexample is OpenAI's. Whether the literature already records the problem has not been checked, and this family is not yet in the systematic review.
 
 ## 3. What the review supports: improvements over stated OpenAI results
 

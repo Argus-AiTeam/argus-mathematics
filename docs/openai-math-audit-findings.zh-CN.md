@@ -34,7 +34,16 @@
 
 撤回原因是第一篇里有一个符号错误（`I_new = I(f_1) − m = −2m ≠ 0`），导致一个稳定化迹抵消论证失效，另外两篇用到了这个论证。OpenAI 说明撤回的是证明，并不是说结论为假。这个错误不是 Argus 发现的。
 
-**外部文献（`342`）。** Argus 核验了 OpenAI 在 `T^4` 上给出的显式近复结构，没有发现错误。用这个例子去检验 Li–Zhang（arXiv:0708.2520v4）中印出的锥对偶等式（Thm 1.3、Cor 1.4、Prop 3.9），似乎出现冲突。不过 OpenAI 在 2026-10-07 修订《Taming implies compatibility》时，已经"更正了锥等式的说法，并补充了一个严格包含的例子"。所以这应当视为第三方论文中的一个候选冲突，Li–Zhang 的正式发表版本、相关几何以及优先权都还需要专家核查。
+**Li–Zhang 锥等式（`342`）。** Li–Zhang《Comparing tamed and compatible symplectic cones…》（Comm. Anal. Geom. 17 (2009)）的 Corollary 1.1（arXiv:0708.2520v4 中为 Corollary 1.4）断言：在存在相容辛形式的四维近复流形上，`K^t = K^c + H^-`。Theorem 1.1 和 Proposition 3.1（v4 中为 Theorem 1.3、Proposition 3.9）也有同样的说法。
+- **OpenAI 9 月 23 日版**《Taming implies compatibility on four-manifolds》引用这条推论，得出 `K^t = K^c + H^-`。
+- **10 月 6 日修订版**改用自己证明的锥描述：只在 `h^- = b_2^+ − 1` 时等式成立，并指出即使 `H^- = 0`，包含关系也可以是严格的，还给出了 `T^4` 上的显式例子（`ex:strict-cones`）。OpenAI 的 `history.md` 记为"更正了锥等式的说法，补充了一个严格包含的例子"。OpenAI 没有明确说 Li–Zhang 的命题是错的。
+- **Argus 补充的工作：**
+  - 核验了 OpenAI 的这个例子（精确符号计算，核心部分有 Lean 证明）。
+  - 直接验证该例子满足 Li–Zhang 的全部前提（`C^∞`-full，相容锥非空），因此它确实是 Li–Zhang 这三个已发表命题的反例。
+  - 把 arXiv 版和正式发表版的编号一一对上。
+  - 找到了出错的具体一步：Theorem 3.4（v4 中为 Theorem 3.7）证明里的"不相交"论断，并用闭流的一个显式正投影否定了它。
+- **没有被推翻的：** `b^+ = 1` 的特例。
+- **归属与现状：** 反例是 OpenAI 构造的。文献里是否早有人指出这个问题，还没有查；这个家族也还没有进入系统复核。
 
 ## 3. 审查支持的成果：对 OpenAI 原文结论的改进
 
