@@ -1,9 +1,5 @@
 # 用 Argus 核验 OpenAI 数学论文集
 
-*截至 2026-11-09 的情况。机器可读台账见 [`data/openai-math-373-audit.json`](../data/openai-math-373-audit.json)。*
-
-上游版本：[`openai/math`](https://github.com/openai/math) 提交 `4eaee87548250b2682affda7d05d947c05554bae`，共 **373 个结果家族、721 篇在架论文**。另有 3 篇论文 OpenAI 已于 2026-10-06 撤回。
-
 ## 摘要
 
 - **Argus 做了什么。** 第一轮是探索性工作，每个家族各跑一个 Argus campaign，共 373 个。这一轮**不是逐篇审查**：只要某个家族积累了足够的证据记录，调度器就判它"完成"。之后开始对第一轮成果做系统复核，目前**373 个家族里有 54 个**已经审完并通过验收。

@@ -1,9 +1,5 @@
 # Verifying the OpenAI Mathematics Collection with Argus
 
-*Status as of 2026-11-09. The machine-readable ledger is [`data/openai-math-373-audit.json`](../data/openai-math-373-audit.json).*
-
-Upstream: [`openai/math`](https://github.com/openai/math) at commit `4eaee87548250b2682affda7d05d947c05554bae` — **721 active manuscripts in 373 result families**, plus 3 manuscripts OpenAI withdrew on 2026-10-06.
-
 ## Summary
 
 - **What Argus did.** An exploratory first pass ran one Argus campaign per active family (373 campaigns). It was *not* a per-manuscript review: the scheduler marked a family done once it had accumulated evidence records. A systematic second-pass review of that work is in progress; **54 of 373 families** have been reviewed and accepted so far.
