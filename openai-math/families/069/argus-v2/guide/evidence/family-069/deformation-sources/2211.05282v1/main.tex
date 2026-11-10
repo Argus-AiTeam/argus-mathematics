@@ -1,0 +1,102 @@
+\documentclass[10pt]{amsart}
+\title{Poincare Series and Miraculous Duality}
+\author{Kevin Lin}
+
+\usepackage[margin=1.5in]{geometry}
+\usepackage{etoolbox}
+\usepackage[nameinlink]{cleveref}
+
+\usepackage{baskervald}
+\usepackage[T1]{fontenc}
+
+\usepackage[mathscr]{euscript}
+
+\usepackage{amssymb}
+\usepackage{tikz-cd}
+
+\usepackage[style=alphabetic,doi=false,isbn=false,url=false,eprint=false,sorting=nyt]{biblatex}
+\addbibresource{ref.bib}
+
+\renewcommand\labelitemi{--}
+
+\numberwithin{equation}{subsubsection}
+
+% THEOREMS
+\newtheorem{kevinthm}{Theorem}[subsection]
+\renewcommand{\thekevinthm}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}
+\newcommand\newkevintheorem[3][]{%
+    \newtheorem{#2}[kevinthm]{#3}%
+    \csletcs{old#2}{#2}%
+    \expandafter\renewcommand\csname #2\endcsname{\stepcounter{subsubsection}\csname old#2\endcsname}%
+}
+
+%% SPECIAL THEOREMS
+\newtheorem{innercustomgeneric}{\customgenericname}
+\providecommand{\customgenericname}{}
+\newcommand{\newcustomtheorem}[2]{%
+  \newenvironment{#1}[1]
+  {%
+   \renewcommand\customgenericname{#2}%
+   \renewcommand\theinnercustomgeneric{\kern-0.3em ##1}%
+   \innercustomgeneric
+  }
+  {\endinnercustomgeneric}
+}
+
+\newcustomtheorem{specialtheorem}{}
+\crefname{specialtheorem}{}{}
+
+\crefname{appsec}{Appendix}{Appendices}
+
+% THEOREM DEFINITIONS
+\newtheoremstyle{kevintheoremstyle}
+{}% space above
+{}% space below
+{}% body font
+{0pt}% space to indent
+{\bfseries}% head font
+{.}% separator between head and body
+{4pt}% space after head
+{\thmnumber{#2}\thmname{ #1}\thmnote{ (#3)}}%head
+
+\theoremstyle{kevintheoremstyle}
+
+\newkevintheorem{theorem}{Theorem}
+\crefname{theorem}{Theorem}{Theorems}
+\newkevintheorem{lemma}{Lemma}
+\crefname{lemma}{Lemma}{Lemmas}
+\newkevintheorem{proposition}{Proposition}
+\crefname{proposition}{Proposition}{Propositions}
+\newkevintheorem{corollary}{Corollary}
+\crefname{corollary}{Corollary}{Corollaries}
+\newkevintheorem{construction}{Construction}
+\crefname{construction}{Construction}{Constructions}
+
+\newkevintheorem{definition}{Definition}
+\crefname{definition}{Definition}{Definitions}
+
+%% END OF MURILO'S HACKS
+
+\input{commands}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+In the setting of global geometric Langlands, we show that miraculous duality on the stack of principal bundles on a curve intertwines the functor of Poincare series with the dual functor to Whittaker coefficients. We construct, for arbitrary parabolic subgroups, Jacquet functors controlling constant terms of Poincare series and Whittaker coefficients of Eisenstein series in local terms.
+\end{abstract}
+
+\input{introduction}
+\input{construction}
+\input{cofiber}
+\input{Jacquet}
+\input{ULA}
+\input{coJacquet}
+\input{Ran}
+\input{Ran_upgrades}
+\input{3_morphism}
+
+\printbibliography
+
+\end{document}

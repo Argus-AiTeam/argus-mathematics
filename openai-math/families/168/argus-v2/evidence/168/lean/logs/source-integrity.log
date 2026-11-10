@@ -1,0 +1,68 @@
+printf 'Run directory: '; pwd
+Run directory: <workspace>
+printf 'UTC: '; date -u +%FT%TZ
+UTC: 2026-11-10T10:53:22Z
+python3 - <<'PY'
+import hashlib
+import json
+from pathlib import Path
+import re
+
+base = Path('evidence/168/lean')
+closure = json.loads((base / 'closure.json').read_text())
+model = (base / 'source/OAI/RepresentationTheory/KazhdanLusztig/Model.lean').read_text()
+comparator = (base / 'source/ComparatorChallenges/KLInvariance.lean').read_text()
+entry = (base / 'source/OAI/RepresentationTheory/KazhdanLusztig/Invariance.lean').read_text()
+core = model[:model.rindex('\nend OAI')].rstrip()
+assert comparator.startswith(core)
+
+def statement(source):
+    source = source[source.index('theorem combinatorial_invariance'):]
+    return ' '.join(source[:source.index(':= by')].split())
+
+assert statement(comparator) == statement(entry)
+assert len(closure['modules']) == 35
+assert sum(name.startswith('OAI.') for name in closure['modules']) == 34
+assert closure['external_imports'] == ['Mathlib']
+for name, record in closure['modules'].items():
+    path = base / 'source' / (name.replace('.', '/') + '.lean')
+    raw = path.read_bytes()
+    assert hashlib.sha1(f'blob {len(raw)}\0'.encode() + raw).hexdigest() == record['git_blob']
+    assert hashlib.sha256(raw).hexdigest() == record['sha256']
+    for dependency in record['imports']:
+        assert dependency == 'Mathlib' or dependency in closure['modules']
+
+pattern = re.compile(
+    r'\b(sorry|admit|sorryAx|native_decide|trustCompiler|ofReduceBool|skipKernelTC)\b'
+    r'|^\s*(?:private\s+|unsafe\s+|partial\s+)*(?:axiom|opaque|constant|elab|macro|syntax)\b'
+)
+hits = []
+for name in closure['modules']:
+    path = base / 'source' / (name.replace('.', '/') + '.lean')
+    for number, line in enumerate(path.read_text().splitlines(), 1):
+        if pattern.search(line):
+            hits.append((name, number, line.strip()))
+assert hits == [('ComparatorChallenges.KLInvariance', 95, 'sorry')], hits
+
+print('RESULTS')
+print('All 35 retained source files match manifest Git blob and SHA-256 identities.')
+print('All OAI imports are in the retained 34-module OAI graph; only Mathlib is external.')
+print('Comparator definitions through end KLInvariance equal the solution Model prefix byte-for-byte.')
+print('Comparator and actual final theorem statements equal after whitespace normalization.')
+print('permitted_axioms in JSON is a policy list, not an observed axiom set.')
+print('Raw scan expression:', pattern.pattern)
+for name, number, line in hits:
+    print(f'Raw source scan hit {name}:{number}: {line}')
+print('Only hit: expected comparator sorry; no such hit in any OAI solution source.')
+print('This raw-text scan is not a Lean parser, kernel replay, or measurement of transitive axioms.')
+PY
+RESULTS
+All 35 retained source files match manifest Git blob and SHA-256 identities.
+All OAI imports are in the retained 34-module OAI graph; only Mathlib is external.
+Comparator definitions through end KLInvariance equal the solution Model prefix byte-for-byte.
+Comparator and actual final theorem statements equal after whitespace normalization.
+permitted_axioms in JSON is a policy list, not an observed axiom set.
+Raw scan expression: \b(sorry|admit|sorryAx|native_decide|trustCompiler|ofReduceBool|skipKernelTC)\b|^\s*(?:private\s+|unsafe\s+|partial\s+)*(?:axiom|opaque|constant|elab|macro|syntax)\b
+Raw source scan hit ComparatorChallenges.KLInvariance:95: sorry
+Only hit: expected comparator sorry; no such hit in any OAI solution source.
+This raw-text scan is not a Lean parser, kernel replay, or measurement of transitive axioms.

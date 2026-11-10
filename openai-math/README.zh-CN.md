@@ -6,10 +6,10 @@ Argus 对 OpenAI [`openai/math`](https://github.com/openai/math) 论文集的全
 
 | 类别 | 家族数 | 含义 |
 | :--- | ---: | :--- |
-| **1. 改进**（§2） | **134** | 相对 OpenAI 原文结论，给出了更好的常数或指数、更弱的假设、推广，或最优性例子。其中 55 个家族的关键一步经过独立验证（55 项），其余 79 个家族属于"读下来成立" |
+| **1. 改进**（§2） | **142** | 相对 OpenAI 原文结论，给出了更好的常数或指数、更弱的假设、推广，或最优性例子。其中 63 个家族的关键一步经过独立验证（55 项，另加 2026-11-10 重跑的 8 族，见 §2.3），其余 79 个家族属于"读下来成立" |
 | **2. 挑错**（§3） | **2**（另有 1 处 DOI） | 没有发现数学错误。找到的问题是：一个引理编号写错（`320`）、一处适用范围的措辞缺口（`247`）、一个失效的 DOI（`318`） |
 | **3. 复核 OpenAI 结果**（§4） | **229** | 独立重新证明、重新计算或用 Lean 形式化了 OpenAI 的结论或其核心引理，没有声称改进。曾被当作改进的条目中，有 72 条其实原文已经隐含，这些也算在这一类 |
-| 无实质产出 | 8 | |
+| 无实质产出 | 0 | 第一轮的 8 个家族已于 2026-11-10 重跑（§2.3） |
 
 Argus 的全部底稿在 [`families/`](families/)，每一条核查记录在 [`verification.json`](verification.json)。Lean 方面：314 个家族共 384 份证书，Argus 原创的去重代码约 12 万行（见 §5）。
 
@@ -30,6 +30,7 @@ Argus 的全部底稿在 [`families/`](families/)，每一条核查记录在 [`v
 | 第一轮（探索性） | 373 个 campaign，约 32.1 亿 tokens，按供应商计量 **$1,861.55** |
 | OpenAI 论文集相关工作累计 | 约 62.7 亿 tokens，**$3,477.03**（截至 2026-11-09 07:21 UTC） |
 | 复核 | Argus 第二轮复核了 54 个家族；之后由 Claude（Anthropic）对全部 373 个家族逐条核查 |
+| 重跑（2026-11-10） | 第一轮无实质产出的 8 个家族，用新版 Argus 重跑（导读 + 三部分结论 + 专门往前推的任务）：**$121.84** |
 
 成本是按供应商 token 计量折算的美元等值，属于已知下界：有 14 次报错的调用没有 token 明细。
 
@@ -94,6 +95,21 @@ Argus 的全部底稿在 [`families/`](families/)，每一条核查记录在 [`v
 | [`363`](families/363/) | Nonuniqueness with local conservation for the hard-sphere Boltzmann equation. | Rank-seven a.e. of ordered gain history map already with three gains (OpenAI uses five); two gains have rank <=6 everywhere; extends to all m>=3 | Python: implemented recursion (nc:rank-map) with random analytic axial profiles a_i(t,z)=c0+sin(c1 t+c2 z), finite-difference Jacobians at 200 random ordered histories: rank 6 for m=2, 7 for m=3, 7 … |
 | [`374`](families/374/) | Sharp one-third stability of Brenier maps. | Stationary-site moment estimate constant C_0=162 improved to optimal 1 (finite two-intercept form), potential constant 2R instead of (1+sqrt162)R | Sympy: identity (4) \|ax-bz\|^2/h+2aPhi(x)+2bPhi(z)-(4ab/h)Phi((x+z)/2) = (a-b)^2R^2/h verified symbolically in R^3. Monte-Carlo 1D Laguerre cells (3000 random configs, N<=5): max ratio LHS/RHS of … |
 | [`378`](families/378/) | Disproof of the Exponential Time Hypothesis. | Tapered Hermite recovery with exact smaller precision P_t=p+hB(a-i,u-i)+(m_t-1)(a+1-i) instead of p+8hL/2^i+8M(a+1) | Exhaustive exact check over a<=6, all u, h in {1,2,3}, all retained t (3132 cases): v_2(E_t(0)) = -hB(a-i,u-i) and the closed form of B(n,k) both hold. Since B<=6*2^n and m_t-1<4M, P_t <= p_t follows |
+
+### 2.3 2026-11-10 重跑：第一轮无实质产出的家族
+
+用 ts-core 上的新版 Argus 和数学 pack 0.7.2 重跑。每篇论文一份导读，后接三部分核验结论（改进、错误与不足、核验通过）和命题表，在 `families/<族号>/argus-v2/guide/`。这些家族里没有发现 OpenAI 原文的错误。
+
+| 家族 | 论文 | 改进 | 核查方式 |
+| :--- | :--- | :--- | :--- |
+| [`058`](families/058/argus-v2/guide/) | Semialgebraic universal covers and bounded domains. | 引理 6.2 去掉光滑源和射影目标（用闭解析图直接证明），并用显式例子说明 properness 不可去；有界实现的半正定支撑判据 | Argus 独立审稿重做了短证明、反例和四个有理见证 |
+| [`069`](families/069/argus-v2/guide/) | Global quantum geometric Langlands at irrational level. | 统一权重上界放宽为逐源有限截断分离判据，并给秩一临界模型；SL₂ 例子说明严格 HN 阈值不能再放宽 | Argus 独立审稿手算核过 |
+| [`077`](families/077/argus-v2/guide/) | Fourier restriction for positively curved surfaces. | 两篇的采样界 Cμ⁻⁷ → Cμ⁻⁴；Gaussian 锐常数；几何校准 s ≤ q* ≤ 2+s−κ | Argus 独立审稿手算核过两处推导 |
+| [`168`](families/168/argus-v2/guide/) | Combinatorial invariance of Kazhdan–Lusztig polynomials. | 显式 A₃ 型 BMP 层（w=3412, x=1324），说明终段不能换成任意边子集；局部假设放宽到任意交换局部环 | Argus 独立审稿；精确复算脚本 |
+| [`188`](families/188/argus-v2/guide/) | The sharp terminal leave in random triangle removal. | 星平均半群的渐近尖锐常数 6；碰撞误差细化到 O(D⁻⁴⁰ + n⁻¹) | Argus 独立审稿；带负控的计算脚本 |
+| [`224`](families/224/argus-v2/guide/) | Critical and quenched near-critical universality for Poisson–Voronoi percolation. | 显式非退化下界 1−2 Re a > 0.429758（原文为定性）；变号谱隙的锐值 11/4；去掉旋转平均估计中的 1+p 损失 | Argus 独立审稿手算核过；谱计算脚本 |
+| [`255`](families/255/argus-v2/guide/) | Quasi-isometric recognition of virtually polycyclic groups. | 有界高度装填引理中未命名的多项式次数换成精确次数 Q(ker π)，上下界同阶 Θ(t^Q) | Argus 独立审稿手算核过 |
+| [`281`](families/281/argus-v2/guide/) | QAOA attains the SK optimum in the thermodynamic-first limit. | 曲率证书常数 1661507/1521000000 ≈ 0.00109 提高到 9385454319/10¹² ≈ 0.00939（约 8.6 倍）；QAOA 正温误差界收紧 | Argus 独立审稿逐项重算 22 个系数；精确算术重放 |
 
 ### 2.2 基本可信：基线已核对，论证已读，关键一步未独立验证（92 项）
 
@@ -548,7 +564,7 @@ Lean 数据不计与 OpenAI 上游 Lean 相同的行。
 | [`055`](families/055/) | Gepner symmetry and large-volume stability on threefolds. | 2 | 1 / 198 | 改进 |
 | [`056`](families/056/) | Termination of projective and Kähler fourfold minimal model programs. | 5 | — | 改进 |
 | [`057`](families/057/) | Fundamental groups of special complex varieties and root orbifolds. | 3 | 1 / 76 | 复核 |
-| [`058`](families/058/) | Semialgebraic universal covers and bounded domains. | 2 | — | 无实质产出 |
+| [`058`](families/058/) | Semialgebraic universal covers and bounded domains. | 2 | — | 改进 |
 | [`059`](families/059/) | Counterexamples to Zariski’s multiplicity conjecture. | 2 | — | 复核 |
 | [`060`](families/060/) | The Global Spherical Shell conjecture. | 1 | — | 改进 |
 | [`062`](families/062/) | Projective contact classification and the LeBrun–Salamon conjecture. | 1 | 1 / 41 | 复核 |
@@ -558,14 +574,14 @@ Lean 数据不计与 OpenAI 上游 Lean 相同的行。
 | [`066`](families/066/) | Bounded klt complements for Fano contractions. | 2 | 1 / 67 | 改进 |
 | [`067`](families/067/) | The Campana–Peternell conjecture in dimension six. | 1 | — | 复核 |
 | [`068`](families/068/) | Anticanonical nonvanishing in every dimension. | 7 | 1 / 111 | 改进 |
-| [`069`](families/069/) | Global quantum geometric Langlands at irrational level. | 1 | — | 无实质产出 |
+| [`069`](families/069/) | Global quantum geometric Langlands at irrational level. | 1 | — | 改进 |
 | [`071`](families/071/) | Koebe’s circle-domain conjecture. | 2 | 1 / 44 | 改进 |
 | [`072`](families/072/) | Brennan's conjecture and the integral-means spectrum. | 2 | 1 / 115 | 改进 |
 | [`073`](families/073/) | The Falconer distance conjecture. | 1 | 1 / 1,113 | 复核 |
 | [`074`](families/074/) | Kakeya in three and four dimensions. | 2 | 1 / 97 | 改进 |
 | [`075`](families/075/) | The $`L\log L`$ Fourier-convergence conjecture. | 1 | 1 / 670 | 复核 |
 | [`076`](families/076/) | Real ultraflat Littlewood polynomials and unbounded binary merit factors. | 3 | 1 / 120 | 改进 |
-| [`077`](families/077/) | Fourier restriction for positively curved surfaces. | 2 | — | 无实质产出 |
+| [`077`](families/077/) | Fourier restriction for positively curved surfaces. | 2 | — | 改进 |
 | [`078`](families/078/) | The three-dimensional Bochner–Riesz conjecture. | 1 | 1 / 122 | 改进 |
 | [`079`](families/079/) | Local smoothing for the Euclidean wave equation. | 2 | 1 / 97 | 改进 |
 | [`080`](families/080/) | The exact Sobolev endpoint for Schrödinger convergence. | 2 | 1 / 88 | 复核 |
@@ -654,7 +670,7 @@ Lean 数据不计与 OpenAI 上游 Lean 相同的行。
 | [`165`](families/165/) | The Harary–Hill and Zarankiewicz crossing-number formulas. | 2 | 1 / 236 | 复核 |
 | [`166`](families/166/) | The higher-dimensional Erdős distinct-distances conjecture. | 1 | 1 / 42 | 改进 |
 | [`167`](families/167/) | Planar distinct distances and unit-distance bounds. | 2 | 1 / 221 | 复核 |
-| [`168`](families/168/) | Combinatorial invariance of Kazhdan–Lusztig polynomials. | 1 | 1 / 85 | 无实质产出 |
+| [`168`](families/168/) | Combinatorial invariance of Kazhdan–Lusztig polynomials. | 1 | 1 / 85 | 改进 |
 | [`169`](families/169/) | Shareshian–Wachs elementary positivity. | 1 | 1 / 53 | 复核 |
 | [`170`](families/170/) | Sharp logarithmic exponents for off-diagonal Ramsey numbers. | 2 | 1 / 89 | 复核 |
 | [`171`](families/171/) | The hypercube Ramsey conjecture. | 1 | 1 / 83 | 复核 |
@@ -674,7 +690,7 @@ Lean 数据不计与 OpenAI 上游 Lean 相同的行。
 | [`185`](families/185/) | Counterexamples to infinite matroid intersection and packing/covering. | 1 | 2 / 547 | 复核 |
 | [`186`](families/186/) | Uniform influence and sharp thresholds for graph and hypergraph properties. | 2 | 2 / 384 | 复核 |
 | [`187`](families/187/) | Snaky in 21 Maker moves. | 1 | 1 / 1,341 | 复核 |
-| [`188`](families/188/) | The sharp terminal leave in random triangle removal. | 1 | 1 / 102 | 无实质产出 |
+| [`188`](families/188/) | The sharp terminal leave in random triangle removal. | 1 | 1 / 102 | 改进 |
 | [`189`](families/189/) | Cycle–clique Ramsey numbers. | 1 | 2 / 265 | 复核 |
 | [`190`](families/190/) | Polynomial removal fails for ordered binary matrices. | 1 | 1 / 162 | 改进 |
 | [`191`](families/191/) | A power improvement in the Heilbronn triangle lower bound. | 1 | 1 / 387 | 复核 |
@@ -710,7 +726,7 @@ Lean 数据不计与 OpenAI 上游 Lean 相同的行。
 | [`221`](families/221/) | The Mézard–Parisi formula for diluted spin glasses. | 1 | 1 / 392 | 改进 |
 | [`222`](families/222/) | Perceptron free energies and microscopic jamming exponents. | 4 | — | 复核 |
 | [`223`](families/223/) | Random-cluster interfaces: critical, disordered, thermal, and natural-time scaling. | 6 | 1 / 425 | 复核 |
-| [`224`](families/224/) | Critical and quenched near-critical universality for Poisson–Voronoi percolation. | 3 | 1 / 102 | 无实质产出 |
+| [`224`](families/224/) | Critical and quenched near-critical universality for Poisson–Voronoi percolation. | 3 | 1 / 102 | 改进 |
 | [`225`](families/225/) | Gaussian free field limits throughout the balanced six-vertex regime. | 1 | 1 / 33 | 改进 |
 | [`226`](families/226/) | The double-dimer loop ensemble converges to CLE<sub>4</sub>. | 1 | 1 / 198 | 改进 |
 | [`227`](families/227/) | Critical SK autocorrelation processes and dynamics across the temperature transition. | 8 | 1 / 106 | 改进 |
@@ -741,7 +757,7 @@ Lean 数据不计与 OpenAI 上游 Lean 相同的行。
 | [`252`](families/252/) | A torsion-free hyperbolic group that is neither residually finite nor linear over any field. | 1 | 1 / 320 | 复核 |
 | [`253`](families/253/) | An infinite finitely presented simple amenable group. | 1 | 1 / 91 | 复核 |
 | [`254`](families/254/) | Classifying spaces and geometric obstructions for Artin groups. | 3 | 1 / 234 | 复核 |
-| [`255`](families/255/) | Quasi-isometric recognition of virtually polycyclic groups. | 1 | — | 无实质产出 |
+| [`255`](families/255/) | Quasi-isometric recognition of virtually polycyclic groups. | 1 | — | 改进 |
 | [`256`](families/256/) | Nonsingular systems of equations over arbitrary groups. | 2 | 1 / 162 | 复核 |
 | [`257`](families/257/) | A hyperbolic group without a geometric CAT(0) action. | 1 | 1 / 827 | 改进 |
 | [`258`](families/258/) | Gersten’s conjecture and virtual compact specialness of one-relator groups. | 2 | 1 / 117 | 复核 |
@@ -767,7 +783,7 @@ Lean 数据不计与 OpenAI 上游 Lean 相同的行。
 | [`278`](families/278/) | Failure of Kohn–Sham ensemble representation. | 1 | — | 复核 |
 | [`279`](families/279/) | Exact quantum factoring over a fixed finite gate set. | 1 | 1 / 98 | 复核 |
 | [`280`](families/280/) | Unitary vertex operator algebras and conformal nets. | 1 | 1 / 198 | 复核 |
-| [`281`](families/281/) | QAOA attains the SK optimum in the thermodynamic-first limit. | 2 | 1 / 112 | 无实质产出 |
+| [`281`](families/281/) | QAOA attains the SK optimum in the thermodynamic-first limit. | 2 | 1 / 112 | 改进 |
 | [`282`](families/282/) | From scale symmetry to local conformal symmetry in four-dimensional QFT. | 1 | — | 复核 |
 | [`283`](families/283/) | Polynomial-time unitary synthesis from a Boolean oracle. | 1 | 1 / 521 | 复核 |
 | [`284`](families/284/) | The optimal quartic separation between randomized and quantum queries. | 1 | 1 / 300 | 复核 |

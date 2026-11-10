@@ -1,6 +1,6 @@
 # Argus drafts on the OpenAI mathematics collection
 
-One directory per active family of [`openai/math`](https://github.com/openai/math) @ `4eaee875`. Each holds the Argus first-pass drafts (`first-pass/`) and, for 54 families, the Argus second-pass review (`argus-review/`). The family `README.md` lists every improvement claim with its OpenAI baseline and verification verdict. Categories: improvement, error found, verification of OpenAI's result. The overall report is [`README.md`](README.md).
+One directory per active family of [`openai/math`](https://github.com/openai/math) @ `4eaee875`. Each holds the Argus first-pass drafts (`first-pass/`) and, for 54 families, the Argus second-pass review (`argus-review/`). The 8 families rerun on 2026-11-10 also hold `argus-v2/`: reader's guides, three-part verdicts, claims tables and the evidence the team wrote. The family `README.md` lists every improvement claim with its OpenAI baseline and verification verdict. Categories: improvement, error found, verification of OpenAI's result. The overall report is [`README.md`](README.md).
 
 Excluded from these copies:
 - third-party papers and text extracts;
@@ -68,7 +68,7 @@ Server paths, e-mail addresses and session identifiers have been removed. Lean c
 | [`055`](families/055/) | Gepner symmetry and large-volume stability on threefolds. | improvement | 1 / 0 |
 | [`056`](families/056/) | Termination of projective and Kähler fourfold minimal model programs. | improvement | 0 / 1 |
 | [`057`](families/057/) | Fundamental groups of special complex varieties and root orbifolds. | verification | 0 / 0 |
-| [`058`](families/058/) | Semialgebraic universal covers and bounded domains. | no substantive output | 0 / 0 |
+| [`058`](families/058/) | Semialgebraic universal covers and bounded domains. | improvement | 0 / 0 |
 | [`059`](families/059/) | Counterexamples to Zariski’s multiplicity conjecture. | verification | 0 / 0 |
 | [`060`](families/060/) | The Global Spherical Shell conjecture. | improvement | 0 / 1 |
 | [`062`](families/062/) | Projective contact classification and the LeBrun–Salamon conjecture. | verification | 0 / 0 |
@@ -78,14 +78,14 @@ Server paths, e-mail addresses and session identifiers have been removed. Lean c
 | [`066`](families/066/) | Bounded klt complements for Fano contractions. | improvement | 1 / 1 |
 | [`067`](families/067/) | The Campana–Peternell conjecture in dimension six. | verification | 0 / 0 |
 | [`068`](families/068/) | Anticanonical nonvanishing in every dimension. | improvement | 1 / 1 |
-| [`069`](families/069/) | Global quantum geometric Langlands at irrational level. | no substantive output | 0 / 0 |
+| [`069`](families/069/) | Global quantum geometric Langlands at irrational level. | improvement | 0 / 0 |
 | [`071`](families/071/) | Koebe’s circle-domain conjecture. | improvement | 1 / 1 |
 | [`072`](families/072/) | Brennan's conjecture and the integral-means spectrum. | improvement | 0 / 3 |
 | [`073`](families/073/) | The Falconer distance conjecture. | verification | 0 / 0 |
 | [`074`](families/074/) | Kakeya in three and four dimensions. | improvement | 0 / 1 |
 | [`075`](families/075/) | The $`L\log L`$ Fourier-convergence conjecture. | verification | 0 / 0 |
 | [`076`](families/076/) | Real ultraflat Littlewood polynomials and unbounded binary merit factors. | improvement | 0 / 1 |
-| [`077`](families/077/) | Fourier restriction for positively curved surfaces. | no substantive output | 0 / 0 |
+| [`077`](families/077/) | Fourier restriction for positively curved surfaces. | improvement | 0 / 0 |
 | [`078`](families/078/) | The three-dimensional Bochner–Riesz conjecture. | improvement | 0 / 1 |
 | [`079`](families/079/) | Local smoothing for the Euclidean wave equation. | improvement | 0 / 1 |
 | [`080`](families/080/) | The exact Sobolev endpoint for Schrödinger convergence. | verification | 0 / 0 |
@@ -174,7 +174,7 @@ Server paths, e-mail addresses and session identifiers have been removed. Lean c
 | [`165`](families/165/) | The Harary–Hill and Zarankiewicz crossing-number formulas. | verification | 0 / 0 |
 | [`166`](families/166/) | The higher-dimensional Erdős distinct-distances conjecture. | improvement | 0 / 1 |
 | [`167`](families/167/) | Planar distinct distances and unit-distance bounds. | verification | 0 / 0 |
-| [`168`](families/168/) | Combinatorial invariance of Kazhdan–Lusztig polynomials. | no substantive output | 0 / 0 |
+| [`168`](families/168/) | Combinatorial invariance of Kazhdan–Lusztig polynomials. | improvement | 0 / 0 |
 | [`169`](families/169/) | Shareshian–Wachs elementary positivity. | verification | 0 / 0 |
 | [`170`](families/170/) | Sharp logarithmic exponents for off-diagonal Ramsey numbers. | verification | 0 / 0 |
 | [`171`](families/171/) | The hypercube Ramsey conjecture. | verification | 0 / 0 |
@@ -194,7 +194,7 @@ Server paths, e-mail addresses and session identifiers have been removed. Lean c
 | [`185`](families/185/) | Counterexamples to infinite matroid intersection and packing/covering. | verification | 0 / 0 |
 | [`186`](families/186/) | Uniform influence and sharp thresholds for graph and hypergraph properties. | verification | 0 / 0 |
 | [`187`](families/187/) | Snaky in 21 Maker moves. | verification | 0 / 0 |
-| [`188`](families/188/) | The sharp terminal leave in random triangle removal. | no substantive output | 0 / 0 |
+| [`188`](families/188/) | The sharp terminal leave in random triangle removal. | improvement | 0 / 0 |
 | [`189`](families/189/) | Cycle–clique Ramsey numbers. | verification | 0 / 0 |
 | [`190`](families/190/) | Polynomial removal fails for ordered binary matrices. | improvement | 0 / 1 |
 | [`191`](families/191/) | A power improvement in the Heilbronn triangle lower bound. | verification | 0 / 0 |
@@ -230,7 +230,7 @@ Server paths, e-mail addresses and session identifiers have been removed. Lean c
 | [`221`](families/221/) | The Mézard–Parisi formula for diluted spin glasses. | improvement | 0 / 1 |
 | [`222`](families/222/) | Perceptron free energies and microscopic jamming exponents. | verification | 0 / 0 |
 | [`223`](families/223/) | Random-cluster interfaces: critical, disordered, thermal, and natural-time scaling. | verification | 0 / 0 |
-| [`224`](families/224/) | Critical and quenched near-critical universality for Poisson–Voronoi percolation. | no substantive output | 0 / 0 |
+| [`224`](families/224/) | Critical and quenched near-critical universality for Poisson–Voronoi percolation. | improvement | 0 / 0 |
 | [`225`](families/225/) | Gaussian free field limits throughout the balanced six-vertex regime. | improvement | 0 / 1 |
 | [`226`](families/226/) | The double-dimer loop ensemble converges to CLE<sub>4</sub>. | improvement | 1 / 0 |
 | [`227`](families/227/) | Critical SK autocorrelation processes and dynamics across the temperature transition. | improvement | 0 / 1 |
@@ -261,7 +261,7 @@ Server paths, e-mail addresses and session identifiers have been removed. Lean c
 | [`252`](families/252/) | A torsion-free hyperbolic group that is neither residually finite nor linear over any field. | verification | 0 / 0 |
 | [`253`](families/253/) | An infinite finitely presented simple amenable group. | verification | 0 / 0 |
 | [`254`](families/254/) | Classifying spaces and geometric obstructions for Artin groups. | verification | 0 / 0 |
-| [`255`](families/255/) | Quasi-isometric recognition of virtually polycyclic groups. | no substantive output | 0 / 0 |
+| [`255`](families/255/) | Quasi-isometric recognition of virtually polycyclic groups. | improvement | 0 / 0 |
 | [`256`](families/256/) | Nonsingular systems of equations over arbitrary groups. | verification | 0 / 0 |
 | [`257`](families/257/) | A hyperbolic group without a geometric CAT(0) action. | improvement | 0 / 1 |
 | [`258`](families/258/) | Gersten’s conjecture and virtual compact specialness of one-relator groups. | verification | 0 / 0 |
@@ -287,7 +287,7 @@ Server paths, e-mail addresses and session identifiers have been removed. Lean c
 | [`278`](families/278/) | Failure of Kohn–Sham ensemble representation. | verification | 0 / 0 |
 | [`279`](families/279/) | Exact quantum factoring over a fixed finite gate set. | verification | 0 / 0 |
 | [`280`](families/280/) | Unitary vertex operator algebras and conformal nets. | verification | 0 / 0 |
-| [`281`](families/281/) | QAOA attains the SK optimum in the thermodynamic-first limit. | no substantive output | 0 / 0 |
+| [`281`](families/281/) | QAOA attains the SK optimum in the thermodynamic-first limit. | improvement | 0 / 0 |
 | [`282`](families/282/) | From scale symmetry to local conformal symmetry in four-dimensional QFT. | verification | 0 / 0 |
 | [`283`](families/283/) | Polynomial-time unitary synthesis from a Boolean oracle. | verification | 0 / 0 |
 | [`284`](families/284/) | The optimal quartic separation between randomized and quantum queries. | verification | 0 / 0 |

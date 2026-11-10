@@ -6,10 +6,10 @@ Argus ran one campaign for each of the 373 active families of OpenAI's [`openai/
 
 | Category | Families | What it means |
 | :--- | ---: | :--- |
-| **1. Improvements** (§2) | **134** | A sharper constant or exponent, a weaker hypothesis, a generalization, or an optimality example, compared with OpenAI's stated result. In 55 families the key step was independently checked (55 items); in 79 families the improvement is plausible on reading. |
+| **1. Improvements** (§2) | **142** | A sharper constant or exponent, a weaker hypothesis, a generalization, or an optimality example, compared with OpenAI's stated result. In 63 families the key step was independently checked (55 items, plus 8 families rerun on 2026-11-10, §2.3); in 79 families the improvement is plausible on reading. |
 | **2. Errors found** (§3) | **2** (+1 DOI) | No mathematical error was found. The issues are a wrong lemma number (`320`), a scope-wording gap (`247`) and a dead DOI (`318`). |
 | **3. Verification of OpenAI's results** (§4) | **229** | OpenAI's result, or its core lemmas, independently re-proved, recomputed or formalized in Lean, with no improvement claimed. Of the claimed improvements, 72 turned out to be already implicit in the manuscripts; these are counted here. |
-| No substantive output | 8 | |
+| No substantive output | 0 | The 8 families of the first pass were rerun on 2026-11-10 (§2.3) |
 
 All Argus drafts are in [`families/`](families/), and every verification record is in [`verification.json`](verification.json). Lean: 384 certificates in 314 families, about 120,000 distinct Argus-authored lines (§5).
 
@@ -30,6 +30,7 @@ All Argus drafts are in [`families/`](families/), and every verification record 
 | First pass (exploratory) | 373 campaigns, about 3.21 B tokens, provider-metered **$1,861.55** |
 | All OpenAI-collection work to date | about 6.27 B tokens, **$3,477.03** (as of 2026-11-09 07:21 UTC) |
 | Review | Argus second-pass review of 54 families, then an item-by-item verification of all 373 families by Claude (Anthropic) |
+| Rerun (2026-11-10) | The 8 families without substantive output, with the current Argus (reader's guide, three-part verdict, a planned task to go past the paper): **$121.84** |
 
 Costs are provider token-meter dollar equivalents and a known lower bound; 14 errored calls carry no token detail.
 
@@ -94,6 +95,21 @@ Costs are provider token-meter dollar equivalents and a known lower bound; 14 er
 | [`363`](families/363/) | Nonuniqueness with local conservation for the hard-sphere Boltzmann equation. | Rank-seven a.e. of ordered gain history map already with three gains (OpenAI uses five); two gains have rank <=6 everywhere; extends to all m>=3 | Python: implemented recursion (nc:rank-map) with random analytic axial profiles a_i(t,z)=c0+sin(c1 t+c2 z), finite-difference Jacobians at 200 random ordered histories: rank 6 for m=2, 7 for m=3, 7 … |
 | [`374`](families/374/) | Sharp one-third stability of Brenier maps. | Stationary-site moment estimate constant C_0=162 improved to optimal 1 (finite two-intercept form), potential constant 2R instead of (1+sqrt162)R | Sympy: identity (4) \|ax-bz\|^2/h+2aPhi(x)+2bPhi(z)-(4ab/h)Phi((x+z)/2) = (a-b)^2R^2/h verified symbolically in R^3. Monte-Carlo 1D Laguerre cells (3000 random configs, N<=5): max ratio LHS/RHS of … |
 | [`378`](families/378/) | Disproof of the Exponential Time Hypothesis. | Tapered Hermite recovery with exact smaller precision P_t=p+hB(a-i,u-i)+(m_t-1)(a+1-i) instead of p+8hL/2^i+8M(a+1) | Exhaustive exact check over a<=6, all u, h in {1,2,3}, all retained t (3132 cases): v_2(E_t(0)) = -hB(a-i,u-i) and the closed form of B(n,k) both hold. Since B<=6*2^n and m_t-1<4M, P_t <= p_t follows |
+
+### 2.3 Rerun on 2026-11-10: families that had no substantive output
+
+Run with the current Argus on ts-core and math pack 0.7.2. Each family has a reader's guide per paper, followed by a three-part verdict (improvements, errors and shortcomings, verified) and a claims table, in `families/<id>/argus-v2/guide/`. No error in OpenAI's manuscripts was found in these families.
+
+| Family | Title | Improvement | How checked |
+| :--- | :--- | :--- | :--- |
+| [`058`](families/058/argus-v2/guide/) | Semialgebraic universal covers and bounded domains. | Lemma 6.2 without smooth source or projective target (direct proof via the closed analytic graph); properness shown necessary by an explicit example; a positive-semidefinite support criterion for bounded realization | Independent Argus reviewer redid the short proof, the counterexample and four rational witnesses |
+| [`069`](families/069/argus-v2/guide/) | Global quantum geometric Langlands at irrational level. | Uniform weight bound relaxed to a per-source finite-truncation separation criterion, with a rank-one critical model; SL_2 example shows the strict HN threshold cannot be relaxed | Independent Argus reviewer checked by hand |
+| [`077`](families/077/argus-v2/guide/) | Fourier restriction for positively curved surfaces. | Sampling bound Cμ^-7 → Cμ^-4 in both papers; sharp Gaussian constant; geometric calibration s ≤ q* ≤ 2+s−κ | Independent Argus reviewer checked both derivations by hand |
+| [`168`](families/168/argus-v2/guide/) | Combinatorial invariance of Kazhdan–Lusztig polynomials. | Explicit A_3 BMP sheaf (w=3412, x=1324) showing the terminal segment cannot be replaced by an arbitrary edge subset; local hypotheses relaxed to any commutative local ring | Independent Argus reviewer; exact recomputation script |
+| [`188`](families/188/argus-v2/guide/) | The sharp terminal leave in random triangle removal. | Sharp asymptotic constant 6 for the star-averaged semigroup; collision error refined to O(D^-40 + n^-1) | Independent Argus reviewer; scripts with negative controls |
+| [`224`](families/224/argus-v2/guide/) | Critical and quenched near-critical universality for Poisson–Voronoi percolation. | Explicit non-degeneracy bound 1−2 Re a > 0.429758 (paper: qualitative); sign-changing spectral gap determined as the sharp value 11/4; the 1+p loss in the rotation-averaged estimate removed | Independent Argus reviewer checked by hand; spectral script |
+| [`255`](families/255/argus-v2/guide/) | Quasi-isometric recognition of virtually polycyclic groups. | Unnamed polynomial degree in the bounded-height packing lemma replaced by the exact degree Q(ker π), with matching lower bound Θ(t^Q) | Independent Argus reviewer checked by hand |
+| [`281`](families/281/argus-v2/guide/) | QAOA attains the SK optimum in the thermodynamic-first limit. | Curvature-certificate constant 1661507/1521000000 ≈ 0.00109 raised to 9385454319/10^12 ≈ 0.00939 (about 8.6×); positive-temperature error bound for QAOA tightened | Independent Argus reviewer recomputed all 22 coefficients; exact-arithmetic replay |
 
 ### 2.2 Plausible: baseline checked, argument read, key step not independently checked (92 items)
 
@@ -548,7 +564,7 @@ Lean figures exclude lines identical to OpenAI's upstream Lean.
 | [`055`](families/055/) | Gepner symmetry and large-volume stability on threefolds. | 2 | 1 / 198 | improvement |
 | [`056`](families/056/) | Termination of projective and Kähler fourfold minimal model programs. | 5 | — | improvement |
 | [`057`](families/057/) | Fundamental groups of special complex varieties and root orbifolds. | 3 | 1 / 76 | verification |
-| [`058`](families/058/) | Semialgebraic universal covers and bounded domains. | 2 | — | no substantive output |
+| [`058`](families/058/) | Semialgebraic universal covers and bounded domains. | 2 | — | improvement |
 | [`059`](families/059/) | Counterexamples to Zariski’s multiplicity conjecture. | 2 | — | verification |
 | [`060`](families/060/) | The Global Spherical Shell conjecture. | 1 | — | improvement |
 | [`062`](families/062/) | Projective contact classification and the LeBrun–Salamon conjecture. | 1 | 1 / 41 | verification |
@@ -558,14 +574,14 @@ Lean figures exclude lines identical to OpenAI's upstream Lean.
 | [`066`](families/066/) | Bounded klt complements for Fano contractions. | 2 | 1 / 67 | improvement |
 | [`067`](families/067/) | The Campana–Peternell conjecture in dimension six. | 1 | — | verification |
 | [`068`](families/068/) | Anticanonical nonvanishing in every dimension. | 7 | 1 / 111 | improvement |
-| [`069`](families/069/) | Global quantum geometric Langlands at irrational level. | 1 | — | no substantive output |
+| [`069`](families/069/) | Global quantum geometric Langlands at irrational level. | 1 | — | improvement |
 | [`071`](families/071/) | Koebe’s circle-domain conjecture. | 2 | 1 / 44 | improvement |
 | [`072`](families/072/) | Brennan's conjecture and the integral-means spectrum. | 2 | 1 / 115 | improvement |
 | [`073`](families/073/) | The Falconer distance conjecture. | 1 | 1 / 1,113 | verification |
 | [`074`](families/074/) | Kakeya in three and four dimensions. | 2 | 1 / 97 | improvement |
 | [`075`](families/075/) | The $`L\log L`$ Fourier-convergence conjecture. | 1 | 1 / 670 | verification |
 | [`076`](families/076/) | Real ultraflat Littlewood polynomials and unbounded binary merit factors. | 3 | 1 / 120 | improvement |
-| [`077`](families/077/) | Fourier restriction for positively curved surfaces. | 2 | — | no substantive output |
+| [`077`](families/077/) | Fourier restriction for positively curved surfaces. | 2 | — | improvement |
 | [`078`](families/078/) | The three-dimensional Bochner–Riesz conjecture. | 1 | 1 / 122 | improvement |
 | [`079`](families/079/) | Local smoothing for the Euclidean wave equation. | 2 | 1 / 97 | improvement |
 | [`080`](families/080/) | The exact Sobolev endpoint for Schrödinger convergence. | 2 | 1 / 88 | verification |
@@ -654,7 +670,7 @@ Lean figures exclude lines identical to OpenAI's upstream Lean.
 | [`165`](families/165/) | The Harary–Hill and Zarankiewicz crossing-number formulas. | 2 | 1 / 236 | verification |
 | [`166`](families/166/) | The higher-dimensional Erdős distinct-distances conjecture. | 1 | 1 / 42 | improvement |
 | [`167`](families/167/) | Planar distinct distances and unit-distance bounds. | 2 | 1 / 221 | verification |
-| [`168`](families/168/) | Combinatorial invariance of Kazhdan–Lusztig polynomials. | 1 | 1 / 85 | no substantive output |
+| [`168`](families/168/) | Combinatorial invariance of Kazhdan–Lusztig polynomials. | 1 | 1 / 85 | improvement |
 | [`169`](families/169/) | Shareshian–Wachs elementary positivity. | 1 | 1 / 53 | verification |
 | [`170`](families/170/) | Sharp logarithmic exponents for off-diagonal Ramsey numbers. | 2 | 1 / 89 | verification |
 | [`171`](families/171/) | The hypercube Ramsey conjecture. | 1 | 1 / 83 | verification |
@@ -674,7 +690,7 @@ Lean figures exclude lines identical to OpenAI's upstream Lean.
 | [`185`](families/185/) | Counterexamples to infinite matroid intersection and packing/covering. | 1 | 2 / 547 | verification |
 | [`186`](families/186/) | Uniform influence and sharp thresholds for graph and hypergraph properties. | 2 | 2 / 384 | verification |
 | [`187`](families/187/) | Snaky in 21 Maker moves. | 1 | 1 / 1,341 | verification |
-| [`188`](families/188/) | The sharp terminal leave in random triangle removal. | 1 | 1 / 102 | no substantive output |
+| [`188`](families/188/) | The sharp terminal leave in random triangle removal. | 1 | 1 / 102 | improvement |
 | [`189`](families/189/) | Cycle–clique Ramsey numbers. | 1 | 2 / 265 | verification |
 | [`190`](families/190/) | Polynomial removal fails for ordered binary matrices. | 1 | 1 / 162 | improvement |
 | [`191`](families/191/) | A power improvement in the Heilbronn triangle lower bound. | 1 | 1 / 387 | verification |
@@ -710,7 +726,7 @@ Lean figures exclude lines identical to OpenAI's upstream Lean.
 | [`221`](families/221/) | The Mézard–Parisi formula for diluted spin glasses. | 1 | 1 / 392 | improvement |
 | [`222`](families/222/) | Perceptron free energies and microscopic jamming exponents. | 4 | — | verification |
 | [`223`](families/223/) | Random-cluster interfaces: critical, disordered, thermal, and natural-time scaling. | 6 | 1 / 425 | verification |
-| [`224`](families/224/) | Critical and quenched near-critical universality for Poisson–Voronoi percolation. | 3 | 1 / 102 | no substantive output |
+| [`224`](families/224/) | Critical and quenched near-critical universality for Poisson–Voronoi percolation. | 3 | 1 / 102 | improvement |
 | [`225`](families/225/) | Gaussian free field limits throughout the balanced six-vertex regime. | 1 | 1 / 33 | improvement |
 | [`226`](families/226/) | The double-dimer loop ensemble converges to CLE<sub>4</sub>. | 1 | 1 / 198 | improvement |
 | [`227`](families/227/) | Critical SK autocorrelation processes and dynamics across the temperature transition. | 8 | 1 / 106 | improvement |
@@ -741,7 +757,7 @@ Lean figures exclude lines identical to OpenAI's upstream Lean.
 | [`252`](families/252/) | A torsion-free hyperbolic group that is neither residually finite nor linear over any field. | 1 | 1 / 320 | verification |
 | [`253`](families/253/) | An infinite finitely presented simple amenable group. | 1 | 1 / 91 | verification |
 | [`254`](families/254/) | Classifying spaces and geometric obstructions for Artin groups. | 3 | 1 / 234 | verification |
-| [`255`](families/255/) | Quasi-isometric recognition of virtually polycyclic groups. | 1 | — | no substantive output |
+| [`255`](families/255/) | Quasi-isometric recognition of virtually polycyclic groups. | 1 | — | improvement |
 | [`256`](families/256/) | Nonsingular systems of equations over arbitrary groups. | 2 | 1 / 162 | verification |
 | [`257`](families/257/) | A hyperbolic group without a geometric CAT(0) action. | 1 | 1 / 827 | improvement |
 | [`258`](families/258/) | Gersten’s conjecture and virtual compact specialness of one-relator groups. | 2 | 1 / 117 | verification |
@@ -767,7 +783,7 @@ Lean figures exclude lines identical to OpenAI's upstream Lean.
 | [`278`](families/278/) | Failure of Kohn–Sham ensemble representation. | 1 | — | verification |
 | [`279`](families/279/) | Exact quantum factoring over a fixed finite gate set. | 1 | 1 / 98 | verification |
 | [`280`](families/280/) | Unitary vertex operator algebras and conformal nets. | 1 | 1 / 198 | verification |
-| [`281`](families/281/) | QAOA attains the SK optimum in the thermodynamic-first limit. | 2 | 1 / 112 | no substantive output |
+| [`281`](families/281/) | QAOA attains the SK optimum in the thermodynamic-first limit. | 2 | 1 / 112 | improvement |
 | [`282`](families/282/) | From scale symmetry to local conformal symmetry in four-dimensional QFT. | 1 | — | verification |
 | [`283`](families/283/) | Polynomial-time unitary synthesis from a Boolean oracle. | 1 | 1 / 521 | verification |
 | [`284`](families/284/) | The optimal quartic separation between randomized and quantum queries. | 1 | 1 / 300 | verification |

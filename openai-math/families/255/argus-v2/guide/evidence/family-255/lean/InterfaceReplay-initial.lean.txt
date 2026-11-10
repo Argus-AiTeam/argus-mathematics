@@ -1,0 +1,2063 @@
+import Mathlib
+
+/- Pinned source: lean/OAI/GroupTheory/CyclicSeries/Length.lean -/
+
+namespace OAI
+
+/-! Cyclic subnormal series and their minimum lengths in finite p-groups. -/
+
+namespace ChromaticCyclic
+
+structure CyclicStep {G : Type*} [Group G] (H K : Subgroup G) : Prop where
+  le : H ≤ K
+  normal : (H.subgroupOf K).Normal
+  cyclic : letI := normal; IsCyclic (K ⧸ H.subgroupOf K)
+
+structure CyclicSeries {G : Type*} [Group G] (H K : Subgroup G) (n : ℕ) where
+  group : ℕ → Subgroup G
+  first : group 0 = H
+  last : group n = K
+  step : ∀ i < n, CyclicStep (group i) (group (i + 1))
+
+noncomputable def cyclicLength {G : Type*} [Group G] (H : Subgroup G) : ℕ :=
+  sInf {n | Nonempty (CyclicSeries H ⊤ n)}
+
+abbrev CyclicPower (p r k : ℕ) := Fin k → Multiplicative (ZMod (p ^ r))
+
+namespace CyclicStep
+variable {G A : Type*} [Group G] [Group A] {H K : Subgroup G}
+
+theorem normal_map (s : CyclicStep H K) (f : G →* A) :
+    ((H.map f).subgroupOf (K.map f)).Normal :=
+  Subgroup.normal_subgroupOf_of_le_normalizer
+    ((Subgroup.map_mono
+      ((Subgroup.normal_subgroupOf_iff_le_normalizer s.le).mp s.normal)).trans
+      (H.le_normalizer_map f))
+
+def factorMap (s : CyclicStep H K) (f : G →* A) :
+    letI := s.normal
+    letI := s.normal_map f
+    K ⧸ H.subgroupOf K →* K.map f ⧸ (H.map f).subgroupOf (K.map f) := by
+  letI := s.normal
+  letI := s.normal_map f
+  exact QuotientGroup.map _ _ (f.subgroupMap K) (by
+    intro x hx
+    exact Subgroup.mem_map.mpr ⟨x, hx, rfl⟩)
+
+theorem factorMap_surjective (s : CyclicStep H K) (f : G →* A) :
+    letI := s.normal
+    letI := s.normal_map f
+    Function.Surjective (s.factorMap f) := by
+  let := s.normal
+  let := s.normal_map f
+  exact QuotientGroup.map_surjective_of_surjective _ _ _
+    (Quotient.mk''_surjective.comp (f.subgroupMap_surjective K)) _
+
+protected theorem map (s : CyclicStep H K) (f : G →* A) :
+    CyclicStep (H.map f) (K.map f) := by
+  refine ⟨Subgroup.map_mono s.le, s.normal_map f, ?_⟩
+  let := s.normal
+  let := s.normal_map f
+  let := s.cyclic
+  exact isCyclic_of_surjective (s.factorMap f) (s.factorMap_surjective f)
+
+theorem normal_comap (s : CyclicStep H K) (f : A →* G) :
+    ((H.comap f).subgroupOf (K.comap f)).Normal :=
+  Subgroup.normal_subgroupOf_of_le_normalizer
+    ((Subgroup.comap_mono
+      ((Subgroup.normal_subgroupOf_iff_le_normalizer s.le).mp s.normal)).trans
+      (H.le_normalizer_comap f))
+
+def factorComap (s : CyclicStep H K) (f : A →* G) :
+    letI := s.normal
+    letI := s.normal_comap f
+    K.comap f ⧸ (H.comap f).subgroupOf (K.comap f) →* K ⧸ H.subgroupOf K := by
+  letI := s.normal
+  letI := s.normal_comap f
+  let g : K.comap f →* K := (f.domRestrict (K.comap f)).codRestrict _ (fun x => x.property)
+  exact QuotientGroup.map _ _ g (by intro x hx; exact hx)
+
+theorem factorComap_injective (s : CyclicStep H K) (f : A →* G) :
+    letI := s.normal
+    letI := s.normal_comap f
+    Function.Injective (s.factorComap f) := by
+  let := s.normal
+  let := s.normal_comap f
+  apply (s.factorComap f).ker_eq_bot_iff.mp
+  apply le_antisymm _ bot_le
+  intro x hx
+  obtain ⟨x, rfl⟩ := QuotientGroup.mk'_surjective _ x
+  change (↑(⟨f x.val, x.property⟩ : K) : K ⧸ H.subgroupOf K) = 1 at hx
+  have hx' := (QuotientGroup.eq_one_iff (⟨f x.val, x.property⟩ : K)).mp hx
+  change (↑x : K.comap f ⧸ (H.comap f).subgroupOf (K.comap f)) = 1
+  exact (QuotientGroup.eq_one_iff _).mpr hx'
+
+protected theorem comap (s : CyclicStep H K) (f : A →* G) :
+    CyclicStep (H.comap f) (K.comap f) := by
+  refine ⟨Subgroup.comap_mono s.le, s.normal_comap f, ?_⟩
+  let := s.normal
+  let := s.normal_comap f
+  let := s.cyclic
+  exact isCyclic_of_injective (s.factorComap f) (s.factorComap_injective f)
+
+end CyclicStep
+
+theorem cyclic_pGroup_disjoint {G : Type*} [Group G] [Finite G] [IsCyclic G]
+    {p : ℕ} [Fact p.Prime] (hp : IsPGroup p G) {A B : Subgroup G}
+    (hd : Disjoint A B) : A = ⊥ ∨ B = ⊥ := by
+  let := IsCyclic.commGroup (α := G)
+  let f : A × B →* G :=
+    { toFun := fun x => x.1.val * x.2.val
+      map_one' := mul_one 1
+      map_mul' := by intro x y; simp only [Prod.fst_mul, Prod.snd_mul, Subgroup.coe_mul]; ac_rfl }
+  have hf : Function.Injective f := by
+    rintro ⟨a, b⟩ ⟨a', b'⟩ h
+    change a.val * b.val = a'.val * b'.val at h
+    have hab : a.val / a'.val = b'.val / b.val := (div_eq_div_iff_mul_eq_mul).mpr (by simpa [mul_comm] using h)
+    have ha : a.val / a'.val = 1 := Subgroup.disjoint_def.mp hd
+      (A.div_mem a.property a'.property) (hab ▸ B.div_mem b'.property b.property)
+    have haa : a = a' := Subtype.ext (div_eq_one.mp ha)
+    subst a'
+    have hbb : b = b' := Subtype.ext (mul_left_cancel h)
+    subst b'
+    rfl
+  have : IsCyclic (A × B) := isCyclic_of_injective f hf
+  have hc := Group.isCyclic_prod_iff.mp (inferInstance : IsCyclic (A × B)) |>.2.2
+  by_contra hn
+  have hA : A ≠ ⊥ := fun h => hn (.inl h)
+  have hB : B ≠ ⊥ := fun h => hn (.inr h)
+  have : Nontrivial A := A.nontrivial_iff_ne_bot.mpr hA
+  have : Nontrivial B := B.nontrivial_iff_ne_bot.mpr hB
+  have ha : p ∣ Nat.card A := (hp.to_subgroup A).card_eq_or_dvd.resolve_left
+    (by
+      intro h
+      obtain ⟨a, b, hab⟩ := exists_pair_ne A
+      exact hab ((Nat.card_eq_one_iff_unique.mp h).1.elim a b))
+  have hb : p ∣ Nat.card B := (hp.to_subgroup B).card_eq_or_dvd.resolve_left
+    (by
+      intro h
+      obtain ⟨a, b, hab⟩ := exists_pair_ne B
+      exact hab ((Nat.card_eq_one_iff_unique.mp h).1.elim a b))
+  exact (Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, Fact.out, ha, hb⟩) hc
+
+namespace CyclicStep
+variable {G A P : Type*} [Group G] [Group A] [Group P]
+  {H K : Subgroup G}
+
+theorem factorMap_injective_of_stable [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (s : CyclicStep H K) (f : G →* A) (i : P →* G)
+    (hs : (H.map f).comap (f.comp i) = H.comap i)
+    (hn : H.comap i ≠ K.comap i) :
+    letI := s.normal
+    letI := s.normal_map f
+    Function.Injective (s.factorMap f) := by
+  let := s.normal
+  let := s.normal_map f
+  let := s.cyclic
+  let e : K.comap i →* K ⧸ H.subgroupOf K :=
+    (QuotientGroup.mk' _).comp
+      ((i.domRestrict (K.comap i)).codRestrict K (fun x => x.property))
+  have he : e.range ≠ ⊥ := by
+    intro he
+    apply hn
+    apply le_antisymm (Subgroup.comap_mono s.le)
+    intro x hx
+    have hx1 : e ⟨x, hx⟩ = 1 := by
+      have : e ⟨x, hx⟩ ∈ e.range := ⟨⟨x, hx⟩, rfl⟩
+      simpa only [he, Subgroup.mem_bot] using this
+    exact (QuotientGroup.eq_one_iff (⟨i x, hx⟩ : K)).mp hx1
+  have hd : Disjoint e.range (s.factorMap f).ker := by
+    apply Subgroup.disjoint_def.mpr
+    rintro z ⟨x, rfl⟩ hx
+    change (↑(⟨f (i x.val), Subgroup.mem_map.mpr ⟨i x.val, x.property, rfl⟩⟩ : K.map f) :
+      K.map f ⧸ (H.map f).subgroupOf (K.map f)) = 1 at hx
+    have hx' := (QuotientGroup.eq_one_iff
+      (⟨f (i x.val), Subgroup.mem_map.mpr ⟨i x.val, x.property, rfl⟩⟩ : K.map f)).mp hx
+    have hh : i x.val ∈ H := by
+      have : x.val ∈ (H.map f).comap (f.comp i) := hx'
+      rwa [hs] at this
+    change (↑(⟨i x.val, x.property⟩ : K) : K ⧸ H.subgroupOf K) = 1
+    exact (QuotientGroup.eq_one_iff _).mpr hh
+  have hker := (cyclic_pGroup_disjoint ((hp.to_subgroup K).to_quotient _) hd).resolve_left he
+  exact (s.factorMap f).ker_eq_bot_iff.mp hker
+
+end CyclicStep
+
+namespace CyclicStep
+variable {G : Type*} [Group G]
+
+protected theorem refl (H : Subgroup G) : CyclicStep H H := by
+  refine ⟨le_rfl, ?_, ?_⟩
+  · rw [Subgroup.subgroupOf_self]; infer_instance
+  · have : Subsingleton (H ⧸ H.subgroupOf H) := by
+      simpa only [Subgroup.subgroupOf_self] using
+        (QuotientGroup.subsingleton_quotient_top : Subsingleton (H ⧸ (⊤ : Subgroup H)))
+    infer_instance
+
+protected theorem bot (K : Subgroup G) [IsCyclic K] : CyclicStep ⊥ K := by
+  refine ⟨bot_le, Subgroup.normal_subgroupOf, ?_⟩
+  exact isCyclic_of_surjective (QuotientGroup.mk' _) (QuotientGroup.mk'_surjective _)
+
+end CyclicStep
+
+namespace CyclicSeries
+variable {G A : Type*} [Group G] [Group A] {H K L : Subgroup G} {n : ℕ}
+
+def refl (H : Subgroup G) : CyclicSeries H H 0 where
+  group := fun _ => H
+  first := rfl
+  last := rfl
+  step := by omega
+
+def cons (s : CyclicStep H K) (c : CyclicSeries K L n) : CyclicSeries H L (n + 1) where
+  group := fun | 0 => H | i + 1 => c.group i
+  first := rfl
+  last := c.last
+  step := by
+    rintro (_ | i) hi
+    · simpa [c.first] using s
+    · exact c.step i (by omega)
+
+def map (c : CyclicSeries H K n) (f : G →* A) :
+    CyclicSeries (H.map f) (K.map f) n where
+  group := fun i => (c.group i).map f
+  first := congrArg (Subgroup.map f) c.first
+  last := congrArg (Subgroup.map f) c.last
+  step := fun i hi => (c.step i hi).map f
+
+def comap (c : CyclicSeries H K n) (f : A →* G) :
+    CyclicSeries (H.comap f) (K.comap f) n where
+  group := fun i => (c.group i).comap f
+  first := congrArg (Subgroup.comap f) c.first
+  last := congrArg (Subgroup.comap f) c.last
+  step := fun i hi => (c.step i hi).comap f
+
+def tail (c : CyclicSeries H K (n + 1)) : CyclicSeries (c.group 1) K n where
+  group := fun i => c.group (i + 1)
+  first := rfl
+  last := c.last
+  step := fun i hi => c.step (i + 1) (by omega)
+
+theorem le (c : CyclicSeries H K n) {i j : ℕ} (hij : i ≤ j) (hj : j ≤ n) :
+    c.group i ≤ c.group j := by
+  induction j, hij using Nat.le_induction with
+  | base => exact le_rfl
+  | succ j hij ih => exact (ih (by omega)).trans (c.step j (by omega)).le
+
+end CyclicSeries
+
+namespace CyclicStep
+variable {G : Type*} [Group G]
+
+theorem exists_larger (hnc : NormalizerCondition G) (H : Subgroup G) (hH : H < ⊤) :
+    ∃ K, H < K ∧ CyclicStep H K := by
+  let N := Subgroup.normalizer (H : Set G)
+  have hHN : H < N := hnc H hH
+  obtain ⟨x, hxN, hxH⟩ := SetLike.exists_of_lt hHN
+  let q := QuotientGroup.mk' (H.subgroupOf N)
+  let Z := Subgroup.zpowers (q ⟨x, hxN⟩)
+  let K := (Z.comap q).map N.subtype
+  have hb : ((⊥ : Subgroup (N ⧸ H.subgroupOf N)).comap q).map N.subtype = H := by
+    change (QuotientGroup.mk' (H.subgroupOf N)).ker.map N.subtype = H
+    rw [QuotientGroup.ker_mk', Subgroup.map_subgroupOf_eq_of_le hHN.le]
+  have hs : CyclicStep H K := by
+    rw [← hb]
+    exact ((CyclicStep.bot Z).comap q).map N.subtype
+  have hxK : x ∈ K := by
+    exact Subgroup.mem_map.mpr ⟨⟨x, hxN⟩, Subgroup.mem_zpowers _, rfl⟩
+  refine ⟨K, lt_of_le_of_ne hs.le ?_, hs⟩
+  intro he
+  exact hxH (he.symm ▸ hxK)
+
+end CyclicStep
+
+namespace CyclicSeries
+variable {G : Type*} [Group G] {H K : Subgroup G} {n m : ℕ}
+
+theorem pad (c : CyclicSeries H K n) (h : n ≤ m) : Nonempty (CyclicSeries H K m) := by
+  induction m, h using Nat.le_induction with
+  | base => exact ⟨c⟩
+  | succ m h ih =>
+    obtain ⟨c'⟩ := ih
+    exact ⟨cons (CyclicStep.refl H) c'⟩
+
+noncomputable def changes (c : CyclicSeries H K n) : ℕ := by
+  classical
+  exact ∑ i ∈ Finset.range n, if c.group i = c.group (i + 1) then 0 else 1
+
+noncomputable def repetitions (c : CyclicSeries H K n) : ℕ := by
+  classical
+  exact ∑ i ∈ Finset.range n, if c.group i = c.group (i + 1) then 1 else 0
+
+theorem changes_add_repetitions (c : CyclicSeries H K n) : c.changes + c.repetitions = n := by
+  classical
+  rw [changes, repetitions, ← Finset.sum_add_distrib]
+  simp only [ite_add_ite, zero_add, add_zero, ite_self, Finset.sum_const,
+    Finset.card_range, smul_eq_mul, mul_one]
+
+theorem compressed (c : CyclicSeries H K n) : Nonempty (CyclicSeries H K c.changes) := by
+  classical
+  induction n generalizing H with
+  | zero =>
+    have hHK : H = K := c.first.symm.trans c.last
+    subst K
+    simpa [changes] using (show Nonempty (CyclicSeries H H 0) from ⟨refl H⟩)
+  | succ n ih =>
+    obtain ⟨ct⟩ := ih c.tail
+    have he : c.changes = c.tail.changes + if H = c.group 1 then 0 else 1 := by
+      simp only [changes, Finset.sum_range_succ', tail, c.first, Nat.zero_add]
+      rfl
+    have hs : CyclicStep H (c.group 1) := by simpa [c.first] using c.step 0 (by omega)
+    by_cases h : H = c.group 1
+    · rw [he, ite_eq_left h, add_zero]
+      simpa only [h] using (show Nonempty (CyclicSeries (c.group 1) K c.tail.changes) from ⟨ct⟩)
+    · rw [he, ite_eq_right h]
+      exact ⟨cons hs ct⟩
+
+theorem exists_of_normalizerCondition [Finite G] (hnc : NormalizerCondition G)
+    (H : Subgroup G) : ∃ n, Nonempty (CyclicSeries H ⊤ n) := by
+  induction H using (wellFounded_gt : WellFounded ((· > ·) : Subgroup G → Subgroup G → Prop)).induction with
+  | h H ih =>
+    by_cases hh : H = ⊤
+    · subst H
+      exact ⟨0, ⟨refl ⊤⟩⟩
+    · obtain ⟨K, hHK, hs⟩ := CyclicStep.exists_larger hnc H (lt_top_iff_ne_top.mpr hh)
+      obtain ⟨n, ⟨c⟩⟩ := ih K hHK
+      exact ⟨n + 1, ⟨cons hs c⟩⟩
+
+theorem exists_of_pGroup [Finite G] {p : ℕ} [Fact p.Prime] (hp : IsPGroup p G)
+    (H : Subgroup G) : ∃ n, Nonempty (CyclicSeries H ⊤ n) := by
+  have := hp.isNilpotent
+  exact exists_of_normalizerCondition Group.normalizerCondition_of_isNilpotent H
+
+end CyclicSeries
+
+theorem cyclicLength_le {G : Type*} [Group G] {H : Subgroup G} {n : ℕ}
+    (c : CyclicSeries H ⊤ n) : cyclicLength H ≤ n := Nat.sInf_le ⟨c⟩
+
+theorem cyclicLength_le_changes {G : Type*} [Group G] {H : Subgroup G} {n : ℕ}
+    (c : CyclicSeries H ⊤ n) : cyclicLength H ≤ c.changes := by
+  obtain ⟨d⟩ := c.compressed
+  exact cyclicLength_le d
+
+theorem cyclicLength_le_iff {G : Type*} [Group G] [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (H : Subgroup G) (n : ℕ) :
+    cyclicLength H ≤ n ↔ Nonempty (CyclicSeries H ⊤ n) := by
+  constructor
+  · intro h
+    obtain ⟨c⟩ := Nat.sInf_mem (CyclicSeries.exists_of_pGroup hp H)
+    exact c.pad h
+  · rintro ⟨c⟩
+    exact cyclicLength_le c
+
+namespace CyclicStep
+variable {G A P : Type*} [Group G] [Group A] [Group P]
+    {H K : Subgroup G}
+
+theorem relIndex_dvd_of_pow (s : CyclicStep H K) {N : ℕ} (he : ∀ x : G, x ^ N = 1) :
+    H.relIndex K ∣ N := by
+  let := s.normal
+  let := s.cyclic
+  change Nat.card (K ⧸ H.subgroupOf K) ∣ N
+  rw [← IsCyclic.exponent_eq_card, Monoid.exponent_dvd_iff_forall_pow_eq_one]
+  intro x
+  obtain ⟨x, rfl⟩ := QuotientGroup.mk'_surjective _ x
+  rw [← map_pow]
+  have hx : x ^ N = 1 := Subtype.ext (he x.val)
+  rw [hx, map_one]
+
+theorem relIndex_eq_of_stable [Finite G] {p : ℕ} [Fact p.Prime] (hp : IsPGroup p G)
+    (s : CyclicStep H K) (f : G →* A) (i : P →* G)
+    (hstable : (H.map f).comap (f.comp i) = H.comap i)
+    (hne : H.comap i ≠ K.comap i) :
+    H.relIndex K = (H.map f).relIndex (K.map f) := by
+  let := s.normal
+  let := s.normal_map f
+  exact Nat.card_congr (Equiv.ofBijective (s.factorMap f)
+    ⟨s.factorMap_injective_of_stable hp f i hstable hne, s.factorMap_surjective f⟩)
+
+end CyclicStep
+
+namespace CyclicSeries
+variable {G A P : Type*} [Group G] [Group A] [Group P]
+    {H K : Subgroup G} {n : ℕ}
+
+theorem prod_relIndex (c : CyclicSeries H K n) :
+    (∏ i ∈ Finset.range n, (c.group i).relIndex (c.group (i + 1))) = H.relIndex K := by
+  classical
+  induction n generalizing H with
+  | zero =>
+    have hHK : H = K := c.first.symm.trans c.last
+    simp [hHK]
+  | succ n ih =>
+    rw [Finset.prod_range_succ']
+    have ht := ih c.tail
+    change (∏ i ∈ Finset.range n, (c.group (i + 1)).relIndex (c.group (i + 1 + 1))) =
+      (c.group 1).relIndex K at ht
+    rw [ht, c.first, Nat.zero_add, mul_comm]
+    exact Subgroup.relIndex_mul_relIndex H (c.group 1) K
+      (by simpa only [c.first, Nat.zero_add] using (c.step 0 (by omega)).le)
+      (by simpa only [c.last] using c.le (by omega : 1 ≤ n + 1) (le_refl _))
+
+theorem prod_relIndex_bot_top (c : CyclicSeries (⊥ : Subgroup G) ⊤ n) :
+    (∏ i ∈ Finset.range n, (c.group i).relIndex (c.group (i + 1))) = Nat.card G := by
+  rw [c.prod_relIndex]
+  simp [Subgroup.relIndex]
+
+theorem card_growth [Finite G] [Finite A] {p N : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (he : ∀ x : G, x ^ N = 1) (hN : 0 < N)
+    (c : CyclicSeries (⊥ : Subgroup G) ⊤ n) (f : G →* A) (hf : Function.Surjective f)
+    (i : P →* G)
+    (hstable : ∀ j ≤ n, ((c.group j).map f).comap (f.comp i) = (c.group j).comap i) :
+    Nat.card G ≤ Nat.card A * N ^ (c.comap i).repetitions := by
+  classical
+  have hstep (j : ℕ) (hj : j < n) :
+      (c.group j).relIndex (c.group (j + 1)) ≤
+        ((c.group j).map f).relIndex ((c.group (j + 1)).map f) *
+          N ^ (if (c.group j).comap i = (c.group (j + 1)).comap i then 1 else 0) := by
+    by_cases h : (c.group j).comap i = (c.group (j + 1)).comap i
+    · rw [ite_eq_left h, pow_one]
+      have hle := Nat.le_of_dvd hN ((c.step j hj).relIndex_dvd_of_pow he)
+      have hpos : 0 < ((c.group j).map f).relIndex ((c.group (j + 1)).map f) := Nat.card_pos
+      exact hle.trans (by nlinarith)
+    · rw [ite_eq_right h, pow_zero, mul_one]
+      exact le_of_eq ((c.step j hj).relIndex_eq_of_stable hp f i (hstable j (by omega)) h)
+  have hprod := Finset.prod_le_prod (fun j hj => hstep j (Finset.mem_range.mp hj))
+  rw [Finset.prod_mul_distrib, Finset.prod_pow_eq_pow_sum] at hprod
+  have hmapprod : (∏ j ∈ Finset.range n,
+      ((c.group j).map f).relIndex ((c.group (j + 1)).map f)) = Nat.card A := by
+    have ht := (c.map f).prod_relIndex
+    simpa only [map, Subgroup.map_bot, Subgroup.map_top_of_surjective f hf,
+      Subgroup.relIndex_top_right, Subgroup.index_bot] using ht
+  rw [c.prod_relIndex_bot_top, hmapprod] at hprod
+  exact hprod
+
+end CyclicSeries
+
+namespace CyclicPower
+
+instance finite (p r k : ℕ) [Fact p.Prime] : Finite (CyclicPower p r k) := by
+  have : NeZero (p ^ r) := ⟨pow_ne_zero r (Fact.out : p.Prime).ne_zero⟩
+  infer_instance
+
+theorem card (p r k : ℕ) [Fact p.Prime] : Nat.card (CyclicPower p r k) = p ^ (r * k) := by
+  rw [Nat.card_fun, Nat.card_congr Multiplicative.toAdd, Nat.card_zmod, Nat.card_fin, pow_mul]
+
+theorem pow_power (p r k : ℕ) (x : CyclicPower p r k) : x ^ (p ^ r) = 1 := by
+  funext j
+  change (x j) ^ (p ^ r) = 1
+  apply Multiplicative.toAdd.injective
+  change (p ^ r) • (x j).toAdd = 0
+  simp [nsmul_eq_mul]
+
+def reduction (p k : ℕ) {s t : ℕ} (hst : s ≤ t) :
+    CyclicPower p t k →* CyclicPower p s k :=
+  MonoidHom.pi fun j =>
+    (AddMonoidHom.toMultiplicative (ZMod.castHom (Nat.pow_dvd_pow p hst) (ZMod (p ^ s))).toAddMonoidHom).comp
+      (Pi.evalMonoidHom _ j)
+
+theorem reduction_surjective (p k : ℕ) {s t : ℕ} (hst : s ≤ t) :
+    Function.Surjective (reduction p k hst) := by
+  intro x
+  choose y hy using fun j => ZMod.castHom_surjective (Nat.pow_dvd_pow p hst) (x j).toAdd
+  refine ⟨fun j => Multiplicative.ofAdd (y j), ?_⟩
+  funext j
+  exact hy j
+
+theorem reduction_comp (p k : ℕ) {r s t : ℕ} (hrs : r ≤ s) (hst : s ≤ t) :
+    (reduction p k hrs).comp (reduction p k hst) = reduction p k (hrs.trans hst) := by
+  apply MonoidHom.ext
+  intro x
+  funext j
+  exact DFunLike.congr_fun (ZMod.castHom_comp (Nat.pow_dvd_pow p hrs) (Nat.pow_dvd_pow p hst)) (x j).toAdd
+
+end CyclicPower
+
+namespace ProductTower
+variable (P : Type*) [Group P]
+
+def reduction (p k : ℕ) {s t : ℕ} (hst : s ≤ t) :
+    P × CyclicPower p t k →* P × CyclicPower p s k :=
+  (MonoidHom.id P).prodMap (CyclicPower.reduction p k hst)
+
+theorem reduction_surjective (p k : ℕ) {s t : ℕ} (hst : s ≤ t) :
+    Function.Surjective (reduction P p k hst) := by
+  rintro ⟨x, y⟩
+  obtain ⟨z, hz⟩ := CyclicPower.reduction_surjective p k hst y
+  exact ⟨(x, z), Prod.ext rfl hz⟩
+
+theorem reduction_comp (p k : ℕ) {r s t : ℕ} (hrs : r ≤ s) (hst : s ≤ t) :
+    (reduction P p k hrs).comp (reduction P p k hst) = reduction P p k (hrs.trans hst) := by
+  ext x : 1
+  refine Prod.ext rfl ?_
+  exact DFunLike.congr_fun (CyclicPower.reduction_comp p k hrs hst) x.2
+
+theorem reduction_inl (p k : ℕ) {s t : ℕ} (hst : s ≤ t) :
+    (reduction P p k hst).comp (MonoidHom.inl P (CyclicPower p t k)) =
+      MonoidHom.inl P (CyclicPower p s k) := by
+  ext x : 1
+  change (x, CyclicPower.reduction p k hst 1) = (x, 1)
+  rw [map_one]
+
+theorem pow_power [Finite P] (p k : ℕ) {m r : ℕ} (hc : Nat.card P = p ^ m) (hmr : m ≤ r)
+    (x : P × CyclicPower p r k) : x ^ (p ^ r) = 1 := by
+  apply Prod.ext
+  · change x.1 ^ (p ^ r) = 1
+    apply orderOf_dvd_iff_pow_eq_one.mp
+    exact (orderOf_dvd_natCard x.1).trans (hc ▸ Nat.pow_dvd_pow p hmr)
+  · exact CyclicPower.pow_power p r k x.2
+
+theorem isPGroup [Finite P] (p : ℕ) [Fact p.Prime] (hP : IsPGroup p P) (r k : ℕ) :
+    IsPGroup p (P × CyclicPower p r k) := by
+  obtain ⟨m, hm⟩ := hP.exists_card_eq
+  apply IsPGroup.of_card (n := m + r * k)
+  rw [Nat.card_prod, hm, CyclicPower.card, pow_add]
+
+end ProductTower
+
+namespace CyclicSeries
+variable {G A : Type*} [Group G] [Group A] {n : ℕ}
+
+def mapSurjective (c : CyclicSeries (⊥ : Subgroup G) ⊤ n) (f : G →* A)
+    (hf : Function.Surjective f) : CyclicSeries (⊥ : Subgroup A) ⊤ n where
+  group := fun j => (c.group j).map f
+  first := by rw [c.first, Subgroup.map_bot]
+  last := by rw [c.last, Subgroup.map_top_of_surjective f hf]
+  step := fun j hj => (c.step j hj).map f
+
+def comapInjective (c : CyclicSeries (⊥ : Subgroup G) ⊤ n) (i : A →* G)
+    (hi : Function.Injective i) : CyclicSeries (⊥ : Subgroup A) ⊤ n where
+  group := fun j => (c.group j).comap i
+  first := by
+    rw [c.first]
+    exact i.ker_eq_bot_iff.mpr hi
+  last := by rw [c.last, Subgroup.comap_top]
+  step := fun j hj => (c.step j hj).comap i
+
+end CyclicSeries
+
+theorem product_series (p : ℕ) [Fact p.Prime] (P : Type*) [Group P] [Finite P]
+    (hP : IsPGroup p P) (k l : ℕ)
+    (h : ∀ r : ℕ, 0 < r →
+      cyclicLength (⊥ : Subgroup (P × CyclicPower p r k)) ≤ l) :
+    k + cyclicLength (⊥ : Subgroup P) ≤ l := by
+  classical
+  obtain ⟨m, hm⟩ := hP.exists_card_eq
+  let D := Fin (l + 1) → Subgroup P
+  let : Fintype D := Fintype.ofFinite D
+  let T := Fintype.card D
+  let r : ℕ → ℕ := fun j => (m + 1) * (k + 2) ^ j
+  have hrpos (j : ℕ) : 0 < r j := Nat.mul_pos (by omega) (pow_pos (by omega) j)
+  have hrmono : Monotone r := fun a b hab =>
+    Nat.mul_le_mul_left _ (Nat.pow_le_pow_right (by omega) hab)
+  have hmle (j : ℕ) : m ≤ r j := by
+    have h0 := hrmono (Nat.zero_le j)
+    simp only [r, pow_zero, mul_one] at h0
+    change m ≤ (m + 1) * (k + 2) ^ j
+    omega
+  have hrgrow {a b : ℕ} (hab : a < b) : k * r a < r b := by
+    calc
+      k * r a < (k + 2) * r a := Nat.mul_lt_mul_of_pos_right (by omega) (hrpos a)
+      _ = r (a + 1) := by dsimp [r]; rw [pow_succ]; ring
+      _ ≤ r b := hrmono (by omega)
+  have hrbound (j : Fin (T + 1)) : r j ≤ r T := hrmono (by omega)
+  obtain ⟨c⟩ := (cyclicLength_le_iff (ProductTower.isPGroup P p hP (r T) k) ⊥ l).mp
+    (h (r T) (hrpos T))
+  let F : Fin (T + 1) → D := fun j q =>
+    ((c.group q).map (ProductTower.reduction P p k (hrbound j))).comap
+      (MonoidHom.inl P (CyclicPower p (r j) k))
+  obtain ⟨a, b, hab, heq⟩ := Fintype.exists_ne_map_eq_of_card_lt F (by
+    simp only [Fintype.card_fin]; exact Nat.lt_succ_self T)
+  have hex : ∃ a b : Fin (T + 1), a < b ∧ F a = F b := by
+    rcases lt_or_gt_of_ne hab with hlt | hgt
+    · exact ⟨a, b, hlt, heq⟩
+    · exact ⟨b, a, hgt, heq.symm⟩
+  obtain ⟨a, b, hab, heq⟩ := hex
+  let s := r a
+  let t := r b
+  have hst : s ≤ t := hrmono (le_of_lt hab)
+  let c' := c.mapSurjective (ProductTower.reduction P p k (hrbound b))
+    (ProductTower.reduction_surjective P p k (hrbound b))
+  let f := ProductTower.reduction P p k hst
+  let i := MonoidHom.inl P (CyclicPower p t k)
+  have hi : Function.Injective i := fun x y hxy => congrArg Prod.fst hxy
+  have hstable (q : ℕ) (hq : q ≤ l) :
+      ((c'.group q).map f).comap (f.comp i) = (c'.group q).comap i := by
+    have hqeq := congrFun heq ⟨q, by omega⟩
+    dsimp [c', f, i, CyclicSeries.mapSurjective]
+    rw [ProductTower.reduction_inl, Subgroup.map_map, ProductTower.reduction_comp]
+    exact hqeq
+  have hg := c'.card_growth (ProductTower.isPGroup P p hP t k)
+    (ProductTower.pow_power P p k hm (hmle b))
+    (pow_pos (Fact.out : p.Prime).pos t) f (ProductTower.reduction_surjective P p k hst) i hstable
+  let z := (c'.comap i).repetitions
+  change Nat.card (P × CyclicPower p t k) ≤ Nat.card (P × CyclicPower p s k) * (p ^ t) ^ z at hg
+  rw [Nat.card_prod, Nat.card_prod, CyclicPower.card, CyclicPower.card] at hg
+  have hge : Nat.card P * p ^ (t * k) ≤ Nat.card P * p ^ (s * k + t * z) := by
+    calc
+      Nat.card P * p ^ (t * k) ≤ (Nat.card P * p ^ (s * k)) * (p ^ t) ^ z := hg
+      _ = Nat.card P * p ^ (s * k + t * z) := by
+        rw [pow_add, pow_mul p t z]
+        exact Nat.mul_assoc _ _ _
+  have hg' : t * k ≤ s * k + t * z :=
+    (Nat.pow_le_pow_iff_right (Fact.out : p.Prime).one_lt).mp
+      (Nat.le_of_mul_le_mul_left hge Nat.card_pos)
+  have hz : k ≤ z := by
+    by_contra hn
+    have hzk : z + 1 ≤ k := by omega
+    have hmul := Nat.mul_le_mul_left t hzk
+    have hgt : k * s < t := hrgrow hab
+    nlinarith
+  let cp := c'.comapInjective i hi
+  have hc := cyclicLength_le_changes cp
+  have hsum : cp.changes + z = l := (c'.comap i).changes_add_repetitions
+  omega
+
+
+
+namespace CyclicSeries
+variable {G : Type*} [Group G] {H K L : Subgroup G} {n m : ℕ}
+
+def append (c : CyclicSeries H K n) (d : CyclicSeries K L m) :
+    CyclicSeries H L (n + m) := by
+  induction n generalizing H with
+  | zero =>
+    have h : H = K := c.first.symm.trans c.last
+    subst H
+    simpa using d
+  | succ n ih =>
+    have s : CyclicStep H (c.group 1) := by
+      simpa only [c.first] using c.step 0 (Nat.succ_pos n)
+    simpa only [Nat.succ_add, Nat.add_succ] using cons s (ih c.tail)
+
+theorem nonempty_zero_iff : Nonempty (CyclicSeries H K 0) ↔ H = K := by
+  constructor
+  · rintro ⟨c⟩
+    exact c.first.symm.trans c.last
+  · rintro rfl
+    exact ⟨refl H⟩
+
+end CyclicSeries
+
+variable {G A : Type*} [Group G] [Group A]
+
+theorem cyclicLength_spec [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (H : Subgroup G) :
+    Nonempty (CyclicSeries H ⊤ (cyclicLength H)) :=
+  (cyclicLength_le_iff hp H _).mp le_rfl
+
+@[simp] theorem cyclicLength_top : cyclicLength (⊤ : Subgroup G) = 0 :=
+  Nat.eq_zero_of_le_zero (cyclicLength_le (CyclicSeries.refl ⊤))
+
+@[simp] theorem cyclicLength_eq_zero_iff [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (H : Subgroup G) :
+    cyclicLength H = 0 ↔ H = ⊤ := by
+  constructor
+  · intro h
+    apply CyclicSeries.nonempty_zero_iff.mp
+    simpa only [h] using cyclicLength_spec hp H
+  · rintro rfl
+    exact cyclicLength_top
+
+theorem cyclicLength_pos_iff [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (H : Subgroup G) :
+    0 < cyclicLength H ↔ H < ⊤ := by
+  rw [Nat.pos_iff_ne_zero, ne_eq, cyclicLength_eq_zero_iff hp, lt_top_iff_ne_top]
+
+theorem cyclicLength_map_le [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (H : Subgroup G) (f : G →* A)
+    (hf : Function.Surjective f) :
+    cyclicLength (H.map f) ≤ cyclicLength H := by
+  obtain ⟨c⟩ := cyclicLength_spec hp H
+  have c' := c.map f
+  rw [Subgroup.map_top_of_surjective f hf] at c'
+  exact cyclicLength_le c'
+
+theorem cyclicLength_comap_le [Finite A] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p A) (K : Subgroup A) (f : G →* A) :
+    cyclicLength (K.comap f) ≤ cyclicLength K := by
+  obtain ⟨c⟩ := cyclicLength_spec hp K
+  have c' := c.comap f
+  rw [Subgroup.comap_top] at c'
+  exact cyclicLength_le c'
+
+theorem cyclicLength_comap_surjective [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (f : G →* A) (hf : Function.Surjective f)
+    (K : Subgroup A) :
+    cyclicLength (K.comap f) = cyclicLength K := by
+  have : Finite A := Finite.of_surjective f hf
+  apply le_antisymm (cyclicLength_comap_le (hp.of_surjective f hf) K f)
+  have h := cyclicLength_map_le hp (K.comap f) f hf
+  rwa [Subgroup.map_comap_eq_self_of_surjective hf] at h
+
+theorem cyclicLength_normal_quotient [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (H : Subgroup G) [H.Normal] :
+    cyclicLength H = cyclicLength (⊥ : Subgroup (G ⧸ H)) := by
+  have h := cyclicLength_comap_surjective hp (QuotientGroup.mk' H)
+    (QuotientGroup.mk'_surjective H) ⊥
+  simpa only [MonoidHom.comap_bot, QuotientGroup.ker_mk'] using h
+
+theorem cyclicLength_map_equiv [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (e : G ≃* A) (H : Subgroup G) :
+    cyclicLength (H.map e.toMonoidHom) = cyclicLength H := by
+  have h := cyclicLength_comap_surjective hp e.toMonoidHom e.surjective
+    (H.map e.toMonoidHom)
+  rw [Subgroup.comap_map_eq_self_of_injective e.injective] at h
+  exact h.symm
+
+theorem cyclicLength_conj [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) (g : G) (H : Subgroup G) :
+    cyclicLength (H.map (MulAut.conj g).toMonoidHom) = cyclicLength H :=
+  cyclicLength_map_equiv hp (MulAut.conj g) H
+
+theorem cyclicLength_triangle [Finite G] {p : ℕ} [Fact p.Prime]
+    (hp : IsPGroup p G) {H K : Subgroup G} (hHK : H ≤ K) :
+    cyclicLength H ≤ cyclicLength (H.subgroupOf K) + cyclicLength K := by
+  obtain ⟨c⟩ := cyclicLength_spec (hp.to_subgroup K) (H.subgroupOf K)
+  obtain ⟨d⟩ := cyclicLength_spec hp K
+  have c' := c.map K.subtype
+  rw [Subgroup.map_subgroupOf_eq_of_le hHK, ← MonoidHom.range_eq_map, K.range_subtype] at c'
+  exact cyclicLength_le (c'.append d)
+
+end ChromaticCyclic
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Algebra/Polycyclic.lean -/
+
+namespace OAI
+
+/-!
+# Polycyclic and virtually polycyclic groups
+
+We use the existing concrete cyclic subnormal series, including normality and
+cyclicity of each quotient. Neither polycyclicity nor virtual polycyclicity is
+an unspecified property parameter.
+-/
+
+namespace PolycyclicRecognition
+
+open ChromaticCyclic
+
+variable (G : Type*) [Group G]
+
+/-- A polycyclic group has a finite subnormal series from the trivial subgroup
+to the whole group with cyclic factors. -/
+def IsPolycyclic : Prop :=
+  ∃ n : ℕ, Nonempty (CyclicSeries (⊥ : Subgroup G) ⊤ n)
+
+/-- A virtually polycyclic group contains a polycyclic subgroup of finite index. -/
+def IsVirtuallyPolycyclic : Prop :=
+  ∃ H : Subgroup G, H.FiniteIndex ∧ IsPolycyclic H
+
+variable {G} {H : Type*} [Group H]
+
+/-- The length-zero series proves polycyclicity of the trivial group. -/
+theorem isPolycyclic_of_subsingleton [Subsingleton G] : IsPolycyclic G := by
+  refine ⟨0, ?_⟩
+  have htop : (⊥ : Subgroup G) = ⊤ := Subsingleton.elim _ _
+  simpa only [htop] using (⟨CyclicSeries.refl (⊥ : Subgroup G)⟩ :
+    Nonempty (CyclicSeries (⊥ : Subgroup G) ⊥ 0))
+
+/-- Polycyclicity descends to a surjective image by mapping a cyclic series. -/
+theorem IsPolycyclic.of_surjective (hG : IsPolycyclic G)
+    (f : G →* H) (hf : Function.Surjective f) : IsPolycyclic H := by
+  obtain ⟨n, ⟨c⟩⟩ := hG
+  refine ⟨n, ?_⟩
+  have hc := c.map f
+  rw [Subgroup.map_bot, Subgroup.map_top_of_surjective f hf] at hc
+  exact ⟨hc⟩
+
+/-- Subgroups of polycyclic groups are polycyclic, by pulling back the cyclic series. -/
+theorem IsPolycyclic.of_injective (hG : IsPolycyclic G)
+    (f : H →* G) (hf : Function.Injective f) : IsPolycyclic H := by
+  obtain ⟨n, ⟨c⟩⟩ := hG
+  refine ⟨n, ?_⟩
+  have hc := c.comap f
+  rw [MonoidHom.comap_bot, (MonoidHom.ker_eq_bot_iff f).mpr hf,
+    Subgroup.comap_top] at hc
+  exact ⟨hc⟩
+
+/-- This formulation is invariant under group isomorphisms. -/
+theorem isPolycyclic_equiv (e : G ≃* H) : IsPolycyclic G ↔ IsPolycyclic H :=
+  ⟨fun h => h.of_surjective e.toMonoidHom e.surjective,
+    fun h => h.of_surjective e.symm.toMonoidHom e.symm.surjective⟩
+
+/-- A polycyclic group is virtually polycyclic, using the whole group. -/
+theorem IsPolycyclic.isVirtuallyPolycyclic (hG : IsPolycyclic G) :
+    IsVirtuallyPolycyclic G := by
+  refine ⟨⊤, inferInstance, ?_⟩
+  exact hG.of_injective (⊤ : Subgroup G).subtype Subtype.val_injective
+
+/-- Every finite group is virtually polycyclic, via its trivial subgroup.
+The ambient finite group itself need not be solvable. -/
+theorem isVirtuallyPolycyclic_of_finite [Finite G] : IsVirtuallyPolycyclic G :=
+  ⟨⊥, inferInstance, isPolycyclic_of_subsingleton⟩
+
+/-- A subgroup of a virtually polycyclic group is virtually polycyclic. -/
+theorem IsVirtuallyPolycyclic.of_injective (hG : IsVirtuallyPolycyclic G)
+    (f : H →* G) (hf : Function.Injective f) : IsVirtuallyPolycyclic H := by
+  obtain ⟨K, hKindex, hKpoly⟩ := hG
+  let := hKindex
+  let J : Subgroup H := K.comap f
+  let g : J →* K :=
+    { toFun x := ⟨f x, x.property⟩
+      map_one' := Subtype.ext f.map_one
+      map_mul' x y := Subtype.ext (f.map_mul x y) }
+  have hg : Function.Injective g := by
+    intro x y hxy
+    apply Subtype.ext
+    apply hf
+    exact congrArg Subtype.val hxy
+  exact ⟨J, inferInstance, hKpoly.of_injective g hg⟩
+
+end PolycyclicRecognition
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Algebra/Extensions.lean -/
+
+namespace OAI
+
+/-!
+# Cyclic factors and extensions of polycyclic groups
+
+These are elementary consequences of concrete cyclic subnormal series. They
+are used in the nilpotent branch of the recognition argument.
+-/
+
+namespace PolycyclicRecognition
+
+open ChromaticCyclic
+
+variable {G : Type*} [Group G]
+
+/-- A cyclic group has a one-step cyclic series. -/
+theorem isPolycyclic_of_isCyclic [IsCyclic G] : IsPolycyclic G := by
+  have : IsCyclic (⊤ : Subgroup G) :=
+    isCyclic_of_injective (⊤ : Subgroup G).subtype Subtype.val_injective
+  exact ⟨1, ⟨CyclicSeries.cons (CyclicStep.bot ⊤) (CyclicSeries.refl ⊤)⟩⟩
+
+/-- Polycyclic groups are closed under group extensions, by concatenating the
+series in the kernel with the lifted series in the quotient. -/
+theorem isPolycyclic_of_normal_subgroup (N : Subgroup G) [N.Normal]
+    (hN : IsPolycyclic N) (hQ : IsPolycyclic (G ⧸ N)) : IsPolycyclic G := by
+  obtain ⟨n, ⟨c⟩⟩ := hN
+  obtain ⟨m, ⟨d⟩⟩ := hQ
+  have cG := c.map N.subtype
+  rw [Subgroup.map_bot, ← MonoidHom.range_eq_map, N.range_subtype] at cG
+  have dG := d.comap (QuotientGroup.mk' N)
+  rw [MonoidHom.comap_bot, QuotientGroup.ker_mk', Subgroup.comap_top] at dG
+  exact ⟨n + m, ⟨cG.append dG⟩⟩
+
+end PolycyclicRecognition
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/Thompson/Model.lean -/
+
+namespace OAI
+
+noncomputable section
+
+open scoped ENNReal
+
+universe uG
+
+namespace ThompsonNonamenability
+
+abbrev UnitInterval := Set.Icc (0 : ℝ) 1
+
+def unitIntervalZero : UnitInterval := ⟨0, le_rfl, zero_le_one⟩
+def unitIntervalOne : UnitInterval := ⟨1, zero_le_one, le_rfl⟩
+
+structure IntervalHomeomorph where
+  toHomeomorph : UnitInterval ≃ₜ UnitInterval
+
+namespace IntervalHomeomorph
+
+instance : CoeFun IntervalHomeomorph (fun _ => UnitInterval → UnitInterval) :=
+  ⟨fun f => f.toHomeomorph⟩
+
+end IntervalHomeomorph
+
+def IsDyadic (x : ℝ) : Prop :=
+  ∃ (k : ℤ) (n : ℕ), x = (k : ℝ) / (2 : ℝ) ^ n
+
+structure DyadicPLWitness (f : IntervalHomeomorph) where
+  pieceCount : ℕ
+  positive : 0 < pieceCount
+  knots : Fin (pieceCount + 1) → UnitInterval
+  strictMono_knots : StrictMono knots
+  first : knots 0 = unitIntervalZero
+  last : knots (Fin.last pieceCount) = unitIntervalOne
+  dyadic : ∀ i, IsDyadic (knots i : ℝ)
+  cover : ∀ x : UnitInterval, ∃ i : Fin pieceCount,
+    knots i.castSucc ≤ x ∧ x ≤ knots i.succ
+  exponent : Fin pieceCount → ℤ
+  affine : ∀ (i : Fin pieceCount) (x : UnitInterval),
+    knots i.castSucc ≤ x → x ≤ knots i.succ →
+    (f x : ℝ) = (f (knots i.castSucc) : ℝ) +
+      (2 : ℝ) ^ exponent i * ((x : ℝ) - (knots i.castSucc : ℝ))
+
+def HasDyadicPLPieces (f : IntervalHomeomorph) : Prop := Nonempty (DyadicPLWitness f)
+
+def F := {f : IntervalHomeomorph // StrictMono f ∧ HasDyadicPLPieces f}
+
+abbrev BoundedReal (G : Type uG) := lp (fun _ : G => ℝ) ∞
+
+variable {G : Type uG} [Group G]
+
+def leftPull (h : G) : BoundedReal G →ₗ[ℝ] BoundedReal G where
+  toFun f := ⟨fun g => f (h * g), memℓp_infty ⟨‖f‖, by
+    rintro y ⟨g, rfl⟩
+    exact lp.norm_apply_le_norm ENNReal.top_ne_zero f (h * g)⟩⟩
+  map_add' f g := by
+    apply lp.ext
+    funext x
+    rfl
+  map_smul' r f := by
+    apply lp.ext
+    funext x
+    rfl
+
+structure InvariantMean (G : Type uG) [Group G] where
+  toLinearMap : BoundedReal G →ₗ[ℝ] ℝ
+  positive : ∀ f : BoundedReal G, (∀ g, 0 ≤ f g) → 0 ≤ toLinearMap f
+  normalized : toLinearMap 1 = 1
+  left_invariant : ∀ (h : G) (f : BoundedReal G),
+    toLinearMap (leftPull h f) = toLinearMap f
+
+end ThompsonNonamenability
+
+end
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/Thompson/InvariantMean.lean -/
+
+namespace OAI
+
+/-!
+# Positive normalized left-invariant means
+
+The domain is the actual space of all bounded real functions on the group.
+Continuity is a consequence of positivity and normalization, not an assumption.
+-/
+
+noncomputable section
+
+open scoped ENNReal
+
+universe uG
+
+namespace ThompsonNonamenability
+
+@[simp]
+theorem BoundedReal.smul_one_apply {G : Type uG} (r : ℝ) (g : G) :
+    (r • (1 : BoundedReal G)) g = r := by
+  simp [lp.coeFn_smul, lp.infty_coeFn_one]
+
+variable {G : Type uG} [Group G]
+
+@[simp]
+theorem leftPull_apply (h : G) (f : BoundedReal G) (g : G) :
+    leftPull h f g = f (h * g) := rfl
+
+@[simp]
+theorem leftPull_one (f : BoundedReal G) : leftPull (1 : G) f = f := by
+  apply lp.ext
+  funext g
+  simp
+
+/-- Pullback reverses the order of the two left multiplications. -/
+theorem leftPull_mul (h k : G) (f : BoundedReal G) :
+    leftPull (h * k) f = leftPull k (leftPull h f) := by
+  apply lp.ext
+  funext g
+  simp [mul_assoc]
+
+namespace InvariantMean
+
+instance : CoeFun (InvariantMean G) (fun _ => BoundedReal G → ℝ) :=
+  ⟨fun M => M.toLinearMap⟩
+
+@[simp]
+theorem map_zero (M : InvariantMean G) : M 0 = 0 := M.toLinearMap.map_zero
+
+@[simp]
+theorem map_add (M : InvariantMean G) (f g : BoundedReal G) :
+    M (f + g) = M f + M g := M.toLinearMap.map_add f g
+
+@[simp]
+theorem map_sub (M : InvariantMean G) (f g : BoundedReal G) :
+    M (f - g) = M f - M g := M.toLinearMap.map_sub f g
+
+@[simp]
+theorem map_smul (M : InvariantMean G) (r : ℝ) (f : BoundedReal G) :
+    M (r • f) = r * M f := by
+  simpa only [smul_eq_mul] using M.toLinearMap.map_smul r f
+
+/-- Evaluation of a constant function. -/
+@[simp]
+theorem map_const (M : InvariantMean G) (r : ℝ) :
+    M (r • (1 : BoundedReal G)) = r := by
+  rw [map_smul, M.normalized, mul_one]
+
+/-- Positivity gives monotonicity for the pointwise order. -/
+theorem mono (M : InvariantMean G) {f g : BoundedReal G}
+    (hfg : ∀ x, f x ≤ g x) : M f ≤ M g := by
+  have h := M.positive (g - f) (fun x => sub_nonneg.mpr (hfg x))
+  rw [map_sub] at h
+  exact sub_nonneg.mp h
+
+/-- A mean has norm at most one, as a consequence of its defining axioms. -/
+theorem abs_apply_le_norm (M : InvariantMean G) (f : BoundedReal G) :
+    |M f| ≤ ‖f‖ := by
+  have hbound (g : G) : -‖f‖ ≤ f g ∧ f g ≤ ‖f‖ := by
+    apply abs_le.mp
+    simpa only [Real.norm_eq_abs] using
+      lp.norm_apply_le_norm ENNReal.top_ne_zero f g
+  have hlo := M.mono (f := (-‖f‖) • (1 : BoundedReal G)) (g := f)
+    (fun g => by simpa only [BoundedReal.smul_one_apply] using (hbound g).1)
+  have hhi := M.mono (f := f) (g := ‖f‖ • (1 : BoundedReal G))
+    (fun g => by simpa only [BoundedReal.smul_one_apply] using (hbound g).2)
+  rw [map_const] at hlo hhi
+  exact abs_le.mpr ⟨hlo, hhi⟩
+
+/-- The continuous functional furnished automatically by a positive normalized mean. -/
+def toContinuousLinearMap (M : InvariantMean G) : BoundedReal G →L[ℝ] ℝ :=
+  M.toLinearMap.mkContinuous 1 (fun f => by
+    simpa only [one_mul, Real.norm_eq_abs] using M.abs_apply_le_norm f)
+
+@[simp]
+theorem toContinuousLinearMap_apply (M : InvariantMean G) (f : BoundedReal G) :
+    M.toContinuousLinearMap f = M f := rfl
+
+theorem continuous (M : InvariantMean G) : Continuous M :=
+  M.toContinuousLinearMap.continuous
+
+theorem norm_toContinuousLinearMap_le_one (M : InvariantMean G) :
+    ‖M.toContinuousLinearMap‖ ≤ 1 := by
+  apply ContinuousLinearMap.opNorm_le_bound _ zero_le_one
+  intro f
+  simpa only [toContinuousLinearMap_apply, one_mul, Real.norm_eq_abs] using
+    M.abs_apply_le_norm f
+
+/-- Normalization makes the automatic functional's operator norm exactly one. -/
+theorem norm_toContinuousLinearMap (M : InvariantMean G) :
+    ‖M.toContinuousLinearMap‖ = 1 := by
+  apply le_antisymm M.norm_toContinuousLinearMap_le_one
+  have h := M.toContinuousLinearMap.le_opNorm (1 : BoundedReal G)
+  simpa only [toContinuousLinearMap_apply, M.normalized, norm_one, mul_one] using h
+
+end InvariantMean
+
+end ThompsonNonamenability
+
+end
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Analysis/MeanSubgroup.lean -/
+
+namespace OAI
+
+/-!
+# Restricting invariant means to subgroups
+
+The finite-index height kernel in the recognition argument inherits amenability
+from the ambient group. The construction below works for an arbitrary subgroup:
+choose representatives for right cosets, construct an equivariant map to the subgroup,
+and extend each bounded function by composition with this map.
+-/
+
+noncomputable section
+
+namespace PolycyclicRecognition
+
+open ThompsonNonamenability
+open scoped ENNReal
+
+universe u
+
+variable {G : Type u} [Group G]
+
+/-- The representative selected for the right coset containing `g`. -/
+def rightCosetRepresentative (K : Subgroup G) (g : G) : G :=
+  (Quotient.mk'' g : Quotient (QuotientGroup.rightRel K)).out
+
+/-- A right-coset transversal gives an equivariant coordinate in the subgroup. -/
+def subgroupCoordinate (K : Subgroup G) (g : G) : K :=
+  ⟨g * (rightCosetRepresentative K g)⁻¹,
+    QuotientGroup.rightRel_apply.mp
+      (Quotient.exact' (Quotient.out_eq' (Quotient.mk'' g :
+        Quotient (QuotientGroup.rightRel K))))⟩
+
+/-- The subgroup coordinate intertwines the left action of the subgroup. -/
+theorem subgroupCoordinate_mul (K : Subgroup G) (k : K) (g : G) :
+    subgroupCoordinate K ((k : G) * g) = k * subgroupCoordinate K g := by
+  have hq : (Quotient.mk'' ((k : G) * g) : Quotient (QuotientGroup.rightRel K)) =
+      Quotient.mk'' g := by
+    apply Quotient.sound'
+    apply QuotientGroup.rightRel_apply.mpr
+    simpa only [mul_inv_rev, mul_assoc, mul_inv_cancel_left] using K.inv_mem k.property
+  apply Subtype.ext
+  change (k : G) * g * (rightCosetRepresentative K ((k : G) * g))⁻¹ =
+    (k : G) * (g * (rightCosetRepresentative K g)⁻¹)
+  unfold rightCosetRepresentative
+  rw [hq, mul_assoc]
+
+/-- Extend a bounded subgroup function to the whole group by the equivariant coordinate. -/
+def subgroupFunctionExtension (K : Subgroup G) : BoundedReal K →ₗ[ℝ] BoundedReal G where
+  toFun f := ⟨fun g => f (subgroupCoordinate K g), memℓp_infty ⟨‖f‖, by
+    rintro y ⟨g, rfl⟩
+    exact lp.norm_apply_le_norm ENNReal.top_ne_zero f (subgroupCoordinate K g)⟩⟩
+  map_add' f g := by
+    apply lp.ext
+    funext x
+    rfl
+  map_smul' r f := by
+    apply lp.ext
+    funext x
+    rfl
+
+@[simp]
+theorem subgroupFunctionExtension_apply (K : Subgroup G) (f : BoundedReal K) (g : G) :
+    subgroupFunctionExtension K f g = f (subgroupCoordinate K g) := rfl
+
+@[simp]
+theorem subgroupFunctionExtension_one (K : Subgroup G) :
+    subgroupFunctionExtension K 1 = 1 := by
+  apply lp.ext
+  funext g
+  rfl
+
+/-- Equivariance makes extension commute with pullback by subgroup translations. -/
+theorem subgroupFunctionExtension_leftPull (K : Subgroup G) (k : K) (f : BoundedReal K) :
+    subgroupFunctionExtension K (leftPull k f) =
+      leftPull (k : G) (subgroupFunctionExtension K f) := by
+  apply lp.ext
+  funext g
+  change f (k * subgroupCoordinate K g) = f (subgroupCoordinate K ((k : G) * g))
+  rw [subgroupCoordinate_mul]
+
+/-- Every subgroup of a group with an invariant mean has an invariant mean. -/
+def subgroupInvariantMean (M : InvariantMean G) (K : Subgroup G) : InvariantMean K where
+  toLinearMap := M.toLinearMap.comp (subgroupFunctionExtension K)
+  positive f hf := M.positive _ (fun g => hf (subgroupCoordinate K g))
+  normalized := by
+    change M.toLinearMap (subgroupFunctionExtension K 1) = 1
+    rw [subgroupFunctionExtension_one]
+    exact M.normalized
+  left_invariant k f := by
+    change M.toLinearMap (subgroupFunctionExtension K (leftPull k f)) =
+      M.toLinearMap (subgroupFunctionExtension K f)
+    rw [subgroupFunctionExtension_leftPull]
+    exact M.left_invariant (k : G) (subgroupFunctionExtension K f)
+
+end PolycyclicRecognition
+
+end
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Analysis/CoarseEquivalence.lean -/
+
+namespace OAI
+
+/-!
+# Coarse equivalences of discrete groups
+
+Finite subsets are the bounded sets in a word metric on a finitely generated
+group. Controlling all finite sets of differences is the metric-free form of
+being bornologous. For finitely generated groups, a coarse equivalence in this
+sense is a quasi-isometry. It also matches the coarse-equivalence formulation
+of Li's finiteness and duality theorems.
+-/
+
+namespace PolycyclicRecognition
+
+open scoped Pointwise
+
+variable {G H J : Type*} [Group G] [Group H] [Group J]
+
+/-- Uniform control of bounded differences, for the discrete group coarse structure. -/
+def GroupBornologous (f : G → H) : Prop :=
+  ∀ S : Set G, S.Finite → ∃ T : Set H, T.Finite ∧
+    ∀ x y, x⁻¹ * y ∈ S → (f x)⁻¹ * f y ∈ T
+
+theorem groupBornologous_hom (f : G →* H) : GroupBornologous f := by
+  intro S hS
+  refine ⟨f '' S, hS.image f, fun x y hxy => ?_⟩
+  exact ⟨x⁻¹ * y, hxy, by simp⟩
+
+theorem GroupBornologous.comp {f : G → H} {g : H → J}
+    (hg : GroupBornologous g) (hf : GroupBornologous f) :
+    GroupBornologous (g ∘ f) := by
+  intro S hS
+  obtain ⟨T, hT, hfT⟩ := hf S hS
+  obtain ⟨U, hU, hgU⟩ := hg T hT
+  exact ⟨U, hU, fun x y hxy => hgU (f x) (f y) (hfT x y hxy)⟩
+
+/-- Coarse inverse maps with uniformly bounded errors, measured by finite
+sets of group differences. -/
+structure GroupCoarseEquivalence (G H : Type*) [Group G] [Group H] where
+  toFun : G → H
+  invFun : H → G
+  bornologous_toFun : GroupBornologous toFun
+  bornologous_invFun : GroupBornologous invFun
+  left_error : (Set.range fun x => x⁻¹ * invFun (toFun x)).Finite
+  right_error : (Set.range fun y => y⁻¹ * toFun (invFun y)).Finite
+
+namespace GroupCoarseEquivalence
+
+/-- Coarse inverses force finite fibers; this is the properness condition in
+the discrete-group definition of a coarse map. -/
+theorem finite_fiber (e : GroupCoarseEquivalence G H) (y : H) :
+    (e.toFun ⁻¹' {y}).Finite := by
+  apply (e.left_error.image (fun a => e.invFun y * a⁻¹)).subset
+  intro x hx
+  have hxy : e.toFun x = y := hx
+  refine ⟨x⁻¹ * e.invFun y, ?_, ?_⟩
+  · exact ⟨x, by dsimp only; rw [hxy]⟩
+  · simp
+
+def symm (e : GroupCoarseEquivalence G H) : GroupCoarseEquivalence H G where
+  toFun := e.invFun
+  invFun := e.toFun
+  bornologous_toFun := e.bornologous_invFun
+  bornologous_invFun := e.bornologous_toFun
+  left_error := e.right_error
+  right_error := e.left_error
+
+omit [Group J] in
+private theorem composite_error (f : G → H) (g : H → G) (f' : H → J) (g' : J → H)
+    (hg : GroupBornologous g)
+    (h : (Set.range fun x => x⁻¹ * g (f x)).Finite)
+    (h' : (Set.range fun y => y⁻¹ * g' (f' y)).Finite) :
+    (Set.range fun x => x⁻¹ * g (g' (f' (f x)))).Finite := by
+  obtain ⟨T, hT, hgT⟩ := hg _ h'
+  apply (h.mul hT).subset
+  rintro _ ⟨x, rfl⟩
+  refine ⟨x⁻¹ * g (f x), ⟨x, rfl⟩,
+    (g (f x))⁻¹ * g (g' (f' (f x))), ?_, ?_⟩
+  · exact hgT (f x) (g' (f' (f x))) ⟨f x, rfl⟩
+  · simp [mul_assoc]
+
+def trans (e : GroupCoarseEquivalence G H) (e' : GroupCoarseEquivalence H J) :
+    GroupCoarseEquivalence G J where
+  toFun := e'.toFun ∘ e.toFun
+  invFun := e.invFun ∘ e'.invFun
+  bornologous_toFun := e'.bornologous_toFun.comp e.bornologous_toFun
+  bornologous_invFun := e.bornologous_invFun.comp e'.bornologous_invFun
+  left_error := composite_error e.toFun e.invFun e'.toFun e'.invFun
+    e.bornologous_invFun e.left_error e'.left_error
+  right_error := composite_error e'.invFun e'.toFun e.invFun e.toFun
+    e'.bornologous_toFun e'.right_error e.right_error
+
+end GroupCoarseEquivalence
+
+theorem finite_rightCosetRepresentatives (K : Subgroup G) [K.FiniteIndex] :
+    (Set.range (rightCosetRepresentative K)).Finite := by
+  have : Finite (Quotient (QuotientGroup.rightRel K)) :=
+    Finite.of_equiv (G ⧸ K) (QuotientGroup.quotientRightRelEquivQuotientLeftRel K).symm
+  apply (Set.finite_range (fun q : Quotient (QuotientGroup.rightRel K) => q.out)).subset
+  rintro _ ⟨g, rfl⟩
+  exact ⟨Quotient.mk'' g, rfl⟩
+
+theorem groupBornologous_subgroupCoordinate (K : Subgroup G) [K.FiniteIndex] :
+    GroupBornologous (subgroupCoordinate K) := by
+  intro S hS
+  let R := Set.range (rightCosetRepresentative K)
+  have hR : R.Finite := finite_rightCosetRepresentatives K
+  let T := R * S * R⁻¹
+  have hT : T.Finite := (hR.mul hS).mul hR.inv
+  refine ⟨K.subtype ⁻¹' T, hT.preimage (fun _ _ _ _ h => Subtype.val_injective h), ?_⟩
+  intro x y hxy
+  change ((subgroupCoordinate K x : G))⁻¹ * (subgroupCoordinate K y : G) ∈ T
+  have heq : ((subgroupCoordinate K x : G))⁻¹ * (subgroupCoordinate K y : G) =
+      rightCosetRepresentative K x * (x⁻¹ * y) * (rightCosetRepresentative K y)⁻¹ := by
+    simp [subgroupCoordinate, mul_assoc]
+  rw [heq]
+  refine ⟨_, ⟨_, ⟨x, rfl⟩, _, hxy, rfl⟩, _, ?_, rfl⟩
+  simpa only [Set.mem_inv, inv_inv] using
+    (show rightCosetRepresentative K y ∈ R from ⟨y, rfl⟩)
+
+/-- Finite-index subgroups are coarsely equivalent to their ambient groups.
+The coordinate map uses a finite right-coset transversal. -/
+noncomputable def finiteIndexCoarseEquivalence (K : Subgroup G) [K.FiniteIndex] :
+    GroupCoarseEquivalence K G where
+  toFun := K.subtype
+  invFun := subgroupCoordinate K
+  bornologous_toFun := groupBornologous_hom K.subtype
+  bornologous_invFun := groupBornologous_subgroupCoordinate K
+  left_error := by
+    let R := Set.range (rightCosetRepresentative K)
+    have hR : R.Finite := finite_rightCosetRepresentatives K
+    apply (hR.inv.preimage (fun _ _ _ _ h => Subtype.val_injective h)).subset
+    rintro _ ⟨x, rfl⟩
+    change (x : G)⁻¹ * ((x : G) * (rightCosetRepresentative K x)⁻¹) ∈ R⁻¹
+    simpa only [inv_mul_cancel_left, Set.mem_inv, inv_inv] using
+      (show rightCosetRepresentative K x ∈ R from ⟨x, rfl⟩)
+  right_error := by
+    apply (finite_rightCosetRepresentatives K).inv.subset
+    rintro _ ⟨y, rfl⟩
+    change y⁻¹ * (y * (rightCosetRepresentative K y)⁻¹) ∈ _
+    simpa only [inv_mul_cancel_left, Set.mem_inv, inv_inv] using
+      (show rightCosetRepresentative K y ∈ Set.range (rightCosetRepresentative K)
+        from ⟨y, rfl⟩)
+
+end PolycyclicRecognition
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Analysis/MetricCoarseBridge.lean -/
+
+namespace OAI
+
+/-!
+# Metric quasi-isometries and the discrete group coarse structure
+
+The finiteness and duality endgame uses finite sets of group differences.
+Here an actual metric quasi-isometry supplies that data. The metrics are
+left invariant and their bounded identity balls are finite, as for word
+metrics on finitely generated groups. No recognition theorem is assumed.
+-/
+
+noncomputable section
+
+namespace PolycyclicRecognition
+
+open Metric
+
+variable {G H : Type*} [Group G] [Group H]
+  [MetricSpace G] [MetricSpace H]
+  [IsIsometricSMul G G] [IsIsometricSMul H H]
+
+/-- Left invariance measures a group difference by the distance between its
+two endpoints. -/
+theorem dist_one_groupDifference (x y : G) : dist 1 (x⁻¹ * y) = dist x y := by
+  simpa using (dist_mul_left x⁻¹ x y)
+
+/-- An upper coarse Lipschitz inequality sends each finite set of group
+differences into a finite identity ball. -/
+theorem groupBornologous_of_metric_bound (f : G → H)
+    (hfinite : ∀ R : ℝ, (closedBall (1 : H) R).Finite)
+    {K C : ℝ} (hK : 0 ≤ K)
+    (hupper : ∀ x y, dist (f x) (f y) ≤ K * dist x y + C) :
+    GroupBornologous f := by
+  intro S hS
+  obtain ⟨R, hR⟩ := (isBounded_iff_subset_closedBall (1 : G)).mp hS.isBounded
+  refine ⟨closedBall (1 : H) (K * R + C), hfinite _, ?_⟩
+  intro x y hxy
+  have hdist : dist x y ≤ R := by
+    have h := hR hxy
+    simpa only [mem_closedBall, dist_comm (x⁻¹ * y), dist_one_groupDifference] using h
+  change dist ((f x)⁻¹ * f y) 1 ≤ _
+  rw [dist_comm, dist_one_groupDifference]
+  exact (hupper x y).trans (add_le_add (mul_le_mul_of_nonneg_left hdist hK) le_rfl)
+
+/-- Uniformly bounded metric displacement is a finite set of group errors. -/
+theorem finite_groupDifference_range_of_metric_bound (r : G → G)
+    (hfinite : ∀ R : ℝ, (closedBall (1 : G) R).Finite)
+    {E : ℝ} (herror : ∀ x, dist x (r x) ≤ E) :
+    (Set.range fun x => x⁻¹ * r x).Finite := by
+  apply (hfinite E).subset
+  rintro _ ⟨x, rfl⟩
+  simpa only [mem_closedBall, dist_comm (x⁻¹ * r x), dist_one_groupDifference]
+    using herror x
+
+/-- Coarse inverse metric maps produce the concrete equivalence used by
+Li's group-cohomological invariance theorems. -/
+def groupCoarseEquivalenceOfMetricInverse (f : G → H) (r : H → G)
+    (hfiniteG : ∀ R : ℝ, (closedBall (1 : G) R).Finite)
+    (hfiniteH : ∀ R : ℝ, (closedBall (1 : H) R).Finite)
+    {K C K' C' E E' : ℝ} (hK : 0 ≤ K) (hK' : 0 ≤ K')
+    (hf : ∀ x y, dist (f x) (f y) ≤ K * dist x y + C)
+    (hr : ∀ x y, dist (r x) (r y) ≤ K' * dist x y + C')
+    (hleft : ∀ x, dist x (r (f x)) ≤ E)
+    (hright : ∀ y, dist y (f (r y)) ≤ E') :
+    GroupCoarseEquivalence G H where
+  toFun := f
+  invFun := r
+  bornologous_toFun := groupBornologous_of_metric_bound f hfiniteH hK hf
+  bornologous_invFun := groupBornologous_of_metric_bound r hfiniteG hK' hr
+  left_error := finite_groupDifference_range_of_metric_bound (r ∘ f) hfiniteG hleft
+  right_error := finite_groupDifference_range_of_metric_bound (f ∘ r) hfiniteH hright
+
+/-- A metric quasi-isometry yields an actual discrete-group coarse
+equivalence. The inverse is chosen from coarse surjectivity, and all its
+control estimates are derived from the lower inequality. -/
+def groupCoarseEquivalenceOfQuasiIsometry (f : G → H)
+    (hfiniteG : ∀ R : ℝ, (closedBall (1 : G) R).Finite)
+    (hfiniteH : ∀ R : ℝ, (closedBall (1 : H) R).Finite)
+    {K C K' C' E : ℝ} (hK : 0 ≤ K) (hK' : 0 ≤ K')
+    (hupper : ∀ x y, dist (f x) (f y) ≤ K * dist x y + C)
+    (hlower : ∀ x y, dist x y ≤ K' * dist (f x) (f y) + C')
+    (hsurj : ∀ y, ∃ x, dist y (f x) ≤ E) : GroupCoarseEquivalence G H := by
+  choose r hr using hsurj
+  refine groupCoarseEquivalenceOfMetricInverse f r hfiniteG hfiniteH hK hK'
+    hupper (C' := K' * (E + E) + C') (E := K' * E + C') (E' := E) ?_ ?_ hr
+  · intro x y
+    have hdist : dist (f (r x)) (f (r y)) ≤ dist x y + (E + E) := by
+      calc
+        dist (f (r x)) (f (r y)) ≤
+            dist (f (r x)) x + dist x y + dist y (f (r y)) :=
+          dist_triangle4 _ _ _ _
+        _ ≤ E + dist x y + E := by
+          gcongr
+          exact (dist_comm (f (r x)) x).trans_le (hr x)
+          exact hr y
+        _ = dist x y + (E + E) := by ring
+    calc
+      dist (r x) (r y) ≤ K' * dist (f (r x)) (f (r y)) + C' := hlower _ _
+      _ ≤ K' * (dist x y + (E + E)) + C' := by gcongr
+      _ = K' * dist x y + (K' * (E + E) + C') := by ring
+  · intro x
+    exact (hlower x (r (f x))).trans
+      (add_le_add (mul_le_mul_of_nonneg_left (hr (f x)) hK') le_rfl)
+
+end PolycyclicRecognition
+
+end
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Analysis/LinearMetricChains.lean -/
+
+namespace OAI
+
+/-!
+# Linear metric chains and coarse Lipschitz bounds
+
+An explicit large-scale geodesic condition allows one to sum local bounds
+along a chain. For continuous homomorphisms out of proper metric groups,
+the local bound comes from compactness. This is the elementary metric step
+in the proper cocompact homomorphism form of the Milnor--Švarc argument.
+-/
+
+noncomputable section
+
+namespace PolycyclicRecognition
+
+open Metric Set
+
+/-- Chains joining any two points with bounded step size and a linear bound
+on the number of steps, including their vertices and endpoint identities. -/
+structure LinearMetricChains (X : Type*) [PseudoMetricSpace X] where
+  step : ℝ
+  step_pos : 0 < step
+  slope : ℝ
+  slope_nonneg : 0 ≤ slope
+  error : ℝ
+  error_nonneg : 0 ≤ error
+  chain : ∀ x y : X, ∃ (n : ℕ) (p : ℕ → X),
+    p 0 = x ∧ p n = y ∧ (n : ℝ) ≤ slope * dist x y + error ∧
+      ∀ i < n, dist (p i) (p (i + 1)) ≤ step
+
+variable {X Y : Type*} [PseudoMetricSpace X] [PseudoMetricSpace Y]
+
+/-- A uniform bound on single steps becomes an affine metric bound by
+summing along the actual chains. -/
+theorem LinearMetricChains.coarseLipschitz (C : LinearMetricChains X) (f : X → Y)
+    {D : ℝ} (hD : 0 ≤ D)
+    (hstep : ∀ x y, dist x y ≤ C.step → dist (f x) (f y) ≤ D) :
+    ∀ x y, dist (f x) (f y) ≤ (D * C.slope) * dist x y + D * C.error := by
+  intro x y
+  obtain ⟨n, p, hp0, hpn, hn, hp⟩ := C.chain x y
+  have hdist : dist (f (p 0)) (f (p n)) ≤ (n : ℝ) * D := by
+    calc
+      dist (f (p 0)) (f (p n)) ≤
+          ∑ i ∈ Finset.range n, dist (f (p i)) (f (p (i + 1))) :=
+        dist_le_range_sum_dist (f ∘ p) n
+      _ ≤ ∑ _i ∈ Finset.range n, D := by
+        exact Finset.sum_le_sum (fun i hi => hstep _ _ (hp i (Finset.mem_range.mp hi)))
+      _ = (n : ℝ) * D := by simp
+  rw [hp0, hpn] at hdist
+  calc
+    dist (f x) (f y) ≤ (n : ℝ) * D := hdist
+    _ ≤ (C.slope * dist x y + C.error) * D := mul_le_mul_of_nonneg_right hn hD
+    _ = (D * C.slope) * dist x y + D * C.error := by ring
+
+variable {G H : Type*} [Group G] [Group H] [MetricSpace G] [MetricSpace H]
+  [IsIsometricSMul G G] [IsIsometricSMul H H]
+
+/-- A continuous homomorphism out of a proper metric group has uniformly
+bounded image displacement on any bounded source step. -/
+theorem continuousHom_bounded_metric_steps [ProperSpace G]
+    (f : G →* H) (hf : Continuous f) (R : ℝ) :
+    ∃ D : ℝ, 0 ≤ D ∧ ∀ x y, dist x y ≤ R → dist (f x) (f y) ≤ D := by
+  obtain ⟨D, hD⟩ := (isCompact_closedBall (1 : G) R).bddAbove_image
+    (continuous_const.dist hf).continuousOn
+  refine ⟨max D 0, le_max_right _ _, fun x y hxy => ?_⟩
+  have hmem : x⁻¹ * y ∈ closedBall (1 : G) R := by
+    simpa only [mem_closedBall, dist_comm (x⁻¹ * y), dist_one_groupDifference] using hxy
+  have hb : dist (1 : H) (f (x⁻¹ * y)) ≤ D := hD (mem_image_of_mem _ hmem)
+  rw [map_mul, map_inv, dist_one_groupDifference] at hb
+  exact hb.trans (le_max_left _ _)
+
+/-- The homomorphism's affine bound requires only compactness and the
+explicit linear chains; no global differentiability estimate is needed. -/
+theorem continuousHom_coarseLipschitz [ProperSpace G] (C : LinearMetricChains G)
+    (f : G →* H) (hf : Continuous f) :
+    ∃ K B : ℝ, 0 ≤ K ∧ 0 ≤ B ∧
+      ∀ x y, dist (f x) (f y) ≤ K * dist x y + B := by
+  obtain ⟨D, hD, hstep⟩ := continuousHom_bounded_metric_steps f hf C.step
+  exact ⟨D * C.slope, D * C.error,
+    mul_nonneg hD C.slope_nonneg, mul_nonneg hD C.error_nonneg,
+    C.coarseLipschitz f hD hstep⟩
+
+end PolycyclicRecognition
+
+end
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Analysis/FiniteWordMetric.lean -/
+
+namespace OAI
+
+/-! # The concrete word metrics used in the metric-free main statement -/
+
+noncomputable section
+namespace PolycyclicRecognition
+
+open Set Metric
+
+theorem finite_lists_length_le (A : Type*) [Finite A] (n : ℕ) :
+    {l : List A | l.length ≤ n}.Finite := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    apply ((Set.finite_singleton ([] : List A)).union
+      ((Set.toFinite (Set.univ : Set A)).image2 List.cons ih)).subset
+    intro l hl
+    cases l with
+    | nil => exact Or.inl rfl
+    | cons a l =>
+      exact Or.inr ⟨a, Set.mem_univ _, l, by simpa using hl, rfl⟩
+
+namespace WordMetric
+
+variable {G I : Type*} [Group G] (P : Group.Generators G I)
+
+theorem dist_eq (x y : G) :
+    letI := P.normedGroup
+    dist x y = (P.wordLength (x⁻¹ * y) : ℝ) := rfl
+
+theorem leftInvariant : letI := P.normedGroup; IsIsometricSMul G G := by
+  let := P.normedGroup
+  refine ⟨fun g => Isometry.of_dist_eq (fun x y => ?_)⟩
+  simp only [smul_eq_mul, dist_eq, mul_inv_rev, mul_assoc, inv_mul_cancel_left]
+
+theorem discrete : letI := P.normedGroup; DiscreteTopology G := by
+  let := P.normedGroup
+  apply DiscreteTopology.of_forall_le_dist (show (0 : ℝ) < 1 by norm_num)
+  intro x y hxy
+  rw [dist_eq]
+  exact_mod_cast Nat.one_le_iff_ne_zero.mpr (by
+    intro hzero
+    exact hxy (inv_mul_eq_one.mp (P.wordLength_eq_zero_iff.mp hzero)))
+
+theorem finite_closedBall [Finite I] (x : G) (R : ℝ) :
+    letI := P.normedGroup
+    (closedBall x R).Finite := by
+  let := P.normedGroup
+  apply ((finite_lists_length_le (I × Bool) ⌈R⌉₊).image
+    (fun l => x * P.wordProd l)).subset
+  intro y hy
+  obtain ⟨l, hl, he⟩ := P.exists_isGeodesic (x⁻¹ * y)
+  refine ⟨l, ?_, by simp [he]⟩
+  have hlen : (l.length : ℝ) ≤ R := by
+    rw [mem_closedBall, dist_comm, dist_eq, ← he, hl.eq] at hy
+    exact hy
+  exact_mod_cast hlen.trans (Nat.le_ceil R)
+
+theorem proper [Finite I] : letI := P.normedGroup; ProperSpace G :=
+  by
+    let := P.normedGroup
+    exact ⟨fun x R => (finite_closedBall P x R).isCompact⟩
+
+/-- Prefixes of a shortest representing word form a unit-step chain whose
+length is the word distance. -/
+def chains : letI := P.normedGroup; LinearMetricChains G := by
+  let := P.normedGroup
+  let := leftInvariant P
+  refine {
+    step := 1
+    step_pos := by norm_num
+    slope := 1
+    slope_nonneg := by norm_num
+    error := 0
+    error_nonneg := by norm_num
+    chain := ?_ }
+  intro x y
+  obtain ⟨l, hl, he⟩ := P.exists_isGeodesic (x⁻¹ * y)
+  refine ⟨l.length, fun n => x * P.wordProd (l.take n), by simp, by simp [he], ?_, ?_⟩
+  · rw [one_mul, add_zero, dist_eq, ← he, hl.eq]
+  · intro i hi
+    rw [dist_mul_left, dist_eq, ← List.take_concat_get' l i hi, P.wordProd_append,
+      inv_mul_cancel_left]
+    exact_mod_cast (P.wordLength_wordProd_le [l[i]] )
+
+end WordMetric
+
+/-- A finitely generated group admits the concrete proper, discrete word
+metric and its linear chains, without an external metric-existence input. -/
+theorem exists_finite_word_metric (G : Type*) [Group G] [Group.FG G] :
+    ∃ d : MetricSpace G, letI := d
+      DiscreteTopology G ∧ IsIsometricSMul G G ∧ ProperSpace G ∧
+        Nonempty (LinearMetricChains G) := by
+  obtain ⟨n, ⟨P⟩⟩ := Group.fg_iff_nonempty_finite_generators.mp (inferInstance : Group.FG G)
+  exact ⟨P.normedGroup.toMetricSpace, WordMetric.discrete P, WordMetric.leftInvariant P,
+    WordMetric.proper P, ⟨WordMetric.chains P⟩⟩
+
+end PolycyclicRecognition
+
+end
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Analysis/ProperCocompactMetric.lean -/
+
+namespace OAI
+
+/-!
+# Metric comparison through a proper cocompact homomorphism
+
+Properness bounds preimages of target balls. A coarse section and explicit
+linear metric chains then give the lower quasi-isometry inequality. Together
+with the continuous-homomorphism upper bound this is the metric part of the
+Milnor--Švarc comparison, proved here without a recognition hypothesis.
+-/
+
+noncomputable section
+
+namespace PolycyclicRecognition
+
+open Metric Set
+
+variable {G H : Type*} [Group G] [Group H] [MetricSpace G] [MetricSpace H]
+  [IsIsometricSMul G G] [IsIsometricSMul H H]
+
+/-- A proper homomorphism has uniformly bounded preimages of bounded
+group differences. Compactness of the kernel is included in this argument. -/
+theorem properHom_bounded_preimage_steps [ProperSpace H]
+    (f : G →* H) (hproper : IsProperMap f) (R : ℝ) :
+    ∃ D : ℝ, 0 ≤ D ∧ ∀ x y, dist (f x) (f y) ≤ R → dist x y ≤ D := by
+  have hcompact := hproper.isCompact_preimage (isCompact_closedBall (1 : H) R)
+  obtain ⟨D, hD⟩ := hcompact.bddAbove_image (continuous_const.dist continuous_id).continuousOn
+  refine ⟨max D 0, le_max_right _ _, fun x y hxy => ?_⟩
+  have hmem : x⁻¹ * y ∈ f ⁻¹' closedBall (1 : H) R := by
+    change dist (f (x⁻¹ * y)) 1 ≤ R
+    rw [map_mul, map_inv, dist_comm, dist_one_groupDifference]
+    exact hxy
+  have hb : dist (1 : G) (x⁻¹ * y) ≤ D := hD (mem_image_of_mem _ hmem)
+  rw [dist_one_groupDifference] at hb
+  exact hb.trans (le_max_left _ _)
+
+omit [MetricSpace G] [IsIsometricSMul G G] in
+/-- Cocompactness, expressed as a compact cover of right image cosets,
+gives the metric coarse-surjectivity radius. -/
+theorem compact_image_cover_coarsely_surjective (f : G →* H)
+    (K : Set H) (hK : IsCompact K)
+    (hcover : ∀ h : H, ∃ (g : G) (k : H), k ∈ K ∧ f g * k = h) :
+    ∃ E : ℝ, 0 ≤ E ∧ ∀ h : H, ∃ g : G, dist h (f g) ≤ E := by
+  obtain ⟨R, hR⟩ := hK.isBounded.subset_closedBall (1 : H)
+  refine ⟨max R 0, le_max_right _ _, fun h => ?_⟩
+  obtain ⟨g, k, hk, rfl⟩ := hcover h
+  refine ⟨g, ?_⟩
+  have hkR : dist k 1 ≤ R := hR hk
+  calc
+    dist (f g * k) (f g) = dist k 1 := by simpa only [mul_one] using dist_mul_left (f g) k 1
+    _ ≤ max R 0 := hkR.trans (le_max_left _ _)
+
+/-- The lower quasi-isometry inequality is a consequence of properness,
+coarse surjectivity, and target chains. No injectivity is required. -/
+theorem properHom_coarse_lower [ProperSpace H] (C : LinearMetricChains H)
+    (f : G →* H) (hproper : IsProperMap f) {E : ℝ}
+    (hsurj : ∀ h, ∃ g, dist h (f g) ≤ E) :
+    ∃ A B : ℝ, 0 ≤ A ∧ 0 ≤ B ∧
+      ∀ x y, dist x y ≤ A * dist (f x) (f y) + B := by
+  choose r hr using hsurj
+  obtain ⟨D, hD, hpre⟩ := properHom_bounded_preimage_steps f hproper (E + C.step + E)
+  obtain ⟨L, hL, herror⟩ := properHom_bounded_preimage_steps f hproper E
+  have hstep : ∀ x y : H, dist x y ≤ C.step → dist (r x) (r y) ≤ D := by
+    intro x y hxy
+    apply hpre
+    calc
+      dist (f (r x)) (f (r y)) ≤
+          dist (f (r x)) x + dist x y + dist y (f (r y)) := dist_triangle4 _ _ _ _
+      _ ≤ E + C.step + E := by
+        exact add_le_add (add_le_add ((dist_comm (f (r x)) x).trans_le (hr x)) hxy) (hr y)
+  have hrbound := C.coarseLipschitz r hD hstep
+  have herr (x : G) : dist x (r (f x)) ≤ L := herror x (r (f x)) (hr (f x))
+  refine ⟨D * C.slope, D * C.error + (L + L),
+    mul_nonneg hD C.slope_nonneg,
+    add_nonneg (mul_nonneg hD C.error_nonneg) (add_nonneg hL hL), fun x y => ?_⟩
+  calc
+    dist x y ≤ dist x (r (f x)) + dist (r (f x)) (r (f y)) + dist (r (f y)) y :=
+      dist_triangle4 _ _ _ _
+    _ ≤ L + ((D * C.slope) * dist (f x) (f y) + D * C.error) + L := by
+      exact add_le_add (add_le_add (herr x) (hrbound (f x) (f y)))
+        ((dist_comm (r (f y)) y).trans_le (herr y))
+    _ = (D * C.slope) * dist (f x) (f y) + (D * C.error + (L + L)) := by ring
+
+/-- A continuous proper homomorphism with compact image-coset cover is a
+metric quasi-isometry when both metrics have the stated linear chains. -/
+theorem proper_cocompact_hom_quasiIsometry [ProperSpace G] [ProperSpace H]
+    (CG : LinearMetricChains G) (CH : LinearMetricChains H)
+    (f : G →* H) (hf : Continuous f) (hproper : IsProperMap f)
+    (K : Set H) (hK : IsCompact K)
+    (hcover : ∀ h : H, ∃ (g : G) (k : H), k ∈ K ∧ f g * k = h) :
+    ∃ A B A' B' E : ℝ, 0 ≤ A ∧ 0 ≤ B ∧ 0 ≤ A' ∧ 0 ≤ B' ∧ 0 ≤ E ∧
+      (∀ x y, dist (f x) (f y) ≤ A * dist x y + B) ∧
+      (∀ x y, dist x y ≤ A' * dist (f x) (f y) + B') ∧
+      (∀ h, ∃ g, dist h (f g) ≤ E) := by
+  obtain ⟨E, hE, hsurj⟩ := compact_image_cover_coarsely_surjective f K hK hcover
+  obtain ⟨A, B, hA, hB, hupper⟩ := continuousHom_coarseLipschitz CG f hf
+  obtain ⟨A', B', hA', hB', hlower⟩ := properHom_coarse_lower CH f hproper hsurj
+  exact ⟨A, B, A', B', E, hA, hB, hA', hB', hE, hupper, hlower, hsurj⟩
+
+end PolycyclicRecognition
+
+end
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Analysis/MetricQuasiEquivalence.lean -/
+
+namespace OAI
+
+/-!
+# Composing the metric comparisons in a Lie-model reduction
+
+The proper cocompact homomorphism reduction has arrows in both directions.
+We keep actual coarse inverse maps and their affine bounds, so that the
+three-arrow zigzag can be composed without assuming a recognition result.
+-/
+
+noncomputable section
+
+namespace PolycyclicRecognition
+
+/-- Actual coarse inverse maps with affine metric bounds in both directions. -/
+structure MetricQuasiEquivalence (X Y : Type*) [PseudoMetricSpace X] [PseudoMetricSpace Y] where
+  toFun : X → Y
+  invFun : Y → X
+  toFun_control : ∃ K C : ℝ, 0 ≤ K ∧ 0 ≤ C ∧
+    ∀ x y, dist (toFun x) (toFun y) ≤ K * dist x y + C
+  invFun_control : ∃ K C : ℝ, 0 ≤ K ∧ 0 ≤ C ∧
+    ∀ x y, dist (invFun x) (invFun y) ≤ K * dist x y + C
+  left_close : ∃ E : ℝ, 0 ≤ E ∧ ∀ x, dist x (invFun (toFun x)) ≤ E
+  right_close : ∃ E : ℝ, 0 ≤ E ∧ ∀ y, dist y (toFun (invFun y)) ≤ E
+
+namespace MetricQuasiEquivalence
+
+variable {X Y Z : Type*} [PseudoMetricSpace X] [PseudoMetricSpace Y] [PseudoMetricSpace Z]
+
+/-- Reverse a comparison using its specified coarse inverse. -/
+def symm (e : MetricQuasiEquivalence X Y) : MetricQuasiEquivalence Y X where
+  toFun := e.invFun
+  invFun := e.toFun
+  toFun_control := e.invFun_control
+  invFun_control := e.toFun_control
+  left_close := e.right_close
+  right_close := e.left_close
+
+/-- Compose actual comparisons, including explicit bounds for the errors
+of their composite inverse maps. -/
+def trans (e : MetricQuasiEquivalence X Y) (e' : MetricQuasiEquivalence Y Z) :
+    MetricQuasiEquivalence X Z where
+  toFun := e'.toFun ∘ e.toFun
+  invFun := e.invFun ∘ e'.invFun
+  toFun_control := by
+    obtain ⟨K, C, hK, hC, hf⟩ := e.toFun_control
+    obtain ⟨K', C', hK', hC', hf'⟩ := e'.toFun_control
+    refine ⟨K' * K, K' * C + C', mul_nonneg hK' hK,
+      add_nonneg (mul_nonneg hK' hC) hC', fun x y => ?_⟩
+    calc
+      dist (e'.toFun (e.toFun x)) (e'.toFun (e.toFun y))
+          ≤ K' * dist (e.toFun x) (e.toFun y) + C' := hf' _ _
+      _ ≤ K' * (K * dist x y + C) + C' := by gcongr; exact hf x y
+      _ = (K' * K) * dist x y + (K' * C + C') := by ring
+  invFun_control := by
+    obtain ⟨K, C, hK, hC, hf⟩ := e.invFun_control
+    obtain ⟨K', C', hK', hC', hf'⟩ := e'.invFun_control
+    refine ⟨K * K', K * C' + C, mul_nonneg hK hK',
+      add_nonneg (mul_nonneg hK hC') hC, fun x y => ?_⟩
+    calc
+      dist (e.invFun (e'.invFun x)) (e.invFun (e'.invFun y))
+          ≤ K * dist (e'.invFun x) (e'.invFun y) + C := hf _ _
+      _ ≤ K * (K' * dist x y + C') + C := by gcongr; exact hf' x y
+      _ = (K * K') * dist x y + (K * C' + C) := by ring
+  left_close := by
+    obtain ⟨E, hE, he⟩ := e.left_close
+    obtain ⟨E', hE', he'⟩ := e'.left_close
+    obtain ⟨K, C, hK, hC, hf⟩ := e.invFun_control
+    refine ⟨E + (K * E' + C), add_nonneg hE (add_nonneg (mul_nonneg hK hE') hC),
+      fun x => ?_⟩
+    calc
+      dist x (e.invFun (e'.invFun (e'.toFun (e.toFun x))))
+          ≤ dist x (e.invFun (e.toFun x)) +
+              dist (e.invFun (e.toFun x))
+                (e.invFun (e'.invFun (e'.toFun (e.toFun x)))) := dist_triangle _ _ _
+      _ ≤ E + (K * E' + C) := by
+        exact add_le_add (he x) ((hf _ _).trans
+          (add_le_add (mul_le_mul_of_nonneg_left (he' (e.toFun x)) hK) le_rfl))
+  right_close := by
+    obtain ⟨E, hE, he⟩ := e.right_close
+    obtain ⟨E', hE', he'⟩ := e'.right_close
+    obtain ⟨K, C, hK, hC, hf⟩ := e'.toFun_control
+    refine ⟨E' + (K * E + C), add_nonneg hE' (add_nonneg (mul_nonneg hK hE) hC),
+      fun y => ?_⟩
+    calc
+      dist y (e'.toFun (e.toFun (e.invFun (e'.invFun y))))
+          ≤ dist y (e'.toFun (e'.invFun y)) +
+              dist (e'.toFun (e'.invFun y))
+                (e'.toFun (e.toFun (e.invFun (e'.invFun y)))) := dist_triangle _ _ _
+      _ ≤ E' + (K * E + C) := by
+        exact add_le_add (he' y) ((hf _ _).trans
+          (add_le_add (mul_le_mul_of_nonneg_left (he (e'.invFun y)) hK) le_rfl))
+
+/-- Choose a coarse inverse from the coarse-surjectivity part of a
+quasi-isometry, and prove its affine bound using the lower inequality. -/
+def ofQuasiIsometry (f : X → Y) {K C K' C' E : ℝ}
+    (hK : 0 ≤ K) (hC : 0 ≤ C) (hK' : 0 ≤ K') (hC' : 0 ≤ C') (hE : 0 ≤ E)
+    (hupper : ∀ x y, dist (f x) (f y) ≤ K * dist x y + C)
+    (hlower : ∀ x y, dist x y ≤ K' * dist (f x) (f y) + C')
+    (hsurj : ∀ y, ∃ x, dist y (f x) ≤ E) : MetricQuasiEquivalence X Y := by
+  choose r hr using hsurj
+  refine ⟨f, r, ⟨K, C, hK, hC, hupper⟩, ?_, ?_, ⟨E, hE, hr⟩⟩
+  · refine ⟨K', K' * (E + E) + C', hK',
+      add_nonneg (mul_nonneg hK' (add_nonneg hE hE)) hC', fun x y => ?_⟩
+    have hd : dist (f (r x)) (f (r y)) ≤ dist x y + (E + E) := by
+      calc
+        dist (f (r x)) (f (r y)) ≤
+            dist (f (r x)) x + dist x y + dist y (f (r y)) := dist_triangle4 _ _ _ _
+        _ ≤ E + dist x y + E := by
+          exact add_le_add (add_le_add ((dist_comm _ _).trans_le (hr x)) le_rfl) (hr y)
+        _ = dist x y + (E + E) := by ring
+    calc
+      dist (r x) (r y) ≤ K' * dist (f (r x)) (f (r y)) + C' := hlower _ _
+      _ ≤ K' * (dist x y + (E + E)) + C' := by gcongr
+      _ = K' * dist x y + (K' * (E + E) + C') := by ring
+  · refine ⟨K' * E + C', add_nonneg (mul_nonneg hK' hE) hC', fun x => ?_⟩
+    exact (hlower x (r (f x))).trans
+      (add_le_add (mul_le_mul_of_nonneg_left (hr (f x)) hK') le_rfl)
+
+/-- Recover the usual inequalities from actual coarse inverse maps. -/
+theorem quasiIsometry_toFun (e : MetricQuasiEquivalence X Y) :
+    ∃ K C K' C' E : ℝ, 0 ≤ K ∧ 0 ≤ C ∧ 0 ≤ K' ∧ 0 ≤ C' ∧ 0 ≤ E ∧
+      (∀ x y, dist (e.toFun x) (e.toFun y) ≤ K * dist x y + C) ∧
+      (∀ x y, dist x y ≤ K' * dist (e.toFun x) (e.toFun y) + C') ∧
+      (∀ y, ∃ x, dist y (e.toFun x) ≤ E) := by
+  obtain ⟨K, C, hK, hC, hf⟩ := e.toFun_control
+  obtain ⟨K', C', hK', hC', hr⟩ := e.invFun_control
+  obtain ⟨L, hL, hl⟩ := e.left_close
+  obtain ⟨E, hE, he⟩ := e.right_close
+  refine ⟨K, C, K', C' + (L + L), E, hK, hC, hK',
+    add_nonneg hC' (add_nonneg hL hL), hE, hf, ?_, fun y => ⟨e.invFun y, he y⟩⟩
+  intro x y
+  calc
+    dist x y ≤ dist x (e.invFun (e.toFun x)) +
+        dist (e.invFun (e.toFun x)) (e.invFun (e.toFun y)) +
+          dist (e.invFun (e.toFun y)) y := dist_triangle4 _ _ _ _
+    _ ≤ L + (K' * dist (e.toFun x) (e.toFun y) + C') + L := by
+      exact add_le_add (add_le_add (hl x) (hr _ _)) ((dist_comm _ _).trans_le (hl y))
+    _ = K' * dist (e.toFun x) (e.toFun y) + (C' + (L + L)) := by ring
+
+end MetricQuasiEquivalence
+
+/-- Coarse inverse maps for a proper cocompact homomorphism, suitable for
+composition along the model zigzag. -/
+theorem nonempty_metricQuasiEquivalence_of_proper_cocompact_hom
+    {G H : Type*} [Group G] [Group H] [MetricSpace G] [MetricSpace H]
+    [IsIsometricSMul G G] [IsIsometricSMul H H] [ProperSpace G] [ProperSpace H]
+    (CG : LinearMetricChains G) (CH : LinearMetricChains H)
+    (f : G →* H) (hf : Continuous f) (hproper : IsProperMap f)
+    (K : Set H) (hK : IsCompact K)
+    (hcover : ∀ h : H, ∃ (g : G) (k : H), k ∈ K ∧ f g * k = h) :
+    Nonempty (MetricQuasiEquivalence G H) := by
+  obtain ⟨A, B, A', B', E, hA, hB, hA', hB', hE, hup, hlo, hsurj⟩ :=
+    proper_cocompact_hom_quasiIsometry CG CH f hf hproper K hK hcover
+  exact ⟨MetricQuasiEquivalence.ofQuasiIsometry f hA hB hA' hB' hE hup hlo hsurj⟩
+
+end PolycyclicRecognition
+
+end
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/Analysis/CoarseEquivalenceMetric.lean -/
+
+namespace OAI
+
+/-! # Passing from finite-difference control to metric coarse inverses -/
+
+noncomputable section
+namespace PolycyclicRecognition
+
+open Metric Set
+
+variable {G H : Type*} [Group G] [Group H] [MetricSpace G] [MetricSpace H]
+  [IsIsometricSMul G G] [IsIsometricSMul H H]
+
+theorem GroupBornologous.bounded_metric_steps {f : G → H}
+    (hf : GroupBornologous f)
+    (hfinite : ∀ R : ℝ, (closedBall (1 : G) R).Finite) (R : ℝ) :
+    ∃ D : ℝ, 0 ≤ D ∧ ∀ x y, dist x y ≤ R → dist (f x) (f y) ≤ D := by
+  obtain ⟨T, hT, hmap⟩ := hf _ (hfinite R)
+  obtain ⟨D, hD⟩ := hT.isBounded.subset_closedBall (1 : H)
+  refine ⟨max D 0, le_max_right _ _, fun x y hxy => ?_⟩
+  have hx : x⁻¹ * y ∈ closedBall (1 : G) R := by
+    simpa only [mem_closedBall, dist_comm (x⁻¹ * y), dist_one_groupDifference] using hxy
+  have hd := hD (hmap x y hx)
+  rw [mem_closedBall, dist_comm, dist_one_groupDifference] at hd
+  exact hd.trans (le_max_left _ _)
+
+theorem GroupBornologous.coarseLipschitz {f : G → H}
+    (hf : GroupBornologous f) (C : LinearMetricChains G)
+    (hfinite : ∀ R : ℝ, (closedBall (1 : G) R).Finite) :
+    ∃ K B : ℝ, 0 ≤ K ∧ 0 ≤ B ∧
+      ∀ x y, dist (f x) (f y) ≤ K * dist x y + B := by
+  obtain ⟨D, hD, hstep⟩ := hf.bounded_metric_steps hfinite C.step
+  exact ⟨D * C.slope, D * C.error, mul_nonneg hD C.slope_nonneg,
+    mul_nonneg hD C.error_nonneg, C.coarseLipschitz f hD hstep⟩
+
+theorem finite_groupDifference_bounded_error {r : G → G}
+    (hr : (range fun x => x⁻¹ * r x).Finite) :
+    ∃ E : ℝ, 0 ≤ E ∧ ∀ x, dist x (r x) ≤ E := by
+  obtain ⟨E, hE⟩ := hr.isBounded.subset_closedBall (1 : G)
+  refine ⟨max E 0, le_max_right _ _, fun x => ?_⟩
+  have hx := hE (mem_range_self x)
+  rw [mem_closedBall, dist_comm, dist_one_groupDifference] at hx
+  exact hx.trans (le_max_left _ _)
+
+/-- On metrics with linear chains and finite balls, an actual discrete
+coarse equivalence is a metric quasi-equivalence. -/
+def GroupCoarseEquivalence.metric (e : GroupCoarseEquivalence G H)
+    (CG : LinearMetricChains G) (CH : LinearMetricChains H)
+    (hG : ∀ R : ℝ, (closedBall (1 : G) R).Finite)
+    (hH : ∀ R : ℝ, (closedBall (1 : H) R).Finite) : MetricQuasiEquivalence G H where
+  toFun := e.toFun
+  invFun := e.invFun
+  toFun_control := e.bornologous_toFun.coarseLipschitz CG hG
+  invFun_control := e.bornologous_invFun.coarseLipschitz CH hH
+  left_close := finite_groupDifference_bounded_error e.left_error
+  right_close := finite_groupDifference_bounded_error e.right_error
+
+/-- An isomorphism is also a discrete coarse equivalence, with exact inverses. -/
+def MulEquiv.groupCoarseEquivalence (e : G ≃* H) : GroupCoarseEquivalence G H where
+  toFun := e
+  invFun := e.symm
+  bornologous_toFun := groupBornologous_hom e.toMonoidHom
+  bornologous_invFun := groupBornologous_hom e.symm.toMonoidHom
+  left_error := by simp
+  right_error := by simp
+
+end PolycyclicRecognition
+
+end
+
+end OAI
+
+/- Pinned source: lean/OAI/GroupTheory/PolycyclicRecognition/CoarseFiniteGeneration.lean -/
+
+namespace OAI
+
+/-! # Finite generation is preserved by discrete-group coarse equivalence. -/
+
+namespace PolycyclicRecognition
+
+variable {G H : Type*} [Group G] [Group H]
+
+/-- Coarse connectedness, expressed by finite generation, transfers through the
+finite-difference control and finite error sets of a coarse equivalence. -/
+theorem GroupCoarseEquivalence.finitelyGenerated (e : GroupCoarseEquivalence G H)
+    [Group.FG G] : Group.FG H := by
+  classical
+  obtain ⟨S, hS, hSfinite⟩ := Group.fg_iff.mp (inferInstance : Group.FG G)
+  obtain ⟨T, hT, hcontrol⟩ := e.bornologous_toFun S hSfinite
+  let E := Set.range fun y => y⁻¹ * e.toFun (e.invFun y)
+  let U := T ∪ E ∪ {e.toFun 1}
+  have hU : U.Finite := (hT.union e.right_error).union (Set.finite_singleton _)
+  let K := Subgroup.closure U
+  have hTmem {t : H} (ht : t ∈ T) : t ∈ K :=
+    Subgroup.subset_closure (Or.inl (Or.inl ht))
+  have hsteps : ∀ a : G, ∀ x : G, (e.toFun x)⁻¹ * e.toFun (x * a) ∈ K := by
+    intro a
+    have ha : a ∈ Subgroup.closure S := hS ▸ Subgroup.mem_top a
+    induction ha using Subgroup.closure_induction with
+    | mem a ha =>
+      intro x
+      exact hTmem (hcontrol x (x * a) (by simpa using ha))
+    | one =>
+      intro x
+      simp
+    | mul a b _ _ ia ib =>
+      intro x
+      have hm := K.mul_mem (ia x) (ib (x * a))
+      simpa only [mul_assoc, mul_inv_cancel_left] using hm
+    | inv a _ ia =>
+      intro x
+      have hi := K.inv_mem (ia (x * a⁻¹))
+      simpa only [mul_assoc, inv_mul_cancel_left, mul_inv_cancel_right,
+        mul_inv_rev, inv_inv, inv_mul_cancel, mul_one] using hi
+  apply Group.fg_iff.mpr
+  refine ⟨U, top_unique ?_, hU⟩
+  intro y _
+  have hbase : e.toFun 1 ∈ K := Subgroup.subset_closure (Or.inr (Set.mem_singleton _))
+  have himage : e.toFun (e.invFun y) ∈ K := by
+    simpa using K.mul_mem hbase (hsteps (e.invFun y) 1)
+  have herr : y⁻¹ * e.toFun (e.invFun y) ∈ K :=
+    Subgroup.subset_closure (Or.inl (Or.inr ⟨y, rfl⟩))
+  simpa only [mul_inv_rev, inv_inv, mul_inv_cancel_left] using
+    K.mul_mem himage (K.inv_mem herr)
+
+end PolycyclicRecognition
+
+end OAI
+
+/- Task-local witnesses, not author theorems. -/
+
+namespace Family255InterfaceWitnesses
+
+open OAI.PolycyclicRecognition
+
+theorem integers_polycyclic : IsPolycyclic (Multiplicative ℤ) :=
+  isPolycyclic_of_isCyclic
+
+theorem integers_virtually_polycyclic : IsVirtuallyPolycyclic (Multiplicative ℤ) :=
+  integers_polycyclic.isVirtuallyPolycyclic
+
+noncomputable def integers_coarse_identity :
+    GroupCoarseEquivalence (Multiplicative ℤ) (Multiplicative ℤ) where
+  toFun := id
+  invFun := id
+  bornologous_toFun := groupBornologous_hom (MonoidHom.id _)
+  bornologous_invFun := groupBornologous_hom (MonoidHom.id _)
+  left_error := by simpa using Set.finite_singleton (1 : Multiplicative ℤ)
+  right_error := by simpa using Set.finite_singleton (1 : Multiplicative ℤ)
+
+theorem integers_word_metric :
+    ∃ d : MetricSpace (Multiplicative ℤ), letI := d
+      DiscreteTopology (Multiplicative ℤ) ∧
+      IsIsometricSMul (Multiplicative ℤ) (Multiplicative ℤ) ∧
+      ProperSpace (Multiplicative ℤ) ∧
+      Nonempty (LinearMetricChains (Multiplicative ℤ)) :=
+  exists_finite_word_metric _
+
+theorem integers_coarse_identity_retains_fg : Group.FG (Multiplicative ℤ) :=
+  integers_coarse_identity.finitelyGenerated
+
+#print axioms integers_polycyclic
+#print axioms integers_virtually_polycyclic
+#print axioms integers_word_metric
+#print axioms integers_coarse_identity_retains_fg
+#print axioms OAI.PolycyclicRecognition.exists_finite_word_metric
+#print axioms OAI.PolycyclicRecognition.GroupCoarseEquivalence.metric
+#print axioms OAI.PolycyclicRecognition.GroupCoarseEquivalence.finitelyGenerated
+
+end Family255InterfaceWitnesses

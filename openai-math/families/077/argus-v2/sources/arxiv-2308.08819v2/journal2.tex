@@ -1,0 +1,2072 @@
+\documentclass{amsart}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}   %\usepackage[utf8]{inputenc}  \usepackage[T1]{fontenc}               % ... or a4paper or a5paper or ...
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf,amsmath}
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{xcolor}
+
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{lemma}[prop]{Lemma}
+\newtheorem{fact}[prop]{Fact}
+\newtheorem{remark}[prop]{Remark}
+\newtheorem{cor}[prop]{Corollary}
+\newtheorem{theorem}[prop]{Theorem}
+\newtheorem{conj}[prop]{Conjecture}
+\newtheorem{definition}[prop]{Definition}
+%\DeclareMathOperator{\Hopf}{Hopf}
+\DeclareMathOperator{\Rank}{Rank}
+\newtheorem{axiom}{Axiom}
+\newcommand {\ignore} [1] {}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\RP}{\mathbb{RP}}
+\newcommand{\CP}{\mathbb{CP}}
+\newcommand{\CS}{\mathbb{CS}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\B}{\mathbb{B}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\U}{\mathbb{U}}
+\newcommand{\V}{\mathbb{V}}
+\renewcommand{\H}{\mathbb{H}}
+\newcommand{\e}{\epsilon}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\leapp}{\lessapprox}
+\newcommand{\geapp}{\gtrapprox}
+\newcommand{\app}{\approx}
+\newcommand{\lesim}{\lesssim}
+\newcommand{\gesim}{\gtrsim}
+\newcommand{\oP}{\overline{\mathcal{P}}}
+\newcommand{\oT}{\overline{\mathcal{T}}}
+\newcommand{\bp}{\mathbf{p}}
+\newcommand{\bT}{\mathbf{T}}
+\newcommand{\bL}{\mathbf{L}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\rta}{\rightarrow}
+\newcommand{\hate}{\widehat e}
+\newcommand{\tA}{\tilde{A}}
+\newcommand{\tB}{\tilde{B}}
+\newcommand{\tC}{\tilde{C}}
+\newcommand{\tX}{\tilde{X}}
+\newcommand{\tY}{\tilde{Y}}
+\newcommand{\tc}{\tilde{c}}
+\newcommand{\td}{\tilde{d}}
+\DeclareMathOperator{\dir}{dir}
+\newcommand{\Tbad}{\T_{\mathrm{bad}}}
+\newcommand{\ord}{\mathrm{ord}}
+\newcommand{\bD}{\mathbf{D}}
+
+
+
+
+\newtheorem{ques}{Question}
+
+
+\title{Furstenberg sets estimate in the plane}
+
+\author{Kevin Ren}
+
+\address{Department of Mathematics, Princeton University}
+
+\email{<email>}
+
+\author{Hong Wang}
+
+\address{Courant institute of mathematical sciences, New York University}
+
+\email{<email>}
+
+
+\begin{document}
+
+
+\maketitle
+
+\begin{abstract}
+    We fully resolve the Furstenberg set conjecture in $\mathbb{R}^2$, that a $(s, t)$-Furstenberg set has Hausdorff dimension $\ge \min(s+t, \frac{3s+t}{2}, s+1)$. As a result, we obtain an analogue of Elekes' bound for the discretized sum-product problem and resolve an orthogonal projection question of Oberlin.
+\end{abstract}
+
+% \section*{Tasks}
+% Hong:
+
+% Flesh out Section 4 induction, special case lemma
+
+% high-low lemma (cite + fill in details)
+
+% Read introduction
+
+% Kevin:
+
+% Write introduction (+ citations)
+
+% Change Lemmas in Section 2
+
+% Proofread pigeonholing
+
+% Delete Section 5 except Lemma 5.4, 5.8, 5.9
+
+% Add multiscale lemma from kevin.tex
+
+\section{Introduction}
+For $s \in (0, 1]$ and $t \in (0, 2]$, a $(s,t)$-Furstenberg set is a set $E\subset\mathbb{R}^2$ with the following property: there exists a family $\mathcal{L}$ of lines with $\dim_H \mathcal{L}\geq t$ such that $\dim_H(E\cap \ell)\geq s$ for all $\ell \in \mathcal{L}$. The Hausdorff dimension $\dim_H\mathcal{L}$ is defined as the Hausdorff dimension of $\mathcal{L}$ in the space $\mathcal{A}(2,1)$ of all affine lines in $\mathbb{R}^2$ (see \cite[Section 3.16]{mattila1999geometry}). The Furstenberg set question asks: what is the minimum possible dimension of $\dim_H (E)$?
+
+Motivated by his work on $\times 2, \times 3$-invariant sets \cite{furstenberg1970intersections}, Furstenberg considered a set $E$ with the following property: there exists a family of lines $\mathcal{L}$, one in every direction, such that $\dim_H(E\cap \ell)\geq s$ for all $\ell \in \mathcal{L}$. He conjectured (in unpublished work, but recalled by Wolff in \cite[Remark 1.5]{wolff1999recent}) that such a set $E$ (which is a special $(s, 1)$-Furstenberg set) has Hausdorff dimension $\ge \frac{3s+1}{2}$. Furstenberg's conjecture was later generalized to $(s, t)$-Furstenberg sets, and the main conjecture is that any $(s,t)$-Furstenberg set $E\subset \mathbb{R}^2$ has Hausdorff dimension
+\begin{equation}
+    \dim_H E \geq \min \{ s+t, \frac{3s+t}{2}, s+1\}.
+\end{equation}
+As observed by Wolff \cite{wolff1999recent}, the conjectured bound $\frac{3s+t}{2}$ is the correct answer for the discrete case by applying the Szemer\'edi-Trotter theorem \cite{szemeredi1983extremal}.
+The bound $s+t$ for $0 \leq t\leq s \leq 1$ was proved by Lutz-Stull \cite{lutz2020bounding} and Hera-Shmerkin-Yavicoli \cite{hera2021improved},  and the bound $s+1$ for $s+t\geq 2$ was proved recently by Fu and the first author \cite{fu2021incidence}. Wolff \cite{wolff1999recent} gave a sharp construction for $\frac{3s+t}{2}$ in the case $t = 1$ based on a grid example (which easily generalizes to other values of $t$), the sharp construction for $s+t$ can be taken as the product of a $t$-dim Cantor set and an $s$-dim Cantor set, and Fu and the first author \cite{fu2021incidence} gave a sharp construction for $s+1$ (the product of an interval and a $s$-dim Cantor set).
+
+Other cases remain open. Elementary bounds due to Wolff \cite{wolff1999recent} in the case $t = 1$,  Molter-Rela \cite{molter2012furstenberg}, H\'{e}ra \cite{hera2019hausdorff}, and Lutz-Stull \cite{lutz2020bounding} give 
+\[
+\dim_H E \geq \max(t/2+s, s + \min(s, t)). 
+\]
+Meanwhile, an $\eps$-improvement $\dim_H (E) \ge 2s+\eps(s, t)$ was proven in the special case $(s, t) = (1/2, 1)$ by Katz-Tao \cite{katz2001some} and Bourgain \cite{bourgain2003erdHos}, then for general $(s, 2s)$ by H\'{e}ra-Shmerkin-Yavicoli \cite{hera2021improved}.  Explicit improvement  for $(s, 2s)$-Furstenberg sets  was obtained by Benedetto-Zahl \cite{di2021new}. 
+
+A breakthrough by Orponen-Shmerkin \cite{orponen2021hausdorff} proves an $\eps$-improvement over $2s$ for general $(s, t)$ with $s < t$ (see Section~\ref{section: roadmap} for how this result leads to recent progress on several problems). Later, work of Shmerkin and the second author \cite{shmerkin2022dimensions} provides an $\eps$-improvement over the bound $s + \frac{t}{2}$ using ideas in \cite{orponen2021hausdorff}.  Very recently, Orponen and Shmerkin \cite{orponen2023projections} made another breakthrough and proved $\dim_H E \geq \max(t/2 +s, s + \min(s, t)) + C(t,s)$ for some good explicit constant $C(t,s)$ depending only on $s$ and $t$ which is not far from the conjecture. In this paper, we prove the Furstenberg conjecture on the Hausdorff dimension of $(s,t)$-Furstenberg sets.
+
+\begin{theorem}\label{thm: Furstenberg}
+    Fix $s \in (0, 1]$ and $t \in (0, 2]$. Any $(s, t)$-Furstenberg set $F \subset \R^2$ has Hausdorff dimension
+    \begin{equation*}
+        \dim_H F \ge \min(s+t, \frac{3s+t}{2}, s+1).
+    \end{equation*}
+\end{theorem}
+
+The $(s,t)$-Furstenberg problem  is known to be connected to the discretized sum-product problem and projection problem, as shown in our introduction and \cite[Section 6]{orponen2023projections}.  
+
+\subsection{Exceptional set estimate for orthogonal projections}
+ Let $K \subset \R^2$ be an arbitrary Borel set and $0 \le u \le \min (\dim_H K, 1)$. The exceptional set problem of orthogonal projections asks for the optimal upper bound on 
+\[
+ \dim_H \{ \theta \in S^1 : \dim_H \pi_\theta (K) < u \}.
+\]
+In 1968, 
+Kaufman \cite{kaufman1968hausdorff} proved that 
+\[
+  \dim_H \{ \theta \in S^1 : \dim_H \pi_\theta (K) < u \} \le u, 
+\]
+sharpening a result of Marstrand \cite{marstrand1954some}. 
+In 2000,  Peres-Schlag \cite{peres2000smoothness} showed  that when $\dim_H K >1 $, one can improve the estimate to 
+\[\dim_H \{ \theta \in S^1 : \dim_H \pi_\theta (K) < u \} \le \max\{ u +1-\dim_H K , 0\}.\]
+Kaufman's bound is sharp when $u=\dim_H K$ and the Peres-Schlag bound is sharp when $u=1$. In fact, the case $u=1$ was obtained previously by Falconer \cite{falconer1982hausdorff}.   For general cases, Oberlin \cite{oberlin2012restricted} conjectured that the right-hand side should be $ \max\{ 2u - \dim_H K, 0 \}.$
+
+
+Further improvements on the exceptional set estimate originates from Bourgain's projection theorem \cite{bourgain2010discretized},  which says
+\begin{equation}\label{eq: Bourgainproj}
+  \dim_H \{ \theta \in S^1 : \dim_H \pi_\theta (K) \leq \dim_H K/2 \}=0. 
+\end{equation}
+
+Bourgain's projection theorem concerns the deep nature of real numbers and has been used in Bourgain-Furman-Lindenstrauss-Mozes \cite{bourgain2011stationary} on random walk on torus  and Katz-Zahl \cite{katz2019improved} on the Hausdorff dimension of Kakeya sets in $\mathbb{R}^3$. Recent improvements  \cite{orponen2021hausdorff, orponen2023projections} on the exceptional sets problem are associated to the improvements on the Furstenberg sets problem.  
+
+
+
+As a corollary of Theorem~\ref{thm: Furstenberg} (in fact, its discretized version Theorem~\ref{Thm: main}), we prove Oberlin's conjecture \cite[(1.8)]{oberlin2012restricted} on the exceptional sets of the orthogonal projections, whose AD-regular version was established in \cite[Theorem 1.13]{orponen2023projections}. This deduction is analogous to the procedure used to establish \cite[Theorem 1.13]{orponen2023projections} (see \cite[Section 6.1]{orponen2023projections}), so we omit the details.
+
+
+
+
+
+
+% As a corollary, we obtain new bounds for the sum-product problem and projection problem, which establish the AD-regular results in Theorems 1.14 and 1.22 of \cite{orponen2023projections} for general sets.
+
+\begin{theorem}\label{thm:projections}
+    Let $K \subset \R^2$ be an arbitrary Borel set. Then for all $0 \le u \le \min(\dim_H (K), 1)$, we have
+    \begin{equation*}
+        \dim_H \{ \theta \in S^1 : \dim_H \pi_\theta (K) < u \} \le \max\{ 2u - \dim_H K, 0 \}.
+    \end{equation*}
+\end{theorem}
+
+
+
+
+
+
+
+
+\subsection{Discretized sum-product}
+
+
+
+Let  $\mathbb{F}$ be a field and $A, B\subset \mathbb{F}$, the sum set $A+B$ is defined as 
+\[
+A+B:=\{ a+b: a\in A, b\in B\}.
+\]
+The product set is defined similarly. 
+
+The sum-product problem asks whether the size of  $A+A$ or $A\cdot A$  can be substantially larger than the size of $A$.  When $A$ is a finite set, we measure the size of $A$ by its cardinality and it was conjectured by Erd\"{o}s and Szemeredi that when $\mathbb{F}=\mathbb{R}$, for any $\epsilon>0$, there exists $C_{\epsilon}>0$ such that 
+\[
+\max\{ |A+A|, |A\cdot A|\}\geq C_{\epsilon} |A|^{2-\epsilon}. 
+\]
+ See \cite{solymosi2009bounding, mohammadi2023attaining,roche2023better,roche2016new,rudnev2020stronger,rudnev2022update} for some recent results when $A$ is finite. 
+
+ When $\mathbb{F}=\mathbb{R}$, a ``fractal'' analogue of the discrete sum-product problem concerns the $(\delta, s, C)$-sets, which are discretizations of  $s$-dimensional sets in $\mathbb{R}$. For a bounded set $A \subset \R^d$, let $|A|_\delta$ denote the dyadic $\delta$-covering number of $A$. This concept will be precisely defined in Definition \ref{defn:covering number}, but for now one can regard $|A|_\delta$ as being the same (up to a constant) as the least number of $\delta$-balls needed to cover $A$.
+
+ \begin{definition}[$(\delta, s, C)$-set]\label{defn:delta, s-set}
+     For $\delta\in 2^{-\mathbb{N}}$, $s\in [0,d]$ and $C>0$, a non-empty bounded set $A\subset \mathbb{R}^d$ is called a $(\delta, s, C)$-set  if 
+     \[
+     |A\cap B(x,r)|_{\delta} \leq C r^{s} |A|_{\delta}, \quad \forall x\in \mathbb{R}^d, r\in [\delta, 1].
+     \]
+     \end{definition}
+
+This is to be contrasted with the notion of a $(\delta, s, C)$-Katz-Tao set, which imposes the bound
+\[
+     |A\cap B(x,r)|_{\delta} \leq C \left( \frac{r}{\delta} \right)^{s}, \quad \forall x\in \mathbb{R}^d, r\in [\delta, 1].
+     \]
+     \begin{definition}[AD-regular set]\label{def: AD}
+      A $(\delta,s, C)$-set  $A$ is called  Alfors-David regular  at scale $\delta$  if  $C>0$ is a constant independent of $\delta$ and 
+      \[
+     C^{-1} r^{s} |A|_{\delta}\leq |A\cap B(x,r)|_{\delta} \leq C r^{s} |A|_{\delta}, \quad \forall x\in A, r\in [\delta, 1].
+     \]
+  We say that $A$ is $(s, \epsilon)$-almost AD-regular if $C=\delta^{-\epsilon}$. Note that in the above condition, we have $x \in A$, not $x \in \R^d$!
+ \end{definition}
+
+%Usually $\eps>0$ goes to zero as $\delta$ goes to zero. {\color{red} what do you mean by this?} {\color{purple} This was a comment I added when I used almost AD-regular instead of $\eps$-almost AD-regular. But I should have removed this sentence with the current definition.}
+ 
+Katz and Tao \cite{katz2001some} made the following ring conjecture and showed that it is equivalent to $\epsilon$-improvement of the $(1/2, 1)$-Furstenberg set problem and Falconer distance set problem for sets of Hausdorff dimension $1$ on the plane.    When $\eps>0$ is sufficiently small, if $A\subset [1,2]$ is a $(\delta, s, \delta^{-\eps})$-set with $s=1/2$, then 
+\[
+\max\{|A+A|_{\delta}, |A\cdot A|_{\delta}\} \geq C_{s, \eps} \delta^{-s-\eps}. 
+\]
+This conjecture was proved in 2003 by Bourgain  \cite{bourgain2003erdHos}. (In related work, Edgar and Miller \cite{edgar2003borel} proved the qualitative statement that there do not exist $s$-dimensional Borel subrings of $\R$ for any $s\in (0,1)$).  Later Bourgain generalized the conjecture to the aforementioned projection theorem \eqref{eq: Bourgainproj}. More recently, Guth-Katz-Zahl \cite{guth2021discretized} used an elementary method inspired by approaches to the sum-product problem in finite fields to prove a quantitative result, replacing $\epsilon$ by an explicit constant depending on $s$. 
+ 
+
+As a corollary of Theorem~\ref{thm:projections}, we prove  a new estimate for the discretized sum-product problem, which complements the analogous results of Elekes \cite{elekes1997number} for $\R$ and Mohammadi-Stevens \cite{mohammadi2023attaining} for finite fields $\F_p$. This deduction is analogous to the procedure used to establish \cite[Theorem 1.26]{orponen2023projections} (see \cite[Section 5.2]{orponen2023projections}), so we omit the details.
+
+ 
+
+\begin{theorem}\label{thm:sum-product}
+    Given $s \in (0, \frac{2}{3})$ and $\eta > 0$, there is $\eps = \eps(s, \eta) > 0$ such that the following holds for small enough $\delta > 0$. Let $A \subset [1, 2]$ be a $(\delta, s, \delta^{-\eps})$-set. Then
+    \begin{equation*}
+        \max\{ |A + A|_\delta, |A \cdot A|_\delta \} \ge \delta^{-(5/4)s + \eta}.
+    \end{equation*}
+\end{theorem}
+Theorem~\ref{thm:sum-product} improves the very recent result of M\'{a}th\'{e}-O'Regan \cite[Theorem B]{mathe2023discretised} and Orponen-Shmerkin \cite[Theorem 1.26]{orponen2023projections} where $5/4$ was replaced by $7/6$ and extends \cite[Theorem 1.26]{orponen2023projections} for almost AD-regular sets to general $(\delta, s, C)$-sets. 
+
+\begin{remark}
+    If $s \ge \frac{2}{3}$, then \cite[Corollary 1.7]{fu2021incidence} gives the lower bound $\delta^{-\frac{s+1}{2} + \eta}$. This bound is sharp, see \cite[Remark 1.13]{mathe2023discretised}.
+\end{remark}
+
+While the sum-product theorem can be viewed as a special case of the Furstenberg sets problem, 
+the asymmetric sum product, i.e. $A+B\cdot C$ for different sets $A, B, C\subset [0,1]$, plays an important role in Orponen and Shmerkin's recent work \cite{orponen2023projections} on Furstenberg sets.  
+
+%Theorem \ref{thm:projections} fully resolves a conjecture of Oberlin \cite[(1.8)]{oberlin2012restricted}, while Theorem \ref{thm:sum-product} establishes the $\frac{5}{4}$ threshold for the discretized problem, which complements the analogous results of Elkies \cite{elekes1997number} for $\R$ and Mohammadi-Stevens \cite{mohammadi2023attaining} for finite fields $\F_p$.
+
+\subsection{Roadmap}\label{section: roadmap}
+Our proof builds on previous works on projection problems and incidences for tubes. We illustrate the relation between different results below. 
+\begin{itemize}[,]
+    \item Bourgain's discretized sum-product theorem \cite{bourgain2003erdHos}/Bourgain's projection theorem \cite{bourgain2010discretized}
+    \item $\Longrightarrow$ $\epsilon$-improvement of Furstenberg sets problem \cite{orponen2021hausdorff}
+    \item $\Longrightarrow$ Sharp radial projection theorem on the plane \cite{orponen2022kaufman} 
+    \item $\Longrightarrow$ $ABC$-sum product theorem \cite{orponen2023projections}, \cite{eberhard2023ABC}
+    \item $\Longrightarrow$ Sharp exceptional sets estimate for almost AD-regular sets \cite{orponen2023projections}
+    \item $\Longrightarrow$ Sharp Furstenberg sets estimate for almost AD-regular sets \cite{orponen2023projections}
+    \item + Sharp Furstenberg sets estimate for well-spaced sets \cite{guth2019incidence}
+    \item $\Longrightarrow$ Sharp Furstenberg sets estimate.
+\end{itemize}
+
+%It is worth noting that the last arrow, our main result in this paper,  is not obvious in general. For instance, the optimal results for Falconer distance set problem in $\mathbb{R}^2$ for both almost AD-regular sets \cite{orponen2017distance, shmerkin2021distance}  and well-spaced sets  \cite{guth2019incidence} are known, same as for the Kakeya conjecture in $\mathbb{R}^3$ \cite{wang2022sticky, guth2019incidence}. But both conjectures still  seem very challenging.
+
+
+
+% Bourgain's discretized sum-product.  Confirm a conjecture of Katz-Tao. 
+
+% Bourgain's projection theorem.  Generalization of discretized sum-product. Used in Random walk on Torus and later in Katz-Zahl's work on the Hausdorff dimension of Kakeya set in $\mathbb{R}^3$. 
+
+% Orponen-Shmerkin breakthrough $\epsilon$-improvement on Furstenberg set problem.   
+
+% Using O-S 21, Orponen-Shmerkin-Wang sharp radial projection, with applications in sticky Kakeya, Heilbronn triangle problem. 
+
+% Using OSW, Orponen-Shmerkin 23 proved the asymmetric version of Bourgain's discretized sum-product theorem, i.e. the ABC sum-product with numerous consequences. 
+
+% Our proof uses Orponen-Shmerkin's proof of Furstenberg sets conjecture for AD-regular sets as a black box (we also provided a short alternate  proof of this results from OS projection for AD-regular sets as a corollary of our pigeonholing proposition). 
+
+%\subsection{Outline} {\color{red} merge this section with previous section?}
+In \cite{orponen2023projections}, the Furstenberg conjecture is solved for almost AD-regular sets. On the other hand, in \cite{guth2019incidence}, the Furstenberg conjecture is solved for well-spaced sets (see also \cite{fu2022incidence} for a related result). In this paper, we will generalize the main result in \cite{guth2019incidence} and solve the Furstenberg conjecture for a class of semi-well spaced sets. Then we combine this result with the almost AD-regular result in an induction-on-scales scheme due to \cite{orponen2021hausdorff} to finish the general Furstenberg conjecture.
+
+It is interesting to note that the Furstenberg conjecture for almost AD-regular sets completely relies on tools from geometric measure theory and additive combinatorics, while our results for semi-well spaced sets completely rely on Fourier analysis, specifically the high-low method pioneered by
+%Orponen \cite{orponen2018dimension}, 
+Vinh \cite{vinh2011szemeredi} and Guth, Solomon, and the second author \cite{guth2019incidence}.
+
+\subsection{Structure of the paper}
+In Section 2, we introduce preliminaries and notation about dyadic tubes, dimensions of sets, and the high-low method. In Section 3, we state and prove some pigeonholing and multiscale lemmas that will be crucial later in the proof. In Section 4, we re-prove the special case $s + t = 2$ of the Furstenberg set problem, as well as introduce the key Lemma \ref{lem:r-rich} that will allow us to solve the Furstenberg set problem for a class of semi-well spaced sets. In Section 5, we prove Lemma \ref{lem:r-rich} using a high-low method. Finally, in Section 6, we prove a decomposition lemma for Lipschitz functions that reduces the full Furstenberg set conjecture to the AD-regular and semi-well spaced cases.
+%we slightly refine the AD-regular Furstenberg set result in \cite{orponen2023projections}, and we combine all the ingredients together to resolve the full Furstenberg set conjecture.
+
+\subsection{Acknowledgments} The first author is supported by an NSF GRFP fellowship. The second author is supported by NSF CAREER DMS-2238818 and NSF DMS-2055544. We would like to thank Larry Guth, Pablo Shmerkin, and Tuomas Orponen for helpful discussions and  for careful reading of an earlier draft.  Finally, the first author would like to thank Yuqiu Fu for introducing him to the Furstenberg set problem.
+
+\section{preliminaries}
+
+In this section, we recall some definitions and lemmas from \cite{orponen2023projections} and the high-low method.
+
+The letter $C$ will usually denote a constant, while the letter $K$ will usually denote a parameter depending on $\delta$ (e.g. $K = C \delta^{-\eps}$).
+
+We say $A \lesim B$ if $A \le CB$ for some absolute constant $C$, and define $A \gesim B$, $A \sim B$ similarly. We write $A \lesim_n B$ to emphasize the implicit constant may depend on $n$.
+
+For a finite set $A$, $|A|$ denotes cardinality of $A$. For a measurable and infinite set $A$ (usually a ball or a rectangle), $|A|$ denotes the Lebesgue measure of $A$.
+ 
+For any compact set $A\in \mathbb{R}^d$, let $|A|_{\delta}$ denote the minimum number of $\delta$--balls in $\mathbb{R}^d$ required to cover $A$. For $r > 0$, let $A^{(r)} := \{ x \in \R^2 : d(x, A) \le r \}$ denote the $r$-neighborhood of $A$. An ordinary $\delta$-tube is the $\delta$-neighborhood of a line in $\R^2$ (so roughly a $2\delta \times 1$ rectangle). An ordinary $\delta$-ball is the $\delta$-neighborhood of a point in $\R^2$. The use of ``ordinary'' is in contrast to the ``dyadic'' cubes and tubes to be defined below.
+%If $\mathcal{J}$ is a set of intervals, let $\cup \mathcal{J}$ denote the union of all intervals in $\mathcal{J}$.
+
+\begin{definition}[Dyadic cubes]
+    If $n\in \mathbb{Z}$ and $\delta=2^{-n}$, denote by $\cD_{\delta}(\mathbb{R}^d) := \{ [a\delta, (a+1)\delta] \times [b\delta, (b+1)\delta] : a, b \in \Z \}$ the family of dyadic cubes  in $\mathbb{R}^d$ of side-length $\delta$. If $\cP\subset \mathbb{R}^d$, denote 
+    \[
+    \cD_{\delta}(\cP):=\{ Q\in \cD_{\delta} (\R^d): Q\cap \cP\neq \emptyset\}.
+    \]
+    We abbreviate $\cD_{\delta}:=\cD_{\delta}([0,1)^d)$ for $n\geq 0$.  If $\delta <\Delta\in 2^{-\mathbb{N}}$ and $p\in \cD_{\delta}$, let $p^{\Delta}$ denote the dyadic cube $\bp \in \cD_{\Delta}$ containing $p$. 
+\end{definition}
+
+\begin{definition}\label{defn:covering number}
+    For a bounded set $P \subset \R^d$ and $\delta = 2^{-n}$, $n \ge 0$, define the dyadic $\delta$-covering number
+    \begin{equation*}
+        |P|_\delta := |\cD_\delta (P)|.
+    \end{equation*}
+\end{definition}
+As remarked before, $|P|_{\delta}$ is comparable (up to a universal constant) to the least number of $\delta$-balls needed to cover $P$. (This latter definition is the more common definition of covering number.) If $\cP\subset \cD_{\delta}$ is a set of dyadic cubes, we say that $\cP$ is a $(\delta, s, C)$-set if the union  of $\delta$-cubes in $\cP$ is a $(\delta, s, C)$-set in the sense of Definition \ref{defn:delta, s-set}. 
+
+
+\begin{definition}[Dyadic $\delta$-tubes]
+    Let $\delta\in 2^{-\mathbb{N}}$. A \emph{dyadic $\delta$-tube} is a set of the form $T=\cup_{x\in p} \mathbf{D}(x)$, where $p\in \cD_{\delta}([-1,1]\times \mathbb{R}),$ and $\mathbf{D}$ is the \emph{point-line duality map}
+\[
+\mathbf{D}(a,b):=\{ (x,y)\in \mathbb{R}^2: y=ax+b\}\subset \mathbb{R}^2
+\]
+sending the point $(a,b)\in \mathbb{R}^2$ to a corresponding line in $\mathbb{R}^2$. Abusing the notation, we abbreviate $\mathbf{D}(p):=\cup_{x\in p} \mathbf{D}(x).$ The collection of all dyadic $\delta$-tubes is denoted 
+\[
+\cT^{\delta}:=\{ \mathbf{D}(p): p\in \mathcal{D}_{\delta}([-1,1]\times \mathbb{R})\}.
+\]
+A finite collection of dyadic $\delta$-tubes $\{\mathbf{D}(p)\}_{p\in \cP}$ is called a $(\delta, s, C)$-set if $\cP$ is a $(\delta, s, C)$-set. 
+
+If $\delta<\Delta\in 2^{-\mathbb{N}}$ and $T\in \cT^{\delta}$, let $T^{\Delta}$ denote the dyadic tube $\bT\in \cT^{\Delta}$ containing $T$. 
+\end{definition}
+
+
+\begin{definition}[Slope set]
+    The slope of a line $\ell=\mathbf{D}(a,b)$ is defined to be the number $a\in \mathbb{R}$, write $\dir(\ell):=a.$ 
+
+    If $T=\mathbf{D}(p)$ is a dyadic $\delta$-tube, we define the slope $\dir(T) = \cup_{x\in p} \dir ( \mathbf{D}(x))$. Thus $\dir{T}$ is an interval of length $\sim \delta$. If $\mathcal{T}$ is a collection of dyadic $\delta$-tubes, we write $\dir(\cT):=\{\dir(T): T\in \cT\}$. If $\cT(p)$ is a collection of dyadic $\delta$-tubes through a fixed point $p$, we identify $\cT(p)$ with $\dir(\cT(p))$. 
+\end{definition}
+
+
+
+If $0<\delta <\Delta \leq 1$,  $\cT\subset \cT^{\delta}$ and $\bT\in \cT^{\Delta}$, write $\cT\cap \bT:=\{ T\in \cT: T\subset \bT\}$. 
+
+
+\begin{definition}[Renormalised set]
+    Let $\cP\subset [0,1)^d$, $\Delta\in 2^{-\mathbb{N}}$ and $Q\in \cP_{\Delta}.$ Define $S_Q: Q\rightarrow [0,1)^d$ be the homothety  with $S_Q(Q)=[0,1)^d$. 
+\end{definition}
+ 
+
+\subsection{Thickening and high-low method}
+For an ordinary $\delta$-tube $T$, let $T^\Delta$ be the $\Delta$-tube coaxial with $T$. This is not to be confused with the convention that for a dyadic $\delta$-tube $T$, $T^\Delta \in \cT^\Delta$ is the $\Delta$-dyadic ancestor of $T$. %Unfortunately, $T^\Delta$ is not exactly a thickening, since it's possible that $T$ and $T^\Delta$ share the same border. To rectify this issue, for a constant $C > 0$ and dyadic tube $T = [a-\delta/2, a+\delta/2] \times [b-\delta/2, b+\delta/2]$, we let $4T := [a - 2\delta, a + 2\delta] \times [b - 2\delta, b + 2\delta]$. Note that if $T$ is a dyadic $\delta$-tube, then $4T^\Delta$ is not necessarily a dyadic $4\Delta$-tube (or even contained in a dyadic tube). However, the property that we will care about is the following:
+
+The following proposition is Proposition 5.2.1 of \cite{bradshaw2022additive} (with choice of parameters $d = 2, \alpha = \eps^2, S = \delta^{-\eps}$) and holds for ordinary tubes.
+
+\begin{definition}[Incidences]
+    Let $K \ge 1$. For a set of weighted $\delta$-balls (or cubes) $\cP$ with weight function $w : \cP \to \R^{\ge 0}$ and a set of (not necessarily essentially distinct) $K\delta$-ordinary tubes $\T$, define the incidence count \[I_w (\cP, \T) := \sum_{p \in \cP} \sum_{T \in \T, p \cap T \neq \emptyset} w(p).\]
+
+    We usually assume $w \equiv 1$ or $w$ is explicitly defined beforehand, in which case we drop it from the notation.
+\end{definition}
+
+\begin{prop}\label{prop:high low}
+    Fix $C \ge 1, \eps > 0$, let $\cP$ be a weighted set of essentially distinct $\delta$-balls (or cubes) with weight function $w : \cP \to \R^{\ge 0}$ and $\cT$ be a set of essentially distinct ordinary $C\delta$-tubes. If $\max(\delta^{-\eps}, 100C) \le S \le \delta^{-1}$, then
+    \begin{equation*}
+        I_w(\cP, \cT) \lesim_{C,\eps} \left( S \delta^{-1} |\T| \sum_{p \in \cP} w(p)^2 \right)^{1/2} +
+  S^{-1+\eps} I_w(\cP, \T^{S\delta}).
+    \end{equation*}
+\end{prop}
+
+\begin{remark}
+Note that $\cT^{S\delta} :=\{ T^{S\delta}: T\in \cT\}$ may not be an essentially distinct set of $S\delta$-tubes, but the definition of incidences makes sense for them.
+\end{remark}
+
+Unfortunately, if we na\"{i}vely try to replace ordinary tubes with dyadic tubes in Proposition \ref{prop:high low}, we run into the issue that the $\Delta$-neighborhood of $T$ may not be contained in the dyadic ancestor $T^\Delta$. Instead, we shall convert dyadic tubes to ordinary tubes via the following procedure, which crucially is ``compatible with thickening''.
+
+\begin{lemma}\label{lem:thicken dyadic tube}
+    For each dyadic $\delta$-tube $T$, there exists an ordinary $6\delta$-tube $T_\ord$ containing $T$ such that all of the $T_\ord$'s for a given scale $\delta$ are essentially distinct and when $6\delta < \Delta$, we have $(T_\ord)^\Delta \cap [-1, 1]^2 \subset (T^\Delta)_\ord$.
+\end{lemma}
+
+\begin{remark}
+    Since $\cP \subset [0, 1]^2$ and so all incidences happen in $[0,1]^2$, we are justified in writing the shorthand $(T_\ord)^\Delta \subset (T^\Delta)_\ord$.
+\end{remark}
+
+\begin{proof}
+    Let $T = \bD(p)$ where $p = [a, a+\delta) \times [b, b+\delta)$ is a $\delta$-cube. We construct the ordinary $6\delta$-tube $T_\ord = \ell_{a,b}^{(6\delta)}$, where $\ell_{a,b}$ is the line $y = ax + b$.
+
+    First, we show $T \subset T_\ord$. Indeed, if $(x, y) \in T$, then $y - (ax + b) \in [-\delta, 2\delta]$, so $d((x, y), \ell_{a,b}) \le 2\delta$. Hence, $(x, y) \in T_\ord$.
+
+    Next, we show $(T_\ord)^\Delta \cap [-1, 1]^2 \subset (T^\Delta)_\ord$. Let $(x, y) \in (T_\ord)^\Delta \cap [-1, 1)^2$; then $d((x, y), \ell_{a,b}) \le \Delta$. Since $a \in (-1, 1)$, this means $|y - (ax + b)| \le 2\Delta$.
+    
+    Let $p^\Delta = [a', a'+\Delta) \times [b', b'+\Delta)$, where $|a' - a| \le \Delta$ and $|b' - b| \le \Delta$ (this encodes the fact $p \in p^\Delta$). Then since $x \in [-1, 1)$,
+    \begin{equation*}
+        |y - (a'x + b')| \le |y - (ax + b)| + |a - a'| + |b - b'| \le 4\Delta.
+    \end{equation*}
+    Since $T^\Delta = \cD(p^\Delta)$, we get $(x, y) \in (T^\Delta)_\ord$, as desired.
+\end{proof}
+
+% \begin{remark}\label{remark:high low}
+%     Note $I(P^{S\delta}, \T^{S\delta}) \le I(P, \T^{2S\delta})$.
+% \end{remark}
+
+% \subsection{Miscellaneous notation}
+% For a ordinary or dyadic $\delta$-tube $T$, let $CT := T^{C\delta}$.
+
+% For a dyadic $\delta$-tube $T$, the dyadic $w$-ancestor of $T$ is the unique dyadic $w$-tube containing $T$.
+
+% Recall Lemma 5.21 in [Shmerkin-Wang]
+% \begin{lemma} \label{lem: lipschitz}
+%     Given $\epsilon, \rho, d>0$ there is $\tau= \tau(\epsilon, \rho, d)>0$ such that the following holds. For any non-decreasing, piecewise linear $d$-Lipschtiz function $f:[a,b]\rightarrow \mathbb{R},$ where $a, b-c\geq \rho,$ there exists a family of consecutive intervals $([a_j, a_{j+1}])_{j=1}^J$ with $a_1=a, a_{J+1}=b$ such that:
+%     \begin{enumerate}
+%         \item For each $j$, 
+%         \[
+%         \tau \leq a_{j+1}-a_j \leq \rho \leq a_j.
+%         \]
+%         \item $(f, a_j, a_{j+1})$ is $\sigma_j$-superlinear, where 
+%         \begin{equation}\label{eq: superlinear}
+%         \sum_{j=1}^J (a_{j+1}-a_j)\sigma_j\geq f(b)-f(a)-\epsilon(b-a).
+%         \end{equation}
+%     \end{enumerate}
+% \end{lemma}
+
+% Recall Lemma 5.20 in [Shmerkin-Wang].
+
+% \begin{lemma}\label{lem: increase}
+%     Let $\{ [a_j, a_{j+1}]\}_{j=1}^J$ be a collection of intervals, let $f: [a_1, a_{J+1}]\rightarrow \mathbb{R}$ be a function, and let $(\sigma_j)_{j=1}^J$ be numbers such that $(f, a_j, a_{j+1})$ is $\sigma_j-$superlinear. Then we can decompose the interval $[a_1, a_{J+1}]$ into consecutive intervals $\{ [a_k', a_{k+1}']\}$ such that 
+%     \begin{enumerate}
+%         \item $(f, a_k', a_{k+1}')$ is $\sigma_k'-$superlinear with 
+%         \[
+%         \sum_{k'} \sigma_k' (a_{k+1}' -a_k') = \sum_{j=1}^J \sigma_j (a_{j+1}-a_j).
+%         \]
+%         \item $\sigma_k' < \sigma_{k+1}'.$
+%     \end{enumerate}
+% \end{lemma}
+
+% Continuous lemma. 
+
+ 
+
+% \begin{lemma}\label{lem: cont}
+% Given $\epsilon, \rho, d>0$ there is $\tau=\tau(\epsilon, \rho, d)>0$ such that the following holds. For any non-decreasing, piecewise linear $d$-Lipschitz function $f: [0,1]\rightarrow \mathbb{R}$ and any interval $[a,b]\subset [0,1]$ where $a, b-c \geq\rho$, there exists a family of consecutive intervals $( [a_j, a_{j+1}])_{j=1}^J$ with $a_1=a, a_{J+1}=b$ such that:
+% \begin{itemize}
+%     \item for each $j, \tau \leq a_{j+1}-a_j.$
+%     \item $(f, a_j, a_{j+1})$ is $\sigma_j$-superlinear, where 
+%     \[
+%     \sum_{j=1}^J(a_{j+1}-a_j)\sigma_j \geq f(b)-f(a)-\epsilon(b-a).
+%     \]
+%     \item $\sigma_j<\sigma_{j+1}.$
+%     % \item Let $h_a(b)=\sigma_1$ and $g_b(a)=\sigma_J$ (which means the largest $\sigma_j$ in the resulting sequence, rather than the $J$th number). Then $g_b(a)$ is continuous in $a$ and $h_a(b)$ is continuous in $b$ in the sense that [add footnote explanation]
+%     % \[ |g_b(a_1)-g_b(a_2)|\leq (d+\epsilon)|a_1-a_2|+\epsilon (b-a_1),\]\[ |h_a(b_1) - h_a(b_2)|\leq (d+\epsilon)|b_1-b_2|+\epsilon(b_1-a). \]
+% \end{itemize}
+% \end{lemma}
+% \begin{proof}
+%     Apply Lemma~\ref{lem: lipschitz} and then Lemma~\ref{lem: increase} to $(f, a, b)$. 
+% \end{proof}
+
+% \begin{cor}\label{cor: control}
+%     Let $f, a, b$ and $a_j, \sigma_j$ as in Lemma~\ref{lem: cont}. If $f$ is $\sigma$-superlinear on $[a',b]$ for some $a'\in [0, a]$ and $ f(b)-f(a')\leq (\sigma+\epsilon)(b-a'),$ then $\sigma_j \leq \sigma$.  If $f$ is $\sigma$-superlinear on $[a, b']$ for some $b'\in [b, 1]$, then $\sigma \leq \sigma_j$.
+% \end{cor}
+
+% Recall merge lemma and add merge two sets of intervals lemma. 
+
+
+
+
+
+
+
+
+% Define the set of dyadic cubes $\mathcal{D}_k$ of side length $2^{-k\eta l M}$ and for any set $E$, let $\mathcal{D}_k(E)$ denote the set of dyadic cubes intersecting $E$.  For any dyadic cube $Q\in \mathcal{D}_k$ and any $k'<k$, let $Q(k')$ be the dyadic cube in $\mathcal{D}_{k'}$ containing $Q.$
+ 
+%Suppose $H\subset E\times \Lambda$. For any $x\in \mathcal{D}_k(E)$,  denote $H_x:=\{\theta\in \mathcal{D}_k(\Lambda): (x, \theta)\cap  H\neq \emptyset\}$ and for any $\theta\in \mathcal{D}_k(\Lambda)$, $H_{\theta}:=\{x\in \mathcal{D}_k(E): (x, \theta)\cap  H\neq \emptyset\}.$ For any $(x,\theta)\in \mathcal{D}_k(H)$, let $T_{\theta,x}$ denote the $\delta_k$-tube passing through $x$, in direction $\theta$.  Let $\pi_E$ denote the projection of $E\times \Lambda$ to $E$ and $\pi_\Lambda$ denote the projection of $E\times \Lambda$ to $\Lambda$.
+
+
+\section{Pigeonholing}
+In this section, we pigeonhole a good configuration to have good properties.
+
+\begin{definition}
+    Fix $\delta\in 2^{-\mathbb{N}}, s\in [0,1], C>0, M\in \mathbb{N}$. We say that a pair $(\mathcal{P}, \mathcal{T})\subset \mathcal{D}_{\delta}\times \mathcal{T}^{\delta}$ is a $(\delta, s, C, M)$-nice configuration if for every $p\in \mathcal{P}$ there exists a $(\delta, s, C)$-set $\mathcal{T}(p)\subset \mathcal{T}$ with $|\mathcal{T}(p)|\sim M$ and such that $T\cap p\neq \emptyset$ for all $T\in \mathcal{T}(p)$. 
+\end{definition}
+
+\begin{definition}
+    Let $\cP\subset \cD_{\delta}$. We say that $\cP'$ is a refinement of $\cP$ if $\cP'\subset \cP$ and $|\cP'|_{\delta}\approx_{\delta} |\cP|_{\delta}.$ Let $\Delta\in (\delta, 1)$, we say that $\cP'$ is a refinement of $\cP$ at resolution $\Delta$ if there is a refinement $\cP_{\Delta}'$ of $\cD_{\Delta}(\cP)$ and \[ \cP'=\bigcup_{\bp\in \cP_{\Delta}'}(\cP\cap \bp).\] 
+    Note that $\cP'$ is not necessarily a refinement of $\cP$ at resolution $\delta$ unless we also have that $\cP$ is uniform at scale $\Delta$. We can likewise define a refinement of a set of dyadic $\delta$-tubes $\T$ at resolution $\Delta$.
+\end{definition}
+Here, the notation $\gtrapprox_\delta$ means $\gtrsim_N \log(1/\delta)^{C_N}$ for some number $N$ independent of $\delta$, and likewise for $\lessapprox_\delta, \approx_\delta$.
+
+\begin{definition}
+    Let $(\cP_0, \cT_0)$ be a $(\delta, s, C_0, M_0)$-nice configuration. We say that $(\cP, \cT)$ is a refinement of $(\cP_0, \cT_0)$ if $\cP\subset \cP_0$, $|\cP|_{\delta}\approx_{\delta} |\cP_0|_{\delta}$, and for any $p\in \cP,$ there is $\cT(p)\subset \cT_0(p)$ with $|\cT(p)|\gtrapprox_{\delta} |\cT_0(p)|$ and $\cT=\cup_{p\in \cP} \cT(p)$. Let $\Delta\in (\delta, 1)$, we say that $(\cP, \cT)$ is a refinement of $(\cP_0,\cT_0)$ at resolution $\Delta$ if $\cP$ is a refinement of $\cP_0$ at resolution $\Delta$ and for each $p\in \cP$, $\bT\in \cD_{\Delta}(\cT(p))$, $\bT\cap \cT(p)=\bT\cap \cT_0(p)$. 
+\end{definition}
+Here $\cT$ might be much smaller than $\cT_0$. 
+
+
+We hope to pigeonhole such that for any $(\delta, s, C, M)$-nice configuration $(\cP, \cT)$, there is an refinement with some uniform properties. The  pigeonholing argument below is based on Orponen-Shmerkin \cite{orponen2021hausdorff}.
+
+
+%for any $\Delta\in (\delta, 1]\cap 2^{\N}$, there is $r_\Delta$, and  for any $T\in \cT$ and  $|T\cap \mathcal{P}_0|_{\delta}\sim r$ and $|T^{\Delta}\cap \mathcal{P}_0|_{\Delta} \approx r_{\Delta}$. 
+
+
+
+
+
+
+
+\begin{definition}
+    Let $N\geq 1, $ and let 
+   \[
+   \delta=\Delta_N<\Delta_{N-1}<\cdots<\Delta_1<\Delta_0=1
+   \]
+   be a sequence of dyadic scales. We say that a set $\cP\subset [0,1]^2$ is $\{\Delta_j\}_{j=1}^N$-uniform if there is a sequence $\{N_j\}_{j=1}^N$ with $N_j\in 2^{\mathbb{N}}$ and $|\cP\cap Q|_{\Delta_j}\in [ N_j/2, N_j)$ for all $j\in \{1, \dots, N\}$ and all $Q\in \cD_{\Delta_j}(\cP)$. 
+\end{definition}
+
+
+Recall Lemma 2.15 from \cite{orponen2023projections}.
+\begin{lemma}\label{lem: pigeonhole}
+    Let $\cP\subset [0,1)^d, N, T\in \mathbb{N}$ and $\delta=2^{-NT}$. Let also $\Delta_j:=2^{-jT}$ for $0\leq j\leq N$. Then, there is a $\{\Delta_j\}_{j=1}^N$-uniform set $\cP'\subset \cP$ such that 
+    \[
+    |\cP'|_{\delta}\geq (2T)^{-N} |\cP|_{\delta}. 
+    \]
+    In particular, if $\epsilon>0$ and $T^{-1}\log(2T)\leq \epsilon$, then $|\cP'|_{\delta}\geq \delta^{\epsilon}|\cP|_{\delta}.$
+\end{lemma}
+
+
+
+
+We will use a variant of Proposition 5.2 of \cite{orponen2021hausdorff}. %In fact, the following proposition highlights the main steps in the proof of Proposition 5.2 of \cite{orponen2021hausdorff}.
+
+
+\begin{prop}\label{prop:incidence multiscale}
+
+    Let $(\mathcal{P}, \mathcal{T}) \subset \mathcal{D}_\delta \times \mathcal{T}^\delta$ be a $(\delta, s, C, M)$-nice configuration and  let $\Delta\in (\delta, 1)$. 
+    
+    
+    Suppose  $\cP_0$ is  $\{\delta, \Delta, 1\}$-uniform. %with $\cP_0$ uniform, $|\cP_0|\sim \delta^{-t}$ and   for every $p\in\cP_0$, there is  an associated $(\delta, s, C_0)$-set $\cT(p)\subset \cT^{\delta}$ with $|\cT(p)|\sim M$ and $T\cap p\neq \empty$ for all $T\in \cT(p)$, $\cT=\cup_{p\in\cP_0} \cT(p)$. 
+    Then there exists a refinement $(\cP_1, \cT_1)$ of $(\cP_0, \cT_0)$ such that 
+    %subset $ \cP_1 \subset \mathcal{P}_0$ with $|\cP_1|_{\delta} \gtrapprox_{\delta}|\cP_0|_{\delta} $  such that:
+    \begin{enumerate}
+        \item $|\mathcal{D}_{\Delta} (\mathcal{P}_1)| \approx_\delta |\mathcal{D}_{\Delta} (\mathcal{P}_0)|$ and $|\mathcal{P}_1 \cap \textbf{p}| \approx_\delta |\mathcal{P}_0 \cap \textbf{p}|$, for every   $\textbf{p} \in \mathcal{D}_{\Delta} (\mathcal{P}_1)$.
+
+        \item for every $\textbf{p}\in \mathcal{D}_{\Delta}(\cP_1)$,  there is an associated $(\Delta, s, C_1)$-set $\cT_\Delta (\bp) \subset \cT^{\Delta}$ with $|\cT_\Delta (\bp)|\approx_{\delta}  m$ and all $\bT\in \cT_\Delta (\bp)$ intersect $\bp$. 
+        
+        \item there  are dyadic numbers $m_1, m_2$ with $m_1m_2\approx_{\delta} M$ such that 
+       % for every  $p\in \cP_2$ and $\bp=p^{\Delta}$, \[ \cD_{\Delta}(\cT_2(p))\subset \cT_1(\bp).\] In addition, 
+        $|\cD_{\Delta}(\cT_1(p))|\approx_{\delta} m_{2}$ and for each $\bT \in \cD_{\Delta}(\cT_1(p))$,$
+       | \cT_1(p)\cap \bT |_{\delta} \approx_{\delta} m_1$.
+        \item for every $\bp\in \cD_{\Delta}(\cP_1)$ and  $\bT\in \cT_\Delta(\bp)$, 
+        \[ |\{ p\in ( \cP_1\cap \bp): \bT\in \mathcal{D}_{\Delta} ( \cT_1(p))\} |\sim X\]
+        and 
+        \[
+        X \cdot m \approx_{\delta} |\cP_1\cap \bp|_{\delta} \cdot m_2.
+        \]
+ %       \item for each $p\in \cP_2, \cT_2(p)\subset \cT_1(p) \subset \cT(p)$ with $|\cT_2(p)|\approx_{\delta} |\cT_1(p)| \approx_{\delta} |\cT(p)|.$
+    \end{enumerate}
+\end{prop}
+
+\begin{remark}\label{rem:desired property}
+    A priori we don't have the desirable property $\cD_\Delta (\cT_1 (p)) \subset \cT_\Delta (p^\Delta)$ for $p \in \cP_1$. However, using the above properties, we can construct a refinement $(\cP_2, \cT_2)$ of $(\cP_1, \cT_1)$ (hence of $(\cP_0, \cT_0)$ too) such that $\cD_\Delta (\cT_2 (p)) \subset \cT_\Delta (p^\Delta)$ for $p \in \cP_2$. We perform a slightly more complicated refinement in the proof of Proposition \ref{prop:s+t=2}, see \eqref{eqn:many tubes left}.
+\end{remark}
+
+% \begin{remark}
+%     If we say a restricted incidence between $\cP$ and $\cT$ is a pair $(p, T) \in \cP \times \T^\delta$ such that $T \in \T_1 (p)$, then the equation in (4) says that each $\bT \in \T_1 (\bp)$ contains at least an average fraction of the set of restricted incidences between $\cP_1 \cap \bp$ and $\cT_1$ (up to $\app_\delta 1$).
+% \end{remark}
+
+\begin{proof}
+
+
+By Lemma~\ref{lem: pigeonhole}, for every  $p\in \cP$ there is a $\{1, \Delta, \delta\}$-uniform subset $\cT_1(p)\subset \cT(p)$ with $|\cT_1(p)|\approx_{\delta} M$ and $|\cD_{\Delta}(\cT_1(p))|\approx_{\delta} m_2(p)$. Pigeonhole again, there exists a $\{1, \Delta, \delta\}$-uniform subset $\cP_1 \subset\cP$ such that $|\cP_1|_{\delta}\gtrapprox_{\delta} |\cP|_{\delta}$ and for each $p\in \cP_1$, $m_2(p)=m_2$. 
+
+For each $\bp \in \cD_{\Delta}(\cP_1)$, 
+find a subset $\cT_1(\bp)\subset \cT^{\Delta}$ satisfying  for each $\bT\in \cT_1(\bp)$, 
+\[
+|\{ p\in \cP_1\cap \bp: \bT\in \cD_{\Delta}(\cT_1(p))\}|\sim X(\bp)
+\]
+and 
+\begin{equation}\label{eq: X}
+X(\bp) \cdot |\cT_1(\bp)|\approx_{\Delta}|\cP_1\cap \bp|\cdot  m_2
+\end{equation}
+
+
+We can refine $\cP_1$ at resolution $\Delta$ such that  there exist $X$  for each $\bp\in \cD_{\Delta}(\cP_1)$, $X(\bp)=X$.
+
+%Finally, by \eqref{eq: X}, for each $\bp\in \cD_{\Delta}(\cP_1)$,  there exists a subset $\cP_2(\bp)$ of $\cP_1\cap \bp$ such that for each $p\in \cP_2(\bp)$,
+%\[
+%\cT_2(p):=\{ T\in \cT_1(p): T^{\Delta}\in \cT_1(\bp)\} 
+%\]
+%satisfies $|\cT_2(p)|\gtrapprox_{\delta}|\cT_1(p)|$ and $|\cP_2(\bp)|_{\delta}\gtrapprox_{\delta} |\cP_1\cap \bp|$. Let $\cP_2 =\cup_{\bp\in \cD_{\Delta}(\cP_1)} \cP_2(\bp).$
+
+It follows from  \eqref{eq: X} and the same proof as \cite[Proposition 4.1]{orponen2021hausdorff}  that $\cT_1(\bp)$ is a $(\Delta, s, C_1)$-set for $C_1\approx_{\delta} C$. Since $\cP$ is $\{ 1, \Delta, \delta\}$-uniform,  let $m= \frac{|\cP_1|_{\delta}m_2}{|\cP_1|_{\Delta}X}$ and $|\cT_1(\bp)|\approx_{\delta} m$ for each $\bp\in \cD_{\Delta}(\cP_1)$. Let $m_1= \frac{M}{m_2}$. 
+\end{proof}
+
+
+
+% \begin{lemma} \label{rmk: uniform fib
+
+
+
+
+
+
+
+
+
+
+
+% \begin{prop}\label{prop: single scale OS}
+%     Let $0<\delta \leq \Delta \leq 1$ be dyadic numbers, and let $C, M\geq 1$. Let $\mathcal{P}\subset [0,\Delta]^2$ be a finite set, and assume that for every $p\in \mathcal{P}$, there is an associated $(\delta, s, C_0)$-set $\cT(p)\subset\cT^{\delta}$ with $ \frac{M}{2}\leq |\cT(p)|\leq M$, and such that $T\cap p\neq \emptyset$ for all $T\in \cT(p)$ and all $p\in \cP$.
+
+%     Then, there exist $m_1, m_2$ with $m_1m_2\approx_{\delta} M$, $X$, and a subset $\cP_2\subset \cP_1\subset \cP$ of cardinality $|\cP_i|\approx_{\Delta}|\cP|$, for each $p\in \cP_i$, $\cT_i(p)\subset \cT(p)$ and a collection $\cT_{\Delta}\subset \cT^{\Delta}$ of dyadic $\Delta$-tubes intersecting $[0,\Delta]^2$  with the following properties: {\color{red} is there something special about $\T_2 (p)$? I believe it should lie in $\T_\Delta$}
+%     \begin{enumerate}
+%         \item for each $ p\in \cP_1$, $|\mathcal{D}_{\Delta} (\cT_1(p))|\sim m_1$ and for each $\bT\in \mathcal{D}_{\Delta} (\cT_1(p))$, \[|\{T\in \cT_1(p): T\subset \bT\}|\sim m_2.\] 
+%         \item for each $\bT\in \cT_{\Delta},$ \[|\{ p\in \cP_1: \bT\in \cD_{\Delta}(\cT_1(p))\}| \sim X\] and  
+%         \[X |\cT_{\Delta}|  \gtrapprox_{\Delta} |\cP_1| m_1.\]
+%         \item for each $p\in \cP_2\subset \cP_1$, $ \cT_2(p)\subset \cT_1(p)$ with $|\cT_2(p)|\gtrapprox_{\Delta} |\cT(p)|$ and for each  $\bT\in \mathcal{D}_{\Delta} (\cT_2(p))$, $|\cT_1(p) \cap \bT|=|\cT_2(p)\cap \bT|$.
+%     \end{enumerate}
+% \end{prop}
+
+% \begin{remark}\label{rmk: spacing}
+%     Denote $\cT_{\bp}\subset \cT^{\delta/\Delta}$ as the $\delta/\Delta$-separate set of $$\{  S_{\bp}(T\cap \bp) : T\in \cT_2(p), p\in \cP_2\}.$$ Then after some refinement, $(S_{\bp}(\cP\cap \bp), \cT_{\bp})$  is a $(\delta/\Delta, s, C', M_{\bp})$-nice configuration with $C'\lessapprox_{\delta} C$ and the proof of \cite[Proposition 5.2]{orponen2021hausdorff} yields
+%         \[
+%         \frac{|\cT|}{M}\gtrapprox_{\delta} \frac{ |\cup_{\bp\in \cD_{\Delta}(\cP_1)} \cT_1(\bp)|}{|\cT_1(\bp)|} \cdot \frac{|\cT_{\bp}|}{M_{\bp}}
+%         \]
+% \end{remark}
+% \begin{remark}\label{rmk: spacing}
+%         The properties in Proposition~\ref{prop:incidence multiscale} imply that for any $\bp\in \cD_{\Delta}(\cP_1)$,  $\cT_1(\bp)$ is a $(\Delta, s, C)$-set with $C\lessapprox_{\Delta} C_0$. 
+%         In addition, denote $\cT_{\bp}\subset \cT^{\delta/\Delta}$ as the $\delta/\Delta$-separate set of $$\{  S_{\bp}(T\cap \bp) : T\in \cT_2(p), p\in \cP_2\}.$$ Then $(S_{\bp}(\cP\cap \bp), \cT_{\bp})$  (after some pigoenholing) is a $(\delta/\Delta, s, C', M_{\bp})$-nice configuration with $C'\lessapprox_{\delta} C$ and 
+%         \[
+%         \frac{|\cT|}{M}\gtrapprox_{\delta} \frac{ |\cup_{\bp\in \cD_{\Delta}(\cP_1)} \cT_1(\bp)|}{|\cT_1(\bp)|} \cdot \frac{|\cT_{\bp}|}{M_{\bp}}
+%         \]
+% \end{remark}
+
+% The proof  of Proposition~\ref{prop: single scale OS} is the same as Proposition 4.1 of \cite{orponen2021hausdorff}.  We recall briefly here. 
+
+% \begin{proof}
+%     There exist a dyadic number $m_2$ and a set $\cP_1 \subset \cP$ with $|\cP_1|_{\delta}\gtrapprox_{\Delta} |\cP|_{\delta}$ such that for  each point $p\in \cP_1$, there exists  $\cT_1(p)\subset\cT(p)$  such that $ |\cT_1(p)|_{\delta}\gtrapprox_{\delta} |\cT(p)|_{\delta}$ and for each $\bT\in \cT^{\Delta}$,  $|\cT_1(p)\cap \bT|$  is either $\sim m_2$ or $0$. 
+
+
+
+
+%     Then apply Lemma~\ref{lem: pigeonhole} to find a
+%     %$\{1, \delta/\Delta, \delta\}$-uniform 
+%     set $\cT_{\Delta}$ satisfying item (2). 
+%     In the end, find $\cP_2\subset \cP_1$ with $|\cP_2|_{\delta}\gtrapprox_{\delta}|\cP_1|_{\delta}$  and for each $p\in \cP_2$ a refinement $\cT_2(p)\subset \cT_1(p)$ with $\cD_{\Delta}(\cT_2(p))\subset \cT_{\Delta}$. 
+% \end{proof}
+
+% Let $(\cP_0, \cT_0)$ be a $(\delta, s, C_0, M_0)$-nice configuration.
+% %with $\cP_0$ uniform and $|\cP_0|_{\delta}\approx \delta^{-t}$.  
+% Iterate Proposition~\ref{prop: single scale OS} to obtain the following multi-scale version. 
+
+
+
+
+
+
+% Let $(\cP, \cT)$ be a $(\delta, s, C, M)$-nice configuration and let $\delta <\Delta < 1$. 
+% Let $(\cP_2, \cT_2)$ be the output of Proposition~\ref{prop:incidence multiscale}. There exists a refinement $(\cP_3, \cT_3)$ of $(\cP_2, \cT_2)$ satisfying the following properties. For each $\bp\in \cD_{\Delta_n}( \cP_3)$, $n=1, \dots N$, there exists a   $\{\Delta_j\}_{j=1}^n$-uniform set refinement $\cT_3(\bp)$ of $\cT_2(\bp)$ with the same sequence among all $\bp\in \cD_{\Delta_n}(\cP_3)$,   and for each $\bT\in \cT_3(\bp)$, there exists 
+% \begin{enumerate}
+%     \item and a $\{\Delta_j\}_{j=1}^n$-uniform refinement $Y(\bT) \subset F(\bT):=\{\bp\in \cD_{\Delta_n}(\cP): \bT\in \cT(p)_2\}$ with the same sequence (possibly different from the previous one for $Y_0(\bT)$) among all $\bT\in \cT_3^{\Delta_n}$.
+%     \item $|\bT\cap \cT_3|\approx \lambda_n,$
+%     % \item 
+%     % \[
+%     % |\{(p, T): p\in \cP_3\cap \bp, T\in \cT_3(p), T^{\Delta_{n}} \in \cT_3(\bp)\}|\gtrapprox_{\delta} |\cP_3\cap \bp|\cdot |\cT_3(p)|.
+%     % \]
+%     \item for each $T\in \cT_3$, let 
+%     \[ \overline{Y}(T) =\cap_{j=1}^N  Y(T^{\Delta_j}),
+%     \]
+%     then 
+%     \begin{equation}\label{eq: r}
+%     M\cdot |\cP|_{\delta}\approx_{\delta} |Y(T)|_{\delta} \cdot |\cT_3|\lessapprox_{\delta}  \sum_{T\in \cT_3} |\overline{Y}(T)|_{\delta}.
+%     \end{equation}
+% \end{enumerate}
+% \end{lemma}
+% \begin{proof}
+
+
+
+% There exists a $\{\Delta_j\}_{j=1}^N$-uniform refinement $\cP_3$ of $\cP_2$ so that  each $p\in \cP_3$, there is  a $\{\Delta_j\}_{j=1}^N$-uniform refinement $\cT_3(p)\subset \cT_2(p)$ and for  each $T\in \cT_3(p)$, there is a $\{\Delta_j\}_{j=1}^N$-uniform refinement $Y(T)\subset F(T)=\{ p\in \cP_2: T\in \cT_2(p)\}$ with  the same sequence $\{N_j\}_{j=1}^N$ among all $T\in \cT_3 = \cup_{p\in \cP_3} \cT_3(p)$. 
+
+% Then \[
+% M\cdot |\cP|_{\delta}\approx_{\delta} |Y(T)|_{\delta} \cdot |\cT_3|.
+% \]
+
+% Suppose we have defined for scale $\Delta_{n+1}$, now we proceed to $\Delta_n$.
+
+% There exists a dyadic number $\lambda_{n}$ and  a subset $\overline{\cT}_{\Delta_n}$ of $\cup_{\bp\in \cD_{\Delta_n}(\cP_3)} \cT_2(\bp)$ such that  
+% \begin{enumerate}
+%     \item $|\bT\cap \cT_3|\approx \lambda_{n}$,
+%    % \item $|\cD_{\Delta_{N-1}} (\bT\cap \cP_1)|\approx r_{N-1},$
+%     \item there is a $\{\Delta_j\}_{j=1}^n$-uniform subset $Y(\bT)\subset F(\bT):=\{ \bp\in \cD_{\Delta_n}(\cP): T\in \cT_2(\bp)\}$ with the same sequence among all $\bT\in \overline{\cT}_{\Delta_n}$ and 
+%     \begin{equation}\label{eq: shading}
+%     \sum_{T\in \bT\cap \cT_3} |\cap_{j=n}^{N} Y(T^{\Delta_j})|_{\delta} \gtrapprox_{\delta} \sum_{T\in \bT\cap \cT_3} |\cap_{j=n+1}^{N} Y(T^{\Delta_j})|_{\delta}\gtrapprox_{\delta}  \sum_{T\in \bT\cap \cT_3} |Y(T)|.
+%     \end{equation}
+%     \item \begin{equation}\label{eq: popular}
+%     \sum_{\bT\in \overline{\cT}_{\Delta_n}} \sum_{T\in \bT\cap \cT_3} |Y(T)|_{\delta}\gtrapprox_{\delta} |\cP|_{\delta}\cdot M. 
+%     \end{equation}
+%     %$|Y(\bT)|_{\Delta_{N-1}}\approx |F(\bT)|_{\Delta_{N-1}}\approx R_{N-1}$.
+%     % \item  \begin{equation}\label{eq: popular} |\{ (p, T): p\in \cP_3\cap \bp, T\in \cT_3(p), T^{\Delta_{n}} \in \cT_3(\bp)\}|\gtrapprox_{\delta} |\cP_3\cap \bp|\cdot |\cT_3(p)|_{\delta}.
+%     % \end{equation}
+% \end{enumerate}
+
+% Then by (3), (4) of Proposition~\ref{prop:incidence multiscale},
+% \[
+% |\{(\bp, \bT)\in \cP_3\times \overline{\cT}_{\Delta_n}: \bT\in \cT_2(\bp)\}| \gtrapprox_{\delta} |\{(\bp, \bT): \bp\in \cD_{\Delta_n}(\cP_3):  \bT\in \cT_2(\bp)\}|,
+% \]
+% for otherwise \eqref{eq: popular} could not hold. 
+
+
+
+% Refine $\cP_3$ uniformly at resolution $\Delta_{n}$ such that for each $\bp \in \cD_{\Delta_n} (\cP_3)$, there exists a $\{\Delta_j\}_{j=1}^n$-uniform refinement $\cT_3(\bp)\subset \cT_2(\bp)\cap \overline{\cT}_{\Delta_n}$ with the same sequence among all $\bp\in \cD_{\Delta_n}(\cP_3)$ and 
+% \[
+% \sum_{\bT\in \cup\cT_3(\bp)} \sum_{T\in \bT\cap \cT_3} |Y(T)|_{\delta} \gtrapprox |\cP|_{\delta}\cdot M
+% \]
+% where $\cup\cT_3(\bp)$ means $\underset{\bp\in \cD_{\Delta_n}(\cP_3)}{\cup}\cT_3(\bp)$.
+
+% Replace $\cT_3$ by $\{ T: T\in \bT\cap \cT_3 \text{ with } \bT\in \cup\cT_3(\bp)\}$.
+
+
+
+
+% % Finally, pigeonhole a $\{\Delta_j\}_{j=1}^{N}$-uniform $\cP_3\subset \cP_2$ with $|\cP_3|\gtrapprox_{\delta} |\cP_2|$ and for any $p\in \cP_3$, there is a $\{\Delta_j\}_{j=1}^{N}$-uniform subset $\cT_3(p)\subset \cT_2(p)$ such that  $|\cT_3(p)|\gtrapprox_{\delta} M$ and for any $j$ and any $T\in \cT_{3}(p)$,  
+% % \[
+% % T^{\Delta_j}\in \cT_2(p^{\Delta_j}). 
+% % \]
+
+% % Choose $\cP_4\subset \cP_3$ such that $|\cP_4|\gtrapprox |\cP_3|$ and for each $p\in \cP_4$ and  $\bp=p^{\Delta_{N-1}}$, 
+% % \[\cT(p)_4:= \{T\in \cP(p)_3:  T^{\Delta_{N-1}}\in \cT(\bp)_3, \, p\cap Y(T)\neq \emptyset\}\]
+% % satisfies $|\cT(p)_4|\approx |\cT(p)_3|$. 
+
+% %Iterate the above process to $\Delta_1$ and we still denote the resulting $(\delta, s, C_4, M_4)$-configuration by  $(\cP_4, \cT_4)$ with $C_4\approx C, M_4\approx M$. 
+
+% \end{proof}
+
+Recall Orponen-Shmerkin multi-scale incidence decomposition \cite[Proposition 5.2]{orponen2021hausdorff}.
+
+\begin{prop}\label{prop: OSincidence multiscale}
+    Fix $N \ge 2$ and a sequence $\{ \Delta_j \}_{j=0}^n \subset 2^{-\N}$ with
+    \begin{equation*}
+        0 < \delta = \Delta_N < \Delta_{N-1} < \cdots < \Delta_1 < \Delta_0 = 1.
+    \end{equation*}
+    Let $(\cP_0, \cT_0) \subset \cD_\delta \times \T^\delta$ be a $(\delta, s, C, M)$-nice configuration. Then there exists a set $\cP \subset \cP_0$ such that:
+    \begin{enumerate}
+        \item $|\cD_{\Delta_j} (\cP)| \approx_\delta |\cD_{\Delta_j} (\cP_0)|$ and $|\cP \cap \textbf{p}| \approx_\delta |\cP_0 \cap \textbf{p}|$, $1 \leq j \leq N$, $\textbf{p} \in \cD_{\Delta_j} (\cP)$.
+        \item For every $0 \leq j \leq N-1$ and $\textbf{p} \in \cD_{\Delta_j}$, there exist numbers $C_{\textbf{p}} \approx_\delta C$ and $M_{\textbf{p}} \geq 1$, and a family of tubes $\cT_{\textbf{p}} \subset \T^{\Delta_{j+1}/\Delta_j}$ with the property that $(S_{\textbf{p}} (\cP \cap \textbf{p}), \cT_{\textbf{p}})$ is a $(\Delta_{j+1}/\Delta_j, s, C_{\textbf{p}}, M_{\textbf{p}})$-nice configuration.
+    \end{enumerate}
+
+    Furthermore, the families $\cT_{\textbf{p}}$ can be chosen such that if $\textbf{p}_j \in \cD_{\Delta_j} (\cP)$ for $0 \le j \le N-1$, then
+    \begin{equation*}
+        \frac{|\cT_0|}{M} \geapp_\delta \prod_{j=0}^{N-1} \frac{|\cT_{\textbf{p}_j}|}{M_{\textbf{p}_j}}.
+    \end{equation*}
+    Here, $\geapp_\delta$ means $\gesim_N \log(1/\delta)^C$, and likewise for $\leapp_\delta, \app_\delta$.
+\end{prop}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    % Let $\mathbb{T}_{\theta}$ denote the set of $\delta$-tubes in direction $\theta$ covering $E'$ and $|\mathbb{T}_{\theta}\leq  \delta^{-\frac{s+t}{2}+\epsilon}$.  Let $\mathbb{T}=\cup_{\theta\in \Lambda} \mathbb{T}_{\theta}$  and $H=H(E, \mathbb{T})$ be the incidence graph.  Let $E_0=\{ x\in E: |H_x|_{\delta}\geq \delta^{2\eta} |\Lambda|_{\delta}$, then $|E_0|_{\delta}\geq\frac{1}{2} |E|_{\delta}$. Let $H_0 = \pi_{E}^{-1}(E_0)\cap H$. Then \[|H_0|_{\delta}\geq \delta^{2\eta}|E_0|_{\delta}\cdot |\Lambda|_{\delta}, \quad |\mathbb{T}|_{\delta}\geq |\Lambda|_{\delta}\cdot \delta^{-\frac{s+t}{2}+\epsilon}.\] 
+    % This implies that 
+    % \[
+    % |H_0|_{\delta}\geq \delta^{\frac{s+t}{2}-\frac{\epsilon}{2}} |\mathbb{T}|_{\delta},
+    % \]
+    % which
+  
+
+%We will prove Proposition~\ref{prop: main} first then use it to prove Theorem~\ref{thm: main}.
+
+
+% \begin{definition}[$(t,s)$-Furstenberg sets]
+%     A $(t,s)$-Furstenberg set is a set $F\subset \mathbb{R}^2$ with the following property. There exists a line family $\mathcal{L}$ with $\dim_H \mathcal{L}=s$ such that $\dim_H (F\cap l)\geq t$ for all $l\in \mathcal{L}$. 
+% \end{definition}
+
+
+
+% \begin{conj}
+%     Any $(t,s)$-Furstenberg set $F$ has Hausdorff dimension $\geq \min \{ s+t, \frac{3t+s}{2}, t+1\}$.
+% \end{conj}
+\section{Main Theorem on Furstenberg sets}
+
+In this section, we will state our main theorem on Furstenberg sets and prove the special case $\cP$ is a $(\delta, 2-s, C)$-set, see Proposition~\ref{prop:s+t=2}. Then, we will prove a key special case (the semi well-spaced case) where $\cD_\Delta (\cP)$ looks like a $(\Delta, 2-s, C)$-set at high scales $\Delta$ and $\cP$ looks like a $(\delta, s, C)$-Katz-Tao set at low scales between $\delta$ and $\Delta$, see Proposition~\ref{prop: key}. Finally, we will combine Proposition~\ref{prop: key} and the recent breakthrough of \cite{orponen2023projections} in a now-standard induction on scales argument due to \cite{orponen2021hausdorff} to finish off the proof of Theorem~\ref{Thm: main}.
+
+In order to prove the Furstenberg set conjecture, it suffices to prove the following discretized version (see \cite[Section 3.1]{orponen2021hausdorff} or \cite[Lemma 3.3]{hera2021improved}).
+\begin{theorem}\label{Thm: main}
+   For every $\eps > 0$, there exists $\eta = \eta(\eps,s,t) > 0$ such that the following holds for any $ \delta < \delta_0(s, t, \epsilon)$. Let $(\cP, \cT)$ be a $(\delta, s, \delta^{-\eta}, M)$-nice configuration with $s\in (0, 1]$, $\cP$ is a $(\delta, t, \delta^{-\eta})$-set, $t\in (0, 2]$. Then
+   % Suppose  $\cP\subset \mathbb{R}^2$ be a   $(\delta, s, \delta^{-\eta})$-set such that for each $p\in \cP$, there is a $(\delta, t, \delta^{-\eta})$-set $\cT(p)$ containing $p$ and $|\cT(p)|\sim \mathcal{M}$. 
+    %Let $\cT=\cup_{p\in \cP} \cT(p)$, then 
+    \[
+    |\cT|_{\delta} \gtrsim_\eps \delta^{-\min\{t, \frac{s+t}{2},1\}+\eps} M.
+    \]
+\end{theorem}
+
+% \begin{prop}\label{prop: main}
+%     Let $t\in (0,1)$ and $s\in [t, 2-t]$, then for any $\epsilon>0$, there exists $\eta, \delta_0=\delta_0(s, t, \epsilon)$ such that the following holds for all $\delta\in (0, \delta_0]$. Let  $E\subset \mathbb{R}^2$ be a $(\delta, s, \delta^{-\eta})$-set and  $\Lambda\subset \mathbb{S}^1$ be a   $(\delta, t, \delta^{-\eta})$-set. For any $p\in E$, there is a $(\delta, t, \delta^{-\eta})$-set of $\delta$-tubes $\cT(p)$ passing through $p$ with directions in $\Lambda$ and $|\mathcal{T}(p)|_{\delta}\geq \delta^{\eta}|\Lambda|_{\delta}.$ Let $\cT = \cup_{p\in E}\cT(p)$, then 
+%         \[
+%     |\cT|_{\delta}\geq \delta^{-\frac{s+t}{2}+\epsilon}|\Lambda|_{\delta}.
+%     \]
+%    % Then for any  incidence graph $H=H(E, \mathbb{T}) \subset E\times \Lambda$ satisfying $|H_x|_{\delta}\geq \delta^{\eta}|\Lambda|_\delta$ for all $x\in E$, 
+%    % \[
+%    % |H|_{\delta}\leq |E|_{\delta} \delta^{\frac{s}{2} +\frac{t}{2}-\epsilon} |\mathbb{T}|_{\delta}.
+%    % \]
+% \end{prop}
+% Proposition~\ref{prop: main}  implies 
+% \begin{cor}
+%     Let $t\in (0,1)$ and $s\in [t, 2-t]$, then for any $\epsilon>0$, there exists $\eta=\eta(s,t, \epsilon), \delta_0=\delta_0(s, t, \epsilon)$ such that the following holds for all $\delta\in (0, \delta_0]$.  Let $E\subset \mathbb{R}^2$ be a  $(\delta, s, \delta^{-\eta})$-set and $\Lambda\subset \mathbb{S}^1$ be a $(\delta, t, \delta^{-\eta})$-set. Then, there exists $\theta\in \Lambda$ such that 
+%     \begin{equation}\label{eq: proj}
+%     |\pi_{\theta} E'|_{\delta}\geq \delta^{-\frac{s+t}{2}+\epsilon}, \quad \forall E'\subset E, |E'|_{\delta}\geq \delta^{\eta}|E|_{\delta}. 
+%     \end{equation}
+% \end{cor}
+% \begin{proof}
+%     We prove by contradiction. Suppose for every $\theta\in \Lambda$, there exists $E'\subset E$ with $|E'|_{\delta}\geq \delta^{\eta}|E|_{\delta}$ and $|\pi_{\theta}E'|_{\delta} \leq \delta^{-\frac{s+t}{2}+\epsilon}.$    Let $\mathcal{T}_{\theta}$ denote the set of $\delta$-tubes in direction $\theta$ covering $E'$ and $|\mathcal{T}_{\theta}|\leq \delta^{-\frac{s+t}{2}+\epsilon}$.  Let $\mathcal{T}=\cup_{\theta\in \Lambda}\mathcal{T}_{\theta}$ and for any $x\in E$, let $\mathcal{T}(x):=\{ T\in \mathcal{T}, x\cap T\neq \emptyset\}$.  Then $E_0:=\{ x\in E: |\mathcal{T}(x)|_{\delta}\geq \delta^{2\eta} |\Lambda|_{\delta}\}$ satisfies $|E_0|_{\delta}\geq \frac{1}{2} |E|_{\delta}.$ 
+
+%   This is a contradiction to Proposition~\ref{prop: main} with $\epsilon/2$ instead of $\epsilon$ and $2\eta$ instead of $\eta$ as $|\mathcal{T}|_{\delta}\leq \delta^{-\frac{s+t}{2} +\epsilon} |\Lambda|_{\delta}.$
+% \end{proof}
+
+
+
+
+
+% After refinement of $(\cP, \cT)$, we reduce to proving
+% \begin{theorem}\label{Thm: main}
+% % For any $(\delta, s, C_0, M_0)$-nice configuration $(\mathcal{P}_0, \mathcal{T}_0)$ with $\cP_0$ a uniform $(\delta, t, C)$-set, if there exist  $\mathcal{P}\subset \mathcal{P}_0$ with $|\mathcal{P}|_{\delta}\gtrapprox_{\delta} |\mathcal{P}_0|_{\delta}$, $\mathcal{T}\subset \mathcal{T}_0$ and $C \gtrapprox_{\delta}C_0$, $M\gtrapprox_{\delta} M_0$ such that
+
+%  For any $(\delta, s, C, M)$-nice configuration $(\mathcal{P}, \mathcal{T})$, when $s+t\geq 2$, define $r=\min_{T\in \cT} |T\cap \mathcal{P}_0|_{\delta}$, when $s+t<2$, define $r=\min_{\T\in \cT} |\{ p\in \cP: T\in \cT(p)\}|$, then 
+% \[
+% r\lesssim |\cP|_{\delta} \cdot \delta^{\min(\frac{t+s}{2}, 1)-\epsilon}.
+% \]
+% \end{theorem}
+
+
+% Here $\mathcal{T}$ might be much smaller than $\mathcal{T}_0$ and the fiber is taken over $\mathcal{P}_0$. {\color{red} I don't know what $\T$ and $\T_0$ mean here? Maybe this was a previous version of the theorem} {\color{purple} Yes. sorry I'm going through them, let me know if you are happy with the revised version}
+
+% \begin{remark}
+% {\color{red} not entirely sure if reducing to the case $|\cP|_{\delta}\approx \delta^{-t}$ is necessary}
+%     When $s+t<2$, it suffices to prove Theorem~\ref{Thm: main} for the case $|\cP|_{\delta}\approx \delta^{-t}$ because Theorem~\ref{Thm: main} is equivalent to Theorem~\ref{thm: main}.
+%     % $|\cT|_{\delta}\gtrapprox  M_0 \delta^{-\frac{s+t}{2}+\epsilon}$ for any $(\delta, s, C, M)$-nice configuration $(\cP, \cT)$ 
+%    To see this,  apply Proposition~\ref{prop:incidence multiscale} and Remark~\ref{rmk: uniform fiber} {\color{red} this remark is missing???} to obtain refinements $(\cP_i, \cT_i)$ of $(\cP_0, \cT_0), i=1,2$ with $r\approx_{\delta} |\{p\in \cP_1: T\in \cT_2(p)\}|$ and 
+%     \[
+%     r|\cT_2|_{\delta} \approx_{\delta} M |\cP_1|_{\delta}. 
+%     \]
+    
+% \end{remark}
+
+\subsection{The case $s + t \geq 2$}
+% \begin{prop}\label{prop:s+t=2}
+% Let $\epsilon>0$ and $(\cP_0, \cT_0)$ be a $(\delta, s, C, M)$-nice configuration with $s+t\geq 2$, $s,t>0$ and $\cP_0$ is $\{\Delta_j\}_{j=1}^N$-uniform with $\Delta_j=\delta^{\epsilon j}$. Then there exists $\delta_0=\delta_0(\epsilon, C)>0$ such that the following holds for any $\delta \in (0, \delta_0)$. 
+% For any refinement $(\cP, \cT)$ of $(\cP_0, \cT_0)$ such that $|T\cap \cP_0|_{\delta} \gtrsim r$ for any $T\in \cT$, we have
+% \[
+% r\lesssim |\cP|_{\delta} \cdot \delta^{1-\epsilon}.
+% \]
+%    % Theorem~\ref{Thm: main} is true when $s + t = 2$.
+% \end{prop}
+
+% {\color{red} I actually just need Corollary \ref{cor:s+t=2} and not Proposition \ref{prop:s+t=2} for Section 4.2. Thus, I propose to just prove Corollary \ref{cor:s+t=2}. The steps should just be the same, but there is an advantage that the inductive hypothesis is clearer. What do you think? I added a proof sketch in Corollary \ref{cor:s+t=2} to illustrate what I mean.} {\color{purple} This looks good, I commented previous Prop 4.2.  and change your Corollary to Prop?}
+
+% \begin{proof}%[Proof of Theorem~\ref{Thm: main} for the case $s+t= 2$.]
+% Apply Proposition~\ref{prop:incidence multiscale} to $(\cP, \cT)$ and with $\Delta_j=\delta^{j\epsilon}$ and obtain refinements $(\cP_i, \cT_i)$, $i=1,2$. 
+
+
+% Let $\Delta=\Delta_{N-1}$.
+% % For each $\bT\in \cD_{\Delta}(\cT_2)$ there exists a shading $Y(\bT) \subset\bT$ (which is a union of $\Delta$-cubes) with 
+% % \[
+% % \sum_{T\in \bT\cap \cT_2} |Y(\bT)\cap T\cap \cP_0|_{\delta}\approx_{\delta} \sum_{T\in \bT\cap \cT_2} |Y(T)|_{\delta}.
+% % \]
+% Let $\cT_{\lambda}\subset \cD_{\Delta}(\cT_2)$ be the $\Delta$-tubes $\bT$ with  $|\bT\cap \cP_0|_{\Delta}\sim \lambda$. {\color{red} to apply induction, I think you need $|\bT \cap \cD_\Delta (\cP_0)| \sim \lambda$} Then there exists a  dyadic number $\lambda$ such that 
+% \[
+% \sum_{\bp\in \cD_{\Delta}(\cP_2)} \sum_{\bT\in \cT_2(\bp)\cap \cT_{\lambda}} |\{(p, T): p\in \bp\cap \cP_2, T\in \cT_2(p)\cap \bT \}| \gtrapprox_{\delta} |\cP_0|_{\delta} \cdot M. 
+% \]
+% By Proposition~\ref{prop:incidence multiscale} and the properties of $(\cP_2, \cT_2)$, there exists a refinement  $(\cP_3, \cT_3)$ of $(\cP_2, \cT_2)$ such that for each $p\in \cP_3$, $\cD_{\Delta}(\cT_3(p))\subset \cT_{\lambda}$ and $(\cD_{\Delta}(\cP_3), \cD_{\Delta}(\cT_3))$ is a $(\Delta, s, C_{\Delta}, M_{\Delta})$-nice configuration for some $C_{\Delta}\approx_{\delta} C$ and $M_{\Delta}\gtrapprox_{\delta} C^{-1}\Delta^{-s}$. 
+
+% To see this, for a $\gtrapprox_{\delta} 1$-fraction of $\bp\in \cD_{\Delta}(\cP_0)$, 
+% \[
+% \sum_{\bT\in \cT_2(\bp)\cap \cT_{\lambda}} |\{(p, T): p\in \bp\cap \cP_2, T\in \cT_2(p)\cap \bT \}| \gtrapprox_{\delta} |\cP_0\cap \bp|_{\delta} \cdot M. 
+% \]
+% By Remark~\ref{rmk: spacing}, $\cT_2(\bp)\cap \cT_{\lambda}$ is a $(\Delta, s, C_{\bp})$-set for $C_{\bp} \approx_{\delta} C$.  Then we can choose $\cP_3$ to be the set of $p$ in $\cP_2$ contained in one of those $\bp$ with $\cT_3(p)= \{ T\in \cT_2(p): T^{\Delta}\in \cT_{\lambda}\}$ and $|\cT_3(p)|\gtrapprox_{\delta} M$. 
+
+
+
+% % Proceed as in the proof of Lemma~\ref{rmk: uniform fiber} {\color{red} this lemma is missing???}, there exists a $\{\Delta_j\}_{j=1}^N$-uniform refinement $\cP_3$ of $\cP_2$ such that for each $p\in \cP_3$, there is a $\{\Delta_j\}_{j=1}^N$-uniform refinement $\cT_3(p)\subset \cT_2(p)$ and for each $T\in \cT_3(p)$, a set $Y(T)\subset T\cap \cP_2$ with \[ |Y(T)|_{\delta}\approx_{\delta} |T\cap \cP_2|_{\delta}\gtrapprox_{\delta} r.\]  Let $\cT_3=\cup_{p\in \cP_3} \cT_3(p).$   There exists dyadic numbers $\lambda, \lambda'$ and  a refinement of $(\cP_3, \cT_3)$ (still use the same notation) such that $(\cD_{\Delta_{N-1}} (\cP_3), \cD_{\Delta_{N-1}}(\cP_3))$ is a $(\Delta_{N-1}, s, C, M_{N-1})$-nice configuration with 
+% % \begin{enumerate}
+% %     \item $|\cT_3\cap \bT|\sim \lambda$ for each $\bT\in \cD_{\Delta_{N-1}}(\cT_3)$ 
+% %     \item  on each $\bT\in \cD_{\Delta_{N-1}}(\cT_3)$, there is a shading $Y_0(\bT)$ with 
+% % \[
+% % \sum_{\bT\in \cT_3^{\Delta_{N-1}}}\sum_{T\in \cT_3\cap \bT} |Y_0(\bT)\cap Y(T)|_{\delta} \approx_{\delta}  \sum_{\bT\in \cT_3} | Y_0(T)|_{\delta}
+% % \]
+% % \item $|Y_0(\bT)|_{\Delta_{N-1}}\sim \lambda'$.
+% % \end{enumerate} 
+
+% Now we are ready to use high-low method to study the number of (unrestricted) incidences between $\cT_3$ and $\cP_0$.  If high frequency dominates, then 
+% \[
+% (|\cP_3|M)^{1/2} (r |\cT_3|)^{1/2} \lesssim \delta^{-\epsilon/2} |\cP_0|^{1/2} (|\cT_3| \delta^{-1})^{1/2},
+% \]
+% since $|\cP_3|\gtrapprox_{\delta} |\cP_0|$, this implies that 
+% \[
+% r \leq \delta^{-1-\epsilon}M^{-1}\leq |\cP|\delta^{1-\epsilon}.
+% \]
+
+% If low frequency dominates, let $\bp\in \cD_{\Delta_{N-1}}(\cP_3)$, then 
+% \[
+% r \cdot |\cT_3|_{\delta}\lessapprox_{\delta} \frac{\delta}{\Delta_{N-1}} |\{ (\bp, T)\in \cD_{\Delta_{N-1}}(\cP_0)\times \cT_3: \bp\cap T\neq \emptyset\}| \cdot |\cP_0\cap \bp|_{\delta}
+% \]
+
+
+
+
+% By induction, 
+% \[
+% \lambda \lesssim |\cP_0|_{\Delta_{N-1}}  \cdot \Delta_{N-1}^{1-\epsilon}.
+% \]
+% Therefore, 
+% \[
+% r \lesssim |\cP_0|_{\delta} \delta^{1-\epsilon}.
+% \]
+
+% The base case of the induction is 
+% \[
+% r \cdot |\cT_3|\lesssim \delta |\cP_0| \cdot |\cT_3|.
+% \]
+% Rearrange gives 
+% \[
+% r\leq \delta |\cP_0|\leq |\cP_0|\delta^{1-\epsilon}.
+% \]
+% \end{proof}
+
+% \begin{cor}\label{cor:s+t=2}
+%     Let $(\cP_0, \cT_0)$ be a $(\delta, s, C_0, M_0)$-nice configuration with $s+t\geq 2$. Then there exists a refinement $(\cP, \cT)$ of $(\cP_0, \cT_0)$ such that for any $\Delta\in (\delta, 1)$ and any $T\in \cT$, 
+%     \[
+%     |T\cap \cP|_{\Delta} \lessapprox_{\delta} |\cP|_{\Delta}\Delta^{1-\epsilon}.
+%     \]
+% \end{cor}
+% \begin{proof}
+%     By Lemma~\ref{lem: pigeonhole}, we can replace $\cP_0$ be a $\{\Delta_j\}_{j=1}^N$-uniform refinement with $\Delta_j =\delta^{j\eps}, j=1\dots N=\eps^{-1}$. Then iterate the argument in the proof of Proposition~\ref{prop:s+t=2}. 
+% \end{proof}
+
+%Then Theorem \ref{Thm: main} is already known and due to \cite{fu2021incidence} (the exact formulation is Corollary 5.51 of \cite{orponen2023projections}). The argument establishing \cite[Theorem 5.2]{fu2021incidence} uses $\T$ to create a new $(\delta, s+1, C)$ Katz-Tao set $\T'$ and uses a high-low method to upper-bound the number of incidences between $\cP$ and $\T'$.
+
+Then Theorem \ref{Thm: main} becomes $|\T|_\delta \gesim_\eps \delta^{-1+\eps} M$. By double counting the number of ``restricted incidences'' $|\{ (p, T) \in \cP \times \cT : T \in \T(p) \}|$, we can equivalently say the average tube in $\T$ belongs to $\T(p)$ for $\lesim \delta^{1-\eps} |\cP|_\delta$ many $\delta$-balls $p \in \cP$. For our purposes, we need the following stronger statement: every tube in $\T$ contains $\lesim \delta^{1-\eps} |\cP|_\delta$ many $\delta$-balls in $\cP$. Furthermore, we need this estimate to be true at all scales $w \in (\delta, 1)$, in the quantitative form presented below. These strong properties may not be true of the original configuration $(\cP, \cT)$, but will be true after passing to a refinement.
+
+\begin{prop}\label{prop:s+t=2}
+    Fix $\eps > 0, \Delta < \Delta_0$, $n \in \N$, and let $\delta = \Delta^n$. (Here $\Delta_0 > 0$ is an absolute constant.) Let $(\cP_0, \cT_0)$ be a $(\delta, s, C_0, M_0)$-nice configuration with $\cP$ a $(\delta, t, C_0)$-set, $s+t\geq 2$. Then there exists a refinement $(\cP, \cT)$ of $(\cP_0, \cT_0)$ such that for any $1 \le k \le n$ and any $T\in \cT$, $w = \Delta^k$,
+    \begin{equation}\label{eqn:cor s+t=2}
+        |(T^w)_\ord \cap \cD_w (\cP)| \lessapprox_{\Delta} C_0^2 \Delta^{-1} \cdot |\cP|_w w^{1-\epsilon}.
+    \end{equation}
+    The implicit constant $C$ in $C (\log \Delta^{-1})^C$ in $\lessapprox_{\Delta}$ may depend on $\eps$ and $n$ but not on $\Delta$, $C_0$, or $M_0$. (Recall $T_\ord$ was defined in Lemma \ref{lem:thicken dyadic tube}.)
+\end{prop}
+
+\begin{remark}
+    This corollary will be used in proving Proposition \ref{prop: key} with the parameter $n = \eps^{-1}$. Thus, $\Delta^{-1}$ should be viewed as a small power of $\delta^{-1}$.
+\end{remark}
+
+\begin{proof}
+    We induct on $n$. Base case $n = 1$ is the trivial fact $|T \cap \cD_{\Delta} (\cP)| \le \Delta^{-1}$ (which is why we have a $\Delta^{-1}$ term on the RHS of \eqref{eqn:cor s+t=2}).
+
+    For the inductive step, assume true for $n-1$, and we will now consider $n$. We first refine $\cP_0$ to be uniform at scales $\{ \Delta^i \}_{i=0}^n$ (and call the refinement $\cP_0$). Next, we apply Proposition~\ref{prop:incidence multiscale} with $\Delta^{n-1}\in (\delta, 1)$ to obtain a refinement $(\cP_1, \cT_1)$ of $(\cP_0, \cT_0)$ and, for each $\bp \in \cQ_{\Delta^{n-1}} := \cD_{\Delta^{n-1}} (\cP_1)$, a set $\cT_{\Delta^{n-1}} (\bp) \subset \T^{\Delta^{n-1}}$. Let $\cT_{\Delta^{n-1}} := \bigcup_{\bp \in \cQ_{\Delta^{n-1}}} \T_{\Delta^{n-1}} (\bp)$. Then $(\cQ_{\Delta^{n-1}}, \cT_{\Delta^{n-1}})$ is a $(\Delta^{n-1}, s, C_{\Delta^{n-1}}, M_{\Delta^{n-1}})$-nice configuration for some $C_{\Delta^{n-1}}\approx_{\Delta} C_0$ and $M_{\Delta^{n-1}}\gtrapprox_{\Delta} C_0^{-1}\Delta^{-s}$. By the induction hypothesis, we can find a refinement $(\cQ'_{\Delta^{n-1}}, \cT'_{\Delta^{n-1}})$ of $(\cQ_{\Delta^{n-1}}, \cT_{\Delta^{n-1}})$ such that %$(\cD_{\Delta^{n-1}}(\cP_2), \cD_{\Delta^{n-1}}(\cT_2))$ is a $(\Delta^{n-1}, s, C_{\Delta^{n-1}}, M_{\Delta^{n-1}})$-nice configuration and
+    for any $1 \le k \le n-1$ and any $\bT \in \cT'_{\Delta^{n-1}}$, $w = \Delta^k$,
+    \begin{equation}\label{eqn:cor s+t=2 ind hyp}
+        |\bT_\ord \cap \cD_w (\cQ'_{\Delta^{n-1}})| \lessapprox_{\Delta} C_0^2 \Delta^{-1} \cdot |\cQ'_{\Delta^{n-1}}|_w w^{1-\epsilon}.
+    \end{equation}
+
+As hinted by Remark \ref{rem:desired property}, we would like $\cD_{\Delta^{n-1}} (\cT_1 (p)) \subset \cT'_{\Delta^{n-1}} (p^{\Delta^{n-1}})$ for all $p \in \cP_1$, so that \eqref{eqn:cor s+t=2} will be automatically satisfied for $1 \le k \le n-1$. This will be true after passing to a refinement of $(\cP_1, \cT_1)$. 
+
+Since $(\cP_1, \cT_1)$ is the output of  Proposition~\ref{prop:incidence multiscale} applied to $(\cP_0, \cT_0)$, we get from Proposition~\ref{prop:incidence multiscale}, we get for each $\bp\in \cQ_{\Delta^{n-1}}$ and $\bT\in \cT_{\Delta^{n-1}} (\bp)$, 
+    \begin{equation}\label{eqn:m1 X}
+        \sum_{p\in \cP_1\cap \bp} | \cT_1(p)\cap \bT| \approx_{\delta} m_1 \cdot X.
+    \end{equation}
+    (indeed, the sum is $\app_\delta m_1$ for $\sim X$ many values of $p$ and $0$ otherwise).
+    Together with $(4)$ of Proposition~\ref{prop:incidence multiscale}, 
+    \[
+    X \cdot m_1 m \approx_{\delta} |\cP_1\cap \bp|_{\delta} \cdot m_1 m_2\approx_{\delta} |\cP_1\cap \bp|_{\delta} \cdot M.
+    \]
+    % Since for each $\bp\in \cQ'=\cD_{\Delta}(\cP_2)$,  $|\cT'_{\Delta}(\bp)|\gtrapprox_{\delta} |\cT_1(\bp)|$ and $\bp\cap \cP_1=\bp\cap \cP_2$, 
+    % \[
+    % \sum_{p\in \cP_2\cap \bp} |\cT_2(p)| \approx_{\delta} |\cP_1\cap \bp| \cdot M.
+    % \]
+    % Thus, we can find a refinement $(\cP_3, \cT_3)$ of $(\cP_2, \cT_2)$ that is also a refinement of $(\cP_1, \cT_1)$ at resolution $\delta$ and satisfies $ \cD_{\Delta}(\cT_3(p))\subset  \cT'_{\Delta}(p^{\Delta})\subset \cT_1(p^{\Delta}).$
+
+
+Let $\cP_2 := \bigcup_{\bp \in \cQ'_{\Delta^{n-1}}} (\cP_1 \cap \bp)$ and for each $p \in \cP_2$, let $\cT_2 (p) := \{ T \in \cT_1 (p) : T^{\Delta^{n-1}} \in \cT'_{\Delta^{n-1}} \}$. Then $(\cP_2, \cT_2)$ is a sub-configuration of $(\cP_1, \cT_1)$ with the desired property $\cD_{\Delta^{n-1}} (\T_2 (p)) \subset \T'_{\Delta^{n-1}} (p)$ for all $p \in \cP_2$, but unfortunately $(\cP_2, \cT_2)$ isn't a refinement of $(\cP_1, \cT_1)$. The saving grace is that $(\cP_2, \cT_2)$ is a big sub-configuration of $(\cP_1, \cT_1)$. Indeed, we sum \eqref{eqn:m1 X} over $\bp\in \cQ'_{\Delta^{n-1}} \subset \cQ_{\Delta^{n-1}}$ and $\bT\in \cT'_{\Delta^{n-1}} (\bp) \subset \cT_{\Delta^{n-1}} (\bp)$ to get
+\begin{align}
+    \sum_{p \in \cP_1} |\T_2 (p)| &=\sum_{\bp\in \cQ'_{\Delta^{n-1}}} \sum_{\bT\in \cT'_{\Delta^{n-1}} (\bp)} |\{(p, T): p\in \bp\cap \cP_2, T\in \cT_2(p)\cap \bT \}| \nonumber\\
+    &\gtrapprox_\delta \sum_{\bp\in \cQ'_{\Delta^{n-1}}} \sum_{\bT\in \cT'_{\Delta^{n-1}} (\bp)} m_1 \cdot X \gtrapprox_\delta |\cD_{\Delta^{n-1}} (\cP_1)| \cdot m \cdot m_1 \cdot X \gtrapprox_{\delta} |\cP_1|_{\delta} \cdot M. \label{eqn:many tubes left}
+\end{align}
+Roughly speaking, \eqref{eqn:many tubes left} tells us that the configuration $(\cP_2, \cT_2)$ ``preserves many of the restricted incidences'' of $(\cP_1, \cT_1)$, where the set of restricted incidences is $\{ (p, T) \in \cP_1 \times \cT_1 : T \in \cT_1 (p) \}$. This property is preserved if we replace $\cT_2$ by a well-chosen subset $\cT_{2,r} := \{ T \in \cT_2 (r) : |T_\ord \cap \cP_2|\sim r \}$ (so we also replace $\cT_2$ by $\cT_2 (p) \cap \cT_{2,r}$). Finally, using \eqref{eqn:many tubes left}, we are able to find a common refinement $(\cP, \cT)$ of $(\cP_2, \cT_2)$ and $(\cP_1, \cT_1)$ at resolution $\delta$ such that $\cT \subset \cT_{2,r}$. After this procedure, we have two useful properties for each $T \in \cT$:
+\begin{itemize}
+    \item $|T_\ord \cap \cP_2|\sim r$ where $r \in [1, \delta^{-1}]$;
+
+    \item $T^{\Delta^{n-1}} \in \T'_{\Delta^{n-1}}$ (because $T \in \T_2 (p)$ for some $p \in \cP_2$), so \eqref{eqn:cor s+t=2 ind hyp} applies to $T^{\Delta^{n-1}}$.
+\end{itemize}
+Furthermore, by property of refinement, we have $M := |\T(p)| \geapp M_0 \ge C^{-1} \delta^{-s}$ for any $p \in \cP$. 
+
+Now, we check \eqref{eqn:cor s+t=2}. Fix $T \in \T$ and $w = \Delta^k$, $1 \le k \le n$. If $1 \le k \le n-1$, then \eqref{eqn:cor s+t=2 ind hyp} applied to $T^{\Delta^{n-1}}$ gives
+\begin{equation*}
+    |(T^w)_\ord \cap \cD_w (\cP)| \lessapprox_{\Delta} C_0^2 \Delta^{-1} \cdot |\cQ'_{\Delta^{n-1}}|_w w^{1-\epsilon} \leapp_\Delta C_0^2 \Delta^{-1} \cdot |\cP|_w w^{1-\epsilon}.
+\end{equation*}
+For the last step $|\cQ'_{\Delta^{n-1}}|_w \leapp_\Delta |\cP|_w$, we used the following auxiliary calculation, which relies on the facts that $\cP$ is a refinement of $\cP_2$ (hence of $\cP_1$ and $\cP_0$) and that $\cP_0$ is $\{ 1, w, \delta \}$-uniform.%, so $\cD_w (\cP)$ is a refinement of $\cD_w (\cP_2) = \cD_w (\cQ'_{\Delta^{n-1}})$ when $1 \le k \le n-1$.
+\begin{equation*}
+    |\cP|_w \geapp_\Delta \frac{|\cP|_\delta}{\sup_{Q \in \cD_w (\cP)} |\cP \cap Q|} \geapp_\Delta \frac{|\cP_0|_\delta}{\sup_{Q \in \cD_w (\cP)} |\cP_0 \cap Q|} \ge |\cD_w (\cP_0)| \ge |\cQ'_{\Delta^{n-1}}|_w.
+\end{equation*}
+
+%In other words, for each $T\in \cT$, we have $|T_\ord \cap \cP_2|\sim r$ for some $r \in [1, \delta^{-1}]$. By property of refinement, $M := |\T(p)| \geapp M_0 \ge C^{-1} \delta^{-s}$ for any $p \in \cP$. Furthermore, since $\cP_2$ is $\{ 1, \Delta, \delta \}$-uniform, we get $|\cP|_w \geapp |\cP_2|_w$, so \eqref{eqn:cor s+t=2 ind hyp} gives for all $1 \le k \le n-1$, $T \in \T_2$, and $w = \Delta^k$,
+
+%continues to hold for $1 \le k \le n-1$ with a worse implicit factor in the $\leapp_\Delta$ notation.
+     
+%     Apply Proposition~\ref{prop:incidence multiscale} to $(\cP, \cT)$ and with $\Delta_j=\delta^{j\epsilon}$ and obtain refinements $(\cP_i, \cT_i)$, $i=1,2$. 
+
+
+% Let $\Delta=\Delta_{N-1}$.
+% % For each $\bT\in \cD_{\Delta}(\cT_2)$ there exists a shading $Y(\bT) \subset\bT$ (which is a union of $\Delta$-cubes) with 
+% % \[
+% % \sum_{T\in \bT\cap \cT_2} |Y(\bT)\cap T\cap \cP_0|_{\delta}\approx_{\delta} \sum_{T\in \bT\cap \cT_2} |Y(T)|_{\delta}.
+% % \]
+% Let $\cT_{\lambda}\subset \cD_{\Delta}(\cT_2)$ be the $\Delta$-tubes $\bT$ with  $|\bT\cap \cD_{\Delta}(\cP_0)|_{\Delta}\sim \lambda$. {\color{red} to apply induction, I think you need $|\bT \cap \cD_\Delta (\cP_0)| \sim \lambda$} {\color{purple} (fixed. Thanks!)} Then there exists a  dyadic number $\lambda$ such that 
+% \[
+% \sum_{\bp\in \cD_{\Delta}(\cP_2)} \sum_{\bT\in \cT_2(\bp)\cap \cT_{\lambda}} |\{(p, T): p\in \bp\cap \cP_2, T\in \cT_2(p)\cap \bT \}| \gtrapprox_{\delta} |\cP_0|_{\delta} \cdot M. 
+% \]
+% By Proposition~\ref{prop:incidence multiscale} and the properties of $(\cP_2, \cT_2)$, there exists a refinement  $(\cP_3, \cT_3)$ of $(\cP_2, \cT_2)$ such that for each $p\in \cP_3$, $\cD_{\Delta}(\cT_3(p))\subset \cT_{\lambda}$ and $(\cD_{\Delta}(\cP_3), \cD_{\Delta}(\cT_3))$ is a $(\Delta, s, C_{\Delta}, M_{\Delta})$-nice configuration for some $C_{\Delta}\approx_{\delta} C$ and $M_{\Delta}\gtrapprox_{\delta} C^{-1}\Delta^{-s}$. 
+
+% To see this, for a $\gtrapprox_{\delta} 1$-fraction of $\bp\in \cD_{\Delta}(\cP_0)$, 
+% \[
+% \sum_{\bT\in \cT_2(\bp)\cap \cT_{\lambda}} |\{(p, T): p\in \bp\cap \cP_2, T\in \cT_2(p)\cap \bT \}| \gtrapprox_{\delta} |\cP_0\cap \bp|_{\delta} \cdot M. 
+% \]
+% By Remark~\ref{rmk: spacing}, $\cT_2(\bp)\cap \cT_{\lambda}$ is a $(\Delta, s, C_{\bp})$-set for $C_{\bp} \approx_{\delta} C$.  Then we can choose $\cP_3$ to be the set of $p$ in $\cP_2$ contained in one of those $\bp$ with $\cT_3(p)= \{ T\in \cT_2(p): T^{\Delta}\in \cT_{\lambda}\}$ and $|\cT_3(p)|\gtrapprox_{\delta} M$. 
+
+
+
+% Proceed as in the proof of Lemma~\ref{rmk: uniform fiber} {\color{red} this lemma is missing???}, there exists a $\{\Delta_j\}_{j=1}^N$-uniform refinement $\cP_3$ of $\cP_2$ such that for each $p\in \cP_3$, there is a $\{\Delta_j\}_{j=1}^N$-uniform refinement $\cT_3(p)\subset \cT_2(p)$ and for each $T\in \cT_3(p)$, a set $Y(T)\subset T\cap \cP_2$ with \[ |Y(T)|_{\delta}\approx_{\delta} |T\cap \cP_2|_{\delta}\gtrapprox_{\delta} r.\]  Let $\cT_3=\cup_{p\in \cP_3} \cT_3(p).$   There exists dyadic numbers $\lambda, \lambda'$ and  a refinement of $(\cP_3, \cT_3)$ (still use the same notation) such that $(\cD_{\Delta_{N-1}} (\cP_3), \cD_{\Delta_{N-1}}(\cP_3))$ is a $(\Delta_{N-1}, s, C, M_{N-1})$-nice configuration with 
+% \begin{enumerate}
+%     \item $|\cT_3\cap \bT|\sim \lambda$ for each $\bT\in \cD_{\Delta_{N-1}}(\cT_3)$ 
+%     \item  on each $\bT\in \cD_{\Delta_{N-1}}(\cT_3)$, there is a shading $Y_0(\bT)$ with 
+% \[
+% \sum_{\bT\in \cT_3^{\Delta_{N-1}}}\sum_{T\in \cT_3\cap \bT} |Y_0(\bT)\cap Y(T)|_{\delta} \approx_{\delta}  \sum_{\bT\in \cT_3} | Y_0(T)|_{\delta}
+% \]
+% \item $|Y_0(\bT)|_{\Delta_{N-1}}\sim \lambda'$.
+% \end{enumerate} 
+Now, we check \eqref{eqn:cor s+t=2} for $k = n$. For this, it suffices to obtain an upper bound on $r$. To estimate $r$, we use the high-low method (Proposition \ref{prop:high low}) to study the number of (unrestricted) incidences between $\cT_\ord := \{ T_\ord : T \in \cT \}$ and $\cP_2$.  Let $S = \Delta^{-1} = \delta^{1/n}$ and $C = 6$ in Proposition \ref{prop:high low}; then
+\begin{equation}\label{eqn:prop 4.2 high low}
+    I(\cP_2, \T_\ord) \lesim_n \Delta^{-1/2} |\cP_2|^{1/2} (|\cT| \delta^{-1})^{1/2} + \Delta^{1-\eps} I(\cP_2, (\T_\ord)^{\Delta^{n-1}}).
+\end{equation}
+If the first term on the right-hand side dominates, then the facts $I(\cP_2, \T_\ord) \geapp_\Delta \max(|\cP|M, r |\cT|)$ imply that
+\[
+(|\cP|M)^{1/2} (r |\cT|)^{1/2} \leapp_\Delta I(\cP_2, \T_\ord) \lesim_n \Delta^{-1/2} |\cP_2|^{1/2} (|\cT| \delta^{-1})^{1/2}.
+\]
+Since $|\cP|\gtrapprox_{\delta} |\cP_2| \ge C_0^{-1} \delta^{-t}$, $M \ge C_0^{-1} \delta^{-s}$, and $s + t \ge 2$, this implies that 
+\[
+r \leq \Delta^{-1} \delta^{-1} M^{-1}\leq C_0^2 \Delta^{-1} \cdot |\cP| \delta^{1-\epsilon}.
+\]
+
+If the second term on the RHS of \eqref{eqn:prop 4.2 high low} dominates, let $\bp\in \cD_{\Delta^{n-1}}(\cP_2)$, then since $(T_\ord)^{\Delta^{n-1}} \subset (T^{\Delta^{n-1}})_\ord$ for $\Delta < \frac{1}{6}$ by Lemma \ref{lem:thicken dyadic tube}, we have
+\begin{align*}
+    r \cdot |\cT| &\lesim \Delta^{1-\eps} |\{ (p, T)\in \cP_2 \times \cT: p \cap (T_\ord)^{\Delta^{n-1}}\neq \emptyset\}| \\
+    &\le \Delta^{1-\eps} |\{ (\bp, T)\in \cD_{\Delta^{n-1}}(\cP_2)\times \cT: \bp\cap (T^{\Delta^{n-1}})_\ord \neq \emptyset\}| \cdot \sup_{\bp \in \cD_{\Delta^{n-1}} (\cP_2)}|\cP_2 \cap \bp|_\delta \\
+    &\le \Delta^{1-\eps} |\T| \cdot C_0^2 \cdot |\cP_2|_{\Delta^{n-1}}  \cdot \Delta^{(1-\epsilon)(n-1)} \cdot \frac{|\cP_2|_\delta}{|\cP_2|_{\Delta^{n-1}}} \\
+    &\le |\cP_2| |\cT| \cdot C_0^2 \delta^{1-\eps}.
+\end{align*}
+The third step follows from the inductive hypothesis \eqref{eqn:cor s+t=2 ind hyp} applied to $\bT = T^{\Delta^{n-1}} \in \cD_{\Delta^{n-1}} (\T_2) \subset \T'_{\Delta^{n-1}} (\bp)$ with $k = n-1$ (using $\cD_{\Delta^{n-1}} (\cP_2) = \cQ'_{\Delta^{n-1}}$), and uniformity of $\cP_2$ at scale $\Delta^{n-1}$.
+Therefore, 
+\[
+r \lesssim C_0^2 |\cP|_{\delta} \delta^{1-\epsilon}.
+\]
+This holds in either case and thus we have completed the proof of the inductive step.
+
+% The base case of the induction is 
+% \[
+% r \cdot |\cT|\lesssim \delta |\cP_0| \cdot |\cT|.
+% \]
+% Rearrange gives 
+% \[
+% r\leq \delta |\cP_0|\leq |\cP_0|\delta^{1-\epsilon}.
+% \]
+\end{proof}
+\subsection{When $\cP$ is $(2-s)$-dimensional at high scales and $s$-dimensional at low scales}
+
+% \begin{definition}[Tubelets]
+%     Let $(\cP,\cT)$ be a $(\delta, s, C, M)$-nice configuration and let $\Delta\in (\delta, 1)$.  Let $p\in \cP$, Define the set of $\Delta\times \delta$-tubelets associated to $p$ as 
+%     \[
+%     \cL_0(p):=\{ L: \exists  T\in \cT(p), L\subset T\}
+%     \]
+%     where $L=Q\cap T$ for some $Q\in \cD_{\Delta}$ and $T\in \cT^{\delta}$.
+%     % Let $\bp\in \cD_{S\delta}(\cP)$, define \[ \cT_{\Delta}(\bp) = \{\bT\in \cD_{S\delta}(\cT): \bT\cap \bp \neq \emptyset, \exists \bT'\in \cT(\bp), |\bT\cap \bT'|\geq S^2\Delta \delta \}\]
+%     % and
+%     % $\cL(p)=\{ L\in \cL: L\cap p\neq \emptyset,  \exists T\in \cT(p),  |L\cap T|\geq |L|/2\}$ and $\cL(T)=\{ L\in \cL: |L\cap T|\geq |L|/2\}.$
+% \end{definition}
+
+% \begin{definition}[Semi-restricted incidences]
+%     Suppose $\cT_0\subset \cT^{\delta}$ and for any $p\in \cP$ there is an associated $\cL(p)\subset \cL_0(p)$. For each $L\in \cL(p)$, let $\cT_0(L)=\{T\in \cT_0, L\subset T\}$.  The set of semi-restricted incidences with respect to $\{\cL(p)\}$ is the following:
+%     \[
+%     I_{\cL}(\cP, \cT_0)=\{ (p, T)\in \cP\times \cT_0: \exists L\in \cL(p), L\subset T\}.
+%     \]
+    
+% \end{definition}
+
+% \begin{prop}\label{prop: key}
+% Let $t\in (s, 2-s)$ and $(\cP, \cT)$ be a $(\delta, s, C, M)$-nice configuration and  $\cP$  a uniform $(\delta, t, C)$-set  with the following additional properties
+% \begin{enumerate}
+%     \item $ |\cP\cap Q|_{\rho} \lesssim  \rho^{2-s} |\cP|_{\delta}$,  for each $Q\in \cD_{\rho}(\cP), \rho \in [\Delta, 1]$,
+%    % \item $|\cP\cap Q|_{\rho} \lesssim (\rho/\delta)^s$,  for each $Q\in \cD_{\rho}(\cP), \rho\in [\delta, \Delta],$
+%     \item for each $p\in \cP$, $\cT(p)$ is uniform. 
+% \end{enumerate}
+% If $\cT_0\subset \cT^{\delta}$ is a uniform set containing $\cT$, for any $T\in \cT_0$ and any $\Delta_j\in [\Delta, 1],$
+% \[
+% |\{Q\in \cD_{\Delta_j}(\cP): Q\cap T\neq \emptyset\}|\leq |\cD_{\Delta_j}(\cP)| \Delta_j^{1-\epsilon}
+% \]
+% and $\{\cL(p)\}_{p\in \cP}$ satisfies $\cL(p)\subset \cL_0(p)$, $|\cL(p)|\approx |\cT(p)|_{\delta/\Delta},$ $|\cT_0(L)|\approx \lambda$, $|\{p\in \cP: L\in  \cL(p)\}|\approx b$ and is two-end for all $L\in \cup_{p\in \cP}\cL(p)$ and for any $T\in \cT_0$, $|I_{\cL}(\cP, \{T\})|\geq \delta^{1-\epsilon} |\cP|$.
+%  Then 
+% \[
+% I_{\cL}(\cP, \cT_0) \lesssim \delta^{-\epsilon} b^{1/2} \sqrt{\frac{|\cP|}{|\cT(p)|}} \cdot |\cT_0|.
+% \]
+% \end{prop}
+
+% The next two pigeonholing lemmas are for the proof of Proposition~\ref{prop: key}. 
+% \begin{lemma}\label{lem: scaleS}
+%      Let $(\cP, \cT)$ be a $(\delta, s, C,M)$-nice configuration and let $\Delta\in (\delta, 1)$, $S=\delta^{-\epsilon}$. Let $(\cP_2, \cT_2)$ be the output of Proposition~\ref{prop:incidence multiscale} applied to $(\cP, \cT)$. Then there exist a refinement $(\cP_3, \cT_3)$ and a dyadic number $\mathbf{a}$ such that for each $\bp\in \cD_{S\delta} (\cP_3)$ and each $S\Delta\times S\delta$-tubelet $\bL\in \cL_S(\bp)$, where
+%      \[
+%      \cL_S(\bp):=\{ \bL: \bp\cap \bL\neq \emptyset, \exists \bT\in \cT_3(\bp), |\bL\cap \bT|\geq |\bL|/2\}, 
+%      \]
+%      satisfies $|\cT_3(\bL)|\sim \mathbf{a}$ with
+%      \begin{equation}
+%          \cT_3(\bL):=\{\bT\in \cT_3(\bp): |\bT\cap \bL|\geq |\bL|/2\}. 
+%      \end{equation}
+% \end{lemma}
+% \begin{proof}
+%     Sort the tubelets  $\bL\in \cL_S(\bp)'= \{ \bL: \bp\cap \bL\neq \emptyset, \exists \bT\in \cT_2(\bp), |\bL\cap \bT|\geq |\bL|/2\}$ according to $\cT_2(\bL)$. There exists a dyadic number $\mathbf{a}(\bp)$ such that, defining \[\cT_3(\bp)= \{ \bT\in \cT_2(\bp): \exists \bL\in \cL_S(\bp)',  |\bT\cap \bL|\geq |\bL|/2, \cT_2(\bL)\sim \mathbf{a}(\bp)\},\]
+%     we have
+%     \[
+%     |\{(p, \bT)\in (\bp\cap \cP_2)\times \cT_3(\bp): \bT\in \cD_{S\delta}(\cT_2(p))\}|\gtrapprox_{\delta} |\cP_2\cap \bp| \cdot m_{N, N-1}
+%     \]
+%     where $m_{N, N-1}$ was defined in Proposition~\ref{prop:incidence multiscale}.
+
+%     Refine $\cP_2$ uniformly at scale $S\delta$ to $\cP_3$ so that $\mathbf{a}(\bp)=\mathbf{a}$ for all $\bp\in \cD_{S\delta}(\cP_3)$. 
+% \end{proof}
+
+% \begin{lemma}\label{lem: scaleS2}
+%     Let $(\cP_3, \cT_3)$ be the output of Lemma~\ref{lem: scaleS}, there exists a refinement $(\cP_4, \cT_4)$ of $(\cP_3, \cT_3)$ such that for each $\bT\in \cD_{S\delta}(\cT_4),$
+%     \[
+%     |\{\bp\in \cD_{S\delta}(\cP_3): \bT\in \cT_{3, \Delta}(\bp)\}|\sim \mathbf{b}, 
+%     \]
+%     \[
+%     |\cT_{4, \Delta}(\bp)|\gtrapprox_{\delta} |\cT_{3, \Delta}(\bp)|.
+%     \]
+% \end{lemma}
+% \begin{proof}
+    
+% \end{proof}
+
+% \begin{lemma}\label{lem: uniform fiber}
+%     Let $(\cP, \cT)$ be a $(\delta, s, C,M)$-nice configuration and let $\Delta_j=\delta^{\epsilon j} \in [ \Delta, 1]$. Let $(\cP_2, \cT_2)$ the the output of Proposition~\ref{prop:incidence multiscale} applying to $(\cP, \cT)$. Then there exists a refinement $(\cP_3, \cT_3)$, $\cL_j$, the set of $\Delta_j\times \delta$ tubelets associated to $(\cP_2, \cT_2)$, and $\cL^S$,  the set of $S\Delta\times S\delta$-tubelets associated to $(\cD_{S\delta}(\cP_2),  \cD_{S\delta}(\cT_2))$  satisfying the following properties. 
+%     \begin{enumerate}
+%         \item $|\cT_3(L_j)|\sim a_j\gtrapprox_{\delta} \frac{|\cT_2(p)|_{\delta}}{|\cT_2(p)|_{\delta/\Delta_j}}$  for each $L_j\in \cL_j$, 
+%         \item $|\cL_j(p)|\sim E_j\gtrapprox_{\delta} |\cT_2(p)|_{\delta/\Delta_j}$ for each $p\in \cP_3$ and $|\cL_j(T)| \sim b_j$ for each $T\in \cT_3$.
+%         \item $|\bT\cap \cT_3|\sim \lambda$ for each $\bT\in \cD_{S\delta}(\cT_3)$. 
+%         \item $|\cL^S(\bp)| \sim \mathbf{E}$ for each $\bp \in \cP_3$ and $|\cT_3(L^S)|\sim  \mathbf{a}$ for each 
+%     \end{enumerate}
+% \end{lemma}
+
+
+% To reduce to the setting of Proposition~\ref{prop: key}, let $(\cP, \cT)$ be a $(\delta, s, C, M)$-nice configuration with $\cP$ satisfying $(1)$ and $|\cP\cap Q|_{\rho} \lesssim (\rho/\delta)^s$,  for each $Q\in \cD_{\rho}(\cP), \rho\in [\delta, \Delta_0]$. 
+% Apply Proposition~\ref{prop:incidence multiscale} and obtain $(\cP_2, \cT_2)$. There exists a uniform subset $\cT_0$ such that 
+% \[
+% \sum_{p\in \cP} |\cT(p)\cap \cT_0|\gtrapprox |\cP|\cdot M.
+% \]
+% Let $(\cP_3, \cT_3)$ be a refinement of $(\cP_2, \cT_2)$ such that $\cP_3$ is uniform and for each $p\in \cP_3$,  $\cT_3(p)$ is uniform and $\cT_3(p)\subset \cT_2(p)\cap \cT_0$. Refine $(\cP_3, \cT_3)$ further and find a scale $\Delta\in (\Delta_0, 1)$ such that for a typical $L\in \cL_0(p)$, $|L\cap \cP|\lesssim (\delta/\Delta)^{\epsilon}$ and is two-end. 
+
+% Rename $(\cP_3, \cT_3)$ as $(\cP, \cT)$. For each $p\in \cP$, let $\cL(p)\subset \cL_0(p)$ such that $|\cT_0(L)|\sim \lambda(p)$ and $|\cL(p)|\gtrapprox |\cT(p)|_{\delta/\Delta}$.  Refine $\cP$ further so that $\lambda(p)=\lambda$ for all $p\in \cP$. 
+
+% \begin{proof}[Proof of Proposition~\ref{prop: key}]
+%     For each $p\in \cP$, let $\cT'(p)=\{ T\in \cT(p), \exists L\in \cL(p), L\subset T\}$. 
+%     Apply Proposition~\ref{prop:incidence multiscale} to $(\cP, \cT')$ to find a refinement $(\cP_2, \cT_2)$ such that $\cP_2$ is uniform and  for each $\bp\in \cD_{S\delta}(\cP_2)$, $\cT_2(\bp)$ is uniform and for each $\bL\in \cL_0(\bp), $ $|\cD_{S\delta}(\cT_0)(\bL)|\sim \lambda_S$.  Since $(\cP_2, \cT_2)$ is a refinement of $(\cP, \cT)$ and for each $p\in \cP$ and each $L\in \cL(p),$ 
+%     \[
+%     |\{T\in \cT'(p):  L\subset T\}|\sim \frac{|\cT(p)|_{\delta}}{|\cT(p)|_{\delta/\Delta}}, 
+%     \]
+%     let $\cL'(p)$ denote the set of $L\in \cL(p)$ such that there exists $T\in \cT_2(p)$, $L\subset T$ and $|L\cap \cP_2|\gtrapprox b$ and is $(1-N^{-2})\epsilon_1$-two-end (refinement are up to factors of $|\log \delta|^{C_N}$ while  two-end is upto $\delta^{\epsilon_1/N^2}$). 
+
+%     Then 
+%     \[
+%     |I_{\cL}(\cP, \cT_0)|\lessapprox |I_{\cL'}(\cP_2, \cT_0)|. 
+%     \]
+
+
+
+
+
+
+
+% Let
+% \[\cT_{\Box} =\bigcup_{\bp\in \cD_{\delta/\Delta}(\cP_2)}\cT_2(\bp).\] Consider the unrestricted incidences 
+% \[
+% I(\cL'\cap \bT_{\Box}, \cT_0\cap \bT_{\Box}):=|\{(L, T): |L\cap T|\geq |L|/2 \}|, 
+% \]
+% the number of incidences between $\cL'\cap \bT_{\Box}$ and $\cT_0\cap \bT_{\Box}$ for $\bT_{\Box}\in \cT_{\Box}$. 
+
+% If high frequency dominates, 
+% \[
+% (\frac{|\cT(p)|_{\delta}}{|\cT(p)|_{\delta/\Delta}} \cdot |\cL'\cap \bT_{\Box}|)^{1/2} \cdot |I(\cL'\cap \bT_{\Box}, \cT_0\cap \bT_{\Box})|^{1/2} \lesssim \delta^{-\epsilon}  |\cL'\cap \bT_{\Box}|^{1/2} \cdot |\cT_0\cap \bT_{\Box}|^{1/2} \Delta^{-1/2}.
+% \] 
+% Therefore, 
+% \[
+% I(\cL'\cap \bT_{\Box}, \cT_0\cap \bT_{\Box}) \lesssim \delta^{-2\epsilon}  \frac{|\cT(p)|_{\delta}}{|\cT(p)|_{\delta/\Delta}} \cdot |\cT_0\cap \bT_{\Box}| \cdot \Delta^{-1}. 
+% \]
+% Recall that  $ I(\cL'\cap \bT_{\Box}, \cT_0\cap \bT_{\Box}) \leq    |\cP|_{\Delta} \cdot \Delta^{1-\epsilon}|\cT_0\cap \bT_{\Box}|.$
+
+
+% By Lemma~\ref{lem: 2broad} with parameter $b$ and two-ends, 
+% \[
+% |\cP|_{\delta}/|\cP|_{\Delta} \gtrsim  b |\cT_2(p)|_{\delta/\Delta}.
+% \]
+
+% Summing over all $\bT_{\Box}$, 
+% \[
+% I_{\cL'}(\cP_2, \cT_0)\lesssim b \cdot I(\cL', \cT_0)\lesssim b \delta^{-\epsilon} \sqrt{\frac{|P|}{|\cT(p) b|}} \cdot |\cT_0| \lesssim \delta^{-\epsilon} b^{1/2} \sqrt{\frac{|P|}{|\cT(p)|}} \cdot |\cT_0| 
+% \]
+
+% If low frequency dominates, summing over all $\bT_{\Box}$ and let $x=\frac{|\cP|}{|\cP|_{S\delta}}$ and $\bT\in \cD_{S\delta}(\cT_0)$, then 
+% \[
+% I_{\cL'}(\cP_2, \cT_0) \sim  c S^{-1} x \cdot |\cT_0\cap\bT|   \cdot I_{\cD_{S\delta}(\cL')}(\cD_{S\delta} (\cP_2), \cD_{S\delta}(\cT_0)) 
+% \]
+% for some $c\leq 1$. 
+% Pigeonholing,  exists $b'$ and a set $\cL_S(\bp)$ of $S\delta \times \Delta$-tubelets, each $\bL\in \cL_S(\bp)$ satisfies
+% \begin{enumerate}
+%     \item $|\{ \bp\in \cD_{S\delta}(\cP_2): \exists \bT\in \cT_2(\bp), \bL\subset\bT\}| \sim b'$,
+%     \item $b\gtrapprox S^{-1} cb'x$,
+%     \item $|\cL_S(\bp)|\gtrapprox |\cT_2(\bp)|_{S\delta/\Delta}$ for a $\gtrapprox 1$-fraction of $\cD_{S\delta}(\cP_2).$
+% \end{enumerate}
+
+
+% We claim that for each $\bL\in \cL_S(\bp)$, $\{ \bp\in \cD_{S\delta}(\cP_2):   \exists \bT\in \cT_2(\bp), \bL\subset\bT\}$ is also $(1-2N^{-2})\epsilon_1$-two-end. There exist refinements $(\cP_3, \cT_3)$ of $(\cD_{S\delta}(\cP_2), \cD_{S\delta}(\cT_2)$ and $\cL_S'(\bp)$ satisfying the assumption with $b'$ in the place of $b$ and $S\delta$ in the place of $\delta$. 
+
+% By induction and the above reduction,  
+% \begin{align*}
+%  |I_{\cD_{S\delta}(\cL')}(\cD_{S\delta} (\cP_2), \cD_{S\delta}(\cT_0)) | &\lessapprox |I_{\cL_S} (\cP_3, \cD_{S\delta}(\cT_0))| \\
+%  &\lessapprox  (S\delta)^{-\epsilon} b'^{1/2} \sqrt{\frac{|\cP_3|_{S\delta}}{|\cT_2(\bp)|_{S\delta}}} \cdot |\cD_{S\delta}\cT_0|.
+% \end{align*}
+
+% Then \begin{align*}
+%     I_{\cL'}(\cP_2, \cT_0) & \lesssim (S\delta)^{-\epsilon} cS^{-1} x b'^{1/2} \sqrt{\frac{|\cP_3|_{S\delta}}{|\cT(\bp)|_{S\delta}}} \cdot |\cT_0|\\
+%     &\lesssim b^{1/2} (S\delta)^{-\epsilon} S^{-1/2} \sqrt{ \frac{|\cP|}{|\cT_2(\bp)|_{S\delta}}} \cdot |\cT_0|\\
+%     &\leq \delta^{-\epsilon} b^{1/2} \sqrt{\frac{|\cP|}{|\cT(p)|}} \cdot |\cT_0|.
+% \end{align*}
+
+% The base case of the induction is when $\delta=\Delta^{1+\epsilon}$. 
+
+    
+% \end{proof}
+
+
+
+
+
+% \begin{definition}[Two-end]
+%     Let $T\in \cT^{\delta}$ and let $\cP\subset \cD_{\delta}$. We say that $T\cap \cP$ is $\epsilon_1$-two-end if 
+%     \[
+%     \max_{Q\in \cD_{\delta^{\epsilon}}} |T\cap Q\cap \cP|_{\delta}\leq \delta^{\epsilon \epsilon_1} |T\cap \cP|_{\delta}. 
+%     \]
+% \end{definition}
+
+% % \begin{lemma}\label{lem: br}
+% %     Suppose $\cP\subset \cD_{\delta}$ and  $r\geq 2$, let $\cT_r\subset \cT^{\delta}$ denote the set of tubes $T\in \cT^{\delta}$ with $|T\cap \cP|\geq r$ and $T\cap \cP$ is two-ends.  Then 
+% %     \[
+% %     |\cT_r|\lesssim \delta^{-\epsilon} \frac{|\cP|^2}{r^2}.
+% %     \]
+% % \end{lemma}
+
+% % Removal process. 
+
+
+
+% % \begin{lemma}\label{lem: prune}
+% %    Let $\cP$ is $\geq 2-s$-dimensional from scale $\Delta$ to $1$ and $\cP$ is  $\leq s$-dim from scale $\delta$ to $\Delta$.  Let $(\cP_3, \cT_3)$ be the output of Proposition~\ref{prop:incidence multiscale} and Remark~\ref{rmk: uniform fiber} applying to a $(\delta, s, M, C)$-nice configuration $(\cP, \cT)$. Then there exists a refinement $(\cP_4, \cT_4)$ of $(\cP_3, \cT_3)$ such that 
+% %    \[ \frac{|Y_0(T)|_{\delta}}{|Y_0(T)|_{\Delta}}=\lambda \leq (\Delta/\delta)^{\epsilon} \] 
+% %    for any $T\in \cT_4$.
+% % \end{lemma}
+% % \begin{proof}
+% %     Prove by contradiction. Let $\cT_{bad}$ be the set of  $T\in \cT_3$ with  $\frac{ |Y_0(T)|_{\delta}}{|Y_0(T)|_{\Delta}}\geq (\Delta/\delta)^{\epsilon}.$  Suppose the conclusion does not hold, then there exists a refinement $(\cP', \cT')$ of $(\cP_3, \cT_3)$ with $\cT'\subset \cT_{bad}$. Let $\mathbb{L}_{\lambda}$ be the set of $\delta\times \Delta$ tube segments $L$ ( in other words, $L=Q\cap T$ for some $Q\in \cD_{\Delta}$ and $T\in \cT^{\delta}$)  with $|L\cap \cP_1| \sim \lambda \geq (\Delta/\delta )^{\epsilon}$.  Then by pigeonholing, there exists a dyadic $\lambda$ such that 
+% %     \[|\mathbb{L}_{\lambda}|\geq |\cP_1|_{\delta} |\cT_3(p)|_{\delta/\Delta}\lambda^{-1} \geq |\cP_1|_{\delta}(\delta/\Delta)^{-s} \lambda^{-1} .\] 
+
+% %     By Lemma~\ref{lem: br} (assuming two-end), 
+% %     \[
+% %     |\mathbb{L}_{\lambda}|\lesssim |\cP|_{\Delta}\cdot (\frac{|\cP|_{\delta}}{|\cP|_{\Delta}})^2 \lambda^{-2}. 
+% %     \]
+% %     By our assumption, $|\cP|_{\delta}/|\cP|_{\Delta}\leq (\delta/\Delta)^{-s}.$ This yields a contradiction when $\lambda> (\Delta/\delta)^{\epsilon}.$
+
+% %     If it is not two-end, let $\Delta' \leq \Delta$ be the largest scale where the tube segment two-end and repeat the process. 
+% % \end{proof}
+
+% % Apply Remark~\ref{rmk: uniform fiber} again so that $(\cP_4, \cT_4)$ satisfies $\cT_4$ is $\{\Delta_j\}_{j=1}^{N}$-uniform with $\Delta_j=\delta^{j\epsilon}$. After each refinement, we always have 
+% % \[
+% % r|\cT_4|\lessapprox_{\delta} I(\cP_4, \cT_4):=|\{(p, T): T\in \cT_4(p)\}|.
+% % \]
+% \vspace{10pt}
+
+% % \begin{proof}[Proof of Proposition~\ref{prop: key}]
+% % (Change to unrestricted incidences for tubelets and tubes.) 
+% % Apply Proposition~\ref{prop:incidence multiscale}, Lemma~\ref{rmk: uniform fiber} and Lemma~\ref{lem: 2broad} to $(\cP, \cT)$ and obtain refinements $(\cP_i, \cT_i), i=1, 2, 3$.  By the case $s+t\geq 2$ of Theorem~\ref{Thm: main}, we can also assume that $|Y_0(T)|_{\Delta_j}\leq |\cP|_{\Delta_j}\Delta_j^{1-\epsilon}$ for any $\Delta_j =\Delta^{\epsilon j}, j=1, \dots, N=\epsilon^{-1}$.   Let $\Delta'\in [\Delta, 1]$ be the maximum scale such that 
+% % \[
+% % \frac{|Y_0(T)|_{\delta}}{|Y_0(T)|_{\Delta'}} \leq (\Delta'/\delta)^{\epsilon}.
+% % \]
+
+% % Rename $\Delta'$ as $\Delta$.  Let $\mathbb{L}$ be the set of $\Delta\times \delta$-tube segments $L$ such that there exist $p\in \cP_3\cap L$ and $L\subset T\in \cT_3(p)$. Let
+% % \[\cT_{\Box} =\bigcup_{\bp\in \cD_{\delta/\Delta}(\cP_3)}\cT_3(\bp).\] Consider the unrestricted incidences 
+% % \[
+% % I(\mathbb{L}\cap \bT, \cT_3\cap \bT):=|\{(L, T): |L\cap T|\geq |L|/2 \}|, 
+% % \]
+% % the number of incidences between $\mathbb{L}\cap \bT$ and $\cT_3\cap \bT$ for $\bT\in \cT_{\Box}$. 
+
+
+% % % If the lowest frequency dominates, then 
+% % % \[
+% % % r|\cT_4\cap \bT| \leq    \Delta (\Delta/\delta)^{\epsilon} |\cT_4\cap \bT| \cdot |\mathbb{L}\cap \bT|   
+% % % \]
+% % % Rearrange, 
+% % % $r\leq \delta|\cP|_{\delta}.$
+
+% % Double counting,  
+% % \[
+% %  I(\mathbb{L}\cap \bT, \cT_3\cap \bT) \approx_{\delta} |Y(T)|_{\delta}\cdot |\cT_3\cap \bT| \approx_{\delta} \frac{|\cT_2(p)|_{\delta}}{|\cT_2(p)|_{\Delta/\delta}} |\mathbb{L}\cap \bT|,
+% % \]
+
+% % Let $S_{\bT}: \cT\rightarrow [0,\Delta^{-1})^2$ be the homothety with $S_{\bT}(\bT)=[0,\Delta^{-1})^2$.
+
+% % If high frequency dominates, then
+
+% % \[
+% % ( r |\cT_4\cap \bT|)^{1/2} (\frac{|\cT_2(p)|_{\delta}}{|\cT_2(p)|_{\Delta/\delta}} |\mathbb{L}\cap \bT|)^{1/2} \lesssim \delta^{-\epsilon} |\mathbb{L}\cap \bT|^{1/2} ( |\cT_4\cap \bT|\Delta^{-1})^{1/2}.
+% % \]
+% % This implies that \[ r \cdot \frac{|\cT_2(p)|_{\delta}}{|\cT_2(p)|_{\delta/\Delta}} \lesssim \delta^{-2\epsilon} \Delta^{-1}.\] 
+% % Recall that  $r\leq |\cP|_{\Delta} \cdot \Delta^{1-2\epsilon}.$
+
+
+% % By Lemma~\ref{lem: 2broad} and the maximality of $\Delta$ (which ensures two-end), 
+% % \[
+% % |\cP|_{\delta}/|\cP|_{\Delta} \geq |\cT_2(p)|_{\delta/\Delta}.
+% % \]
+
+% % Putting everything together, 
+% % \[
+% % r^2 \lesssim \delta^{-4\epsilon} \frac{|\cP|_{\delta}}{|\cT(p)|_{\delta}}.
+% % \]
+% % Therefore,
+% % \[
+% % r\lesssim \delta^{-2\epsilon} |\cP|_{\delta} (|\cP|_{\delta}|\cT_4(p)|_{\delta})^{-1/2} \lesssim  |\cP|_{\delta}\delta^{\frac{s+t}{2} -2\epsilon}.
+% % \]
+
+% % Now assume that low frequency dominates,  then there exists $S \in (\delta^{-\epsilon} , \Delta/\delta]$ such that, let $\rho=S\delta$ and $\cT_{S\delta}=\cup_{p\in \cD_{S\delta}(\cP_4)} \cT_4(p)$,
+% % \[
+% % r|\cT_4\cap \bT| \leq S^{-1} \cdot |\cT_4\cap T_{\rho}| \cdot |\{ (p, T_{\rho})\in (\cP_4\cap \bT)\times (\cT_{\rho}\cap \bT): T_{\rho}\in \cD_{\rho}(\cT_4(p))\}|.
+% % \]
+% % The reason is that $T\in \cT_4(p)$ implies that $T^{\rho}\in \cD_{\rho}(\cT_4(p))$.  Note also $ \cD_{\rho}(\cT_4(p))\subset \cT_4(p^{\rho}).$
+
+
+% % Summing over all $\bT\in \cT_{\Box},$
+% % \begin{align*}
+% % r\cdot |\cT_4|&\leq S^{-1}  |\cT_4\cap T_{\rho}|\cdot  |\{ (p, T_{\rho})\in \cP_4\times\cT_{\rho}: T_{\rho}\in \cD_{\rho}(\cT_4(p))\}|\\
+% % &\leq S^{-1} |\cT_4\cap T_{\rho}|\cdot  \frac{|\cP|_{\delta}}{|\cP|_{\rho}} \cdot |\cT_{\rho}|_{\rho} \cdot |\cP|_{\rho} \cdot  (\rho)^{\frac{s+t}{2} -\epsilon}. 
+% % \end{align*}
+% % The last inequality is by induction
+% % \[
+% % I(\cD_{\rho}(\cP_4), \cT_{\rho}) = | \{ (\bp, T_{\rho})\in \cD_{\rho}(\cP_4) \times \cT_{\rho}: T_{\rho}\in  \cT_4(\bp)\}|\lesssim |\cT_{\rho}| \cdot |\cP|_{\rho}  \cdot \rho^{\frac{s+t}{2}-\epsilon}.
+% % \]
+% % %(think about an argument without using induction). 
+% % Rearrange gives  $r\leq |\cP|_{\delta}\delta^{\frac{s+t}{2}-\epsilon}.$
+
+% % The base case of the induction is when $S=\Delta/\delta$, then by Theorem~\ref{Thm: main} for the case $s+t\geq 2$, 
+% % \[
+% % I(\cD_{\Delta}(\cP_4),\cT_{\Delta}) \leq |\cT_{\Delta}|\cdot |\cP|_{\Delta}\cdot \Delta^{1-\epsilon}.
+% % \]
+% % %For each $p\in \cP_2$, choose a uniform set $\cT(p)_3\subset \cT(p)_2$ with $|\cT(p)_3|\gtrapprox |\cT(p)_2|$ and for each $T\in \cT(p)_3$, there is a $\beta_N(p)$-uniform set $Y(T)\subset T\cap \cP_1$ with $|Y(T)|\gtrapprox |T\cap \cP_1|$. Refine $\cP_2$ such that $\beta_N(p)=\beta$.  
+
+% % %Then we move to scale $\Delta_{N-1}$. For each $\bp\in \cD_{\Delta_{N-1}}, $ there is a $\gamma_{N-1}$-uniform set $\cT(\bp)_3$ so that for each $\bT\in \cT(\bp)_3$, there is a $\beta_{N-1}(\bp)$-uniform set $Y(\bT)\subset \bT\cap \cP_1$ (up to scale $\Delta_{N-1}$) such that $|\bT\cap \cT_2|\approx \lambda_{N-1}(\bp)$ and 
+% % %\[
+% % %|\{ (p, T): p\in \cP_2\cap \bp, T\in \cP(p)_3, T^{\Delta_{N-1}} \in \cT(\bp)_3\}|\gtrapprox |\cP_2\cap \bp|\cdot |\cT(p)_2|.
+% % %\]
+% % \end{proof}
+
+
+%  \begin{lemma}\label{lem: 2broad}
+%     Let $\cP\subset\cD_{\delta}, \cT\subset \cT^{\delta}$ such that for each $T\in \cT$, there is $ Y(T)\subset T\cap \cP$  and $|Y(T)|\sim r$ is two-end, and $|\{T\in \cT: p\in Y(T)\}|\geq M$ for a $\geq \delta^{\epsilon}$-fraction of $\cP$, then 
+%     \[
+%     |\cP|_{\delta}\gtrsim \delta^{4\epsilon} M r. 
+%     \]
+% \end{lemma}
+% {\color{red} Does the following alternate proof work (needs only one $p \in \cP$ instead of a fraction $\delta^\eps$)? Take $p \in \cP$ such that $|\T(p)| := |\{T\in \cT: p\in Y(T)\}|\geq M$, and then consider $\cup \T(p) \cap \cP \setminus B(p, \delta^\eps)$. There are $\sim r$ many balls of $\cP$ in $t \setminus B(p, \delta^\eps)$ for $t \in \T(p)$ (by two-ends), and each such ball $q$ lies in $\lesim \delta^{-\eps}$ many $t \in \T(p)$ since $d(p, q) \ge \delta^{\eps}$. Hence, $|\cup \T(p) \cap \cP \setminus B(p, \delta^\eps)| \ge \delta^\eps Mr$, and this is a lower bound for $|\cP|$.}
+% \begin{proof}
+%     Consider the number of incidences 
+%     \[
+%     I(\cP, \cT):=|\{(p,T)\in \cP\times \cT: p\in Y(T)\}|. 
+%     \]
+%     Then \[|\cP|_{\delta}\cdot M \cdot \delta^{\epsilon}  \lesssim I(\cP, \cT)  \lesssim \delta^{-\epsilon}  |\cT|^{1/2} |\cP|_{\delta}\]
+%     and 
+%     \[
+%     I(\cP, \cT) \gtrsim r |\cT|.
+%     \].
+% \end{proof}
+
+%\section{Szemeredi-Trotter type decay}
+%In this section, $\leapp$ means $\le C \delta^{-C\eps}$ and 
+In this section, if $\cP$ is a set of $\delta$--balls, not necessarily essentially distinct and $Q\subset \mathbb{R}^2$ is a set, then $|\cP\cap Q|$ means the number of $\delta$--balls in $\cP$ intersecting $Q$.
+
+\begin{prop}\label{prop: key}
+    Let $\delta \le \Delta \le 1$, $\eps > 0$, and $(\cP, \cT)$ be a $(\delta, s, \delta^{-\eps^2}, M)$-nice configuration with $s\in (0, 1]$. Suppose that
+   % Suppose  $\cP\subset \mathbb{R}^2$ be a   $(\delta, s, \delta^{-\eta})$-set such that for each $p\in \cP$, there is a $(\delta, t, \delta^{-\eta})$-set $\cT(p)$ containing $p$ and $|\cT(p)|\sim \mathcal{M}$. 
+    %Let $\cT=\cup_{p\in \cP} \cT(p)$, then 
+    $\cP \subset \cD_\delta$ satisfies the spacing conditions
+    \begin{gather}
+        |\cP \cap B(x, r)| \le \delta^{-\eps^2} \cdot r^{2-s} \cdot |\cP|, \qquad \Delta < r < 1, \\
+        %|\cP_0 \cap B(x, r)| \le C_1 \Delta^{2-s} (r/\Delta)^s \cdot |\cP_0|, \qquad \delta < r < \Delta.
+        |\cP \cap B(x, r)| \le \delta^{-\eps^2} \cdot (r/\delta)^s, \qquad \delta < r < \Delta. \label{eqn:spacing condition 2}
+    \end{gather}
+    Then $|\cT|_{\delta} \gtrsim_\eps \delta^{35\eps} \cdot \min(M|\cP|, M^{3/2} |\cP|^{1/2}, \delta^{-1} M)$.
+\end{prop}
+
+For future reference, we repackage it into a special case of Theorem \ref{Thm: main}. The corollary follows from Proposition \ref{prop: key} because we can just take $\Delta = (|\cP|_\delta 
+ \delta^s)^{2s-2} \in (\delta, 1)$.
+\begin{cor}\label{cor: key}
+    For every $\eps > 0$ and $\eta = \frac{\eps^2}{1225}$, the following holds for any $ \delta < \delta_0(s, t, \epsilon)$. Let $(\cP, \cT)$ be a $(\delta, s, \delta^{-\eta}, M)$-nice configuration with $s\in (0, 1]$, and $|\cP| \sim \delta^{-t}$, $t \in [s, 2-s]$.
+    Suppose $\cP$ satisfies the stronger spacing condition
+    \begin{equation*}
+        |\cP \cap Q|_\delta \lesim \delta^{-\eta} \cdot \max(\rho^{2-s} |\cP|_\delta, (\rho/\delta)^s) \text{ for any } Q \in \cD_\rho (\cP), \delta \le \rho \le 1.
+    \end{equation*}
+   Then
+    \[
+    |\cT|_{\delta} \gtrsim_\eps \delta^{-\frac{s+t}{2}+\eps} M.
+    \]
+\end{cor}
+
+The key lemma to prove Proposition \ref{prop: key} is the following generalization of \cite[Theorem 1.1]{guth2019incidence}.
+
+\begin{lemma}\label{lem:r-rich}
+     Let $\delta < \Delta < 1$, $\eps \in \frac{1}{\N}$, and let $\cP$ be a set of dyadic $\delta$-cubes (with possible repetitions) such that for all $1 \le k \le \eps^{-1}$, we have that each $Q \in \cD_{\Delta^{k\eps}} (\cP)$ contains the same number of cubes in $\cP$, and that no two cells of $\cD_\Delta (\cP)$ are adjacent. Call a $\delta$-tube $T$ \textbf{good} if $|T^w \cap \cD_w (\cP)| \le \Delta^{-\eps} \cdot w |\cD_w (\cP)|$ for all $w \in \{ \Delta^\eps, \Delta^{2\eps}, \cdots, \Delta \}$. Let $N_{w, b} (T)$ be the number of $Q \in \cD_w (\cP)$ such that $|T \cap Q \cap \cP| \ge b$. Let $\T_{a,b}$ be a set of essentially distinct good $\delta$-tubes with $N_{\Delta, b} (T) \ge a$. If $a \ge 2$ and $ab > \delta^{1-2\eps} |\cP|$, then $|\T_{a,b}| \lesim_{\eps} \frac{|\cP|^2}{a^3 b^2} \delta^{-5\eps}$.
+\end{lemma}
+
+We give some clarifying examples of this lemma.
+
+\begin{remark}
+    The lemma holds equally well for ordinary $\delta$-balls in place of dyadic $\delta$-cubes.
+    If $\cP$ is a set of well-spaced $\delta$-balls, i.e. $\cD_\Delta (\cP)$ is the set of all dyadic $\Delta$-squares in $[0, 1]^2$ and each $Q \in \cD_\Delta (\cP)$ contains exactly $1$ $\delta$-ball in $\cP$, then the set of $r$-rich tubes is contained in $\T_{r,1}$. Furthermore, for any $\eps > 0$, the condition $N_w (T) \le C\Delta^{-\eps} \cdot w|\cD_w (\cP)|$ is true: the LHS is $\le w^{-1}$ while $|\cD_w (\cP)| = w^{-2}$. Hence, we get $|\T_r| \lesim \frac{|\cP|^2}{r^3} \delta^{-C \eps}$, which agrees with \cite[Theorem 3]{fu2022incidence} (the dual of \cite[Theorem 1.1]{guth2019incidence}) in the case $X = W$. (Curiously, Lemma \ref{lem:r-rich} doesn't seem to imply all of \cite[Theorem 3]{fu2022incidence}.)
+\end{remark}
+
+\begin{remark}
+    If we superimpose $k$ copies of $\cP$ and increase $b$ by a factor of $k$, then Lemma~\ref{lem:r-rich} does not change.
+\end{remark}
+
+Before proving Lemma~\ref{lem:r-rich}, we see how it implies Proposition~\ref{prop: key}. The following lemma uses the spacing condition \eqref{eqn:spacing condition 2} for $\cP$.
+
+\begin{lemma}\label{lem:elementary incidence}
+    Fix $\delta < \Delta < 1$. Let $\cP$ be a set of distinct $\delta$-balls in $[0, \Delta]^2$ such that $|\cP \cap B(x, w)| \le K \cdot (\frac{w}{\delta})^s$ for all $\delta \le w \le \Delta$ and $w$-balls $B(x, w)$. For each $p \in \cP$, let $\T(p)$ be a $(\delta, s, K)$-set of dyadic tubes such that $|\T(p)| = M$. Let $\T = \cup \T(p)$. Then there exists a subset $\cP' \subset \cP$ with $|\cP'| \ge \frac{1}{2} |\cP|$ and for each $p \in \cP$, a subset $\T'(p) \subset \T(p)$ with $|\T'(p)| \ge \frac{1}{2} |\T(p)|$ such that for each $T \in \T'$, we have $|\{ p \in \cP' : T \in \T'(p) \}| \le C_1 K^2 (\log \delta^{-1})$, for some universal constant $C_1 > 0$.
+\end{lemma}
+
+% \begin{remark}
+% {\color{purple} I'm no longer sure if this is correct without the two-end assumption.  Maybe remove this remark?}    In fact, it's possible to find a refinement with $|\cP' \cap T| \leapp C_1 K^2$ for all $T \in \T'$, via suitable pigeonholing and applying a two-ends/bush argument at an appropriate scale. Using this, we can prove the analogue of Proposition \ref{prop:s+t=2}, which is slightly stronger than Proposition \ref{prop: key}. This extra strength is not useful for us, so we will keep things simpler and prove the results in their current form.
+% \end{remark}
+
+\begin{proof}
+    Let $\Tbad \subset \T$ be the set of tubes with $|\{ p \in \cP : T \in \T(p) \}| \ge C_1 K^2$. By Markov's inequality, we get $|\Tbad| \le \frac{M|P|}{C_1 K^2 \log \delta^{-1}}$. This is the only property of $\Tbad$ that will be used in the proof.
+
+    Suppose the lemma were false; then there exists a subset $|\cP'| \ge \frac{1}{2} |\cP|$ and a subset $\T'(p) \subset \T(p) \cap \Tbad$ for each $p \in \cP'$ with $|\T'(p)| \ge \frac{1}{2} |\T(p)|$. Note that $\T'(p)$ is still a $(\delta, s, 2K)$-set. We now find a lower bound for $\T' = \cup_{p \in \cP} \T'(p)$ via an elementary energy argument. Let $J$ be the number of triples $(p_1, p_2, t) \in (\cP')^2 \times \cT'$ such that $t \in \T'(p_1) \cap \T'(p_2)$. Then
+    \begin{equation*}
+        J \le \sum_{p \in \cP'} \sum_{\substack{w \text{ dyadic},\\\delta < w < \Delta}} (KM(\delta/w)^s) \cdot K \cdot (w/\delta)^s + |\cP| M \le M(K^2 \log \delta^{-1} + 1) |\cP|.
+    \end{equation*}
+    Here, there are $K \cdot (w/\delta)^s$ many $\delta$-balls $q \in \cP'$ at distance $\sim w$ from $p$, and there are $\le KM(\delta/w)^s$ many $\delta$-tubes in $\cT(p)\cap \cT(q)$ with $d(p, q) \sim w$.
+    
+    Thus, by Cauchy-Schwarz, \[\frac{(M |\cP|)^2}{|\T'|} \lesim \frac{I(\cP', \T')^2}{|\T'|} \le J \le MK^2 \log \delta^{-1} |\cP|,\]
+    so $|\T'| \gesim (K^2 \log \delta^{-1})^{-1} M |\cP|$. Since $\T' \subset \Tbad$, this contradicts our upper bound $|\Tbad| \le \frac{M|P|}{C_1 K^2 \log \delta^{-1}}$ if $C_1$ is chosen sufficiently large.
+\end{proof}
+
+% \begin{lemma}\label{lem:elementary incidence'}
+%     Fix $0<\delta < 1$ and $\eps>0$. Let $\cP\subset\cD_{\delta}$ such that $|\cP \cap Q| \le K \cdot (\frac{w}{\delta})^s$ for all $\delta \le w \le 1$. For each $p \in \cP$, let $\T(p)$ be a $(\delta, s, K)$-set of dyadic tubes such that $|\T(p)| = M$. Let $\T = \cup \T(p)$. Then there exist $C_{\eps}>0$ and  a subset $\cP' \subset \cP$ with $|\cP'| \ge \frac{1}{2} |\cP|$ and for each $p \in \cP$, a subset $\T'(p) \subset \T(p)$ with $|\T'(p)| \ge \frac{1}{2} |\T(p)|$ such that for each $T \in \T'$, 
+%     \[
+%     |T\cap \cP|_{\delta}\leq C_{\epsilon} K^2 \delta^{-\epsilon}
+%     \]
+    
+%     %$|\{ p \in \cP' : T \in \T'(p) \}| \le C_1 K^2 (\log \delta^{-1})$, for some universal constant $C_1 > 0$.
+% \end{lemma}
+% \begin{proof}
+%     We prove by contradiction. Suppose there exists a subset $\cP_1\subset \cP$ with $|\cP_1|\geq 1/2|\cP|$ and for each $p\in \cP_1$ a subset $\cT_1(p)\subset \cT(p)$ with $|\cT_1(p)|\geq \frac{1}{2}|\cT(p)|$ and for each $T\in \cT_1$, 
+%     \[
+%     |T\cap \cP|_{\delta} \geq C_{\eps} K^2 \delta^{-\eps}.
+%     \]
+    
+%     For each $T\in \cT_1$, let $\lambda=\lambda(T)\in [\delta^{1-\eps/10}, 1 ]$ be the largest number such that 
+% \[
+% \max_{B_{\delta^{\eps/10}\lambda}} |B_{\delta^{\eps/10} \lambda}\cap T\cap \cP|_{\delta}\leq \lambda^{\eps/10} |T\cap \cP|_{\delta}.
+% \]
+% Such $\lambda$ must exist, otherwise $|T\cap \cP|_{\delta}\leq \delta^{-\eps/10}$.  Then for each $T$, there associates a ball $B_{\lambda}$ such that 
+% \[
+% |B_{\lambda}\cap T\cap \cP|_{\delta} \geq \lambda^{\eps/10}\delta^{-\eps^2/100} |T\cap \cP|_{\delta},
+% \]
+% which we denote $T\sim B_{\lambda}$. If there are more than one such $B_{\lambda}$, choose an arbitrary one. 
+
+
+
+% There exists a dyadic $\lambda$ and $\cP_2\subset \cP_1$ such that $\cT_{\lambda}:=\{T\in \cT_1, \lambda(T)\sim \lambda\}$ satisfies $|\cT_{\lambda}\cap \cT_1(p)|_{\delta}\geq |\log \delta|^{-1} |\cT_1(p)|_{\delta}$ for any $p\in \cP_2$ and $|\cP_2|\geq |\log\delta|^{-1}|\cP_1|$. Denote $\cT_2(p)=\cT_1(p)\cap \cT_\lambda$. 
+
+% Consider the number of unrestricted incidences between $\cT_2$ and $\cP$. Then 
+% \[
+%  C_{\eps} K^2 \delta^{-\eps} |\cT_2| \leq |I(\cT_2, \cP)| \leq \delta^{-\eps/5} \sum_{B_{\lambda}} |I(\cT_2(B_{\lambda}), \cP\cap B_{\lambda})|,
+% \]
+% where $\cT_2(B_{\lambda}):=\{T\in \cT_2: T\sim B_{\lambda}\}$. 
+
+
+
+% \end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop: key} given Lemma~\ref{lem:r-rich}]
+    Pick $\delta_0 = \delta_0 (\eps)$, to be chosen sufficiently small later. First, if $\delta > \delta_0$, then the trivial bound $|\T|_\delta \ge M$ would suffice. Hence, assume $\delta < \delta_0$.
+
+    First, if $\delta^{8\eps} < \Delta$, then $\cP$ is a $(\delta, s, \delta^{-17\eps})$ Katz-Tao set, since for $r < \Delta$ we have \eqref{eqn:spacing condition 2}, and for $r \ge \Delta$, we have
+    \begin{equation*}
+        |\cP \cap B(x, r)| \lesim \left( \frac{r}{\Delta} \right)^2 \sup_x |\cP \cap B(x, \Delta)| \lesim \Delta^{-2} \cdot \delta^{-\eps^2} \left( \frac{\Delta}{\delta} \right)^s \le \delta^{-17\eps} \cdot \left( \frac{r}{\delta} \right)^s.
+    \end{equation*}
+    Hence, by Lemma \ref{lem:elementary incidence}, there exists a subset $\cP'\subset\cP$ with $|\cP'|\geq \frac{1}{2}|\cP|$ and for each $p\in \cP$ a subset $\cT'(p)\subset \cT(p)$ with $|\cT'(p)|\geq \frac{1}{2}|\cT(p)|$ such that for each $T\in \cT'$, 
+    \[
+    |\{p\in \cP': T\in \cT'(p)\}|\leq C_1 \delta^{-34\eps} (\log \delta^{-1}).
+    \]
+    Therefore, 
+    \begin{equation*}
+        |\T| \cdot \sup_{T \in \T'} |\{ p \in \cP' : T \in \T'(p) \}| \ge |\cP'| \sup_{p \in \cP'} |\T'(p)| \gesim |\cP| M \implies |\T| \gtrsim_{\eps} |\cP| M \delta^{35\eps}.
+    \end{equation*}
+    Thus, assume $\delta^{8\eps} > \Delta$. In particular, $\Delta < \delta_0^{8\eps}$.
+
+    Next, if $\delta > \frac{\Delta}{6}$, then $\cP$ is a $(\delta, 2-s, \delta^{-\eps})$-set for analogous reasons, and we may conclude $|\T| \gesim_\eps \delta^{-1+4\eps} M$ by \cite[Theorem 5.28]{orponen2023projections} (see also \cite[Theorem 5.2]{fu2021incidence} and Proposition~\ref{prop:s+t=2}). Thus, assume $\delta < \frac{\Delta}{6}$.
+
+    The main idea is to apply Lemma \ref{lem:r-rich} to the configuration $(\cP, \cT)$ to get a strong incidence bound. The impatient reader can skip to the end of the proof for the calculation.
+    %Since $b$ is small, we get a Szemeredi-Trotter type bound for the number of $r$-rich tubes, which leads to the desired lower bound for Furstenberg sets.
+
+    But to satisfy the conditions of Lemma \ref{lem:r-rich}, we need to suitably refine $(\cP, \cT)$. 
+    First, apply Lemma~\ref{lem: pigeonhole} to $\cP$ such that the resulting set, still denote as $\cP$ is $\{\Delta_j\}_{j=1}^{\eps^{-1}}$-uniform where $\Delta_j= \Delta^{\eps j}$.  Then apply Proposition~\ref{prop:incidence multiscale} to $(\cP, \cT)$ with parameter $\Delta$  to obtain a refinement $(\cP_1, \cT_1)$ and for each $\bp \in \cQ_\Delta := \cD_{\Delta}(\cP_1)$, a $(\Delta, s, C_{\Delta})$-set $\cT_\Delta (\bp)\subset \cT^{\Delta}$. Let $\cT_\Delta := \bigcup_{\bp \in \cQ_\Delta} \cT_\Delta (\bp)$; then $(\cQ_\Delta, \cT_\Delta)$ is a $(\Delta, s, C_\Delta, M_\Delta)$-nice configuration for some $C_\Delta \app_\Delta \delta^{-\eps^2}$ and $M_\Delta \geapp_\Delta \delta^{\eps^2} \Delta^{-s}$.
+    %assume $(\cP, \cT)$ is uniform at scales $\Delta^{j\eps}$, $1 \le j \le \eps^{-1}$. 
+ By Proposition~\ref{prop:s+t=2} with $\eps := \eps/4, n := 4/\eps$, and $C_0 := \delta^{-\eps^2} < \Delta^{-\eps/8}$, there exists a refinement $(\cQ_\Delta', \cT_\Delta')$ of $(\cQ_\Delta, \cT_\Delta)$ such that 
+$|\bT_\ord \cap \cD_w (\cP_1)| \leapp_\Delta \Delta^{-3\eps/4} \cdot w |\cD_w (\cP_1)|$ for all $w \in \{ 1, \Delta^\eps, \cdots, \Delta \}$ and $\bT \in \cT'_\Delta$.
+
+Now, we define $\cP_2=\cup_{\bp \in \cQ'_\Delta} (\cP_1\cap \bp)$ and for each $p\in \cP_2$, let $\cT_2(p)= \{T\in \cT_1(p): T^{\Delta}\in \cT_{\Delta}'(\bp)\}.$ It's possible that $(\cP_2, \cT_2)$ is not a refinement of $(\cP_1, \cT_1)$, but % Indeed, we work with the following $(\Delta, s, C_{\Delta}, M_{\Delta})$-nice configuration:  for each $\bp \in \cD_{\Delta}(\cP_1)$, the set $\cT_1(\bp)$ is a $(\Delta, s, C_{\Delta})$-set with $C_{\Delta}\approx_{\delta} C_0$ and $|\cT_1(\bp)|_{\Delta}\approx M_{\Delta}$. Note that $\cD_{\Delta}(\cT_1(p))$ is not necessarily a subset of $\cT_1(\bp)$ for any $p\in \bp\cap \cP_1$.   We obtain a $(\Delta, s, C', M')$-nice configuration $(\cQ', \cT_{\Delta}')$ and let $\cP_2=\cup_{\bp \in \cQ'} (\cP_1\cap \bp)$ and for each $p\in \cP_2$, let $\cT_2(p)= \{T\in \cT_1(p): T^{\Delta}\in \cT_{\Delta}'(\bp)\}.$
+%Since for each $\bp\in \cQ'=\cD_{\Delta}(\cP_2)$, we know that  $|\cT'_{\Delta}(\bp)|\gtrapprox_{\delta} |\cT_1(\bp)|$ and $\bp\cap \cP_1=\bp\cap \cP_2$,
+by a similar argument to the proof of Proposition \ref{prop:s+t=2} (see \eqref{eqn:many tubes left}), we get
+\[
+    \sum_{p\in \cP_2} |\cT_2(p)| \approx_{\delta} |\cP_1|_\delta \cdot M.
+    \]
+
+
+% By Proposition~\ref{prop:incidence multiscale},  for each $\bp\in \cD_{\Delta}(\cP_1)$ and $\bT\in \cT_1(\bp)$, 
+%     \[
+%     \sum_{p\in \cP_1\cap \bp} | \cT_1(p)\cap \bT| \approx_{\delta}  \frac{1}{|\cT_1(\bp)|\cdot  |\cD_{\Delta}(\cP_1)|}  |\cP_1|_{\delta} \cdot M. 
+%     \]
+%     Since for each $\bp\in \cQ'=\cD_{\Delta}(\cP_2)$,  $|\cT'_{\Delta}(\bp)|\gtrapprox_{\delta} |\cT_1(\bp)|$ and $\bp\cap \cP_1=\bp\cap \cP_2$, 
+%     \[
+%     \sum_{p\in \cP_2\cap \bp} |\cT_2(p)| \approx_{\delta} |\cP_1\cap \bp| \cdot M.
+%     \]
+    Thus, we can find a refinement $(\cP_3, \cT_3)$ of $(\cP_2, \cT_2)$ that is also a refinement of $(\cP_1, \cT_1)$ and satisfies $ \cD_{\Delta}(\cT_3(p))\subset  \cT'_{\Delta}(p^{\Delta})$ for all $p \in \cP_3$. %\subset \cT_1(p^{\Delta}).$
+
+
+
+    
+    % By Proposition~\ref{prop:s+t=2} with $\eps := \eps/4, n := 4/\eps$, and $C_0 := \delta^{-\eps^2} < \Delta^{-\eps/8}$, there exists a refinement $(\cQ', \T_\Delta')$ of $(\cD_\Delta (\cP_3), \cD_\Delta (\cT_3))$ such that $|\bT_\ord \cap \cD_w (\cP)| \leapp_\Delta \Delta^{-3\eps/4} \cdot w |\cD_w (\cP_0)|$ for all $w \in \{ 1, \Delta^\eps, \cdots, \Delta \}$ and $\bT \in \cD_\Delta (\cT_3)$. By Proposition~\ref{prop:incidence multiscale},  for each $\bp\in \cP_2$ and $\bT\in \cT_2(\bp)$, 
+    % \[
+    % \sum_{p\in \cP_2\cap \bp} | \cT_1(p)\cap \bT| \approx_{\delta}  \frac{1}{|\cT_2(\bp)|\cdot  |\cD_{\Delta}(\cP)|}  |\cP|_{\delta} \cdot M. 
+    % \]
+    % Thus, we can find a refinement $(\cP_4, \cT_4)$ of $(\cP_3, \cT_3)$ such that $\cD_\Delta (\cP_4) \subset \cQ'$ and $\cD_\Delta (\cT_4) \subset \cT_\Delta'$.
+    
+    
+    By Lemma \ref{lem:elementary incidence} on each $Q \in \cD_\Delta (\cP_{3})$ (and assuming $\eps$ is small enough), we can find a refinement $(\cP_4, \cT_4)$ of $(\cP_3, \cT_3)$ such that  for each $T\in \cT_4$ and each $Q\in \cD_{\Delta}(\cP_4)$, 
+    \begin{equation}\label{eqn:small tubes}
+        \{ p\in Q\cap \cP_4: T\in \cT_4(p)\}|\lesssim \delta^{-\eps}
+    \end{equation}
+By refining $\cP_4$ further, we may assume $\cP_4$ is $\{ \Delta_j \}_{j=1}^{\eps^{-1}}$-uniform, and \eqref{eqn:small tubes} will still hold.
+For each $T\in \cT_4$, there exists  a dyadic number $a(T) \in [1, \delta^{-1}]$ such that  
+\begin{equation}\label{eqn: a}
+|\{Q\in \cD_{\Delta}(\cP_4): \exists p\in Q\cap \cP_4, T\in \cT_4(p)\}|\sim a(T).
+\end{equation}
+By pigeonholing, there exists a dyadic number $b(T) \in [1, \delta^{-1}]$ such that there are $a'(T) \approx_{\delta} a(T)$ many $Q\in \cD_{\Delta}(\cP_4)$ with 
+\[ |T\cap \cP_4\cap Q|\approx_{\delta} b(T). \]
+By pigeonholing again, there exists a pair of dyadic numbers $(a,b)$ such that \[ \cT_4':=\{ T\in \cT_4: a(T)\sim a, b(T)\sim b\}\] preserves the number of incidences
+\begin{equation}\label{eqn:preserve incidences}
+            |\{ (p, T) \in \cP_4 \times \cT_4' : T \in \T_4 (p) \}| \gtrapprox_{\delta} |P|_\delta M.
+        \end{equation}
+
+    
+%     By pigeonholing, we can find two numbers $r, b\geq 1$ and a subset $\cT_4'\subset \cT_4$ with the following properties:
+%     \begin{itemize}
+%         \item Preserve the number of incidences:
+%         \begin{equation}\label{eqn:preserve incidences}
+%             |\{ (p, T) \in \cP_4 \times \cT_4' : T \in \T_4 (p) \}| \gtrapprox_{\delta} |P|_\delta M
+%         \end{equation}
+
+%         \item Uniformity on each tube: for each $T \in \cT_4'$, there exists $\approx_{\delta} r$ many $Q\in \cD_{\Delta}(\cP_4)$ with 
+% \[
+% |T\cap \cP_4 \cap Q|\approx_{\delta} b.
+% \]
+%     \end{itemize}
+
+   By \eqref{eqn: a} and \eqref{eqn:small tubes}, we get
+   \begin{equation}\label{eq: r}
+  a\lesssim  |\{p\in \cP_4: T\in \cT_4(p)\}|\lesssim \delta^{-\eps} a. 
+    \end{equation}
+    % such that 
+    %and 
+    %{\color{red} is this true? Because when you try to do pigeonholing, you can ensure $|T \cap \cP_3 \cap Q|$ is roughly constant, but then you can't ensure that $|T \cap \cP_4 \cap Q|$ is roughly constant. The way I did it originally was to just choose a subset $\T_4 \subset \T_3$ of tubes that preserves the number of incidences, so we really don't need that $(\cP_4, \cT_4)$ must be a refinement of $(\cP_3, \cT_3)$.} {\color{purple} good point! Please see the current version and let me know what you think..}
+   % Finally, since $\cP_4$ was uniform, we can find a refinement $(\cP_4, \cT_2)$ such that $\cP_2$ is uniform.
+
+   By intersecting $\cP_4$ with $\cD_\Delta^{x,y} ([0,1]^2) := \{ [(2k_1 + x) \Delta, (2k_1 + x+1) \Delta ] \times [(2k_2 + y) \Delta, (2k_2 + y+1) \Delta ] : 0 \le k_1, k_2 \le \frac{1}{2} \Delta^{-1} \}$ for suitable $x, y \in \{ 0, 1 \}$, we can also ensure that no two $\Delta$-cells of $\cD_\Delta (\cP_4)$ are adjacent (while preserving the cardinality of $\cP_4$ up to a factor of $4$).
+
+    Now convert dyadic tubes $T \in \cT_4'$ to ordinary tubes $T_\ord$. By Lemma \ref{lem:thicken dyadic tube}, since $\frac{\delta}{\Delta} < \frac{1}{6}$, we have $(T_\ord)^w \subset (T^w)_\ord$. Then $|(T_\ord)^w \cap \cD_w (\cP)| \le \Delta^{-\eps} \cdot w |\cD_w (\cP_4)|$ since $|\cD_w (\cP_4)| \geapp |\cD_w (\cP)|$ (by uniformity of $\cP$) and the implicit log factor is dominated by $\Delta^{-\eps/2}$ if $\delta_0 (\eps)$ is chosen sufficiently small (recall $\Delta < \delta_0^{8\eps}$). Now, the conditions of Lemma \ref{lem:r-rich} are satisfied, with $\inf_{T \in \T_4'} a'(T) \app_\delta a$ instead of $a$.
+
+    By Lemma~\ref{lem:r-rich}, 
+    either $a\lesssim \delta^{1-2\eps}|\cP|_{\delta}$ or 
+    \[
+    |\cT_4'|\lesssim  \delta^{-5\eps} \frac{|\cP|_{\delta}^2}{a^3 b^2} \lesssim \delta^{-5\eps} \frac{|\cP|_{\delta}^2}{a^3}.
+    \]
+    On the other hand, by \eqref{eqn:preserve incidences} and \eqref{eq: r}, 
+    \begin{equation}\label{eqn:preserve incidences 2}
+        |\cT_4'| \gtrapprox_{\delta}  \delta^{\eps} \frac{|\cP|_{\delta} M}{a}.
+    \end{equation}
+    Thus in the first case $a\lesssim \delta^{1-2\eps}|\cP|_{\delta}$, we get $|\T_4| \ge |\T_4'| \geapp_\delta M \delta^{-1+2\eps}$. In the second case, we get
+    \[
+    a^2\lessapprox_{\delta} \frac{|\cP|_{\delta}}{M} \delta^{-6\eps}
+    \]
+    and by plugging this result into \eqref{eqn:preserve incidences 2}, we get $|\T_4| \gtrapprox_{\delta} |\cP|^{1/2} M^{3/2} \cdot \delta^{3\eps}.$ % $\gtrapprox_{\delta} M (\delta^{-s} |\cP|)^{1/2} \cdot \delta^{5\eps/2}$.
+    % Choose a subset $\T_r \subset \T_2$ such that $N_\Delta (t) \sim r$ while preserving $\{ (p, t) \in \cP \times \T_r : t \in \T(p) \} \geapp M |\cP|$. Thus, $|\T_r| \ge \frac{M |\cP|}{r}$. On the other hand, Lemma \ref{lem:r-rich} on $\cP$ and $\T_\ord$ with $a = r, b = 1$ tells us that $|\T_r| \le \frac{|\cP|^2}{r^3}$. Putting the two bounds against each other, we get $r^2 \le \frac{|\cP|}{M} \delta^{-5\eps}$ and so $|\T_r| \ge |\cP|^{1/2} M^{3/2} \ge M \delta^{-(s+t)/2+5\eps/2}$.
+\end{proof}
+
+\section{Proof of Lemma \ref{lem:r-rich}}
+We restate Lemma \ref{lem:r-rich}, which may have independent interest. We emphasize that we work with a set of essentially distinct ordinary tubes, so $T^w$ denotes the $w$-tube coaxial with $T$.
+\begin{lemma}\label{lem:r-rich'}
+    Let $\delta < \Delta < 1$, $\eps \in \frac{1}{\N}$, and let $\cP$ be a set of dyadic $\delta$-cubes (with possible repetitions) such that for all $1 \le k \le \eps^{-1}$, we have that each $Q \in \cD_{\Delta^{k\eps}} (\cP)$ contains the same number of cubes in $\cP$, and that no two cells of $\cD_\Delta (\cP)$ are adjacent. Call a $\delta$-tube $T$ \textbf{good} if $|T^w \cap \cD_w (\cP)| \le \Delta^{-\eps} \cdot w |\cD_w (\cP)|$ for all $w \in \{ \Delta^\eps, \Delta^{2\eps}, \cdots, \Delta \}$. Let $N_{w, b} (T)$ be the number of $Q \in \cD_w (\cP)$ such that $|T \cap Q \cap \cP| \ge b$. Let $\T_{a,b}$ be a set of essentially distinct good $\delta$-tubes with $N_{\Delta, b} (T) \ge a$. If $a \ge 2$ and $ab > \delta^{1-2\eps} |\cP|$, then $|\T_{a,b}| \lesim_{\eps} \frac{|\cP|^2}{a^3 b^2} \delta^{-5\eps}$.
+\end{lemma}
+
+The proof of Lemma \ref{lem:r-rich'} uses the same high-low method as in \cite{guth2019incidence}, but crucially we streamline the induction on scales mechanism.
+
+First, we begin with a weaker version of Lemma \ref{lem:r-rich'}, which is true under a weaker hypothesis (that $\cP$ is a ``$(\delta, 1, C)$-set down to scale $\Delta$''). It will be useful when $a$ is small.
+\begin{lemma}\label{lem:r-rich weaker}
+    Let $\delta < \Delta < 1$. Suppose $\cP$ is a set of not necessarily disjoint $\delta$-cubes satisfying the following spacing condition: for all $\Delta \le r \le 1$, we have $|\cP \cap Q| \le K |\cP| r$ for $Q \in \cD_r (\cP)$, and that no two cells of $\cD_\Delta (\cP)$ are adjacent. Then
+    \begin{equation*}
+        \sum_{N_{\Delta,b} (T) \ge 2} N_{\Delta,b} (T)^2 \le K \log \Delta^{-1} \cdot \frac{|\cP|^2}{b^2}.
+    \end{equation*}
+    If $\T_{a,b}$ is a set of essentially distinct $\delta$-tubes with $N_{\Delta,b} (T) \ge a$ and $a \ge 2$, then $|\T_{a,b}| \lesim K \log \Delta^{-1} \cdot \frac{|\cP|^2}{(ab)^2}$.
+\end{lemma}
+
+\begin{proof}
+    This is a standard $L^2$-energy argument (similar to Lemma \ref{lem:elementary incidence}). Consider $J$, the number of $(p_1, p_2, t) \in \cP^2 \times \T^\delta$ such that $p_1, p_2$ belong to different $\Delta$-cells of $\cD_w (\cP)$ and $p_1, p_2 \in t$. We have $I \ge \frac{1}{2} b^2 \sum_{N_{\Delta,b} (t) \ge 2} |N_{\Delta,b} (t)|^2$ because each $t$ with $N_{\Delta,b} (t) = a \ge 2$ contributes $\ge ab \cdot (a-1)b \ge \frac{1}{2} a^2 b^2$ many incidences to $I$. On the other hand, since no two cells of $\cD_w (\cP)$ are adjacent, we automatically have $d(p_1, p_2) \in (\Delta, 1)$, so
+    \begin{equation*}
+        J \lesim \sum_{p_1 \in \cP} \sum_{\Delta < x < 1 \text{ dyadic}} K|\cP| x \cdot \frac{1}{x} = K \log \Delta^{-1} \cdot |\cP|^2.
+    \end{equation*}
+    Here, there are $K |\cP| x$ many $\delta$-balls at distance $\sim x$ from $p_1$, and there are $\frac{1}{x}$ many distinct $\delta$-tubes between $p_1, p_2$ if $d(p_1, p_2) \sim x$.
+\end{proof}
+
+\begin{proof}[Proof of Lemma \ref{lem:r-rich'}]
+    Before anything else, let us check that $\cP$ satisfies the conditions of Lemma \ref{lem:r-rich weaker}. If we pick some $T\in \cT_{a,b}^\delta$, then we know $1\leq N_{w,b}(T)\leq \Delta^{-\eps} \cdot w|\cD_w(\cP)|$. Since each $Q\in \cD_{\Delta^{k\eps}}(\cP)$ contains the same number of balls in $\cP$, we obtain
+    \begin{equation*}
+        |\cP \cap Q| = \frac{|\cP|}{|\cD_w (\cP)|} \le \Delta^{-\eps} \cdot w |\cP|.
+    \end{equation*}
+    Thus we proved $|\cP \cap Q| \le \Delta^{-\eps} \cdot r |\cP|$ for all $\cD_r (\cP)$ when $r = \Delta^{k\eps}$ for some $k$. The same holds for general dyadic $\Delta \le r \le 1$ at the cost of a $\Delta^{-\eps}$ factor (round $r$ up to the nearest $\Delta^{k\eps}$). Thus, the assumptions of Lemma \ref{lem:r-rich weaker} are satisfied with $K = \Delta^{-2\eps}$, so
+    \begin{equation}\label{eqn:weak bound}
+        |\T_{a,b}| \lesim \Delta^{-3\eps} \cdot \frac{|\cP|^2}{(ab)^2}.
+    \end{equation}
+    This bound is too weak in general, but it does allow us to dispose of a special edge case. Pick $\Delta_0 = \Delta_0 (\eps) > 0$ a small constant (to be chosen later). If $\Delta > \Delta_0$, then $a \le \Delta^{-1} \le \Delta_0^{-1}$ to ensure $\T_{a,b} \neq \emptyset$. Thus, \eqref{eqn:weak bound} will suffice (upon absorbing $\Delta_0^{-1}$ into the implicit constant).
+
+    For a fixed $\Delta < \Delta_0$, we induct on $\delta = \Delta 2^{-n}$. Base case is $\delta > \Delta^{1+\eps}$, in which case we will prove $|\T_{a,b}| = 0$. Indeed, if $T \in \T_{a,b}$, then $|\cP \cap Q| \ge b$ for some $Q \in \cD_\Delta (\cP)$, so by uniformity of $\cP$, we get $|\cP| \ge b |\cD_\Delta (\cP)|$. Also, if $\Delta < \Delta_0 (\eps)$ is small enough, $N_{\Delta, b} (T) \ge a > \delta^{1-2\eps} b^{-1} |\cP| > \Delta^{1-\eps} |\cD_\Delta (\cP)|$, which contradicts $N_{\Delta, b} (T)  \le |T^{\Delta}\cap \cD_{\Delta}(\cP)|\le \Delta^{1-\eps} |\cD_\Delta (\cP)|$. Thus, $|\T_{a,b}| = 0$, which completes the base case.
+
+    For the inductive step, assume true for $\delta > \Delta 2^{-n+1}$, and consider $\delta \in (\Delta 2^{-n}, \Delta 2^{-n+1})$. We shall assume $\T_{a,b} \neq \emptyset$, as otherwise the lemma is obviously true.
+    
+    We first take care of when $a$ is small: if $a \le 2\Delta^{-\eps}$, then \eqref{eqn:weak bound} will give us the desired bound.
+    
+    Now assume $a > 2\Delta^{-\eps}$. Let $w$ be the \textbf{smallest} scale $\Delta^{k \eps}$ such that $a > 2\Delta^{-\eps} \cdot w|\cD_w (\cP)|$, or $k = -1$ if no such $k$ exists. If $k = -1$, then $a < 2\Delta^{-\eps}$, and we already considered this case. So let's assume $k \ge 0$; then we obtain two useful conclusions from $a < 2\Delta^{-\eps} \cdot x|\cD_x (\cP)|$ for $x = \Delta^{m \eps}$, $m > k$. (We observe if $k = \eps^{-1}$, then $|\T_{a,b}| = 0$, so assume $k < \eps^{-1}$.)
+    \begin{enumerate}[(C1)]
+        \item\label{conc1} $a < 2\Delta^{-\eps} \cdot (w\Delta^\eps) |\cD_{w\Delta^\eps} (\cP)| \lesim \Delta^{-2\eps} \cdot w|\cD_w (\cP)|$, since each $Q \in \cD_w (\cP)$ contains $\lesim \Delta^{-2\eps}$ many elements of $\cD_{w\Delta^\eps} (\cP)$. This complements the bound $a > 2\Delta^{-\eps} \cdot w|\cD_w (\cP)|$. 
+
+        \item\label{conc2} For any $Q \in \cD_w (\cQ)$, we have $\cP^Q := S_Q (\cP \cap Q)$ is a $(\delta/w, 1, \Delta^{-\eps})$-set down to scale $\Delta/w$ (in the notation of Lemma \ref{lem:r-rich weaker}). This is because for $x = \Delta^{m\eps}$, $m > k$, we have $w|\cD_w(\cP)| \le \frac{a}{2\Delta^{-\eps}} \le x|\cD_x(\cP)|$. Thus, we have for $R \in \cD_x (\cP)$,
+        \begin{equation*}
+            |R \cap \cP| = \frac{|\cP|}{|\cD_x (\cP)|} \le \frac{|\cP|}{|\cD_w (\cP)|} \cdot \frac{x}{w} = |Q \cap \cP| \cdot \frac{x}{w}.
+        \end{equation*}
+        By rounding $r$ up to the nearest $\Delta^{m\eps}$, we have established that for all $R \in \cD_r (\cP)$, $\delta \le r \le w$, that $|R \cap \cP| \le \Delta^{-\eps} |Q \cap \cP| \cdot \frac{x}{w}$. This immediately implies that $\cP^Q$ is a $(\delta/w, 1, \Delta^{-\eps})$-set down to scale $\Delta/w$.
+    \end{enumerate}
+    Let $\U$ be the set of intersections of $\T_{a,b}$ with $w$-cells of $\cD_w (\cP)$. (More precisely, we let $\U_Q$ be an essentially distinct set of $\delta \times w$-tubelets for each $Q \in \cD_w (\cP)$ such that each $u \in \U_Q$ satisfies $|u \cap T| \ge \frac{|u|}{2}$ for at least one tube $T \in \T_{a,b}$, and let $\U = \cup_{Q \in \cD_w (\cP)} \U_Q$.) For $u \in \U$, define $N_{\Delta, b} (u)$ to be the number of $Q \in \cD_\Delta (\cP)$ such that $|u \cap Q \cap \cP| \ge b$ and $m(u)$ be the number of $\delta$-tubes in $\T_{a,b}$ containing $u$. We shall assign $u$ the weight $N_{\Delta, b} (u)$, and consider weighted incidences. With this convention, we have
+    \begin{equation*}
+        a |\T_{a,b}| \le I(\U, \T_{a,b}) := \sum_{u \in \U} N_{\Delta, b} (u) \cdot m(u)
+    \end{equation*}
+    and
+    \begin{equation*}
+        \frac{a}{2} |\T_{a,b}| \ge \sup_T |T \cap \cD_w (\cP)| \cdot |\T_{a,b}| \ge \sum_{u \in \U} m(u),
+    \end{equation*}
+    %The maximum number of tubelets in some $t \in \T_r$ is $\sup_t N_w (t) \le C \Delta^{-\eps} \cdot w|\cD_w (\cP)| < \frac{r}{2}$,
+    so at least half of the incidences between tubes and tubelets involves tubelets with $N_{\Delta,b} (u) \ge 2$. We now reproduce the calculation in \cite[Theorem 5.1.2]{bradshaw2022additive}. Replace $\U$ by the tubelets $u \in \U$ with $N_{\Delta, b} (u) \ge 2$.
+
+    Let $\T_{\Box}$ be an essentially distinct cover of $[0, 1]^2$ by $\frac{\delta}{w}$-tubes, such that each $\delta$-tube lies in at least $1$ and at most $O(1)$ many members of $\T_{\Box}$. In each $\bT \in \T_{\Box}$, the tubelets $U_{\bT}$ in $\bT$ parallel to the direction of $\bT$ behave like weighted $w$-atoms, after we rescale $\bT$ to $[0, 1]^2$. Meanwhile, the $\delta$-tubes in $\T_{\bT} := \cT_{a,b}\cap \bT$ stretch to become $w$-tubes. We may decompose our incidence count as follows:
+    \begin{equation*}
+        I(\U, \T_{a,b}) = \sum_{\bT \in \T_{\Box}} I(\U_{\bT}, \T_{\bT}).
+    \end{equation*}
+    By Proposition \ref{prop:high low}  with $S = \Delta^{-\eps/100} \in (w^{-\eps/100}, w^{-1})$, we obtain
+    \begin{align*}
+        a |\T_{a,b}|& \lesim I(\U, \T_{a,b}) = \sum_{\bT \in \T_{\Box}} I(\U_{\bT}, \T_{\bT}) \\
+                &\lesim_\eps (Sw^{-1})^{1/2} \sum_{\bT \in \T_{\Box}} |\T_{\bT}|^{1/2} \left( \sum_{u \in \U_{\bT}} N_{\Delta, b} (u)^2 \right)^{1/2} + S^{-1+\eps} \sum_{\bT \in \T_{\Box}} I(\U_\bT^{S\delta}, \T_\bT^{S\delta}) \\
+                &\le (Sw^{-1})^{1/2} \left( \sum_{\bT \in \T_{\Box}} |\T_{\bT}| \right)^{1/2} \left( \sum_{\bT \in \T_{\Box}} \sum_{\substack{u \in \U_{\bT}\\N_{\Delta,b} (u) \ge 2}} N_{\Delta, b} (u)^2 \right)^{1/2} + S^{-1+\eps} \sum_{\bT \in \T_{\Box}} I(\U_\bT^{S\delta}, \T_\bT^{S\delta}) \\
+                &= (Sw^{-1})^{1/2} |\T_{a,b}|^{1/2} \left( \sum_{Q \in \cD_w (\cP)} \sum_{\substack{u \in Q\\N_{\Delta, b} (u) \ge 2}} N_{\Delta,b} (u)^2 \right)^{1/2} + S^{-1+\eps} \sum_{\bT \in \T_{\Box}} I(\U_\bT^{S\delta}, \T_\bT^{S\delta})
+    \end{align*}
+    The third line used Cauchy-Schwarz and the fact that $\U$ now only contains tubelets with $N_{\Delta,b} (u) \ge 2$. By Conclusion \ref{conc2} and Lemma \ref{lem:r-rich weaker} applied to $\cP^Q$ for each $Q \in \cD_w (Q)$, the first term becomes
+    $$\lesim (Sw^{-1})^{1/2} |\T_{a,b}|^{1/2} \left( |\cD_w (\cP)| \cdot \Delta^{-2\eps} \left( \frac{|\cP|}{b|\cD_w (\cP)|} \right)^2 \right)^{1/2}.$$
+    If the first term dominates, we get by Conclusion \ref{conc1},
+    \begin{equation*}
+        |\T_{a,b}| \lesim \Delta^{-2\eps} \cdot \frac{w^{-1}}{a^2 b^2} |\cD_w (\cP)| \cdot \left( \frac{|\cP|}{|\cD_w (\cP)|} \right)^2 \lesim \Delta^{-4\eps} \frac{|\cP|^2}{a^3 b^2}.
+    \end{equation*}
+
+    Now suppose the second term dominates \[a|\T_{a,b}| \lesim S^{-1+\eps} \sum_{\bT \in \T_{\Box}} I(\U_\bT^{S\delta}, \T_\bT^{S\delta}).\]
+    Let $f(T) := \sum_{U \in \U_{\bT} \cap T^S} N_{\Delta, b} (u)$ for $T\subset \bT$; then $\sum_{\bT \in \T_{\Box}} I(\U_\bT^{S\delta}, \T_\bT^{S\delta}) = \sum_{T \in \T} f(T)$. Hence, there exists a subset $\T'''_{a,b} \subset \T_{a,b}$ with $|\T'''_{a,b}| \ge \frac{1}{2} |\T_{a,b}|$ such that for each $T \in \T'''_{a,b}$, we have 
+    %(letting $T \in \bT$ for some $\bT \in \T_\Box$) 
+    a lower bound for sum of weights,
+    \begin{equation*}
+        f(T) = \sum_{U \in \U_{\bT} \cap T^S} N_{\Delta, b} (u) \gesim S^{1-\eps} a.
+    \end{equation*}
+    Since the $U \in \U_{\bT}$ are essentially distinct, we see that each $T^{S\delta} \in \T'''_{a,b}$ contains $\gesim f(T) \gesim S^{1-\eps} a$ many $b$-rich $\Delta$-tubelets in the direction of $T$.
+
+    Now, for $Q \in \cD_\Delta (\cP)$, we let $g_T (Q)$ be the number of $\Delta$-tubelets in the direction of $T$ that lie in $T^{S\delta} \cap Q$. We have $g_T (Q) \le S$ (since $T^{S\delta} \cap Q$ is roughly a $S\delta \times \Delta$ rectangle) and $\sum_{Q \in \cD_{\Delta (\cP)}} g_T (Q) \ge S^{1-\eps} a$. Hence, by pigeonholing, we can find dyadic $k_T \in [1, S]$ and a set $\cQ_T \subset \cD_\Delta (\cP)$ with $|\cQ_T| \ge (\log S)^{-1} \cdot \frac{S^{1-\eps} a}{k_T}$ such that $g_T (Q) = k_T$ for all $Q \in \cQ_T$. By another pigeonholing, we can further choose a subset $\T''_{a,b} \subset \T'''_{a,b}$ with $|\T''_{a,b}| \gesim (\log S)^{-1} |\T'''_{a,b}|$ such that $k_T = k$ is the same for all $T \in \T''_{a,b}$. Finally, the tubes $\{ T^{S\delta} : T \in \T''_{a,b} \}$ may not be essentially distinct. To correct this, we use a partitioning argument due to \cite{fu2021incidence}: draw a graph on tubes in $\T''_{a,b}$ with an edge between two if they lie in the same $S\delta$-tube; since each $S\delta$-tube contains $\le S^2$ many $\delta$-tubes in $\T^\delta$, the maximum degree of the graph is $S^2$, so by Brook's theorem on chromatic numbers \cite{brooksthm}, we can color the vertices with $\lesim S^2$ many colors such that no two vertices of the same color are connected by an edge. By the pigeonhole principle, we can find $\ge S^{-2} |\T''_{a,b}|$ many vertices of a single color. Denote the corresponding subset of tubes as $\T'_{a,b} \subset \T''_{a,b}$; then $|\T'_{a,b}| \gesim S^{-2} |\T''_{a,b}|$ and $\T'^{S\delta}_{a,b} := \{ T^{S\delta} : T \in \T'_{a,b} \}$ is essentially distinct. We aim to apply the inductive hypothesis to $\T'^{S\delta}_{a,b}$.
+
+    Note that if $T$ is good, then so is $T^{S\delta}$ because $(T^{S\delta})^w = T^w$ for any $w > \Delta$. (We are assuming $S\delta < \Delta$, which is true by our base case and $S = \Delta^{-\eps/100}$.) Furthermore, for every $T \in \T'_{a,b}$, we have $N_{w,kb} (\cP) \ge a' := \frac{S^{1-\eps} a}{k \log S}$. Let $b' := kb$. Since $k \le S$, we get $a' \ge S^{-\eps} (\log S)^{-1} a \ge 2$. Also $a'b' \ge S^{1-\eps} (\log S)^{-1} ab > \max((S\delta)^{1-2\eps} |\cP|, 2)$, we can apply the inductive hypothesis to $\T'^{S\delta}_{a,b}$ (and $\cP^{S\delta} := \{ p^{S\delta} : p \in \cP \}$) to get
+    \begin{equation*}
+        |\T_{a,b}| \lesim S^2 \log S \cdot |\T'^{S\delta}_{a,b}| \lesim S^{2+\eps} \cdot \frac{|\cP|^2}{(a')^3 (b')^2} (S\delta)^{-5\eps} \le  \frac{|\cP|^2 b'}{S^{1-4\eps} |\log \Delta|^{-2} a^3 b^3} (S\delta)^{-5\eps} \le S^{-\eps} \cdot \frac{|\cP|^2}{a^3 b^2} \delta^{-5\eps}.
+    \end{equation*}
+    The $S^{-\eps} = \Delta^{-\eps^2/100}$ cleans up the losses from $\lesim_\eps$ if $\Delta < \Delta_0 (\eps)$. This closes the inductive step and finishes the proof of Lemma \ref{lem:r-rich}.
+    
+    % Let $\T^{S\delta}$ be an essentially distinct cover of $[0, 1]^2$ by $S\delta$-tubes, such that each $\delta$-tube lies in at least $1$ and at most $O(1)$ many members of $\T^{S\delta}$. Each $\bT \in \T^{S\delta}$ contains at most $S^2$ tubes in $\T^\delta$. Thus, by pigeonholing, we can find a set of essentially distinct $S\delta$-tubes $\T^{S\delta}_{a,b} \subset \T^{S\delta}$ each containing $\ge S^{1-\eps} a$ many parallel $b$-rich $\Delta$-tubelets such that $\T_{Sa,b}$ contains $\gesim (\log S)^{-1} |\T_{a,b}|$ many elements of $\T_{a,b}$. This means $|\T_{a,b}| \lesim S^{2+\eps} |\T_{Sa,b}|$. Now, by another pigeonholing, we can find a significant subset $\T' \subset \T_{a,b}^{S\delta}$ with $|\T'| \gesim (\log S)^{-1} |\T_{a,b}|^{S\delta}$ such that each $\bT \in \T'$ satisfies $N_{\Delta, b'} (T) \ge a'$ with $a' b' \ge |\log\Delta|^{-2} S^{1-\eps} ab$ and $b' \le Sb$. {\color{purple} (it seems easier to prove for $a'\geq  a /|\log \Delta|$ , also $a'b'\gtrsim |\log\Delta|^{-2} S ab$ since the $\gtrapprox$ means up to $\delta^{\epsilon}$ in this section)} Note that $N_w (t^S) = N_w (t)$ since any two elements of $\cD_w (\cP)$ are $\ge 100w$ distance apart {\color{purple} ($\ge w$ and $\delta < \Delta^{1+\eps}$)}. Since $a' \ge S^{-\eps} |\log \Delta|^{-2} a \ge 2$ and $a'b' \ge S^{1-\eps} |\log \Delta|^{-2} ab > \max((S\delta)^{1-2\eps} |\cP|, 2)$, we can apply the inductive hypothesis to get
+    % \begin{equation*}
+    %     |\T_{a,b}| \lesim S^2 |\T_{a',b'}| \leapp S^2 \cdot \frac{|\cP|^2}{(a')^3 (b')^2} (S\delta)^{-C\eps} \le  \frac{|\cP|^2 b'}{S^{1-3\eps} |\log \Delta|^{-2} a^3 b^3} (S\delta)^{-C\eps} \le \frac{|\cP|^2}{a^3 b^2} \delta^{-C\eps}.
+    % \end{equation*}
+    % The $S^{-C\eps}$ cleans up the losses from $\leapp$ for $C$ sufficiently large.
+    % By dyadic pigeonholing to preserve most of the incidences, we may assume that each tubelet in $\U$ contains $\sim E$ many $\delta$-balls in $\cP$. We are in the thin case or thick case.
+
+    % \textbf{Thin case:} We have $|\T| \leapp \frac{w^{-1} |\U|}{(r/E)^2}$. But by Lemma \ref{lem:r-rich weaker}, we have for any $Q \in \cD_w (\cP)$, that $|\U \cap Q| \leapp C \cdot \frac{|\cP \cap Q|^2}{(r/E)^2}$. Thus,
+    % \begin{equation*}
+    %     |\T| \leapp \frac{w^{-1} |\U|}{E^2} \lesim \frac{w^{-1}}{r^2} |\cD_w (Q)| \cdot \left( \frac{|\cP|}{|\cD_w (Q)|} \right)^2 \leapp \frac{|\cP|^2}{r^3}.
+    % \end{equation*}
+
+    % \textbf{Thick case.} We verify the condition $Sr > \max((S\delta)^{1-2\eps} |\cP|, 2)$, so $|\T_r| \lesim S^2 |\T_{Sr}| \leapp S^2 \cdot \frac{|\cP|^2}{(Sr)^3} \le \frac{|\cP|^2}{r^3}$.
+\end{proof}
+
+\section{General case using Orponen-Shmerkin's regular Furstenberg result}
+
+
+
+
+% {\color{red} this below definition sounds redundant with Theorem \ref{Thm: main}. Is this redundancy good?}
+
+
+% \begin{definition}
+% Furstenberg $(s,t, \eta,  u)$ means that if $(\cP, \cT)\subset \cD_{\delta}\times \cT^{\delta}$ is a $(\delta, s, \delta^{-\eta}, M)$-nice configuration, then 
+% \[
+% \frac{|\cT|_{\delta}}{M} \gtrsim \delta^{-\frac{s+t}{2}+u}.
+% \]
+% % and in addition there is a $(\delta, t, \delta^{-\eta})$-set $\cP_0$ containing $\cP$ with $|\cP_0|\lessapprox |\cP|$ and for each $T\in \cT$, $|\{p\in \cP_0: T\in \cT(p)_0|\geq r$, then 
+% % \[
+% % r\lesssim |\cP|_{\delta}\delta^{\frac{s+t}{2}-u}.
+% % \]
+% \end{definition}
+
+In the previous sections, we dealt with the Furstenberg set problem for a semi-well spaced set $\cP$. Now we turn to the other extreme, when $\cP$ is almost AD-regular. This case has been solved by Orponen-Shmerkin \cite[Theorem 5.7]{orponen2023projections}, and we present a slight refinement.
+\begin{theorem}\label{prop:furst-ADreg}
+    For any $\eps > 0, s\in (0,1], t\in [s,2-s]$, there exists $\eta(\eps,s) > 0$ and $\delta_0=\delta(\eps,s,t)>0$ such that for any $\delta\in (0, \delta_0)$ and any $(\delta, s, \delta^{-\eta}, M)$-nice configuration $(\cP, \cT)$ with $\cP$ $(t, \eta)$-almost AD regular as in Definition~\ref{def: AD}, then
+    \[
+\frac{|\cT|_{\delta}}{M} \gtrsim \delta^{-\frac{s+t}{2}+\eps}.
+\]  
+    %Furstenberg $(s, t, \eta, \eps)$ is true for AD-regular sets.
+\end{theorem}
+
+\begin{remark}
+    There are two differences between our proposition and \cite[Theorem 5.7]{orponen2023projections}. First, our definition of almost AD-regular set is slightly different from the $(\delta, s, C)$-regular set in \cite[Definition 4.2]{orponen2023projections}. Second, our $\eta$ is only required to depend on $\eps, s$, while the $\eta$ in \cite[Theorem 5.7]{orponen2023projections} may depend on $\eps, s, t$.
+\end{remark}
+
+\begin{proof}
+    We resolve the differences mentioned in the remark. First, we show that if $\cP$ is $(t, \eta)$-almost AD-regular set, then it is also a $(\delta, t, \delta^{-3\eta})$-regular set in the sense of \cite[Definition 4.2]{orponen2023projections}. Indeed, the upper bound in Definition \ref{def: AD} shows that $\cP$ is a $(\delta, t, 4\delta^{-\eta})$-set. (More precisely, if $\cP \cap B(x, r) \neq \emptyset$ for some $x \in \R^2$, then let $y \in \cP \cap B(x, r)$; then $\cP \cap B(x, r) \subset \cP \cap B(y, 2r)$.) Furthermore, for any dyadic $\delta \le r \le R \le 1$ and $\bp \in \cD_R$, we have
+    \begin{equation*}
+        4\delta^{-\eta} \cdot R^t \cdot |\cP|_\delta \ge |\cP \cap \bp|_\delta = \sum_{Q \in \cD_r (\cP \cap \bp)} |Q \cap \cP|_\delta \gesim |\cP \cap \bp|_r \cdot \delta^\eta r^t |\cP|_\delta.
+    \end{equation*}
+    The last inequality uses the lower bound in Definition \ref{def: AD} and the fact that for any $Q \in \cD_r (\cP \cap \bp)$ and $x \in \bp \cap Q$, we have $Q \subset B(x, \sqrt{2} r)$. Hence, we get $|\cP \cap \bp|_r \lesim \delta^{-2\eta} \cdot \left( \frac{R}{r} \right)^t$, and the implicit constant can be absorbed into $\delta^{-\eta}$ if $\delta > 0$ is sufficiently small.
+
+    The next difference is that the $\eta$ in \cite[Theorem 5.7]{orponen2023projections} depends a priori on $\eps, s, t$. To prevent confusion later, we let $\tilde{\eta} (\eps, s, t)$ denote this parameter, and reserve $\eta(\eps, s)$ for the desired parameter which is independent of $t$.
+    
+    To remove the dependence on $t$, we use a compactness argument. For fixed $s$, the set $S = [s, 2-s] \subset \R$ is compact. Now let $\eta_t = \frac{1}{2} \min \{\tilde{\eta}(\eps/2, s, t), \eps \} > 0$ and define $B_t := B(t, \eta_t)$ for $t \in S$. Then $S = \cup_{t \in S} B_t$, so $S$ admits a finite subcover $\cup_{t \in S'} B_t$ where $S' \subset S$ is finite. Now define $\eta = \eta(\eps, s) := \min_{t \in S'} \eta_t$. We claim that this choice of $\eta$ works for any $t \in S$. Indeed, given $t \in S$, let $t' \in S'$ such that $|t - t'| \le \eta_{t'}$. Then since $\eta + |t - t'| \le 2\eta_{t'} \le \tilde{\eta}(\eps/2, s, t)$, we see that a $(\delta, t, \delta^{-\eta})$-set $\cP$ is also a $(\delta, t', \delta^{-\tilde{\eta}(\eps/2, s, t')})$-set. Hence, by \cite[Theorem 5.7]{orponen2023projections} and $t' \ge t - \eta_{t'} \ge t - \eps/2$, we know that $\frac{|\cT|_{\delta}}{M} \gtrsim \delta^{-\frac{s+t'}{2}+\eps/2} \ge \delta^{-\frac{s+t}{2}+\eps}.$
+\end{proof}
+
+Thus, we know that Theorem \ref{Thm: main} is true when the set $\cP$ is either semi-well spaced or AD-regular. To prove Theorem \ref{Thm: main} for general sets $\cP$, we show that the set of scales $(\delta, 1)$ can be partitioned into two sets $A, B$ such that $\cP$ looks AD-regular on scales in $A$ and looks semi-well spaced on scales in $B$. To formalize this intuition, we first define the branching function of a set $\cP$, c.f. \cite[Definition 2.22]{orponen2023projections}.
+
+\begin{definition}[Branching function]
+    Let $T\in \mathbb{N}$, and let $\cP\subset [0,1)^d$ be a $\{\Delta_j\}_{j=1}^n$-uniform set, with $\Delta_j: = 2^{-jT}$, and with associated sequence $\{N_j\}_{j=1}^n\subset \{ 1, \dots, 2^{dT}\}^n$. 
+    We define the \emph{branching function} $f: [0, n]\rightarrow [0, dn]$ by setting $f(0)=0$, and 
+    \[
+    f(j):=\frac{\log |\cP|_{2^{-jT}}}{T} =\frac{1}{T}\sum_{i=1}^j \log N_i, \quad i \in \{1, \dots n\}. 
+    \]
+\end{definition}
+
+
+% Fix $\eta>0$ and $\delta\in 2^{-\mathbb{N}}.$ Pick an integer $M=M(\eta)$ such that 
+% \[
+% \frac{2\log (M)}{M}\leq \eta^2.
+% \]
+%  Fix a large integer $m=Ml$. Let $f_{\alpha}$ be the function such that 
+%  \begin{equation}\label{eq: falpha}
+%  f_{\alpha}(\frac{j}{l}) = \frac{1}{l} (\alpha_1+\cdots +\alpha_j)
+%  \end{equation}
+%  and interpolates linearly between $j/l$ and $(j+1)/l$. Then $f_{\alpha}$ is a piecewise-linear, $3$-Lipschitz function. Let $\tilde{f}_{\alpha}$ be the function that agrees with $f_{\alpha}$ on $[\eta^{1/2}, 1]$ and interpolates linearly between $f_{\alpha}(0)=0$ and $f_{\alpha}(\eta^{1/2})$ then $\tilde{f}_{\xi}(x)\geq (s -\eta^{1/2})x.$ To ease the notation, still use $f_{\alpha}$  to denote $\tilde{f}_{\alpha}$.
+
+% We say that a function $f: [0,1]\rightarrow \mathbb{R}$ is $\sigma$-superlinear on $[a,b]\subset [0,1]$, or that $(f, a, b)$ is $\sigma$-superlinear, if 
+% \[ f(x)\geq f(a) +\sigma (x-a), x\in [a, b]. 
+% \]
+We now try to convert the notions of $(\delta, s, C)$-set, AD-regular set, and semi-well spaced set into the language of branching functions. Let $s_f (a, b) = \frac{f(b) - f(a)}{b - a}$ denote the slope of a line segment between $(a, b)$ and $(f(a), f(b))$. We say that a function $f: [0,n]\rightarrow \mathbb{R}$ is $(\sigma, \eps)$-superlinear on $[a,b]\subset [0,n]$, or that $(f, a, b)$ is $(\sigma, \eps)$-superlinear, if 
+ \[ f(x)\geq f(a) + \sigma (x-a) - \eps (b - a), \qquad x\in [a, b]. 
+ \]
+If $\sigma = s_f (a, b)$, then we just say that $(f, a, b)$ is $\eps$-superlinear.
+Since $f(a) + s_f (a,b) (x-a) = f(b) - s_f (a,b)(b-x)$, another criterion for $(f, a, b)$ being $\eps$-superlinear is
+\begin{equation*}
+    f(x) \geq f(b) - s_f (a,b)(b-x) - \eps (b - a), \qquad x \in [a, b].
+\end{equation*}
+We will use both criteria in later proofs. Finally, $(f, a, b)$ is $(\sigma, \eps)$-linear if
+\[ |f(x) - f(a) - \sigma (x-a)| \le \eps (b - a), \qquad x\in [a, b]. 
+ \]
+We also define $(f, a, b)$ to be $\eps$-linear if $\sigma = s_f (a, b)$. If $\cP$ is a $(\delta, s, \delta^{-\eps})$-set that is $\{ \Delta_j \}_{j=1}^n$-uniform, then one can show that the branching function of $f$ is $\eps$-superlinear. Likewise, if $\cP$ is $(s, \eps)$-almost AD-regular, then $f$ is $\eps$-linear. The reader is encouraged to ponder what happens if $\cP$ is semi-well spaced in the sense of Proposition \ref{prop: key} (the answer is revealed in Remark \ref{rem:dictionary}).
+
+The following proposition is a ``merging'' of \cite[Lemma 2.6 and 2.7]{orponen2023projections} and may be of independent interest. Roughly, it allows us to partition the set of scales $[\delta, 1]$ into a bounded number of intervals, where in each interval the set of scales look either almost AD-regular or semi-well spaced. %(For the equivalent formulation in terms of non-concentration of $\cP$, go ahead to Lemma \ref{lem:dictionary}.)
+
+\begin{prop}\label{prop:multiscale}
+    Fix $0<s<t<u$. For every $0 < \eps < \min(u-s, \frac{1}{2})$, there is $\tau = \tau(\eps, s,u, t) > 0$ such that the following holds: for every piecewise affine $2$-Lipschitz function $f : [0, m] \to \R$ such that
+    \begin{equation*}
+        f(x) \ge tx - \eps^2 m \text{ for all } x \in [0, m],
+    \end{equation*}
+    there exists a family of non-overlapping intervals $\{ [c_j, d_j] \}_{j=1}^n$ contained in $[0, m]$ such that:
+    \begin{enumerate}
+        \item For each $j$, there exists $t_j \in [s, u]$ such that at least one of the following alternatives holds:
+        \begin{enumerate}
+            \item $(f, c_j, d_j)$ is $(t_j, \eps)$-linear;
+
+            \item $(f, c_j, d_j)$ is $\eps$-superlinear with $s_f (c_j, d_j) = t_j$ and $f(x) \ge \min(f(c_j) + u(x - c_j), f(d_j) - s(d_j - x)) - \eps(d_j - c_j)$.
+        \end{enumerate}
+
+        \item $d_j - c_j \ge \tau m$ for all $j$;
+
+        \item $|[0, m] \setminus \cup_j [c_j, d_j]| \lesim_{s,t,u} \eps m$.
+    \end{enumerate}
+\end{prop}
+
+\begin{remark}\label{rem:dictionary}
+    Let $f$ be the branching function of a set $\cP$. Let $[c_j, d_j]$ be an interval satisfying condition (1)(a) in Proposition \ref{prop:multiscale}. Let $\bp \in \cD_{\delta^{c_j}}$ and $\cP_j = S_\bp (\cP \cap \bp)$, which encodes the geometry of $\cP$ between scales $\Delta^n$ and $\Delta^{c_j}$. Then for $x \in (c_j, d_j)$, we roughly have $s_f (x, d_j) = t_j$, so $\cP_j$ is a $(\Delta^{d_j - c_j}, t_j, C_0)$-AD regular set (where $C_0$ is a small parameter to be quantified later).
+
+    If $[c_j, d_j]$ satisfies condition (1)(b), then pick $\tilde{\Delta}=\Delta^{c-c_j}$ where $c$ satisfies $f(c_j)+u(c-c_j) = f(d_j)-s(d_j-c)$. Then for $x \in (c, d_j)$, we roughly have $s_f (x, d_j) \ge u$, which means that $\cP_j$ is a $(\tilde{\Delta}, u, C_0)$-set. Likewise, for $x \in (c_j, c)$, we roughly have $s_f (c_j, x) \le s$, which means that $\cP_j$ is a $(\Delta^{d_j-c_j}, s, C_0)$ Katz-Tao set ``from scales $\Delta^{d_j-c_j}$ to $\tilde\Delta$.'' Thus, $\cP_j$ is semi well-spaced in the sense of Proposition \ref{prop: key}. See Lemma \ref{lem:dictionary} for more precise statements (including the value of $C_0$).
+\end{remark}
+
+\begin{proof}
+    By \cite[Lemma 2.7]{orponen2023projections} for $\eps^2$ and using $t < u$, there is a family of non-overlapping intervals $\{ [c_j, d_j] \}_{j=1}^n$, where the $c_j$'s are increasing,  contained in $[0, m]$ such that:
+
+    \begin{enumerate}
+        \item For each $j$, at least one of the following alternatives holds: 
+        \begin{enumerate}[(i)]
+            \item $(f, c_j, d_j)$ is $\eps^2$-linear with $s_f (c_j, d_j) \in [0, u]$;
+
+            \item $(f, c_j, d_j)$ is $\eps^2$-superlinear with $s_f (c_j, d_j) = u$.
+        \end{enumerate}
+
+        \item $d_j - c_j \ge \tau m$ for all $j$;
+
+        \item $|[0, m] \setminus \cup_j [c_j, d_j]| \lesim_{t,u} \eps^2 m$.
+    \end{enumerate}
+    This is close to our desired output, except the first alternative allows $s_f (c_j, d_j) \in [0, u]$ instead of $[s, u]$. To remedy this, we follow the algorithm in \cite[Lemma 8.5]{orponen2021hausdorff}. Initially set $k = n$; the value of $k$ represents that we still need to process intervals $[c_j, d_j]$ with $j \le k$. For purposes that will be apparent later, we shall weaken the condition on the last unprocessed interval $[c_k, d_k]$: for $(f, c_n, d_n)$, we weaken (i) to (i') $(f, c_k, d_k)$ is $(t_k, \eps/2)$-linear with $t_k \in [0, u]$. Clearly (i) implies (i') with $t_k = s_f (c_k, d_k)$ (as long as $\eps < 1/2$).
+
+    If $[c_k, d_k]$ satisfies (ii) or $t_k \ge s$ in (i'), then $[c_k, d_k]$ is an interval of type (b) or type (a) respectively, as in (1) of the statement of Proposition \ref{prop:multiscale}, and so we shall mark $[c_k, d_k]$ as ``processed'' and set $k$ to $k-1$. So, assume $[c_k, d_k]$ is of type (i') and satisfies $t_k < s$. If $d_k \le \frac{\eps m}{t-s}$, then remove all intervals $[c_i, d_i]$ with $i < k$ and we are done. Otherwise, we observe that
+    \begin{equation*}
+        s_f (0, d_k) = \frac{f(d_k)}{d_k} \ge \frac{td_k - \eps m}{d_k} > s.
+    \end{equation*}
+    Since $s_f (c_k, d_k) < s$ and $f$ is piecewise affine, we can find a largest $c' \in (0, c_k)$ such that $s_f (c', d_k) = s$.
+
+    Now we check that $(f, c', d_k)$ is $\eps$-superlinear. If $x \in (c', c_k)$, then by maximality of $c'$, we have $s_f (x, d_k) < s = s_f (c', d_k)$. Since $s_f (c', d_k)$ is a convex combination of $s_f (c', x)$ and $s_f (x, d_k)$, we get $s_f (c', x) \ge s$, so $f(x) \ge f(c') + s(x - c')$. If $x \in (c_k, d_k)$, then we have, using $s_f (c_k, d_k) < s$ and $f$ being $(t_k, \eps/2)$-linear on $[c_k, d_k]$,
+    \begin{align}
+        f(x) &\ge f(d_k) - t_k (d_k - x) - \eps (d_k - c_k) \nonumber\\
+            &\ge f(d_k) - s (d_k - x) - \eps (d_k - c') \label{align1}
+            % &> f(c') + (d_k - c')s - s(d_k - x) - \eps^2 (d_k - c_k) \\
+            % &\ge f(c') + s(x - c') - \eps^2 (d_k - c').
+    \end{align}
+    Hence, since $s_f (c', d_k) = s$, we get that $(f, c', d_k)$ is $\eps$-superlinear. Observe that $[\tc_i, \td_i] = [c_i, d_i]$ for $i > k$ is an interval of type (a) as in $(1)$ of the statement of Proposition~\ref{prop:multiscale}, and $[\tc_k, \td_k] = [c', d_k]$ is a type (b) interval. We consider several cases:
+    \begin{itemize}
+        \item If $c' \notin \cup_j [c_j, d_j]$, then repeat the procedure with $k$ equal to the largest index with $d_k < c'$ (if $c' < c_1$ or no such $k$ exists, we stop).
+
+        \item If $c' \in [c_\ell, d_\ell]$ and $(c' - c_\ell) \le 2\eps (d_\ell - c_\ell)$, we discard the piece $[c_\ell, c']$. Repeat the procedure, setting $k := \ell - 1$.
+
+        \item If $c' \in [c_\ell, d_\ell]$, $(c' - c_\ell) \ge 2\eps (d_\ell - c_\ell)$, and $[c_\ell, d_\ell]$ is type (i), then we replace the interval $[c_\ell, d_\ell]$ by $[c_\ell, c']$ and repeat the procedure, setting $k := \ell$. Observe that $(f, c_\ell, c')$ is $(s_f (c_\ell, d_\ell), \eps/2)$-linear since $(f, c_\ell, d_\ell)$ is $\eps^2$-linear. Hence, (i') is satisfied in the procedure.
+
+        \item If $c' \in [c_\ell, d_\ell]$, $(c' - c_\ell) \ge \eps(d_\ell - c_\ell)$, and $[c_\ell, d_\ell]$ is type (ii), then we merge $[c', d_k]$ and $[c_\ell, d_\ell]$ to form a redefined interval $[\tc_k, \td_k] = [c_\ell, d_k]$. Note that $[c_\ell, d_k]$ is type (b) because for $x \in [c', d_k]$, we get from our earlier calculation \eqref{align1} and $c_\ell \le c'$,
+        \begin{equation}\label{align2}
+            f(x) \ge f(d_k) - s (d_k - x) - \eps^2 (d_k - c_\ell),
+                % &> f(c') + (d_k - c')s - s(d_k - x) - \eps^2 (d_k - c_k) \\
+                % &\ge f(c') + s(x - c') - \eps^2 (d_k - c').
+        \end{equation}
+        and for $x \in [c_\ell, d_\ell]$, we get by the fact that $(f, c_\ell, d_\ell)$ is $\eps^2$-superlinear with $s_f (c_\ell, d_\ell) = u$,
+        \begin{align}
+            f(x) &\ge f(c_\ell) + u(x - c_\ell) - \eps^2 (d_\ell - c_\ell) \label{align2.5}\\
+            &\ge f(c_\ell) + u(x - c_\ell) - \eps^2 (d_k - c_\ell). \label{align3}
+        \end{align}
+        Now, we check that $s_f (c_\ell, d_k) \in [s, u]$. First, $s_f (c_\ell, d_k)$ is a convex combination of $s_f (c_\ell, d_\ell)$ and $s_f (d_\ell, d_k)$. Since $s_f (c_\ell, d_\ell) \le u$ and $s_f (d_\ell, d_k) \le s$ by maximality of $c'$ and $d_\ell < c_k$, we have $s_f (c_\ell, d_k) \le u$.
+        
+        Likewise, $s_f (c_\ell, d_k)$ is also a convex combination of $s_f (c_\ell, c')$ and $s_f (c', d_k)$. Since $c' - c_\ell \ge \eps (d_\ell - c_\ell)$, \eqref{align2.5} implies that
+        \begin{equation*}
+            f(c') \ge f(c_\ell) + u(c' - c_\ell) - \eps(c' - c_\ell),
+        \end{equation*}
+        which means that $s_f (c_\ell, c') \ge u - \eps \ge s$. Combined with $s_f (c', d_k) = s$, we get that $s_f (c_\ell, d_k) \ge s$. Hence, $s_f (c_\ell, d_k) \in [s, u]$.
+
+        Finally, since $s_f (c_\ell, d_k) \in [s, u]$, equations \eqref{align2} and \eqref{align3} tell us that $(f, c_\ell, d_k)$ is $\eps$-superlinear. This shows the interval $[c_\ell, d_k]$ satisfies (1)(b), and then we can repeat the procedure with $k := \ell-1$.
+
+   %      Finally, we check that $f$ is $\eps^2$-superlinear on $[c_l, d_k]$. Let $\sigma=s_f(c_l, d_k)$. It suffices to show for any $x\in [d_l, d_k]$,
+   %  $f(x)-f(c_{\ell}) \geq \sigma(x-c_{\ell}) -\eps^2(d_k-c_{\ell}).$
+   %  To see this, 
+   %  we claim that for any $x\in [d_l, d_k]$, 
+   %  \[
+   %  f(x)-f(d_k) \geq -s(d_k-x) -\eps^2(d_k-x). 
+   %  \]
+   % This is true for $x\in [c_k, d_k]$, so we only have to verify for $x\in [d_l, c_k]$. Suppose this is not true, then $c'$ should have been $\geq d_l$. 
+   %  Therefore, 
+   %  \begin{align*}
+   %      f(x)-f(c_{\ell}) & = f(x)- f(d_k) + f(d_k) -f(c_{\ell}) \\
+   %      &\geq -s(d_k-x) +\sigma (d_k-c_{\ell}) \\
+   %      &\geq \sigma(x-c_{\ell}). 
+   %  \end{align*}
+   The procedure must terminate in $\le \tau^{-1}$ many steps and all resulting intervals satisfy one of the alternatives in (1). All of the resulting intervals have length $\ge 2\eps \tau m$, since they contain a least a proportion $2\eps$ of some $[c_j, d_j]$. Finally, the sum of their lengths is at least $(1 - O_{s,t,u} (\eps)) m$ since a proportion of at least $(1-2\eps)$ of each interval $[c_j, d_j]$ with $c_j \ge_{s,t} \eps m$ is contained in some $[\tc_i, \td_i]$. This gives the claim, with $\eps \tau$ in place of $\tau$.
+    \end{itemize}
+   %  {\color{purple}
+   %  $s_f(d_{\ell}, d_k)\leq s$ by the maximality of $c'$. So $s_f(c_{\ell}, d_k)\leq 2-s$. To see that $s_f(c_{\ell}, d_k) \geq s$, since $f$ is $\eps^2$-superlinear on $[c_{\ell}, d_{\ell}]$ with $s_f(c_{\ell}, d_{\ell})=2-s$
+   %  \begin{align*}
+   %      f(d_k)&=f(c')+ s(d_k-c') \geq  f(c_{\ell}) + (2-s)(c'-c_{\ell}) +\eps^2(d_{\ell}-c_{\ell}) \\
+   %      &\geq f(c_{\ell}) +s(d_k-c_{\ell}).
+   %  \end{align*}
+    
+   %  Finally, we check that $f$ is $\eps^2$-superlinear on $[c_l, d_k]$. Let $\sigma=s_f(c_l, d_k)$. It suffices to show for any $x\in [d_l, d_k]$,
+   %  $f(x)-f(c_{\ell}) \geq \sigma(x-c_{\ell}) -\eps^2(d_k-c_{\ell}).$
+   %  To see this, 
+   %  we claim that for any $x\in [d_l, d_k]$, 
+   %  \[
+   %  f(x)-f(d_k) \geq -s(d_k-x) -\eps^2(d_k-x). 
+   %  \]
+   % This is true for $x\in [c_k, d_k]$, so we only have to verify for $x\in [d_l, c_k]$. Suppose this is not true, then $c'$ should have been $\geq d_l$. 
+   %  Therefore, 
+   %  \begin{align*}
+   %      f(x)-f(c_{\ell}) & = f(x)- f(d_k) + f(d_k) -f(c_{\ell}) \\
+   %      &\geq -s(d_k-x) +\sigma (d_k-c_{\ell}) \\
+   %      &\geq \sigma(x-c_{\ell}). 
+   %  \end{align*}
+   %  }
+\end{proof}
+
+As promised by Remark \ref{rem:dictionary}, here is a more precise version of what Proposition \ref{prop:multiscale} says about the set $\cP$ at different scales.
+\begin{lemma}\label{lem:dictionary}
+    Suppose $\cP\subset[0,1)^d$ is a $\{\Delta_j\}_{j=1}^n$-uniform set with branching function $f$, and we apply Proposition~\ref{prop:multiscale} with $u = 2-s$. Fix $j$ and $\bp \in \cD_{\Delta^{c_j}}(\cP)$, $\cP_j := S_\bp (\cP \cap \bp)$. If condition $(1)(a)$ in Proposition~\ref{prop:multiscale} holds for $j$, then $\cP_j$ is a $(\Delta^{d_j-c_j}, t_j, O_\Delta (1) \cdot \Delta^{-(d_j-c_j)\eps})$-AD regular set. If condition $(1)(b)$ holds for $j$, then $|\cP_j| = \Delta^{-(d_j - c_j) t_j}$ and $|\cP_j \cap Q| \lesim_\Delta \Delta^{-(d_j - c_j) \eps} \cdot \max(r^{2-s} |\cP_j|, (r/\Delta^{d_j - c_j})^s)$ for any $r \in [\Delta^{d_j - c_j}, 1]$ and $Q \in \cD_r (\cP_j)$.
+\end{lemma}
+
+\begin{proof}
+For any $0 \le k \le d_j - c_j$ and $Q \in \cD_{\Delta^k} (\cP_j)$, we get that
+\begin{equation}\label{eqn:P cap Q}
+    |\cP_j \cap Q|_{\Delta^{d_j-c_j}} = |\cP \cap S_\bp^{-1} (Q)|_{\Delta^{d_j}} = \frac{|\cP|_{\Delta^{d_j}}}{|\cP|_{\Delta^{c_j+k}}} = \Delta^{f(c_j + k) - f(d_j)}.
+\end{equation}
+In particular, when $k = 0$, we get $|\cP_j|_{\Delta^{d_j-c_j}} = \Delta^{f(c_j) - f(d_j)}$. Plugging back into \eqref{eqn:P cap Q} gives
+\begin{equation}\label{eqn:P cap Q 2}
+    |\cP_j \cap Q|_{\Delta^{d_j-c_j}} = \Delta^{f(c_j+k) - f(d_j)} = |\cP_j|_{\Delta^{d_j-c_j}} \cdot \Delta^{f(c_j+k) - f(c_j)}.
+\end{equation}
+
+We start by analyzing condition $(1)(a)$, which says that
+\begin{equation}\label{eqn:eps linear specific}
+    |f(x) - f(c_j) - t_j (x - c_j)| \le \eps (d_j - c_j), \qquad x \in [c_j, d_j].
+\end{equation}
+% Plug in $x = d_j$ to get $|f(d_j) - f(c_j) - t_j (d_j - c_j)| \le \eps (d_j - c_j)$, and then triangle inequality gives
+% \[
+% |f(x) - f(d_j) - t_j (d_j - x)| \le 2\eps (d_j - c_j), \qquad x \in [c_j, d_j].
+% \]
+We check that $\cP_j$ is a $(\Delta^{d_j-c_j}, t_j, O_\Delta (1) \cdot \Delta^{-(d_j-c_j)\eps})$-AD regular set. Fix $r \in (\Delta^{d_j-c_j}, 1)$ and $y \in \cP_j$; we wish to show
+\[
+\Delta^{\eps (d_j-c_j)} r^{t_j} |\cP_j|_{\Delta^{d_j-c_j}} \lesim_\Delta |\cP_j \cap B(y, r)|_{\Delta^{d_j-c_j}} \lesim_\Delta |\cP_j|_{\Delta^{d_j-c_j}} r^{t_j} \Delta^{-(d_j-c_j)\eps}
+\]
+
+For the upper bound, note that \eqref{eqn:P cap Q 2} and \eqref{eqn:eps linear specific} give us $|\cP_j \cap Q|_{\Delta^{d_j-c_j}} \le |\cP_j|_{\Delta^{d_j-c_j}} \cdot \Delta^{k t_j} \cdot \Delta^{-(d_j-c_j)\eps}$ for all $Q \in \cD_{\Delta^k} ([0,1]^2)$ (indeed, if $Q \notin \cD_{\Delta^k} (\cP_j)$, then the LHS is zero). Since any ball of radius $r \in (\Delta^{d_j-c_j}, 1)$ can be covered by $O(1)$ many squares in $\cD_{\Delta^k} ([0,1]^2)$, where $k \in [0, d_j - c_j]$ is the largest integer with $r < \Delta^k$ (so $\Delta^k < r \Delta^{-1}$), we get $|\cP_j \cap B(y, r)| \lesim |\cP_j| \Delta^{-kt_j} \Delta^{-(d_j-c_j)\eps} \lesim_\Delta |\cP_j| r^{t_j} \Delta^{-(d_j-c_j)\eps}$.
+
+The lower bound is similar: choose $k$ to be the smallest integer with $r > 2\Delta^k$ (so $2\Delta^{k-1} > r$). Then by applying \eqref{eqn:P cap Q 2} to $Q = \cD_{\Delta^k} (y)$ and \eqref{eqn:eps linear specific}, we verify the desired condition
+\begin{equation*}
+    \Delta^{\eps (d_j-c_j)} r^{t_j} |\cP_j|_{\Delta^{d_j-c_j}} \lesim_\Delta \Delta^{\eps (d_j-c_j)} \Delta^{k t_j} |\cP_j|_{\Delta^{d_j-c_j}} \le |\cP_j \cap Q|_{\Delta^{d_j-c_j}} \le |\cP_j \cap B(y, r)|_{\Delta^{d_j-c_j}}.
+\end{equation*}
+This completes the analysis of condition $(1)(a)$.
+
+In a similar fashion, the condition in $(1)(b)$ becomes $f(d_j) - f(c_j) = t_j (d_j - c_j)$ and
+\[
+f(x)\geq \min ( f(c_j)+(2-s)(x-c_j), f(d_j) -s(d_j-x))-\eps (d_j-c_j), \qquad x \in [c_j, d_j].
+\]
+As before, from \eqref{eqn:P cap Q} with $k = 0$, we have $|\cP_j|_{\Delta^{d_j-c_j}} = \Delta^{f(c_j) - f(d_j)} = \Delta^{-(d_j - c_j) t_j}$. Finally, for a given $r \in [\Delta^{d_j-c_j}, 1]$, use \eqref{eqn:P cap Q}, \eqref{eqn:P cap Q 2}, and pick the largest $k \in [0, d_j - c_j]$ with $r < \Delta^k$ to obtain $|\cP_j \cap Q| \lesim_\Delta \Delta^{-(d_j - c_j) \eps} \cdot \max(r^{2-s} |\cP_j|, (r/\Delta^{d_j - c_j})^s)$ for any $Q \in \cD_r (\cP_j)$.
+
+%Thus, for any $Q\in \cD_{\Delta^{c_j}}(\cP)$, $S_Q(Q\cap \cP)$ satisfies the assumption of Corollary~\ref{cor: key} with $\Delta^{d_j-c_j}$ in the place of $\Delta$ and $t := t_j \in [s, 2-s]$. %(We can also apply Proposition~\ref{prop: key} with $\delta^{d_j-c_j}$ in the place of $\delta$ and $\Delta=\delta^{c-c_j}$ where $c$ satisfies $f(c_j)+u(c-c_j) = f(d_j)-s(d_j-c).$)
+\end{proof}
+
+We finally complete the proof of the Furstenberg set conjecture for general sets.
+
+\begin{proof}[Proof of Theorem \ref{Thm: main}]
+If $t \le s$ or $t \ge 2-s$ then we are done by \cite[Corollary 2.14]{orponen2021hausdorff} or Proposition \ref{prop: key} with $\Delta = \delta$ (see also \cite[Corollary 5.28]{orponen2023projections}), respectively. Hence, assume $t \in (s, 2-s)$.
+
+We will eventually choose the following parameters: $\eta_0 (\eps, s), \tau (s, t, \eta_0), \eta (\eta_0, \tau), T(\eta)$.
+
+For a fixed choice of $\eps, s$, let $\eta_0 (\eps, s) > 0$ be the minimum of $\eps$ and the two $\eta_0 (\eps, s)$'s in Proposition \ref{prop:furst-ADreg} and Corollary \ref{cor: key}.
+
+Let $\eta$ be a small constant to be chosen and  $T=T(\eta)$ such that $\frac{2\log T}{T}\leq \eta^2$. Refine $(\cP, \cT)$ such that $\cP$ is $\{2^{-jT}\}_{j=1}^m$-uniform for $2^{-mT}=\delta$ with associated sequence $\{N_j\}_{j=1}^m$. Let $f$ be the corresponding branching function. Since $\cP$ is a $(\delta, t, \delta^{-\eta})$-set, we have $f(x) \ge tx - \eta m$ for all $x \in [0, m]$. Thus, if we later choose $\eta < \eta_0^2$, then we may apply Proposition \ref{prop:multiscale} to the branching function $f$.
+
+Let $\{ [c_j, d_j] \}_{j=1}^n$ be the intervals from Proposition \ref{prop:multiscale} applied with parameters $s, t, u := 2 - s, \eps := \eta_0$ to be specified later, corresponding to a sequence $0 < \delta = \Delta_n < \Delta_{n-1} < \cdots < \Delta_1 < \Delta_0 = 1$. We can partition $\{ 0, 1, \cdots, n-1 \} = \cS \cup \cB$, ``structured'' and ``bad'' scales such that:
+    \begin{enumerate}
+        \item $\frac{\Delta_{j}}{\Delta_{j+1}} \ge \delta^{-\tau}$ for all $j \in \cS$, and $\prod_{j \in \cB} (\Delta_{j}/\Delta_{j+1}) \le \delta^{-O_{s,t} (\eta_0)}$;
+
+        \item Using Lemma \ref{lem:dictionary}, we see that for each $j \in \cS$ and $\bp \in \cD_{\Delta_j} (\cP)$, we can find $t_j \in [s, 2-s]$ such that the set $\cP_j := S_{\bp} (\cP \cap \bp)$ is either
+        \begin{enumerate} 
+        \item[(i)] a $(\Delta_{j+1}/\Delta_j, t_j, O_\Delta (1) \cdot (\Delta_j/ \Delta_{j+1})^{\eta_0})$-AD regular set; 
+        \item[(ii)] satisfies $|\cP_j| = \delta^{-t_j}$ and $|\cP_j \cap Q| \lesim_\Delta (\Delta_j/\Delta_{j+1})^{\eta_0} \cdot \max(\rho^{2-s} |\cP_j|, (\rho/(\Delta_{j+1}/\Delta_j))^s)$ for any $\rho \in (\Delta_{j+1}/\Delta_j, 1)$ and $Q \in \cD_\rho (\cP_j)$.
+        \end{enumerate}
+
+        \item $\prod_{j \in S} (\Delta_j/\Delta_{j+1})^{t_j} \ge  |\cP|  \cdot \prod_{j \in \cB} (\Delta_{j+1}/\Delta_{j})^2 \ge \delta^{-t+\eta} \cdot \delta^{O_{s,t} (\eta_0)} = \delta^{-t + O_{s,t} (\eta_0)}$.
+    \end{enumerate}
+    Apply Proposition \ref{prop: OSincidence multiscale} and $\frac{\Delta_{j}}{\Delta_{j+1}} \ge \delta^{-\tau}$ to get a family of tubes $\cT_{\textbf{p}} \subset \T^{\Delta_{j+1}/\Delta_j}$ with the property that $(\cD_{\Delta_{j+1}} (S_{\textbf{p}} (\cP \cap \textbf{p})), \cT_{\textbf{p}})$ is a $(\Delta_{j+1}/\Delta_j, s, C_j, M_{\textbf{p}})$-nice configuration for some $C_j \lessapprox_\delta (\Delta_{j+1}/\Delta_j)^{-\tau^{-1} \eta}$ and
+    \begin{equation*}
+        \frac{|\cT_0|}{M} \geapp_\delta \prod_{j=0}^{N-1} \frac{|\cT_{\textbf{p}_j}|}{M_{\textbf{p}_j}}.
+    \end{equation*}
+    For $j \in \cS$, we get by either applying Proposition \ref{prop:furst-ADreg} for case (2)(i) or Corollary \ref{cor: key} for case (2)(ii), that if $\eta < \tau \eta_0 (\eps, s)$, then $\frac{|\cT_{\textbf{p}_j}|}{M_{\textbf{p}_j}} \ge (\Delta_j/\Delta_{j+1})^{(s+t_j)/2-\eps}$. Thus, since $\eta_0 \le \eps$, we have using items (1) and (3),
+    % \begin{equation*}
+    %     \frac{|\cT_0|}{M} \geapp_\delta \prod_{j \in \cS} \left( \frac{\Delta_j}{\Delta_{j+1}} \right)^{-(s+t_j)/2+\eps} \ge \delta^{(1-\eta)(-(s+t)/2+\eps+O_{s,t} (\eta_0))} \ge \delta^{-(s+t)/2 + O_{s,t}(\eps)},
+    % \end{equation*}
+    \begin{multline*}
+        \frac{|\cT_0|}{M} \geapp_\delta \prod_{j \in \cS} \left( \frac{\Delta_j}{\Delta_{j+1}} \right)^{(s+t_j)/2-\eps} \ge \prod_{j \in \cS} \left( \frac{\Delta_j}{\Delta_{j+1}} \right)^{s/2-\eps} \cdot \prod_{j \in \cS} \left( \frac{\Delta_j}{\Delta_{j+1}} \right)^{t_j/2} \\
+        \ge \delta^{(-1+O_{s,t} (\eta_0))(s/2 - \eps)} \cdot \delta^{-t/2 + O_{s,t} (\eta_0)} \ge \delta^{-(s+t)/2 + O_{s,t}(\eps)},
+    \end{multline*}
+    which proves Theorem \ref{Thm: main} if we re-run the argument with $\eps/C_{s,t}$ in place of $\eps$.
+\end{proof}
+
+\begin{remark}
+    After proving Theorem \ref{Thm: main}, a similar compactness argument as in the proof of Theorem \ref{prop:furst-ADreg} shows we can remove the dependence of $\eta$ on $t$. Indeed, we may in fact assume $t \in [s + \eps/100, 2 - s - \eps/100]$ because we can use \cite[Corollary 2.14]{orponen2021hausdorff} or \cite[Corollary 5.28]{orponen2023projections} for $t \le s + \frac{\eps}{100}$ or $t \ge 2 - s - \frac{\eps}{100}$, respectively.
+\end{remark}
+
+\bibliographystyle{plain}
+\bibliography{journal2}
+\end{document}

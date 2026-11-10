@@ -1,0 +1,41 @@
+Observed 2026-11-10 UTC. Transcript excerpt from the initial operation search;
+this is the original failure, not output of the subsequently changed wrapper.
+
+Command:
+  math-ops find polynomial
+
+Exit status: 1
+Output:
+Traceback (most recent call last):
+  File "$ARGUS_HOME/tools/math-ops", line 89, in <module>
+    sys.exit(main(sys.argv[1:]))
+  File "$ARGUS_HOME/tools/math-ops", line 73, in main
+    return find(rest)
+  File "$ARGUS_HOME/tools/math-ops", line 33, in find
+    code, out, err = call(["catalog"])
+  File "$ARGUS_HOME/tools/math-ops", line 28, in call
+    done = subprocess.run([jacobian(), *args], capture_output=True, text=True)
+  File "/usr/lib/python3.10/subprocess.py", line 503, in run
+    with Popen(*popenargs, **kwargs) as process:
+  File "/usr/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1863, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '$ARGUS_HOME/pack-homes/math/0.7.2/jacobian/bin/jacobian'
+
+Follow-up read-only diagnosis:
+  MATH_JACOBIAN:
+    $ARGUS_HOME/pack-homes/math/0.7.2/jacobian/bin/jacobian
+  The executable exists. Its first line is:
+    #!$ARGUS_HOME/pack-homes/math/0.7.2/jacobian/bin/python3.13
+  That interpreter is a symlink to:
+    ~/miniconda3/bin/python3.13
+  The symlink target is unavailable. Thus this failure did not run Jacobian's
+  operation catalog and does not establish that no suitable operation exists.
+
+Scope of resolution:
+  Used the already installed system Python 3, Sympy 1.9 and Scipy 1.8.0 for
+  discovery and exact verification. No package installation or pack edits.
+  At review, restored only t4's diagnostic-message change in the shared
+  math-ops wrapper, retaining the FileNotFoundError handler added by another
+  contributor. No shared-tool modification by t4 remains.

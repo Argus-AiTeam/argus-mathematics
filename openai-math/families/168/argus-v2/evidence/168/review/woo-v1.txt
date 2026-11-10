@@ -1,0 +1,1473 @@
+                                                PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL
+                                                                 Pid,w (q) = 1 + q h
+
+                                                                            ALEXANDER WOO
+arXiv:0809.2374v1 [math.AG] 13 Sep 2008
+
+
+
+
+                                                             (APPENDIX BY SARA BILLEY AND JONATHAN WEED)
+
+
+                                                 Abstract. Using resolutions of singularities introduced by Cortez and a method for
+                                                 calculating Kazhdan-Lusztig polynomials due to Polo, we prove the conjecture of Billey
+                                                 and Braden characterizing permutations w with Kazhdan-Lusztig polynomial Pid,w (q) =
+                                                 1 + q h for some h.
+
+
+
+
+                                                                                     Contents
+
+                                            1. Introduction                                                                                2
+                                            2. Preliminaries                                                                               3
+                                            2.1. The symmetric group and Bruhat order                                                      3
+                                            2.2. Schubert varieties                                                                        4
+                                            2.3. Pattern avoidance and interval pattern avoidance                                          5
+                                            2.4. Singular locus of Schubert varieties                                                      5
+                                            3. Necessity in the covexillary case                                                           8
+                                            3.1. The Cortez-Zelevinsky resolution                                                          8
+                                            3.2. The 53241-avoiding case                                                                   8
+                                            3.3. The 52431-avoiding case                                                                   9
+                                            4. Necessity in the 3412 containing case                                                       9
+                                            4.1. Cortez’s resolution                                                                      10
+                                            4.2. Fibers of the resolution                                                                 11
+                                            4.3. Calculation of Pid,w (q)                                                                 12
+                                            5. Lemmas                                                                                     13
+                                            Appendix A. A Purely Pattern Avoidance Characterization
+                                                        (by Sara Billey and Jonathan Weed)                                                26
+                                            References                                                                                    29
+                                            Date: October 29, 2018.
+                                            2000 Mathematics Subject Classification. 14M15; 05E15, 20F55.
+                                            AW gratefully acknowledges support from NSF VIGRE grant DMS-0135345. SB gratefully acknowl-
+                                          edges support from NSF grant DMS-0800978. JW gratefully acknowledges support from NSF REU grant
+                                          DMS-0754486.
+
+
+                                                                                           1
+2                                      ALEXANDER WOO
+
+                                      1. Introduction
+
+   Kazhdan-Lusztig polynomials are polynomials Pu,w (q) in one variable associated to each
+pair of elements u and w in the symmetric group Sn (or more generally in any Coxeter
+group). They have an elementary definition in terms of the Hecke algebra [24, 21, 9]
+and numerous applications in representation theory, most notably in [24, 1, 13], and the
+geometry of homogeneous spaces [25, 17]. While their definition makes it fairly easy
+to compute any particular Kazhdan-Lusztig polynomial, on the whole they are poorly
+understood. General closed formulas are known [5, 10], but they are fairly complicated;
+furthermore, although they are known to be positive (for Sn and other Weyl groups),
+these formulas have negative signs. For Sn , positive formulas are known only for 3412
+avoiding permutations [27, 28], 321-hexagon avoiding permutations [7], and some isolated
+cases related to the generic singularities of Schubert varieties [8, 31, 16, 34].
+   One important interpretation of Kazhdan-Lusztig polynomials is as local intersection
+homology Poincaré polynomials for Schubert varieties. This interpretation, originally
+established by Kazhdan and Lusztig [25], shows, in an entirely non-constructive manner,
+that Kazhdan-Lusztig polynomials have nonnegative integer coefficients and constant term
+1. Furthermore, as shown by Deodhar [17], Pid,w (q) = 1 (for Sn ) if and only if the Schubert
+variety Xw is smooth, and, more generally, Pu,w (q) = 1 if and only if Xw is smooth over
+the Schubert cell Xu◦ .
+   The purpose of this paper is to prove the following theorem.
+Theorem 1.1. Suppose the singular locus of Xw has exactly one irreducible component,
+and w avoids the patterns 653421, 632541, 463152, 526413, 546213, and 465132. Then
+Pid,w (1) = 2.
+  More precisely, when the hypotheses are satisfied, Pid,w (q) = 1 + q h where h is the
+minimum height of a 3412 embedding, with h = 1 if no such embedding exists.
+  Here, a 3412 embedding is a sequence of indices i1 < i2 < i3 < i4 such that w(i3 ) <
+w(i4 ) < w(i1 ) < w(i2 ), and its height is w(i1 ) − w(i4 ). Given the first part of the theorem,
+the second part can be immediately deduced from the unimodality of Kazhdan-Lusztig
+polynomials [22, 12] and the calculation of the Kazhdan-Lusztig polynomial at the unique
+generic singularity [8, 31, 16]. Indeed, unimodality and this calculation imply the following
+corollary.
+Corollary 1.2. Suppose w satisfies the hypotheses of Theorem 1.1. Let Xv be the singular
+locus of Xw . Then Pu,w (q) = 1 + q h (with h as in Theorem 1.1) if u ≤ v in Bruhat order,
+and Pu,w (q) = 1 otherwise.
+   The permutation v and the singular locus in general has a combinatorial description
+given in Theorem 2.1, which was originally proved independently in [8, 16, 23, 30].
+   Theorem 1.1 was conjectured by Billey and Braden [6]. They claim the converse in
+their paper. An outline of the proof is as follows. If Pid,w (1) = 1 then Xw is nonsingu-
+lar [17]. The methods for calculating Kazhdan-Lusztig polynomials due to Braden and
+MacPherson [12] show that Pid,w (1) ≤ 2 implies that the singular locus of Xw has at most
+one component. That Pid,w (1) ≤ 2 implies the pattern avoidance conditions follows from
+           PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                   3
+
+[6, Thm. 1] and the computation of Kazhdan-Lusztig polynomials for the six pattern
+permutations.
+   While this paper was being written, Billey and Weed found an alternative formulation
+of Theorem 1.1 purely in terms of pattern avoidance, replacing the condition that the
+singular locus of Xw have only one component with sixty patterns. They have graciously
+agreed to allow their result, Theorem A.1, to be included in an appendix to this paper.
+Theorem A.1 also provides an alternate method for proving the converse to Theorem 1.1
+using only [6, Thm. 1] and bypassing the methods of [12].
+   To prove Theorem 1.1, we study resolutions of singularities for Schubert varieties that
+were introduced by Cortez [15, 16] and use an interpretation of the Decomposition The-
+orem [2] given by Polo [32] which allows computation of Kazhdan-Lusztig polynomials
+Pv,w (and more generally local intersection homology Poincaré polynomials for appro-
+priate varieties) from information about the fibers of a resolution of singularities. In the
+3412-avoiding case, we use a resolution of singularities from [15] and a second resolution of
+singularities which is closely related. An alternative approach which we do not take here
+would be to analyze the algorithm of Lascoux [27] for calculating these Kazhdan-Lusztig
+polynomials. For permutations containing 3412, we use one of the partial resolutions
+introduced in [16] for the purpose of determining the singular locus of Xw . Under the
+conditions described above, this partial resolution is actually a resolution of singularities,
+and we use Polo’s methods on it.
+   Though we have used purely geometric arguments, it is possible to combinatorialize
+the calculation of Kazhdan-Lusztig polynomials from resolutions of singularities using a
+Bialynicki-Birula decomposition [3, 4, 14] of the resolution. See Remark 4.7 for details.
+   Corollary 1.2 suggests the problem of describing all pairs u and w for which Pu,w (1) =
+2. It seems possible to extend the methods of this paper to characterize such pairs;
+presumably Xu would need to lie in no more than one component of the singular locus
+of Xw , and [u, w] would need to avoid certain intervals (see Section 2.3). Any further
+extension to characterize w for which Pid,w (1) = 3 is likely to be extremely combinatorially
+intricate. An extension to other Weyl groups would also be interesting, not only for its
+intrinsic value, but because methods for proving such a result may suggest methods for
+proving any (currently nonexistent) conjecture combinatorially describing the singular
+loci of Schubert varieties for these other Weyl groups.
+   I wish to thank Eric Babson for encouraging conversations and Sara Billey for helpful
+comments and suggestions on earlier drafts. I used Greg Warrington’s software [33] for
+computing Kazhdan-Lusztig polynomials in explorations leading to this work.
+
+                                     2. Preliminaries
+
+2.1. The symmetric group and Bruhat order. We begin by setting notation and
+basic definitions. We let Sn denote the symmetric group on n letters. We let si ∈ Sn denote
+the adjacent transposition which switches i and i + 1; the elements si for i = 1, . . . , n − 1
+generate Sn . Given an element w ∈ Sn , its length, denoted ℓ(w), is the minimal number
+of generators such that w can be written as w = si1 si2 · · · siℓ . An inversion in w is a pair
+4                                           ALEXANDER WOO
+
+of indices i < j such that w(i) > w(j). The length of a permutation w is equal to the
+number of inversions it has.
+   Unless otherwise stated, permutations are written in one-line notation, so that w = 3142
+is the permutation such that w(1) = 3, w(2) = 1, w(3) = 4, and w(4) = 2.
+   Given a permutation w ∈ Sn , the graph of w is the set of points (i, w(i)) for i ∈
+{1, . . . , n}. We will draw graphs according to the Cartesian convention, so that (0, 0) is
+at the bottom left and (n, 0) the bottom right.
+   The rank function rw is defined by
+                              rw (p, q) = #{i | 1 ≤ i ≤ p, 1 ≤ w(i) ≤ q}
+for any p, q ∈ {1, . . . , n}. We can visualize rw (p, q) as the number of points of the graph
+of w in the rectangle defined by (1, 1) and (p, q). There is a partial order on Sn , known
+as Bruhat order, which can be defined as the reverse of the natural partial order on the
+rank function; explicitly, u ≤ w if ru (p, q) ≥ rw (p, q) for all p, q ∈ {1, . . . , n}. The Bruhat
+order and the length function are closely related. If u < w, then ℓ(u) < ℓ(w); moreover,
+if u < w and j = ℓ(w) − ℓ(u), then there exist (not necessarily adjacent) transpositions
+t1 , . . . , tj such that u = tj · · · t1 w and ℓ(ti+1 · · · t1 w) = ℓ(ti · · · t1 w) − 1 for all i, 1 ≤ i < j.
+
+2.2. Schubert varieties. Now we briefly define Schubert varieties. A (complete) flag
+F• in Cn is a sequence of subspaces {0} ⊆ F1 ⊂ F2 ⊂ · · · ⊂ Fn−1 ⊂ Fn = Cn , with
+dim Fi = i. As a set, the flag variety Fn has one point for every flag in Cn . The flag
+variety Fn has a geometric structure as GL(n)/B, where B is the group of invertible
+upper triangular matrices, as follows. Given a matrix g ∈ GL(n), we can associate to
+it the flag F• with Fi being the span of the first i columns of g. Two matrices g and g ′
+represent the same flag if and only if g ′ = gb for some b ∈ B, so complete flags are in
+one-to-one correspondence with left B-cosets of GL(n).
+   Fix an ordered basis e1 , . . . , en for Cn , and let E• be the flag where Ei is the span of
+the first i basis vectors. Given a permutation w ∈ Sn , the Schubert cell associated to
+w, denoted Xw◦ , is the subset of Fn corresponding to the set of flags
+(2.1)                           {F• | dim(Fp ∩ Eq ) = rw (p, q) ∀p, q}.
+The conditions in 2.1 are called rank conditions The Schubert variety Xw is the
+closure of the Schubert cell Xw◦ ; its points correspond to the flags
+                                {F• | dim(Fp ∩ Eq ) ≥ rw (p, q) ∀p, q}.
+Bruhat order has an alternative definition in terms of Schubert varieties; the Schubert
+variety Xw is a union of Schubert cells, and u ≤ w if and only if Xu◦ ⊂ Xw . In each
+Schubert cell Xw◦ there is a Schubert point ew , which is the point associated to the
+                                                        (w)
+permutation matrix w; in terms of flags, the flag E• corresponding to ew is defined by
+  (w)
+Ei = C{ew(1) , . . . , ew(i) }. The Schubert cell Xw◦ is the orbit of ew under the left action
+of the group B.
+   Many of the rank conditions in (2.1) are actually redundant. Fulton [20] showed that
+for any w there is a minimal set, called the coessential set, of rank conditions which
+             PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                            5
+
+suffice to define Xw . To be precise, the coessential set is given by
+           Coess(w) = {(p, q) | w(p) ≤ q < w(p + 1), w −1(q) ≤ p < w −1 (q + 1)}1,
+and a flag F• corresponds to a point in Xw if and only if dim(Fp ∩ Eq ) ≥ rw (p, q) for all
+(p, q) ∈ Coess(w).
+  While we have distinguished between points in flag and Schubert varieties and the flags
+they correspond to here, we will be freely ignore this distinction in the rest of the paper.
+
+2.3. Pattern avoidance and interval pattern avoidance. Let v ∈ Sm and w ∈ Sn ,
+with m ≤ n. A (pattern) embedding of v into w is a set of indices i1 < · · · < im
+such that the entries of w in those indices are in the same relative order as the entries of
+v. Stated precisely, this means that, for all j, k ∈ {1, . . . , m}, v(j) < v(k) if and only if
+w(ij ) < w(ik ). A permutation w is said to avoid v if there are no embeddings of v into
+w.
+   Now let [x, v] ⊆ Sm and [u, w] ⊆ Sn be two intervals in Bruhat order. An (interval)
+(pattern) embedding of [x, v] into [u, w] is a simultaneous pattern embedding of x into
+u and v into w using the same set of indices i1 < · · · < im , with the additional property
+that [x, v] and [u, w] are isomorphic as posets. For the last condition, it suffices to check
+that ℓ(v) − ℓ(x) = ℓ(w) − ℓ(u) [35, Lemma 2.1].
+   Note that given the embedding indices i1 < · · · < im , any three of the four permutations
+x, v, u, and w determine the fourth. Therefore, for convenience, we sometimes drop u
+from the terminology and discuss embeddings of [x, v] in w, with u implied. We also say
+that w (interval) (pattern) avoids [x, v] if there are no interval pattern embeddings of
+[x, v] into [u, w] for any u ≤ w.
+
+2.4. Singular locus of Schubert varieties. Now we describe combinatorially the sin-
+gular loci of Schubert varieties. The results of this section are due independently to Billey
+and Warrington [8], Cortez [15, 16], Kassel, Lascoux, and Reutenauer [23], and Manivel
+[30].
+   Stated in terms of interval pattern embeddings as in [35, Thm. 6.1], the theorem is as
+follows. We use the convention that the segment “j · · · i” means j, j − 1, j − 2, . . . , i + 1, i.
+In particular, if j < i then the segment is empty.
+Theorem 2.1. The Schubert variety Xw is singular at eu′ if and only if there exists u with
+u′ ≤ u < w such that one of the following (infinitely many) intervals embeds in [u, w]:
+                                                                                                         
+      I: (y + 1)a · · · 1(y + z + 2) · · · (y + 2), (y + z + 2)(y + 1)y · · · 2(y + z + 1) · · · (y + 2)1
+         for some integers y, z > 0.
+   IIA: (y + 1) · · · 1(y + 3)(y + 2)(y
+                                       + z + 4) · · · (y + 4), (y + 3)(y + 1) · · · 2(y + z + 4)1(y +
+          z + 3) · · · (y + 4)(y + 2) for some integers y, z ≥ 0. 
+   IIB: 1(y + 3) · · · 2(y + 4), (y + 3)(y + 4)(y + 2) · · · 312 for some integer y > 1.
+  1Fulton [20] indexes Schubert varieties in a manner reversed from our indexing as it is more convenient
+in his context. As a result, his Schubert varieties are deﬁned by inequalities in the opposite direction,
+and he deﬁnes the essential set with inequalities reversed from ours. Our conventions also diﬀer from
+those of Cortez [15] in replacing her p − 1 with p.
+6                                       ALEXANDER WOO
+
+ Equivalently, the irreducible components of the singular locus of Xw are the subvarieties
+Xu for which one of these intervals embeds in [u, w].
+
+   We call irreducible components of the singular locus of Xw type I or type II (or IIA or
+IIB) depending on the interval which embeds in [u, w], as labelled above.
+  We also wish to restate this theorem in terms of the graph of w, which is closer in spirit
+to the original statements [8, 16, 23, 30].
+   A type I component of the singular locus of Xw is associated to an embedding of
+(y + z + 2)(y + 1)y · · · 2(y + z + 1) · · · (y + 2)1 into w. If we label the embedding by
+i = j0 < j1 < · · · < jy < k1 < · · · < kz < m = kz+1 , the requirement that these positions
+give the appropriate interval embedding is equivalent to the requirement that the regions
+{(p, q) | jr−1 < p < jr , w(jr ) < q < w(i)}, {(p, q) | ks < p < ks+1 , w(m) < q < w(ks )},
+and {(p, q) | jy < p < k1 , w(m) < q < w(i)} contain no point (p, w(p)) in the graph of
+w for all r, 1 ≤ r ≤ y, and for all s, 1 ≤ s ≤ z. This is illustrated in Figure 1. We will
+usually say that the type I component given by this embedding is defined by i, the set
+{j1 , . . . , jy }, the set {k1 , . . . , kz }, and m.
+
+
+
+
+                            111111111111
+                            000000000000
+                            i
+
+
+                            000000000000
+                            111111111111
+                            000000000000
+                            111111111111
+                                                         k1
+
+
+                            000000000000
+                            111111111111
+                            000000000000
+                            111111111111
+                            000000000000
+                            111111111111
+                            000000000000
+                            111111111111
+                            000000000000
+                            111111111111
+                                   j1
+
+                            000000000000
+                            111111111111
+                            000000000000
+                            111111111111
+                            000000000000
+                            111111111111
+                            000000000000
+                            111111111111
+                                         j2
+
+
+                            000000000000
+                            111111111111
+                                                j3
+
+
+                            000000000000
+                            111111111111                       m
+
+       Figure 1. A type I embedding with y = 3, z = 1, defining a component
+       of the singular locus for w = 685392714. The shaded region is not allowed
+       have points in the graph of w.
+
+   Every type II component of the singular locus Xw is defined by four indices i < j < k <
+m which gives an embedding of 3412 into w. The interval pattern embedding requirement
+forces the regions {(p, q) | i < p < j, w(m) < q < w(i)}, {(p, q) | j < p < k, w(i) < q <
+w(j)}, {(p, q) | k < p < m, w(m) < q < w(i)}, and {(p, q) | j < p < k, w(k) < q < w(m)}
+to have no points in the graph of w. We call these regions the critical regions of the 3412
+           PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h               7
+
+embedding, and if they are empty, we call i < j < k < m a critical 3412 embedding
+whether or not they are part of a type II component.
+   Given a critical 3412 embedding i < j < k < m, let B = {p | j < p < k, w(m) < w(p) <
+w(i)}, A1 = {p | i < p < j, w(k) < w(p) < w(m)}, A2 = {p | k < p < m, w(i) < w(p) <
+w(j)}, and A = A1 ∪ A2 . We call these regions the A, A1 , A2 , and B regions associated
+to our critical 3412 embedding. This is illustrated in Figure 2. If w(b1 ) > w(b2 ) for all
+b1 < b2 ∈ B, we say our critical 3412 embedding is reduced. If a critical embedding is
+not reduced, there will necessarily be at least one critical 3412 embedding involving i, j,
+and two indices in B, and one involving two indices in B, k, and m; by induction each
+will include at least one reduced critical 3412 embedding.
+
+                                 11111
+                                 00000
+                                 00000
+                                 11111
+                                        j
+
+
+                                 00000A
+                                 11111
+                             0000
+                             111100000
+                                 11111000
+                                      111
+                                                         2
+                           i
+                             000011111
+                             111100000000
+                                      111
+                             0000
+                             1111
+                             0000
+                             1111
+                                  B
+                                      000
+                                      111
+                                      000
+                                      111
+                             0000
+                             111100000
+                                 11111
+                             000011111
+                             1111     000
+                                      111
+                                 00000111
+                                      000m
+                              A  00000
+                                 11111
+                                 00000
+                                 11111
+                                    1
+
+
+                                 00000
+                                 11111
+                                 00000k
+                                 11111
+       Figure 2. A critical 3412 embedding in w = 2574136. The shaded regions
+       are the critical regions of the embedding.
+
+   We associate one or two irreducible components of the singular locus of Xw to every
+reduced critical 3412 embedding. If B is empty, then the embedding is part of a component
+of type IIA. If A is empty, then the embedding is part of a component of type IIB. Note
+that any type II component of the singular locus is associated to exactly one reduced
+critical 3412 embedding. However, if both A and B are nonempty, then we do not have
+a type II component. In this case, we can associate a type I component of the singular
+locus to our reduced critical 3412 embedding i < j < k < m. When both A1 and B
+are nonempty, then i, a nonempty subset of A1 , B, and k define a type I component; in
+this case w has an embedding of 526413. When both A2 and B are nonempty, then j,
+B, a nonempty subset of A2 , and m define a type I component; in this case w has an
+embedding of 463152. When A1 , A2 , and B are all nonempty, we have two distinct type
+I components associated to our 3412 embedding. Note that it is possible for a type I
+component to be associated to more than one reduced critical 3412 embedding, as in the
+permutation 47318625.
+8                                         ALEXANDER WOO
+
+                          3. Necessity in the covexillary case
+
+  We begin with the case where w avoids 3412; such a permutation is commonly called
+covexillary. We show here that, if w is covexillary, the singular locus of Xw has only
+one component, and w avoids 653421 and 632541, then Pid,w (q) = 1 + q. Throughout this
+section w is assumed to be covexillary unless otherwise noted.
+
+3.1. The Cortez-Zelevinsky resolution. For a covexillary permutation, the coessen-
+tial set has the special property that, for any (p, q), (p′, q ′ ) ∈ Coess(w) with p ≤ p′ , we also
+have q ≤ q ′ . Therefore have a natural total order on the coessential set, and we label its
+elements (p1 , q1 ), . . . , (pk , qk ) in order. We let ri = rw (pi , qi ); note that, by the definition
+of rw and the minimality of the coessential set, ri < rj when i < j. When ri = min{pi , qi },
+we call (pi , qi ) an inclusion element of the coessential set, since the condition it implies
+for Xw will either be Eqi ⊆ Fpi (if ri = qi ) or Fpi ⊆ Eqi (if ri = pi ).
+  Zelevinsky [36] described some resolutions of singularities of Xw in the case where w
+has at most one ascent (meaning that w(i) < w(i + 1) for at most one index i), explaining
+a formula of Lascoux and Schützenberger [28] for Kazhdan-Lusztig polynomials Pv,w (q)
+in that case. Following a generalization by Lascoux [27] of this formula to covexillary
+permutations, Cortez [15] generalized the Zelevinsky resolution to this case.
+  Let Fi1 ,...,ik denote the partial flag manifold whose points correspond to flags whose
+component subspaces have dimensions i1 < · · · < ik . Define the configuration variety Zw
+by
+                  Zw := {(G• , F• ) ∈ Fr1 ,...,rk (Cn ) × Xw | Gri ⊆ (Fpi ∩ Eqi ) ∀i}.
+Cortez shows that the projection π2 : Zw → Xw is a resolution of singularities. She
+furthermore shows that the exceptional locus of π2 is precisely the singular locus of Xw ,
+and describes a one-to-one correspondence between components of the singular locus of
+Xw and elements of the coessential set which are not inclusion elements. (This last fact
+about the singular locus was implicit in Lascoux’s formula [27] for covexillary Kazhdan-
+Lusztig polynomials.)
+    We now have the following lemma, whose proof is deferred to Section 5.
+Lemma 3.1. Suppose the singular locus of Xw has only one component. If w contains
+both 53241 and 52431, then w contains 632541.
+
+  This lemma allows us to treat separately the two cases where w avoids 53241 and
+where w avoids 52431. We treat first the case where w avoids 53241, for which we use
+the resolution of singularities just described. The case where w avoids 52431 requires the
+use of a resolution of singularities which is dual (in the sense of dual vector spaces) to the
+one just described; we will describe this resolution at the end of this section.
+
+3.2. The 53241-avoiding case. In this subsection we show that Pid,w (q) = 1 + q when
+the singular locus of Xw has exactly one component and w avoids 653421 and 53241. To
+maintain the flow of the argument, proofs of lemmas are deferred to Section 5.
+  When (pj , qj ) is an inclusion element, then dim(Fpj ∩ Eqj ) = rj for any flag F• in Xw
+and not merely generic flags in Xw . Therefore, given any F• we will have only one choice
+            PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                    9
+
+for Grj , namely Fpj ∩ Eqj , in the fiber π2−1 (F• ). In particular, for the flag E• , any G• in
+the fiber π −1 (E• ) will have Grj = Erj . Now let i be the unique index such that (pi , qi ) is
+not an inclusion element; there is only one such index since the singular locus of Xw has
+only one irreducible component. For convenience, we let p = pi , q = qi , and r = ri . Now
+we have the following lemmas. (In the case where i = 1, we define p0 = q0 = r0 .)
+Lemma 3.2. Suppose w avoids 653421 (and 3412). Then min{p, q} = r + 1.
+Lemma 3.3. Suppose w avoids 53241 (and 3412). Then ri−1 = r − 1.
+
+  By definition, Gr ⊇ Gri−1 . Therefore, the fiber π2−1 (eid ) = π2−1 (E• ) is precisely
+        {(G• , E• ) | Grj = Erj for j 6= i and Er−1 = Eri−1 ⊆ Gr ⊆ (Ep ∩ Eq ) = Er+1 }.
+This fiber is clearly isomorphic to P1 .
+  By Polo’s interpretation [32] of the Decomposition Theorem [2],
+                                             X
+                      Hz,π2 (q) = Pz,w (q) +   q ℓ(w)−ℓ(v) Ev (q)Pz,v (q),
+                                                   z≤v<w
+
+where                                        X
+                               Hz,π2 (q) =         q i dim H 2i (π2−1 (ez )),
+                                             i≥0
+                                                           1
+and the Ev (q) are some Laurent polynomials in q 2 , depending only on v and π2 and not on
+z, which have with positive integer coefficients and satisfy the identity Ev (q) = Ev (q −1 ).
+Since the fiber of π2 at eid is P1 , it follows that Hid,π2 (q) = 1 + q. As Pid,w (q) 6= 1 (since
+by assumption Xw is singular), and all coefficients of all polynomials involved must be
+nonnegative integers, Ev (q) = 0 for all v and
+                                          Pid,w (q) = 1 + q.
+
+3.3. The 52431-avoiding case. When w avoids 52431 instead, we use the resolution
+                Zw′ := {(G• , F• ) ∈ Fr1′ ,...,rk′ (Cn ) × Xw | Gri′ ⊇ (Fpi + Eqi ) ∀i},
+where ri′ := pi + qi − ri . Arguments similar to the above show that, if we let i be the index
+so that (pi , qi ) does not give an inclusion element, the fiber π2−1 (eid ) is
+                 {(G• , E• ) | Grj′ = Erj′ for j 6= i and Eri′ −1 ⊆ Gri′ ⊆ Eri′ +1 }.
+
+  Hence the fiber over eid is isomorphic to P1 and Pid,w (q) = 1 + q by the same argument
+as above.
+
+                       4. Necessity in the 3412 containing case
+
+  In this section we treat the case where w contains a 3412 pattern. Our strategy in this
+case is to use another resolution of singularities given by Cortez [16]. We will again apply
+the Decomposition Theorem [2] to this resolution, but in this case the calculation is more
+complicated as the fiber at eid will no longer always be isomorphic to P1 . When the fiber
+at eid is not P1 , we will need to identify the image of the exceptional locus, which turns
+out to be irreducible, and calculate the generic fiber over the image of the exceptional
+10                                          ALEXANDER WOO
+
+locus as well as the fiber over eid . We then follow Polo’s strategy in [32] to calculate that
+Pid,w (q) = 1 + q h , where h is the minimum height of a 3412 embedding as defined below.
+
+4.1. Cortez’s resolution. We begin with some definitions necessary for defining a va-
+riety Z and a map π2 : Z → Xw which we will show is our resolution of singularities.
+Our notation and terminology generally follows that of Cortez [16]. Given an embed-
+ding i1 < i2 < i3 < i4 of 3412 into w, we call w(i1 ) − w(i4 ) its height (hauteur), and
+w(i2 ) − w(i3 ) its amplitude. Among all embeddings of 3412 in w, we take the ones
+with minimum height, and among embeddings of minimum height, we choose one with
+minimum amplitude. As we will be continually referring this particular embedding, we
+denote the indices of this embedding by a < b < c < d and entries of w at these indices
+by α = w(a), β = w(b), γ = w(c), and δ = w(d). We let h = α − δ be the height of this
+embedding.
+   Let α′ be the largest number such that w −1(α′ ) < w −1 (α′ − 1) < · · · < w −1 (α + 1) <
+w (α) and δ ′ the smallest number such that w −1 (δ) < w −1 (δ − 1) < · · · < w −1 (δ ′ ). Also
+  −1
+
+let a′ = w −1(α′ ) and d′ = w −1 (δ ′ ). Now let κ = δ ′ + α′ − α, let I denote the set of simple
+transpositions {sδ′ , · · · , sα′ −1 }, and let J be I \ {sκ }. Furthermore, let v = w0J w0I w, where
+w0J and w0I denote the longest permutations in the parabolic subgroups of Sn generated
+by J and I respectively.
+    As an example, let w = 817396254 ∈ S9 ; its graph is in figure 3. Then a = 3, b = 5,
+c = 7, and d = 8, while α = 7, β = 9, γ = 2, and δ = 5. We also have h = 2, α′ = 8 and
+δ ′ = 4. Hence κ = 5 and v = 514398276.
+  Now consider the variety Z = PI ×PJ Xv . By definition, Z is a quotient of PI ×Xv under
+the free action of PJ where q · (p, x) = (pq −1 , q · x) for any q ∈ PJ , p ∈ PI , and x ∈ Xv .
+In the spirit of Magyar’s realization [29] of full Bott-Samelson varieties as configuration
+varieties, we can also consider Z as the configuration variety
+
+          {(G, F• ) ∈ Grκ (Cn ) × Xw | Eδ′ −1 ⊆ G ⊆ Eα′ and dim(Fi ∩ G) ≥ rv (i, κ)}.2
+   By the definition of v, rv (i, κ) = rw (i, α′ ) for i < w −1 (α − 1), rv (i, κ) = rw (i, α′ ) − j
+when w −1(α − j) ≤ i < w −1(α − j − 1), and rv (i, κ) = rw (i, α′ ) − α′ + κ when i ≥ d′ . The
+last condition is automatically satisfied since, as G ⊆ Eα′ , we always have dim(G ∩ Fi ) ≥
+dim(Eα′ ∩ Fi ) − (α′ − κ) ≥ rw (i, α′ ) − α′ + κ.
+   Cortez [16] introduced the variety Z along with several other varieties (constructed by
+defining κ = δ ′ + α′ − α + i − 1 for i = 1, . . . , h) to help in describing the singular locus of
+Schubert varieties3. A virtually identical proof would follow from analyzing the resolution
+given by i = h instead of i = 1 as we are doing, but the other choices of i give maps which
+are harder to analyze as they have more complicated fibers.
+   The variety Z has maps π1 : Z → PI /PJ ∼
+                                                                      ′  ′
+                                                      = Grα′ −α+1 (Cα −δ +1 ) sending the orbit of
+(p, x) to the class of p under the right action of PJ and π2 : Z → Xw sending the orbit of
+     2The statement of this geometric description in [16] has a typographical error.
+     3Cortez’s choice of 3412 embedding in [16] is slightly diﬀerent from ours.For technical reasons she
+chooses one of minimum amplitude among those satisfying a condition she calls “well-ﬁlled” (bien remplie).
+As she notes, 3412 embeddings of minimum height are automatically “well-ﬁlled”.
+           PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                  11
+
+                                               (b, β)
+
+
+                     α′
+                                  (a, α)
+
+
+
+
+                                                                   (d, δ)
+
+
+                                                                            δ′
+
+
+
+
+                                                        (c, γ)
+
+
+
+       Figure 3. The graph of w = 817396254 in black, labelled. The points of
+       the graph of v = 514398276 which are different from w are in clear circles.
+
+(p, x) to p · x. Under the configuration space description, π1 sends (G, F• ) to the point in
+               ′ ′
+Grα′ −α+1 (Cα −δ +1 ) corresponding to the plane G/Eδ′ −1 ⊆ Eα′ /Eδ′ −1 , and π2 sends (G, F• )
+to F• . The map π1 is a fiber bundle with fiber Xv , and, by [16, Prop. 4.4], the map π2
+is surjective and birational. (In our case where the singular locus of Xw has only one
+component, the latter statement is also a consequence our proof of Lemma 4.5.)
+   In general Z is not smooth; hence π2 is only a partial resolution of singularities. How-
+ever, we show in Section 5 the following.
+Lemma 4.1. Suppose w avoids 463152 and the singular locus of Xw has only one irre-
+ducible component. Then Z is smooth.
+
+4.2. Fibers of the resolution. We now describe of the fibers of π2 . To highlight the
+main flow of the argument, proofs of individual lemmas will be deferred to Section 5.
+Define M = max{p | p < c, w(p) < δ ′ } ∪ {a} and N = max{p | w(p) < δ ′ }.
+Lemma 4.2. The fiber of π2 over a flag F• is
+                      {G ∈ Grκ (Cn ) | Eδ′ −1 + FM ⊆ G ⊆ Eα′ ∩ FN }.
+
+  Now we focus on the fiber at the identity, and show that it is isomorphic to Ph . Since
+the flag corresponding to the identity is E• , it suffices by the previous lemma to show
+that dim(Eδ′ −1 + EM ) = κ − 1 and dim(Eα′ ∩ EN ) = κ + h.
+12                                             ALEXANDER WOO
+
+Lemma 4.3. Suppose that the singular locus of Xw has only one component and w avoids
+546213. Then dim(Eδ′ −1 + EM ) = κ − 1.
+Lemma 4.4. Suppose that the singular locus of Xw has only one component and w avoids
+465132. Then dim(Eα′ ∩ EN ) = κ + h.
+  In the case where h = 1, these are all the geometric facts we need. When h > 1, we
+identify the image of the exceptional locus as Xu for a particular permutation u of length
+ℓ(u) = ℓ(w) − h. We then show that the fiber over a generic point of Xu is isomorphic to
+Ph−1 .
+  First we describe the image of the exceptional locus geometrically.
+Lemma 4.5. Suppose the singular locus of Xw has only one component, and h > 1. Then
+the image of the exceptional locus of π2 is {F• | dim(Eδ′ −1 ∩ FM ) > rw (M, δ ′ − 1)}.
+  Now let σ ∈ Sn be the cycle (γ, δ + 1, δ + 2, . . . , α = δ + h), and let u = σw. We show
+the following.
+Lemma 4.6. Assume that the singular locus of Xw has only one component, that h > 1,
+and that w avoids 526413. Then the image of the exceptional locus of π2 is Xu , ℓ(w) −
+ℓ(u) = h, and the generic fiber over Xu is isomorphic to Ph−1 .
+4.3. Calculation of Pid,w (q). We now have all the geometric information we need to
+calculate Pid,w (q), following the methods of Polo [32]. The Decomposition Theorem [2]
+shows that                                    X
+                       Hz,π2 (q) = Pz,w (q) +   q ℓ(w)−ℓ(v) Ev (q)Pz,v (q),
+                                                      z≤v<w
+where                                           X
+                                 Hz,π2 (q) =          q i dim H 2i (π2−1 (ez )),
+                                                i≥0
+                                                           1
+and Ev (q) are some Laurent polynomials in q 2 , depending on v and π2 but not z, which
+have positive integer coefficients and satisfy the identity Ev (q) = Ev (q −1 ). 4
+  When h = 1, the fiber of π2 at eid is isomorphic to P1 , and so by same argument as in
+Section 3.2, Pid,w (q) = 1 + q.
+   For h > 1, let u be the permutation specified above. For any x with x ≤ w and x 6≤ u,
+π2−1 (ex ) is a point, so Xw is smooth at ex , and Hx,w (q) = 1 = Px,w (q). Therefore, by
+induction downwards from w, Ex (q) = 0 for any x with x ≤ w and x 6≤ u.
+                                                                                                 h
+  Now we calculate Eu (q). From the above it follows that Hu,π2 (q) = Pu,w (q) + q 2 Eu (q).
+Since Hu,π2 (q) − Pu,w (q) has nonnegative coefficients and deg Pu,w (q) ≤ (h − 1)/2 < h − 1,
+                                       Pu,w (q) = 1 + · · · + q s−1
+                                           h                                            h            h
+for some s, 1 ≤ s ≤ h − 1. Then q 2 Eu (q) = q s + · · · + q h−1 , so Eu (q) = q s− 2 + · · · + q 2 −1 .
+Since Eu (q −1 ) = Eu (q), s = 1, so
+                                       h
+                                      q 2 Eu (q) = q + · · · + q h−1 .
+     4For those readers familiar with the Decomposition Theorem: No local systems appear in the formula
+since Xw has a stratiﬁcation, compatible with π2 , into Schubert cells, all of which are simply connected.
+           PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                                    13
+
+  To calculate Pid,w (q), note that Hid,π2 = 1 + q + · · · + q h , so
+                               X ℓ(w)−ℓ(x)
+    Pid,w (q) = Hid,π2 (q) −       q 2 Ex (q)Pid,x (q)
+                                x≤w
+                                                                     X          ℓ(w)−ℓ(x)
+               = 1 + · · · + q − (q + · · · + q h−1 )Pid,u (q) +
+                               h
+                                                                            q       2       Ex (q)Pid,x (q).
+                                                                      x<u
+Evaluating at q = 1, we see that
+                                                               X
+                   Pid,w (1) = h + 1 − (h − 1)Pid,u (1) −            Ex (1)Pid,x (1).
+                                                               x<u
+
+Since Pid,w (1) ≥ 2, Pid,x (1) is a positive integer for all x, and Ex (1) is a nonnegative
+integer for all x, we must have that Pid,u (1) = 1 and Ex (1) = 0 for all x < u. Therefore,
+Pid,u (q) = 1 and Ex (q) = 0 for all x < u, and
+                                       Pid,w (q) = 1 + q h .
+  Readers may note that the last computation is essentially identical to the one given by
+Polo in the proof of [32, Prop. 2.4(b)]. In fact, in this case the resolution we use, due to
+Cortez [16], is very similar to the one described by Polo.
+Remark 4.7. We could have used a simultaneous Bialynicki-Birula cell decomposition [3,
+4, 14] of the Z and Xw , compatible with the map π2 , to combinatorialize the above
+computation, turning many geometrically stated lemmas into purely combinatorial ones.
+To be specific, for any u, the number Hu,π2 (1) is the number of factorizations u = στ
+such that τ ≤ v, σ ∈ WI , and σ is maximal in its right WJ coset. (The last condition
+can be replaced by any condition that forces us to pick at most one σ from any WJ
+coset.) This observation does not simplify the argument; the combinatorics required to
+determine which factorizations of the identity satisfy these conditions are exactly the
+same as the combinatorics used above to calculate the fiber of π2 at the identity. It
+should also be possible to combinatorially calculate Hu,π2 (q) by attaching the appropriate
+statistic to such a factorization. If Z were the full Bott-Samelson resolution, the result
+would be Deodhar’s approach [18] to calculating Kazhdan-Lusztig polynomials, and the
+aforementioned statistic would be his defect statistic. However, when Z is some other
+resolution, even one “of Bott-Samelson type,” no reasonable combinatorial description of
+the statistic appears to be known.
+
+                                          5. Lemmas
+
+  In this section we give proofs for the lemmas of Sections 3 and 4. We begin with
+Lemma 3.1.
+Lemma 3.1. Suppose the singular locus of Xw has only one component. If w contains
+both 53241 and 52431, then w contains 632541.
+
+Proof. Let a < b < c < d < e be an embedding of 53241, and a′ < b′ < c′ < d′ < e′ an
+embedding of 52431. Since b < d and w(b) < w(d), there must be an element (p, q) of the
+coessential set such that b < p < d and w(b) < q < w(d). This cannot be an inclusion
+14                                     ALEXANDER WOO
+
+element since a < p but w(a) > q, and q < e but w(e) > p. We also have c < d and
+w(c) < w(d), also inducing an element of the coessential set which is not an inclusion
+element. Since the singular locus of Xw has only one component, this element must also
+be (p, q). The pairs b′ < c′ and b′ < d′ also each induce an element of the coessential set
+which is not an inclusion element; hence these must also be the same as (p, q). Therefore,
+b < c < p < c′ < d′ , and w(c) < w(b) < q < w(d′ ) < w(c′).
+   If a′ > b and w(a) < w(c′ ), then there must be an element (p′ , q ′ ) of the coessential set
+with a < b < p′ < a′ < c′ and w(b) < w(a) < q ′ < w(c′ ) < w(a′ ). We now have p′ < a′ < p
+but q < a ≤ q ′ , contradicting w being covexillary. Therefore, a′ < b or w(a) > w(c′ ).
+Similarly, e > d′ or w(e′) < w(c). Let a′′ be a if w(a) > w(c′ ) and a′ if a′ < b, and e′′ be e
+if e > d′ and e′ if w(e′ ) < w(c).
+   Now a′′ < b < c < c′ < d′ < e′′ is an embedding of 632541 in w.
+                                                                                              
+
+  Recall that (p, q) = (pi , qi ) is the unique element of the coessential set which is not
+an inclusion element, and r = ri = rw (p, q). Furthermore, (pi−1 , qi−1 ) is the immediately
+preceeding element of the coessential set, and ri−1 = rw (pi−1 , qi−1 = min(pi−1 , qi−1 ).
+Lemma 3.2. Suppose w avoids 653421 (and 3412). Then min{p, q} = r + 1.
+
+Proof. Suppose that r ≤ min{p, q} − 2; we show that in that case we have an embedding
+of 3412 or 653421. Since r ≤ p − 2, there exist a < b ≤ p with w(a), w(b) > q. Note
+that w(a) > w(b), as, otherwise, a < b < p < w −1(q + 1) would be an embedding of 3412.
+Similarly, since r ≤ q − 2, there exist d > c > p with w(d), w(c) ≤ q, and we have w(c) >
+w(d) since w −1(q) < p + 1 < c < d is an embedding of 3412 otherwise. Furthermore, if
+b > w −1 (q), then w(c) < w(p), as otherwise w −1 (q) < b < p < c would be an embedding
+of 3412, and if w(b) < w(p + 1), then c > w −1 (q + 1) to avoid b < p + 1 < c < w −1 (q + 1)
+being a similar embedding.
+   Now we have up to four potential cases depending on whether b < w −1 (q) or b > w −1 (q),
+and whether w(b) > w(p+1) or w(b) < w(p+1). In each case we produce an embedding of
+653421. If b < w −1 (q) and w(b) > w(p+1), then a < b < w −1 (q) < p+1 < c < d is such an
+embedding. If b < w −1 (q) and w(b) < w(p+1), then we use a < b < w −1(q) < q −1 (q+1) <
+c < d. If b > w −1 (q) and w(b) > w(p + 1), then we use a < b < p < p + 1 < c < d. Finally,
+if b > w −1 (q) and w(b) < w(p + 1), a < b < p < w −1 (q + 1) < c < d produces the desired
+embedding.                                                                                
+Lemma 3.3. Suppose w avoids 53241 (and 3412). Then ri−1 = r − 1.
+Proof. We treat the two cases where w(p) = q and w(p) 6= q separately. First suppose
+w(p) = q. Suppose for contradiction that ri−1 < r − 1. Then there must exist an
+index b 6= p which contributes to r = rw (p, q) but not to ri−1 = rw (pi−1 , qi−1 ). This
+happens when b ≤ p and w(b) ≤ q, but b > pi−1 or w(b) > qi−1 . Since b < p and
+w(b) < w(p) = q, there must be an element (pj , qj ) of the coessential set such that
+b ≤ pj < p and w(b) ≤ qj < q. But then we have that pj > pi−1 or qj > qi−1 , contradicting
+the definition of (pi−1 , qi−1 ) as the next element smaller than (pi , qi ) in our total ordering
+of the coessential set. Therefore, we must have ri−1 = ri − 1.
+           PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                15
+
+   Now suppose w(p) 6= q. Since r < p and r < q, there exists b < p with w(b) > q and
+c > p with w(c) < q. Note that we cannot have both w(b) < w(p + 1) and c < w −1 (q + 1),
+as, otherwise, b < p + 1 < c < w −1 (q + 1) would be an embedding of 3412. It then
+follows that we cannot have both b < w −1(q) and w(c) < w(p); when w(b) > w(p + 1),
+b < w −1 (q) and w(c) < w(p) imply that b < w −1 (q) < p < p + 1 < c is an embedding of
+53241, and when c > w −1 (q + 1), b < w −1 (q) and w(c) < w(p) imply that b < w −1 (q) <
+p < w −1 (q + 1) < c is an embedding of 53241. Therefore, b > w −1(q) or w(c) > w(p), and
+we now treat these two cases separately.
+   Suppose b > w −1 (q). We must have w(c) < w(p) in this case, because otherwise
+w −1 (q) < b < p < c would be an embedding of 3412. Let a = min{b | w −1(q) < b <
+p, w(b) > q}. We show that, for all b′ with a ≤ b′ < p, w(b′ ) > q. First, we cannot have
+both w(a) < w(p + 1) and c < w −1(q + 1), as a < p + 1 < c < w −1 (q + 1) would be
+an embedding of 3412 otherwise. Now, if w(b′ ) < w(p), then w −1 (q) < a < b′ < p is
+an embedding of 3412, and if w(p) < w(b′ ) < q, then either a < b′ < p < p + 1 < c or
+a < b′ < p < w −1 (q + 1) < c would be an embedding of 53241, depending on whether
+w(a) > w(p + 1) or c > w −1 (q + 1).
+   We have now established that there is an element of the coessential set at (a − 1, q).
+Since this shares its second coordinate with (p, q), and w(b) > q for all b, a < b < p, there
+are no elements of the coessential set in between, and (pi−1 , qi−1 ) = (a − 1, q), so that
+ri−1 = rw (a − 1, q). Now, rw (a − 1, q) = rw (p, q) − #{j | a − 1 < j ≤ p, w(j) ≤ q}. The
+latter list has just one element, namely j = p, so ri−1 = ri − 1.
+   Now suppose w(c) > w(p) instead. Then we let s = min{t | w(p) < t < q, w −1(s) > p}.
+By arguments symmetric with the above, for all s′ with s ≤ s′ < q, s′ > w(p). Therefore,
+there is an element of the coessential set at (p, s − 1), and this is the element immediately
+before (p, q) in the total ordering. Furthermore, rw (p, s − 1) = rw (p, q) − #{j | s − 1 <
+j < q, w −1(j) ≤ p}, and the latter list has one element, namely j = q, so ri−1 = ri − 1. 
+
+   Before moving on to prove the lemmas of Section 4, we prove the following two lemmas
+which will be repeatedly used further. As in Section 4, a < b < c < d is an embedding of
+3412 of minimal amplitude among such embeddings of minimal height, and α, β, γ, and
+δ respectively denote w(a), w(b), w(c), and w(d).
+   For Lemmas 4.1, 5.1, and 5.2, we use the description of the singular locus given in
+Section 2.4. It is worth noting that, since we only need to detect when the singular locus
+has more than one irreducible component, it is also possible to prove these lemmas using
+Lemma A.2 (which was originally [8, Sect. 13]). Another alternate approach is first to
+directly prove Theorem A.1 by using the condition of avoiding all its patterns instead of
+the condition of having one component in the singular locus in the lemmas and then to
+prove Theorem 1.1 as a corollary. Neither approach appears to substantially reduce the
+need for detailed case-by-case analysis in the proof of these lemmas.
+Lemma 5.1. Suppose the singular locus of Xw has only one component. Then the fol-
+lowing sets are empty.
+    (i) {p | p < a, w(p) > β}
+   (ii) {p | p < a, α′ < w(p) < β}
+16                                        ALEXANDER WOO
+
+   (iii) {p | a < p < b, α < w(p) < β}
+   (iv) {p | b < p < c, α < w(p) < β}
+    (v) {p | b < p < c, β < w(p)}
+   (vi) {p | p < b, δ ′ < w(p) < α}
+  (vii) {p | p > d, w(p) < γ}
+ (viii) {p | p > d, γ < w(p) < δ ′ }
+   (ix) {p | c < p < d, γ < w(p) < δ}
+    (x) {p | b < p < c, γ < w(p) < δ}
+   (xi) {p | b < p < c, w(p) < γ}
+  (xii) {p | p > c, δ < w(p) < α′ }
+
+  Most of this lemma and its proof is implicitly stated by Cortez, scattered as parts of the
+proofs of various lemmas in [16, Sect. 5]. The empty regions are illustrated in Figure 4.
+
+          (i)                                  (v)
+
+
+                                           b
+
+          (ii)
+                                 (iii)          (iv)
+
+
+     a′          ···
+
+                          a
+
+
+                                                                          (xii)
+                  (vi)
+
+
+
+
+                                                                      d           ···
+
+                                               (x)             (ix)                         d′
+                                                                                   (viii)
+
+                                                           c
+
+                                               (xi)                                 (vii)
+
+
+                       Figure 4. The regions forced to be empty by Lemma 5.1.
+           PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                   17
+
+Proof. If p is in the set (vi), then p < b < c < d is a 3412 embedding with height less than
+that of a < b < c < d. If p is in (iii) or (iv), then a < p < c < d is a 3412 embedding of
+the same height but smaller amplitude than a < b < c < d. Similar arguments apply to
+(ix), (x), and (xii).
+   Now we show that, if one of the other sets is nonempty, the singular locus of Xw must
+have at least two components. Note that by the emptiness of (iv), (vi), (x), and (xii)
+a < b < c < d is a critical 3412 embedding, and by the minimality of its height it must
+be reduced.
+   Suppose the set (v) is nonempty; let p be the largest element of (v). Let C = {i | b <
+i < p, δ < w(i) < α}; if C is nonempty, then i < p < c < d is a 3412 embedding of smaller
+height than a < b < c < d for any i ∈ C. Now suppose C is empty. If the A2 region
+associated to a < b < c < d is also empty, then b < p < c < d is a reduced critical 3412
+embedding. The top critical region is empty by our choice of p, the left critical region is
+empty by (iv) and the emptiness of C, the bottom critical region is empty by (x), and the
+right critical region is empty by (xii) and the emptiness of A2 ; furthermore it is reduced
+since a < b < c < d is reduced. Since a 6= b and b 6= p, the components of the singular
+locus associated to these critical 3412 embeddings must be different, even if they are of
+type I. If A1 or B is empty, then a < p < c < d is a reduced critical 3412 embedding. The
+critical regions are empty by the choice of p, the emptiness of C, and the emptiness of
+(iv), (vi), (x), and (xii). Since b 6= p, the only way the two critical 3412 embeddings gave
+rise to the same component is for the component to be a type I component using elements
+of both A1 and B, but one of these sets is empty in this case. If A1 , A2 , and B are all
+nonempty, then the singular locus of Xw must already have more than one component.
+   Suppose (ii) is nonempty; let e be the element of (ii) with the smallest value of ǫ = w(e).
+By the definition of α′ and the emptiness of (iii) and (iv), either w −1 (ǫ−1) > c, or ǫ = α′ +1
+and a′ < e < a.
+  First we treat the case where w −1 (ǫ − 1) > c. Let f = w −1(ǫ − 1). If h > 1, then
+e < b < w −1 (α − 1) < f is a 3412 embedding of height 1 and amplitude smaller than
+that of a < b < c < d. If f > d, then the same holds for e < b < d < f . If h = 1 and
+f < d, then we have a type I component defined by e, {i | e < i ≤ a, α ≤ w(i) ≤ α′ },
+which contains a, a subset of {j | c < j < d, α′ < w(j) < ǫ} that contains f , and d.
+This type I component cannot be the component of the singular locus of Xw associated
+to a < b < c < d, since b 6= e.
+   Now we treat the case where ǫ = α′ + 1 and a′ < e < a. Let i be the largest element
+of {i | a′ ≤ i < e, α < w(i) ≤ α′ }. Let j be the smallest element of {j | e < j ≤ c, γ ≤
+w(j) < δ}, a set which contains c. Let k be the smallest element of {k | j < k ≤ d, w(j) <
+w(k) < w(i)}, a set which contains d. Then i < e < j < k is a reduced critical 3412
+embedding. The only portion of the critical region not directly guaranteed empty by the
+definitions of i, e, j, and k is {m | e < m < j, δ ≤ w(m) < w(k)}; if m is an element of
+this set then m < k < c < d is a 3412 embedding of height smaller than a < b < c < d.
+Since i 6= a and e 6= b, this must produce a second component of the singular locus of Xw .
+This shows (ii) must be empty.
+18                                      ALEXANDER WOO
+
+  Suppose (i) is nonempty; let e be the largest element of (i). Then the singular locus of
+Xw has a type I component defined by e, a set of which a is the largest element, a set of
+which b is the largest element, and w −1 (α − 1).
+   The proofs that (xi), (viii), and (vii) are empty are entirely analogous to those for (v),
+(ii), and (i) respectively.
+                                                                                           
+  For the following lemma, recall the definitions M = max{p | p < c, w(p) < δ ′ } ∪ {a}
+and N = max{p | w(p) < δ ′ }, given in Section 4.
+Lemma 5.2. Suppose the singular component of Xw has only one component. Then
+       (i) a ≤ M < b.
+      (ii) {p | a < p < M, w(p) > α′ } is empty.
+     (iii) c ≤ N < d.
+     (iv) {p | c < p < N, w(p) > α′ } is empty.
+     This lemma is illustrated in Figure 5
+
+
+
+
+                       (ii)                               (iv)
+                                         b
+
+
+                a
+
+
+
+
+                                                                           d
+
+                                                      c
+                          M
+                                Def’n                              Def’n
+                                of M                               of N
+                                                            N
+
+
+
+                 Figure 5. The regions forced to be empty by Lemma 5.2.
+
+Proof. We know that a ≤ M by definition, and M < b by Lemma 5.1 (x) and (xi).
+Similarly, c ≤ N by definition, and N < d by Lemma 5.1 (vii) and (viii).
+            PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                    19
+
+  Now, assume for contradiction that {p | a < p < M, w(p) > α′ } is nonempty. Let
+j = max{p | a < p < M, α < w(p)}. By the definition of j and Lemma 5.1 (vi),
+w(j + 1) < δ ′ . Then a < j < j + 1 < w −1 (α − 1) is a reduced critical 3412 embedding
+defining a component of the singular locus in addition to the one defined by a < b < c < d.
+  Similarly, suppose {p | c < p < N, w(p) > α′ } is nonempty. Let j = max{p | c <
+p < N, α′ < w(p)}. By the definition of j and Lemma 5.1 (xi), w(j + 1) < δ ′ . Then
+w −1 (δ + 1) < j < j + 1 < d is a reduced critical 3412 embedding defining a component of
+the singular locus.                                                                      
+  We now proceed with the proof of the lemmas of Section 4, beginning with Lemma 4.1.
+Lemma 4.1. Suppose the singular locus of Xw has only one component and w avoids
+463152. Let Z be constructed as above; then Z is smooth.
+Proof. Since Z is a fibre bundle by the map π1 over a smooth variety (the Grassmannian)
+with fibre Xv , it is smooth if and only if Xv is.
+  We show the contrapositive of our stated lemma by showing that, if Xv is not smooth
+and w avoids 463152, then the singular locus of Xw must have a component in addition
+to the one defined by the reduced critical 3412 embedding a < b < c < d.
+   Assume Xv is singular. We choose a component of its singular locus. This component
+has a combinatorial description as in Section 2.4.
+   For convenience, we let a1 = a′ = w −1(α′ ), a2 = w −1(α′ − 1), and so on with aα′ −α+1 =
+w (α) = a. Similarly, we let d1 = w −1 (α − 1), d2 = w −1 (α − 2), and so on with dh = d
+  −1
+
+and dh+δ−δ′ = d′ = w −1 (δ ′ ). We also let A = {a1 , . . . , aα′ −α+1 }, D1 = {d1 , . . . , dh−1},
+D2 = {dh , . . . , dh+δ−δ′ }, and D = D1 ∪ D2 .
+   First we handle the case where our chosen component of the singular locus of Xv is of
+type I. If no index of the embedding into v defining the component is in A or D, then
+the indices define an embedding of the same permutation into w, and the sets required to
+be empty by the interval condition remain in exactly the same positions. The horizontal
+boundaries of these regions are all above α′ or below δ ′ , so these regions remain empty in
+w. Therefore, the same embedding indices will define a type I component of the singular
+locus of Xw . This cannot be the same as the component associated to the critical 3412
+embedding a < b < c < d; even if the component associated to a < b < c < d is of type I,
+it still must involve at least either a or d, whereas the component we just defined coming
+from the singular locus of Xv involves neither. Therefore, the singular locus of Xw has at
+least two components.
+   Now suppose our chosen type I component includes some index in A or D. Let its
+defining embedding into v be given by i < j1 < · · · < jy < k1 < · · · < kz < m. Define the
+sets J and K by J = {j1 , . . . , jy } and K = {k1 , . . . , kz }. We first show that one of A and
+D contains no part of the embedding. If ar ∈ A and ds ∈ D are both in the embedding,
+then since ar < ds and v(ar ) < v(ds ), ar ∈ J and ds ∈ K. Now we must have that i < ar ,
+and that v(i) > α′ , since, by definition, v −1 (t) ∈ D and hence v −1 (t) > ar whenever
+ds ≤ t ≤ α′ . But then i < a and w(i) = v(i) > α′ , which is forbidden by Lemma 5.1 (i)
+and (ii).
+20                                    ALEXANDER WOO
+
+   Therefore, we have two cases, one where A has some part of our type I embedding but
+D does not, and one where D has a part of our embedding but A does not. We first tackle
+the case where A contains a part of the embedding. In this case, i ∈ A, since otherwise
+i < a and w(i) > α′ , violating Lemma 5.1 (i) or (ii). Having i ∈ A then implies that
+m 6∈ A and J ∩ A = ∅ as follows. First, we cannot have m ∈ A because, otherwise, any r
+and s satisfying i < r < s < m would satisfy v(r) > v(s), which contradicts i and m being
+the first and last indices of a type I embedding. Second, J ∩ A must be empty because,
+if ar ∈ A, w(ar ) < w(k) < w(i) implies i < k < ar for any k, contradicting ar ∈ J for
+any type I embedding starting with i.
+   We now have two subcases for the case where A has a part of our type I embedding,
+depending on whether ((K ∪ {m}) \ A contains an index less than b. If it does, then
+either m < b or ks < b and w(ks ) < δ ′ for some s. Either way, the forbidden region
+for the type I embedding does not intersect {(p, q) | b < p, δ ′ < q < α′ }. Therefore
+i < j1 < . . . < jy < k1 < . . . < kz < m defines a type I component of the singular locus
+of Xw as well as Xv . The forbidden region may be a little larger in w, but it does not
+acquire any points in the graph of w. This cannot be the same as any type I component
+of the singular locus of Xw associated to a < b < c < d since both J and K contain
+indices outside of the region B associated to a < b < c < d.
+  In the other case, since m > b, we must have c ≤ m < d by Lemma 5.1 (x), (xi), (vii),
+and (viii). One possibility is that c = m. In this case, taking the type I embedding in v
+and adding D1 to K gives a type I component of the singular locus of Xw . Both J and
+K contain indices outside of B, so this will also be a second component of the singular
+locus of Xw .
+  If, on the other hand, c 6= m, then c ∈ K by the following argument. An example of
+this case is in Figure 6. By Lemma 5.1 (ix), v(m) = w(m) < γ. Furthermore, j < c and
+v(j) < γ for all j ∈ J as follows. If jr > c and jr−1 < c (allowing for r = 1 in which case
+we define j0 = i), the forbidden region {(p, q) | jr−1 < p < jr , v(jr ) < q < v(i)} for our
+type I embedding contains (c, γ) as v(jr ) < γ by Lemma 5.1 (ix). If v(j) ≥ γ for some
+j ∈ J , then v(kz ) > γ, and hence kz < c by Lemma 5.1 (ix); now the forbidden region
+{(p, q) | kz < p < m, v(m) < q < v(kz )} contains (c, γ).
+   Recall that (K \ A) has no index less than b in the case under consideration. Therefore,
+by Lemma 5.1 (xi), no index k ∈ K satisfies k < c, v(k) < γ = v(c). As i < c < m,
+v(m) < γ < v(i), and j < c and v(j) < γ for all j ∈ J , we must have c ∈ K as otherwise
+(c, γ) would be in a forbidden region. Therefore, taking the type I embedding in v and
+adding D1 to K also gives a type I component of the singular locus of Xw distinct from
+any associated to a < b < c < d.
+   Now suppose D contains some part of the embedding but A does not. If i 6∈ D, then
+w(i) = v(i) > α′ , so by Lemma 5.1 (i) and (ii), i > a. If i ∈ D, we also have i > a.
+(Actually, we cannot have i ∈ D but do not need this fact.) Therefore, i < j1 < · · · <
+jy < k1 < · · · < kz < m also defines a type I component of the singular locus of Xw ,
+since, as the forbidden region does not intersect {(p, q) | p ≤ a, δ ′ < q < α′ }, no points of
+the graph of w move into the forbidden region. This type I component can be the same
+           PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                   21
+
+
+
+                                        b
+
+
+                   111111111111111
+                   000000000000000
+                   000000000000000
+                   111111111111111
+                   000000000000000
+                   111111111111111
+                   000000000000000
+                   111111111111111
+                             d
+                 i 111111111111111
+                                      d=d       1
+
+
+                   000000000000000
+                                                                            3
+                               d
+                   000000000000000
+                   111111111111111
+                                                      2
+
+
+
+                   000000000000000
+                   111111111111111
+                      k        1
+
+
+                   000000000000000
+                   111111111111111
+                   000000000000000
+                   111111111111111
+                         a=k                2
+
+
+                   000000000000000
+                   111111111111111
+                   000000000000000
+                   111111111111111
+                                 k =c
+
+                   000000000000000
+                   111111111111111
+                                                            3
+
+
+
+
+                   000000000000000
+                   111111111111111
+                   000000000000000
+                   111111111111111
+                    j 1
+                                    m
+
+       Figure 6. The case of a type I configuration in v, using points in A, with
+       c < m < d. The hollow points are in w, and the shaded region is the
+       forbidden region of the associated configuration in w.
+
+as one associated to the critical 3412 embedding a < b < c < d, but only if w has an
+embedding of 463152.
+   We have completed the case where our chosen component of the singular locus of Xv
+is of type I; now we move on to the case where it is of type II. Let i < j < k < m be
+the reduced critical 3412 embedding associated to this component of the singular locus of
+Xv . If none of i, j, k, and m are in A or D, then the critical regions are in the same place
+in both v and w, and they remain empty. Therefore, they produce a component of the
+singular locus of Xw which must not be the same as the one associated to a < b < c < d
+as their reduced critical 3412 embeddings are different.
+   Now we first consider the case where D has a part of the critical embedding but A does
+not. If i ∈ D, then i > a, so the critical region as well as the regions A and B associated
+to i < j < k < m do not intersect {(p, q) | p ≤ a, δ ′ ≤ q ≤ α′ }, and i < j < k < m is also
+a reduced critical 3412-embedding producing a type II component of the singular locus of
+Xw . If j ∈ D, then v(i) < k, and, since i 6∈ A by assumption, v(i) < δ ′ . Since j > a, we
+therefore also have that {(p, q) | p ≤ a, δ ′ ≤ q ≤ α′ } fails to intersect the critical regions
+or the regions A and B, and i < j < k < m is a critical 3412 embedding producing a type
+II component of the singular locus of Xw . Otherwise, i < d1 and v(i) > α′ , so by Lemma
+5.1 (i) and (ii), i > a, implying that i < j < k < m produces a type II component of the
+singular locus of Xw . Since i < j < k < m is not a < b < c < d, we must have produced
+a second component of the singular locus of Xw in all of these cases.
+22                                  ALEXANDER WOO
+
+   Now suppose A has part of the critical embedding. We cannot have k ∈ A or m ∈ A,
+since otherwise we would have i < j < a with v(a) < v(i) < v(j), which forces j 6∈ A.
+Then j < a and w(j) = v(j) > α′ , violating Lemma 5.1 (i) or (ii). Therefore, j ∈ A or
+i ∈ A.
+   If j ∈ A, then since i < j and v(i) < v(j), v(i) < δ ′ , and so v(k) < v(m) < δ ′ . Now
+if k < b, i < j < k < m is a reduced critical 3412 embedding in w. It may have an
+element in its A2 region in w that when there is none in its A2 region in v, but in that
+case either the B region is empty or w fails to avoid 463152. When w avoids 463152,
+i < j < k < m produces a second type II component of the singular locus of Xw . If
+j ∈ A and k > b, then by Lemma 5.1 (x) and (xi), k ≥ c. Moreover, we cannot have
+k = c as, in that case, c < m and γ < v(m) = w(m) < δ ′ , violating Lemma 5.1 (viii) or
+(ix). Therefore, c < k < m, and, as m < δ ′ , m < d by Lemma 5.1 (vii) and (viii). Since
+j < c < k, we now must have that v(i) = w(i) > γ in order for i < j < k < m to be
+a critical 3412 embedding in v. If h = 1 and hence D1 is empty, then i < j < k < m
+is a critical 3412 embedding in w with A or B empty as they are in v. If h > 1, let
+i′ = max{p | p < b, γ < w(p) ≤ w(i)}; this set is nonempty because i is an element. Then
+i′ < dh−1 < k < m is a reduced critical embedding of 3412 in w, and the component of
+the singular locus of Xw it produces, whether it is type I or type II, must be different
+from the one associated to a < b < c < d. This last case is illustrated in Figure 7.
+
+
+                                      b
+
+
+
+                                                  dh−1
+                                      1111
+                                      0000
+                             j=a                                      d
+
+                                      0000
+                                      1111
+                                      0000
+                                      1111
+                                      0000
+                                      1111
+                               0000000
+                               1111111000011
+                                      1111
+                               0000000 c 00
+                i
+
+                               1111111     00
+                                           11
+                                ′
+                               i
+
+                               00000001111
+                               11111110000 00m
+                                           11
+                                      0000k
+                                      1111
+       Figure 7. The case of a type II configuration in v, using points in A, with
+       h > 1 and k > b. The hollow points are in w, and the shaded regions are
+       the critical regions of the associated 3412 embedding in w.
+
+   Finally we tackle the case where i ∈ A. If m < b, then i < j < k < m is a reduced
+critical 3412 embedding in w. Otherwise, m ≥ c by Lemma 5.1 (x) and (xi), and hence
+v(m) < δ ′ . If k < c, then v(k) < δ ′ , so k ≤ M by definition. We then have j < M with
+           PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h              23
+
+v(j) > α′ , which is forbidden by Lemma 5.1 (i), (ii), and (iii) and Lemma 5.2 (ii). We
+cannot have k = c since in that case γ < w(m) = v(m) < δ ′ and m > c, violating Lemma
+5.1 (viii) or (ix). If k > c then we have c < k < m < d. In this case a < b < k < m
+is a critical 3412 embedding in w. In particular, {p | b < p < k, α < w(p) < β} is
+empty by Lemma 5.1 (iv) and Lemma 5.2 (iv). Since k 6= c and m 6= d, the associated
+component of the singular locus of Xw must be different from the component associated
+to a < b < c < d.
+  We have now shown that, unless 463152 embeds in w, no matter what singularity Xv
+may have, it must produce a second component of the singular locus of Xw , either directly
+or through the use of Lemma 5.1 or Lemma 5.2. Therefore, if the singular locus of Xw
+has only one component and w avoids 463152, Xv , and hence Z, is nonsingular.
+                                                                                        
+  Now we continue on to proving the lemmas of Section 4.2.
+Lemma 4.2. The fiber of π2 over a flag F• is
+                     {G ∈ Grκ (Cn ) | Eδ′ −1 + FM ⊆ G ⊆ Eα′ ∩ FN }.
+
+Proof. By definition of Z, Eδ′ −1 ⊆ G ⊆ Eα′ . We need to show that FM ⊆ G, that G ⊆ FN ,
+and that any such subspace G is in π2−1 (F• ).
+  To show that FM ⊆ G, we show that rv (M, κ) = M. This is equivalent to showing
+that {p | p ≤ M, v(p) > κ} is empty, which is in turn equivalent to showing that {p | p ≤
+M, δ ′ − 1 < w(p) < α} and {p | p ≤ M, α′ < w(p)} are both empty. The first follows from
+Lemma 5.1 (vi) since M < b by Lemma 5.2 (i). The second follows from Lemma 5.1 (i)
+and (ii) and Lemma 5.2 (ii).
+  Now we show G ⊆ FN . This means showing that rv (N, κ) = κ, or that {p | p >
+N, v(p) ≤ κ} is empty. This is equivalent to showing that {p | p > N, w(p) < δ ′ } and
+{p | p > N, α ≤ w(p) ≤ α′ } are both empty. The first is empty by the definition of N,
+and the second is empty by the definition of α′ .
+   To show that any G satisfying Eδ′ −1 + FM ⊆ G ⊆ Eα′ ∩ FN is in π2−1 (F• ), we need to
+show that dim(G ∩ Fj ) ≥ rv (j, κ) for any j with M < j < N. It suffices to show that
+rv (j, κ) = rv (M, κ) = M when M < j < c, and that rv (j, κ) = rv (j − 1, κ) + 1 when
+c ≤ j ≤ N. Equivalently, this means that v(j) > κ when M < j < c and v(j) ≤ κ when
+c ≤ j ≤ N.
+   Since v(j) ≤ κ if and only if w(j) < δ ′ or α ≤ w(j) ≤ α′ , the first condition is clear
+from the definition of M. We also have that N < d by Lemma 5.2 (iii), so we need
+that {p | c < p < N, w(p) > α′ } is empty, which follows from Lemma 5.2 (iv). Therefore,
+rv (j, κ) = rv (j−1, κ)+1 when c ≤ j ≤ N, and any G satisfying Eδ′ −1 +FM ⊆ G ⊆ Eα′ ∩FN
+is in π2−1 (F• ).
+                                                                                         
+24                                     ALEXANDER WOO
+
+Lemma 4.3. Suppose that the singular locus of Xw has only one component and w avoids
+546213. Then dim(Eδ′ −1 + EM ) = κ − 1.
+
+Proof. Since rv (M, κ) = M, c > M, and v(c) < κ, M = rv (M, κ) + 1 ≤ rv (c, κ) ≤ κ, so
+M ≤ κ − 1. If α = α′ , then δ ′ = α′ − α + δ ′ = κ, so δ ′ − 1 = κ − 1. Otherwise, we need
+to show that M = κ − 1. Since M ≥ a, so that {p | p > M, α ≤ p ≤ α′ } is empty, this is
+equivalent to showing that {p | p > M, w(p) < δ ′ } has only one element, namely c.
+  By the definition of M, {p | M < p < c, w(p) < δ ′ } is empty. Furthermore, by Lemma
+5.1 (vii), (viii), and (ix), {p | p > d, w(p) < γ}, {p | p < d, γ < w(p) < δ ′ }, and
+{p | c < p < d, γ < w(p) < δ} are empty. This leaves {p | c < p < d, w(p) < γ}, which is
+empty since α′ 6= α and w avoids 546213.                                              
+Lemma 4.4. Suppose that the singular locus of Xw has only one component and w avoids
+465132. Then dim(Eα′ ∩ EN ) = κ + h.
+Proof. First, note that N ≥ κ + h, since N = #{p | p < N, v(p) ≤ κ} + #{p | p <
+N, v(p) > κ}, and the first summand is rv (N, κ) = κ, while the second summand is
+at least h since the h elements b, w −1 (α − 1), . . . , w −1 (δ + 1) are in the set. If δ ′ = δ,
+then α′ = κ + α − δ = κ + h. Otherwise, we need to show that N = κ + h. This
+means showing that {p | p < N, v(p) > κ} has exactly h elements, or, equivalently, that
+{p | p < N, w(p) > α′ } contains only b.
+  We know that {p | c < p < N, w(p) > α′ } is empty by Lemma 5.2 (iv), and, by
+Lemma 5.1 (i), (ii), and (iii), {p | p < a, w(p) > β}, {p | p < a, α′ < w(p) < β}, and
+{p | a < p < b, α < w(p) < β} are empty. This leaves {p | a < p < b, w(p) > β}, which is
+empty since δ ′ 6= δ and w avoids 465132.
+                                                                                               
+Lemma 4.5. Suppose the singular locus of Xw has only one component, and h > 1. Then
+the image of the exceptional locus of π2 is
+                          {F• | dim(Eδ′ −1 ∩ FM ) > rw (M, δ ′ − 1)}.
+
+Proof. First we show that rw (N, α′ ) = κ + h − 1. By the definition of N, rv (N, κ) = κ,
+so the two sets {p | p < N, w(p) < δ ′ } and {p | p < N, α ≤ w(p) ≤ α′ } have κ
+elements combined. Since c < N by definition and N < d by Lemma 5.1 (vii) and (viii),
+{p | p < N, δ ′ ≤ w(p) < α} has precisely the h − 1 elements w −1 (α − 1), . . . , w −1(δ + 1).
+Therefore, dim(Eα′ ∩ FN ) = rw (N, α′ ) = κ + h − 1 generically.
+   Now we calculate dim(Eδ′ −1 + FM ). Note that
+                    dim(Eδ′ −1 + FM ) = δ ′ − 1 + M − dim(Eδ′ −1 ∩ FM ).
+Generically,
+                              dim(Eδ′ −1 ∩ FM ) = rw (M, δ ′ − 1),
+and
+                rw (M, δ ′ − 1) = rv (M, κ) − #{p | p < M, α ≤ w(p) ≤ α′ }
+                                = M − (α′ − α + 1).
+              PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h              25
+
+Therefore, generically,
+                     dim(Eδ′ −1 + FM ) = δ ′ − 1 + M − M + α′ − α + 1
+                                       = δ ′ + α′ − α
+                                       = κ.
+  Recall that, by Lemma 4.2, the fiber over a flag F• is
+                       {G ∈ Grκ (Cn ) | Eδ′ −1 + FM ⊆ G ⊆ Eα′ ∩ FN }.
+Therefore, since dim G = κ, the fiber over F• consists of the single point correspond-
+ing to the subspace Eδ′ −1 + FM generically; here, the generic situation occurs whenever
+dim(Eδ′ −1 ∩ FM ) = rw (M, δ ′ − 1). When h = 1, we also have that dim(Eα′ ∩ FN ) = κ in
+the generic situation, and we also need dim(Eα′ ∩ FN ) > κ in order for the fiber over F•
+to consist of more than a point. However, when h > 1, π −1 (F• ) has more than one point
+whenever dim(Eδ′ −1 ∩ FM ) > rw (M, δ ′ − 1), so the image of the exceptional locus is
+                          {F• | dim(Eδ′ −1 ∩ FM ) > rw (M, δ ′ − 1)},
+as desired.                                                                                 
+
+  Recall that u is defined by u = σw, where σ ∈ Sn is the cycle (γ, δ + 1, δ + 2, . . . , α).
+Lemma 4.6. Assume that h > 1 and w avoids 526413. Then the image of the exceptional
+locus of π2 is Xu , ℓ(w) − ℓ(u) = h, and the generic fiber over Xu is isomorphic to Ph−1.
+
+Proof. Suppose F• is in the image of the exceptional locus, and let Xx◦ be the Schubert
+cell containing F• . Our strategy is to show using rank matrices that x ≤ u. As part of
+this proof, we show that a certain region of the graph of w is empty, which will imply
+that ℓ(w) − ℓ(u) = h.
+   First we compare the rank matrices ru and rw . Let R1 denote the region {(p, q) | w −1 (δ+
+1) ≤ p < c, γ ≤ q < δ+1} and Ri = {(p, q) | w −1 (δ+i−1) ≤ p < w −1 (δ+i), γ ≤ q < δ+i}
+when 1 < i ≤ h. Since u = th · · · t1 w where t1 = (γ, δ + 1) and ti = (δ + i − 1, δ + i)
+when 1 < i ≤ h, we get that ru (p, q) = rw (p, q) + 1 if (p, q) is in Ri for some i, and
+ru (p, q) = rw (p, q) otherwise. Let R denote the union R = hi=1 Ri . The region R is
+                                                                S
+drawn in Figure 8.
+   Now we show that, when (p, q) ∈ R, then rw (p, q) is as small as possible given that
+rw (M, δ ′ − 1) = M and given that, as for any permutation and any p and q, 0 ≤ rw (p +
+1, q) − rw (p, q) ≤ 1 and 0 ≤ rw (p, q + 1) − rw (p, q) ≤ 1. To be precise, this means that,
+assuming (p, q) and (p, q + 1) are both in R, rw (p, q) = rw (p, q + 1) − 1 if γ ≤ q < δ ′
+and rw (p, q) = rw (p, q + 1) otherwise, and, assuming (p, q) and (p + 1, q) are both in R,
+rw (p, q) = rw (p + 1, q) − 1 if a ≤ p < M with rw (p, q) = rw (p + 1, q) otherwise.
+   To prove the above claim, we need to show that R contains no point in the graph of w,
+that w(p) < γ when a < p ≤ M, and that w −1 (q) < a when γ < q ≤ δ ′ − 1. Since h > 1
+and w avoids 526413, {p | a < p < b, γ < w(p) < δ ′ }. Also, {p | a < p < b, δ ′ ≤ w(p) < α}
+and {p | b ≤ p < c, γ < w(p) < δ ′ } are empty by Lemma 5.1 (vi) and (x). The remaining
+portion of R contains no point in the graph of w since, as a < b < c < d is a 3412
+embedding of minimal height, b < w −1 (α − 1) < · · · < w −1 (δ + 1) < c by a < b < c < d.
+26                                      ALEXANDER WOO
+
+
+
+
+                                            b
+
+                              a
+                               1111111111
+                               0000000000
+                               0000000000
+                               1111111111
+                               0000000000
+                               1111111111
+                               0000000000
+                               1111111111
+                               0000000000
+                               1111111111
+                               0000000000
+                               1111111111
+                               0000000000
+                               1111111111
+                               0000000000
+                               1111111111
+                                                                    d
+
+
+                               0000000000
+                               1111111111
+                               0000000000
+                               1111111111
+                               0000000000c
+                               1111111111
+                       Figure 8. The region R “between” u and w.
+
+Furthermore, using that R contains no point of the graph of w, w(p) < γ when a < p ≤ M
+by Lemma 5.2 (ii), and w −1 (q) < a when γ < q ≤ δ ′ − 1 by Lemma 5.1 (viii) and (ix).
+   Suppose Xx◦ is in the image of the exceptional locus, so that x ≤ w and rx (M, δ ′ − 1) ≥
+rw (M, δ ′ − 1) + 1. We show that rx (p, q) ≥ ru (p, q) for all p and q. If (p, q) is not in
+R, this follows since x ≤ w. For (p, q) ∈ R, rw (p, q) is the minimum possible given that
+rw (M, δ ′ − 1) = M. Since rx (M, δ ′ − 1) > rw (M, δ ′ − 1), it follows that rx (p, q) > rw (p, q)
+for (p, q) ∈ R. Therefore, rx (p, q) ≥ ru (p, q) when (p, q) is in R, and x ≤ u.
+   Since the regions Ri are empty, multiplication by each transposition t1 ,. . . , th decreases
+the length of w by 1, and ℓ(u) = ℓ(w) − h.
+  Since u(p) ≤ α′ if and only if w(p) ≤ α′ , ru (N, α′ ) = rw (N, α′ ) = κ + h − 1. Therefore,
+dim(Eα′ ∩ FN ) = κ + h − 1 for F• ∈ Xu◦ . Moreover, for F• ∈ Xu◦ ,
+                     dim(Eδ′ −1 + FM ) = δ ′ − 1 + M − ru (M, δ ′ − 1)
+                                       = δ ′ − 1 + M − M + α′ − α
+                                       = κ − 1.
+Therefore, the generic fiber over Xu is isomorphic to Ph−1 .                                    
+
+         Appendix A. A Purely Pattern Avoidance Characterization
+                   (by Sara Billey and Jonathan Weed)
+
+  Let S∞ be the union of Sn for all n ≥ 1. There exists a partial order on S∞ determined
+by pattern embeddings; we say v ≺ w if there is a pattern embedding of v into w. If
+the embedding of v into w is given by the set of indices Z = {i1 , . . . , im }, then we write
+           PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h               27
+
+f lZ (w) = v, i.e., that the “flattened” version of w consisting only of the indices in Z is
+the permutation v.
+  Consider the set KLm = {w ∈ S∞ | Pid,w (1) ≤ m} for any positive integer m. By [6,
+Thm. 1], we know KLm is the complement of a lower order ideal in the poset of pattern
+embeddings. Therefore, KLm can be characterized by pattern avoidance for every m ≥ 1.
+For example, KL1 is the set of permutations avoiding 4231 and 3412. The following
+theorem gives a minimal set of patterns characerizing KL2 .
+Theorem A.1. KL2 is equal to the set of permutations avoiding the 66 patterns
+
+
+               45123              34512              53412              52341
+               45231              351624             523614             526314
+               624153             524613             462513             526413
+               546213             361452             461352             364152
+               463152             536142             465132             426351
+               632541             635241             642531             653421
+               3612745            6231745            6241735            3416725
+               4236715            4263715            4267315            3712564
+(A.1)          7231564            3715264            3751264            7523164
+               6251734            7261453            3417562            3517462
+               4517362            4237561            5347261            4275631
+               34127856           42317856           34172856           42371856
+               42731856           35127846           52317846           52417836
+               34128675           42318675           34182675           42381675
+               42831675           34186275           42386175           42863175
+               35128674           52318674           36128574           62318574
+               52418673           62518473.
+
+  Given w ∈ Sn , the irreducible components of the singular locus of the Schubert variety
+Xw are themselves Schubert varieties. The set of permutations indexing these irreducible
+components is called the maximal singular locus, and is denoted by maxsing(w). The
+proof of Theorem A.1 follows from the next two lemmas relating the maximal singular
+locus of a Schubert variety with patterns.
+28                                      ALEXANDER WOO
+
+Lemma A.2. [8, Sec. 13] Consider a set Z such that f lZ (w) = 4231 or 3412. Then Z
+corresponds to a unique element of maxsing(w) if and only if the pattern does not occur
+as the dotted part of one of the following patterns:
+
+
+                                  3̇5̇41̇2̇     4̇35̇1̇2̇    4̇5̇1̇32̇
+                                  4̇5̇21̇3̇     5̇2̇34̇1̇    5̇2̇4̇31̇
+(A.2)                             5̇32̇4̇1̇     5̇3̇4̇21̇    5̇42̇3̇1̇
+                                  6̇3̇524̇1̇    5̇6̇341̇2̇   5̇26̇41̇3̇
+                                  4̇6̇31̇52̇.
+Remark A.3. In contrast to Theorem A.1, it is interesting to note that the set MS2 =
+{w ∈ S∞ : | maxsing(w)| ≥ 2} is not characterized by pattern avoidance. For instance,
+the permutation x = 4631725 has a maximal singular locus of size 2, so x ∈ MS2 . However
+x ≺ w = 47318625, but w has maximal singular locus of size 1.
+Lemma A.4. If | maxsing(w)| ≥ k, then there exists a pattern v ≺ w with at most 4k
+entries such that | maxsing(v)| ≥ k.
+Proof. For each element xi of maxsing(w), let Zi be the indices of w such that f lZi (w) is
+the 4231 or 3412 pattern corresponding to xi , and let Z be the union of Z1 , Z2 , . . . , Zk .
+Then |Z| ≤ 4k, since each element of maxsing(w) adds at most 4 indices to Z, so flZ (w)
+has at most 4k entries. Let v = flZ (w).
+  Given xi ∈ maxsing(w), flZi (w) is a 4231 or 3412 pattern which is not a subpattern of
+one of the dotted patterns in (A.2). Since Zi ⊂ Z, flZi (v) = flZi (flZ (w)) = flZi (w), so Zi is
+a 4231 or 3412 pattern in v as well. Furthermore, it cannot be a subpattern of one of the
+patterns in (A.2), since then it would be a subpattern of that pattern in w as well. Hence
+Zi corresponds to a unique element of maxsing(v). So | maxsing(v)| ≥ | maxsing(w)| ≥ k,
+as desired.                                                                                    
+Proof of Theorem A.1. By Theorem 1.1, KL2 is the set of permutations which have at
+most 1 elements in the maximal singular locus and avoid
+(A.3)                {653421, 632541, 463152, 526413, 546213, 465132}.
+If w 6∈ KL2 , then either it contains a pattern in (A.3) or it has at least two elements
+in its maximal singular locus. The patterns of (A.3) are in (A.1). We claim that any
+w ∈ S∞ with | maxsing(w)| ≥ 2 contains a pattern in (A.1). Therefore, w 6∈ KL2 contains
+a pattern from (A.1).
+   To prove the claim, note by Lemma A.4 that there exists v ∈ S≤8 such that v ≺ w
+and | maxsing(v)| ≥ 2. A computer check establishes that (A.1) contains all the minimal
+patterns in S≤8 not in KL2 , hence w contains one such pattern.
+   Conversely, if w ∈ S∞ contains a pattern v in (A.1), then a computer verification shows
+that Pid,v (1) > 2 so by [6], Pid,w (1) > 2. Hence, w is not in KL2 . Therefore, the patterns
+of (A.1) characterize KL2 , as desired.                                                    
+  The structure of KLm for m ≥ 1 gives a pattern avoidance “filtration” on S∞ . This
+suggests the following questions.
+             PERMUTATIONS WITH KAZHDAN-LUSZTIG POLYNOMIAL Pid,w (q) = 1 + q h                                29
+
+    (1) Can KLm always be characterized by a finite number of patterns?
+    (2) If so, can the minimal elements of the complement of KLm be determined effi-
+        ciently?
+    (3) We know the maximal singular locus is efficient to calculate. Can we use informa-
+        tion about maxsing(w) to give bounds for Pid,w (1)?
+  The following conjecture has been tested through S8 .
+Conjecture A.5. Let w ∈ Sn .
+    (1) If Pid,w (1) ≤ 3 then | maxsing(w)| ≤ 3.
+    (2) If Pid,w (1) = 3 and | maxsing(w)| = 1 then Pid,w = 1 + q a + q b .
+    (3) If Pid,w (1) = 3 and | maxsing(w)| = 2 then Pid,w = 1 + q a + q b .
+    (4) If Pid,w (1) = 3 and | maxsing(w)| = 3 then Pid,w = 1 + 2q a .
+
+  The following conjecture has been tested for B5 , C5 , and D5 .
+Conjecture A.6. For other Weyl group types, Pid,w (1) = 2 implies | maxsing(w)| = 1.
+
+                                               References
+ [1] A. Beilinson and J. Bernstein, Localisation de g-modules, C. R. Acad. Sci. Paris Sér. I Math. 292
+     (1981), 15–18.
+ [2] A. Beilinson, J. Bernstein, and P. Deligne, Faisceaux pervers, in Analyse et topologie sur les espaces
+     singuliers (I), Astérisque 100 (1982), 3–171.
+ [3] A. Bialynicki-Birula, Some theorems on actions of algebraic groups, Ann. of Math. (2), 98 (1973),
+     480–497.
+ [4] A. Bialynicki-Birula, On fixed points of torus actions on projective varieties, Bull. Acad. Polon. Sci.
+     Sér. Sci. Math. Astronom. Phys. 22 (1974), 1097–1101.
+ [5] L. Billera and F. Brenti, Quasisymmetric functions and Kazhdan-Lusztig polynomials,
+     arXiv:0710.3965
+ [6] S. Billey and T. Braden, Lower bounds for Kazhdan-Lusztig polynomials from patterns, Transform.
+     Groups 8 (2003), 321–332.
+ [7] S. Billey and G. Warrington, Kazhdan-Lusztig polynomials for 321-hexagon-avoiding permutations,
+     J. Algebraic Combin. 13 (2001), 111–136.
+ [8] S. Billey and G. Warrington, Maximal singular loci of Schubert varieties on SL(n)/B, Trans. Amer.
+     Math. Soc. 355 (2003), 3915–3945.
+ [9] A. Björner and F. Brenti, Combinatorics of Coxeter groups, Graduate Texts in Mathematics 231,
+     Springer-Verlag, New York-Heidelberg, 2005.
+[10] F. Brenti, Lattics paths and Kazhdan-Lusztig polynomials, J. Amer. Math. Soc. 11 (1998), 229–259.
+[11] R. Bott and H. Samelson, Applications of the theory of Morse to symmetric spaces, Amer. J. Math.
+     80 (1958), 964–1029.
+[12] T. Braden and R. Macpherson, From moment graphs to intersection cohomology, Math. Ann. 321
+     (2001), 533–551.
+[13] J.-L. Brylinski and M. Kashiwara, Kazhdan-Lusztig conjecture and holonomic systems, Invent. Math.
+     64 (1981), 387–410.
+[14] J. Carrell, Torus actions and cohomology, in Algebraic quotients. Torus actions and cohomology. The
+     adjoint representation and the adjoint action, Encyclopaedia Math. Sci. 131, Springer-Verlag, Berlin
+     (2002), 83–158.
+[15] A. Cortez, Singularités génériques des varieétés de Schubert covexillaires, Ann. Inst. Fourier (Greno-
+     ble) 51 (2001), 375–393.
+30                                         ALEXANDER WOO
+
+[16] A. Cortez, Singularités génériques et quasi-résolutions des variétés de Schubert pour le groupe
+     linéaire, Adv. Math. 178 (2003), 396–445.
+[17] V. Deodhar, Local Poincaré duality and nonsingularity of Schubert varieties, Comm. Algebra 13
+     (1985), 1379–1388.
+[18] V. Deodhar, A combinatorial setting for questions in Kazhdan-Lusztig theory, Geom. Dedicata 36
+     (1990), 95–119.
+[19] M. Demazure, Désingularisation des variétés de Schubert généralisées, Ann. Sci. École Norm. Sup.
+     (4), 7 (1974), 53–88.
+[20] W. Fulton, Flags, Schubert polynomials, degeneracy loci, and determinantal formulas, Duke Math.
+     J. 65 (1992), 381–420.
+[21] J. Humphreys, Reflection groups and Coxeter groups, Cambridge Studies in Advanced Mathematics
+     29, Cambridge University Press, Cambridge, 1990.
+[22] R. Irving, The socle filtration of a Verma module, Ann. Sci. Ecole Norm. Sup. ser. 4 21 (1988),
+     47–65.
+[23] C. Kassel, A. Lascoux and C. Reutenauer, The singular locus of a Schubert variety, J. Algebra 269
+     (2003), 74–108.
+[24] D. Kazhdan and G. Lusztig, Representations of Coxeter Groups and Hecke Algebras, Invent. Math.
+     53 (1979), 165–184.
+[25] D. Kazhdan and G. Lusztig, Schubert varieties and Poincaré duality, in Geometry of the Lapalce
+     operator (Proc. Sympos. Pure Math., Univ. Hawaii, Honolulu, Hawaii, 1979), Proc. Sympos. Pure
+     Math., 36, Amer. Math. Soc., Providence, RI (1980), 185–203.
+[26] V. Lakshmibai and B. Sandhya, Criterion for smootheness of Schubert varieties in SL(n)/B, Proc.
+     Indian Acad. Sci. Math. Sci. 100 (1990), 45–52.
+[27] A. Lascoux, Polynômes de Kazhdan-Lusztig pour les variétés de Schubert vexillaires,
+     C. R. Acad. Sci. Paris, 321 (1995), 667–670.
+[28] A. Lascoux and M.P. Schützenberger, Polynômes de Kazhdan-Lusztig pour les grassmanniennes,
+     Astérisque, 87–88 (1981), 249–266.
+[29] P. Magyar, Schubert polynomials and Bott-Samelson varieties, Commentarii Mathematici Helvetici,
+     73 (1998), 603–636.
+[30] L. Manivel, Le lieu singulier des variétés de Schubert, Internat. Math. Res. Notices 16 (2001), 849–
+     871.
+[31] L. Manivel, Generic singularities of Schubert varieties, math.AG/0105239.
+[32] P. Polo, Construction of arbitrary Kazhdan-Lusztig polynomials in symmetric groups, Represent.
+     Theory 3 (1999), 90–104 (electronic).
+[33] G. Warrington, KLPOL (2002), available at http://www.wfu.edu/˜warrings/research/klpol/klpol.html
+[34] G. Warrington, A formula for certain inverse Kazhdan-Lusztig polynomials in Sn , J. Combin. Theory
+     Ser. A 104 (2003), 301–316.
+[35] A. Woo and A. Yong, Governing singularities of Schubert varieties, J. Algebra 320 (2008), 495–520.
+[36] A. Zelevinsky, Small resolutions of singularities of Schubert varieties, Funct. Anal. Applic. 17 (1982),
+     142–144.
+
+  Mathematics, Statistics, and Computer Science, Saint Olaf College, 1520 Saint Olaf
+Ave., Northfield, MN 55057
+     E-mail address: <email>
+
